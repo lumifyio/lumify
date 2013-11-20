@@ -1,0 +1,25 @@
+<table cellpadding="0">
+  <tr class="input-prepend">
+
+    <td class="predicate-row">
+      <span class="add-on">
+        <% if (predicates) { %>
+        <select class="predicate">
+          <option value="<">is before</option>
+          <option value=">">is after</option>
+          <option value="range">is between</option>
+          <option value="equal">is</option>
+        </select>
+        <% } else { %>
+        <i class="icon-calendar"></i> 
+        <% } %>
+      </span>
+    </td>
+
+    <td class="input-row">
+      <input data-provide="datepicker" placeholder="YYYY-MM-DD" value="<%= value %>" type="text"></input>
+      <input data-provide="datepicker" placeholder="YYYY-MM-DD" class="range-only" type="text"></input>
+    </td>
+  </tr>
+</table>
+

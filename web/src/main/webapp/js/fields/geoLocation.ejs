@@ -1,0 +1,36 @@
+
+<table cellpadding="0">
+  <tr class="input-prepend">
+    <td class="predicate-row">
+      <span style="min-width:5em;" class="add-on">Latitude</span>
+    </td>
+
+    <td class="input-row">
+      <input class="lat" type="text" value="<%= value && value.latitude || '' %>" />
+    </td>
+  </tr>
+
+  <tr class="input-prepend">
+    <td class="predicate-row">
+      <span style="min-width:5em;" class="add-on">Longitude</span>
+    </td>
+
+    <td class="input-row">
+      <input class="lon" type="text" value="<%= value && value.longitude || '' %>"></input>
+    </td>
+  </tr>
+
+  <% if (predicates) { %>
+  <tr class="input-prepend">
+    <td class="predicate-row">
+      <span style="min-width:5em;" class="add-on">Radius</span>
+    </td>
+
+    <td class="input-row">
+      <input class="radius" placeholder="km" type="text"></input>
+    </td>
+  </tr>
+  <% } %>
+
+</table>
+

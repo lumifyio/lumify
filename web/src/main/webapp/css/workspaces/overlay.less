@@ -1,0 +1,31 @@
+@import "../util/constants";
+@import "../util/selection";
+
+background: fadeout(white, 10%);
+position: absolute;
+left: @menubar-width;
+bottom: 0;
+padding: 0.5em 1em;
+font-size: 95%;
+margin: 0;
+white-space: no-wrap;
+cursor: default;
+z-index: @graph-zIndex;
+
+.box-sizing(border-box);
+.disable-text-selection;
+
+
+.name {
+  margin: 0;
+  color: #777;
+  font-weight: bold;
+  font-size: 90%;
+  line-height: 1em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 90%;
+  color: #999;
+}

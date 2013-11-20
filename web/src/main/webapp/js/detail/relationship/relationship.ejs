@@ -1,0 +1,17 @@
+<div class="btn-toolbar">
+  <%- highlightButton %>
+</div>
+
+<h1>
+<span class="vertex-to-vertex-relationship generic-draggable fake-link" data-vertex-id='<%- relationshipData.source.id %>' >
+        <%= relationshipData.source.title %>
+</span>
+
+&#8674;
+
+<span class="vertex-to-vertex-relationship generic-draggable fake-link" data-vertex-id='<%- relationshipData.target.id %>'>
+        <%= relationshipData.target.title %>
+</span>
+</h1>
+
+<div style="margin:0 -1em" class="properties"/>

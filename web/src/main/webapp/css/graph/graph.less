@@ -1,0 +1,19 @@
+@import "../util/constants.less";
+
+background: white;
+
+.empty-graph {
+  .fullscreen;
+  background: url(../img/drop-items.png) no-repeat center;
+}
+
+.cytoscape-container {
+  position: relative;
+
+  // Cytoscape hardcodes 1000 here, breaks resizing
+  div { z-index: @graph-zIndex !important; }
+}
+
+canvas {
+  left: 0;
+}

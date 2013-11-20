@@ -1,0 +1,122 @@
+@import "../util/lists";
+@import "../util/animation";
+
+background: @menubar-background;
+
+.user-select(none);
+
+
+.menu-top, .menu-bottom {
+  .reset-list;
+
+  a {
+    opacity: 0.5;
+    font-size: 0;
+    display: block;
+    height: 40px;
+    cursor: pointer;
+    background: transparent;
+    background-size: 65%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    .transition(opacity 0.2s ease-in-out);
+  }
+
+  li.active a {
+    opacity: 0.9;
+  }
+
+  li.divider {
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #555;
+    width: 75%;
+    margin: auto;
+    height: 0px;
+  }
+}
+
+.menu-top, .menu-bottom {
+  .dashboard a {
+    background-image: url(/img/lumify-icon@2x.png);
+    opacity: 1.0;
+  }
+
+  .workspaces a { 
+    background-image: url(/img/glyphicons/white/glyphicons_153_more_windows@2x.png);
+  }
+
+  .graph a { 
+    background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+  }
+  .map a { 
+    background-image: url(/img/glyphicons/white/glyphicons_242_google_maps@2x.png);
+    background-size: 51%;
+  }
+
+  .search a { 
+    background-image: url(/img/glyphicons/white/glyphicons_027_search@2x.png); 
+  }
+
+  .users { 
+
+    &.synchronizing a:before {
+      .spinning-image('glyphicons_081_refresh@2x', 10px, 1px, -22px, 4s, forward);
+      .animation-play-state(running);
+    }
+
+    a {
+      background-image: url(/img/glyphicons/white/glyphicons_245_chat@2x.png);
+      background-size: 70%;
+
+    }
+  }
+  .metrics a { background-image: url(/img/glyphicons/white/glyphicons_041_charts@2x.png); }
+  .prefs a { background-image: url(/img/glyphicons/white/glyphicons_280_settings@2x.png); }
+
+  // Activity is special in that it animates when active
+  .activity { 
+    position: relative;
+
+    a {
+      &:before {
+        .spinning-image('white/glyphicons_019_cogwheel@2x', 18px, -4px, -4px, 4s, forward);
+      }
+
+      &:after {
+        .spinning-image('white/glyphicons_019_cogwheel@2x', 14px, 6px, 6px, 4s, reverse);
+      }
+    }
+
+    &.animating a:before, 
+    &.animating a:after { 
+        .animation-play-state(running);
+    }
+  }
+}
+
+
+
+.spinning-image(@image, @dimension, @offsetLeft, @offsetTop, @spin, @direction) {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: @dimension / 2 * -1px + @offsetLeft;
+  margin-top: @dimension / 2 * -1px + @offsetTop;
+  width: @dimension;
+  height: @dimension;
+  background-image: url("/img/glyphicons/@{image}.png"); 
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  .spin(@spin, @direction);
+}
+
+
+.menu-bottom {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+}

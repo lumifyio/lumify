@@ -1,0 +1,34 @@
+@import "../util/constants";
+
+background: #efefef;
+width: 340px;
+
+.content {
+  display: block;
+  max-width: none;
+  width: auto;
+  box-sizing: border-box;
+  white-space: normal;
+  overflow: visible;
+}
+
+.users-list {
+  float: left;
+  overflow: auto;
+  height: 100%;
+
+  .user a {
+    max-width: 95px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .badge {
+    float: right;
+    margin-left: 5px;
+  }
+}
+
+.active-chat {
+  @import "chat/chat";
+}

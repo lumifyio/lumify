@@ -1,0 +1,21 @@
+<div class="scroller">
+  <ul class="share-list nav nav-list">
+    <% if (editable) { %>
+    <li class="nav-header">Edit Workspace</li>
+
+    <li><input class="workspace-title" type="text" value="<%= workspace.title %>" required></li>
+    <% } %>
+
+    <li class="nav-header share-header">Sharing<span class="badge loading"/></li>
+
+    <li class="share-form" style="display:none">
+        <input name="title" type="text" autocomplete="off" placeholder="Share with user..." />
+    </li>
+  </ul>
+</div>
+
+<button class="copy btn btn-primary">Copy</button>
+<% if (editable) { %>
+<button class="delete btn btn-danger">Delete</button>
+<% } %>
+

@@ -1,0 +1,20 @@
+<table cellpadding="0">
+  <% if (predicates) { %>
+  <tr class="input-prepend">
+
+    <td class="predicate-row">
+      <span class="add-on">Contains</span>
+    </td>
+
+    <td class="input-row">
+      <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+    </td>
+  </tr>
+  <% } else { %>
+    <tr>
+      <td class="input-row">
+        <input placeholder="<%= property.displayName %>" value="<%= value %>" type="text"/>
+      </td>
+    </tr>
+  <% } %>
+</table>

@@ -1,0 +1,158 @@
+
+body > .vertex-dragging {
+  background: rgba(255,255,255,0.7);
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 0.5em;
+  margin-left: -0.5em;
+  margin-top: -0.5em;
+
+  * { display: none; }
+  
+  & > div { display: block; }
+
+  .vertex-dragging {
+    display: inline;
+    font-size: 80%;
+
+    &:after {
+      content: ',';
+      position: relative;
+      left: -3px;
+    }
+    &:last-child:after { display:none; }
+  }
+}
+
+.viewing-vertex .vertex-list {
+  ul li.has_preview {
+    a { padding-left: 16px; }
+  }
+}
+.vertex-list {
+  word-wrap: break-word;
+  text-align: right;
+
+  .infinite-loading {
+    padding: 1em 0;
+    text-align: center;
+    background: url(/img/loading.gif);
+    background-repeat: no-repeat;
+    background-size: auto 16px;
+    background-position: right;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+  }
+
+  ul {
+    text-align: left;
+    .box-sizing(border-box);
+
+    li {
+      position: relative;
+
+      &.active {
+        .source, .date {
+          color: #eee;
+        }
+        .graph button {
+          background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+        }
+        .map button {
+          background-image: url(/img/glyphicons/white/glyphicons_242_google_maps@2x.png);
+        }
+      }
+
+      &.graph-displayed li.graph { display: block; }
+      &.map-displayed li.map { display: block; }
+
+      @preview-width: 100px;
+      &.has_preview {
+        padding-left: @preview-width - 15px;
+        a { padding-left: 30px; }
+        .preview {
+          display: block;
+        }
+        ul { left: 83px; }
+      }
+
+      .preview {
+        display: none;
+        width: @preview-width;
+        height: 100%;
+        position: absolute;
+        left: -15px;
+        top: 0;
+        overflow: hidden;
+        background-repeat: no-repeat;
+      }
+
+      ul {
+        position: absolute;
+        left: -16px;
+        top: 2px;
+        margin: 0;
+        padding: 0;
+        width: 16px;
+        overflow: hidden;
+
+        li {
+          display: none;
+
+          button {
+            background-size: 48%;
+            background-repeat: no-repeat;
+            background-color: transparent;
+            background-position: center center;
+            height: 20px;
+            width: 100%;
+            font-size: 0;
+            border: 0;
+          }
+
+          &.graph button {
+            background-image: url(/img/glyphicons/glyphicons_326_share@2x.png);
+          }
+
+          &.map button {
+            background-image: url(/img/glyphicons/glyphicons_242_google_maps@2x.png);
+          }
+        }
+      }
+    }
+  }
+
+
+  a {
+
+    cursor: pointer;
+
+    &.ui-selecting, &.ui-selected {
+      .active-selection;
+    }
+
+    div {
+      .clearfix;
+    }
+    .source, .date {
+      color: #555;
+      font-size: x-small;
+
+    }
+    .source:empty:after {
+      content: 'Source unknown';
+      font-style: italic;
+    }
+    .date:empty:after {
+      content: ' ';
+    }
+    
+    .date {
+      float: right;
+    }
+    .source {
+      float: left;
+    }
+  }
+}

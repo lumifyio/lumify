@@ -1,0 +1,181 @@
+@import "../util/badge-loading.less";
+@import "../util/positioning.less";
+
+width: 200px;
+
+
+li {
+  position: relative;
+
+  input {
+    width: 100%;
+    .box-sizing(border-box);
+    padding: 0.1em 0.5em;
+    margin-top: 1em;
+    height: 2em;
+  }
+
+  .nav-list-subtitle {
+      display: block;
+      font-size: 80%;
+      color: #999;
+  }
+  &.active .nav-list-subtitle {
+      color: #dadada;
+  }
+  .nav-list-title {
+      word-break: break-word;
+      white-space: normal;
+      display: block;
+  }
+
+  .nav-list-title, .nav-list-subtitle {
+      padding-right: 35px;
+  }
+
+  .disclosure {
+    border: 0;
+    width: 4em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    margin-right: -0.4em;
+    box-shadow: none;
+    background-color: inherit;
+    background-size: auto 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(/img/glyphicons/glyphicons_019_cogwheel@2x.png);
+    .opacity(30);
+    &:hover { .opacity(100); }
+  }
+
+  &.active .disclosure {
+    .opacity(60);
+    &:hover { .opacity(100); }
+    background-image: url(/img/glyphicons/white/glyphicons_019_cogwheel@2x.png);
+  }
+
+  .badge {
+    float: right;
+  }
+}
+
+.workspaces-list .loading {
+    position: absolute;
+    right: 8px;
+    left: auto;
+    top: 0;
+    border: 0;
+    height: 100%;
+}
+
+.new-workspace {
+  padding-top: 1em;
+  padding-bottom: 0em;
+  .input-append {
+    width: 100%;
+  }
+
+  input.new {
+    width: 80%;
+    margin: 0;
+  }
+  button.new {
+    width: 20%;
+    height: 2.7em;
+    position: relative;
+    left: -1px;
+  }
+}
+
+
+.workspace-form {
+  .pin-left-split;
+
+  width: 200px;
+  background: @pane-background;
+  z-index: 89;  // so it floats above graph, but below splitbar handles
+
+  .content {
+    padding: 0 1em;
+  }
+
+  .badge {
+    cursor: pointer;
+  }
+
+  .popover {
+    width: 12em;
+  }
+  .permissions-list {
+    input {
+      margin: 0;
+      padding: 0;
+      width: auto;
+      margin-right: 1em;
+    }
+    button {
+      width: 100%;
+      float: none;
+    }
+  }
+
+  .caret {
+    top: 0.9ex;
+    position: relative;
+    border-top-color: white;
+    left: 0.3ex;
+  }
+  input[type=text] {
+    width: 100%;
+    .box-sizing(border-box);
+    margin: 0.5em 0;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .scroller {
+    position: absolute;
+    bottom: 7em;
+    top: 0;
+    overflow: auto;
+    left: 0;
+    width: 100%;
+    padding: 0 1em;
+    .box-sizing(border-box);
+  }
+  .delete {
+    position: absolute;
+    margin: 0;
+    bottom: 1em;
+    right: 1em;
+    left: 1em;
+    width: auto;
+  }
+  .copy {
+    position: absolute;
+    margin: 0;
+    bottom: 4em;
+    right: 1em;
+    left: 1em;
+    width: auto;
+  }
+
+  .share-list li.user-row {
+    margin: 0.5em 0;
+  }
+  .share-form {
+    position: relative;
+    margin: 1em 0 2em 0;
+    input { margin: 0; }
+    .typeahead { width: 100%; }
+    button {
+        float: none;
+    }
+  }
+}
