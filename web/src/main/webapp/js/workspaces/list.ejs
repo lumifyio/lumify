@@ -1,0 +1,20 @@
+
+<li class="nav-header">Workspaces</li>
+
+<% (results.mine || []).forEach(function(workspace) { %>
+  <% include workspaces/item %>
+<% }); %>
+
+<li class="new-workspace">
+  <div class="input-append">
+    <input class="new" name="title" type="text" placeholder="Workspace name" />
+    <button class="new btn btn-mini">Add</button>
+  </div>
+</li>
+
+<li class="divider"/>
+<li class="nav-header">Shared with me</li>
+
+<% (results.shared || []).forEach(function(workspace) { %>
+  <% include workspaces/item %>
+<% }); %>

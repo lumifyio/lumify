@@ -1,0 +1,29 @@
+<% if (item.properties) { %>
+  
+  <div class="existing gId-<%= item.id %> <%= iconSrc ? 'has_preview' : '' %> subType-<%= item.properties._subType %>">
+
+    <% if (iconSrc) { %>
+      <div class="preview" style="background-image:url(<%= iconSrc %>)" />
+    <% } %>
+
+    <%- html %>
+    <% if (concept) { %>
+      <span class="concept-type">(<%= concept.flattenedDisplayName %>)</span>
+    <% } %>
+
+    <% properties.forEach(function(property) {
+        if (property.key !== 'title') { %>
+          <div class="property property-<%= property.key %>">
+            <strong><%= property.displayName %></strong><span class="value"><%= property.value %></span>
+          </div>
+    <%  }
+      }); %>
+  </div>
+
+<% } else { %>
+
+  <div class="create-new">
+    <%- html %>
+  </div>
+
+<% } %>

@@ -1,0 +1,112 @@
+
+position: relative;
+text-align: center;
+
+.no-results {
+  color: #666;
+  width: 30em;
+  margin: auto;
+  padding: 0 0.5em;
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+
+  h1 {
+      margin-top: 2em;
+      padding: inherit;
+  }
+}
+
+.detail-pane {
+  text-align: left;
+  background: white;
+  padding: 0;
+  margin: 0 0 2em 0;
+  height: auto;
+  position: relative;
+  overflow: auto;
+
+  .highlight-button {
+    display: none;
+  }
+
+  .content {
+    overflow: visible;
+    height: auto;
+  }
+}
+
+&.onlyone .close-detail-pane {
+  display: none;
+}
+
+// 2 Column Entities, 1 column
+@media (min-width: 37em) {
+  &.entity-cols-1 .detail-pane.type-entity,
+  &.entity-cols-2 .detail-pane.type-entity {
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+  }
+
+  &.entities-1 .detail-pane.type-entity {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+  }
+}
+
+// 3 Column Entities, 1 column
+@media (min-width: 45em) {
+  &.entity-cols-1 .detail-pane.type-entity,
+  &.entity-cols-3 .detail-pane.type-entity {
+    display: inline-block;
+    vertical-align: top;
+    width: 33%;
+  }
+}
+
+// 4 Column Entities, 1 column
+@media (min-width: 56em) {
+  &.entity-cols-1 .detail-pane.type-entity,
+  &.entity-cols-4 .detail-pane.type-entity {
+    display: inline-block;
+    vertical-align: top;
+    width: 25%;
+  }
+}
+
+@media (min-width: 65em) {
+  &.entity-cols-2 .detail-pane.type-entity {
+    display: inline-block;
+    vertical-align: top;
+    width: 25%;
+  }
+}
+
+@media (min-width: 50em) {
+
+  &.has-artifacts.has-entities {
+
+    padding: 1em;
+    .box-sizing(border-box);
+
+    .entities-container {
+      .detail-pane.type-entity {
+        width: 100%;
+      }
+      position: absolute;
+      float: left;
+      width: 30%;
+    }
+    .artifacts-container {
+      width: 70%;
+      padding-left: 1em;
+      .box-sizing(border-box);
+      float: right;
+    }
+  }
+}
+

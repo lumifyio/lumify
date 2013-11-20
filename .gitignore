@@ -1,0 +1,15 @@
+/data/
+target/
+conf/knowEntities/dictionaries/*.dict
+.idea
+*.iml
+.vagrant
+.settings/
+.project
+.classpath
+.DS_Store
+node_modules/
+*.swp
+allCountries.txt
+coverage-error.log
+/web/src/main/webapp/npm-debug.log

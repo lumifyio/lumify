@@ -1,0 +1,77 @@
+
+width: 200px;
+float: left;
+height: 100%;
+position: relative;
+padding-left: 10px;
+font-size: 90%;
+
+&:before {
+  position: absolute;
+  content: '';
+  left: 0;
+  width: 0;
+  top: 10px;
+  bottom: 10px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #f5f5f5;
+}
+
+.chat-window {
+  overflow: auto;
+  height: 100%;
+  padding-right: 10px;
+
+  .to { display: none; }
+
+  .chat-messages {
+    margin-top: 10px;
+
+    .chat-message {
+      border: 0 !important;
+      margin: 1em 0;
+
+      .from {
+        float: right;
+        font-style: italic;
+        color: #888;
+        text-shadow: 0 1px 0 white;
+        margin-left: 5px;
+      } 
+      .date {
+        color: #999;
+        font-size: 70%;
+        text-align: right;
+      }
+    }
+  }
+
+  .new-message {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+    left: 10px;
+    padding: 0;
+    margin: 0;
+    display: block;
+
+    .message {
+      width: 100%;
+      margin: 0;
+      font-size: 90%;
+      .box-sizing(border-box);
+    }
+  }
+  
+  .sync-request {
+    margin-bottom: 40px;
+    text-align: center;
+    display: block;
+    white-space: normal;
+    line-height: 1.3em;
+
+    .btn-group {
+      margin-top: 5px;
+    }
+  }
+}

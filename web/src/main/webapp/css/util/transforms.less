@@ -1,0 +1,25 @@
+
+.transform-origin(@origin) {
+  -webkit-transition-origin: @origin;
+     -moz-transition-origin: @origin;
+       -o-transition-origin: @origin;
+          transition-origin: @origin;
+}
+
+.transition-transform(@timing, @duration:0.2s) {
+  -webkit-transition-property: -webkit-transform;
+     -moz-transition-property: -moz-transform;
+       -o-transition-property: -o-transform;
+          transition-property: transform;
+
+
+  -webkit-transition-timing-function: @timing;
+     -moz-transition-timing-function: @timing;
+       -o-transition-timing-function: @timing;
+          transition-timing-function: @timing;
+
+  -webkit-transition-duration: @duration;
+     -moz-transition-duration: @duration;
+       -o-transition-duration: @duration;
+          transition-duration: @duration;
+}

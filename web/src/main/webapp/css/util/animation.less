@@ -1,0 +1,76 @@
+.spin-keyframe() {
+  from {
+    .rotate(0deg);
+  }
+  to {
+    .rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {.spin-keyframe;}
+@-moz-keyframes spin {.spin-keyframe;}
+@-ms-keyframes spin {.spin-keyframe;}
+@-o-keyframes spin {.spin-keyframe;}
+@keyframes spin {.spin-keyframe;}
+
+.spin(@duration: 3s, @direction: normal) {
+  .animation-play-state(paused);
+  .animation-duration(@duration);
+  .animation-iteration-count(infinite);
+  .animation-name(spin);
+  .animation-direction(@direction);
+  .animation-timing-function(linear);
+}
+
+.shake-keyframe() {
+    0%, 100% {.translate(0,0);}
+    10%, 30%, 50%, 70%, 90% {.translate(-10px,0);}
+    20%, 40%, 60%, 80% {.translate(10px,0);}
+}
+@-webkit-keyframes shake {.shake-keyframe;}
+@-moz-keyframes shake {.shake-keyframe;}
+@-ms-keyframes shake {.shake-keyframe;}
+@-o-keyframes shake {.shake-keyframe;}
+@keyframes shake {.shake-keyframe;}
+
+.shake(@duration:1s) {
+  .animation-duration(@duration);
+  .animation-iteration-count(1);
+  .animation-name(shake);
+  .animation-fill-mode(both);
+}
+
+.animation-play-state(@state) {
+  -webkit-animation-play-state: @state;
+  animation-play-state: @state;
+}
+.animation-fill-mode(@mode) {
+  -webkit-animation-fill-mode: @mode;
+  animation-fill-mode: @mode;
+}
+.animation-duration(@duration) {
+  -webkit-animation-duration: @duration;
+  animation-duration: @duration;
+}
+.animation-iteration-count(@count) {
+  -webkit-animation-iteration-count: @count;
+  animation-iteration-count: @count;
+}
+.animation-name(@name) {
+  -webkit-animation-name: @name;
+  animation-name: @name;
+}
+.animation-direction(@direction) {
+  -webkit-animation-direction: @direction;
+  animation-direction: @direction;
+}
+.animation-timing-function(@function) {
+  -webkit-animation-timing-function: @function;
+  animation-timing-function: @function;
+}
+
+.shrink {
+  .scale(0.1);
+  .opacity(0);
+  .transition(~"all ease-in 0.5s");
+}
+

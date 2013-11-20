@@ -1,0 +1,219 @@
+@import "util/constants";
+@import "util/animation";
+@import "util/splitbar";
+@import "util/positioning";
+@import "util/flexbox";
+@import "util/transforms";
+@import "util/video/scrubber";
+@import "util/vertexList/list";
+@import "util/instructions";
+@import "util/jquery-ui-draggable-multiselect";
+
+// Import bootstrap
+@import "/libs/bootstrap/less/bootstrap.less";
+// Override sprite paths
+@iconSpritePath: "../libs/bootstrap/img/glyphicons-halflings.png";
+@iconWhiteSpritePath: "../libs/bootstrap/img/glyphicons-halflings-white.png";
+@import "/libs/bootstrap-datepicker/less/datepicker.less";
+
+@import "/libs/video.js/video-js.css";
+
+@import "sync/sync";
+@import "fields/fields";
+
+html.fullscreenApp {
+  height: 100%;
+  overflow: hidden;
+
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #app {
+    .fullscreen;
+    overflow: hidden;
+  }
+}
+
+
+html.fullscreenDetails {
+  .fullscreen-details {
+    @import "fullscreenDetails/details";
+  }
+}
+
+
+.above-graph(@extra:1) {
+  z-index: @graph-zIndex + @extra;
+}
+
+.left-pane(@left-padding: 0) {
+  .transition-transform(ease-in-out, 0.2s);
+
+  .translate3d(@pane-animation-distance * -1, 0, 0);
+  &.visible {
+    .translate3d(@menubar-width + @left-padding, 0, 0);
+  }
+}
+.right-pane {
+  .fullscreen;
+  left: auto !important;
+  width: 4px;
+
+  &.visible {
+    width: 25%;
+    max-width: 500px;
+  }
+
+  &.collapsed {
+    width: 4px !important;
+    .transition(width 0.2s ease-in-out);
+  }
+}
+
+.fullscreenApp {
+  .users-pane, 
+  .search-pane, 
+  .workspaces-pane, 
+  .detail-pane {
+    .above-graph;
+    position: absolute;
+    background: @pane-background;
+
+    .content {
+      overflow: auto;
+      height: 100%;
+      .box-sizing(border-box);
+    }
+  }
+
+  .search-pane, 
+  .workspaces-pane,
+  .detail-pane {
+    height: 100%;
+
+    .ui-resizable-handle {
+      .splitbar;
+    }
+  }
+}
+
+.graph-pane, .map-pane, .dashboard-pane {
+  display: none;
+  
+  &.visible {
+    display: block;
+  }
+}
+
+
+.menubar-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: @menubar-width;
+  .above-graph(10);
+
+  @import "menubar/menubar";
+}
+
+.search-pane {
+  .left-pane;
+
+  @import "search/search";
+}
+
+.workspaces-pane {
+  .left-pane;
+
+  @import "workspaces/workspaces";
+}
+.workspace-overlay {
+  @import "workspaces/overlay";
+}
+
+.users-pane {
+  @padding: 10px;
+  .above-graph(2);
+  .left-pane(@padding);
+
+  bottom: @padding;
+  height: 200px;
+
+  @import "users/users";
+}
+
+@import "graph/plugins";
+.graph-pane { 
+  .fullscreen;
+  left: @menubar-width;
+
+  @import "graph/graph";
+}
+
+.map-pane {
+  .fullscreen;
+  left: @menubar-width;
+
+  @import "map/map";
+}
+
+.dashboard-pane {
+  .fullscreen;
+  left: @menubar-width;
+
+  @import "dashboard/dashboard";
+}
+
+.fullscreenApp .detail-pane {
+  .right-pane;
+  visibility: visible;
+  right: 0;
+}
+
+.detail-pane { 
+  @import "detail/detail";
+}
+@import "detail/preview";
+
+.mode-select-pane {
+    padding-left: 300px;
+}
+
+.file-hover {
+  &.uploading:after, &.uploading:hover:after {
+    display: none;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5) url(/img/drop-items.png) no-repeat center center;
+    background-size: auto 45%;
+    .opacity(80);
+  }
+}
+
+a {
+  cursor: pointer;
+}
+
+.ui-draggable-dragging {
+  .opacity(100);
+  .scale(1.0);
+  .transition(~"opacity ease-in-out 0.3s, -webkit-transform ease-in-out 0.3s");
+}
+.draggable-invisible {
+  .opacity(0);
+  .scale(0.1);
+}
+.draggable-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}

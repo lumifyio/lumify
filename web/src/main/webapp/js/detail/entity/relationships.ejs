@@ -1,0 +1,32 @@
+<% if (sortedKeys.length == 0) { %>
+    <span>There are no relationships to display</span>
+<% } %>
+
+<ul class="nav nav-list">
+<% sortedKeys.forEach(function(type) { %>
+    <% if (type === 'references') return;
+       var relationships = relationshipsGroupedByType[type]; %>
+
+    <li class="nav-header relationship"><%= type %></li>
+    <% relationships.forEach(function(r) { %>
+        <li class="relationship">
+        <% if (type === 'inverse') { %>
+            <span class="<%= r.vertices.classes.src %>" 
+                  data-vertex-id="<%= r.vertices.src.id %>" data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.src.properties.title %></span>
+            <span data-info='<%= JSON.stringify(r.relationshipInfo) %>' class="relationship"><%= r.displayLabel %></span>
+            <span class="<%= r.vertices.classes.dest %>"
+                  data-vertex-id='<%= r.vertices.dest.id %>' data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.dest.properties.title %></span>
+        <% } else if (type !== 'references') { %>
+          <span 
+            class="<%= r.vertices.classes.other %>"
+            data-vertex-id="<%= r.vertices.other.id %>" data-info="<%= JSON.stringify(r.vertices.other.properties) %>"><%- r.vertices.other.properties.title %></span>
+        <% } %>
+        </li>
+    <% }); %>
+<% }); %>
+
+    <% if (relationshipsGroupedByType['references']) { %>
+        <li class="nav-header relationship">referenced in</li>
+        <li class="references"></li>
+    <% } %>
+</ul>

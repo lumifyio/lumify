@@ -1,0 +1,7 @@
+<% if (state === STATES.NORMAL) { %>
+background: <%= colorjs(concept.color).setSaturation(0.8).setAlpha(0.2) %>;
+<% } else if (state == STATES.DIM) { %>
+background: <%= colorjs(concept.color).setSaturation(0.2).setAlpha(0.1) %>;
+<% } else if (state == STATES.HOVER) { %>
+background: <%= colorjs(concept.color).setSaturation(0.3).setAlpha(0.5) %>;
+<% } %>

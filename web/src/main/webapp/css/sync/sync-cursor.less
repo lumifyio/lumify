@@ -1,0 +1,57 @@
+@import "../util/selection";
+
+.sync-cursor {
+  position: absolute;
+  display: none;
+  z-index: 1000;
+
+  background: url(../../img/cursor.png) no-repeat left top;
+  background-size: 16px;
+  padding-left: 14px;
+  padding-top: 14px;
+  cursor: default;
+
+  .opacity(20);
+  .disable-text-selection;
+
+  .name {
+    text-shadow: 1px 1px 2px rgba(100, 100, 100, 0.2);
+  }
+
+  @arrow-dim: 13px;
+  @padding: 2px;
+
+  &.focus { .opacity(80); }
+
+  &.offscreen-x {
+    .arrow-defaults;
+    border-width: 11px 0 11px @arrow-dim;
+    border-color: transparent transparent transparent #111;
+    margin-left: -@arrow-dim - @padding;
+  }
+  &.offscreen-y {
+    .arrow-defaults;
+    border-width: 13px 11px 0 11px; 
+    border-color: #111 transparent transparent transparent;
+    margin-top: -@arrow-dim - @padding;
+  }
+  &.offscreen-x.offscreen-y {
+    .arrow-defaults;
+    border-width: 18px 18px 0px 0px;
+    border-color: transparent #111 transparent transparent;
+    margin-left: -22px;
+    margin-top: -22px;
+  }
+
+}
+
+.arrow-defaults {
+  background: none;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+  .opacity(50);
+}

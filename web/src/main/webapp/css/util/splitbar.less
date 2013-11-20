@@ -1,0 +1,25 @@
+@import "gradient";
+
+.splitbar() {
+  @border: darken(@pane-background, 10%);
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    background: @border;
+    left: 10px;
+    top: 0;
+  }
+}
+
+.ui-resizable-handle.ui-resizable-e {
+  width: 20px;
+  right: -10px;
+}
+.ui-resizable-handle.ui-resizable-w {
+  width: 20px;
+  left: -10px;
+}

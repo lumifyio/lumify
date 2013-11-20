@@ -1,0 +1,21 @@
+
+switch('{{mapProvider}}') {
+case 'leaflet':
+    document.write('<link rel="stylesheet" href="libs/leaflet/leaflet.css" />');
+    //<!--[if lte IE 8]>
+    //<link rel="stylesheet" href="libs/leaflet/leaflet.ie.css" />
+    //<![endif]-->
+    document.write('<script src="libs/leaflet/leaflet-src.js"></script>');
+    break;
+
+case 'googlev3':
+    document.write('<script src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&sensor=false"></script>');
+    break;
+
+default:
+    console.error('Invalid map provider: {{mapProvider}}');
+    break;
+}
+document.write('<script src="libs/mapstraction/mxn.js?({{mapProvider}})" type="text/javascript"></script>');
+
+document.mapProvider = '{{mapProvider}}';
