@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
@@ -26,12 +27,14 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
     private final ArtifactRepository artifactRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
-    public VertexSetProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final ArtifactRepository artifactRepo) {
+    public VertexSetProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final ArtifactRepository artifactRepo, final AuditRepository auditRepo) {
         ontologyRepository = ontologyRepo;
         graphRepository = graphRepo;
         artifactRepository = artifactRepo;
+        auditRepository = auditRepo;
     }
 
     @Override
@@ -56,6 +59,15 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
+
+        String message;
+        if (graphVertex.getProperty(propertyName) != null) {
+            message = "Changed " + propertyName + " from " + graphVertex.getProperty(propertyName) + " to " + valueStr;
+        } else {
+            message = "Set " + propertyName + " to " + valueStr;
+        }
+        auditRepository.audit(graphVertexId, message, user);
+
         graphVertex.setProperty(propertyName, value);
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
             graphVertex.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION, "");
