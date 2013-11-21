@@ -222,7 +222,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
         Artifact artifact = artifactRepository.findByRowKey(artifactExtractedInfo.getRowKey(), getUser().getModelUserContext());
         if (artifact == null) {
             artifact = new Artifact(artifactExtractedInfo.getRowKey());
-            artifact.getMetadata().setCreateDate(new Date());
+            if (artifactExtractedInfo.getDate() != null) {
+                artifact.getMetadata().setCreateDate(artifactExtractedInfo.getDate());
+            } else {
+                artifact.getMetadata().setCreateDate(new Date());
+            }
         }
         if (artifactExtractedInfo.getRaw() != null) {
             artifact.getMetadata().setRaw(artifactExtractedInfo.getRaw());
