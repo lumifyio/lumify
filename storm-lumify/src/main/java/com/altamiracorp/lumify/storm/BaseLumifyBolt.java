@@ -15,6 +15,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Guice;
@@ -53,6 +54,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
     private AtomicLong processingCount = new AtomicLong();
     private AtomicLong totalErrorCount = new AtomicLong();
     private long averageProcessingTime;
+    protected WorkQueueRepository workQueueRepository;
 
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -296,6 +298,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
     @Inject
     public void setTermMentionRepository (TermMentionRepository termMentionRepository) {
         this.termMentionRepository = termMentionRepository;
+    }
+
+    @Inject
+    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
+        this.workQueueRepository = workQueueRepository;
     }
 
     protected boolean isArchive(String fileName) {
