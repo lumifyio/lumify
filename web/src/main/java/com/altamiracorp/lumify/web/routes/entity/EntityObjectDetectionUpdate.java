@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
@@ -18,13 +19,16 @@ import javax.servlet.http.HttpServletResponse;
 public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final GraphRepository graphRepository;
     private final EntityHelper entityHelper;
+    private final AuditRepository auditRepository;
 
     @Inject
     public EntityObjectDetectionUpdate(
             final GraphRepository graphRepository,
-            final EntityHelper entityHelper) {
+            final EntityHelper entityHelper,
+            final AuditRepository auditRepository) {
         this.graphRepository = graphRepository;
         this.entityHelper = entityHelper;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         GraphVertex resolvedVertex;
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
+            auditRepository.audit(resolvedGraphVertexId, auditRepository.updateEntityAuditMessage(), user);
         } else {
             resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox,
                     artifactId, user);
@@ -70,6 +75,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 entityTag.put("artifactId", artifactId);
                 detectedObjects.put(i, entityTag);
                 artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
+                auditRepository.audit(artifactVertex.getId(), auditRepository.propertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
                 result.put("entityVertex", entityTag);
                 graphRepository.save(artifactVertex, user);
 

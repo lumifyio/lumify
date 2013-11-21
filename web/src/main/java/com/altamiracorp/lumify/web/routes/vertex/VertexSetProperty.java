@@ -58,11 +58,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
 
-        String oldPropertyValue = null;
-        if (graphVertex.getProperty(propertyName) != null) {
-            oldPropertyValue = graphVertex.getProperty(propertyName).toString();
-        }
-        auditRepository.audit(graphVertexId, auditRepository.propertyAuditMessage(propertyName, oldPropertyValue, valueStr), user);
+        auditRepository.audit(graphVertexId, auditRepository.propertyAuditMessage(graphVertex, propertyName, valueStr), user);
 
         graphVertex.setProperty(propertyName, value);
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {

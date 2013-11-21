@@ -3,6 +3,8 @@ package com.altamiracorp.lumify.core.model.audit;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -49,9 +51,12 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public String propertyAuditMessage(String propertyName, String oldValue, String newValue) {
-        if (oldValue == null) {
+    public String propertyAuditMessage(GraphVertex graphVertex, String propertyName, Object newValue) {
+        Object oldValue;
+        if (graphVertex.getProperty(propertyName) == null) {
             oldValue = "undefined";
+        } else {
+            oldValue = graphVertex.getProperty(propertyName);
         }
         return "Set " + propertyName + " from " + oldValue + " to " + newValue;
     }
@@ -62,5 +67,9 @@ public class AuditRepository extends Repository<Audit> {
 
     public String updateEntityAuditMessage () {
         return "Updating Entity";
+    }
+
+    public String deleteEntityAuditMessage (String deletedVertexId) {
+        return "Deleted: " + deletedVertexId;
     }
 }

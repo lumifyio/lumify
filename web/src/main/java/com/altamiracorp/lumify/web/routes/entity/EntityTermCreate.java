@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
@@ -20,13 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 public class EntityTermCreate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final GraphRepository graphRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
     public EntityTermCreate(
             final EntityHelper entityHelper,
-            final GraphRepository graphRepository) {
+            final GraphRepository graphRepository,
+            final AuditRepository auditRepository) {
         this.entityHelper = entityHelper;
         this.graphRepository = graphRepository;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -44,8 +48,14 @@ public class EntityTermCreate extends BaseRequestHandler {
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
         final GraphVertex createdVertex = new InMemoryGraphVertex();
+        auditRepository.audit(createdVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+
         createdVertex.setType(VertexType.ENTITY);
+        auditRepository.audit(createdVertex.getId(), auditRepository.propertyAuditMessage(createdVertex, PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
+
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
+        auditRepository.audit(createdVertex.getId(), auditRepository.propertyAuditMessage(createdVertex, PropertyName.ROW_KEY.toString(), termMentionRowKey.toString()), user);
+
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 

@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -19,13 +20,16 @@ import java.util.Map;
 public class EntityObjectDetectionDelete extends BaseRequestHandler {
     private final GraphRepository graphRepository;
     private final EntityHelper entityHelper;
+    private final AuditRepository auditRepository;
 
     @Inject
     public EntityObjectDetectionDelete(
             final GraphRepository graphRepository,
-            final EntityHelper entityHelper) {
+            final EntityHelper entityHelper,
+            final AuditRepository auditRepository) {
         this.graphRepository = graphRepository;
         this.entityHelper = entityHelper;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -44,6 +48,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             obj.put("edgeId", edgeId);
             graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.CONTAINS_IMAGE_OF.toString(), user);
         } else {
+            auditRepository.audit(artifactVertex.getId(), auditRepository.deleteEntityAuditMessage(graphVertexId), user);
             graphRepository.remove(graphVertexId, user);
             obj.put("remove", true);
         }
@@ -62,6 +67,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
+        auditRepository.audit(artifactVertex.getId(), auditRepository.propertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
         graphRepository.save(artifactVertex, user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));

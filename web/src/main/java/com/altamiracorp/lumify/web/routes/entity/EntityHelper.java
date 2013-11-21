@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
@@ -18,13 +19,16 @@ public class EntityHelper {
     private final GraphRepository graphRepository;
     private final TermMentionRepository termMentionRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
     public EntityHelper(final TermMentionRepository termMentionRepository,
-                        final GraphRepository graphRepository, WorkQueueRepository workQueueRepository) {
+                        final GraphRepository graphRepository, WorkQueueRepository workQueueRepository,
+                        final AuditRepository auditRepository) {
         this.termMentionRepository = termMentionRepository;
         this.graphRepository = graphRepository;
         this.workQueueRepository = workQueueRepository;
+        this.auditRepository = auditRepository;
     }
 
     public void updateTermMention(TermMention termMention, String sign, GraphVertex conceptVertex, GraphVertex resolvedVertex, User user) {
@@ -37,8 +41,11 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, User user) {
+        auditRepository.audit(vertex.getId(), auditRepository.updateEntityAuditMessage(), user);
         vertex.setProperty(PropertyName.SUBTYPE, subType);
+        auditRepository.audit(vertex.getId(), auditRepository.propertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
         vertex.setProperty(PropertyName.TITLE, title);
+        auditRepository.audit(vertex.getId(), auditRepository.propertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
 
         graphRepository.saveVertex(vertex, user);
     }
@@ -67,13 +74,21 @@ public class EntityHelper {
         // If the user chose to use an existing resolved entity
         if( existing != null && !existing.isEmpty() ) {
             resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.updateEntityAuditMessage(), user);
         } else {
             resolvedVertex = new InMemoryGraphVertex();
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.createEntityAuditMessage() , user);
+
             resolvedVertex.setType(VertexType.ENTITY);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
         }
 
-        resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptVertex.getId());
+        String conceptId = conceptVertex.getId();
+        resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptId);
+        auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.SUBTYPE.toString(), conceptId), user);
+
         resolvedVertex.setProperty(PropertyName.TITLE, sign);
+        auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.TITLE.toString(), sign), user);
 
         graphRepository.saveVertex(resolvedVertex, user);
 
