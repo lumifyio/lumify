@@ -26,14 +26,12 @@ public class VertexSetProperty extends BaseRequestHandler {
 
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
-    private final ArtifactRepository artifactRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public VertexSetProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final ArtifactRepository artifactRepo, final AuditRepository auditRepo) {
+    public VertexSetProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
         ontologyRepository = ontologyRepo;
         graphRepository = graphRepo;
-        artifactRepository = artifactRepo;
         auditRepository = auditRepo;
     }
 
@@ -60,13 +58,11 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
 
-        String message;
+        String oldPropertyValue = null;
         if (graphVertex.getProperty(propertyName) != null) {
-            message = "Changed " + propertyName + " from " + graphVertex.getProperty(propertyName) + " to " + valueStr;
-        } else {
-            message = "Set " + propertyName + " to " + valueStr;
+            oldPropertyValue = graphVertex.getProperty(propertyName).toString();
         }
-        auditRepository.audit(graphVertexId, message, user);
+        auditRepository.audit(graphVertexId, auditRepository.propertyAuditMessage(propertyName, oldPropertyValue, valueStr), user);
 
         graphVertex.setProperty(propertyName, value);
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {

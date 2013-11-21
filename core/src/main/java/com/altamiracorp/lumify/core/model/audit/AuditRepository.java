@@ -48,4 +48,11 @@ public class AuditRepository extends Repository<Audit> {
         save(audit, user.getModelUserContext());
         return audit;
     }
+
+    public String propertyAuditMessage(String propertyName, String oldValue, String newValue) {
+        if (oldValue == null) {
+            oldValue = "undefined";
+        }
+        return "Set " + propertyName + " from " + oldValue + " to " + newValue;
+    }
 }
