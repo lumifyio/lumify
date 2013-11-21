@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Property;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -58,7 +57,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
 
-        auditRepository.audit(graphVertexId, auditRepository.propertyAuditMessage(graphVertex, propertyName, valueStr), user);
+        auditRepository.audit(graphVertexId, auditRepository.vertexPropertyAuditMessage(graphVertex, propertyName, valueStr), user);
 
         graphVertex.setProperty(propertyName, value);
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {

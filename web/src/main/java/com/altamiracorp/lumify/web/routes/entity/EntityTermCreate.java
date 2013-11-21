@@ -48,15 +48,15 @@ public class EntityTermCreate extends BaseRequestHandler {
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
         final GraphVertex createdVertex = new InMemoryGraphVertex();
-        auditRepository.audit(createdVertex.getId(), auditRepository.createEntityAuditMessage(), user);
-
         createdVertex.setType(VertexType.ENTITY);
-        auditRepository.audit(createdVertex.getId(), auditRepository.propertyAuditMessage(createdVertex, PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
-
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
-        auditRepository.audit(createdVertex.getId(), auditRepository.propertyAuditMessage(createdVertex, PropertyName.ROW_KEY.toString(), termMentionRowKey.toString()), user);
 
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
+
+        auditRepository.audit(createdVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.ROW_KEY.toString(), termMentionRowKey.toString()), user);
+
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 
         TermMention termMention = new TermMention(termMentionRowKey);

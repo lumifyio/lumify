@@ -51,7 +51,11 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public String propertyAuditMessage(GraphVertex graphVertex, String propertyName, Object newValue) {
+    public String vertexPropertyAuditMessage (String propertyName, Object value) {
+        return "Set " + propertyName + " from undefined to " + value;
+    }
+
+    public String vertexPropertyAuditMessage(GraphVertex graphVertex, String propertyName, Object newValue) {
         Object oldValue;
         if (graphVertex.getProperty(propertyName) == null) {
             oldValue = "undefined";

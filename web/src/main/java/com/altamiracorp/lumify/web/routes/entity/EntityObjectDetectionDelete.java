@@ -66,8 +66,8 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         if (!deleted) {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
+        auditRepository.audit(artifactVertex.getId(), auditRepository.vertexPropertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
-        auditRepository.audit(artifactVertex.getId(), auditRepository.propertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
         graphRepository.save(artifactVertex, user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));

@@ -41,13 +41,23 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, User user) {
-        auditRepository.audit(vertex.getId(), auditRepository.updateEntityAuditMessage(), user);
-        vertex.setProperty(PropertyName.SUBTYPE, subType);
-        auditRepository.audit(vertex.getId(), auditRepository.propertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
-        vertex.setProperty(PropertyName.TITLE, title);
-        auditRepository.audit(vertex.getId(), auditRepository.propertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
+        boolean isInMemVertex = (vertex.getId() == null);
 
-        graphRepository.saveVertex(vertex, user);
+        if (!isInMemVertex){
+            auditRepository.audit(vertex.getId(), auditRepository.updateEntityAuditMessage(), user);
+            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
+            vertex.setProperty(PropertyName.SUBTYPE, subType);
+            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
+            vertex.setProperty(PropertyName.TITLE, title);
+            graphRepository.saveVertex(vertex, user);
+        } else {
+            vertex.setProperty(PropertyName.SUBTYPE, subType);
+            vertex.setProperty(PropertyName.TITLE, title);
+            graphRepository.saveVertex(vertex, user);
+            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.SUBTYPE.toString(), subType), user);
+            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TITLE.toString(), title), user);
+        }
+
     }
 
     public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, GraphVertex resolvedVertex, GraphVertex conceptVertex) {
@@ -70,27 +80,37 @@ public class EntityHelper {
 
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String boundingBox,
                                           String artifactId, User user) {
+        boolean inMemVertex = true;
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if( existing != null && !existing.isEmpty() ) {
+            inMemVertex = false;
             resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
             auditRepository.audit(resolvedVertex.getId(), auditRepository.updateEntityAuditMessage(), user);
         } else {
             resolvedVertex = new InMemoryGraphVertex();
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.createEntityAuditMessage() , user);
-
             resolvedVertex.setType(VertexType.ENTITY);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
         }
 
         String conceptId = conceptVertex.getId();
+        if (!inMemVertex) {
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(resolvedVertex, PropertyName.SUBTYPE.toString(), conceptId), user);
+        }
         resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptId);
-        auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.SUBTYPE.toString(), conceptId), user);
 
+        if (!inMemVertex) {
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(resolvedVertex, PropertyName.TITLE.toString(), sign), user);
+        }
         resolvedVertex.setProperty(PropertyName.TITLE, sign);
-        auditRepository.audit(resolvedVertex.getId(), auditRepository.propertyAuditMessage(resolvedVertex, PropertyName.TITLE.toString(), sign), user);
 
         graphRepository.saveVertex(resolvedVertex, user);
+
+        if (inMemVertex) {
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.SUBTYPE.toString(), conceptId), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TITLE.toString(), sign), user);
+        }
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
         graphRepository.setPropertyEdge(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF.toString()

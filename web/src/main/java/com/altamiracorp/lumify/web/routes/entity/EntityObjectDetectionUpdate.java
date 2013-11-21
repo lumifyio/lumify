@@ -47,7 +47,6 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         GraphVertex resolvedVertex;
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
-            auditRepository.audit(resolvedGraphVertexId, auditRepository.updateEntityAuditMessage(), user);
         } else {
             resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox,
                     artifactId, user);
@@ -74,8 +73,8 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 JSONObject entityTag = tag.getJson();
                 entityTag.put("artifactId", artifactId);
                 detectedObjects.put(i, entityTag);
+                auditRepository.audit(artifactVertex.getId(), auditRepository.vertexPropertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
                 artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
-                auditRepository.audit(artifactVertex.getId(), auditRepository.propertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
                 result.put("entityVertex", entityTag);
                 graphRepository.save(artifactVertex, user);
 
