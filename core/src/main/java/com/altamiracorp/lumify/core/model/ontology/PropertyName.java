@@ -23,7 +23,10 @@ public enum PropertyName {
     RAW_HDFS_PATH("_rawHdfsPath"),
     TEXT_HDFS_PATH("_textHdfsPath"),
     DETECTED_OBJECTS("_detectedObjects"),
-    HIGHLIGHTED_TEXT_HDFS_PATH("highlightedTextHdfsPath");
+    HIGHLIGHTED_TEXT_HDFS_PATH("highlightedTextHdfsPath"),
+    TWEET_ID("TWEET_ID"),
+    FAVORITE_COUNT("FAVORITE_COUNT"),
+    RETWEET_COUNT("RETWEET_COUNT");
 
     private final String text;
 
