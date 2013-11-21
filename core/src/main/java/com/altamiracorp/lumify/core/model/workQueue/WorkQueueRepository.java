@@ -19,7 +19,6 @@ public abstract class WorkQueueRepository {
     public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
-    public static final String TWITTER_STREAM_QUEUE_NAME = "twitterStream";
 
     public void pushArtifactHighlight(final String artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
