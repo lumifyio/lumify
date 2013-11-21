@@ -20,10 +20,17 @@ public class TermRegexFinder {
         Matcher m = regex.matcher(text);
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (m.find()) {
-            TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, m.start(), m.end());
+            if (m.groupCount() != 2) {
+                throw new RuntimeException("regex pattern must have 2 capture groups. the first will determine the start and end index, the second will determine the sign.");
+            }
+
+            String groupCapture = m.group(1);
+            int groupCaptureOffset = text.indexOf(groupCapture, m.start());
+
+            TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, groupCaptureOffset, groupCaptureOffset + groupCapture.length());
             TermMention termMention = new TermMention(termMentionRowKey);
             termMention.getMetadata()
-                    .setSign(m.group(1).toString())
+                    .setSign(m.group(2))
                     .setOntologyClassUri((String) concept.getProperty(PropertyName.DISPLAY_NAME))
                     .setConceptGraphVertexId(concept.getId());
             termMentions.add(termMention);
