@@ -199,8 +199,9 @@
                 </configuration>
             </plugin>
             <plugin>
-              <artifactId>exec-maven-plugin</artifactId>
               <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.2.1</version>
               <executions>
                 <execution><!-- Install all javascript dependencies -->
                   <id>JavaScript Dependencies</id>
