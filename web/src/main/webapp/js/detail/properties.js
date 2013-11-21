@@ -4,10 +4,23 @@ define([
     'service/ontology',
     'service/vertex',
     'service/relationship',
+    'service/audit',
+    'util/formatters',
     './dropdowns/propertyForm/propForm',
     'tpl!./properties',
+    'tpl!./audit-list',
     'sf'
-], function (defineComponent, OntologyService, VertexService, RelationshipService, PropertyForm, propertiesTemplate, sf) {
+], function (
+    defineComponent,
+    OntologyService,
+    VertexService,
+    RelationshipService,
+    AuditService,
+    formatters,
+    PropertyForm,
+    propertiesTemplate,
+    auditsListTemplate,
+    sf) {
     'use strict';
 
     var component = defineComponent(Properties);
@@ -19,9 +32,11 @@ define([
         this.ontologyService = new OntologyService();
         this.vertexService = new VertexService();
         this.relationshipService = new RelationshipService();
+        this.auditService = new AuditService();
 
         this.defaultAttrs({
-            addNewPropertiesSelector: '.add-new-properties'
+            addNewPropertiesSelector: '.add-new-properties',
+            entityAuditsSelector: '.entity_audit_events'
         });
 
         this.after('initialize', function () {
@@ -31,9 +46,89 @@ define([
             this.on('addProperty', this.onAddProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
+            this.$node
+                .closest('.type-content')
+                .off('.properties')
+                .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
+
             this.$node.html(propertiesTemplate({properties:null}));
             this.displayProperties(this.attr.data.properties);
         });
+
+        this.onToggleAuditing = function(event, data) {
+            var self = this,
+                auditsEl = this.select('entityAuditsSelector');
+
+            if (data.displayed) {
+                auditsEl.html('<div class="nav-header">Audits<span class="badge loading"/></div>').show();
+                this.$node.find('.audit-list').remove();
+
+                this.auditService.getAudits(this.attr.data.id)
+                    .done(function(auditResponse) {
+                        var audits = auditResponse.auditHistory.reverse(),
+                            propertyAudits = _.filter(audits, function(a) { return /^Set/i.test(a.message); });
+
+                        self.select('entityAuditsSelector').html(auditsListTemplate({
+                            audits: audits,
+                            formatters: formatters,
+                            hideRegex: /^(BEGIN|END|Set)/i
+                        }));
+
+                        self.updatePropertyAudits(propertyAudits);
+                        auditsEl.show();                        
+                    });
+            } else {
+                auditsEl.hide();
+                this.$node.find('.audit-list').remove();
+            }
+        };
+
+        this.updatePropertyAudits = function(audits) {
+            var self = this,
+                extractRegex = /^Set\s+([^\s]+)\s+from\s+([^\s]+)\s+to\s+(.+)$/,
+                auditsByProperty = {};
+
+            audits.forEach(function(audit) {
+                var match = audit.message.match(extractRegex);
+                if (match && match.length === 4) {
+                    match.shift();
+                    var propertyName = match.shift(),
+                        fromValue = match.shift(),
+                        toValue = match.shift();
+
+                    if (!auditsByProperty[propertyName]) {
+                        auditsByProperty[propertyName] = [];
+                    }
+
+                    audit.fromValue = fromValue;
+                    audit.toValue = toValue;
+                    if (!$('#app').hasClass('fullscreen-details')) {
+                        var geoMatch = audit.toValue.match(/^point\(([\d.-]+)\s*,\s*([\d.-]+)\s*\)$/);
+                        if (geoMatch && geoMatch.length === 3) {
+                            audit.geoLocation = {
+                                latitude: geoMatch[1],
+                                longitude: geoMatch[2]
+                            };
+                        }
+                    }
+                    if (/^\d+-\d+-\d+$/.test(audit.toValue)) {
+                        audit.toValue = sf("{0:yyyy/MM/dd}", new Date(audit.toValue + " 00:00"));
+                    }
+
+                    auditsByProperty[propertyName].push(audit);
+                        
+                } else console.warn('Unable to extract property audit details: ', audit.message);
+            });
+
+            Object.keys(auditsByProperty).forEach(function(propertyName) {
+                var propLi = self.$node.find('.property-' + propertyName);
+                propLi.append(auditsListTemplate({
+                    audits: auditsByProperty[propertyName],
+                    formatters: formatters,
+                    hideRegex: null
+                }));
+            });
+        };
 
         this.onVerticesUpdated = function(event, data) {
             var self = this;
@@ -127,6 +222,7 @@ define([
                 var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
                 self.$node.html(props);
             });
+            self.trigger('toggleAuditDisplay', { displayed: false })
         };
     }
 

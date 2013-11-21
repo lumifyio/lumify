@@ -2,8 +2,9 @@
 define([
     'service/ucd',
     'tpl!./toolbar/fullscreen',
-    'tpl!./toolbar/fullscreen-item'
-], function(UCD, fullscreenButtonTemplate, fullscreenItemTemplate) {
+    'tpl!./toolbar/fullscreen-item',
+    'tpl!./toolbar/audits'
+], function(UCD, fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
     'use strict';
 
     var intercomInstance;
@@ -19,7 +20,8 @@ define([
             fullscreenSingleSelector: '.fullscreen-single',
             fullscreenMultiSelector: '.fullscreen-multi',
             fullscreenDropdownButtonSelector: '.fullscreen-multi .dropdown-toggle',
-            fullscreenDropdownItemSelector: '.fullscreen-multi .existing a'
+            fullscreenDropdownItemSelector: '.fullscreen-multi .existing a',
+            auditSelector: '.audits'
         });
 
         this.after('teardown', function() {
@@ -39,11 +41,36 @@ define([
 
                 this.setupTabCommunication();
             }
+
+            this.auditDisplayed = false;
+            this.on('toggleAuditDisplay', this.onToggleAuditDisplay);
+
+            this.on('click', {
+                auditSelector: this.onAuditToggle
+            });
         });
 
         this.fullscreenButton = function(vertexIds) {
             return fullscreenButtonTemplate({
                 vertexIds: vertexIds
+            });
+        };
+
+        this.auditsButton = function() {
+            return auditsButtonTemplate({});
+        };
+
+        this.onToggleAuditDisplay = function(event, data) {
+            this.auditDisplayed = data.displayed;
+            this.$node.toggleClass('showAuditing', data.displayed);
+            this.$node.find('.btn-toolbar .audits').toggleClass('active', data.displayed);
+        };
+
+        this.onAuditToggle = function(event) {
+            event.stopPropagation();
+            this.auditDisplayed = !this.auditDisplayed;
+            this.trigger('toggleAuditDisplay', {
+                displayed: this.auditDisplayed
             });
         };
 

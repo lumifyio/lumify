@@ -96,7 +96,8 @@ define([
             this.$node.html(template({
                 vertex: vertex,
                 highlightButton: this.highlightButton(),
-                fullscreenButton: this.fullscreenButton([vertex.id])
+                fullscreenButton: this.fullscreenButton([vertex.id]),
+                auditsButton: this.auditsButton()
             }));
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
