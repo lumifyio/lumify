@@ -55,4 +55,12 @@ public class AuditRepository extends Repository<Audit> {
         }
         return "Set " + propertyName + " from " + oldValue + " to " + newValue;
     }
+
+    public String createEntityAuditMessage () {
+        return "Entity Created";
+    }
+
+    public String updateEntityAuditMessage () {
+        return "Updating Entity";
+    }
 }
