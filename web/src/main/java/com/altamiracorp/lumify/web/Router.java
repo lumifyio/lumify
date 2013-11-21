@@ -103,8 +103,6 @@ public class Router extends HttpServlet {
         app.get("/map/marker/{type}/image", MapMarkerImage.class);
         app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
-        app.get("/admin/query", authenticator, AdminQuery.class);
-        app.get("/admin/tables", authenticator, AdminTables.class);
         app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
         app.get("/admin/dictionary", authenticator, AdminDictionary.class);
         app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
