@@ -13,6 +13,8 @@ import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Guice;
@@ -41,9 +43,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
 
     private OutputCollector collector;
     protected ArtifactRepository artifactRepository;
+    protected OntologyRepository ontologyRepository;
     private FileSystem hdfsFileSystem;
     protected GraphRepository graphRepository;
     protected AuditRepository auditRepository;
+    protected TermMentionRepository termMentionRepository;
     private Injector injector;
     private AtomicLong totalProcessedCount = new AtomicLong();
     private AtomicLong processingCount = new AtomicLong();
@@ -282,6 +286,16 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
     @Inject
     public void setAuditRepository(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
+    }
+
+    @Inject
+    public void setOntologyRepository (OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
+
+    @Inject
+    public void setTermMentionRepository (TermMentionRepository termMentionRepository) {
+        this.termMentionRepository = termMentionRepository;
     }
 
     protected boolean isArchive(String fileName) {
