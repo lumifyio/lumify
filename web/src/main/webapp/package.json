@@ -7,7 +7,11 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-bower-task": "~0.3.4",
+    "grunt-exec": "~0.4.2",
     "karma": "0.10.1",
     "karma-chrome-launcher": "0.1.0",
     "karma-coffee-preprocessor": "0.1.0",
@@ -20,12 +24,6 @@
     "karma-requirejs": "0.1.0",
     "karma-script-launcher": "0.1.0",
     "jshint": "~2.3.0"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-bower-task": "~0.3.4",
-    "grunt-exec": "~0.4.2"
   },
   "scripts": {
     "test": "karma start --single-run"

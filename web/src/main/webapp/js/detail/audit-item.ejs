@@ -1,0 +1,25 @@
+<% if (!hideRegex || !hideRegex.test(audit.message)) { %>
+  <li>
+    <% if (audit.fromValue && audit.toValue) { %>
+      <span class="audit-user"><%= audit.user %></span> set 
+      <span class="audit-date"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
+      <span class="audit-from"><%= audit.fromValue %></span>
+      <span class="audit-to">
+        <% if (audit.geoLocation) { %>
+          <a href="#" 
+            class="map-coordinates"
+            data-latitude="<%= audit.geoLocation.latitude %>"
+            data-longitude="<%= audit.geoLocation.longitude %>">
+              <%= audit.geoLocation.latitude %>, <%= audit.geoLocation.longitude %>
+          </a>
+        <% } else { %>
+          <%= audit.toValue %>
+        <% } %>
+      </span>
+    <% } else { %>
+       <span class="audit-message">  <%= audit.message %></span> by 
+       <span class="audit-date"> <%= formatters.date.relativeToNow(audit.dateTime) %></span>
+       <span class="audit-user"><%= audit.user %></span>
+    <% } %>
+  </li>
+<% } %>

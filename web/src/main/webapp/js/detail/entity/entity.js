@@ -78,7 +78,8 @@ define([
                 self.$node.html(template({
                     vertex: self.attr.data,
                     highlightButton: self.highlightButton(),
-                    fullscreenButton: self.fullscreenButton([self.attr.data.id])
+                    fullscreenButton: self.fullscreenButton([self.attr.data.id]),
+                    auditsButton: self.auditsButton()
                 }));
 
                 Image.attachTo(self.select('glyphIconSelector'), {
@@ -200,7 +201,7 @@ define([
                 vertices: _.map(groupedByType.references, function(r) {
                     return r.vertices.other;
                 }),
-                infiniteScrolling: groupedByType.references.length > 0,
+                infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
                 total: totalReferences
             });
         };
