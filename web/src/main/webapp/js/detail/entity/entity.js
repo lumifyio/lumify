@@ -201,7 +201,7 @@ define([
                 vertices: _.map(groupedByType.references, function(r) {
                     return r.vertices.other;
                 }),
-                infiniteScrolling: groupedByType.references.length > 0,
+                infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
                 total: totalReferences
             });
         };
