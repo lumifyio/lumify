@@ -23,7 +23,7 @@ var require = {
     'tpl': '../libs/requirejs-ejs/rejs',
     'googlev3': '//maps.googleapis.com/maps/api/js?v=3&sensor=false&callback=googleV3Initialized',
     'map/map': 'map/map-openlayers',
-    'openlayers': '../libs/openlayers/OpenLayers',
+    'openlayers': '../libs/openlayers/OpenLayers.debug',
     'cytoscape': '../libs/cytoscape.js/build/cytoscape',
     'arbor': '../libs/cytoscape.js/lib/arbor',
     'videojs': '../libs/video.js/video',
