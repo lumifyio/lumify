@@ -69,10 +69,6 @@ public class AuditRepository extends Repository<Audit> {
         return "Entity Created";
     }
 
-    public String updateEntityAuditMessage () {
-        return "Updating Entity";
-    }
-
     public String deleteEntityAuditMessage (String deletedVertexId) {
         return "Deleted: " + deletedVertexId;
     }

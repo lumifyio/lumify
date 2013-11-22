@@ -210,9 +210,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
         boolean existingGraphVertex = oldGraphVertexId != null && oldGraphVertexId.length() > 0;
 
         GraphVertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, getUser());
-        if (existingGraphVertex) {
-            auditRepository.audit(vertex.getId(), auditRepository.updateEntityAuditMessage(), getUser());
-        } else {
+        if (!existingGraphVertex) {
             auditRepository.audit(vertex.getId(), auditRepository.createEntityAuditMessage(), getUser());
         }
         return vertex;

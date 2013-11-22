@@ -44,7 +44,6 @@ public class EntityHelper {
         boolean isInMemVertex = (vertex.getId() == null);
 
         if (!isInMemVertex){
-            auditRepository.audit(vertex.getId(), auditRepository.updateEntityAuditMessage(), user);
             auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
             vertex.setProperty(PropertyName.SUBTYPE, subType);
             auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
@@ -86,7 +85,6 @@ public class EntityHelper {
         if( existing != null && !existing.isEmpty() ) {
             inMemVertex = false;
             resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.updateEntityAuditMessage(), user);
         } else {
             resolvedVertex = new InMemoryGraphVertex();
             resolvedVertex.setType(VertexType.ENTITY);
