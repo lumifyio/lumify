@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 
     exec: {
         build_openlayers: {
-            command: 'python build.py full ../OpenLayers.js && python build.py -c none full ../OpenLayers.debug.js',
+            command: 'python build.py -c minimize full ../OpenLayers.js && python build.py -c none full ../OpenLayers.debug.js',
             stdout: false,
             cwd: 'libs/openlayers/build'
         },
