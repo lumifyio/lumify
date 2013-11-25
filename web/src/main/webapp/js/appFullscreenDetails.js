@@ -4,10 +4,11 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./appFullscreenDetails',
+    'tpl!./appFullscreenDetailsError',
     'service/vertex',
     'service/ucd',
     'detail/detail'
-], function(defineComponent, registry, template, VertexService, UCD, Detail) {
+], function(defineComponent, registry, template, errorTemplate, VertexService, UCD, Detail) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -25,7 +26,8 @@ define([
 
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',
-            closeSelector: '.close-detail-pane'
+            closeSelector: '.close-detail-pane',
+            noResultsSelector: '.no-results'
         });
 
         this.after('initialize', function() {
@@ -97,10 +99,21 @@ define([
             document.title = this.titleForVertices();
         };
 
+        this.handleNoVertices = function() {
+            document.title = "No vertices found";
+            this.select('noResultsSelector')
+                .html(errorTemplate({ vertices: this.attr.graphVertexIds }))
+                .addClass('visible');
+        };
+
         this.handleVerticesLoaded = function(vertices) {
 
             Detail.teardownAll();
             this.$node.find('.detail-pane').remove();
+
+            if (vertices.length === 0) {
+                return this.handleNoVertices();
+            }
 
             this.vertices = _.sortBy(vertices, function(v) {
                 var descriptors = [];

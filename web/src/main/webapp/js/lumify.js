@@ -33,38 +33,54 @@ require([
 function(compose, registry, advice, withLogging, debug, _, Visibility) {
     'use strict';
 
-    $.fn.datepicker.defaults.format = "yyyy-mm-dd";
-    $.fn.datepicker.defaults.autoclose = true;
+    configureApplication();
 
-    debug.enable(true);
-    DEBUG.events.logNone();
+    loadApplicationTypeBasedOnUrlHash();
 
+    function configureApplication() {
+        // Flight Logging
+        debug.enable(true);
+        DEBUG.events.logNone();
 
-    // Uncomment to enable logging of on, off, trigger events
-    //DEBUG.events.logAll();
+        // Default datepicker options
+        $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+        $.fn.datepicker.defaults.autoclose = true;
 
-    // Uncomment to enable logging of trigger events
-    //DEBUG.events.logByAction('trigger');
-
-    Visibility.attachTo(document);
-
-    var ids = graphVertexIdsToOpen();
-
-    if (ids && ids.length) {
-        window.isFullscreenDetails = true;
-        $('html').addClass('fullscreenDetails');
-        require(['appFullscreenDetails'], function(FullscreenDetailApp) {
-            FullscreenDetailApp.attachTo('#app', {
-                graphVertexIds: ids
-            });
-        });
-    } else {
-        $('html').addClass('fullscreenApp');
-        require(['app'], function(App) {
-            App.attachTo('#app');
-        });
+        Visibility.attachTo(document);
+        $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
     }
 
+    /**
+     * Switch between lumify and lumify-fullscreen-details based on url hash
+     */
+    function loadApplicationTypeBasedOnUrlHash() {
+        var ids = graphVertexIdsToOpen(),
+
+            // Is this the popoout details app? ids passed to hash?
+            popoutDetails = !!(ids && ids.length),
+
+            // Is this the default lumify application?
+            mainApp = !popoutDetails;
+
+        $('html')
+            .toggleClass('fullscreenApp', mainApp)
+            .toggleClass('fullscreenDetails', popoutDetails)
+        window.isFullscreenDetails = popoutDetails;
+        
+        if (popoutDetails) {
+            require(['appFullscreenDetails'], function(PopoutDetailsApp) {
+                PopoutDetailsApp.teardownAll();
+                PopoutDetailsApp.attachTo('#app', {
+                    graphVertexIds: ids
+                });
+            });
+        } else {
+            require(['app'], function(App) {
+                App.teardownAll();
+                App.attachTo('#app');
+            });
+        }
+    }
 
     function graphVertexIdsToOpen() {
         // http://...#v=1,2,3

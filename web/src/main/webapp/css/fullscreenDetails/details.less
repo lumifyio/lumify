@@ -2,6 +2,23 @@
 position: relative;
 text-align: center;
 
+.no-results {
+  color: #666;
+  width: 30em;
+  margin: auto;
+  padding: 0 0.5em;
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+
+  h1 {
+      margin-top: 2em;
+      padding: inherit;
+  }
+}
+
 .detail-pane {
   text-align: left;
   background: white;
