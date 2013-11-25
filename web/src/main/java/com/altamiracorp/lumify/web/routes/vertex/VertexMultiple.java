@@ -31,8 +31,14 @@ public class VertexMultiple extends BaseRequestHandler {
         Iterator<GraphVertex> i = graphVertices.iterator();
         while (i.hasNext()) {
             GraphVertex vertex = i.next();
-            if (vertex == null || !vertex.getProperty(PropertyName.TYPE.toString()).equals("entity")) {
+            if (vertex == null) {
                 i.remove();
+
+            } else {
+                Object type = vertex.getProperty(PropertyName.TYPE.toString());
+                if (!type.equals("entity") && !type.equals("artifact")) {
+                    i.remove();
+                }
             }
         }
 
