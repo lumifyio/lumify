@@ -672,9 +672,6 @@ define([
                 menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
                 menu.data("currentVertexType", event.cyTarget.data('_type'));
                 menu.data("currentVertexSubtype", event.cyTarget.data('_subType'));
-                if (event.cy.nodes().filter(':selected').length > 1) {
-                    return false;
-                }
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             }
