@@ -66,11 +66,11 @@ define([
                 var vertices = this._verticesInData(val);
 
                 if (vertices && vertices.length === 1)
-                    this.trigger('displayInformation', { message: 'Copy vertex' });
+                    this.trigger('displayInformation', { message: 'Copied vertex' });
                 if (vertices && vertices.length > 1)
-                    this.trigger('displayInformation', { message: 'Copy ' + vertices.length + ' vertices' });
+                    this.trigger('displayInformation', { message: 'Copied ' + vertices.length + ' vertices' });
                 else if (!vertices)
-                    this.trigger('displayInformation', { message: 'Copy data' });
+                    this.trigger('displayInformation', { message: 'Copied data' });
             }
         };
 
