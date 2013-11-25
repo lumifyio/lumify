@@ -38,6 +38,7 @@ public class TikaTextExtractor {
     private static final String PROPS_FILE = "tika-extractor.properties";
     private static final String DATE_KEYS_PROPERTY = "tika.extraction.datekeys";
     private static final String SUBJECT_KEYS_PROPERTY = "tika.extraction.titlekeys";
+    private static final String AUTHOR_PROPERTY = "tika.extractions.author";
     private static final String URL_KEYS_PROPERTY = "tika.extraction.urlkeys";
     private static final String TYPE_KEYS_PROPERTY = "tika.extraction.typekeys";
     private static final String EXT_URL_KEYS_PROPERTY = "tika.extraction.exturlkeys";
@@ -53,6 +54,7 @@ public class TikaTextExtractor {
     private List<String> srcTypeKeys;
     private List<String> retrievalTimestampKeys;
     private List<String> customFlickrMetadataKeys;
+    private List<String> authorKeys;
 
     @Inject
     public TikaTextExtractor() {
@@ -76,6 +78,7 @@ public class TikaTextExtractor {
         srcTypeKeys = Arrays.asList(tikaProperties.getProperty(SRC_TYPE_KEYS_PROPERTY, "og:type").split(","));
         retrievalTimestampKeys = Arrays.asList(tikaProperties.getProperty(RETRIEVAL_TIMESTAMP_KEYS_PROPERTY, "atc:retrieval-timestamp").split(","));
         customFlickrMetadataKeys = Arrays.asList(tikaProperties.getProperty(CUSTOM_FLICKR_METADATA_KEYS_PROPERTY, "Unknown tag (0x9286)").split(","));
+        authorKeys = Arrays.asList(tikaProperties.getProperty(AUTHOR_PROPERTY, "author").split(","));
 
     }
 
@@ -112,6 +115,7 @@ public class TikaTextExtractor {
         result.set("extUrl", extractTextField(metadata, extUrlKeys));
         result.set("srcType", extractTextField(metadata, srcTypeKeys));
         result.set("retrievalTime", extractRetrievalTime(metadata));
+        result.setAuthor(extractTextField(metadata, authorKeys));
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
         if (customImageMetadata != null && !customImageMetadata.equals("")) {

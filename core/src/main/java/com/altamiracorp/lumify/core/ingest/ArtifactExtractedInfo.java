@@ -34,6 +34,7 @@ public class ArtifactExtractedInfo {
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String URL = "url";
     private static final String SOURCE = "source";
+    private static final String AUTHOR = "author";
 
     private HashMap<String, Object> properties = new HashMap<String, Object>();
 
@@ -271,7 +272,13 @@ public class ArtifactExtractedInfo {
         set (SOURCE, source);
     }
 
+    public String getAuthor () {
+        return (String) properties.get(AUTHOR);
+    }
 
+    public void setAuthor (String author) {
+        set (AUTHOR, author);
+    }
 
     public static class VideoFrame {
         private final String hdfsPath;

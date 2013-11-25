@@ -123,6 +123,9 @@ public class ArtifactRepository extends Repository<Artifact> {
         if (artifactExtractedInfo.getDate() != null) {
             artifactVertex.setProperty(PropertyName.PUBLISHED_DATE, artifactExtractedInfo.getDate().getTime());
         }
+        if (artifactExtractedInfo.getAuthor() != null) {
+            artifactVertex.setProperty(PropertyName.AUTHOR, artifactExtractedInfo.getAuthor());
+        }
         String vertexId = graphSession.save(artifactVertex, user);
         graphSession.commit();
 
