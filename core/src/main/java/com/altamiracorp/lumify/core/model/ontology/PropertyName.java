@@ -26,7 +26,8 @@ public enum PropertyName {
     HIGHLIGHTED_TEXT_HDFS_PATH("highlightedTextHdfsPath"),
     TWEET_ID("TWEET_ID"),
     FAVORITE_COUNT("FAVORITE_COUNT"),
-    RETWEET_COUNT("RETWEET_COUNT");
+    RETWEET_COUNT("RETWEET_COUNT"),
+    AUTHOR("author");
 
     private final String text;
 

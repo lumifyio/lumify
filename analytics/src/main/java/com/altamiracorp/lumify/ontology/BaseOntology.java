@@ -153,6 +153,12 @@ public class BaseOntology {
             sourceProperty = graph.makeType().name(PropertyName.SOURCE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
         }
 
+
+        TitanKey authorProperty = (TitanKey) graph.getType(PropertyName.AUTHOR.toString());
+        if (authorProperty == null) {
+            authorProperty = graph.makeType().name(PropertyName.AUTHOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+        }
+
         //properties for tweets
         TitanKey tweetIdProperty = (TitanKey) graph.getType(PropertyName.TWEET_ID.toString());
         if (tweetIdProperty == null) {
