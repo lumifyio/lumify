@@ -6,7 +6,7 @@
     "bootstrap-datepicker": "~1.2.0",
     "chai": "~1.8.1",
     "color-js": "~1.0.1",
-    "cytoscape.js": "git://github.com/nearinfinity/cytoscape.js.git#master",
+    "cytoscape.js": "git://github.com/nearinfinity/cytoscape.js.git#dcccbb72ce6d5b173cd7fbd5134cca4ed9f83de2",
     "d3": "~3.3.2",
     "flight": "~1.1.1",
     "flight-mocha": "~0.1.0",
