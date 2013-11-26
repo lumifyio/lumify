@@ -36,8 +36,8 @@ define([
         SELECTION_THROTTLE = 100,
         // How many edges are required before we don't show them on zoom/pan
         SHOW_EDGES_ON_ZOOM_THRESHOLD = 50,
-        GRID_LAYOUT_X_INCREMENT = 350,
-        GRID_LAYOUT_Y_INCREMENT = 200;
+        GRID_LAYOUT_X_INCREMENT = 175,
+        GRID_LAYOUT_Y_INCREMENT = 100;
 
     return defineComponent(Graph, withContextMenu, withGraphContextMenuItems);
 
@@ -89,10 +89,9 @@ define([
                         x:renderedPosition.x,
                         y:renderedPosition.y
                     },
-                    inc = GRID_LAYOUT_X_INCREMENT * cy.zoom(),
-                    yinc = GRID_LAYOUT_Y_INCREMENT * cy.zoom(),
+                    inc = GRID_LAYOUT_X_INCREMENT * cy.zoom() * retina.devicePixelRatio,
+                    yinc = GRID_LAYOUT_Y_INCREMENT * cy.zoom() * retina.devicePixelRatio,
                     width = inc * 4;
-
 
                 if (data.start) {
                     idToCyNode = {};
@@ -228,8 +227,8 @@ define([
                     boundingBox = currentNodes.boundingBox(),
                     validBox = isFinite(boundingBox.x1),
                     zoom = cy.zoom(),
-                    xInc = GRID_LAYOUT_X_INCREMENT/2,
-                    yInc = GRID_LAYOUT_Y_INCREMENT/2,
+                    xInc = GRID_LAYOUT_X_INCREMENT,
+                    yInc = GRID_LAYOUT_Y_INCREMENT,
                     nextAvailablePosition = retina.pixelsToPoints({ 
                         x: validBox ? (boundingBox.x1/* + xInc*/) : 0,
                         y: validBox ? (boundingBox.y2/* + yInc*/) : 0
