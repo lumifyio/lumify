@@ -35,7 +35,9 @@ define([
         MAX_TITLE_LENGTH = 15,
         SELECTION_THROTTLE = 100,
         // How many edges are required before we don't show them on zoom/pan
-        SHOW_EDGES_ON_ZOOM_THRESHOLD = 50;
+        SHOW_EDGES_ON_ZOOM_THRESHOLD = 50,
+        GRID_LAYOUT_X_INCREMENT = 350,
+        GRID_LAYOUT_Y_INCREMENT = 200;
 
     return defineComponent(Graph, withContextMenu, withGraphContextMenuItems);
 
@@ -87,9 +89,10 @@ define([
                         x:renderedPosition.x,
                         y:renderedPosition.y
                     },
-                    inc = 350 * cy.zoom(), 
-                    yinc = 200 * cy.zoom(),
+                    inc = GRID_LAYOUT_X_INCREMENT * cy.zoom(),
+                    yinc = GRID_LAYOUT_Y_INCREMENT * cy.zoom(),
                     width = inc * 4;
+
 
                 if (data.start) {
                     idToCyNode = {};
@@ -224,15 +227,20 @@ define([
                 var currentNodes = cy.nodes(),
                     boundingBox = currentNodes.boundingBox(),
                     validBox = isFinite(boundingBox.x1),
-                    inc = 200,
+                    zoom = cy.zoom(),
+                    xInc = GRID_LAYOUT_X_INCREMENT/2,
+                    yInc = GRID_LAYOUT_Y_INCREMENT/2,
                     nextAvailablePosition = retina.pixelsToPoints({ 
-                        x: validBox ? (boundingBox.x1 + inc/2) : 0,
-                        y: validBox ? (boundingBox.y2 + inc) : 0
-                    }),
-                    maxWidth = validBox ? retina.pixelsToPoints({ x:boundingBox.w, y:boundingBox.h}).x : 0,
+                        x: validBox ? (boundingBox.x1/* + xInc*/) : 0,
+                        y: validBox ? (boundingBox.y2/* + yInc*/) : 0
+                    });
+
+                nextAvailablePosition.y += yInc;
+
+                var maxWidth = validBox ? retina.pixelsToPoints({ x:boundingBox.w, y:boundingBox.h}).x : 0,
                     startX = nextAvailablePosition.x;
 
-                maxWidth = Math.max(maxWidth, inc * 10);
+                maxWidth = Math.max(maxWidth, xInc * 10);
 
                 var vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(n.id()) >= 0; });
@@ -266,9 +274,9 @@ define([
 
                         cyNodeData.position = retina.pointsToPixels(nextAvailablePosition);
 
-                        nextAvailablePosition.x += inc;
+                        nextAvailablePosition.x += xInc;
                         if((nextAvailablePosition.x - startX) > maxWidth) {
-                            nextAvailablePosition.y += inc;
+                            nextAvailablePosition.y += yInc;
                             nextAvailablePosition.x = startX;
                         }
 
@@ -651,7 +659,7 @@ define([
 
         this.graphContextTap = function(event) {
             var menu;
-            // TODO: create different vertexContext menus for vertices/edges
+
             if (event.cyTarget == event.cy){
                 menu = this.select ('contextMenuSelector');
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
