@@ -199,8 +199,8 @@ public class BaseOntology {
         Concept document = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), "Document", user);
 //        Concept tweet = ontologyRepository.getOrCreateConcept(document, ArtifactType.DOCUMENT.toString(), "Tweet", user);
         ontologyRepository.addPropertyTo(document, tweetIdProperty.getName(), "Tweet ID", PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(document, favoriteCountProperty.getName(), "Favorite Count", PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(document, retweetCountProperty.getName(), "Retweet Count", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(document, favoriteCountProperty.getName(), "Favorite Count", PropertyType.DOUBLE, user);
+        ontologyRepository.addPropertyTo(document, retweetCountProperty.getName(), "Retweet Count", PropertyType.DOUBLE, user);
         graph.commit();
 
         ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), "Video", user);
