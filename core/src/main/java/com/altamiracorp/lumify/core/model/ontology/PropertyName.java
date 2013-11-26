@@ -24,10 +24,10 @@ public enum PropertyName {
     TEXT_HDFS_PATH("_textHdfsPath"),
     DETECTED_OBJECTS("_detectedObjects"),
     HIGHLIGHTED_TEXT_HDFS_PATH("highlightedTextHdfsPath"),
-    TWEET_ID("TWEET_ID"),
-    FAVORITE_COUNT("FAVORITE_COUNT"),
-    RETWEET_COUNT("RETWEET_COUNT"),
-    AUTHOR("author");
+    AUTHOR("author"),
+    TWEET_ID("tweetId"),
+    FAVORITE_COUNT("favoriteCount"),
+    RETWEET_COUNT("retweetCount");
 
     private final String text;
 

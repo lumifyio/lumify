@@ -167,12 +167,12 @@ public class BaseOntology {
 
         TitanKey favoriteCountProperty = (TitanKey) graph.getType(PropertyName.FAVORITE_COUNT.toString());
         if (favoriteCountProperty == null) {
-            favoriteCountProperty = graph.makeType().name(PropertyName.FAVORITE_COUNT.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            favoriteCountProperty = graph.makeType().name(PropertyName.FAVORITE_COUNT.toString()).dataType(Integer.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
         }
 
         TitanKey retweetCountProperty = (TitanKey) graph.getType(PropertyName.RETWEET_COUNT.toString());
         if (retweetCountProperty == null) {
-            retweetCountProperty = graph.makeType().name(PropertyName.RETWEET_COUNT.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            retweetCountProperty = graph.makeType().name(PropertyName.RETWEET_COUNT.toString()).dataType(Integer.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
         }
         graph.commit();
 
