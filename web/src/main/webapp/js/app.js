@@ -194,6 +194,9 @@ define([
 
                 pane.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
                     pane.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                    if (!visible) {
+                        self.trigger(data.name + 'PaneVisible');
+                    }
                     self.triggerPaneResized();
                 });
             }
