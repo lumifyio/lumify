@@ -342,8 +342,6 @@ define([
 
         var spriteMaterial = new THREE.SpriteMaterial({
             map: texture,
-            useScreenCoordinates:false,
-            alignment: THREE.SpriteAlignment.center,
             transparent: true
         });
         var sprite = new THREE.Sprite(spriteMaterial);
@@ -368,8 +366,6 @@ define([
 
         var textSpriteMaterial = new THREE.SpriteMaterial({
             map: textTexture,
-            useScreenCoordinates:false,
-            alignment: THREE.SpriteAlignment.center,
             color: 0xffffff  
         });
         var textSprite = new THREE.Sprite(textSpriteMaterial);

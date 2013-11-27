@@ -1,3 +1,4 @@
+define(['three'], function(THREE) {
 /**
  * @author Eberhard Graether / http://egraether.com/
  */
@@ -542,3 +543,4 @@ THREE.TrackballControls = function ( object, domElement ) {
 };
 
 THREE.TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+});
