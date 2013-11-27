@@ -65,6 +65,10 @@ define([
             this.loadArtifact();
         });
 
+        this.before('teardown', function() {
+            this.select('propertiesSelector').teardownComponent(Properties);
+        });
+
         this.onVerticesUpdated = function(event, data) {
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
