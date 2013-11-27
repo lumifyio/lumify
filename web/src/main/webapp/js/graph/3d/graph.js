@@ -183,7 +183,7 @@ define([
                     var data = graph.node(event.content).data;
                     selected.push(data);
                 }
-                self.trigger('selectObjects', { vertices:[selected] });
+                self.trigger('selectObjects', { vertices:selected });
             }, false);
         };
     }
