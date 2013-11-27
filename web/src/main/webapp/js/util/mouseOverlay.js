@@ -22,7 +22,14 @@ function(defineComponent) {
 
             this.on('displayInformation', this.onDisplayInformation);
             this.on('mousemove.displayInformation', this.onMouseMove);
+            this.on(document, 'click', this.onClick);
         });
+
+        this.onClick = function() {
+            clearTimeout(this.timeout);
+            this.overlayNode.hide();
+            this.tracking = false;
+        };
 
         /**
          * @options data.dismiss [click, auto]
