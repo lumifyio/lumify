@@ -53,7 +53,6 @@ function(defineComponent) {
         }
 
         this.fireEvent = function(node, name, data) {
-            console.log('triggering', name)
             this.trigger(node, name, data);
         }
     }
