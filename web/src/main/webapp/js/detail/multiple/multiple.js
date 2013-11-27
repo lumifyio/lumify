@@ -238,6 +238,7 @@ define([
                             break;
                     }
                 }
+                if (propertyValueDisplay === '') return '[ blank ]';
                 return propertyValueDisplay;
             }
 
