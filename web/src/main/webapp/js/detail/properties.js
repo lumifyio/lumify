@@ -55,6 +55,13 @@ define([
             this.displayProperties(this.attr.data.properties);
         });
 
+        this.before('teardown', function() {
+            if (this.auditRequest && this.auditRequest.abort) {
+                console.log('aborting');
+                this.auditRequest.abort();
+            }
+        });
+
         this.onToggleAuditing = function(event, data) {
             var self = this,
                 auditsEl = this.select('entityAuditsSelector');
@@ -63,7 +70,7 @@ define([
                 auditsEl.html('<div class="nav-header">Audits<span class="badge loading"/></div>').show();
                 this.$node.find('.audit-list').remove();
 
-                this.auditService.getAudits(this.attr.data.id)
+                this.auditRequest = this.auditService.getAudits(this.attr.data.id)
                     .done(function(auditResponse) {
                         var audits = auditResponse.auditHistory.reverse(),
                             propertyAudits = _.filter(audits, function(a) { return /^Set/i.test(a.message); });

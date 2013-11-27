@@ -92,7 +92,9 @@ define([
             this.on('workspaceCopied', this.onWorkspaceCopied);
 
             this.on('socketMessage', this.onSocketMessage);
-            this.on('keydown', this.onKeydown);
+
+            this.on('select-all', this.onSelectAll);
+            this.on('delete', this.onDelete);
 
             var self = this;
             this.setupAsyncQueue('socketSubscribe');
@@ -122,32 +124,15 @@ define([
             }
         };
 
-        this.onKeydown = function(event) {
-            var $target = $(event.target);
-            if ($target.is('input,select')) return;
+        this.onSelectAll = function() {
+            this.trigger('selectObjects', { vertices:this.verticesInWorkspace() });
+        };
 
-            var KEYS = { A:65 },
-                meta = event.metaKey || event.ctrlKey;
-
-            switch (event.which) {
-
-                // Prevent browser back button
-                // TODO: move vertex deletion from graph to here
-                case $.ui.keyCode.BACKSPACE:
-                case $.ui.keyCode.DELETE:
-                    if (this.selectedVertices.length) {
-                        this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
-                    } else if (this.selectedEdges.length) {
-                        this.trigger('deleteEdges', { edges: this.selectedEdges});
-                    }
-                    event.preventDefault();
-                    break;
-                case KEYS.A:
-                    if (meta) {
-                        this.trigger('selectObjects', { vertices:this.verticesInWorkspace() });
-                        event.preventDefault();
-                    }
-                    break;
+        this.onDelete = function() {
+            if (this.selectedVertices.length) {
+                this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
+            } else if (this.selectedEdges.length) {
+                this.trigger('deleteEdges', { edges: this.selectedEdges});
             }
         };
 

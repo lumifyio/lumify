@@ -274,10 +274,16 @@ define([
         };
 
         this.onKeyUp = function (evt) {
-            var query = this.select('querySelector').val();
+            var search = this.select('querySelector'),
+                query = search.val();
+
             if (query != this.currentQuery) {
                 this.trigger("searchQueryChanged", { query: query});
                 this.currentQuery = query;
+            }
+
+            if (evt.which === 27) {
+                search.blur();
             }
         };
 
@@ -312,6 +318,10 @@ define([
             this.$node.find('.search-results-summary .active').removeClass('active');
         };
 
+        this.onPaneVisible = function() {
+            this.select('querySelector').focus().select();
+        };
+
         this.after('initialize', function() {
             var self = this;
             this.searchResults = {};
@@ -327,6 +337,7 @@ define([
             this.on(document,'showSearchResults', this.onShowSearchResults);
             this.on(document,'searchQueryChanged',this.onQueryChange);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
+            this.on(document, 'searchPaneVisible', this.onPaneVisible);
             this.on('submit', {
                 formSelector: this.onFormSearch
             });
