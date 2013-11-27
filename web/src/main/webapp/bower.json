@@ -28,8 +28,7 @@
     "sf": "git://github.com/nearinfinity/node-sf.git",
     "threejs": "*",
     "underscore": "~1.5.1",
-    "video.js": "~4.3.0",
-    "flight-keyboard-shortcuts": "~0.0.2"
+    "video.js": "~4.3.0"
   },
   "resolutions": {
     "bootstrap": "*",
