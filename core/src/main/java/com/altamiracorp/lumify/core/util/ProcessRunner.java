@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class ProcessRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRunner.class);
 
-    public static void execute(final String programName, final String[] programArgs, OutputStream out) throws IOException, InterruptedException {
+    public Process execute(final String programName, final String[] programArgs, OutputStream out) throws IOException, InterruptedException {
         final List<String> arguments = Lists.newArrayList(programName);
         for (String programArg : programArgs) {
             if (programArg == null) {
@@ -84,6 +84,8 @@ public class ProcessRunner {
         if (pipeException[0] != null) {
             throw new RuntimeException("pipe exception", pipeException[0]);
         }
+
+        return proc;
     }
 
     private static String arrayToString(List<String> arr) {
