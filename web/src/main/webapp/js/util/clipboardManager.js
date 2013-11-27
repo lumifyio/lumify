@@ -12,18 +12,21 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.textarea = $('<textarea class="clipboardManager" autocomplete="false" spellcheck="false" style="position:absolute;z-index:1000;"/>')
+            this.textarea = $('<textarea class="clipboardManager" autocomplete="false" spellcheck="false" />')
                 .css({
                     position: 'absolute',
                     zIndex: 10,
                     cursor: 'pointer',
-                    top: '-10000px',
-                    left: '-10000px'
+                    top: '-300px',
+                    height: '10px',
+                    boxSizing: 'border-box'
                 })
                 .on({
                     cut: this.onCut.bind(this),
                     copy: this.onCopy.bind(this),
-                    paste: this.onPaste.bind(this)
+                    paste: this.onPaste.bind(this),
+                    keydown: this.onKeyDown.bind(this),
+                    keyup: this.onKeyDown.bind(this)
                 })
                 .appendTo(document.body);
 
@@ -33,15 +36,21 @@ define([
             this.on('clipboardFocus', this.focus);
         });
 
+        this.onKeyDown = function(event) {
+            this.textarea.val(this.lastSetData && this.lastSetData.text || '').focus().select();
+        };
+
         this.focus = function() {
             this.textarea.focus();
         };
 
         this.set = function(event, data) {
+            this.lastSetData = data;
             this.textarea.val(data && data.text || '').focus().select();
         };
 
         this.clear = function() {
+            this.lastSetData = null;
             this.textarea.val('');
         };
 
@@ -54,6 +63,7 @@ define([
                 console.debug('Clipboard: Paste', val);
 
                 self.trigger('clipboardPaste', { data:val });
+                self.lastSetData = null;
                 textarea.val('').focus();
             });
         };
@@ -81,8 +91,19 @@ define([
         };
 
         this._onClick = function(event) {
-            if ($(event.target).is('input,select')) return;
+            var inFocus = $(':focus');
+
+            // Check for previous focus, since we are going to steal it to
+            // support browser cut/copy/paste events
+            if (inFocus.length) {
+                this.trigger(inFocus[0], 'focusLostByClipboard');
+            } else {
+                this.trigger(event.target, 'focusLostByClipboard');
+            }
+
+            if ($(event.target).is('input,select,textarea')) return;
             if (window.getSelection().isCollapsed === false) return;
+
             this.focus();
         };
 

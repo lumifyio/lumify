@@ -56,6 +56,13 @@ define([
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
             this.on(document, 'resizestop', this.onResizeStop);
+            this.on(document, 'forwardSlash', this.toggleSearchPane);
+            this.on(document, 'escape', this.onEscapeKey);
+            this.on(document, 'windowResize', this.triggerPaneResized);
+            this.on(document, 'mapCenter', this.onMapAction);
+            this.on(document, 'changeView', this.onChangeView);
+
+            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
 
             // Prevent the fragment identifier from changing after an anchor
             // with href="#" not stopPropagation'ed
@@ -90,14 +97,8 @@ define([
 
             this.$node.html(content);
 
-            // Activate Graph
+            // Open Page to Dashboard
             this.trigger(document, 'menubarToggleDisplay', { name: dashboardPane.data(DATA_MENUBAR_NAME) });
-
-            this.on(document, 'windowResize', this.triggerPaneResized);
-            this.on(document, 'mapCenter', this.onMapAction);
-            this.on(document, 'changeView', this.onChangeView);
-
-            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
 
             this.setupWindowResizeTrigger();
 
@@ -105,6 +106,15 @@ define([
 
             _.defer(this.triggerPaneResized.bind(this));
         });
+
+        this.toggleSearchPane = function() {
+            this.trigger(document, 'menubarToggleDisplay', { name:'search' });
+        };
+
+        this.onEscapeKey = function() {
+            this.collapseAllPanes();
+            this.trigger('selectObjects', { vertices:[] });
+        };
 
         this.trapAnchorClicks = function(e) {
             var $target = $(e.target);
@@ -291,18 +301,22 @@ define([
 
 
         this.onSyncStarted = function() {
-            this.collapse([
-                this.select('searchSelector'),
-                this.select('workspacesSelector'),
-                this.select('detailPaneSelector')
-            ]);
-            // TODO: fix this smellyness
-            $('.search-results').hide();
+            this.collapseAllPanes();
 
             var graph = this.select('graphSelector');
             if ( ! graph.hasClass('visible') ) {
                 self.trigger(document, 'menubarToggleDisplay', { name:graph.data(DATA_MENUBAR_NAME), syncToRemote:false });
             }
+        };
+
+        this.collapseAllPanes = function() {
+            this.collapse([
+                this.select('searchSelector'),
+                this.select('workspacesSelector'),
+                this.select('detailPaneSelector')
+            ]);
+
+            $('.search-results').hide();
         };
 
         this.collapse = function(panes) {

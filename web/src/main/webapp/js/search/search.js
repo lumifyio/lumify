@@ -274,10 +274,16 @@ define([
         };
 
         this.onKeyUp = function (evt) {
-            var query = this.select('querySelector').val();
+            var search = this.select('querySelector'),
+                query = search.val();
+
             if (query != this.currentQuery) {
                 this.trigger("searchQueryChanged", { query: query});
                 this.currentQuery = query;
+            }
+
+            if (evt.which === 27) {
+                search.blur();
             }
         };
 

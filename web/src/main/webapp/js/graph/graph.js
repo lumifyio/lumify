@@ -899,6 +899,7 @@ define([
                         });
 
                         self.trigger(document, 'addVertices', { vertices: added });
+                        self.trigger('selectObjects', { vertices:added })
                     });
                 });
         };

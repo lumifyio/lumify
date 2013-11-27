@@ -77,7 +77,38 @@ define([
             this.setupDraggables();
 
             this.onObjectsSelected(null, { edges:[], vertices:appData.selectedVertices});
+
+            this.on('select-all', this.onSelectAll);
+            this.on('down', this.move);
+            this.on('up', this.move);
         });
+
+        this.move = function(e, data) {
+            var previousSelected = this.$node.find('.active')[e.type === 'up' ? 'first' : 'last'](),
+                moveTo = previousSelected[e.type === 'up' ? 'prev' : 'next']('.vertex-item');
+
+            if (moveTo.length) {
+
+                var selected = [];
+
+                if (data.shiftKey) {
+                    selected = selected.concat(appData.selectedVertices);
+                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                } else {
+                    selected.push(appData.vertex(moveTo.data('vertexId')));
+                }
+
+                this.trigger(document, 'defocusVertices');
+                this.trigger('selectObjects', { vertices:selected });
+            }
+        };
+
+        this.onSelectAll = function(e) {
+            e.stopPropagation();
+
+            var items = this.$node.find('.vertex-item').addClass('active');
+            this.selectItems(items);
+        };
 
         this.after('teardown', function() {
             this.$node.off('mouseenter mouseleave');
@@ -257,22 +288,25 @@ define([
                     $(ui.helper).addClass('vertex-dragging');
                 },
                 selection: function(ev, ui) {
-                    var selected = ui.selected,
-                        vertices = appData.vertices(selected.map(function() {
-                            return $(this).data('vertexId');
-                        }).toArray());
-
-                    if (vertices.length > 1) {
-                        vertices.forEach (function (vertex) {
-                            vertex.workspace = {
-                                selected: true
-                            };
-                        });
-                    }
-                    self.trigger(document, 'defocusVertices');
-                    self.trigger('selectObjects', { vertices:vertices });
+                    self.selectItems(ui.selected);
                 }
             });
+        };
+
+        this.selectItems = function(items) {
+            var vertices = appData.vertices(items.map(function() {
+                    return $(this).data('vertexId');
+                }).toArray());
+
+            if (vertices.length > 1) {
+                vertices.forEach (function (vertex) {
+                    vertex.workspace = {
+                        selected: true
+                    };
+                });
+            }
+            this.trigger(document, 'defocusVertices');
+            this.trigger('selectObjects', { vertices:vertices });
         };
 
         this.onWorkspaceLoaded = function(evt, workspace) {

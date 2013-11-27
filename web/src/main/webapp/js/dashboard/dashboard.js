@@ -16,6 +16,7 @@ define([
             var self = this;
             this.$node.html(template({}));
             this.$node.on('click', this.onDashboardClicked.bind(this));
+            this.on('select-all', function(e) { e.stopPropagation(); });
         });
 
         this.onDashboardClicked = function(event) {
