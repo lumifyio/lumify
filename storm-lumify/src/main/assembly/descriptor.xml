@@ -20,6 +20,9 @@
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
             <scope>runtime</scope>
+            <excludes>
+                <exclude>storm:storm</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
 </assembly>
