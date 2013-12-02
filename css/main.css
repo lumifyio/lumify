@@ -1,0 +1,54 @@
+body {
+  background-color: rgb(43, 194, 227);
+}
+
+#home {
+  color: white;
+}
+
+img.lumify-logo {
+  width: 50%;
+}
+
+.container {
+  padding: 20px 0;
+}
+
+footer .social {
+  text-align: right;
+}
+
+/* banner
+================================================== */
+
+#banner {
+  background-color: white;
+  line-height: 1.2;
+  padding: 20px 0;
+}
+
+#banner .wrap {
+  position: relative;
+}
+
+#banner .brand {
+  text-align: center;
+}
+
+#banner h1 {
+  letter-spacing: -0.04em;
+  margin: 0 0  10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+#banner .tagline {
+  font-size: 22px;
+  color: rgb(43, 194, 227);
+}
+
+/* index.html
+================================================== */
+img.scaled {
+  width: 100%;
+}
