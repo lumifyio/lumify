@@ -45,6 +45,7 @@ public class TikaTextExtractor {
     private static final String SRC_TYPE_KEYS_PROPERTY = "tika.extraction.srctypekeys";
     private static final String RETRIEVAL_TIMESTAMP_KEYS_PROPERTY = "tika.extraction.retrievaltimestampkeys";
     private static final String CUSTOM_FLICKR_METADATA_KEYS_PROPERTY = "tika.extraction.customflickrmetadatakeys";
+    public static final int TIKA_WRITE_LIMIT = 1 * 1000 * 1000;
 
     private List<String> dateKeys;
     private List<String> subjectKeys;
@@ -92,7 +93,7 @@ public class TikaTextExtractor {
         byte[] input = IOUtils.toByteArray(in);
         // since we are using the AutoDetectParser, it is safe to assume that
         //the Content-Type metadata key will always return a value
-        ContentHandler handler = new BodyContentHandler();
+        ContentHandler handler = new BodyContentHandler(TIKA_WRITE_LIMIT);
         parser.parse(new ByteArrayInputStream(input), handler, metadata, ctx);
 
         if (isHtml(mimeType)) {
