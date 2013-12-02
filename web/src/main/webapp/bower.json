@@ -31,8 +31,7 @@
     "video.js": "~4.3.0"
   },
   "resolutions": {
-    "bootstrap": "*",
-    "flight": "~1.1.1"
+    "bootstrap": "*"
   },
   "devDependencies": {}
 }
