@@ -25,8 +25,8 @@ module.exports = function(config) {
 
       // Included libs
       'libs/jquery/jquery.js',
-      'libs/jquery-ui/jquery-ui-1.10.3.custom.js',
-      'libs/bootstrap/js/bootstrap.js',
+      'libs/jquery-ui/ui/jquery-ui.js',
+      'libs/bootstrap/docs/assets/js/bootstrap.js',
 
       // Libraries
       {pattern: 'libs/**/*.js', included: false},

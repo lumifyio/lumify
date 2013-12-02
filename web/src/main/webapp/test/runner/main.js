@@ -13,7 +13,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             chai: '../libs/chai/chai',
             sinon: '../libs/sinon/lib/sinon',
             'sinon-chai': '../libs/sinon-chai/lib/sinon-chai',
-            'flight-mocha': '../libs/flight-mocha/lib/flight-mocha',
+            'mocha-flight': '../libs/mocha-flight/lib/mocha-flight',
 
             // MOCKS
             'service/serviceBase': '../test/mocks/serviceBase'
@@ -41,7 +41,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
                     'sinon/stub',
                     'sinon/spy',
                     'sinon/mock',
-                    'flight-mocha'
+                    'mocha-flight'
             ], function(sinonChai) {
 
                 // Use sinon as mocking framework
@@ -56,7 +56,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
                 expect = chai.expect;
 
                 // Use the twitter flight interface to mocha
-                mocha.ui('flight-mocha');
+                mocha.ui('mocha-flight');
                 mocha.options.globals.push( "ejs", "cytoscape", "DEBUG" );
 
                 // Run tests after loading
