@@ -15,7 +15,7 @@ function(defineComponent) {
             46: 'delete',
             191: 'forwardSlash',
 
-            'CTRL-65': 'select-all'
+            'CTRL-A': 'select-all'
         }, 
         shouldFilter = function(e) {
             return $(e.target).is('input,select,textarea:not(.clipboardManager)');
@@ -43,7 +43,7 @@ function(defineComponent) {
 
             var eventToFire = CODES[e.which];
             if (e.metaKey || e.ctrlKey) {
-                eventToFire = CODES['CTRL-' + e.which];
+                eventToFire = CODES['CTRL-' + String.fromCharCode(e.which)];
             }
 
             if (eventToFire) {
