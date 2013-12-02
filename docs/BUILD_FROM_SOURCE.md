@@ -17,13 +17,13 @@ Lumify has several required dependencies to build from source. Please ensure tha
 
 ## Getting Started
 
-1. Clone the repository from github using either of the links from the [main page](https://github.com/nearinfinity/lumify-enterprise)
-3. Copy [configuration.properties.sample](https://github.com/nearinfinity/lumify-enterprise/blob/develop/docs/configuration.properties.sample) file into ```/opt/lumify/config/``` and rename it to configuration.properties.
+1. Clone the repository from github using either of the links from the [main page](../)
+3. Copy [configuration.properties.sample](./configuration.properties.sample) file into ```/opt/lumify/config/``` and rename it to configuration.properties.
    * Fill in all empty fields
    * To generate a Google Map V3 api key, please refer to the [documentation](https://developers.google.com/maps/documentation/javascript/tutorial#api_key) provided by Google.
 2. From the top level project directory, run the command ```mvn clean compile```
 4. Deploy storm topology jar files
 5. Deploy web war 
 
-If you would like to see an example of the ingest capability Lumify has, please refer to our [open source Twitter ingest example](https://github.com/nearinfinity/lumify-enterprise/tree/develop/lumify-twitter) and follow the instructions there.
+If you would like to see an example of the ingest capability Lumify has, please refer to our [open source Twitter ingest example](../../lumify-twitter) and follow the instructions there.
 
