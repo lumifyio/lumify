@@ -26,13 +26,6 @@ define([
         this.entityService = new EntityService();
         this.ontologyService = new OntologyService();
 
-        this.highlightButton = function() {
-            return highlightButtonTemplate({
-                styles: HIGHLIGHT_STYLES,
-                activeStyle: this.getActiveStyle()
-            });
-        };
-
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
             highlightTypeSelector: '.highlight-options a',
@@ -166,7 +159,8 @@ define([
                                 var STATES = {
                                         NORMAL: 0,
                                         HOVER: 1,
-                                        DIM: 2
+                                        DIM: 2,
+                                        TERM: 3
                                     },
                                     className = concept.className || 'entity.subType-' + concept.id,
                                     definition = function(state) {
@@ -177,13 +171,19 @@ define([
                                 // (when dropdown is opened and it wasn't this entity)
                                 stylesheet.addRule(
                                     '.highlight-' + style.selector + ' .dropdown .' + className + ',' +
+                                    '.highlight-' + style.selector + ' .dropdown .resolved.' + className + ',' +
                                     '.highlight-' + style.selector + ' .drag-focus .' + className,
                                     definition(STATES.DIM)
                                 );
 
+                                stylesheet.addRule(
+                                   '.highlight-' + style.selector + ' .' + className,
+                                   definition(STATES.TERM)
+                                );
+
                                 // Default style (or focused)
                                 stylesheet.addRule(
-                                    '.highlight-' + style.selector + ' .' + className + ',' +
+                                    '.highlight-' + style.selector + ' .resolved.' + className + ',' +
                                     '.highlight-' + style.selector + ' .drag-focus .resolved.' + className + ',' +
                                     '.highlight-' + style.selector + ' .dropdown .focused.' + className,
                                     definition(STATES.NORMAL)
