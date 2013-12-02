@@ -344,6 +344,7 @@ define([
 
                 vertex.removeClass(labels.join(' '))
                     .addClass(classPrefix + conceptId);
+                this.updateResolveImageIcon(null, conceptId);
             }
         };
 
@@ -403,7 +404,7 @@ define([
             this.startSign = sign;
         };
 
-        this.updateResolveImageIcon = function(vertex) {
+        this.updateResolveImageIcon = function(vertex, conceptId) {
             var self = this,
                 info = $(self.attr.mentionNode).data('info');
 
@@ -411,32 +412,42 @@ define([
                 $.extend(vertex, {}, vertex.properties);
             }
 
-            if (!vertex && info) {
+            if (!vertex && info && !conceptId) {
                 self.deferredConcepts.done(function(allConcepts) {
                     var concept = self.conceptForSubType(info._subType, allConcepts);
                     if (concept) {
                         updateCss(concept.glyphIconHref);
                     }
                 });
-            } else if (!vertex) {
-                updateCss();
-            } else if (vertex.properties._glyphIcon) {
+            } else if (vertex && vertex.properties._glyphIcon) {
                 updateCss(vertex && vertex.properties._glyphIcon);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var concept = self.conceptForSubType(vertex.properties._subType, allConcepts);
-                    if (concept) {
-                        updateCss(concept.glyphIconHref);
+                    var subType = conceptId || (vertex && vertex.properties._subType);
+                    if (subType) {
+                        var concept = self.conceptForSubType(subType, allConcepts);
+                        if (concept) {
+                            updateCss(concept.glyphIconHref);
+                            return;
+                        }
                     }
+
+                    updateCss();
                 });
             }
 
             function updateCss(src) {
-                var url = 'url("' + (src || "/img/glyphicons/glyphicons_194_circle_question_mark@2x.png")  + '")',
-                    preview = self.$node.find('.resolve-wrapper > .preview');
+                
+                var preview = self.$node.find('.resolve-wrapper > .preview');
 
-                if (preview.css('background-image') !== url) {
-                    preview.css('background-image', url);
+                if (src) {
+                    var url = 'url("' + src  + '")';
+
+                    if (preview.css('background-image') !== url) {
+                        preview.css('background-image', url);
+                    }
+                } else {
+                    preview.css('backgroundImage', ' ').addClass('icon-unknown');
                 }
             }
         };
