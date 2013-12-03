@@ -173,13 +173,15 @@ public class ArtifactRepository extends Repository<Artifact> {
         String hdfsPath = (String) artifactVertex.getProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH);
         if (hdfsPath == null) {
             String artifactRowKey = (String) artifactVertex.getProperty(PropertyName.ROW_KEY);
-            Artifact artifact = findByRowKey(artifactRowKey, user.getModelUserContext());
-            if (artifact != null) {
-                ArtifactMetadata metadata = artifact.getMetadata();
-                if (metadata != null) {
-                    String highlightedText = metadata.getHighlightedText();
-                    if (highlightedText != null) {
-                        return new StringInputStream(highlightedText);
+            if (artifactRowKey != null) {
+                Artifact artifact = findByRowKey(artifactRowKey, user.getModelUserContext());
+                if (artifact != null) {
+                    ArtifactMetadata metadata = artifact.getMetadata();
+                    if (metadata != null) {
+                        String highlightedText = metadata.getHighlightedText();
+                        if (highlightedText != null) {
+                            return new StringInputStream(highlightedText);
+                        }
                     }
                 }
             }
