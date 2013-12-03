@@ -27,6 +27,9 @@ password: lumify
 ```
 
 ## Useful URLS
+
+The VM must be running for these URLs to work.
+
 * [Hadoop Administration](http://192.168.33.10:50070/dfshealth.jsp)
 * [Storm UI](http://192.168.33.10:8080/)
 
