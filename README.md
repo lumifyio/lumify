@@ -2,17 +2,17 @@
 
 ![ScreenShot](web/src/main/webapp/img/lumify-logo.png?raw=true)
 
-Lumify is an open source big data analytical tool and knowledge discovery. See the [project page] (http://lumify.io) for more details. Basically, it's a way to aggregate your data and extract useful insights.
+Lumify is an open source big data integration, analytics, and visualization platform. Please see the [project page] (http://lumify.io) for more details.
 
 ## Getting Started
 
-Lumify supplies a pre-built virtual machine, however if you would like to build the project from source please see the corresponding section below.
+Lumify supplies a pre-built virtual machine to get you started quickly, but you can also build from source. Please choose your adventure from the linked documents below.
 
-[Pre-built VM Instructions] (docs/PREBUILT_VM.md)
+[Use the pre-built VM] (docs/PREBUILT_VM.md)
+[Build from source] (docs/BUILD_FROM_SOURCE.md)
 
-[Build from source Instructions] (docs/BUILD_FROM_SOURCE.md)
+## Important Notes
 
-## Disclaimers
 * The following Titan properties are required on every vertex:
     * ```title```
     * ```_subType```: concept id
