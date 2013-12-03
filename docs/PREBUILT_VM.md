@@ -31,4 +31,5 @@ password: lumify
 * [Storm UI](http://192.168.33.10:8080/)
 
 ## Re-importing data
-1. ```/opt/accumulo-import.sh /opt/lumify/sample-data.tgz```
+1. ```/opt/format.sh```
+2. ```/opt/accumulo-import.sh /opt/lumify/sample-data.tgz```
