@@ -9,6 +9,7 @@ Lumify is an open source big data integration, analytics, and visualization plat
 Lumify supplies a pre-built virtual machine to get you started quickly, but you can also build from source. Please choose your adventure from the linked documents below.
 
 [Use the pre-built VM] (docs/PREBUILT_VM.md)
+
 [Build from source] (docs/BUILD_FROM_SOURCE.md)
 
 ## Important Notes
