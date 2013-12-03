@@ -180,7 +180,7 @@ public class ArtifactRepository extends Repository<Artifact> {
                     if (metadata != null) {
                         String highlightedText = metadata.getHighlightedText();
                         if (highlightedText != null) {
-                            return new StringInputStream(highlightedText);
+                            return new ByteArrayInputStream(highlightedText.getBytes());
                         }
                     }
                 }
