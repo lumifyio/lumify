@@ -10,6 +10,7 @@ import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.model.KafkaJsonEncoder;
+import com.altamiracorp.lumify.storm.searchIndex.SearchIndexBolt;
 import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
 import org.apache.accumulo.core.util.CachedConfiguration;
 import org.apache.commons.cli.CommandLine;
@@ -90,6 +91,7 @@ public class StormRunner extends CommandLineBase {
     public StormTopology createTopology() {
         TopologyBuilder builder = new TopologyBuilder();
         createArtifactHighlightingTopology(builder);
+        createSearchIndexTopology(builder);
         return builder.createTopology();
     }
 
@@ -98,6 +100,13 @@ public class StormRunner extends CommandLineBase {
         builder.setSpout("artifactHighlightSpout", new KafkaSpout(spoutConfig), 1);
         builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), 1)
                 .shuffleGrouping("artifactHighlightSpout");
+    }
+
+    private void createSearchIndexTopology(TopologyBuilder builder) {
+        SpoutConfig spoutConfig = createSpoutConfig(WorkQueueRepository.SEARCH_INDEX_QUEUE_NAME, null);
+        builder.setSpout("searchIndexSpout", new KafkaSpout(spoutConfig), 1);
+        builder.setBolt("searchIndexBolt", new SearchIndexBolt(), 1)
+                .shuffleGrouping("searchIndexSpout");
     }
 
     private SpoutConfig createSpoutConfig(String queueName, Scheme scheme) {

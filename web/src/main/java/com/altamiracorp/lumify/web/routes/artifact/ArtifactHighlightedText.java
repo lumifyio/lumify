@@ -1,15 +1,17 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
@@ -32,7 +34,16 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             return;
         }
         OutputStream out = response.getOutputStream();
-        artifactRepository.writeHighlightedTextTo(artifactVertex, out, user);
+        InputStream in = artifactRepository.getHighlightedText(artifactVertex, user);
+        if (in == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        try {
+            IOUtils.copy(in, out);
+        } finally {
+            in.close();
+        }
         out.close();
     }
 }

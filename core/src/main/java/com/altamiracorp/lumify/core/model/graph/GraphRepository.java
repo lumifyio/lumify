@@ -1,10 +1,10 @@
 package com.altamiracorp.lumify.core.model.graph;
 
+import com.altamiracorp.lumify.core.model.GraphSession;
+import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tinkerpop.blueprints.Edge;
@@ -103,7 +103,7 @@ public class GraphRepository {
         return graphSession.findByGeoLocation(latitude, longitude, radius, user);
     }
 
-    public List<GraphVertex> searchVerticesByTitle (String title, JSONArray filterJson) {
+    public List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson) {
         return graphSession.searchVerticesByTitle(title, filterJson);
     }
 
@@ -113,6 +113,10 @@ public class GraphRepository {
 
     public List<GraphVertex> searchVerticesByTitleAndType(String query, VertexType type, User user) {
         return graphSession.searchVerticesByTitleAndType(query, type, user);
+    }
+
+    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
+        return graphSession.searchAllVertices(offset, size, user);
     }
 
     public void removeRelationship(String source, String target, String label, User user) {

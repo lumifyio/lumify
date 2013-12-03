@@ -20,14 +20,12 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+import org.hsqldb.lib.StringInputStream;
 import org.json.JSONArray;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -168,9 +166,8 @@ public class ArtifactRepository extends Repository<Artifact> {
         return results;
     }
 
-    public void writeHighlightedTextTo(GraphVertex artifactVertex, OutputStream out, User user) throws IOException {
+    public InputStream getHighlightedText(GraphVertex artifactVertex, User user) throws IOException {
         checkNotNull(artifactVertex);
-        checkNotNull(out);
         checkNotNull(user);
 
         String hdfsPath = (String) artifactVertex.getProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH);
@@ -182,13 +179,13 @@ public class ArtifactRepository extends Repository<Artifact> {
                 if (metadata != null) {
                     String highlightedText = metadata.getHighlightedText();
                     if (highlightedText != null) {
-                        out.write(highlightedText.getBytes());
+                        return new StringInputStream(highlightedText);
                     }
                 }
             }
+            return null;
         } else {
-            InputStream in = fsSession.loadFile(hdfsPath);
-            IOUtils.copy(in, out);
+            return fsSession.loadFile(hdfsPath);
         }
     }
 
