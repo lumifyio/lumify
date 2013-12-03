@@ -343,13 +343,11 @@
     </build>
 
     <modules>
-        <module>core</module>
         <module>fs-hdfs</module>
         <module>model-accumulo</module>
         <module>model-titan</module>
         <module>model-kafka</module>
         <module>model-elasticSearch</module>
-        <module>analytics</module>
         <module>web</module>
         <module>storm-lumify</module>
     </modules>

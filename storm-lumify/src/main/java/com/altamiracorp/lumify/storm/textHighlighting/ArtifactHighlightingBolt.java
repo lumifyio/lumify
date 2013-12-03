@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.storm.textHighlighting;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
