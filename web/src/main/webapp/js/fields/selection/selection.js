@@ -11,6 +11,8 @@ define([
 
     function FieldSelection() {
 
+        var PLACEHOLDER = 'Type to filter properties';
+
         this.defaultAttrs({
             findPropertySelection: 'input'
         });
@@ -26,17 +28,20 @@ define([
                     .attr('disabled', true);
             } else {
                 this.select('findPropertySelection')
+                    .on('focus', function(e) {
+                        var target = $(e.target);
+                        target.attr('placeholder', PLACEHOLDER)
+                    })
                     .on('click', function(e) { 
                         var target = $(e.target);
 
-                        if (!target.val()) {
-                            // Weirdness to force the typeahead to open when no value
-                            target.val(' ').typeahead('lookup').val(''); 
-                        } else {
+                        if (target.val()) {
                             target.typeahead('lookup').select();
+                        } else {
+                            target.typeahead('lookup');
                         }
 
-                        target.attr('placeholder', 'Type to filter properties');
+                        target.attr('placeholder', PLACEHOLDER);
                     })
                     .on('change blur', function(e) {
                         var target = $(e.target);
@@ -74,7 +79,8 @@ define([
                             self.propertySelected(item);
                             return item;
                         }
-                    });
+                    })
+                    .data('typeahead').lookup = allowEmptyLookup;
             }
         });
 
@@ -90,5 +96,21 @@ define([
                 }.bind(this));
             }
         };
+    }
+
+
+    function allowEmptyLookup() {
+        var items;
+
+        this.query = this.$element.val();
+
+        // Remove !this.query check to allow empty values to open dropdown
+        if (this.query.length < this.options.minLength) {
+            return this.shown ? this.hide() : this;
+        }
+
+        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
+
+        return items ? this.process(items) : this;
     }
 });
