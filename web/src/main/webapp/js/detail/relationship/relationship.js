@@ -53,7 +53,6 @@ define([
                     data.properties.relationshipType
             ).done(function(relationshipData) {
                 self.$node.html(template({
-                    highlightButton: self.highlightButton(),
                     auditsButton: self.auditsButton(),
                     relationshipData: relationshipData
                 }));

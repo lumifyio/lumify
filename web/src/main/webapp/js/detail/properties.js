@@ -57,7 +57,6 @@ define([
 
         this.before('teardown', function() {
             if (this.auditRequest && this.auditRequest.abort) {
-                console.log('aborting');
                 this.auditRequest.abort();
             }
         });

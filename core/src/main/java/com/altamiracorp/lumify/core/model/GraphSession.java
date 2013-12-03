@@ -78,4 +78,6 @@ public abstract class GraphSession {
     public abstract List<Vertex> getRelationships(Concept sourceConcept, Concept destConcept, User user);
 
     public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
+
+    public abstract List<GraphVertex> searchAllVertices(long offset, long size, User user);
 }

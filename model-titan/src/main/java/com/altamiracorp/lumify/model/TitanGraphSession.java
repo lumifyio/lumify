@@ -19,13 +19,10 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.Tokens;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
-import com.tinkerpop.gremlin.pipes.transform.PropertyPipe;
 import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.branch.LoopPipe;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -405,7 +402,7 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offset, long size, String subType) {
+    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
         GraphPagedResults results = new GraphPagedResults();
         final List<String> tokens = LuceneTokenizer.standardTokenize(title);
 
@@ -421,17 +418,17 @@ public class TitanGraphSession extends GraphSession {
                 vertexPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
                 countPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
             } else {
-                vertexPipeline = new GremlinPipeline <Vertex, Vertex>(query.vertices());
+                vertexPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
                 countPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
             }
 
             HashMap<Object, Number> map = new HashMap<Object, Number>();
-            Collection <Vertex> vertexList;
+            Collection<Vertex> vertexList;
             if (subType != null) {
-                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.SUBTYPE.toString(), Tokens.T.eq, subType).range((int) offset, (int) size).toList();
+                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.SUBTYPE.toString(), Tokens.T.eq, subType).range((int) offsetStart, (int) offsetEnd).toList();
                 map.put(subType, vertexList.size());
             } else {
-                vertexList = vertexPipeline.range((int) offset, (int) size).toList();
+                vertexList = vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
                 countPipeline.property(PropertyName.SUBTYPE.toString()).groupCount(map).iterate();
             }
 
@@ -441,7 +438,7 @@ public class TitanGraphSession extends GraphSession {
                     if (!results.getResults().containsKey(key)) {
                         results.getResults().put((String) key, new ArrayList<GraphVertex>(countValue));
                     }
-                    results.getCount().put((String)key, countValue);
+                    results.getCount().put((String) key, countValue);
                 }
             }
 
@@ -454,6 +451,13 @@ public class TitanGraphSession extends GraphSession {
         }
 
         return results;
+    }
+
+    @Override
+    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
+        GremlinPipeline<Vertex, Vertex> pipeline = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
+        List<Vertex> vertexList = pipeline.range((int) offset, (int) (offset + size - 1)).toList();
+        return toGraphVertices(vertexList);
     }
 
     @Override
