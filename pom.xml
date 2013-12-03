@@ -12,7 +12,7 @@
 
     <distributionManagement>
         <repository>
-            <id>local</id>
+            <id>bits.lumify.io</id>
             <url>file:///var/www/maven/</url>
         </repository>
         <site>
