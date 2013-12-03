@@ -77,7 +77,6 @@ define([
 
                 self.$node.html(template({
                     vertex: self.attr.data,
-                    highlightButton: self.highlightButton(),
                     fullscreenButton: self.fullscreenButton([self.attr.data.id]),
                     auditsButton: self.auditsButton()
                 }));
