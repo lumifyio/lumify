@@ -343,6 +343,7 @@
     </build>
 
     <modules>
+        <module>core</module>
         <module>fs-hdfs</module>
         <module>model-accumulo</module>
         <module>model-titan</module>
