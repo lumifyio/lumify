@@ -10,6 +10,17 @@
 
     <name>Lumify</name>
 
+    <distributionManagement>
+        <repository>
+            <id>local</id>
+            <url>file:///var/www/maven/</url>
+        </repository>
+        <site>
+            <id>site-docs</id>
+            <url>file:///</url>
+        </site>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -24,7 +35,7 @@
         <javadoc.stylesheetfile>conf/maven/javadoc/stylesheet.css</javadoc.stylesheetfile>
         <maven.build.timestamp.format>EEE MMM dd HH:mm z yyyy</maven.build.timestamp.format>
         <classpath-filename>${project.build.directory}/.classpath.${user.name}</classpath-filename>
-        <internal.project.repo>http://63.141.238.205:8081/maven/</internal.project.repo>
+        <internal.project.repo>http://bits.lumify.io/m2/</internal.project.repo>
         <cluster.dependency.scope>compile</cluster.dependency.scope>
     </properties>
 
@@ -69,13 +80,6 @@
             </snapshots>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <site>
-            <id>site-docs</id>
-            <url>file:///</url>
-        </site>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
