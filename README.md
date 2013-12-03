@@ -11,3 +11,13 @@ The lumify.io website is built using Jekyll and deployed as a Github site. Follo
 5. Use Jekyll to compile and serve the website locally. `bundle exec jekyll serve`.
 
 Note: It's import to use `bundle exec` when running any of the jekyll commands to ensure the correct versions of all Ruby gems are used.
+
+Publishing the Website
+----------------------
+Once you've verified your changes locally, publishing the website is as simple as committing your changes and pushing them to the `gh-pages` branch.
+
+```shell
+git add .
+git commit -m "useful message describing changes"
+git push origin gh-pages
+```
