@@ -22,6 +22,7 @@ If you would like to see an example of the capabilities Lumify has for ingest, p
 ## DISCLAIMER
 * The pre-built VM comes with Maven installed, so you will be able to develop within the VM if you choose to do so.
 * To log into your VM, please use the following credentials:
+
 ```
 username: lumify
 password: lumify
