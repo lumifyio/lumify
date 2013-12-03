@@ -15,6 +15,10 @@
             <id>local</id>
             <url>file:///var/www/maven/</url>
         </repository>
+        <site>
+            <id>site-docs</id>
+            <url>file:///</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -76,13 +80,6 @@
             </snapshots>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <site>
-            <id>site-docs</id>
-            <url>file:///</url>
-        </site>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
