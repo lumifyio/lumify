@@ -48,6 +48,22 @@ footer .social {
   color: rgb(43, 194, 227);
 }
 
+.social-twitter img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  padding: 10px;
+  z-index: 1;
+}
+.social-github img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 1;
+}
+
 /* index.html
 ================================================== */
 img.scaled {
