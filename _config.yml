@@ -4,4 +4,4 @@ pygments: true
 safe: true
 lsi: false
 timezone: America/New_York
-google_analytics_ua: UA
+google_analytics_ua: UA-74388-18
