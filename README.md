@@ -4,11 +4,6 @@
 
 Lumify is an open source big data analytical tool and knowledge discovery. See the [project page] (http://lumify.io) for more details. Basically, it's a way to aggregate your data and extract useful insights.
 
-## System Requirements
-
-The following system requirements must be installed and configured for Lumify execution:
-* More than 4G Ram
-
 ## Getting Started
 
 Lumify supplies a pre-built virtual machine, however if you would like to build the project from source please see the corresponding section below.
