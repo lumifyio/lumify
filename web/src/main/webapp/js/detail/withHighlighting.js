@@ -3,12 +3,11 @@
 define([
     './dropdowns/termForm/termForm',
     './dropdowns/statementForm/statementForm',
-    'tpl!detail/toolbar/highlight',
     'util/css-stylesheet',
     'colorjs',
     'service/entity',
     'service/ontology'
-], function(TermForm, StatementForm, highlightButtonTemplate, stylesheet, colorjs, EntityService, OntologyService) {
+], function(TermForm, StatementForm, stylesheet, colorjs, EntityService, OntologyService) {
     'use strict';
 
     var HIGHLIGHT_STYLES = [
