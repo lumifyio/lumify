@@ -14,8 +14,7 @@ The following system requirements must be available/installed for pre-built virt
 1. Download the [Pre-built VM](http://bits.lumify.io/vm/lumify-2013-12-03.ova)
 2. Import the .ova file into your preferred vm application
 3. Start the VM
-4. Browse to ```http://localhost:8443``` or
-   ```http://192.168.33.10:8443```
+4. Browse to ```https://localhost:8443``` or ```https://192.168.33.10:8443```
 5. Login to the webapp with username "Lumify" and any password to load a prepopulated workspace
 
 If you would like to see an example of the capabilities Lumify has for ingest, please refer to our [open source ingest example](https://github.com/nearinfinity/lumify-twitter) and follow the instructions there.
@@ -23,6 +22,7 @@ If you would like to see an example of the capabilities Lumify has for ingest, p
 ## DISCLAIMER
 * The pre-built VM comes with Maven installed, so you will be able to develop within the VM if you choose to do so.
 * To log into your VM, please use the following credentials:
+
 ```
 username: lumify
 password: lumify
