@@ -1,15 +1,6 @@
 package com.altamiracorp.lumify.web;
 
-import java.util.Properties;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.altamiracorp.lumify.FrameworkUtils;
+import com.altamiracorp.lumify.core.FrameworkUtils;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
@@ -17,6 +8,13 @@ import com.altamiracorp.lumify.web.config.ParameterExtractor;
 import com.altamiracorp.lumify.web.guice.modules.Bootstrap;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import java.util.Properties;
 
 /**
  * Responsible for defining behavior corresponding to web servlet context

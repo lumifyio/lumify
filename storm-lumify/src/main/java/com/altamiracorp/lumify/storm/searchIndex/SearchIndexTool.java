@@ -1,13 +1,11 @@
 package com.altamiracorp.lumify.storm.searchIndex;
 
-import com.altamiracorp.lumify.cmdline.CommandLineBase;
+import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.google.inject.Inject;
-import org.apache.accumulo.core.util.CachedConfiguration;
 import org.apache.commons.cli.CommandLine;
-import org.apache.hadoop.util.ToolRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +18,7 @@ public class SearchIndexTool extends CommandLineBase {
     private int pageSize = 100;
 
     public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(CachedConfiguration.getInstance(), new SearchIndexTool(), args);
+        int res = new SearchIndexTool().run(args);
         if (res != 0) {
             System.exit(res);
         }

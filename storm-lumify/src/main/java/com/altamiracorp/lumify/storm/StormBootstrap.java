@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.storm;
 
-import com.altamiracorp.lumify.BootstrapBase;
+import com.altamiracorp.lumify.core.BootstrapBase;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.google.inject.Module;
 
