@@ -2,7 +2,7 @@
   <li>
     <% if (audit.fromValue && audit.toValue) { %>
       <span class="audit-user"><%= audit.user %></span> set 
-      <span class="audit-date"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
+      <span class="audit-date" data-date-relative="<%= formatters.date.relativeToNow(audit.dateTime) %>" data-date="<%= sf('{0:yyyy-MM-dd HH:mm}', new Date(audit.dateTime)) %>"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
       <span class="audit-from"><%= audit.fromValue %></span>
       <span class="audit-to">
         <% if (audit.geoLocation) { %>
@@ -18,7 +18,7 @@
       </span>
     <% } else { %>
        <span class="audit-message">  <%= audit.message %></span> by 
-       <span class="audit-date"> <%= formatters.date.relativeToNow(audit.dateTime) %></span>
+       <span class="audit-date" data-date-relative="<%= formatters.date.relativeToNow(audit.dateTime) %>" data-date="<%= sf('{0:yyyy-MM-dd HH:mm}', new Date(audit.dateTime)) %>"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
        <span class="audit-user"><%= audit.user %></span>
     <% } %>
   </li>
