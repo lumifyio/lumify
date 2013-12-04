@@ -191,6 +191,7 @@ public class BaseOntology {
         ontologyRepository.addPropertyTo(artifact, geoLocationDescriptionProperty.getName(), "Geo-location Description", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(artifact, publishedDateProperty.getName(), "Published Date", PropertyType.DATE, user);
         ontologyRepository.addPropertyTo(artifact, sourceProperty.getName(), "Source", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(artifact, authorProperty.getName(), "Author", PropertyType.STRING, user);
         graph.commit();
 
         InputStream artifactGlyphIconInputStream = this.getClass().getResourceAsStream("artifact.png");
