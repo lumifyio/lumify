@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
+import static org.mockito.internal.util.Checks.checkNotNull;
+
 public class BaseOntology {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseOntology.class);
 
@@ -192,6 +194,7 @@ public class BaseOntology {
         graph.commit();
 
         InputStream artifactGlyphIconInputStream = this.getClass().getResourceAsStream("artifact.png");
+        checkNotNull(artifactGlyphIconInputStream, "artifact.png not found");
         String artifactGlyphIconRowKey = resourceRepository.importFile(artifactGlyphIconInputStream, "png", user);
         artifact.setProperty(PropertyName.GLYPH_ICON, artifactGlyphIconRowKey);
         graph.commit();
