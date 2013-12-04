@@ -36,18 +36,26 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(GraphSession.class).toInstance(createGraphSession());
         bind(SearchProvider.class).toInstance(createSearchProvider(user));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
-        bind(ContentTypeExtractor.class).toInstance(createContentTypeExtractor());
+        ContentTypeExtractor contentTypeExtractor = createContentTypeExtractor();
+        if (contentTypeExtractor != null) {
+            bind(ContentTypeExtractor.class).toInstance(contentTypeExtractor);
+        }
     }
 
     private ContentTypeExtractor createContentTypeExtractor() {
         Class contentTypeExtractorClass = null;
         try {
             contentTypeExtractorClass = config.getClass(Configuration.CONTENT_TYPE_EXTRACTOR, null);
-            checkNotNull(contentTypeExtractorClass, Configuration.CONTENT_TYPE_EXTRACTOR + " must be configured");
+            if (contentTypeExtractorClass == null) {
+                return null;
+            }
             Constructor<ContentTypeExtractor> contentTypeExtractorConstructor = contentTypeExtractorClass.getConstructor();
             ContentTypeExtractor contentTypeExtractor = contentTypeExtractorConstructor.newInstance();
             contentTypeExtractor.init(config.toMap());
             return contentTypeExtractor;
+        } catch (ClassNotFoundException e) {
+            LOGGER.warn("Could not load class " + config.get(Configuration.CONTENT_TYPE_EXTRACTOR));
+            return null;
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("The provided model provider " + contentTypeExtractorClass.getName() + " does not have the required constructor");
         } catch (Exception e) {
