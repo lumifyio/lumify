@@ -17,7 +17,7 @@ define([
             var graphVertexId = menu.data('currentVertexGraphVertexId');
             this.ignoreCySelectionEvents = true;
 
-            this.cy(function (cy) {
+            this.cytoscapeReady(function (cy) {
                 var self = this;
                 var sourceVertex = cy.getElementById(graphVertexId);
                 var title = sourceVertex.data('title');

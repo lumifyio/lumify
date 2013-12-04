@@ -11,56 +11,71 @@ define([
 
     function Connection() {
 
+        var input, edge;
+
         if (!this.relationshipService) {
             this.relationshipService = new RelationshipService();
             this.ontologyService = new OntologyService();
         }
 
-        this.getRelationshipLabels = function (source, dest) {
-            var self = this;
-            var sourceConceptTypeId = source.data('_subType');
-            var destConceptTypeId = dest.data('_subType');
-            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId)
-                .done(function(results) {
-                    self.displayRelationships(results.relationships);
-                });
-        };
+        this.after('initialize', function() {
+            //this.on('createConnection', this.onCreateConnection);
+        });
 
-        this.displayRelationships = function (relationships) {
-            var self = this;
-            self.ontologyService.relationships()
-                .done(function(ontologyRelationships) {
 
-                    var relationshipsTpl = [];
+        this.onCreateConnection = function(event, data) {
 
-                    relationships.forEach(function (relationship) {
-                        var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
-                        var displayName;
-                        if (ontologyRelationship) {
-                            displayName = ontologyRelationship.displayName;
-                        } else {
-                            displayName = relationship.title;
+            this.cytoscapeReady(function(cy) {
+                edge = cy.$('#' + data.edgeId);
+
+                var self = this,
+                    srcPosition = retina.pixelsToPoints(cy.getElementById(edge.data('source')).renderedPosition()),
+                    dstPosition = retina.pixelsToPoints(cy.getElementById(edge.data('target')).renderedPosition()),
+                    center = {
+                        left: (dstPosition.x - srcPosition.x) / 2 + srcPosition.x,
+                        top: (dstPosition.y - srcPosition.y) / 2 + srcPosition.y
+                    };
+
+
+                cy.panningEnabled(false)
+                  .zoomingEnabled(false)
+                  .boxSelectionEnabled(false);
+
+                input = $(connectionTemplate({})).appendTo('body')
+                    .css({
+                        left: (center.left - 50) + 'px',
+                        top: (center.top - 25) + 'px',
+                        width: '175px',
+                        position: 'absolute',
+                        zIndex: 100,
+                        textAlign: 'center'
+                    })
+                    .on({
+                        keydown: function (e) {
+                            var val = $.trim($(this).val());
+                            if (e.which === $.ui.keyCode.ENTER && val.length) {
+                                complete(val);
+                            }
                         }
-
-                        var data = {
-                            title: relationship.title,
-                            displayName: displayName
-                        };
-
-                        relationshipsTpl.push(data);
                     });
-
-                    $(".concept-label").html(relationshipTypeTemplate({ relationships: relationshipsTpl }));
-                });
+                _.defer(input.focus.bind(input));
+                edge.addClass('label');
+                self.getRelationshipLabels(cy.getElementById(edge.data('source')), cy.getElementById(edge.data('target')));
+            });
         };
 
         this.onContextMenuConnect = function () {
             var menu = this.select('vertexContextMenuSelector');
             var graphVertexId = menu.data('currentVertexGraphVertexId');
 
-            this.creatingStatement = true;
+            this.trigger('startVertexConnection', {
+                sourceId: graphVertexId
+            });
+            return;
 
-            this.cy(function (cy) {
+            //this.creatingStatement = true;
+
+            this.cytoscapeReady(function (cy) {
                 var self = this,
                     sourceVertex = cy.getElementById(graphVertexId),
                     title = sourceVertex.data('title'),
@@ -69,8 +84,6 @@ define([
                         .text(beginText)
                         .addClass('instructions')
                         .appendTo(this.$node),
-                    edge = null,
-                    input = null,
                     targetGraphId = null;
 
                 var complete = function (val) {
@@ -153,37 +166,10 @@ define([
                         instructions.text('Select the relationship, then press [Enter]');
                         cy.off(mouseEvents);
 
-                        var srcPosition = retina.pixelsToPoints(cy.getElementById(edge.data('source')).renderedPosition()),
-                            dstPosition = retina.pixelsToPoints(cy.getElementById(edge.data('target')).renderedPosition()),
-                            center = {
-                                left: (dstPosition.x - srcPosition.x) / 2 + srcPosition.x,
-                                top: (dstPosition.y - srcPosition.y) / 2 + srcPosition.y
-                            };
+                        self.trigger('createConnection', {
+                            edgeId: edge.id()
+                        });
 
-                        cy.panningEnabled(false)
-                            .zoomingEnabled(false)
-                            .boxSelectionEnabled(false);
-
-                        input = $(connectionTemplate({})).appendTo('body')
-                            .css({
-                                left: (center.left - 50) + 'px',
-                                top: (center.top - 25) + 'px',
-                                width: '175px',
-                                position: 'absolute',
-                                zIndex: 100,
-                                textAlign: 'center'
-                            })
-                            .on({
-                                keydown: function (e) {
-                                    var val = $.trim($(this).val());
-                                    if (e.which === $.ui.keyCode.ENTER && val.length) {
-                                        complete(val);
-                                    }
-                                }
-                            });
-                        _.defer(input.focus.bind(input));
-                        edge.addClass('label');
-                        self.getRelationshipLabels(cy.getElementById(edge.data('source')), cy.getElementById(edge.data('target')));
                     },
                     cxttap: function (event) {
                         complete();

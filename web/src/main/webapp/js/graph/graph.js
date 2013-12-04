@@ -7,13 +7,15 @@ define([
     './renderer',
     './stylesheet',
     './contextmenu/withGraphContextMenuItems',
+    './withControlDrag',
     'tpl!./graph',
     'util/throttle',
     'util/previews',
     'service/ucd',
     'service/ontology',
     'util/retina',
-    'util/withContextMenu'
+    'util/withContextMenu',
+    'util/withAsyncQueue'
 ], function(
     defineComponent,
     appData,
@@ -21,13 +23,15 @@ define([
     Renderer,
     stylesheet,
     withGraphContextMenuItems,
+    withControlDrag,
     template,
     throttle,
     previews,
     UCD,
     OntologyService,
     retina,
-    withContextMenu) {
+    withContextMenu,
+    withAsyncQueue) {
     'use strict';
 
         // Delay before showing hover effect on graph
@@ -39,13 +43,12 @@ define([
         GRID_LAYOUT_X_INCREMENT = 175,
         GRID_LAYOUT_Y_INCREMENT = 100;
 
-    return defineComponent(Graph, withContextMenu, withGraphContextMenuItems);
+    return defineComponent(Graph, withAsyncQueue, withContextMenu, withGraphContextMenuItems, withControlDrag);
 
     function Graph() {
         this.ucd = new UCD();
         this.ontologyService = new OntologyService();
 
-        var callbackQueue = [];
         var LAYOUT_OPTIONS = {
             // Customize layout options
             random: { padding: 10 },
@@ -61,16 +64,8 @@ define([
             edgeContextMenuSelector: '.edge-context-menu'
         });
 
-        this.cy = function(callback) {
-            if ( this.cyLoaded ) {
-                callback.call(this, this._cy);
-            } else {
-                callbackQueue.push( callback );
-            }
-        };
-
         this.onVerticesHoveringEnded = function(evt, data) {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 cy.$('.hover').remove();
             });
         };
@@ -78,7 +73,7 @@ define([
         var vertices, idToCyNode;
         this.onVerticesHovering = function(evt, data) {
             if (!this.isWorkspaceEditable) return;
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 var self = this,
                     offset = this.$node.offset(),
                     renderedPosition = retina.pointsToPixels({
@@ -153,7 +148,7 @@ define([
 
         this.onVerticesDropped = function(evt, data) {
             if (!this.isWorkspaceEditable) return;
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 var self = this,
                     vertices = data.vertices, 
                     toFitTo = [],
@@ -222,7 +217,7 @@ define([
                     .insertAfter(dragging);
             }
 
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 var currentNodes = cy.nodes(),
                     boundingBox = currentNodes.boundingBox(),
                     validBox = isFinite(boundingBox.x1),
@@ -352,7 +347,7 @@ define([
         };
 
         this.onVerticesDeleted = function(event, data) {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
 
                 if (data.vertices.length) {
                     cy.$( 
@@ -370,7 +365,7 @@ define([
                 return;
             }
 
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 this.ignoreCySelectionEvents = true;
 
                 cy.$(':selected').unselect();
@@ -393,7 +388,7 @@ define([
 
         this.onVerticesUpdated = function(evt, data) {
             var self = this;
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 data.vertices
                     .forEach(function(updatedVertex) {
                         var cyNode = cy.getElementById(updatedVertex.id);
@@ -444,7 +439,7 @@ define([
 
 
         this.onContextMenuZoom = function(level) {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 cy.zoom(level);
             });
         };
@@ -486,7 +481,7 @@ define([
         };
 
         this.onEdgesDeleted = function (event, data) {
-            this.cy(function (cy) {
+            this.cytoscapeReady(function (cy) {
                 cy.remove('#' + data.edgeId);
                 this.updateEdgeOptions(cy);
             });
@@ -509,7 +504,7 @@ define([
         };
 
         this.onDevicePixelRatioChanged = function() {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 cy.renderer().updatePixelRatio();
                 this.fit(cy);
             });
@@ -521,7 +516,7 @@ define([
             if (cy) {
                 _fit(cy);
             } else {
-                this.cy(_fit);
+                this.cytoscapeReady(_fit);
             }
 
             function _fit(cy) {
@@ -548,7 +543,7 @@ define([
         };
 
         this.onFocusVertices = function(e, data) {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 var vertexIds = data.vertexIds;
                 this.hoverDelay = _.delay(function() {
                     var nodes = this.verticesForGraphIds(cy, vertexIds)
@@ -591,7 +586,7 @@ define([
 
         this.onDefocusVertices = function(e, data) {
             clearTimeout(this.hoverDelay);
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 cy.nodes('.focus').removeClass('focus').stop(true, true);
             });
         };
@@ -619,7 +614,7 @@ define([
         this.onContextMenuLayout = function(layout, opts) {
             var self = this;
             var options = $.extend({onlySelected:false}, opts);
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
 
                 var unselected;
                 if (options.onlySelected) {
@@ -713,12 +708,15 @@ define([
         });
 
         this.updateVertexSelections = function(cy) {
-            var nodes = cy.nodes().filter(':selected'),
-                edges = cy.edges().filter(':selected'),
+            window.cy = cy;
+            var nodes = cy.nodes().filter(':selected').not('.temp'),
+                edges = cy.edges().filter(':selected').not('.temp'),
                 vertices = [];
 
             nodes.each(function(index, cyNode) {
-                vertices.push(appData.vertex(cyNode.id()));
+                if (!cyNode.hasClass('temp')) {
+                    vertices.push(appData.vertex(cyNode.id()));
+                }
             });
 
             edges.each(function(index, cyEdge) {
@@ -738,8 +736,8 @@ define([
 
         this.graphGrab = function(event) {
             var self = this;
-            this.cy(function(cy) {
-                var vertices = event.cyTarget.selected() ? cy.nodes().filter(':selected') : event.cyTarget;
+            this.cytoscapeReady(function(cy) {
+                var vertices = event.cyTarget.selected() ? cy.nodes().filter(':selected').not('.temp') : event.cyTarget;
                 this.grabbedVertices = vertices.each(function() {
                     var p = retina.pixelsToPoints(this.position());
                     this.data('originalPosition', { x:p.x, y:p.y });
@@ -814,7 +812,7 @@ define([
         };
 
         this.checkEmptyGraph = function() {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 var noVertices = cy.nodes().length === 0;
 
                 this.select('emptyGraphSelector').toggle(noVertices);
@@ -832,7 +830,7 @@ define([
         };
 
         this.resetGraph = function() {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 cy.nodes().remove();
                 this.setWorkspaceDirty();
             });
@@ -849,7 +847,7 @@ define([
         };
 
         this.onRelationshipsLoaded = function(evt, relationshipData) {
-            this.cy(function(cy) {
+            this.cytoscapeReady(function(cy) {
                 if (relationshipData.relationships) {
                     var relationshipEdges = [];
                     relationshipData.relationships.forEach(function(relationship) {
@@ -889,7 +887,7 @@ define([
                 .done(function(data) {
                     var added = data.vertices;
                     
-                    self.cy(function(cy) {
+                    self.cytoscapeReady(function(cy) {
                         cy.filter(':selected').unselect();
                         cy.container().focus();
                         added.forEach(function(vertex, index) {
@@ -906,7 +904,7 @@ define([
 
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph') {
-                this.cy(function(cy) {
+                this.cytoscapeReady(function(cy) {
                     cy.renderer().notify({type:'viewport'});
                 });
             }
@@ -918,6 +916,9 @@ define([
 
         this.after('initialize', function() {
             var self = this;
+
+            this.setupAsyncQueue('cytoscape');
+
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
@@ -978,15 +979,6 @@ define([
                 ready: function(){
                     var cy = this;
 
-                    self._cy = cy;
-
-                    self.drainCallbackQueue = function() {
-                        callbackQueue.forEach(function( callback ) {
-                            callback.call(self, cy); 
-                        });
-                        callbackQueue.length = 0;
-                    };
-
                     var container = cy.container(),
                         options = cy.options();
 
@@ -1020,10 +1012,8 @@ define([
 
                 },
                 done: function() {
-                    self.cyLoaded = true;
-                    self.drainCallbackQueue();
+                    self.cytoscapeMarkReady(this);
 
-                    
                     setTimeout(function() {
                         self.fit();
                     }, 100);
