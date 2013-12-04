@@ -27,16 +27,11 @@
   
 ### VBoxManage
 
-1.  `VBoxManage hostonlyif create`
-  * Note interface name in success message:
-  
-    `Interface '_vboxnet**\<N\>**_' was successfully created
-  
-2.  `VBoxManage hostonlyif ipconfig _vboxnet**N**_ --ip 192.168.33.1
-3.  If the newly created network is not **_vboxnet0_**, reconfigure the
-    Lumify VM to use the new network:
-  1.  `VBoxManage modifyvm lumify-demo --nic2 hostonly
-      --hostonlyadapter2 vboxnet<N>`
+```
+ifname=$(VBoxManage hostonlyif create | awk '/Interface/ {print $2}' | sed -e "s/'//g")
+VBoxManage hostonlyif ipconfig ${ifname} --ip 192.168.33.1
+VBoxManage modifyvm lumify-demo --nic2 hostonly --hostonlyadapter2 ${ifname} 
+```
 
 **Note that the VirtualBox daemon may need to be restarted to
 successfully add the network interfaces and default routes to the host
