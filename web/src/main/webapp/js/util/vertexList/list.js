@@ -332,6 +332,17 @@ define([
             var self = this;
             (data.vertices || []).forEach(function(vertex) {
                 self.toggleItemIcons(vertex.id, self.stateForVertex(vertex));
+                var currentAnchor = self.$node.find('li.gId' + encodeURIComponent(vertex.id)).children('a'),
+                    newAnchor = $(vertexTemplate({
+                        vertex: vertex,
+                        classNamesForVertex: self.classNameMapForVertices([vertex]),
+                    })).children('a'),
+                    currentHtml = currentAnchor.html(),
+                    newHtml = newAnchor.html();
+                
+                if (currentAnchor.length && newHtml !== currentHtml) {
+                    currentAnchor.html(newHtml);
+                }
             });
         };
 
