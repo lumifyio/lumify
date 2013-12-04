@@ -36,6 +36,6 @@ The VM must be running for these URLs to work.
 * [Storm UI](http://192.168.33.10:8081/)
 
 ## Re-importing data
-1. ```/opt/format.sh```
-2. ```/opt/accumulo-import.sh /opt/lumify/sample-data.tgz```
-3. ```/opt/rebuild-index.sh```
+1. ```/opt/lumify/format.sh```
+2. ```/opt/lumify/accumulo-import.sh /opt/lumify/sample-data.tgz```
+3. ```/opt/lumify/rebuild-index.sh```
