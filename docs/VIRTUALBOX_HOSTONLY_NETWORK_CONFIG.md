@@ -1,6 +1,4 @@
-
-st-Only Network Configuration
----
+## VirtualBox Host-Only Network Configuration
 
 ### VirtualBox UI
 
