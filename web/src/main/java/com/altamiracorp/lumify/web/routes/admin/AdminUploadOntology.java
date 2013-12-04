@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.web.routes.admin;
 
-import com.altamiracorp.lumify.cmdline.OwlImport;
+import com.altamiracorp.lumify.core.cmdline.OwlImport;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;

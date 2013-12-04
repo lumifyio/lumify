@@ -7,16 +7,14 @@ import backtype.storm.generated.StormTopology;
 import backtype.storm.spout.Scheme;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
-import com.altamiracorp.lumify.cmdline.CommandLineBase;
+import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.model.KafkaJsonEncoder;
 import com.altamiracorp.lumify.storm.searchIndex.SearchIndexBolt;
 import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
-import org.apache.accumulo.core.util.CachedConfiguration;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.hadoop.util.ToolRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.kafka.KafkaConfig;
@@ -31,7 +29,7 @@ public class StormRunner extends CommandLineBase {
     private static final String TOPOLOGY_NAME = "lumify";
 
     public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(CachedConfiguration.getInstance(), new StormRunner(), args);
+        int res = new StormRunner().run(args);
         if (res != 0) {
             System.exit(res);
         }

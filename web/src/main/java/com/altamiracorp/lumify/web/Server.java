@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import org.apache.accumulo.core.util.CachedConfiguration;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -12,8 +13,6 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
-
-import com.altamiracorp.lumify.cmdline.CommandLineBase;
 
 public class Server extends CommandLineBase {
 
@@ -29,7 +28,7 @@ public class Server extends CommandLineBase {
     private String keyStorePassword;
 
     public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(CachedConfiguration.getInstance(), new Server(), args);
+        int res = new Server().run(args);
         if (res != 0) {
             System.exit(res);
         }
