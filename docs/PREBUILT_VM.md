@@ -8,6 +8,7 @@ The following system requirements must be available/installed for pre-built virt
 
 * At least 4GB of memory (>4GB recommended)
 * Virtual Machine software that imports .ova files
+  * If using Virtual Box, please refer to [Virtual Box Host-Only Network Configuration](/docs/VIRTUALBOX_HOSTONLY_NETWORK_CONFIG.md) instructions
 
 ## Getting Started
 
