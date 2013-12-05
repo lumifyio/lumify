@@ -8,6 +8,7 @@ define([
     './stylesheet',
     './contextmenu/withGraphContextMenuItems',
     'tpl!./graph',
+    'util/controls',
     'util/throttle',
     'util/previews',
     'service/ucd',
@@ -22,6 +23,7 @@ define([
     stylesheet,
     withGraphContextMenuItems,
     template,
+    Controls,
     throttle,
     previews,
     UCD,
@@ -55,7 +57,7 @@ define([
         this.defaultAttrs({
             cytoscapeContainerSelector: '.cytoscape-container',
             emptyGraphSelector: '.empty-graph',
-            graphToolsSelector: '.ui-cytoscape-panzoom',
+            graphToolsSelector: '.controls',
             contextMenuSelector: '.graph-context-menu',
             vertexContextMenuSelector: '.vertex-context-menu',
             edgeContextMenuSelector: '.edge-context-menu'
@@ -954,6 +956,8 @@ define([
                 self.bindContextMenuClickEvent();
                 self.checkEmptyGraph();
 
+                Controls.attachTo(self.select('graphToolsSelector'));
+
                 stylesheet(function(style) {
                     self.initializeGraph(style);
                 });
@@ -990,22 +994,6 @@ define([
                     var container = cy.container(),
                         options = cy.options();
 
-                    $(container).cytoscapePanzoom({
-                        minZoom: options.minZoom,
-                        maxZoom: options.maxZoom
-                    }).focus().on({
-                        click: function() {
-                            $(".instructions").remove();
-                        }
-                    });
-
-                    // Override "Fit to Window" button and call our own
-                    $('.ui-cytoscape-panzoom-reset').on('mousedown', function(e) {
-						if (e.button !== 0) return;
-                        e.stopPropagation();
-                        self.fit(cy);
-                    });
-
                     self.panZoom = self.select('graphToolsSelector');
                     self.updatePanZoomLocation();
                     
@@ -1018,12 +1006,38 @@ define([
                         free: self.graphFree.bind(self)
                     });
 
+
+                    self.on('pan', function(e, data) {
+                        e.stopPropagation();
+                        cy.panBy(data.pan);
+                    });
+                    self.on('fit', function(e) {
+                        e.stopPropagation();
+                        self.fit(cy);
+                    });
+
+                    var zoomFactor = 0.05,
+                        zoom = function(factor) {
+                            var pan = cy.pan(),
+                                zoom = cy.zoom(),
+                                w = self.$node.width(),
+                                h = self.$node.height(),
+                                pos = cy.renderer().projectIntoViewport(w/2 + self.$node.offset().left, h/2),
+                                unpos = [pos[0] * zoom + pan.x, pos[1] * zoom + pan.y];
+
+                            cy.zoom({
+                                level: cy.zoom() + factor,
+                                position: { x: unpos[0], y: unpos[1] }
+                            })
+                        };
+
+                    self.on('zoomIn', function(e) { zoom(zoomFactor); });
+                    self.on('zoomOut', function(e) { zoom(-zoomFactor); });
                 },
                 done: function() {
                     self.cyLoaded = true;
                     self.drainCallbackQueue();
 
-                    
                     setTimeout(function() {
                         self.fit();
                     }, 100);

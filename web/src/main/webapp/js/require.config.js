@@ -10,7 +10,6 @@ var jQueryPlugins = {
 };
 
 var cytoscapePlugins = [
-  'jquery.cytoscape-panzoom'
 ];
 
 var require = {
