@@ -160,22 +160,6 @@ public class BaseOntology {
         if (authorProperty == null) {
             authorProperty = graph.makeType().name(PropertyName.AUTHOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
         }
-
-        //properties for tweets
-        TitanKey tweetIdProperty = (TitanKey) graph.getType(PropertyName.TWEET_ID.toString());
-        if (tweetIdProperty == null) {
-            tweetIdProperty = graph.makeType().name(PropertyName.TWEET_ID.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
-        TitanKey favoriteCountProperty = (TitanKey) graph.getType(PropertyName.FAVORITE_COUNT.toString());
-        if (favoriteCountProperty == null) {
-            favoriteCountProperty = graph.makeType().name(PropertyName.FAVORITE_COUNT.toString()).dataType(Integer.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
-        TitanKey retweetCountProperty = (TitanKey) graph.getType(PropertyName.RETWEET_COUNT.toString());
-        if (retweetCountProperty == null) {
-            retweetCountProperty = graph.makeType().name(PropertyName.RETWEET_COUNT.toString()).dataType(Integer.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
         graph.commit();
 
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
@@ -200,14 +184,9 @@ public class BaseOntology {
         artifact.setProperty(PropertyName.GLYPH_ICON, artifactGlyphIconRowKey);
         graph.commit();
 
-        Concept document = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), "Document", user);
-//        Concept tweet = ontologyRepository.getOrCreateConcept(document, ArtifactType.DOCUMENT.toString(), "Tweet", user);
-        ontologyRepository.addPropertyTo(document, tweetIdProperty.getName(), "Tweet ID", PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(document, favoriteCountProperty.getName(), "Favorite Count", PropertyType.DOUBLE, user);
-        ontologyRepository.addPropertyTo(document, retweetCountProperty.getName(), "Retweet Count", PropertyType.DOUBLE, user);
-        graph.commit();
-
+        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), "Document", user);
         ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), "Video", user);
+        graph.commit();
 
         Concept image = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.IMAGE.toString(), "Image", user);
 

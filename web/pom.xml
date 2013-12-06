@@ -69,6 +69,12 @@
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-model-accumulo</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
