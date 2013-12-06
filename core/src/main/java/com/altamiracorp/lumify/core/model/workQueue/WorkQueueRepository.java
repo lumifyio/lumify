@@ -52,4 +52,8 @@ public abstract class WorkQueueRepository {
     }
 
     protected abstract void pushOnQueue(String queueName, JSONObject json, String... extra);
+
+    public void init(Map map) {
+
+    }
 }

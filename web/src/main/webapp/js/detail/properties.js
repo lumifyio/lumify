@@ -23,7 +23,12 @@ define([
     sf) {
     'use strict';
 
-    var component = defineComponent(Properties);
+    var component = defineComponent(Properties),
+        AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
+        AUDIT_DATE_DISPLAY_RELATIVE = 0,
+        AUDIT_DATE_DISPLAY_REAL = 1,
+        CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE;
+
     component.filterPropertiesForDisplay = filterPropertiesForDisplay;
     return component;
 
@@ -36,12 +41,14 @@ define([
 
         this.defaultAttrs({
             addNewPropertiesSelector: '.add-new-properties',
-            entityAuditsSelector: '.entity_audit_events'
+            entityAuditsSelector: '.entity_audit_events',
+            auditDateSelector: '.audit-date'
         });
 
         this.after('initialize', function () {
             this.on('click', {
-                addNewPropertiesSelector: this.onAddNewPropertiesClicked
+                addNewPropertiesSelector: this.onAddNewPropertiesClicked,
+                auditDateSelector: this.onAuditDateClicked
             });
             this.on('addProperty', this.onAddProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
@@ -60,6 +67,14 @@ define([
                 this.auditRequest.abort();
             }
         });
+
+        this.onAuditDateClicked = function(event) {
+            CURRENT_DATE_DISPLAY = (CURRENT_DATE_DISPLAY + 1) % AUDIT_DATE_DISPLAY.length;
+
+            this.$node.find('.audit-date').each(function() {
+                $(this).text($(this).data(AUDIT_DATE_DISPLAY[CURRENT_DATE_DISPLAY]));
+            });
+        };
 
         this.onToggleAuditing = function(event, data) {
             var self = this,

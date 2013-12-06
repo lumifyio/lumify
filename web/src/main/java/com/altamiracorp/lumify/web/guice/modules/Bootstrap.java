@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.web.guice.modules;
 
-import com.altamiracorp.lumify.BootstrapBase;
+import com.altamiracorp.lumify.core.BootstrapBase;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 

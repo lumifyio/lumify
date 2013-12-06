@@ -17,8 +17,8 @@ Lumify supplies a pre-built virtual machine to get you started quickly, but you 
 * The following Titan properties are required on every vertex:
     * ```title```
     * ```_subType```: concept id
-    * ```type```: type of concept (i.e. Look at VertexType.java)
-* Accumulo must have a row structure with a SHA256 hash for the row key.
+    * ```type```: type of concept (see [VertexType.java](core/src/main/java/com/altamiracorp/lumify/core/model/ontology/VertexType.java))
+* Accumulo must have a row structure with a SHA256 hash for the row key
 
 ## License
 

@@ -73,18 +73,28 @@
             <groupId>net.java.dev.inflector</groupId>
             <artifactId>inflector</artifactId>
             <version>0.7.0</version>
-        </dependency>        
+        </dependency>
 
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-analytics</artifactId>
+            <artifactId>lumify-model-accumulo</artifactId>
             <version>1.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.esotericsoftware.kryo</groupId>
-                    <artifactId>kryo</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-fs-hdfs</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-model-titan</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>

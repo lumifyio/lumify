@@ -53,14 +53,22 @@ function(compose, registry, advice, withLogging, debug, _, Visibility) {
     /**
      * Switch between lumify and lumify-fullscreen-details based on url hash
      */
-    function loadApplicationTypeBasedOnUrlHash() {
+    function loadApplicationTypeBasedOnUrlHash(e) {
         var ids = graphVertexIdsToOpen(),
 
             // Is this the popoout details app? ids passed to hash?
             popoutDetails = !!(ids && ids.length),
 
+            // If this is a hash change
+            event = e && e.originalEvent,
+
             // Is this the default lumify application?
             mainApp = !popoutDetails;
+
+        // Ignore hash change if not in popout and not going to popout
+        if (event && !isPopoutUrl(event.newURL) && !isPopoutUrl(event.oldURL)) {
+            return;
+        }
 
         $('html')
             .toggleClass('fullscreenApp', mainApp)
@@ -76,16 +84,33 @@ function(compose, registry, advice, withLogging, debug, _, Visibility) {
             });
         } else {
             require(['app'], function(App) {
-                App.teardownAll();
-                App.attachTo('#app');
+                if (event) {
+                    location.replace(location.href);
+                } else {
+                    App.teardownAll();
+                    App.attachTo('#app');
+                }
             });
         }
     }
 
-    function graphVertexIdsToOpen() {
+    function isPopoutUrl(url) {
+        var ids = graphVertexIdsToOpen(url)
+
+        return !!(ids && ids.length);
+    }
+
+    function graphVertexIdsToOpen(url) {
         // http://...#v=1,2,3
 
         var h = location.hash;
+
+        if (url) {
+            var urlMatch = url.match(/.*?(#.*)$/);
+            if (urlMatch) {
+                h = urlMatch[1];
+            } else h = '';
+        }
 
         if (!h || h.length === 0) return;
 

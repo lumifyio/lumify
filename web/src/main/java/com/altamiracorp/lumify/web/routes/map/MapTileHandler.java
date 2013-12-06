@@ -4,7 +4,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
-import org.apache.poi.util.IOUtils;
+import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
