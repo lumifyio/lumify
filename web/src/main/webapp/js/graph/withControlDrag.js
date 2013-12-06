@@ -18,6 +18,7 @@ define([
             tempTargetNode,
             currentEdgeId,
             state = STATE_NONE,
+            hops,
             connectionType;
 
         if (!this.graphService) {
@@ -277,6 +278,7 @@ define([
         this.onStartVertexConnection = function(event, data) {
             state = STATE_STARTED;
             connectionType = data.connectionType;
+            hops = data.hops;
 
             // TODO: register for viewport changes and move dialog
             
@@ -379,7 +381,7 @@ define([
                 sourceGraphVertexId: source,
                 destGraphVertexId: dest,
                 depth: 5,
-                hops: 1
+                hops: hops
             };
 
             return this.graphService.findPath(parameters)

@@ -18,7 +18,8 @@ define([
 
             this.trigger('startVertexConnection', {
                 sourceId: graphVertexId,
-                connectionType: 'FindPath'
+                connectionType: 'FindPath',
+                hops: hops
             });
         };
     }
