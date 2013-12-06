@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -142,38 +142,48 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>storm-jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.altamiracorp.lumify.storm.StormRunner</mainClass>
+                                </manifest>
+                                <manifestEntries>
+                                    <Specification-Title>Java Advanced Imaging Image I/O Tools</Specification-Title>
+                                    <Specification-Version>1.1</Specification-Version>
+                                    <Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
+                                    <Implementation-Title>com.sun.media.imageio</Implementation-Title>
+                                    <Implementation-Version>1.1</Implementation-Version>
+                                    <Implementation-Vendor>Sun Microsystems, Inc.</Implementation-Vendor>
+                                    <Extension-Name>com.sun.media.imageio</Extension-Name>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.altamiracorp.lumify.storm.StormRunner</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <Specification-Title>Java Advanced Imaging Image I/O Tools</Specification-Title>
-                            <Specification-Version>1.1</Specification-Version>
-                            <Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
-                            <Implementation-Title>com.sun.media.imageio</Implementation-Title>
-                            <Implementation-Version>1.1</Implementation-Version>
-                            <Implementation-Vendor>Sun Microsystems, Inc.</Implementation-Vendor>
-                            <Extension-Name>com.sun.media.imageio</Extension-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
