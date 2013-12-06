@@ -692,9 +692,6 @@ define([
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {
             if (this.ignoreCySelectionEvents) return;
-            if (this.creatingStatement) {
-                return event.cy.elements().unselect();
-            }
             this.updateVertexSelections(event.cy);
         });
 
@@ -756,6 +753,7 @@ define([
             var dup = true,
                 vertices = this.grabbedVertices;
 
+            if (!vertices) return;
             vertices.each(function(i, e) {
                 var p = retina.pixelsToPoints(this.position());
                 if ( !e.data('freed') ) {
