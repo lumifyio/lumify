@@ -278,10 +278,8 @@ define([
         this.onStartVertexConnection = function(event, data) {
             state = STATE_STARTED;
             connectionType = data.connectionType;
-            hops = data.hops;
+            hops = data.hops || 1;
 
-            // TODO: register for viewport changes and move dialog
-            
             this.ignoreCySelectionEvents = true;
 
             this.cytoscapeReady(function(cy) {
