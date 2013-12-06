@@ -3,6 +3,15 @@ define(['sf'], function() {
     'use strict';
 
     return {
+        string: {
+            plural: function(count, plural, singular) {
+                switch(count) {
+                    case 0: return 'No ' + plural;
+                    case 1: return '1 ' + singular;
+                    default: return count + ' ' + plural;
+                }
+            }
+        },
         date: {
             relativeToNow: function(date) {
                 date = _.isDate(date) ? date : new Date(date);

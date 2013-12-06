@@ -36,7 +36,7 @@ function(defineComponent) {
             this.codes = SYSTEM_WIDE_CODES;
 
             this.fireEventUp = _.debounce(this.fireEvent.bind(this), 100);
-            this.fireEvent = _.debounce(this.fireEvent.bind(this), 100);
+            this.fireEvent = _.debounce(this.fireEvent.bind(this), 100, true);
 
             this.on('keydown', this.onKeyDown);
             this.on('keyup', this.onKeyUp);

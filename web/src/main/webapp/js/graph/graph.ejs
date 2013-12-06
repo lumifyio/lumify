@@ -2,6 +2,23 @@
 <div class="cytoscape-container" tabindex="1"></div>
 
 <div>
+  <div class="popover connect-dialog top">
+    <div class="arrow"></div>
+    <button data-form="find-path-form" class="btn form-button find-path">Find Path</button>
+    <button data-form="create-connection-form" class="btn form-button create-connection">Connect</button>
+    <div class="form find-path-form">
+      <span class="path"></span>
+      <button class="btn btn-primary">Add Vertices</button>
+    </div>
+    <div class="form create-connection-form">
+      <span class="source"/>
+      <select></select>
+      <button class="btn btn-primary">Connect</button>
+    </div>
+  </div>
+</div>
+
+<div>
 <ul class="graph-context-menu dropdown-menu" role="menu">
   <!-- TODO
   <li><a tabindex="-1" href="#">Undo</a></li>

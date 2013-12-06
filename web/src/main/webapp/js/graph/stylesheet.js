@@ -93,6 +93,19 @@ define([
                 'font-size': 20 * retina.devicePixelRatio
             })
 
+            .selector('node.temp')
+            .css({
+                'background-color': 'rgba(255,255,255,0.0)',
+                'width': '1',
+                'height': '1'
+            })
+
+            .selector('node.controlDragSelection')
+            .css({
+                'border-width': 5 * retina.devicePixelRatio,
+                'border-color': '#a5e1ff'
+            })
+
             .selector('edge')
             .css({
                 'width': 1.5 * retina.devicePixelRatio,
