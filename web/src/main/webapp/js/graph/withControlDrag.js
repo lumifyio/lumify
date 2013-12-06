@@ -37,6 +37,7 @@ define([
                 lockedCyTarget;
 
             this.mouseDragHandler = self.onControlDragMouseMove.bind(this);
+            this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 100);
 
             this.on(document, 'controlKey', function() { controlKeyPressed = true; });
             this.on(document, 'controlKeyUp', function() { controlKeyPressed = false; });
@@ -220,6 +221,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 cy.$('.temp').remove();
                 cy.$('.controlDragSelection').removeClass('controlDragSelection');
+                cy.off('pan zoom', this.onViewportChanges);
                 currentEdgeId = null;
                 this.select('dialogSelector').hide();
                 this.ignoreCySelectionEvents = false;
@@ -229,21 +231,13 @@ define([
         this.showDialog = function(edge) {
             this.cytoscapeReady(function(cy) {
                 var self = this,
-                    targetId = edge.data('target'),
-                    target = cy.getElementById(targetId),
-                    position = retina.pixelsToPoints(target.renderedPosition());
+                    targetId = edge.data('target');
 
-                position.y -= target.height() / cy.zoom() / 2;
-
-                this.dialogPosition = {
-                    x: position.x,
-                    y: position.y
-                };
+                this.currentTargetNode = cy.getElementById(targetId);
+                this.onViewportChanges();
                 
-                var dialog = this.$node.find('.connect-dialog').blur(),
-                    parent = dialog.parent('div');
-
-                parent.css({ position: 'absolute', left: position.x, top: position.y });
+                var dialog = this.$node.find('.connect-dialog');
+                dialog.parent('div').css({ position: 'absolute' });
 
                 if (connectionType) {
                     dialog.find('.form').hide();
@@ -257,15 +251,26 @@ define([
                     this.positionDialog();
                 }
 
+                cy.on('pan zoom', this.onViewportChanges);
             });
         };
 
+        this.onViewportChanges = function() {
+            this.dialogPosition = retina.pixelsToPoints(this.currentTargetNode.renderedPosition());
+            this.dialogPosition.y -= this.currentTargetNode.height() / 2 * this.currentTargetNode.cy().zoom();
+            this.positionDialog();
+        };
+
         this.positionDialog = function() {
-            var dialog = this.select('dialogSelector');
-            dialog.parent('div').css({
-                left: this.dialogPosition.x - (dialog.outerWidth(true) / 2),
-                top: this.dialogPosition.y - (dialog.outerHeight(true))
-            });
+            var dialog = this.select('dialogSelector'),
+                width = dialog.outerWidth(true),
+                height = dialog.outerHeight(true),
+                proposed = {
+                    left: Math.max(0, Math.min(this.$node.width() - width, this.dialogPosition.x - (width / 2))),
+                    top: Math.max(0, Math.min(this.$node.height() - height, this.dialogPosition.y - height))
+                };
+
+            dialog.parent('div').css(proposed);
             dialog.show();
         }
 
