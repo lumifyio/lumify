@@ -206,8 +206,9 @@ define([
                 updatedVertices = [],
                 self = this;
 
-            if ($(".instructions").length > 0) {
-                $(".instructions").text ('Related Entities Added');
+            if (self.addingRelatedVertices) {
+                self.trigger('displayInformation', { message: 'Related Entities Added'});
+                self.addingRelatedVertices = false;
             }
 
             var dragging = $('.ui-draggable-dragging:not(.clone-vertex)'),
@@ -873,10 +874,6 @@ define([
 
 
         this.onLoadRelatedSelected = function(data) {
-            var instructions = $('<div>')
-                .text("Loading...")
-                .addClass('instructions')
-                .appendTo(this.$node);
             var self = this;
 
             if ($.isArray(data) && data.length == 1){
@@ -896,7 +893,8 @@ define([
                             };
                         });
 
-                        self.trigger(document, 'addVertices', { vertices: added });
+                        self.addingRelatedVertices = true;
+                        self.trigger('addVertices', { vertices:added });
                         self.trigger('selectObjects', { vertices:added })
                     });
                 });
