@@ -37,7 +37,10 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(GraphSession.class).toInstance(createGraphSession());
         bind(SearchProvider.class).toInstance(createSearchProvider(user));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
-        bind(ObjectDetector.class).toInstance(createObjectDetector());
+        ObjectDetector objectDetector = createObjectDetector();
+        if (objectDetector != null) {
+            bind(ObjectDetector.class).toInstance(objectDetector);
+        }
         ContentTypeExtractor contentTypeExtractor = createContentTypeExtractor();
         if (contentTypeExtractor != null) {
             bind(ContentTypeExtractor.class).toInstance(contentTypeExtractor);
