@@ -54,19 +54,22 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public void audit (String vertexId, ArrayList<String> messages, User user) {
+    public void audit(String vertexId, ArrayList<String> messages, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
         checkNotNull(messages, "message cannot be null");
-        checkArgument(messages.size() > 0, "message cannot be empty");
         checkNotNull(user, "user cannot be null");
+
+        if (messages.size() < 1) {
+            return;
+        }
 
         for (String message : messages) {
             audit(vertexId, message, user);
         }
     }
 
-    public String vertexPropertyAuditMessage (String propertyName, Object value) {
+    public String vertexPropertyAuditMessage(String propertyName, Object value) {
         return "Set " + propertyName + " from undefined to " + value;
     }
 
@@ -80,8 +83,7 @@ public class AuditRepository extends Repository<Audit> {
         return "Set " + propertyName + " from " + oldValue + " to " + newValue;
     }
 
-
-    public ArrayList<String> vertexPropertyAuditMessages (GraphVertex vertex, List<String> modifiedProperties) {
+    public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
         ArrayList<String> messages = new ArrayList<String>();
         HashMap<String, Object> oldProperties = vertex.getOldProperties();
         for (String modifiedProperty : modifiedProperties) {
@@ -98,11 +100,11 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
-    public String createEntityAuditMessage () {
+    public String createEntityAuditMessage() {
         return "Entity Created";
     }
 
-    public String deleteEntityAuditMessage (String deletedVertexId) {
+    public String deleteEntityAuditMessage(String deletedVertexId) {
         return "Deleted: " + deletedVertexId;
     }
 }

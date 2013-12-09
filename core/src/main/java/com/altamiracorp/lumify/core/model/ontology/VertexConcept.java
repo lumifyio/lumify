@@ -64,7 +64,7 @@ public class VertexConcept extends Concept {
 
     @Override
     public HashMap<String, Object> getOldProperties () {
-        return this.getOldProperties();
+        return this.oldProperties;
     }
 
     public Vertex getVertex() {

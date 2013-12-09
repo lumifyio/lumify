@@ -9,11 +9,13 @@ public class GraphVertexRelationship extends Relationship {
     private final GraphVertex vertex;
     private final Concept sourceConcept;
     private final Concept destConcept;
+    private HashMap<String, Object> oldProperties;
 
     public GraphVertexRelationship(GraphVertex vertex, Concept sourceConcept, Concept destConcept) {
         this.vertex = vertex;
         this.sourceConcept = sourceConcept;
         this.destConcept = destConcept;
+        oldProperties = vertex.getOldProperties();
     }
 
     @Override
@@ -23,6 +25,9 @@ public class GraphVertexRelationship extends Relationship {
 
     @Override
     public GraphVertex setProperty(String key, Object value) {
+        if (vertex.getPropertyKeys().contains(key)) {
+            oldProperties.put(key, vertex.getProperty(key));
+        }
         vertex.setProperty(key, value);
         return this;
     }
@@ -65,6 +70,6 @@ public class GraphVertexRelationship extends Relationship {
 
     @Override
     public HashMap<String, Object> getOldProperties () {
-        return vertex.getOldProperties();
+        return oldProperties;
     }
 }

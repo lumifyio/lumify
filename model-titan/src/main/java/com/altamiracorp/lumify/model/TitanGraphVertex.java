@@ -54,7 +54,7 @@ public class TitanGraphVertex extends GraphVertex {
 
     @Override
     public HashMap<String, Object> getOldProperties () {
-        return getOldProperties();
+        return this.oldProperties;
     }
 
     public Vertex getVertex() {

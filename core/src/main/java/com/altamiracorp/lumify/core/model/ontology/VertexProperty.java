@@ -61,7 +61,7 @@ public class VertexProperty extends Property {
 
     @Override
     public HashMap<String, Object> getOldProperties () {
-        return this.getOldProperties();
+        return this.oldProperties;
     }
 
     public Vertex getVertex() {
