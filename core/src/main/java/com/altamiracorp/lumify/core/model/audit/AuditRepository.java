@@ -69,20 +69,6 @@ public class AuditRepository extends Repository<Audit> {
         }
     }
 
-    public String vertexPropertyAuditMessage(String propertyName, Object value) {
-        return "Set " + propertyName + " from undefined to " + value;
-    }
-
-    public String vertexPropertyAuditMessage(GraphVertex graphVertex, String propertyName, Object newValue) {
-        Object oldValue;
-        if (graphVertex.getProperty(propertyName) == null) {
-            oldValue = "undefined";
-        } else {
-            oldValue = graphVertex.getProperty(propertyName);
-        }
-        return "Set " + propertyName + " from " + oldValue + " to " + newValue;
-    }
-
     public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
         ArrayList<String> messages = new ArrayList<String>();
         HashMap<String, Object> oldProperties = vertex.getOldProperties();

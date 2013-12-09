@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
@@ -57,15 +59,18 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
 
-        auditRepository.audit(graphVertexId, auditRepository.vertexPropertyAuditMessage(graphVertex, propertyName, valueStr), user);
-
+        List<String> modifiedProperties = Lists.newArrayList(propertyName);
         graphVertex.setProperty(propertyName, value);
+
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
             graphVertex.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION, "");
+            modifiedProperties.add(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
             graphVertex.setProperty(PropertyName.SOURCE, value);
+            modifiedProperties.add(PropertyName.SOURCE.toString());
         }
-        graphRepository.commit();
+        graphRepository.save(graphVertex, user);
+        auditRepository.audit(graphVertexId, auditRepository.vertexPropertyAuditMessages(graphVertex, modifiedProperties), user);
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 

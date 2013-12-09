@@ -12,8 +12,12 @@ import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityHelper {
     private final GraphRepository graphRepository;
@@ -41,22 +45,10 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, User user) {
-        boolean isInMemVertex = (vertex.getId() == null);
-
-        if (!isInMemVertex) {
-            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
-            vertex.setProperty(PropertyName.SUBTYPE, subType);
-            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
-            vertex.setProperty(PropertyName.TITLE, title);
-            graphRepository.saveVertex(vertex, user);
-        } else {
-            vertex.setProperty(PropertyName.SUBTYPE, subType);
-            vertex.setProperty(PropertyName.TITLE, title);
-            graphRepository.saveVertex(vertex, user);
-            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.SUBTYPE.toString(), subType), user);
-            auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TITLE.toString(), title), user);
-        }
-
+        vertex.setProperty(PropertyName.SUBTYPE, subType);
+        vertex.setProperty(PropertyName.TITLE, title);
+        graphRepository.saveVertex(vertex, user);
+        auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessages(vertex, Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString())), user);
     }
 
     public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, GraphVertex resolvedVertex, GraphVertex conceptVertex) {
@@ -81,36 +73,29 @@ public class EntityHelper {
 
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String boundingBox,
                                          String artifactId, User user) {
-        boolean inMemVertex = true;
+        boolean newVertex = false;
+        List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
-            inMemVertex = false;
             resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
         } else {
+            newVertex = true;
             resolvedVertex = new InMemoryGraphVertex();
             resolvedVertex.setType(VertexType.ENTITY);
+            modifiedProperties.add(PropertyName.TYPE.toString());
         }
 
         String conceptId = conceptVertex.getId();
-        if (!inMemVertex) {
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(resolvedVertex, PropertyName.SUBTYPE.toString(), conceptId), user);
-        }
         resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptId);
-
-        if (!inMemVertex) {
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(resolvedVertex, PropertyName.TITLE.toString(), sign), user);
-        }
         resolvedVertex.setProperty(PropertyName.TITLE, sign);
 
         graphRepository.saveVertex(resolvedVertex, user);
 
-        if (inMemVertex) {
+        if (newVertex) {
             auditRepository.audit(resolvedVertex.getId(), auditRepository.createEntityAuditMessage(), user);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.SUBTYPE.toString(), conceptId), user);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TITLE.toString(), sign), user);
         }
+        auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
         graphRepository.setPropertyEdge(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF.toString()
