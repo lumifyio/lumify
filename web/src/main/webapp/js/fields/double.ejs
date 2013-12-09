@@ -5,12 +5,16 @@
 
     <td class="predicate-row">
       <span class="add-on">
+        <% if (predicates) { %>
         <select class="predicate">
           <option value="<">less then</option>
           <option value=">">greater then</option>
           <option value="range">between</option>
           <option value="=">is</option>
         </select>
+        <% } else { %>
+        #
+        <% } %>
       </span>
     </td>
 

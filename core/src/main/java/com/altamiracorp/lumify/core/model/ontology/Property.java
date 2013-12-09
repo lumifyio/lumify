@@ -56,6 +56,8 @@ public abstract class Property extends GraphVertex {
             case GEO_LOCATION:
                 value = parseGeoLocation(valueStr);
                 break;
+            case CURRENCY:
+                value = Double.parseDouble(valueStr);
         }
         return value;
     }
