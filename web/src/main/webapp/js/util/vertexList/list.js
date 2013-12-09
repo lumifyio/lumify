@@ -337,11 +337,16 @@ define([
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
-                    currentHtml = currentAnchor.html(),
-                    newHtml = newAnchor.html();
+                    currentHtml = currentAnchor.html();
+
+                if (vertex.properties._glyphIcon) {
+                    $('<img/>').attr('src', vertex.properties._glyphIcon).appendTo(newAnchor.find('.preview'));
+                }
+
+                var newHtml = newAnchor.html();
                 
                 if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml);
+                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', !!vertex.properties._glyphIcon);
                 }
             });
         };
