@@ -3,12 +3,14 @@ package com.altamiracorp.lumify.core.model.ontology;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class VertexRelationship extends Relationship {
     private final Vertex vertex;
     private final Concept sourceConcept;
     private final Concept destConcept;
+    private HashMap<String, Object> oldProperties = new HashMap<String, Object>();
 
     public VertexRelationship(Vertex vertex, Concept sourceConcept, Concept destConcept) {
         this.vertex = vertex;
@@ -23,6 +25,9 @@ public class VertexRelationship extends Relationship {
 
     @Override
     public GraphVertex setProperty(String key, Object value) {
+        if (getVertex().getPropertyKeys().contains(key)) {
+            oldProperties.put(key, getVertex().getProperty(key));
+        }
         getVertex().setProperty(key, value);
         return this;
     }
@@ -61,6 +66,11 @@ public class VertexRelationship extends Relationship {
     @Override
     public Concept getDestConcept() {
         return destConcept;
+    }
+
+    @Override
+    public HashMap<String, Object> getOldProperties () {
+        return this.getOldProperties();
     }
 
     public Vertex getVertex() {

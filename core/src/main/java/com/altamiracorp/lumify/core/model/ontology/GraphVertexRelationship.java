@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class GraphVertexRelationship extends Relationship {
@@ -60,5 +61,10 @@ public class GraphVertexRelationship extends Relationship {
     @Override
     public Concept getDestConcept() {
         return destConcept;
+    }
+
+    @Override
+    public HashMap<String, Object> getOldProperties () {
+        return vertex.getOldProperties();
     }
 }
