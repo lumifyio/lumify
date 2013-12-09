@@ -71,7 +71,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
             try {
                 ((TextExtractionWorker) service).prepare(data);
             } catch (Exception ex) {
-                throw new RuntimeException("Failed to prepare " + service.getClass());
+                throw new RuntimeException("Failed to prepare " + service.getClass(), ex);
             }
             workers.add((ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>) service);
         }
