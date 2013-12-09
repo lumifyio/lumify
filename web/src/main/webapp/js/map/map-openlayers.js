@@ -232,7 +232,10 @@ define([
                 map.featuresLayer.redraw();
 
                 if (adding && vertices.length && validAddition) {
-                    map.zoomToExtent(map.featuresLayer.getDataExtent()); 
+                    var dataExtent = map.featuresLayer.getDataExtent();
+                    if (dataExtent) {
+                        map.zoomToExtent(dataExtent.scale(2)); 
+                    }
                 }
 
                 if (adding && !validAddition && !preventShake) {
