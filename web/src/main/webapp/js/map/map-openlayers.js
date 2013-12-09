@@ -286,6 +286,7 @@ define([
             var dataExtent = map.featuresLayer.getDataExtent();
             if (dataExtent) {
                 map.zoomToExtent(dataExtent.scale(2)); 
+                map.featuresLayer.redraw();
             } else {
                 map.zoomToMaxExtent();
             }
