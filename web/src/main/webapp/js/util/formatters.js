@@ -3,6 +3,13 @@ define(['sf'], function() {
     'use strict';
 
     return {
+        number: {
+            pretty: function(number) {
+                if (number >= 10000) {
+                    return (number / 10000).toFixed(1).replace(/.0$/,'') + 'K';
+                } else return sf('{0:#,###}', number);
+            }
+        },
         string: {
             plural: function(count, plural, singular) {
                 switch(count) {
