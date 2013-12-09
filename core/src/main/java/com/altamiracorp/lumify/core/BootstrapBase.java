@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.objectDetection.ObjectDetector;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.AbstractModule;
@@ -36,9 +37,31 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(GraphSession.class).toInstance(createGraphSession());
         bind(SearchProvider.class).toInstance(createSearchProvider(user));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
+        bind(ObjectDetector.class).toInstance(createObjectDetector());
         ContentTypeExtractor contentTypeExtractor = createContentTypeExtractor();
         if (contentTypeExtractor != null) {
             bind(ContentTypeExtractor.class).toInstance(contentTypeExtractor);
+        }
+    }
+
+    private ObjectDetector createObjectDetector() {
+        Class objectDetectorClass = null;
+        try {
+            objectDetectorClass = config.getClass(Configuration.OBJECT_DETECTOR, null);
+            if (objectDetectorClass == null) {
+                return null;
+            }
+            Constructor<ObjectDetector> objectDetectorConstructor = objectDetectorClass.getConstructor();
+            ObjectDetector objectDetector = objectDetectorConstructor.newInstance();
+            objectDetector.init(config.toMap());
+            return objectDetector;
+        } catch (ClassNotFoundException e) {
+            LOGGER.warn("Could not load class " + config.get(Configuration.OBJECT_DETECTOR));
+            return null;
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("The provided object detector " + objectDetectorClass.getName() + " does not have the required constructor");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
