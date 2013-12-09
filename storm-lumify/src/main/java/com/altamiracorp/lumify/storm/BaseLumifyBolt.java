@@ -194,7 +194,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
         LOGGER.info("moving file " + sourceFileName + " -> " + destFileName);
         Path sourcePath = new Path(sourceFileName);
         Path destPath = new Path(destFileName);
-        getHdfsFileSystem().rename(sourcePath, destPath);
+        if (!getHdfsFileSystem().rename(sourcePath, destPath)) {
+            throw new IOException("Cannot move file " + sourcePath + " to " + destPath);
+        }
     }
 
     public OutputCollector getCollector() {
@@ -289,12 +291,12 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
     }
 
     @Inject
-    public void setOntologyRepository (OntologyRepository ontologyRepository) {
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
     }
 
     @Inject
-    public void setTermMentionRepository (TermMentionRepository termMentionRepository) {
+    public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
         this.termMentionRepository = termMentionRepository;
     }
 

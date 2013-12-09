@@ -209,7 +209,7 @@ define([
                     }
                     self.triggerPaneResized();
                 });
-            }
+            } else this.triggerPaneResized();
 
             pane.toggleClass('visible');
         };

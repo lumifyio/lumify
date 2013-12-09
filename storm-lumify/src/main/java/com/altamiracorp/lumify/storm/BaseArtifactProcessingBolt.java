@@ -105,7 +105,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         } else {
             in = getInputStream(fileMetadata.getFileName(), artifactExtractedInfo);
         }
-        artifactExtractedInfo.setTitle(FilenameUtils.getName(fileMetadata.getFileName()));
+        artifactExtractedInfo.setTitle(getFilenameWithoutDateTime(fileMetadata));
         artifactExtractedInfo.setFileExtension(FilenameUtils.getExtension(fileMetadata.getFileName()));
         artifactExtractedInfo.setMimeType(fileMetadata.getMimeType());
 
@@ -146,6 +146,15 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         }
         LOGGER.debug("Created graph vertex [" + graphVertex.getId() + "] for " + artifactExtractedInfo.getTitle());
         return graphVertex;
+    }
+
+    private String getFilenameWithoutDateTime(FileMetadata fileMetadata) {
+        String fileName = FilenameUtils.getName(fileMetadata.getFileName());
+        int dateTimeSeparator = fileName.lastIndexOf("__");
+        if (dateTimeSeparator > 0) {
+            fileName = fileName.substring(0, dateTimeSeparator);
+        }
+        return fileName;
     }
 
     protected File getPrimaryFileFromArchive(File archiveTempDir) {
@@ -302,7 +311,11 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
 
     protected String moveRawFile(String fileName, String rowKey) throws IOException {
         String rawArtifactHdfsPath = "/lumify/artifacts/raw/" + rowKey;
-        moveFile(fileName, rawArtifactHdfsPath);
+        if (getHdfsFileSystem().exists(new Path(rawArtifactHdfsPath))) {
+            getHdfsFileSystem().delete(new Path(fileName), false);
+        } else {
+            moveFile(fileName, rawArtifactHdfsPath);
+        }
         return rawArtifactHdfsPath;
     }
 
