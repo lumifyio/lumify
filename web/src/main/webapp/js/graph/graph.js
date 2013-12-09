@@ -597,7 +597,6 @@ define([
         this.onGraphPaddingUpdated = function(e, data) {
             var border = 20;
             this.graphPaddingRight = data.padding.r;
-            this.updatePanZoomLocation();
 
             var padding = $.extend({}, data.padding);
 
@@ -606,12 +605,6 @@ define([
             padding.t += border;
             padding.b += border;
             this.graphPadding = padding;
-        };
-
-        this.updatePanZoomLocation = function() {
-            if (this.panZoom) {
-                this.panZoom.css({ right: (this.graphPaddingRight||0) + 'px' });
-            }
         };
 
         this.onContextMenuLayout = function(layout, opts) {
@@ -969,7 +962,6 @@ define([
                 showOverlay: false,
                 minZoom: 1 / 4,
                 maxZoom: 4,
-                graphPaperEnabled: false, // :( sorry chris
                 container: this.select('cytoscapeContainerSelector').css({height:'100%'})[0],
                 renderer: {
                     name: 'lumify'
@@ -982,9 +974,6 @@ define([
                     var container = cy.container(),
                         options = cy.options();
 
-                    self.panZoom = self.select('graphToolsSelector');
-                    self.updatePanZoomLocation();
-                    
                     cy.on({
                         tap: self.graphTap.bind(self),
                         cxttap: self.graphContextTap.bind(self),

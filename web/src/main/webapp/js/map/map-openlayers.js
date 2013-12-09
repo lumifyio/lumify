@@ -10,6 +10,7 @@ define([
     'service/ucd',
     'service/vertex',
     'util/retina',
+    'util/controls',
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,
@@ -21,6 +22,7 @@ define([
     UcdService,
     VertexService,
     retina,
+    Controls,
     withAsyncQueue,
     withContextMenu) {
     'use strict';
@@ -43,7 +45,8 @@ define([
         this.defaultAttrs({
             mapSelector: '#map',
             contextMenuSelector: '.contextmenu',
-            contextMenuVertexSelector: '.contextmenuvertex'
+            contextMenuVertexSelector: '.contextmenuvertex',
+            controlsSelector: '.controls'
         });
 
         this.after('initialize', function() {
@@ -60,11 +63,48 @@ define([
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
 
+            this.attachToZoomPanControls();
+
             var verticesInWorkspace = appData.verticesInWorkspace();
             if (verticesInWorkspace.length) {
                 this.updateOrAddVertices(verticesInWorkspace, { adding:true, preventShake:true });
             }
         });
+
+        this.attachToZoomPanControls = function() {
+            Controls.attachTo(this.select('controlsSelector'));
+
+            this.mapReady(function(map) {
+
+                // While panning add a div so map doesn't swallow mousemove
+                // events
+                this.on('startPan', function() {
+                    this.$node.append('<div class="draggable-wrapper"/>');
+                });
+                this.on('endPan', function() {
+                    this.$node.find('.draggable-wrapper').remove();
+                });
+
+                this.on('pan', function(e, data) {
+                    e.stopPropagation();
+                    map.pan(
+                        data.pan.x * -1, 
+                        data.pan.y * -1, 
+                        { animate:false }
+                    );
+                });
+                this.on('fit', function(e) {
+                    e.stopPropagation();
+                    this.fit(map);
+                });
+
+                var slowZoomIn = _.throttle(map.zoomIn.bind(map), 250, {trailing: false}),
+                    slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
+
+                this.on('zoomIn', function() { slowZoomIn(); });
+                this.on('zoomOut', function() { slowZoomOut(); });
+            });
+        };
 
         this.onMapShow = function() {
             if (this.mapIsReady()) {
@@ -232,10 +272,7 @@ define([
                 map.featuresLayer.redraw();
 
                 if (adding && vertices.length && validAddition) {
-                    var dataExtent = map.featuresLayer.getDataExtent();
-                    if (dataExtent) {
-                        map.zoomToExtent(dataExtent.scale(2)); 
-                    }
+                    this.fit(map);
                 }
 
                 if (adding && !validAddition && !preventShake) {
@@ -243,6 +280,15 @@ define([
                 }
             });
 
+        };
+
+        this.fit = function(map) {
+            var dataExtent = map.featuresLayer.getDataExtent();
+            if (dataExtent) {
+                map.zoomToExtent(dataExtent.scale(2)); 
+            } else {
+                map.zoomToMaxExtent();
+            }
         };
 
         this.invalidMap = function() {
