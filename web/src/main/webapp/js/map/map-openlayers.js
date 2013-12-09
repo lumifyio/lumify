@@ -83,6 +83,7 @@ define([
                 });
                 this.on('endPan', function() {
                     this.$node.find('.draggable-wrapper').remove();
+                    map.featuresLayer.redraw();
                 });
 
                 this.on('pan', function(e, data) {
