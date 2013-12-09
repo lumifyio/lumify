@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
+import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -66,7 +67,12 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         for (Object service : services) {
             LOGGER.info(String.format("Adding service %s to %s", service.getClass().getName(), getClass().getName()));
             inject(service);
-            ((TextExtractionWorker) service).prepare(stormConf, getUser());
+            TextExtractionWorkerPrepareData data = new TextExtractionWorkerPrepareData(stormConf, getUser(), getHdfsFileSystem(), getInjector());
+            try {
+                ((TextExtractionWorker) service).prepare(data);
+            } catch (Exception ex) {
+                throw new RuntimeException("Failed to prepare " + service.getClass());
+            }
             workers.add((ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>) service);
         }
 

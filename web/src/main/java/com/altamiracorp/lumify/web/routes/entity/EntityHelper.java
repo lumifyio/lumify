@@ -43,7 +43,7 @@ public class EntityHelper {
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, User user) {
         boolean isInMemVertex = (vertex.getId() == null);
 
-        if (!isInMemVertex){
+        if (!isInMemVertex) {
             auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.SUBTYPE.toString(), subType), user);
             vertex.setProperty(PropertyName.SUBTYPE, subType);
             auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessage(vertex, PropertyName.TITLE.toString(), title), user);
@@ -60,14 +60,16 @@ public class EntityHelper {
     }
 
     public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, GraphVertex resolvedVertex, GraphVertex conceptVertex) {
-        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2);
+        String concept;
+        if (conceptVertex.getProperty("ontologyTitle").toString().equals("person")) {
+            concept = "face";
+        } else {
+            concept = conceptVertex.getProperty("ontologyTitle").toString();
+        }
+
+        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, concept);
         detectedObject.setGraphVertexId(resolvedVertex.getId().toString());
 
-        if (conceptVertex.getProperty("ontologyTitle").toString().equals("person")) {
-            detectedObject.setConcept("face");
-        } else {
-            detectedObject.setConcept(conceptVertex.getProperty("ontologyTitle").toString());
-        }
         detectedObject.setResolvedVertex(resolvedVertex);
 
         return detectedObject;
@@ -78,11 +80,11 @@ public class EntityHelper {
     }
 
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String boundingBox,
-                                          String artifactId, User user) {
+                                         String artifactId, User user) {
         boolean inMemVertex = true;
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
-        if( existing != null && !existing.isEmpty() ) {
+        if (existing != null && !existing.isEmpty()) {
             inMemVertex = false;
             resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
         } else {
@@ -116,7 +118,7 @@ public class EntityHelper {
         return resolvedVertex;
     }
 
-    public JSONObject formatUpdatedArtifactVertexProperty (String id, String propertyKey, Object propertyValue) {
+    public JSONObject formatUpdatedArtifactVertexProperty(String id, String propertyKey, Object propertyValue) {
         // puts the updated artifact vertex property in the correct JSON format
 
         JSONObject artifactVertexProperty = new JSONObject();

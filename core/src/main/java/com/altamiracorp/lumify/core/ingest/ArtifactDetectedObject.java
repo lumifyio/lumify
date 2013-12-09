@@ -14,11 +14,12 @@ public class ArtifactDetectedObject {
     private String x2;
     private String y2;
 
-    public ArtifactDetectedObject(String x1, String y1, String x2, String y2) {
+    public ArtifactDetectedObject(String x1, String y1, String x2, String y2, String concept) {
         setX1(x1);
         setY1(y1);
         setX2(x2);
         setY2(y2);
+        this.concept = concept;
     }
 
     public String getX1() {
