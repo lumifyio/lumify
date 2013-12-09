@@ -8,6 +8,10 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -50,6 +54,18 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
+    public void audit (String vertexId, ArrayList<String> messages, User user) {
+        checkNotNull(vertexId, "vertexId cannot be null");
+        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
+        checkNotNull(messages, "message cannot be null");
+        checkArgument(messages.size() > 0, "message cannot be empty");
+        checkNotNull(user, "user cannot be null");
+
+        for (String message : messages) {
+            audit(vertexId, message, user);
+        }
+    }
+
     public String vertexPropertyAuditMessage (String propertyName, Object value) {
         return "Set " + propertyName + " from undefined to " + value;
     }
@@ -62,6 +78,24 @@ public class AuditRepository extends Repository<Audit> {
             oldValue = graphVertex.getProperty(propertyName);
         }
         return "Set " + propertyName + " from " + oldValue + " to " + newValue;
+    }
+
+
+    public ArrayList<String> vertexPropertyAuditMessages (GraphVertex vertex, List<String> modifiedProperties) {
+        ArrayList<String> messages = new ArrayList<String>();
+        HashMap<String, Object> oldProperties = vertex.getOldProperties();
+        for (String modifiedProperty : modifiedProperties) {
+            Object oldProperty = "undefined";
+            if (oldProperties.containsKey(modifiedProperty)) {
+                if (oldProperties.equals(vertex.getProperty(modifiedProperty))) {
+                    continue;
+                } else {
+                    oldProperty = oldProperties.get(modifiedProperty);
+                }
+            }
+            messages.add("Set " + modifiedProperty + " from " + oldProperty + " to " + vertex.getProperty(modifiedProperty));
+        }
+        return messages;
     }
 
     public String createEntityAuditMessage () {

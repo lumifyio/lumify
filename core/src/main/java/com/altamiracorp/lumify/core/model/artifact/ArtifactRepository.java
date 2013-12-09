@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
@@ -18,6 +19,7 @@ import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONArray;
@@ -25,10 +27,7 @@ import org.json.JSONArray;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -44,17 +43,20 @@ public class ArtifactRepository extends Repository<Artifact> {
     private final FileSystemSession fsSession;
     private final GraphSession graphSession;
     private final SearchProvider searchProvider;
+    private final AuditRepository auditRepository;
 
     @Inject
     public ArtifactRepository(
             final ModelSession modelSession,
             final FileSystemSession fsSession,
             final GraphSession graphSession,
-            final SearchProvider searchProvider) {
+            final SearchProvider searchProvider,
+            final AuditRepository auditRepository) {
         super(modelSession);
         this.fsSession = fsSession;
         this.graphSession = graphSession;
         this.searchProvider = searchProvider;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -93,38 +95,53 @@ public class ArtifactRepository extends Repository<Artifact> {
     public GraphVertex saveToGraph(Artifact artifact, ArtifactExtractedInfo artifactExtractedInfo, User user) {
         GraphVertex artifactVertex = null;
         String oldGraphVertexId = artifact.getMetadata().getGraphVertexId();
+        boolean newVertex = false;
         if (oldGraphVertexId != null) {
             artifactVertex = graphSession.findGraphVertex(oldGraphVertexId, user);
         }
         if (artifactVertex == null) {
             artifactVertex = new InMemoryGraphVertex();
+            newVertex = true;
         }
 
         artifactVertex.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString());
         artifactVertex.setProperty(PropertyName.TYPE, VertexType.ARTIFACT.toString());
         artifactVertex.setProperty(PropertyName.SUBTYPE, artifactExtractedInfo.getArtifactType());
         artifactVertex.setProperty(PropertyName.TITLE, artifactExtractedInfo.getTitle());
+
+        List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString(), PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
+
         if (artifactExtractedInfo.getSource() != null) {
             artifactVertex.setProperty(PropertyName.SOURCE, artifactExtractedInfo.getSource());
+            modifiedProperties.add(PropertyName.SOURCE.toString());
         }
         if (artifactExtractedInfo.getRawHdfsPath() != null) {
             artifactVertex.setProperty(PropertyName.RAW_HDFS_PATH, artifactExtractedInfo.getRawHdfsPath());
+            modifiedProperties.add(PropertyName.RAW_HDFS_PATH.toString());
         }
         if (artifactExtractedInfo.getTextHdfsPath() != null) {
             artifactVertex.setProperty(PropertyName.TEXT_HDFS_PATH, artifactExtractedInfo.getTextHdfsPath());
             artifactVertex.setProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH, artifactExtractedInfo.getTextHdfsPath());
+            Collections.addAll(modifiedProperties, PropertyName.TEXT_HDFS_PATH.toString(), PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString());
         }
         if (artifactExtractedInfo.getDetectedObjects() != null) {
             artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, artifactExtractedInfo.getDetectedObjects());
+            modifiedProperties.add(PropertyName.DETECTED_OBJECTS.toString());
         }
         if (artifactExtractedInfo.getDate() != null) {
             artifactVertex.setProperty(PropertyName.PUBLISHED_DATE, artifactExtractedInfo.getDate().getTime());
+            modifiedProperties.add(PropertyName.PUBLISHED_DATE.toString());
         }
-        if (artifactExtractedInfo.getAuthor() != null) {
+        if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
             artifactVertex.setProperty(PropertyName.AUTHOR, artifactExtractedInfo.getAuthor());
+            modifiedProperties.add(PropertyName.AUTHOR.toString());
         }
         String vertexId = graphSession.save(artifactVertex, user);
-        graphSession.commit();
+
+        if (newVertex) {
+            auditRepository.audit(vertexId, auditRepository.createEntityAuditMessage(), user);
+        }
+        auditRepository.audit(vertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
 
         if (!vertexId.equals(oldGraphVertexId)) {
             artifact.getMetadata().setGraphVertexId(vertexId);

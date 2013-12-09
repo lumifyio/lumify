@@ -213,14 +213,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
         if (artifactExtractedInfo.getUrl() != null && !artifactExtractedInfo.getUrl().isEmpty()) {
             artifactExtractedInfo.setSource(artifactExtractedInfo.getUrl());
         }
-
-        String oldGraphVertexId = artifact.getMetadata().getGraphVertexId();
-        boolean existingGraphVertex = oldGraphVertexId != null && oldGraphVertexId.length() > 0;
-
         GraphVertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, getUser());
-        if (!existingGraphVertex) {
-            auditRepository.audit(vertex.getId(), auditRepository.createEntityAuditMessage(), getUser());
-        }
         return vertex;
     }
 
