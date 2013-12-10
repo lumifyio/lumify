@@ -40,7 +40,7 @@ public class DictionaryEntryRepository extends Repository<DictionaryEntry> {
     }
 
     public List<DictionaryEntry> findByConcept (String concept, User user) {
-        List<Row> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME,".*\\c_" + concept, user.getModelUserContext());
+        List<Row<? extends RowKey>> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME,".*\\c_" + concept, user.getModelUserContext());
         return fromRows(rows);
     }
 
