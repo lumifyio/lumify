@@ -55,7 +55,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
 
-        auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditArtifactMessage(sign), user);
+        auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
         auditRepository.audit(createdVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
         auditRepository.audit(createdVertex.getId(),
                 auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);

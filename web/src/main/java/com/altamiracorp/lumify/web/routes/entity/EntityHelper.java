@@ -94,7 +94,7 @@ public class EntityHelper {
 
         if (newVertex) {
             auditRepository.audit(resolvedVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
-            auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditArtifactMessage(sign), user);
+            auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
         }
         auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 

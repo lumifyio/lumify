@@ -86,7 +86,7 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
-    public String resolvedEntityAuditArtifactMessage(Object entityTitle) {
+    public String resolvedEntityAuditMessageForArtifact(Object entityTitle) {
         return "Resolved entity, " + entityTitle;
     }
 
