@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHelper {
@@ -75,6 +74,7 @@ public class EntityHelper {
                                          String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
+        GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
@@ -93,7 +93,8 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
+            auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditArtifactMessage(sign), user);
         }
         auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 

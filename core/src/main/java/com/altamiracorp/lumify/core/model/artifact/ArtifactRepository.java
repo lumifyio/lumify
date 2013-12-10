@@ -136,15 +136,15 @@ public class ArtifactRepository extends Repository<Artifact> {
             artifactVertex.setProperty(PropertyName.AUTHOR, artifactExtractedInfo.getAuthor());
             modifiedProperties.add(PropertyName.AUTHOR.toString());
         }
-        String vertexId = graphSession.save(artifactVertex, user);
+        String artifactVertexId = graphSession.save(artifactVertex, user);
 
         if (newVertex) {
-            auditRepository.audit(vertexId, auditRepository.createEntityAuditMessage(), user);
+            auditRepository.audit(artifactVertexId, auditRepository.resolvedEntityAuditArtifactMessage(artifactExtractedInfo.getTitle()), user);
         }
-        auditRepository.audit(vertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
+        auditRepository.audit(artifactVertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
 
-        if (!vertexId.equals(oldGraphVertexId)) {
-            artifact.getMetadata().setGraphVertexId(vertexId);
+        if (!artifactVertexId.equals(oldGraphVertexId)) {
+            artifact.getMetadata().setGraphVertexId(artifactVertexId);
             save(artifact, user.getModelUserContext());
         }
         return artifactVertex;

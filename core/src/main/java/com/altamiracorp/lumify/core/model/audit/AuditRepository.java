@@ -86,11 +86,15 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
-    public String createEntityAuditMessage() {
-        return "Entity Created";
+    public String resolvedEntityAuditArtifactMessage(Object entityTitle) {
+        return "Resolved entity, " + entityTitle;
     }
 
-    public String deleteEntityAuditMessage(String deletedVertexId) {
-        return "Deleted: " + deletedVertexId;
+    public String resolvedEntityAuditMessage(Object artifactTitle) {
+        return "Resolved entity from " + artifactTitle;
+    }
+
+    public String deleteEntityAuditMessage(Object title) {
+        return "Deleted entity, " + title;
     }
 }

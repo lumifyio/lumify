@@ -48,13 +48,15 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
+        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         final GraphVertex createdVertex = new InMemoryGraphVertex();
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
 
-        auditRepository.audit(createdVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+        auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditArtifactMessage(sign), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
         auditRepository.audit(createdVertex.getId(),
                 auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);
 
