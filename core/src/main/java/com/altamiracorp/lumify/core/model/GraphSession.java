@@ -53,6 +53,8 @@ public abstract class GraphSession {
 
     public abstract GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType graphVertexType, User user);
 
+    public abstract GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType graphVertexType, User user);
+
     public abstract GraphVertex findVertexByOntologyTitleAndType(String title, VertexType concept, User user);
 
     public abstract GraphVertex findVertexByOntologyTitle(String title, User user);
