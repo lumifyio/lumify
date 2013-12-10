@@ -958,6 +958,11 @@ define([
             if (data.name === 'graph') {
                 this.cytoscapeReady(function(cy) {
                     cy.renderer().notify({type:'viewport'});
+
+                    if (this.fitOnMenubarToggle) {
+                        this.fit(cy);
+                        this.fitOnMenubarToggle = false;
+                    }
                 });
             }
         };
@@ -1077,9 +1082,11 @@ define([
                 done: function() {
                     self.cytoscapeMarkReady(this);
 
-                    setTimeout(function() {
-                        self.fit();
-                    }, 100);
+                    if (self.$node.is('.visible')) {
+                        setTimeout(function() {
+                            self.fit();
+                        }, 100);
+                    } else self.fitOnMenubarToggle = true;
                 }
             });
         };
