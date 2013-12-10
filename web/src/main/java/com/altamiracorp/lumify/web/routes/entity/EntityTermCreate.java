@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
@@ -23,15 +24,18 @@ public class EntityTermCreate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final GraphRepository graphRepository;
     private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public EntityTermCreate(
             final EntityHelper entityHelper,
             final GraphRepository graphRepository,
-            final AuditRepository auditRepository) {
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository) {
         this.entityHelper = entityHelper;
         this.graphRepository = graphRepository;
         this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
-        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
+        final Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
         final GraphVertex createdVertex = new InMemoryGraphVertex();
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
@@ -56,11 +60,15 @@ public class EntityTermCreate extends BaseRequestHandler {
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
 
         auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactTitle), user);
         auditRepository.audit(createdVertex.getId(),
                 auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
+
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle), user);
 
         TermMention termMention = new TermMention(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, conceptVertex, createdVertex, user);

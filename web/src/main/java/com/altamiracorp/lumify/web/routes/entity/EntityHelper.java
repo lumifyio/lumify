@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
@@ -23,15 +24,19 @@ public class EntityHelper {
     private final TermMentionRepository termMentionRepository;
     private final WorkQueueRepository workQueueRepository;
     private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public EntityHelper(final TermMentionRepository termMentionRepository,
-                        final GraphRepository graphRepository, WorkQueueRepository workQueueRepository,
-                        final AuditRepository auditRepository) {
+                        final GraphRepository graphRepository,
+                        final WorkQueueRepository workQueueRepository,
+                        final AuditRepository auditRepository,
+                        final OntologyRepository ontologyRepository) {
         this.termMentionRepository = termMentionRepository;
         this.graphRepository = graphRepository;
         this.workQueueRepository = workQueueRepository;
         this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     public void updateTermMention(TermMention termMention, String sign, GraphVertex conceptVertex, GraphVertex resolvedVertex, User user) {
@@ -74,7 +79,7 @@ public class EntityHelper {
                                          String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
-        GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
+        final Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
@@ -93,12 +98,16 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactTitle), user);
             auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
         }
         auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString(), user);
+        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign), user);
+        auditRepository.audit(resolvedVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle), user);
+
         graphRepository.setPropertyEdge(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF.toString()
                 , PropertyName.BOUNDING_BOX.toString(), boundingBox, user);
         return resolvedVertex;

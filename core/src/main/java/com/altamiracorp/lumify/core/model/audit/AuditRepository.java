@@ -86,6 +86,18 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
+    public String relationshipAuditMessageOnSource (String label, Object destTitle) {
+        return label + " relationship created to " + destTitle;
+    }
+
+    public String relationshipAuditMessageOnDest (String label, Object sourceTitle) {
+        return label + " relationship created from " + sourceTitle;
+    }
+
+    public String relationshipAuditMessageOnArtifact (Object sourceTitle, Object destTitle, String label) {
+        return label + " relationship created from " + sourceTitle + " to " + destTitle;
+    }
+
     public String resolvedEntityAuditMessageForArtifact(Object entityTitle) {
         return "Resolved entity, " + entityTitle;
     }

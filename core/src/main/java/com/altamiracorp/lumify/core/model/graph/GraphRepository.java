@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.model.graph;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;

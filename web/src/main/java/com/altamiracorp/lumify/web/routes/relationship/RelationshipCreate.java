@@ -1,5 +1,8 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -16,10 +19,16 @@ public class RelationshipCreate extends BaseRequestHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipCreate.class);
 
     private final GraphRepository graphRepository;
+    private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
-    public RelationshipCreate(final GraphRepository repo) {
-        graphRepository = repo;
+    public RelationshipCreate(final GraphRepository graphRepository,
+                              final AuditRepository auditRepository,
+                              final OntologyRepository ontologyRepository) {
+        this.graphRepository = graphRepository;
+        this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -31,6 +40,12 @@ public class RelationshipCreate extends BaseRequestHandler {
 
         User user = getUser(request);
         GraphRelationship relationship = graphRepository.saveRelationship(sourceGraphVertexId, destGraphVertexId, predicateLabel, user);
+
+        String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel, user);
+        Object destTitle = graphRepository.findVertex(destGraphVertexId, user).getProperty(PropertyName.TITLE.toString());
+        Object sourceTitle = graphRepository.findVertex(sourceGraphVertexId, user).getProperty(PropertyName.TITLE.toString());
+        auditRepository.audit(sourceGraphVertexId, auditRepository.relationshipAuditMessageOnSource(relationshipDisplayName, destTitle), user);
+        auditRepository.audit(destGraphVertexId, auditRepository.relationshipAuditMessageOnDest(relationshipDisplayName, sourceTitle), user);
 
         LOGGER.info("Statement created:\n" + relationship.toJson().toString(2));
 

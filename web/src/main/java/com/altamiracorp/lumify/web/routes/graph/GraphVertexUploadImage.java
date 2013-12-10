@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -40,11 +42,15 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
     private final ArtifactRepository artifactRepository;
     private final GraphRepository graphRepository;
+    private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphVertexUploadImage(final ArtifactRepository artifactRepo, final GraphRepository graphRepo) {
+    public GraphVertexUploadImage(final ArtifactRepository artifactRepo, final GraphRepository graphRepo, final AuditRepository auditRepo, final OntologyRepository ontologyRepo) {
         artifactRepository = artifactRepo;
         graphRepository = graphRepo;
+        auditRepository = auditRepo;
+        ontologyRepository = ontologyRepo;
     }
 
     @Override
@@ -86,6 +92,11 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         graphRepository.commit();
 
         graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
+        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
+        Object sourceTitle = entityVertex.getProperty(PropertyName.TITLE.toString());
+        Object destTitle = artifactVertex.getProperty(PropertyName.TITLE.toString());
+        auditRepository.audit(entityVertex.getId(), auditRepository.relationshipAuditMessageOnSource(labelDisplay, destTitle), user);
+        auditRepository.audit(artifactVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplay, sourceTitle), user);
         graphRepository.commit();
 
         respondWithJson(response, entityVertex.toJson());

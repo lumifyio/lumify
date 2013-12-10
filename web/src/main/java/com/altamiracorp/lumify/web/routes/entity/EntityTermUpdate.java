@@ -1,9 +1,12 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -19,15 +22,21 @@ public class EntityTermUpdate extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
     private final GraphRepository graphRepository;
     private final EntityHelper entityHelper;
+    private final OntologyRepository ontologyRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
     public EntityTermUpdate(
             final TermMentionRepository termMentionRepository,
             final GraphRepository graphRepository,
-            final EntityHelper entityHelper) {
+            final EntityHelper entityHelper,
+            final OntologyRepository ontologyRepository,
+            final AuditRepository auditRepository) {
         this.termMentionRepository = termMentionRepository;
         this.graphRepository = graphRepository;
         this.entityHelper = entityHelper;
+        this.ontologyRepository = ontologyRepository;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -47,6 +56,10 @@ public class EntityTermUpdate extends BaseRequestHandler {
 
         if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.HAS_ENTITY.toString(), user) == null) {
             graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.HAS_ENTITY, user);
+            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+            Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
+            auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign), user);
+            auditRepository.audit(resolvedVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle), user);
         }
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
