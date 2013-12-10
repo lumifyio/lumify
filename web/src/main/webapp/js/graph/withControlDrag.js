@@ -214,7 +214,7 @@ define([
                             text.text(vertexText + suffix + ' already in workspace');
                             button.text('Add ' + vertexText).removeAttr('disabled').show().data('vertices', notInWorkspace);
                         } else {
-                            text.text('all vertices added to workspace');
+                            text.text('all vertices are already added to workspace');
                         }
                     } else text.text('Path search using ' + formatters.string.plural(hops, 'hop'));
 
