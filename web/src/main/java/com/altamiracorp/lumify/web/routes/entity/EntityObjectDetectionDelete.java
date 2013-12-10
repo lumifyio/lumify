@@ -63,6 +63,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(jsonObject.get("graphVertexId"))) {
                 detectedObjects.remove(i);
                 deleted = true;
+                break;
             }
         }
         if (!deleted) {
@@ -70,8 +71,6 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         }
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
         graphRepository.save(artifactVertex, user);
-
-        auditRepository.audit(artifactVertex.getId(), auditRepository.vertexPropertyAuditMessages(artifactVertex, Lists.newArrayList(PropertyName.DETECTED_OBJECTS.toString())), user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);
