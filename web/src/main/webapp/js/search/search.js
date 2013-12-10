@@ -411,7 +411,7 @@ define([
             var filterInfo = this.select('filtersInfoSelector'),
                 numberOfFilters = this.filters.length;
 
-            filterInfo.find('.message').text(formatters.string.plural(numberOfFilters, 'filters', 'filter') + ' applied');
+            filterInfo.find('.message').text(formatters.string.plural(numberOfFilters, 'filter') + ' applied');
             filterInfo.toggle(numberOfFilters > 0);
 
             this.trigger(document, 'search', { query:query });

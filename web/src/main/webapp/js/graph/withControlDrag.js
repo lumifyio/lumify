@@ -72,7 +72,11 @@ define([
                         }
                     },
                     grab: function(event) {
+
                         if (controlKeyPressed) {
+                            if (state > STATE_NONE) {
+                                self.trigger('finishedVertexConnection');
+                            }
                             lockedCyTarget = event.cyTarget;
                             lockedCyTarget.lock();
                         }
@@ -113,10 +117,11 @@ define([
                     edge = cy.getElementById(currentEdgeId),
                     form = this.showForm('create-connection-form'),
                     select = form.find('select'),
+                    title = form.closest('.popover').find('.popover-title'),
                     button = form.find('button');
                 
                 select.html('<option>Loading...</option>');
-                form.find('.source').text(cy.getElementById(edge.data('source')).data('title'));
+                title.text(cy.getElementById(edge.data('source')).data('title'));
                 button.text('Connect').attr('disabled', true);
                 form.show();
 
@@ -175,35 +180,48 @@ define([
             this.cytoscapeReady(function(cy) {
                 var self = this,
                     edge = cy.getElementById(currentEdgeId),
+                    src = edge.data('source'),
+                    dest = edge.data('target'),
                     form = this.showForm('find-path-form'),
-                    span = form.find('span'),
+                    title = form.closest('.popover').find('.popover-title'),
+                    text = form.find('span'),
                     button = form.find('button');
 
-                span.text('Loading...');
-                button.text('Add Vertices').attr('disabled', true);
+                text.text('Loading...');
+                button.hide().text('Add Vertices').attr('disabled', true);
                 form.show();
 
                 this.positionDialog();
 
                 button.focus();
 
-                this.findPath(
-                    edge.data('source'),
-                    edge.data('target')
-                ).done(function(vertices){
-                    var notInWorkspace = vertices.filter(function(v) { 
-                        return !appData.workspaceVertices[v.id]; 
-                    });
+                this.findPath(src, dest).done(function(result){
 
-                    if (vertices.length === 0) {
-                        span.text('No path found');
-                    } else if (notInWorkspace.length === 0) {
-                        span.text('No vertices to add');
-                    } else {
-                        var text = formatters.string.plural(notInWorkspace.length, 'vertices', 'vertex');
-                        span.text('Found path through ' + text);
-                        button.text('Add ' + text).removeAttr('disabled').data('vertices', notInWorkspace);
-                    }
+                    var paths = result.paths,
+                        vertices = result.uniqueVertices,
+                        verticesNotSourceDest = vertices.filter(function(v) {
+                            return v.id !== src && v.id !== dest;
+                        }),
+                        notInWorkspace = vertices.filter(function(v) { 
+                            return !appData.workspaceVertices[v.id]; 
+                        }),
+                        pathsFoundText = formatters.string.plural(paths.length, 'path') + ' found';
+
+                    if (paths.length) {
+                        if (notInWorkspace.length) {
+                            var vertexText = formatters.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
+                                suffix = notInWorkspace.length === 1 ? ' isn\'t' : ' aren\'t';
+                            text.text(vertexText + suffix + ' already in workspace');
+                            button.text('Add ' + vertexText).removeAttr('disabled').show().data('vertices', notInWorkspace);
+                        } else {
+                            text.text('all vertices added to workspace');
+                        }
+                    } else text.text('Path search using ' + formatters.string.plural(hops, 'hop'));
+
+                    cy.$('.temp').remove();
+                    self.trigger('focusPaths', { paths:paths, sourceId:src, targetId:dest });
+
+                    title.text(pathsFoundText);
                     self.positionDialog();
                 });
             });
@@ -211,21 +229,21 @@ define([
 
         this.onFindPathButton = function(e) {
             var vertices = $(e.target).data('vertices');
-            this.trigger('addVertices', { vertices: vertices });
             this.trigger('finishedVertexConnection');
+            this.trigger('addVertices', { vertices: vertices });
         };
 
         this.onFinishedVertexConnection = function(event) {
             state = STATE_NONE;
-            // Unregister viewport listener
 
             this.cytoscapeReady(function(cy) {
                 cy.$('.temp').remove();
                 cy.$('.controlDragSelection').removeClass('controlDragSelection');
-                cy.off('pan zoom', this.onViewportChanges);
+                cy.off('pan zoom position', this.onViewportChanges);
                 currentEdgeId = null;
                 this.select('dialogSelector').hide();
                 this.ignoreCySelectionEvents = false;
+                this.trigger('defocusPaths');
             });
         };
 
@@ -239,6 +257,7 @@ define([
                 
                 var dialog = this.$node.find('.connect-dialog');
                 dialog.parent('div').css({ position: 'absolute' });
+                dialog.find('.popover-title').empty();
 
                 if (connectionType) {
                     dialog.find('.form').hide();
@@ -252,7 +271,7 @@ define([
                     this.positionDialog();
                 }
 
-                cy.on('pan zoom', this.onViewportChanges);
+                cy.on('pan zoom position', this.onViewportChanges);
             });
         };
 
@@ -394,7 +413,10 @@ define([
                                 });
                             });
 
-                            return vertices;
+                            return {
+                                paths: data.paths,
+                                uniqueVertices: vertices
+                            };
                         });
         };
         

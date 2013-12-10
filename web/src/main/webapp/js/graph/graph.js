@@ -12,11 +12,13 @@ define([
     'util/controls',
     'util/throttle',
     'util/previews',
+    'util/formatters',
     'service/ucd',
     'service/ontology',
     'util/retina',
     'util/withContextMenu',
-    'util/withAsyncQueue'
+    'util/withAsyncQueue',
+    'colorjs'
 ], function(
     defineComponent,
     appData,
@@ -29,11 +31,13 @@ define([
     Controls,
     throttle,
     previews,
+    formatters,
     UCD,
     OntologyService,
     retina,
     withContextMenu,
-    withAsyncQueue) {
+    withAsyncQueue,
+    colorjs) {
     'use strict';
 
         // Delay before showing hover effect on graph
@@ -594,6 +598,61 @@ define([
             });
         };
 
+        this.onFocusPaths = function(e, data) {
+            this.cytoscapeReady(function(cy) {
+                var paths = data.paths,
+                    sourceId = data.sourceId,
+                    targetId = data.targetId;
+
+                paths.forEach(function(path, i) {
+                    var vertexIds = _.chain(path)
+                                .filter(function(v) { return v.id !== sourceId && v.id !== targetId; })
+                                .pluck('id')
+                                .value(),
+                        end = colorjs('#0088cc').shiftHue(i * (360 / paths.length)).toCSSHex(),
+                        lastNode = cy.getElementById(sourceId),
+                        count = 0,
+                        existingOrNewEdgeBetween = function(node1, node2, count) {
+                            var edge = node1.edgesWith(node2);
+                            if (!edge.length || edge.removed() || edge.hasClass('path-edge')) {
+                                edge = cy.add({
+                                    group: 'edges',
+                                    classes: 'path-temp' + (count ? ' path-hidden-verts' : ''),
+                                    id: node1.id() + '-' + node2.id() + 'path=' + i,
+                                    data: {
+                                        source: node1.id(),
+                                        target: node2.id(),
+                                        label: count ? 
+                                            formatters.string.plural(count, 'vertex', 'vertices') : ''
+                                    }
+                                });
+                            }
+                            edge.addClass('path-edge');
+                            edge.data('pathColor', end);
+                            return edge;
+                        };
+
+                    vertexIds.forEach(function(vId, i) {
+                        var thisNode = cy.getElementById(vId);
+                        if (thisNode.length && !thisNode.removed()) {
+                            existingOrNewEdgeBetween(lastNode, thisNode, count);
+                            lastNode = thisNode;
+                            count = 0;
+                        } else count++;
+                    });
+
+                    existingOrNewEdgeBetween(lastNode, cy.getElementById(targetId), count);
+                });
+            });
+        };
+
+        this.onDefocusPaths = function(e, data) {
+            this.cytoscapeReady(function(cy) {
+                cy.$('.path-edge').removeClass('path-edge path-hidden-verts');
+                cy.$('.path-temp').remove();
+            });
+        };
+
         this.onGraphPaddingUpdated = function(e, data) {
             var border = 20;
             this.graphPaddingRight = data.padding.r;
@@ -707,13 +766,15 @@ define([
                 vertices = [];
 
             nodes.each(function(index, cyNode) {
-                if (!cyNode.hasClass('temp')) {
+                if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {
                     vertices.push(appData.vertex(cyNode.id()));
                 }
             });
 
             edges.each(function(index, cyEdge) {
-                vertices.push({ id: cyEdge.id(), properties:cyEdge.data() });
+                if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
+                    vertices.push({ id: cyEdge.id(), properties:cyEdge.data() });
+                }
             });
 
             // Only allow one edge selected
@@ -924,6 +985,8 @@ define([
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
             this.on(document, 'focusVertices', this.onFocusVertices);
             this.on(document, 'defocusVertices', this.onDefocusVertices);
+            this.on(document, 'focusPaths', this.onFocusPaths);
+            this.on(document, 'defocusPaths', this.onDefocusPaths);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
 
             if (self.attr.vertices && self.attr.vertices.length) {

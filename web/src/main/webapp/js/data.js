@@ -131,7 +131,7 @@ define([
         this.onDelete = function() {
             if (this.selectedVertices.length) {
                 this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
-            } else if (this.selectedEdges.length) {
+            } else if (this.selectedEdges && this.selectedEdges.length) {
                 this.trigger('deleteEdges', { edges: this.selectedEdges});
             }
         };

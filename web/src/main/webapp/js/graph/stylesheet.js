@@ -121,6 +121,24 @@ define([
                 'text-outline-width': 4,
             })
 
+            .selector('edge.path-hidden-verts')
+            .css({
+                'line-style': 'dashed',
+                'content': 'data(label)',
+                'font-size': 16 * retina.devicePixelRatio,
+                'color': 'data(pathColor)',
+                'text-outline-color': 'white',
+                'text-outline-width': 4,
+            })
+
+            .selector('edge.path-edge')
+            .css({
+                'line-color': 'data(pathColor)',
+                'target-arrow-color': 'data(pathColor)',
+                'source-arrow-color': 'data(pathColor)',
+                'width': 4 * retina.devicePixelRatio,
+            })
+
             .selector('edge.temp')
             .css({
                 'width': 4,

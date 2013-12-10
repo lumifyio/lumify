@@ -11,7 +11,9 @@ define(['sf'], function() {
             }
         },
         string: {
-            plural: function(count, plural, singular) {
+            plural: function(count, singular, plural) {
+                plural = plural || (singular + 's');
+
                 switch(count) {
                     case 0: return 'No ' + plural;
                     case 1: return '1 ' + singular;
