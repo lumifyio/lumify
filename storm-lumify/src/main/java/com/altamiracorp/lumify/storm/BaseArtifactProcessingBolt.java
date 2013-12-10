@@ -243,8 +243,8 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
             LOGGER.debug("Copied " + numberOfBytesCopied + " to file " + localFile);
         } finally {
             localFileOut.close();
+            in.close();
         }
-        in.close();
         return localFile;
     }
 
@@ -354,9 +354,14 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
 
     @Override
     public void safeExecute(Tuple input) throws Exception {
-        GraphVertex graphVertex = processFile(input);
-        onAfterGraphVertexCreated(graphVertex);
-        getCollector().ack(input);
+        try {
+            GraphVertex graphVertex = processFile(input);
+            onAfterGraphVertexCreated(graphVertex);
+        } catch (FileNotFoundException ex) {
+            // TODO: this is a hack. On large datasets we see the bolt execute multiple times even though the
+            //        hdfs spout only emits the file once.
+            LOGGER.warn("Could not find file: " + input, ex);
+        }
     }
 
     protected void onAfterGraphVertexCreated(GraphVertex graphVertex) {

@@ -142,6 +142,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
             }
             try {
                 safeExecute(input);
+
+                LOGGER.debug("ack'ing: " + input);
+                getCollector().ack(input);
             } catch (Exception e) {
                 totalErrorCount.getAndIncrement();
                 LOGGER.error("Error occurred during execution: " + input, e);

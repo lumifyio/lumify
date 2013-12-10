@@ -36,8 +36,6 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
         } else {
             LOGGER.warn("Could not find vertex with id: " + graphVertexId);
         }
-
-        getCollector().ack(input);
     }
 
     private void performHighlighting(final String rowKey, final GraphVertex vertex, final List<TermMention> termMentions) throws Exception {
