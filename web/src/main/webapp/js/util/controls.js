@@ -35,8 +35,14 @@ define([
             this.on('mousedown mouseup', {
                 buttonSelector: this.onButton
             });
+            this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             $(window).on('mouseup blur', this.handleUp.bind(this));
+        };
+
+        this.onGraphPaddingUpdated = function(e, data) {
+            var rightPadding = data.padding.r || 0;
+            this.$node.css({ right: rightPadding + 'px' });
         };
 
         this.onButton = function(e) {
@@ -58,6 +64,7 @@ define([
         };
 
         this.onPannerMouseDown = function(e) {
+            this.trigger('startPan');
             this.handleMove(e);
             $(window).on('mousemove.panningControls', this.handleMove.bind(this))
         };
@@ -83,6 +90,7 @@ define([
         };
 
         this.handleUp = function(e) {
+            this.trigger('endPan');
             clearInterval(this.panInterval);
             $(window).off('mousemove.panningControls');
         };

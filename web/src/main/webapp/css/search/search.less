@@ -50,6 +50,28 @@ width: 175px;
   left: auto;
 }
 
+.filter-info {
+  color: #999;
+  font-style: italic;
+  cursor: pointer;
+  padding: 0 1em;
+
+  div {
+      font-size: 85%;
+  }
+  i {
+      opacity: 0.5;
+  }
+
+  &:hover .message, .action {
+      display: none;
+  }
+  &:hover .action {
+      display: block;
+      color: #0088cc;
+  }
+}
+
 .search-filters { width: 220px; }
 
 .search-filters {

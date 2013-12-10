@@ -5,7 +5,8 @@ import java.util.Set;
 
 public class InMemoryGraphVertex extends GraphVertex {
     private String id;
-    private HashMap<String, Object> properties = new HashMap<String, Object>();
+    private HashMap<String, Object> newProperties = new HashMap<String, Object>();
+    private HashMap<String, Object> oldProperties = new HashMap<String, Object>();
 
     public InMemoryGraphVertex() {
         this.id = null;
@@ -20,26 +21,31 @@ public class InMemoryGraphVertex extends GraphVertex {
     }
 
     public GraphVertex setProperty(String key, Object value) {
-        properties.put(key, value);
+        newProperties.put(key, value);
         return this;
     }
 
     @Override
     public GraphVertex removeProperty(String key) {
-        if (properties.containsKey(key)) {
-            properties.remove(key);
+        if (newProperties.containsKey(key)) {
+            newProperties.remove(key);
         }
         return this;
     }
 
     @Override
     public Set<String> getPropertyKeys() {
-        return properties.keySet();
+        return newProperties.keySet();
     }
 
     @Override
     public Object getProperty(String propertyKey) {
-        return properties.get(propertyKey);
+        return newProperties.get(propertyKey);
+    }
+
+    @Override
+    public HashMap<String, Object> getOldProperties () {
+        return oldProperties;
     }
 
     public void setId(String id) {

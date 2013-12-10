@@ -2,18 +2,17 @@ package com.altamiracorp.lumify.storm.file;
 
 import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
+import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
 import com.altamiracorp.lumify.core.ingest.document.DocumentTextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.image.ImageTextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.structuredData.StructuredDataExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.video.VideoTextExtractionWorker;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.util.Map;
 
 public class HashCalculationWorker
         extends ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>
@@ -31,6 +30,6 @@ public class HashCalculationWorker
     }
 
     @Override
-    public void prepare(Map stormConf, User user) {
+    public void prepare(TextExtractionWorkerPrepareData data) {
     }
 }

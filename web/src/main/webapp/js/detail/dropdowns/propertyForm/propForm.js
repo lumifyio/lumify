@@ -155,7 +155,7 @@ define([
             _.defer(this.buttonLoading.bind(this));
 
             this.$node.find('input').removeClass('validation-error');
-            if (propertyName.length && value.length) {
+            if (propertyName.length && ((_.isString(value) && value.length) || value)) {
                 this.trigger('addProperty', {
                     property: {
                         name: propertyName,

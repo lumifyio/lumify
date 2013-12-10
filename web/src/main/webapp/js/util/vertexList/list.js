@@ -338,10 +338,21 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    newHtml = newAnchor.html();
-                
+                    hasPreview = false;
+
+                if (vertex.properties._type === 'artifact') {
+                    newAnchor.find('.preview').replaceWith(currentAnchor.find('.preview').clone());
+                    hasPreview = true;
+                } else {
+                    if (vertex.properties._glyphIcon) {
+                        $('<img/>').attr('src', vertex.properties._glyphIcon).appendTo(newAnchor.find('.preview'));
+                    }
+                    hasPreview = !!vertex.properties._glyphIcon;
+                }
+
+                var newHtml = newAnchor.html();
                 if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml);
+                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', hasPreview);
                 }
             });
         };

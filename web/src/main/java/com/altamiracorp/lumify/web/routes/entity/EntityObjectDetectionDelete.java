@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,8 +40,8 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
 
         // Delete just the relationship if vertex has more than one relationship otherwise delete vertex
         String graphVertexId = jsonObject.getString("graphVertexId");
-        JSONObject obj =  new JSONObject();
-        obj.put("entityVertex",graphRepository.findVertex(graphVertexId, user).toJson());
+        JSONObject obj = new JSONObject();
+        obj.put("entityVertex", graphRepository.findVertex(graphVertexId, user).toJson());
         Map<GraphRelationship, GraphVertex> relationships = graphRepository.getRelationships(graphVertexId, user);
         GraphVertex artifactVertex = graphRepository.findVertex(jsonObject.getString("artifactId"), user);
         if (relationships.size() > 1) {
@@ -66,9 +67,10 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         if (!deleted) {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
-        auditRepository.audit(artifactVertex.getId(), auditRepository.vertexPropertyAuditMessage(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString()), user);
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
         graphRepository.save(artifactVertex, user);
+
+        auditRepository.audit(artifactVertex.getId(), auditRepository.vertexPropertyAuditMessages(artifactVertex, Lists.newArrayList(PropertyName.DETECTED_OBJECTS.toString())), user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);

@@ -6,6 +6,7 @@ define([
     'service/ucd',
     'service/ontology',
     'util/vertexList/list',
+    'util/formatters',
     './filters/filters',
     'tpl!./search',
     'tpl!./conceptItem',
@@ -20,6 +21,7 @@ define([
     UCD,
     OntologyService,
     VertexList,
+    formatters,
     Filters,
     template,
     conceptItemTemplate,
@@ -31,12 +33,6 @@ define([
 
     return defineComponent(Search);
 
-    function formatNumber(number) {
-        if (number >= 10000) {
-            return (number / 10000).toFixed(1).replace(/.0$/,'') + 'K';
-        } else return sf('{0:#,###}', number);
-    }
-
     function Search() {
         this.ucd = new UCD();
         this.ontologyService = new OntologyService();
@@ -46,6 +42,7 @@ define([
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
+            filtersInfoSelector: '.filter-info',
             resultsSummarySelector: '.search-results-summary',
             entitiesHeaderBadgeSelector: '.search-results-summary li.entities .badge',
             summaryResultItemSelector: '.search-results-summary li',
@@ -172,7 +169,7 @@ define([
                     Object.keys(results).forEach(function(type) {
                         if (type === 'artifact') {
                             Object.keys(results[type]).forEach(function(subType) {
-                                self.$node.find('.' + subType + ' .badge').removeClass('loading').text(formatNumber(artifactCounts[subType]));
+                                self.$node.find('.' + subType + ' .badge').removeClass('loading').text(formatters.number.pretty(artifactCounts[subType]));
                             });
                         }
                     });
@@ -342,7 +339,8 @@ define([
                 formSelector: this.onFormSearch
             });
             this.on('click', {
-                summaryResultItemSelector: this.onSummaryResultItemClick
+                summaryResultItemSelector: this.onSummaryResultItemClick,
+                filtersInfoSelector: this.onFiltersInfoRemoveClick
             });
             this.on('keyup', {
                 querySelector: this.onKeyUp
@@ -410,7 +408,17 @@ define([
 
             var query = this.select('querySelector').val() || '*';
 
+            var filterInfo = this.select('filtersInfoSelector'),
+                numberOfFilters = this.filters.length;
+
+            filterInfo.find('.message').text(formatters.string.plural(numberOfFilters, 'filters', 'filter') + ' applied');
+            filterInfo.toggle(numberOfFilters > 0);
+
             this.trigger(document, 'search', { query:query });
+        };
+
+        this.onFiltersInfoRemoveClick = function() {
+            this.trigger(this.select('filtersSelector').find('.content'), 'clearfilters');
         };
     }
 });

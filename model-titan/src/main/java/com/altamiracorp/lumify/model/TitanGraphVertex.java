@@ -6,10 +6,12 @@ import com.thinkaurelius.titan.core.TitanVertex;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class TitanGraphVertex extends GraphVertex {
     private final Vertex vertex;
+    private HashMap<String, Object> oldProperties = new HashMap<String, Object>();
 
     public TitanGraphVertex(Vertex vertex) {
         this.vertex = vertex;
@@ -22,6 +24,9 @@ public class TitanGraphVertex extends GraphVertex {
 
     @Override
     public GraphVertex setProperty(String key, Object value) {
+        if (this.vertex.getPropertyKeys().contains(key)) {
+            oldProperties.put(key, this.vertex.getProperty(key));
+        }
         if (value instanceof GraphGeoLocation) {
             GraphGeoLocation loc = (GraphGeoLocation) value;
             value = Geoshape.point(loc.getLatitude(), loc.getLongitude());
@@ -45,6 +50,11 @@ public class TitanGraphVertex extends GraphVertex {
     @Override
     public Object getProperty(String propertyKey) {
         return this.vertex.getProperty(propertyKey);
+    }
+
+    @Override
+    public HashMap<String, Object> getOldProperties () {
+        return this.oldProperties;
     }
 
     public Vertex getVertex() {

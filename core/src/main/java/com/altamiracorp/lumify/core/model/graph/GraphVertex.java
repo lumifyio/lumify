@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ public abstract class GraphVertex {
     public abstract GraphVertex removeProperty(String key);
 
     public abstract Set<String> getPropertyKeys();
+
+    public abstract HashMap<String, Object> getOldProperties ();
 
     public Object getProperty(PropertyName propertyKey) {
         return getProperty(propertyKey.toString());

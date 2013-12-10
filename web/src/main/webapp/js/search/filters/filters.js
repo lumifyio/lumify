@@ -38,12 +38,24 @@ define([
 
             this.on('propertychange', this.onPropertyFieldItemChanged);
             this.on('propertyselected', this.onPropertySelected);
+            this.on('clearfilters', this.onClearFilters);
             this.on('click', {
                 removeRowSelector: this.onRemoveRow
             });
 
             this.loadPropertyFilters();
         });
+
+        this.onClearFilters = function() {
+            var self = this,
+                nodes = this.$node.find('.configuration');
+
+            nodes.each(function() {
+                self.teardownField($(this));
+            }).closest('li:not(.newrow)').remove();
+
+            this.createNewRowIfNeeded();
+        };
 
         this.notifyOfFilters = function() {
             this.trigger('filterschange', {

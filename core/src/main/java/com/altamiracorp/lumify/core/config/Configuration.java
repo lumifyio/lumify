@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Responsible for parsing application configuration file and providing
  * configuration values to the application
  */
-public final class Configuration  {
+public final class Configuration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
@@ -42,6 +42,7 @@ public final class Configuration  {
     public static final String MAP_ACCESS_KEY = "map.apiKey";
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
+    public static final String OBJECT_DETECTOR = "object.detector";
 
     private org.apache.commons.configuration.Configuration config;
 
@@ -56,7 +57,7 @@ public final class Configuration  {
      */
     private static final int UNKNOWN_INT = -999;
 
-    public Configuration () {
+    public Configuration() {
         this.config = new PropertiesConfiguration();
     }
 
@@ -64,16 +65,16 @@ public final class Configuration  {
         this.config = config;
     }
 
-    public String get (String propertyKey) {
+    public String get(String propertyKey) {
         return get(propertyKey, UNKNOWN_STRING);
     }
 
     public String get(String propertyKey, String defaultValue) {
-        return config.getString(propertyKey,defaultValue);
+        return config.getString(propertyKey, defaultValue);
     }
 
     public Integer getInt(String propertyKey) {
-        return config.getInt(propertyKey,UNKNOWN_INT);
+        return config.getInt(propertyKey, UNKNOWN_INT);
     }
 
     public Class getClass(String propertyKey, String defaultClassName) throws ClassNotFoundException {
@@ -85,19 +86,19 @@ public final class Configuration  {
     }
 
     public Class getClass(String propertyKey) throws ClassNotFoundException {
-        return getClass(propertyKey,null);
+        return getClass(propertyKey, null);
     }
 
-    public Configuration getSubset (String keyPrefix) {
+    public Configuration getSubset(String keyPrefix) {
         org.apache.commons.configuration.Configuration subset = config.subset(keyPrefix);
         return new Configuration(subset);
     }
 
-    public Map toMap () {
+    public Map toMap() {
         return new ConfigurationMap(config);
     }
 
-    public Iterable<String> getKeys () {
+    public Iterable<String> getKeys() {
         //convenience method to easily get keys
         ConfigurationMap map = new ConfigurationMap(config);
         return map.keySet();
@@ -122,9 +123,9 @@ public final class Configuration  {
         LOGGER.debug(String.format("Attempting to load configuration file: %s and credentials file: %s", configUrl, credentialsUrl));
 
         PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
-        processFile(configUrl,propertiesConfiguration);
+        processFile(configUrl, propertiesConfiguration);
         if (credentialsUrl != null) {
-            processFile(credentialsUrl,propertiesConfiguration);
+            processFile(credentialsUrl, propertiesConfiguration);
         }
 
         return new Configuration(propertiesConfiguration);

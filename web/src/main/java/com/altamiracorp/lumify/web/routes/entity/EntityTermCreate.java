@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,15 +49,14 @@ public class EntityTermCreate extends BaseRequestHandler {
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
         final GraphVertex createdVertex = new InMemoryGraphVertex();
-        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
 
-        auditRepository.audit(artifactVertex.getId(), auditRepository.createEntityAuditMessage(), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.TYPE.toString(), VertexType.ENTITY.toString()), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.vertexPropertyAuditMessage(PropertyName.ROW_KEY.toString(), termMentionRowKey.toString()), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.createEntityAuditMessage(), user);
+        auditRepository.audit(createdVertex.getId(),
+                auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 

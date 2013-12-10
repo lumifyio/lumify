@@ -3,13 +3,16 @@ package com.altamiracorp.lumify.core.model.ontology;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class GraphVertexConcept extends Concept {
     private final GraphVertex graphVertex;
+    private HashMap<String, Object> oldProperties;
 
     public GraphVertexConcept(GraphVertex graphVertex) {
         this.graphVertex = graphVertex;
+        oldProperties = graphVertex.getOldProperties();
     }
 
     @Override
@@ -19,6 +22,9 @@ public class GraphVertexConcept extends Concept {
 
     @Override
     public GraphVertex setProperty(String key, Object value) {
+        if (graphVertex.getPropertyKeys().contains(key)) {
+            oldProperties.put(key, graphVertex.getProperty(key));
+        }
         graphVertex.setProperty(key, value);
         return this;
     }
@@ -62,6 +68,11 @@ public class GraphVertexConcept extends Concept {
     @Override
     public Vertex getVertex() {
         return graphVertex.getVertex();
+    }
+
+    @Override
+    public HashMap<String, Object> getOldProperties () {
+        return oldProperties;
     }
 
     public GraphVertex getGraphVertex() {
