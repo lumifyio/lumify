@@ -31,8 +31,6 @@ public class SearchIndexBolt extends BaseTextProcessingBolt {
         } else {
             LOGGER.warn("Could not find vertex with id: " + graphVertexId);
         }
-
-        getCollector().ack(input);
     }
 
     private void addGraphVertexToSearch(GraphVertex graphVertex) {

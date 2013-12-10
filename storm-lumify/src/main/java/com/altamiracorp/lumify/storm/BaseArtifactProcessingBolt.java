@@ -222,9 +222,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
             }
             List<ThreadedTeeInputStreamWorker.WorkResult<ArtifactExtractedInfo>> results = threadedInputStreamProcess.doWork(in, additionalDocumentWorkData);
             mergeResults(artifactExtractedInfo, results);
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("Extracted document info:\n" + artifactExtractedInfo.toJson().toString(2));
-            }
         } finally {
             in.close();
             if (additionalDocumentWorkData.getLocalFileName() != null) {
@@ -243,8 +240,8 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
             LOGGER.debug("Copied " + numberOfBytesCopied + " to file " + localFile);
         } finally {
             localFileOut.close();
+            in.close();
         }
-        in.close();
         return localFile;
     }
 
@@ -356,7 +353,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
     public void safeExecute(Tuple input) throws Exception {
         GraphVertex graphVertex = processFile(input);
         onAfterGraphVertexCreated(graphVertex);
-        getCollector().ack(input);
     }
 
     protected void onAfterGraphVertexCreated(GraphVertex graphVertex) {

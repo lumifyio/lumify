@@ -28,18 +28,16 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyBoltMXBean {
+public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
 
     private OutputCollector collector;
@@ -68,21 +66,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
             String hdfsRootDir = (String) stormConf.get(com.altamiracorp.lumify.core.config.Configuration.HADOOP_URL);
             hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
 
-            registerJmxBean();
+            JmxBeanHelper.registerJmxBean(this, JmxBeanHelper.BOLT_PREFIX);
         } catch (Exception e) {
             collector.reportError(e);
-        }
-    }
-
-    protected void registerJmxBean() throws MalformedObjectNameException, NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException {
-        MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
-        for (int suffix = 0; ; suffix++) {
-            ObjectName beanName = new ObjectName("com.altamiracorp.lumify.storm.bolt:type=" + getClass().getName() + "-" + suffix);
-            if (beanServer.isRegistered(beanName)) {
-                continue;
-            }
-            beanServer.registerMBean(this, beanName);
-            break;
         }
     }
 
@@ -142,6 +128,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements BaseLumifyB
             }
             try {
                 safeExecute(input);
+
+                LOGGER.debug("ack'ing: " + input);
+                getCollector().ack(input);
             } catch (Exception e) {
                 totalErrorCount.getAndIncrement();
                 LOGGER.error("Error occurred during execution: " + input, e);
