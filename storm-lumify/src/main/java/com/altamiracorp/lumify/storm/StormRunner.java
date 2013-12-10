@@ -4,12 +4,10 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.StormTopology;
-import backtype.storm.spout.Scheme;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.model.KafkaJsonEncoder;
 import com.altamiracorp.lumify.storm.searchIndex.SearchIndexBolt;
 import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
 import org.apache.commons.cli.CommandLine;
@@ -17,9 +15,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import storm.kafka.KafkaConfig;
-import storm.kafka.KafkaSpout;
-import storm.kafka.SpoutConfig;
 
 public class StormRunner extends CommandLineBase {
 
@@ -94,29 +89,14 @@ public class StormRunner extends CommandLineBase {
     }
 
     private void createArtifactHighlightingTopology(TopologyBuilder builder) {
-        SpoutConfig spoutConfig = createSpoutConfig(WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME, null);
-        builder.setSpout("artifactHighlightSpout", new KafkaSpout(spoutConfig), 1);
+        builder.setSpout("artifactHighlightSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1);
         builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), 1)
                 .shuffleGrouping("artifactHighlightSpout");
     }
 
     private void createSearchIndexTopology(TopologyBuilder builder) {
-        SpoutConfig spoutConfig = createSpoutConfig(WorkQueueRepository.SEARCH_INDEX_QUEUE_NAME, null);
-        builder.setSpout("searchIndexSpout", new KafkaSpout(spoutConfig), 1);
+        builder.setSpout("searchIndexSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.SEARCH_INDEX_QUEUE_NAME), 1);
         builder.setBolt("searchIndexBolt", new SearchIndexBolt(), 1)
                 .shuffleGrouping("searchIndexSpout");
-    }
-
-    private SpoutConfig createSpoutConfig(String queueName, Scheme scheme) {
-        if (scheme == null) {
-            scheme = new KafkaJsonEncoder();
-        }
-        SpoutConfig spoutConfig = new SpoutConfig(
-                new KafkaConfig.ZkHosts(getConfiguration().get(com.altamiracorp.lumify.core.config.Configuration.ZK_SERVERS), "/kafka/brokers"),
-                queueName,
-                "/kafka/consumers",
-                queueName);
-        spoutConfig.scheme = scheme;
-        return spoutConfig;
     }
 }
