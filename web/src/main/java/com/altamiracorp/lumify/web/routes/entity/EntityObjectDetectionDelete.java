@@ -36,9 +36,6 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         JSONObject jsonObject = new JSONObject(getRequiredParameter(request, "objectInfo"));
-System.out.println ("______________________________________________________________________");
-System.out.println ("JSONOBJECT: " + jsonObject);
-System.out.println ("______________________________________________________________________");
         User user = getUser(request);
 
         // Delete just the relationship if vertex has more than one relationship otherwise delete vertex
@@ -52,8 +49,8 @@ System.out.println ("___________________________________________________________
             obj.put("edgeId", edgeId);
             graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.CONTAINS_IMAGE_OF.toString(), user);
         } else {
-            auditRepository.audit(artifactVertex.getId(), auditRepository.deleteEntityAuditMessage(artifactVertex.getProperty(PropertyName.TITLE.toString())), user);
-//            auditRepository.audit(graphVertexId, auditRepository.deleteEntityAuditMessage());
+            auditRepository.audit(artifactVertex.getId(), auditRepository.deleteEntityAuditMessage(jsonObject.get("title")), user);
+            auditRepository.audit(graphVertexId, auditRepository.deleteEntityAuditMessage(jsonObject.get("title")), user);
             graphRepository.remove(graphVertexId, user);
             obj.put("remove", true);
         }
