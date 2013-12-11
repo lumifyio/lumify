@@ -520,6 +520,19 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
+    public GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
+        Iterable<Vertex> r = graph.query()
+                .has(property, graphVertexPropertyValue)
+                .has(PropertyName.TYPE.toString(), type.toString())
+                .vertices();
+        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+        if (graphVertices.size() > 0) {
+            return graphVertices.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
