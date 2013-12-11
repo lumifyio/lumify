@@ -7,18 +7,22 @@ import kafka.javaapi.producer.ProducerData;
 import kafka.producer.ProducerConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class KafkaWorkQueueRepository extends WorkQueueRepository {
     private Producer<String, JSONObject> kafkaProducer;
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaWorkQueueRepository.class);
 
     @Override
     public void init(Map config) {
         super.init(config);
 
         String zkServerNames = getZkServerNames(config);
+        LOGGER.debug("Kafka Work Queue Repository zkServerNames: " + zkServerNames);
         Properties props = new Properties();
         props.put("zk.connect", zkServerNames);
         props.put("serializer.class", KafkaJsonEncoder.class.getName());
