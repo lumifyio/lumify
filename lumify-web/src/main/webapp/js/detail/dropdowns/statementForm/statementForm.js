@@ -39,7 +39,7 @@ define([
             this.attr.destTerm.addClass('focused');
 
             this.select('createStatementButtonSelector').attr('disabled', true);
-            this.getRelationshipLabels ();
+            this.getRelationshipLabels();
 
             this.on('click', {
                 createStatementButtonSelector: this.onCreateStatement,
@@ -82,9 +82,9 @@ define([
         };
 
         this.onSelection = function (e) {
-            if (this.select('relationshipSelector').val() == ''){
+            if (this.select('relationshipSelector').val() == '') {
                 this.select('createStatementButtonSelector')
-                                .attr('disabled', true);
+                    .attr('disabled', true);
                 return;
             }
             this.select('createStatementButtonSelector')
@@ -105,7 +105,7 @@ define([
             this.attr.destTerm = sourceTerm;
 
             this.select('formSelector').toggleClass('invert');
-            this.getRelationshipLabels ();
+            this.getRelationshipLabels();
         };
 
 
@@ -114,7 +114,8 @@ define([
                 parameters = {
                     sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId || this.attr.sourceTerm.data('vertex-id'),
                     destGraphVertexId: this.attr.destTerm.data('info').graphVertexId || this.attr.destTerm.data('vertex-id'),
-                    predicateLabel: this.select('relationshipSelector').val()
+                    predicateLabel: this.select('relationshipSelector').val(),
+                    artifactId: this.attr.artifactId
                 };
 
             if (this.select('formSelector').hasClass('invert')) {
@@ -125,7 +126,7 @@ define([
 
             _.defer(this.buttonLoading.bind(this));
 
-            this.relationshipService.createRelationship(parameters).done(function(data) {
+            this.relationshipService.createRelationship(parameters).done(function (data) {
                 _.defer(self.teardown.bind(self));
                 self.trigger(document, 'refreshRelationships');
             });
@@ -135,20 +136,20 @@ define([
             var self = this;
             var sourceConceptTypeId = this.attr.sourceTerm.data('info')._subType;
             var destConceptTypeId = this.attr.destTerm.data('info')._subType;
-            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (results){
-                self.displayRelationships (results.relationships);
+            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (results) {
+                self.displayRelationships(results.relationships);
             });
         };
 
         this.displayRelationships = function (relationships) {
             var self = this;
-            self.ontologyService.relationships().done(function(ontologyRelationships) {
+            self.ontologyService.relationships().done(function (ontologyRelationships) {
                 var relationshipsTpl = [];
 
-                relationships.forEach(function(relationship) {
+                relationships.forEach(function (relationship) {
                     var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
                     var displayName;
-                    if(ontologyRelationship) {
+                    if (ontologyRelationship) {
                         displayName = ontologyRelationship.displayName;
                     } else {
                         displayName = relationship.title;

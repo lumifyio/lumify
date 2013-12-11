@@ -95,8 +95,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
         Object sourceTitle = entityVertex.getProperty(PropertyName.TITLE.toString());
         Object destTitle = artifactVertex.getProperty(PropertyName.TITLE.toString());
-        auditRepository.audit(entityVertex.getId(), auditRepository.relationshipAuditMessageOnSource(labelDisplay, destTitle), user);
-        auditRepository.audit(artifactVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplay, sourceTitle), user);
+        auditRepository.audit(entityVertex.getId(), auditRepository.relationshipAuditMessageOnSource(labelDisplay, destTitle, ""), user);
+        auditRepository.audit(artifactVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplay, sourceTitle, ""), user);
         graphRepository.commit();
 
         respondWithJson(response, entityVertex.toJson());

@@ -86,12 +86,20 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
-    public String relationshipAuditMessageOnSource (String label, Object destTitle) {
-        return label + " relationship created to " + destTitle;
+    public String relationshipAuditMessageOnSource (String label, Object destTitle, String titleOfCreationLocation) {
+        String message = label + " relationship created to " + destTitle;
+        if (titleOfCreationLocation != null && titleOfCreationLocation != "") {
+            message = "In " + titleOfCreationLocation + ", " + message;
+        }
+        return message;
     }
 
-    public String relationshipAuditMessageOnDest (String label, Object sourceTitle) {
-        return label + " relationship created from " + sourceTitle;
+    public String relationshipAuditMessageOnDest (String label, Object sourceTitle, String titleOfCreationLocation) {
+        String message = label + " relationship created to " + sourceTitle;
+        if (titleOfCreationLocation != "") {
+            message = "In " + titleOfCreationLocation + ", " + message;
+        }
+        return message;
     }
 
     public String relationshipAuditMessageOnArtifact (Object sourceTitle, Object destTitle, String label) {

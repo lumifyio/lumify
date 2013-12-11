@@ -371,7 +371,8 @@ define([
 
                         StatementForm.attachTo(form, {
                             sourceTerm: ui.draggable,
-                            destTerm: destTerm
+                            destTerm: destTerm,
+                            artifactId: self.$node.find('.artifact-title').data('vertex-id')
                         });
                     }
                 });

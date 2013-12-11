@@ -67,8 +67,8 @@ public class EntityTermCreate extends BaseRequestHandler {
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
-        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle), user);
+        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign, ""), user);
+        auditRepository.audit(createdVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle, ""), user);
 
         TermMention termMention = new TermMention(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, conceptVertex, createdVertex, user);
