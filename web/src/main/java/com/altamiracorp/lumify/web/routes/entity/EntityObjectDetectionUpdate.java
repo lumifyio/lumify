@@ -59,8 +59,6 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
 
         // update graph vertex
         entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, user);
-        graphRepository.setPropertyEdge(artifactVertex.getId(), resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF.toString()
-                , PropertyName.BOUNDING_BOX.toString(), boundingBox, user);
 
         // update the detected object property on the artifact
         JSONArray detectedObjects = new JSONArray(artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS).toString());

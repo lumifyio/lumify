@@ -108,8 +108,6 @@ public class EntityHelper {
         auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign), user);
         auditRepository.audit(resolvedVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle), user);
 
-        graphRepository.setPropertyEdge(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF.toString()
-                , PropertyName.BOUNDING_BOX.toString(), boundingBox, user);
         return resolvedVertex;
     }
 

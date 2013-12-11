@@ -215,7 +215,6 @@ public class BaseOntology {
 
         // Image to Entity relationship
         GraphVertex containsImageOf = ontologyRepository.getOrCreateRelationshipType(image, entity, LabelName.CONTAINS_IMAGE_OF.toString(), "contains image of", user);
-        ontologyRepository.addPropertyTo(containsImageOf, PropertyName.BOUNDING_BOX.toString(), "Bounding Box", PropertyType.STRING, user);
         graph.commit();
 
         // Artifact to TermMention relationship
