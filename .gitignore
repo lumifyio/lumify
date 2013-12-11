@@ -13,3 +13,4 @@ node_modules/
 allCountries.txt
 coverage-error.log
 /web/src/main/webapp/npm-debug.log
+/web/src/main/webapp/libs
