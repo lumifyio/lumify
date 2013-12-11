@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.config;
 
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationMap;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -10,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -60,10 +60,14 @@ public final class Configuration {
 
     public Configuration() {
         this.config = new PropertiesConfiguration();
+        ((PropertiesConfiguration) this.config).setDelimiterParsingDisabled(true);
     }
 
     private Configuration(org.apache.commons.configuration.Configuration config) {
         this.config = config;
+        if (this.config instanceof AbstractConfiguration) {
+            ((AbstractConfiguration) this.config).setDelimiterParsingDisabled(true);
+        }
     }
 
     public String get(String propertyKey) {
