@@ -21,6 +21,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -33,12 +34,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
+    private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
 
     private OutputCollector collector;
     protected ArtifactRepository artifactRepository;
@@ -313,5 +316,18 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     @Override
     public long getTotalErrorCount() {
         return this.totalErrorCount.get();
+    }
+
+    public static String getFileNameWithoutDateSuffix(String fileName) {
+        fileName = FilenameUtils.getName(fileName);
+        int dateTimeSeparator = fileName.lastIndexOf("__");
+        if (dateTimeSeparator > 0) {
+            fileName = fileName.substring(0, dateTimeSeparator);
+        }
+        return fileName;
+    }
+
+    public static String getFileNameWithDateSuffix(String fileName) {
+        return FilenameUtils.getName(fileName) + "__" + fileNameSuffix.format(new Date());
     }
 }

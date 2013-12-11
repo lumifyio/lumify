@@ -95,8 +95,9 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         InputStream in;
         LOGGER.info(String.format("Processing file: %s (mimeType: %s)", fileMetadata.getFileName(), fileMetadata.getMimeType()));
 
+        String fileName = getFileNameWithoutDateSuffix(fileMetadata.getFileName());
         ArtifactExtractedInfo artifactExtractedInfo = new ArtifactExtractedInfo();
-        if (isArchive(fileMetadata.getFileName())) {
+        if (isArchive(fileName)) {
             archiveTempDir = extractArchive(fileMetadata);
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
             in = getInputStream(primaryFile.getAbsolutePath(), artifactExtractedInfo);
@@ -105,7 +106,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         } else {
             in = getInputStream(fileMetadata.getFileName(), artifactExtractedInfo);
         }
-        artifactExtractedInfo.setTitle(getFilenameWithoutDateTime(fileMetadata));
+        artifactExtractedInfo.setTitle(fileName);
         artifactExtractedInfo.setFileExtension(FilenameUtils.getExtension(fileMetadata.getFileName()));
         artifactExtractedInfo.setMimeType(fileMetadata.getMimeType());
 
@@ -146,15 +147,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         }
         LOGGER.debug("Created graph vertex [" + graphVertex.getId() + "] for " + artifactExtractedInfo.getTitle());
         return graphVertex;
-    }
-
-    private String getFilenameWithoutDateTime(FileMetadata fileMetadata) {
-        String fileName = FilenameUtils.getName(fileMetadata.getFileName());
-        int dateTimeSeparator = fileName.lastIndexOf("__");
-        if (dateTimeSeparator > 0) {
-            fileName = fileName.substring(0, dateTimeSeparator);
-        }
-        return fileName;
     }
 
     protected File getPrimaryFileFromArchive(File archiveTempDir) {
