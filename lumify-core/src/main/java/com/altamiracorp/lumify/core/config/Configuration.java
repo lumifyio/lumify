@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -161,5 +162,29 @@ public final class Configuration {
         return sb.toString();
     }
 
+    public static String getZkConnectString(Object zkServers, String suffix) {
+        String zkServerNames;
+        if (zkServers instanceof Collection) {
+            Collection c = (Collection) zkServers;
+            StringBuilder temp = new StringBuilder();
+            boolean first = true;
+            for (Object zkServer : c) {
+                if (!first) {
+                    temp.append(",");
+                }
+                temp.append(zkServer.toString());
+                temp.append(suffix);
+                first = false;
+            }
+            zkServerNames = temp.toString();
+        } else {
+            zkServerNames = zkServers + suffix;
+        }
+        return zkServerNames;
+    }
+
+    public String getZkConnectString(String suffix) {
+        return getZkConnectString(get(Configuration.ZK_SERVERS), suffix);
+    }
 }
 
