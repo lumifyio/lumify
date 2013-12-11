@@ -27,7 +27,7 @@ public class LumifyKafkaSpout extends KafkaSpout implements LumifySpoutMXBean {
             scheme = new KafkaJsonEncoder();
         }
         SpoutConfig spoutConfig = new SpoutConfig(
-                new KafkaConfig.ZkHosts(configuration.getZkConnectString(""), "/kafka/brokers"),
+                new KafkaConfig.ZkHosts(configuration.get(Configuration.ZK_SERVERS), "/kafka/brokers"),
                 queueName,
                 "/kafka/consumers",
                 queueName);

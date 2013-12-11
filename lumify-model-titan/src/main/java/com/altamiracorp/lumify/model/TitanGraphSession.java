@@ -44,6 +44,7 @@ public class TitanGraphSession extends GraphSession {
     public TitanGraphSession(Configuration config) {
         Configuration titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
         PropertiesConfiguration conf = new PropertiesConfiguration();
+        conf.setDelimiterParsingDisabled(true);
 
         //load the storage specific configuration parameters
 
