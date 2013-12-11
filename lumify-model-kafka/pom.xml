@@ -8,48 +8,34 @@
         <groupId>com.altamiracorp.lumify</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <artifactId>lumify-model-kafka</artifactId>
 
-    <artifactId>lumify-model-elasticSearch</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <name>Lumify Model: Kafka</name>
 
-    <name>Model Elastic Search</name>
+    <profiles>
+        <!-- Use this profile to build when deploying to a clustered environment. -->
+        <profile>
+            <id>cluster</id>
+            <properties>
+                <cluster.dependency.scope>provided</cluster.dependency.scope>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>storm</groupId>
+            <artifactId>storm</artifactId>
+            <scope>${cluster.dependency.scope}</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <scope>test</scope>
+            <groupId>storm</groupId>
+            <artifactId>storm-kafka</artifactId>
         </dependency>
     </dependencies>
 

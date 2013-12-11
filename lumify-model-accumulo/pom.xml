@@ -8,28 +8,23 @@
         <groupId>com.altamiracorp.lumify</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>lumify-model-accumulo</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
-    <name>Model Accumulo</name>
+    <name>Lumify Model: Accumulo</name>
 
     <dependencies>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
             <artifactId>bigtable-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
             <artifactId>accumulo-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.accumulo</groupId>
@@ -38,32 +33,6 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

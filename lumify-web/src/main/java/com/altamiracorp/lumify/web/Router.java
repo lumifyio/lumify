@@ -31,7 +31,7 @@ import java.io.IOException;
 public class Router extends HttpServlet {
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
-    final File rootDir = new File("./web/src/main/webapp");
+    final File rootDir = new File("./lumify-web/src/main/webapp");
 
     @Override
     public void init(ServletConfig config) throws ServletException {

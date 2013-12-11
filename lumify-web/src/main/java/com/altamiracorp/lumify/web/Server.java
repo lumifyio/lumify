@@ -119,7 +119,7 @@ public class Server extends CommandLineBase {
 
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/");
-        webAppContext.setWar("./web/src/main/webapp/");
+        webAppContext.setWar("./lumify-web/src/main/webapp/");
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});
