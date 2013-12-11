@@ -95,7 +95,7 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     public String relationshipAuditMessageOnDest (String label, Object sourceTitle, String titleOfCreationLocation) {
-        String message = label + " relationship created to " + sourceTitle;
+        String message = label + " relationship created from " + sourceTitle;
         if (titleOfCreationLocation != "") {
             message = "In " + titleOfCreationLocation + ", " + message;
         }
