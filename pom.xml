@@ -15,10 +15,6 @@
 
     <name>Lumify</name>
 
-    <properties>
-        <lumify.maven.repo>http://bits.lumify.io/m2/</lumify.maven.repo>
-    </properties>
-    
     <modules>
         <module>lumify-core</module>
         <module>lumify-fs-hdfs</module>
@@ -33,7 +29,7 @@
     <repositories>
         <repository>
             <id>lumify-releases</id>
-            <url>${lumify.maven.repo}</url>
+            <url>http://bits.lumify.io/m2/</url>
         </repository>
         <repository>
             <snapshots>
@@ -41,7 +37,7 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
             <id>lumify-snapshots</id>
-            <url>${lumify.maven.repo}</url>
+            <url>http://bits.lumify.io/m2/</url>
         </repository>
     </repositories>
 </project>
