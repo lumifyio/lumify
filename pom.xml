@@ -7,7 +7,6 @@
         <groupId>com.altamiracorp.lumify</groupId>
         <artifactId>lumify-root</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>lumify-root/pom.xml</relativePath>
     </parent>
     
     <artifactId>lumify</artifactId>
