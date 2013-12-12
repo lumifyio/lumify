@@ -16,32 +16,33 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.Properties;
 
-/**
- * Responsible for defining behavior corresponding to web servlet context
- * initialization and destruction
- */
 public final class ApplicationBootstrap implements ServletContextListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationBootstrap.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        LOGGER.info("Servlet context initialized...");
+        try {
+            LOGGER.info("Servlet context initialized...");
 
-        final ServletContext context = sce.getServletContext();
+            final ServletContext context = sce.getServletContext();
 
-        if (context != null) {
-            final Configuration config = fetchApplicationConfiguration(context);
-            LOGGER.info("Running application with configuration: " + config);
+            if (context != null) {
+                final Configuration config = fetchApplicationConfiguration(context);
+                LOGGER.info("Running application with configuration: " + config);
 
-            final Injector injector = Guice.createInjector(new Bootstrap(config));
+                final Injector injector = Guice.createInjector(new Bootstrap(config));
 
-            // Store the injector in the context for a servlet to access later
-            context.setAttribute(Injector.class.getName(), injector);
+                // Store the injector in the context for a servlet to access later
+                context.setAttribute(Injector.class.getName(), injector);
 
-            final User user = new SystemUser();
-            FrameworkUtils.initializeFramework(injector, user);
-        } else {
-            LOGGER.error("Servlet context could not be acquired!");
+                final User user = new SystemUser();
+                FrameworkUtils.initializeFramework(injector, user);
+            } else {
+                LOGGER.error("Servlet context could not be acquired!");
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Failed to initialize context", ex);
+            throw new RuntimeException("Failed to initialize context", ex);
         }
     }
 
