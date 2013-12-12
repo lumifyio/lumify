@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class KafkaWorkQueueRepository extends WorkQueueRepository {
+    public static final String KAFKA_PATH_PREFIX = "/kafka";
     private Producer<String, JSONObject> kafkaProducer;
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaWorkQueueRepository.class);
 
@@ -27,7 +28,11 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
         props.put("zk.connect", zkServerNames);
         props.put("serializer.class", KafkaJsonEncoder.class.getName());
         ProducerConfig producerConfig = new ProducerConfig(props);
-        kafkaProducer = new Producer<String, JSONObject>(producerConfig);
+        try {
+            kafkaProducer = new Producer<String, JSONObject>(producerConfig);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to create kafka producer. Have you run /opt/lumify/kafka-clear.sh?", ex);
+        }
     }
 
     private String getZkServerNames(Map config) {
@@ -39,7 +44,7 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
                 result.append(",");
             }
             result.append(zkServersArray[i]);
-            result.append("/kafka");
+            result.append(KAFKA_PATH_PREFIX);
 
             // TODO when kafka is upgraded to 0.8.x try this again with multiple zk servers.
             //      Currently kafka only handles one.
