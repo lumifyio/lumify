@@ -336,7 +336,6 @@ define([
 
                     if (updatedVertices.length) {
                         self.trigger(document, 'updateVertices', { vertices:updatedVertices });
-                        console.log(updatedVertices)
                     } else if (addedVertices.length) {
                         cy.container().focus();
                         self.trigger(document, 'addVertices', { vertices:addedVertices });
