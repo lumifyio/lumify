@@ -7,10 +7,11 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -110,44 +111,49 @@ public final class Configuration {
         config.setProperty(propertyKey, value);
     }
 
-    /**
-     * Attempts to parse the application configuration file located at the
-     * specified filesystem path
-     *
-     * @param configUrl      The URL to the configuration file, not null or empty
-     * @param credentialsUrl The URL to the credentials file, not null or empty
-     * @return A {@link Configuration} object that contains the parsed configuration values
-     */
-    public static Configuration loadConfigurationFile(final String configUrl, final String credentialsUrl) {
-        checkNotNull(configUrl, "The specified config file URL was null");
-        checkArgument(!configUrl.isEmpty(), "The specified config file URL was empty");
+    public static Configuration loadConfigurationFile(final String configDirectory) {
+        checkNotNull(configDirectory, "The specified config file URL was null");
+        checkArgument(!configDirectory.isEmpty(), "The specified config file URL was empty");
 
-        LOGGER.debug(String.format("Attempting to load configuration file: %s and credentials file: %s", configUrl, credentialsUrl));
+        LOGGER.debug(String.format("Attempting to load configuration from directory: %s", configDirectory));
+        File configDirectoryFile = new File(configDirectory);
+        if (!configDirectoryFile.exists()) {
+            throw new RuntimeException("Could not find config directory: " + configDirectory);
+        }
 
         PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
         propertiesConfiguration.setDelimiterParsingDisabled(true);
-        processFile(configUrl, propertiesConfiguration);
-        if (credentialsUrl != null) {
-            processFile(credentialsUrl, propertiesConfiguration);
+
+        File[] files = configDirectoryFile.listFiles();
+        Arrays.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        for (File f : files) {
+            if (!f.getAbsolutePath().endsWith(".properties")) {
+                continue;
+            }
+            try {
+                processFile(f.getAbsolutePath(), propertiesConfiguration);
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not load config file: " + f.getAbsolutePath(), ex);
+            }
         }
 
         return new Configuration(propertiesConfiguration);
     }
 
-    private static void processFile(final String fileUrl, final PropertiesConfiguration propertiesConfiguration) {
+    private static void processFile(final String fileName, final PropertiesConfiguration propertiesConfiguration) throws IOException {
+        LOGGER.info("Loading config file: " + fileName);
+        FileInputStream in = new FileInputStream(fileName);
         try {
-            final URL url = new URL(fileUrl);
-            propertiesConfiguration.load(url.openStream());
-        } catch (MalformedURLException e) {
-            LOGGER.error("Could not create URL object for malformed URL: " + fileUrl, e);
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            LOGGER.info("Could not find file to load: " + fileUrl);
-        } catch (IOException e) {
-            LOGGER.error("Error occurred while loading file: " + fileUrl, e);
-            throw new RuntimeException(e);
+            propertiesConfiguration.load(in);
         } catch (ConfigurationException e) {
-            LOGGER.info("Could not find file to load: " + fileUrl);
+            LOGGER.info("Could not find file to load: " + fileName);
+        } finally {
+            in.close();
         }
     }
 

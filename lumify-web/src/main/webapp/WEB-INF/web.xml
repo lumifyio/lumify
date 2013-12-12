@@ -1,15 +1,11 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
     <context-param>
         <param-name>application.config.location</param-name>
-        <param-value>file:///opt/lumify/config/configuration.properties</param-value>
-    </context-param>
-    <context-param>
-        <param-name>application.config.credentials.location</param-name>
-        <param-value>file:///opt/lumify/config/credentials.properties</param-value>
+        <param-value>/opt/lumify/config</param-value>
     </context-param>
     <context-param>
         <param-name>application.config.log4j.location</param-name>
-        <param-value>file:///opt/lumify/config/log4j.xml</param-value>
+        <param-value>/opt/lumify/config/log4j.xml</param-value>
     </context-param>
 
     <listener>

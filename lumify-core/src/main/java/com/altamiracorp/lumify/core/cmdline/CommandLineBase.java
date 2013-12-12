@@ -13,8 +13,7 @@ import org.apache.hadoop.fs.FileSystem;
 import java.net.URI;
 
 public abstract class CommandLineBase {
-    private String configLocation = "file:///opt/lumify/config/configuration.properties";
-    private String credentialsLocation;
+    private String configLocation = "/opt/lumify/config/configuration.properties";
     private Configuration configuration;
     private User user = new SystemUser();
     private boolean willExit = false;
@@ -71,10 +70,6 @@ public abstract class CommandLineBase {
         if (cmd.hasOption("configLocation")) {
             configLocation = cmd.getOptionValue("configLocation");
         }
-
-        if (cmd.hasOption("credentialsLocation")) {
-            credentialsLocation = cmd.getOptionValue("credentialsLocation");
-        }
     }
 
     protected Options getOptions() {
@@ -95,20 +90,12 @@ public abstract class CommandLineBase {
                         .create()
         );
 
-        options.addOption(
-                OptionBuilder
-                        .withLongOpt("credentialsLocation")
-                        .withDescription("Credentials configuration file location")
-                        .hasArg()
-                        .create()
-        );
-
         return options;
     }
 
     protected Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = Configuration.loadConfigurationFile(configLocation, credentialsLocation);
+            configuration = Configuration.loadConfigurationFile(configLocation);
         }
         return configuration;
     }

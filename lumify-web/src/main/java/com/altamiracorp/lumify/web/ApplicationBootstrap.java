@@ -22,7 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class ApplicationBootstrap implements ServletContextListener {
     private static Logger LOGGER;
     public static final String APP_CONFIG_LOCATION = "application.config.location";
-    public static final String APP_CREDENTIALS_LOCATION = "application.config.credentials.location";
     public static final String APP_LOG4J_LOCATION = "application.config.log4j.location";
 
     @Override
@@ -80,7 +79,6 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
     private Configuration fetchApplicationConfiguration(final ServletContext context) {
         final String configLocation = context.getInitParameter(APP_CONFIG_LOCATION);
-        final String credentialsLocation = context.getInitParameter(APP_CREDENTIALS_LOCATION);
-        return Configuration.loadConfigurationFile(configLocation, credentialsLocation);
+        return Configuration.loadConfigurationFile(configLocation);
     }
 }
