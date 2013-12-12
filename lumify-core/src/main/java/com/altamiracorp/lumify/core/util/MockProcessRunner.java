@@ -5,7 +5,7 @@ import java.io.OutputStream;
 
 public abstract class MockProcessRunner extends ProcessRunner {
     @Override
-    public Process execute(String programName, String[] programArgs, OutputStream out) throws IOException, InterruptedException {
+    public Process execute(String programName, String[] programArgs, OutputStream out, String logPrefix) throws IOException, InterruptedException {
         return onExecute(programName, programArgs, out);
     }
 

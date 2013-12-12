@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.config;
 
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationMap;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -10,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -24,9 +24,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class Configuration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
-
-    public static final String APP_CONFIG_LOCATION = "application.config.location";
-    public static final String APP_CREDENTIALS_LOCATION = "application.config.credentials.location";
 
     public static final String HADOOP_URL = "hadoop.url";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
@@ -60,10 +57,14 @@ public final class Configuration {
 
     public Configuration() {
         this.config = new PropertiesConfiguration();
+        ((PropertiesConfiguration) this.config).setDelimiterParsingDisabled(true);
     }
 
     private Configuration(org.apache.commons.configuration.Configuration config) {
         this.config = config;
+        if (this.config instanceof AbstractConfiguration) {
+            ((AbstractConfiguration) this.config).setDelimiterParsingDisabled(true);
+        }
     }
 
     public String get(String propertyKey) {
@@ -124,6 +125,7 @@ public final class Configuration {
         LOGGER.debug(String.format("Attempting to load configuration file: %s and credentials file: %s", configUrl, credentialsUrl));
 
         PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
+        propertiesConfiguration.setDelimiterParsingDisabled(true);
         processFile(configUrl, propertiesConfiguration);
         if (credentialsUrl != null) {
             processFile(credentialsUrl, propertiesConfiguration);
@@ -160,31 +162,6 @@ public final class Configuration {
         }
 
         return sb.toString();
-    }
-
-    public static String getZkConnectString(Object zkServers, String suffix) {
-        String zkServerNames;
-        if (zkServers instanceof Collection) {
-            Collection c = (Collection) zkServers;
-            StringBuilder temp = new StringBuilder();
-            boolean first = true;
-            for (Object zkServer : c) {
-                if (!first) {
-                    temp.append(",");
-                }
-                temp.append(zkServer.toString());
-                temp.append(suffix);
-                first = false;
-            }
-            zkServerNames = temp.toString();
-        } else {
-            zkServerNames = zkServers + suffix;
-        }
-        return zkServerNames;
-    }
-
-    public String getZkConnectString(String suffix) {
-        return getZkConnectString(get(Configuration.ZK_SERVERS), suffix);
     }
 }
 

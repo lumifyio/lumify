@@ -20,6 +20,8 @@ import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticFileHandler;
 import com.google.inject.Injector;
 import org.eclipse.jetty.server.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -29,88 +31,94 @@ import java.io.File;
 import java.io.IOException;
 
 public class Router extends HttpServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Router.class);
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
     final File rootDir = new File("./lumify-web/src/main/webapp");
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init(config);
+        try {
+            super.init(config);
 
-        final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
+            final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
 
-        app = new WebApp(config, injector);
+            app = new WebApp(config, injector);
 
-        AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
-        Class<? extends Handler> authenticator = authenticatorInstance.getClass();
+            AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
+            Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-        app.get("/index.html", authenticatorInstance, new StaticFileHandler(config));
+            app.get("/index.html", authenticatorInstance, new StaticFileHandler(config));
 
-        app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
-        app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
-        app.get("/ontology/concept/", authenticator, ConceptList.class);
-        app.get("/ontology/property/", authenticator, PropertyList.class);
-        app.get("/ontology/relationship/", authenticator, RelationshipLabelList.class);
+            app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
+            app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
+            app.get("/ontology/concept/", authenticator, ConceptList.class);
+            app.get("/ontology/property/", authenticator, PropertyList.class);
+            app.get("/ontology/relationship/", authenticator, RelationshipLabelList.class);
 
-        app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
+            app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
 
-        app.get("/resource/{_rowKey}", authenticator, ResourceGet.class);
+            app.get("/resource/{_rowKey}", authenticator, ResourceGet.class);
 
-        app.get("/artifact/search", authenticator, ArtifactSearch.class);
-        app.get("/artifact/{graphVertexId}/highlightedText", authenticator, ArtifactHighlightedText.class);
-        app.get("/artifact/{_rowKey}/raw", authenticator, ArtifactRawByRowKey.class);
-        app.get("/artifact/{_rowKey}/thumbnail", authenticator, ArtifactThumbnailByRowKey.class);
-        app.get("/artifact/{_rowKey}/poster-frame", authenticator, ArtifactPosterFrameByRowKey.class);
-        app.get("/artifact/{_rowKey}/video-preview", authenticator, ArtifactVideoPreviewImageByRowKey.class);
-        app.get("/artifact/{_rowKey}", authenticator, ArtifactByRowKey.class);
-        app.post("/artifact/import", authenticator, ArtifactImport.class);
+            app.get("/artifact/search", authenticator, ArtifactSearch.class);
+            app.get("/artifact/{graphVertexId}/highlightedText", authenticator, ArtifactHighlightedText.class);
+            app.get("/artifact/{_rowKey}/raw", authenticator, ArtifactRawByRowKey.class);
+            app.get("/artifact/{_rowKey}/thumbnail", authenticator, ArtifactThumbnailByRowKey.class);
+            app.get("/artifact/{_rowKey}/poster-frame", authenticator, ArtifactPosterFrameByRowKey.class);
+            app.get("/artifact/{_rowKey}/video-preview", authenticator, ArtifactVideoPreviewImageByRowKey.class);
+            app.get("/artifact/{_rowKey}", authenticator, ArtifactByRowKey.class);
+            app.post("/artifact/import", authenticator, ArtifactImport.class);
 
-        app.post("/entity/relationships", authenticator, EntityRelationships.class);
-        app.post("/entity/createTerm", authenticator, EntityTermCreate.class);
-        app.post("/entity/updateTerm", authenticator, EntityTermUpdate.class);
-        app.post("/entity/createResolvedDetectedObject", authenticator, EntityObjectDetectionCreate.class);
-        app.post("/entity/updateResolvedDetectedObject", authenticator, EntityObjectDetectionUpdate.class);
-        app.post("/entity/deleteResolvedDetectedObject", authenticator, EntityObjectDetectionDelete.class);
+            app.post("/entity/relationships", authenticator, EntityRelationships.class);
+            app.post("/entity/createTerm", authenticator, EntityTermCreate.class);
+            app.post("/entity/updateTerm", authenticator, EntityTermUpdate.class);
+            app.post("/entity/createResolvedDetectedObject", authenticator, EntityObjectDetectionCreate.class);
+            app.post("/entity/updateResolvedDetectedObject", authenticator, EntityObjectDetectionUpdate.class);
+            app.post("/entity/deleteResolvedDetectedObject", authenticator, EntityObjectDetectionDelete.class);
 
-        app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
-        app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
-        app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
-        app.get("/vertex/relationship", authenticator, VertexToVertexRelationship.class);
-        app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
-        app.get("/vertex/multiple", authenticator, VertexMultiple.class);
+            app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
+            app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
+            app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
+            app.get("/vertex/relationship", authenticator, VertexToVertexRelationship.class);
+            app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
+            app.get("/vertex/multiple", authenticator, VertexMultiple.class);
 
-        app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
-        app.post("/relationship/create", authenticator, RelationshipCreate.class);
+            app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
+            app.post("/relationship/create", authenticator, RelationshipCreate.class);
 
-        app.get("/graph/findPath", authenticator, GraphFindPath.class);
-        app.get("/graph/{graphVertexId}/relatedVertices", authenticator, GraphRelatedVertices.class);
-        app.get("/graph/vertex/search", authenticator, GraphVertexSearch.class);
-        app.get("/graph/vertex/geoLocationSearch", authenticator, GraphGeoLocationSearch.class);
-        app.post("/graph/vertex/{graphVertexId}/uploadImage", authenticator, GraphVertexUploadImage.class);
+            app.get("/graph/findPath", authenticator, GraphFindPath.class);
+            app.get("/graph/{graphVertexId}/relatedVertices", authenticator, GraphRelatedVertices.class);
+            app.get("/graph/vertex/search", authenticator, GraphVertexSearch.class);
+            app.get("/graph/vertex/geoLocationSearch", authenticator, GraphGeoLocationSearch.class);
+            app.post("/graph/vertex/{graphVertexId}/uploadImage", authenticator, GraphVertexUploadImage.class);
 
-        app.get("/workspace/", authenticator, WorkspaceList.class);
-        app.post("/workspace/save", authenticator, WorkspaceSave.class);
-        app.post("/workspace/{workspaceRowKey}/copy", authenticator, WorkspaceCopy.class);
-        app.post("/workspace/{workspaceRowKey}/save", authenticator, WorkspaceSave.class);
-        app.get("/workspace/{workspaceRowKey}", authenticator, WorkspaceByRowKey.class);
-        app.delete("/workspace/{workspaceRowKey}", authenticator, WorkspaceDelete.class);
+            app.get("/workspace/", authenticator, WorkspaceList.class);
+            app.post("/workspace/save", authenticator, WorkspaceSave.class);
+            app.post("/workspace/{workspaceRowKey}/copy", authenticator, WorkspaceCopy.class);
+            app.post("/workspace/{workspaceRowKey}/save", authenticator, WorkspaceSave.class);
+            app.get("/workspace/{workspaceRowKey}", authenticator, WorkspaceByRowKey.class);
+            app.delete("/workspace/{workspaceRowKey}", authenticator, WorkspaceDelete.class);
 
-        //app.get("/user/messages", authenticator, MessagesGet.class);
-        app.get("/user/me", authenticator, MeGet.class);
-        app.get("/user/", authenticator, UserList.class);
+            //app.get("/user/messages", authenticator, MessagesGet.class);
+            app.get("/user/me", authenticator, MeGet.class);
+            app.get("/user/", authenticator, UserList.class);
 
-        app.get("/map/map-init.js", MapInitHandler.class);
-        app.get("/map/marker/{type}/image", MapMarkerImage.class);
-        app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
+            app.get("/map/map-init.js", MapInitHandler.class);
+            app.get("/map/marker/{type}/image", MapMarkerImage.class);
+            app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
-        app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
-        app.get("/admin/dictionary", authenticator, AdminDictionary.class);
-        app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
-        app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
-        app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
+            app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
+            app.get("/admin/dictionary", authenticator, AdminDictionary.class);
+            app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
+            app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
+            app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
 
-        LessRestlet.init(rootDir);
-        app.get("/css/{file}.css", LessRestlet.class);
+            LessRestlet.init(rootDir);
+            app.get("/css/{file}.css", LessRestlet.class);
+        } catch (Exception ex) {
+            LOGGER.error("Failed to initialize Router", ex);
+            throw new RuntimeException("Failed to initialize " + getClass().getName(), ex);
+        }
     }
 
     @Override
