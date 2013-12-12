@@ -7,6 +7,10 @@
         <param-name>application.config.credentials.location</param-name>
         <param-value>file:///opt/lumify/config/credentials.properties</param-value>
     </context-param>
+    <context-param>
+        <param-name>application.config.log4j.location</param-name>
+        <param-value>file:///opt/lumify/config/log4j.xml</param-value>
+    </context-param>
 
     <listener>
         <listener-class>com.altamiracorp.lumify.web.ApplicationBootstrap</listener-class>
