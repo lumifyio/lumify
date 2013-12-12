@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class ProcessRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRunner.class);
 
-    public Process execute(final String programName, final String[] programArgs, OutputStream out) throws IOException, InterruptedException {
+    public Process execute(final String programName, final String[] programArgs, OutputStream out, final String logPrefix) throws IOException, InterruptedException {
         final List<String> arguments = Lists.newArrayList(programName);
         for (String programArg : programArgs) {
             if (programArg == null) {
@@ -27,27 +27,27 @@ public class ProcessRunner {
         final ProcessBuilder procBuilder = new ProcessBuilder(arguments);
         final Map<String, String> sortedEnv = new TreeMap<String, String>(procBuilder.environment());
 
-        LOGGER.info("Running: " + arrayToString(arguments));
+        LOGGER.info(logPrefix + "Running: " + arrayToString(arguments));
 
         if (!sortedEnv.isEmpty()) {
-            LOGGER.info("Spawned program environment: ");
+            LOGGER.info(logPrefix + "Spawned program environment: ");
             for (final Map.Entry<String, String> entry : sortedEnv.entrySet()) {
-                LOGGER.info(String.format("%s:%s", entry.getKey(), entry.getValue()));
+                LOGGER.info(logPrefix + String.format("%s:%s", entry.getKey(), entry.getValue()));
             }
         } else {
-            LOGGER.info("Running program environment is empty");
+            LOGGER.info(logPrefix + "Running program environment is empty");
         }
 
         final Process proc = procBuilder.start();
 
-        StreamHelper errStreamHelper = new StreamHelper(proc.getErrorStream(), LOGGER, programName + "(stderr): ");
+        StreamHelper errStreamHelper = new StreamHelper(proc.getErrorStream(), LOGGER, logPrefix + programName + "(stderr): ");
         errStreamHelper.start();
 
         final Exception[] pipeException = new Exception[1];
         Pipe pipe = null;
         StreamHelper stdoutStreamHelper = null;
         if (out == null) {
-            stdoutStreamHelper = new StreamHelper(proc.getInputStream(), LOGGER, programName + "(stdout): ");
+            stdoutStreamHelper = new StreamHelper(proc.getInputStream(), LOGGER, logPrefix + programName + "(stdout): ");
             stdoutStreamHelper.start();
         } else {
             Pipe.StatusHandler statusHandler = new Pipe.StatusHandler() {
@@ -76,7 +76,7 @@ public class ProcessRunner {
         proc.getInputStream().close(); // stdout
         proc.getErrorStream().close();
 
-        LOGGER.info(programName + "(returncode): " + proc.exitValue());
+        LOGGER.info(logPrefix + programName + "(returncode): " + proc.exitValue());
 
         if (proc.exitValue() != 0) {
             throw new RuntimeException("unexpected return code: " + proc.exitValue() + " for command " + arrayToString(arguments));
