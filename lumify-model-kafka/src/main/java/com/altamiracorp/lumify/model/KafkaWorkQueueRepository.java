@@ -22,7 +22,7 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
         super.init(config);
 
         String zkServerNames = getZkServerNames(config);
-        LOGGER.debug("Kafka Work Queue Repository zkServerNames: " + zkServerNames);
+        LOGGER.info("Kafka Work Queue Repository zkServerNames: " + zkServerNames);
         Properties props = new Properties();
         props.put("zk.connect", zkServerNames);
         props.put("serializer.class", KafkaJsonEncoder.class.getName());
