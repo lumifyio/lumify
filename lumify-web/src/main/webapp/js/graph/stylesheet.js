@@ -76,14 +76,6 @@ define([
                 'opacity': 0.6
             })
 
-            .selector(':selected')
-            .css({
-                'background-color': '#0088cc',
-                'border-color': '#0088cc',
-                'line-color': '#000',
-                'color': '#0088cc'
-            })
-
             .selector('node.focus')
             .css({
                 'border-width': 5 * retina.devicePixelRatio,
@@ -104,6 +96,22 @@ define([
             .css({
                 'border-width': 5 * retina.devicePixelRatio,
                 'border-color': '#a5e1ff'
+            })
+
+            .selector('node:selected')
+            .css({
+                'background-color': '#0088cc',
+                'border-color': '#0088cc',
+                'color': '#0088cc'
+            })
+
+            .selector('edge:selected')
+            .css({
+                'line-color': '#0088cc',
+                'color': '#0088cc',
+                'target-arrow-color': '#0088cc',
+                'source-arrow-color': '#0088cc',
+                'width': 4 * retina.devicePixelRatio
             })
 
             .selector('edge')
