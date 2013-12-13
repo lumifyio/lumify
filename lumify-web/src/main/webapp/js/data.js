@@ -268,7 +268,8 @@ define([
                     if (added.length) {
                         self.trigger('verticesAdded', { 
                             vertices:freeze(added),
-                            remoteEvent: data.remoteEvent
+                            remoteEvent: data.remoteEvent,
+                            options: data.options || {}
                         });
                     }
                 });

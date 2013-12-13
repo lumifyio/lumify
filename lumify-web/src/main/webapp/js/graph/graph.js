@@ -201,7 +201,7 @@ define([
         };
 
         this.onVerticesAdded = function(evt, data) {
-            this.addVertices(data.vertices);
+            this.addVertices(data.vertices, data.options);
         };
 
         this.addVertices = function(vertices, opts) {
@@ -211,7 +211,9 @@ define([
                 self = this;
 
             if (self.addingRelatedVertices) {
-                self.trigger('displayInformation', { message: 'Related Entities Added'});
+                _.defer(function() {
+                    self.trigger('displayInformation', { message: 'Related Entities Added'});
+                });
                 self.addingRelatedVertices = false;
             }
 
@@ -244,90 +246,104 @@ define([
                 maxWidth = Math.max(maxWidth, xInc * 10);
 
                 var vertexIds = _.pluck(vertices, 'id'),
-                    existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(n.id()) >= 0; });
+                    existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(n.id()) >= 0; }), 
+                    customLayout = $.Deferred();
 
-                vertices.forEach(function(vertex) {
+                if (options.layout) {
+                    require(['graph/layouts/' + options.layout.type], function(doLayout) {
+                        customLayout.resolve(
+                            doLayout(cy, currentNodes, boundingBox, vertexIds, options.layout)
+                        );
+                    });
+                } else customLayout.resolve({});
 
-                    var cyNodeData = {
-                        group: 'nodes',
-                        classes: self.classesForVertex(vertex),
-                        data: {
-                            id: vertex.id,
-                        },
-                        grabbable: self.isWorkspaceEditable,
-                        selected: !!vertex.workspace.selected
-                    };
-                    self.updateCyNodeData(cyNodeData.data, vertex);
+                customLayout.done(function(layoutPositions) {
 
-                    var needsAdding = false,
-                        needsUpdating = false;
+                    vertices.forEach(function(vertex) {
 
-                    if (vertex.workspace.graphPosition) {
-                        cyNodeData.position = retina.pointsToPixels(vertex.workspace.graphPosition);
-                    } else if (vertex.workspace.dropPosition) {
-                        var offset = self.$node.offset();
-                        cyNodeData.renderedPosition = retina.pointsToPixels({
-                            x: vertex.workspace.dropPosition.x - offset.left,
-                            y: vertex.workspace.dropPosition.y - offset.top
-                        });
-                        needsAdding = true;
-                    } else {
+                        var cyNodeData = {
+                            group: 'nodes',
+                            classes: self.classesForVertex(vertex),
+                            data: {
+                                id: vertex.id,
+                            },
+                            grabbable: self.isWorkspaceEditable,
+                            selected: !!vertex.workspace.selected
+                        };
+                        self.updateCyNodeData(cyNodeData.data, vertex);
 
-                        cyNodeData.position = retina.pointsToPixels(nextAvailablePosition);
+                        var needsAdding = false,
+                            needsUpdating = false;
 
-                        nextAvailablePosition.x += xInc;
-                        if((nextAvailablePosition.x - startX) > maxWidth) {
-                            nextAvailablePosition.y += yInc;
-                            nextAvailablePosition.x = startX;
-                        }
-
-                        if (dragging.length === 0) {
+                        if (vertex.workspace.graphPosition) {
+                            cyNodeData.position = retina.pointsToPixels(vertex.workspace.graphPosition);
+                        } else if (vertex.workspace.dropPosition) {
+                            var offset = self.$node.offset();
+                            cyNodeData.renderedPosition = retina.pointsToPixels({
+                                x: vertex.workspace.dropPosition.x - offset.left,
+                                y: vertex.workspace.dropPosition.y - offset.top
+                            });
+                            needsAdding = true;
+                        } else if (layoutPositions[vertex.id]) {
+                            cyNodeData.position = retina.pointsToPixels(layoutPositions[vertex.id]);
                             needsUpdating = true;
                         } else {
-                            needsAdding = true;
-                        }
-                    }
 
-                    var cyNode = cy.add(cyNodeData);
+                            cyNodeData.position = retina.pointsToPixels(nextAvailablePosition);
 
-                    if (needsAdding || needsUpdating) {
-                        (needsAdding ? addedVertices : updatedVertices).push({
-                            id: vertex.id,
-                            workspace: {
-                                graphPosition: retina.pixelsToPoints(cyNode.position())
+                            nextAvailablePosition.x += xInc;
+                            if((nextAvailablePosition.x - startX) > maxWidth) {
+                                nextAvailablePosition.y += yInc;
+                                nextAvailablePosition.x = startX;
                             }
-                        });
-                    }
 
-                    if (vertex.properties._type === 'artifact' && /^(image|video)$/i.test(vertex.properties._subType)) {
-                        _.delay(function() {
-                            previews.generatePreview(vertex.properties._rowKey, { width:178 * retina.devicePixelRatio }, function(dataUri) {
-                                if (dataUri) {
-                                    cyNode.css('background-image', dataUri);
+                            if (dragging.length === 0) {
+                                needsUpdating = true;
+                            } else {
+                                needsAdding = true;
+                            }
+                        }
+
+                        var cyNode = cy.add(cyNodeData);
+
+                        if (needsAdding || needsUpdating) {
+                            (needsAdding ? addedVertices : updatedVertices).push({
+                                id: vertex.id,
+                                workspace: {
+                                    graphPosition: retina.pixelsToPoints(cyNode.position())
                                 }
                             });
-                        }, 500);
+                        }
+
+                        if (vertex.properties._type === 'artifact' && /^(image|video)$/i.test(vertex.properties._subType)) {
+                            _.delay(function() {
+                                previews.generatePreview(vertex.properties._rowKey, { width:178 * retina.devicePixelRatio }, function(dataUri) {
+                                    if (dataUri) {
+                                        cyNode.css('background-image', dataUri);
+                                    }
+                                });
+                            }, 500);
+                        }
+                    });
+
+                    if (options.fit && cy.nodes().length) {
+                        _.defer(self.fit.bind(self));
                     }
+
+                    if (existingNodes.length && cloned && cloned.length) {
+                        // Animate to something
+                    } else if (cloned) cloned.remove();
+
+                    if (updatedVertices.length) {
+                        self.trigger(document, 'updateVertices', { vertices:updatedVertices });
+                    } else if (addedVertices.length) {
+                        cy.container().focus();
+                        self.trigger(document, 'addVertices', { vertices:addedVertices });
+                    }
+
+                    self.setWorkspaceDirty();
                 });
-
-                if (options.fit && cy.nodes().length) {
-                    _.defer(this.fit.bind(this));
-                }
-
-                if (existingNodes.length && cloned && cloned.length) {
-                    // Animate to something
-                } else if (cloned) cloned.remove();
-
-                if (updatedVertices.length) {
-                    this.trigger(document, 'updateVertices', { vertices:updatedVertices });
-                } else if (addedVertices.length) {
-                    cy.container().focus();
-                    this.trigger(document, 'addVertices', { vertices:addedVertices });
-                }
-
             });
-
-            this.setWorkspaceDirty();
         };
 
         this.classesForVertex = function(vertex) {

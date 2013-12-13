@@ -23,7 +23,8 @@
     "sf": "git://github.com/nearinfinity/node-sf.git",
     "threejs": "*",
     "underscore": "~1.5.1",
-    "video.js": "~4.3.0"
+    "video.js": "~4.3.0",
+    "PathFinding.js": "*"
   },
   "resolutions": {
     "bootstrap": "*"

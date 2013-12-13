@@ -212,14 +212,33 @@ define([
                             var vertexText = formatters.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
                                 suffix = notInWorkspace.length === 1 ? ' isn\'t' : ' aren\'t';
                             text.text(vertexText + suffix + ' already in workspace');
-                            button.text('Add ' + vertexText).removeAttr('disabled').show().data('vertices', notInWorkspace);
+                            button.text('Add ' + vertexText).removeAttr('disabled').show();
+
+                            var index, map = {};
+                            for (var i = 0; i < notInWorkspace.length; i++) {
+                                paths: for (var j = 0; j < paths.length; j++) {
+                                    for (var x = 0; x < paths[j].length; x++) {
+                                        if (paths[j][x].id === notInWorkspace[i].id) {
+                                            map[notInWorkspace[i].id] = {
+                                                sourceId: paths[j][x-1].id,
+                                                targetId: paths[j][x+1].id
+                                            };
+                                            break paths;
+                                        }
+                                    }
+                                }
+                            }
+
+                            self.verticesToAdd = notInWorkspace;
+                            self.verticesToAddLayoutMap = map;
                         } else {
                             text.text('all vertices are already added to workspace');
                         }
+
+                        cy.$('.temp').remove();
+                        self.trigger('focusPaths', { paths:paths, sourceId:src, targetId:dest });
                     } else text.text('Path search using ' + formatters.string.plural(hops, 'hop'));
 
-                    cy.$('.temp').remove();
-                    self.trigger('focusPaths', { paths:paths, sourceId:src, targetId:dest });
 
                     title.text(pathsFoundText);
                     self.positionDialog();
@@ -228,9 +247,19 @@ define([
         };
 
         this.onFindPathButton = function(e) {
-            var vertices = $(e.target).data('vertices');
+            var vertices = this.verticesToAdd;
+
             this.trigger('finishedVertexConnection');
-            this.trigger('addVertices', { vertices: vertices });
+            this.trigger('addVertices', { 
+                vertices: vertices,
+                options: {
+                    layout: {
+                        type: 'path',
+                        map: this.verticesToAddLayoutMap
+                    }
+                }
+            });
+            this.trigger('selectObjects', { vertices:vertices })
         };
 
         this.onFinishedVertexConnection = function(event) {
