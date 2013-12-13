@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,12 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(GraphSession.class).toInstance(createGraphSession());
         bind(SearchProvider.class).toInstance(createSearchProvider(user));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
-        ContentTypeExtractor contentTypeExtractor = createContentTypeExtractor();
-        if (contentTypeExtractor != null) {
-            bind(ContentTypeExtractor.class).toInstance(contentTypeExtractor);
-        }
+        bind(ContentTypeExtractor.class).toProvider(new Provider<ContentTypeExtractor>() {
+            @Override
+            public ContentTypeExtractor get() {
+                return createContentTypeExtractor();
+            }
+        });
     }
 
     private ContentTypeExtractor createContentTypeExtractor() {
