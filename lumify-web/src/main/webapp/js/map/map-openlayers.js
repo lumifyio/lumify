@@ -102,8 +102,8 @@ define([
                 var slowZoomIn = _.throttle(map.zoomIn.bind(map), 250, {trailing: false}),
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
-                this.on('zoomIn', function() { slowZoomIn(); });
-                this.on('zoomOut', function() { slowZoomOut(); });
+                this.on('zoom-in', function() { slowZoomIn(); });
+                this.on('zoom-out', function() { slowZoomOut(); });
             });
         };
 

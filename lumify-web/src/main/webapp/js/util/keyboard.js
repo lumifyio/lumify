@@ -20,9 +20,14 @@ function(defineComponent) {
             46: 'delete',
             8: 'delete',
 
+            189: 'zoom-out',
+            187: 'zoom-in',
+
             191: 'forwardSlash',
 
-            'CTRL-A': 'select-all'
+            'CTRL-A': 'select-all',
+
+            'ALT-F': 'fit'
         }, 
         shouldFilter = function(e) {
             return $(e.target).is('input,select,textarea:not(.clipboardManager)');
@@ -40,21 +45,36 @@ function(defineComponent) {
 
             this.on('keydown', this.onKeyDown);
             this.on('keyup', this.onKeyUp);
+            this.on('didToggleDisplay', this.onToggleDisplay);
             this.on('focusLostByClipboard', this.onFocusLostByClipboard);
             this.on('addKeyboardShortcuts', this.onAddKeyboardShortcuts);
         });
+
+        this.onToggleDisplay = function(e, data) {
+            if (!data.visible) return;
+            if (data.name === 'map') {
+                this.triggerElement = $('.map-pane').focus()[0];
+            } else if (data.name === 'graph') {
+                this.triggerElement = $('.graph-pane').focus()[0];
+            }
+        };
 
         this.onAddKeyboardShortcuts = function(e, data) {
             var self = this;
 
             if (data && data.shortcuts) {
                 Object.keys(data.shortcuts).forEach(function(shortcut) {
-                    self.codes[shortcut] = data.shortcuts[shortcuts];
+                    var normalized = shortcut.replace(/\+/g, '-').toUpperCase();
+                    self.codes[normalized] = data.shortcuts[shortcut];
                 });
             }
         };
 
         this.onFocusLostByClipboard = function(e) {
+            var $target = $(e.target);
+
+            if ($target.is('.clipboardManager')) return;
+            if ($target.closest('.menubar-pane').length) return;
             this.triggerElement = e.target;
         };
 
@@ -64,6 +84,9 @@ function(defineComponent) {
 
             if (event.metaKey || event.ctrlKey) {
                 return this.codes['CTRL-' + w] || this.codes['CTRL-' + s] || this.codes[w];
+            }
+            if (event.altKey) {
+                return this.codes['ALT-' + w] || this.codes['ALT-' + s] || this.codes[w];
             }
 
             return this.codes[w] || this.codes[s];

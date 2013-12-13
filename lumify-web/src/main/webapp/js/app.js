@@ -78,6 +78,9 @@ define([
                 detailPane = content.filter('.detail-pane'),
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map');
 
+            Keyboard.attachTo(document);
+            WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
+            MouseOverlay.attachTo(document);
             Sync.attachTo(window);
             Menubar.attachTo(menubarPane.find('.content'));
             Dashboard.attachTo(dashboardPane);
@@ -86,9 +89,6 @@ define([
             Users.attachTo(usersPane.find('.content'));
             Graph.attachTo(graphPane);
             Detail.attachTo(detailPane.find('.content'));
-            Keyboard.attachTo(document);
-            WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
-            MouseOverlay.attachTo(document);
 
             // Configure splitpane resizing
             resizable(searchPane, 'e', 160, 200, this.onPaneResize.bind(this));
@@ -212,6 +212,11 @@ define([
             } else this.triggerPaneResized();
 
             pane.toggleClass('visible');
+
+            this.trigger('didToggleDisplay', {
+                name: data.name,
+                visible: pane.is('.visible')
+            })
         };
 
         this.onChatMessage = function(e, data) {

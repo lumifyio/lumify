@@ -1,0 +1,38 @@
+
+
+
+body .dropdown-menu {
+  min-width: 13em;
+
+  li a span {
+    color: #777;
+  }
+  li:hover > a > span {
+    text-shadow: none;
+    color: white;   
+  }
+
+  .shortcut {
+      position: absolute;
+      right: 1em;
+      text-transform: uppercase;
+      font-family: menlo, courier, fixed;
+      font-size: 70%;
+      line-height: 4.3ex;
+  }
+  li a.has-shortcut {
+      padding-right: 5em;
+  }
+  .dropdown-submenu > a.has-shortcut:after {
+      margin-right: -4.5em; 
+  }
+
+  .has-subtitle .subtitle {
+      display: block;
+      margin-right: -5.4em;
+      font-size: 80%;
+      white-space: normal;
+      line-height: 2.5ex;
+  }
+}
+
