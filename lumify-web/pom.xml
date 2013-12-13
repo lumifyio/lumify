@@ -16,22 +16,18 @@
     <name>Lumify Web Interface</name>
 
     <properties>
+        <!--
+            Default packaging is jar.  Moved from "activeByDefault" profile because that
+            profile becomes inactive if any other profiles are activated.
+        -->
+        <packaging.type>jar</packaging.type>
+        
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.3</plugin.maven.war.version>
     </properties>
 
     <profiles>
-        <!-- Bundle the web interface as a jar. -->
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <packaging.type>jar</packaging.type>
-            </properties>
-        </profile>
         <!-- Bundle the web interface as a war. -->
         <profile>
             <id>web-war</id>
@@ -49,17 +45,6 @@
                                 node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
                             </warSourceExcludes>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>codeQuality</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

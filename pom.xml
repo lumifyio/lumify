@@ -15,6 +15,20 @@
 
     <name>Lumify</name>
 
+    <inceptionYear>2013</inceptionYear>
+    <organization>
+        <name>Altamira Corporation</name>
+        <url>http://www.altamiracorp.com</url>
+    </organization>
+    <url>https://github.com/altamiracorp/lumify</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Veresion 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
     <modules>
         <module>lumify-core</module>
         <module>lumify-fs-hdfs</module>
