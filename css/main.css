@@ -33,15 +33,19 @@ a:hover {
   padding: 1em 0;
 }
 
-#banner td {
-  width: 50%;
-  vertical-align: middle;
-}
-
 #banner .tagline {
   font-size: 22px;
   color: rgb(43, 194, 227);
-  padding-left: 20px;
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  #banner .tagline {
+    display: table-cell;
+    height: 150px;
+    vertical-align: middle;
+    text-align: left;
+  }
 }
 
 #intro {
