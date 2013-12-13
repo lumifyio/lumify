@@ -1,22 +1,24 @@
+body, h1, h2, h3, h4 {
+  font-family: 'Open Sans',sans-serif,Arial;
+  font-weight: 300;
+}
+
 body {
   background-color: rgb(43, 194, 227);
 }
 
-#home {
-  color: white;
+a {
+  color: rgb(247, 245, 118);
+  text-decoration: none;
 }
 
-.container {
-  padding: 20px 0;
+a:hover {
+  color: rgb(247, 245, 118);
 }
 
-footer .social {
-  text-align: right;
-}
-
-.video {
-  text-align: center;
-  margin: 20px;
+#intro h2, #screenshots h2 {
+  font-size: 250%;
+  margin: 1em 0;
 }
 
 /* banner
@@ -24,38 +26,28 @@ footer .social {
 
 #banner {
   background-color: white;
-  line-height: 1.2;
-  padding: 20px 0;
+  border-bottom: 0.3em solid rgb(31, 42, 97);
 }
 
-#banner .wrap {
-  position: relative;
+#banner .container {
+  padding: 1em 0;
 }
 
-#banner .brand {
-  text-align: center;
-}
-
-#banner h1 {
-  letter-spacing: -0.04em;
-  margin: 0 0  10px;
-  font-size: 18px;
-  text-align: center;
+#banner td {
+  width: 50%;
+  vertical-align: middle;
 }
 
 #banner .tagline {
   font-size: 22px;
   color: rgb(43, 194, 227);
+  padding-left: 20px;
 }
 
-.social-twitter img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 0;
-  padding: 10px;
-  z-index: 1;
+#intro {
+  color: white;
 }
+
 .social-github img {
   position: absolute;
   top: 0;
@@ -64,8 +56,35 @@ footer .social {
   z-index: 1;
 }
 
-/* index.html
-================================================== */
-img.scaled {
-  width: 100%;
+#overview {
+  color: white;
+  margin: 2em 0;
+}
+
+#overview .card {
+  text-align: center;
+}
+
+#overview .card img {
+  margin-bottom: 1em;
+}
+
+footer {
+  padding: 2em 0;
+  color: black;
+  font-size: 85%;
+}
+
+footer .social {
+  text-align: right;
+}
+
+#screenshots {
+  background-color: #DDD;
+  color: rgb(31, 42, 97);
+}
+
+#screenshots .video {
+  text-align: center;
+  padding-bottom: 1em;
 }
