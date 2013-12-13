@@ -111,11 +111,14 @@ public final class Configuration {
         config.setProperty(propertyKey, value);
     }
 
-    public static Configuration loadConfigurationFile(final String configDirectory) {
+    public static Configuration loadConfigurationFile(String configDirectory) {
         checkNotNull(configDirectory, "The specified config file URL was null");
         checkArgument(!configDirectory.isEmpty(), "The specified config file URL was empty");
 
         LOGGER.debug(String.format("Attempting to load configuration from directory: %s", configDirectory));
+        if (configDirectory.startsWith("file://")) {
+            configDirectory = configDirectory.substring("file://".length());
+        }
         File configDirectoryFile = new File(configDirectory);
         if (!configDirectoryFile.exists()) {
             throw new RuntimeException("Could not find config directory: " + configDirectory);
@@ -125,6 +128,9 @@ public final class Configuration {
         propertiesConfiguration.setDelimiterParsingDisabled(true);
 
         File[] files = configDirectoryFile.listFiles();
+        if (files == null) {
+            throw new RuntimeException("Could not parse directory name: " + configDirectory);
+        }
         Arrays.sort(files, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
