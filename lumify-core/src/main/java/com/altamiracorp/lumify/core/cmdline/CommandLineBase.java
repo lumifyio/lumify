@@ -13,7 +13,7 @@ import org.apache.hadoop.fs.FileSystem;
 import java.net.URI;
 
 public abstract class CommandLineBase {
-    private String configLocation = "/opt/lumify/config/configuration.properties";
+    private String configLocation = "/opt/lumify/config/";
     private Configuration configuration;
     private User user = new SystemUser();
     private boolean willExit = false;
