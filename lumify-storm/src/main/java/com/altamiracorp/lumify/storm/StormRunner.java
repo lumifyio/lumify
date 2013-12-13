@@ -17,9 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StormRunner extends CommandLineBase {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StormRunner.class);
-
     private static final String CMD_OPT_LOCAL = "local";
     private static final String TOPOLOGY_NAME = "lumify";
 
@@ -57,6 +54,8 @@ public class StormRunner extends CommandLineBase {
         for (String key : getConfiguration().getKeys()) {
             conf.put(key, getConfiguration().get(key));
         }
+        conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS, 10000);
+        conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 100);
         conf.setDebug(false);
         conf.setNumWorkers(2);
 

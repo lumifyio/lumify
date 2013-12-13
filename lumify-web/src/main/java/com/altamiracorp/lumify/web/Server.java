@@ -15,7 +15,6 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Server extends CommandLineBase {
-
     private static final String PORT_OPTION_VALUE = "port";
     private static final String HTTPS_PORT_OPTION_VALUE = "httpsPort";
     private static final String KEY_STORE_PATH_OPTION_VALUE = "keyStorePath";
