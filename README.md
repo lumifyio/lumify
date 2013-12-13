@@ -1,6 +1,6 @@
 # Lumify
 
-![ScreenShot](web/src/main/webapp/img/lumify-logo.png?raw=true)
+![ScreenShot](lumify-web/src/main/webapp/img/lumify-logo.png?raw=true)
 
 Lumify is an open source big data integration, analytics, and visualization platform. Please see http://lumify.io for more details.
 
