@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import org.json.JSONArray;
 import org.slf4j.Logger;
