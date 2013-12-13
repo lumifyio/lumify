@@ -57,6 +57,8 @@ public class StormRunner extends CommandLineBase {
         for (String key : getConfiguration().getKeys()) {
             conf.put(key, getConfiguration().get(key));
         }
+        conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS, 10000);
+        conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 100);
         conf.setDebug(false);
         conf.setNumWorkers(2);
 
