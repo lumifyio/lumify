@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OwlImport extends CommandLineBase {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OwlImport.class.getName());
     private OntologyRepository ontologyRepository;
     private ResourceRepository resourceRepository;
     private GraphSession graphSession;

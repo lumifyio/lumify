@@ -9,10 +9,15 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.net.URI;
 
 public abstract class CommandLineBase {
+    protected Logger LOGGER;
     private String configLocation = "/opt/lumify/config/";
     private Configuration configuration;
     private User user = new SystemUser();
@@ -20,6 +25,8 @@ public abstract class CommandLineBase {
     protected boolean initFramework = true;
 
     public int run(String[] args) throws Exception {
+        initLog4j();
+
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -57,6 +64,17 @@ public abstract class CommandLineBase {
         }
 
         return run(cmd);
+    }
+
+    private void initLog4j() {
+        String log4jFile = "/opt/lumify/config/log4j.xml";
+        if (!new File(log4jFile).exists()) {
+            throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
+        }
+
+        DOMConfigurator.configure(log4jFile);
+        LOGGER = LoggerFactory.getLogger(getClass());
+        LOGGER.info("Using log4j.xml: " + log4jFile);
     }
 
     protected void printHelp(Options options) {

@@ -17,9 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StormRunner extends CommandLineBase {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StormRunner.class);
-
     private static final String CMD_OPT_LOCAL = "local";
     private static final String TOPOLOGY_NAME = "lumify";
 

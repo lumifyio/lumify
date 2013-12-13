@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class SearchIndexTool extends CommandLineBase {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchIndexTool.class);
     private WorkQueueRepository workQueueRepository;
     private GraphRepository graphRepository;
     private int pageSize = 100;
