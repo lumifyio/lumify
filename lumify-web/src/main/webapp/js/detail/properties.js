@@ -165,17 +165,32 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            // TODO: add relationship property deletion
-            //
-
-            this.vertexService.deleteProperty(
-                this.attr.data.id,
-                data.property)
+            if (self.attr.data.properties._type === 'relationship') {
+                self.relationshipService.deleteProperty(
+                        data.property.name,
+                        this.attr.data.properties.source,
+                        this.attr.data.properties.target,
+                        this.attr.data.properties.relationshipLabel)
                 .fail(this.requestFailure.bind(this))
-                .done(function(vertexData) {
-                    self.displayProperties(vertexData.properties);
-                    self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                .done(function(newProperties) {
+                    var properties = $.extend({}, self.attr.data.properties, newProperties);
+                    self.displayProperties(properties);
+                    self.trigger('updateRelationships', [{
+                        id: self.attr.data.id,
+                        properties: properties
+                    }]);
                 });
+
+            } else {
+                this.vertexService.deleteProperty(
+                    this.attr.data.id,
+                    data.property)
+                    .fail(this.requestFailure.bind(this))
+                    .done(function(vertexData) {
+                        self.displayProperties(vertexData.properties);
+                        self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                    });
+            }
         };
 
         this.onAddProperty = function (event, data) {
@@ -187,15 +202,16 @@ define([
                         data.property.value,
                         this.attr.data.properties.source,
                         this.attr.data.properties.target,
-                        this.attr.data.properties.relationshipLabel
-                ).done(function(newProperties) {
+                        this.attr.data.properties.relationshipLabel)
+                .fail(this.requestFailure.bind(this))
+                .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
                     self.displayProperties(properties);
                     self.trigger('updateRelationships', [{
                         id: self.attr.data.id,
                         properties: properties
                     }]);
-                }).fail(this.requestFailure.bind(this));
+                });
             } else {
                 self.vertexService.setProperty(
                     this.attr.data.id,

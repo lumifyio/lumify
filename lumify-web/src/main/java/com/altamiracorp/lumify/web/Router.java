@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.web.routes.map.MapInitHandler;
 import com.altamiracorp.lumify.web.routes.map.MapMarkerImage;
 import com.altamiracorp.lumify.web.routes.map.MapTileHandler;
 import com.altamiracorp.lumify.web.routes.ontology.*;
+import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
 import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
@@ -85,6 +86,7 @@ public class Router extends HttpServlet {
             app.get("/vertex/multiple", authenticator, VertexMultiple.class);
 
             app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
+            app.post("/relationship/property/delete", authenticator, DeleteRelationshipProperty.class);
             app.post("/relationship/create", authenticator, RelationshipCreate.class);
 
             app.get("/graph/findPath", authenticator, GraphFindPath.class);
