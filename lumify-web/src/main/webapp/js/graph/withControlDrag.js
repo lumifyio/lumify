@@ -28,9 +28,10 @@ define([
         this.defaultAttrs({
             dialogSelector: '.connect-dialog',
             findPathSelector: '.connect-dialog .find-path',
-            findPathButtonSelector: '.find-path-form button',
+            findPathButtonSelector: '.connect-dialog .find-path-form button',
+            findPathHopsButtonSelector: '.connect-dialog .popover-title .dropdown-menu a',
             createConnectionSelector: '.connect-dialog .create-connection',
-            createConnectionButtonSelector: '.create-connection-form button'
+            createConnectionButtonSelector: '.connect-dialog .create-connection-form button'
         });
 
         this.after('initialize', function() {
@@ -103,25 +104,26 @@ define([
             }
         };
 
-        this.showForm = function(form) {
-            var form = this.$node.find('.' + form),
+        this.showForm = function(formName) {
+            var form = this.$node.find('.popover-content .' + formName),
                 dialog = form.closest('.connect-dialog');
 
             dialog.find('.form-button').hide();
+            dialog.find('.popover-title > div').hide();
+            dialog.find('.popover-title .' + formName).show();
             return form;
         };
 
         this.onCreateConnection = function() {
             this.cytoscapeReady(function(cy) {
                 var self = this,
-                    edge = cy.getElementById(currentEdgeId),
                     form = this.showForm('create-connection-form'),
                     select = form.find('select'),
-                    title = form.closest('.popover').find('.popover-title'),
+                    title = form.closest('.popover').find('.popover-title .title'),
                     button = form.find('button');
                 
                 select.html('<option>Loading...</option>');
-                title.text(cy.getElementById(edge.data('source')).data('title'));
+                title.text(cy.getElementById(currentSourceId).data('title')).closest('.popover-title').show();
                 button.text('Connect').attr('disabled', true);
                 form.show();
 
@@ -130,8 +132,8 @@ define([
                 button.focus();
 
                 this.getRelationshipLabels(
-                    cy.getElementById(edge.data('source')),
-                    cy.getElementById(edge.data('target'))
+                    cy.getElementById(currentSourceId),
+                    cy.getElementById(currentTargetId)
                 ).done(function(relationships) {
 
                     if (relationships.length) {
@@ -158,10 +160,9 @@ define([
 
             this.cytoscapeReady(function(cy) {
                 var self = this,
-                    edge = cy.getElementById(currentEdgeId),
                     parameters = {
-                        sourceGraphVertexId: edge.data('source'),
-                        destGraphVertexId: edge.data('target'),
+                        sourceGraphVertexId: currentSourceId,
+                        destGraphVertexId: currentTargetId,
                         predicateLabel: $target.siblings('select').val()
                     };
 
@@ -179,17 +180,21 @@ define([
         this.onFindPath = function() {
             this.cytoscapeReady(function(cy) {
                 var self = this,
-                    edge = cy.getElementById(currentEdgeId),
-                    src = edge.data('source'),
-                    dest = edge.data('target'),
+                    src = currentSourceId,
+                    dest = currentTargetId,
                     form = this.showForm('find-path-form'),
-                    title = form.closest('.popover').find('.popover-title'),
+                    popoverTitle = form.closest('.popover'),
+                    title = popoverTitle.find('.popover-title .title'),
                     text = form.find('span'),
                     button = form.find('button');
 
+                this.trigger('defocusPaths');
+                
                 text.text('Loading...');
                 button.hide().text('Add Vertices').attr('disabled', true);
                 form.show();
+
+                this.select('findPathHopsButtonSelector').off('click').on('click', this.onFindPathHopsButton.bind(this));
 
                 this.positionDialog();
 
@@ -240,7 +245,7 @@ define([
                     } else text.text('Path search using ' + formatters.string.plural(hops, 'hop'));
 
 
-                    title.text(pathsFoundText);
+                    title.text(pathsFoundText).closest('.popover-title').show();
                     self.positionDialog();
                 });
             });
@@ -262,6 +267,22 @@ define([
             this.trigger('selectObjects', { vertices:vertices })
         };
 
+        this.onFindPathHopsButton = function(e) {
+            var $target = $(e.target),
+                newHops = $target.data('hops');
+
+            if ($target.closest('.disabled').length) return;
+
+            var list = $target.closest('ul')
+            
+            list.siblings('.dropdown-toggle').html($target.data('displayText') + ' <span class="caret"/>');
+            list.find('.disabled').removeClass('disabled');
+            $target.closest('li').addClass('disabled');
+
+            hops = newHops;
+            this.onFindPath();
+        };
+
         this.onFinishedVertexConnection = function(event) {
             state = STATE_NONE;
 
@@ -270,6 +291,8 @@ define([
                 cy.$('.controlDragSelection').removeClass('controlDragSelection');
                 cy.off('pan zoom position', this.onViewportChanges);
                 currentEdgeId = null;
+                currentSourceId = null;
+                currentTargetId = null;
                 this.select('dialogSelector').hide();
                 this.ignoreCySelectionEvents = false;
                 this.trigger('defocusPaths');
@@ -286,7 +309,11 @@ define([
                 
                 var dialog = this.$node.find('.connect-dialog');
                 dialog.parent('div').css({ position: 'absolute' });
-                dialog.find('.popover-title').empty();
+                var popoverTitle = dialog.find('.popover-title').hide();
+
+                popoverTitle.find('.dropdown-toggle').html('Shortest <span class="caret"/>');
+                popoverTitle.find('.disabled').removeClass('disabled');
+                popoverTitle.find('.dropdown-menu li:first-child').addClass('disabled');
 
                 if (connectionType) {
                     dialog.find('.form').hide();
@@ -407,6 +434,8 @@ define([
                 }
 
                 currentEdgeId = edgeId;
+                currentSourceId = sourceId;
+                currentTargetId = targetId;
                 if (!edge.length) {
                     cy.add({
                         group: "edges",

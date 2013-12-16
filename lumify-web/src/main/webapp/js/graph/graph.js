@@ -970,6 +970,13 @@ define([
                 });
         };
 
+        this.onLoadRelatedItems = function() {
+            var vertexIds = appData.selectedVertexIds;
+            if (vertexIds.length === 1) {
+                this.onLoadRelatedSelected({ graphVertexId: vertexIds[0] });
+            }
+        };
+
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph') {
                 this.cytoscapeReady(function(cy) {
@@ -1009,6 +1016,14 @@ define([
             this.on(document, 'focusPaths', this.onFocusPaths);
             this.on(document, 'defocusPaths', this.onDefocusPaths);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
+
+            this.on('loadRelatedItems', this.onLoadRelatedItems);
+
+            this.trigger(document, 'addKeyboardShortcuts', {
+                shortcuts: {
+                    'alt-r': 'loadRelatedItems'
+                }
+            })
 
             if (self.attr.vertices && self.attr.vertices.length) {
                 this.select('emptyGraphSelector').hide();
@@ -1092,8 +1107,8 @@ define([
                             })
                         };
 
-                    self.on('zoomIn', function(e) { zoom(zoomFactor); });
-                    self.on('zoomOut', function(e) { zoom(-zoomFactor); });
+                    self.on('zoom-in', function(e) { zoom(zoomFactor); });
+                    self.on('zoom-out', function(e) { zoom(-zoomFactor); });
                 },
                 done: function() {
                     self.cytoscapeMarkReady(this);
