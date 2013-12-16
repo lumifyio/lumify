@@ -22,6 +22,15 @@ define(
             });
         };
 
+        VertexService.prototype.deleteProperty = function (vertexId, propertyName) {
+            return this._ajaxPost({
+                url: 'vertex/' + vertexId + '/property/delete',
+                data: {
+                    propertyName: propertyName
+                }
+            });
+        };
+
         VertexService.prototype.getMultiple = function (vertexIds) {
             return this._ajaxGet({
                 url: 'vertex/multiple',

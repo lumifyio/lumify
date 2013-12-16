@@ -135,6 +135,10 @@ define([
             var id = vertex.id;
             var cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });
 
+            if (options && options.deletedProperty && cache.properties) {
+                delete cache.properties[options.deletedProperty]
+            }
+
             $.extend(true, cache.properties || (cache.properties = {}), vertex.properties);
             $.extend(true, cache.workspace ||  (cache.workspace = {}),  vertex.workspace || {});
 

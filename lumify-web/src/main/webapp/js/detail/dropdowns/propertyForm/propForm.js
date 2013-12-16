@@ -20,8 +20,8 @@ define([
 
         this.defaultAttrs({
             propertyListSelector: '.property-list',
-            addPropertySelector: '.add-property',
-            buttonDivSelector: '.buttons',
+            saveButtonSelector: '.btn-primary',
+            deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
             propertyInputSelector: '.input-row input'
         });
@@ -31,7 +31,8 @@ define([
                 vertex = this.attr.data;
 
             this.on('click', {
-                addPropertySelector: this.onAddPropertyClicked
+                saveButtonSelector: this.onSave,
+                deleteButtonSelector: this.onDelete
             });
             this.on('keyup', {
                 propertyInputSelector: this.onKeyup
@@ -44,7 +45,8 @@ define([
 
             this.$node.html(template({}));
 
-            self.select('addPropertySelector').attr('disabled', true);
+            self.select('saveButtonSelector').attr('disabled', true);
+            self.select('deleteButtonSelector').hide();
 
             (vertex.properties._subType ?
                 self.attr.service.propertiesByConceptId(vertex.properties._subType) :
@@ -93,8 +95,9 @@ define([
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
-            var button = this.select('addPropertySelector');
-            button.html((previousValue ? 'Update' : 'Add') + ' Property');
+            var button = this.select('saveButtonSelector');
+            button.text(previousValue ? 'Update' : 'Add');
+            this.select('deleteButtonSelector').toggle(!!previousValue);
             if (previousValue) {
                 button.removeAttr('disabled');
             }
@@ -117,12 +120,12 @@ define([
             event.stopPropagation();
 
             this.invalid = true;
-            this.select('addPropertySelector').attr('disabled', true);
+            this.select('saveButtonSelector').attr('disabled', true);
         };
 
         this.onPropertyChange = function (event, data) {
             this.invalid = false;
-            this.select('addPropertySelector').removeAttr('disabled');
+            this.select('saveButtonSelector').removeAttr('disabled');
 
             event.stopPropagation();
 
@@ -141,11 +144,17 @@ define([
 
         this.onKeyup = function(evt) {
             if (evt.which === $.ui.keyCode.ENTER) {
-                this.onAddPropertyClicked();
+                this.onSave();
             }
         };
 
-        this.onAddPropertyClicked = function (evt) {
+        this.onDelete = function() {
+            this.trigger('deleteProperty', {
+                property: this.currentProperty.title
+            });
+        };
+
+        this.onSave = function (evt) {
             if (this.invalid) return;
 
             var vertexId = this.attr.data.id,

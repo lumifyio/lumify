@@ -77,6 +77,7 @@ public class Router extends HttpServlet {
             app.post("/entity/deleteResolvedDetectedObject", authenticator, EntityObjectDetectionDelete.class);
 
             app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
+            app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
             app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
             app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
             app.get("/vertex/relationship", authenticator, VertexToVertexRelationship.class);

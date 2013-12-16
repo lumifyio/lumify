@@ -51,6 +51,7 @@ define([
                 auditDateSelector: this.onAuditDateClicked
             });
             this.on('addProperty', this.onAddProperty);
+            this.on('deleteProperty', this.onDeleteProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
             this.$node
@@ -161,6 +162,22 @@ define([
             });
         };
 
+        this.onDeleteProperty = function(event, data) {
+            var self = this;
+
+            // TODO: add relationship property deletion
+            //
+
+            this.vertexService.deleteProperty(
+                this.attr.data.id,
+                data.property)
+                .fail(this.requestFailure.bind(this))
+                .done(function(vertexData) {
+                    self.displayProperties(vertexData.properties);
+                    self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                });
+        };
+
         this.onAddProperty = function (event, data) {
             var self = this;
 
@@ -178,26 +195,27 @@ define([
                         id: self.attr.data.id,
                         properties: properties
                     }]);
-                }).fail(onFail);
+                }).fail(this.requestFailure.bind(this));
             } else {
                 self.vertexService.setProperty(
                     this.attr.data.id,
                     data.property.name,
                     data.property.value)
-                    .fail(onFail)
+                    .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);
                         self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
                     });
             }
 
-            function onFail(err) {
-                if (err.status == 400) {
-                    console.error('Validation error');
-                    return self.trigger(self.$node.find('.underneath'), 'addPropertyError', {});
-                }
-                return 0;
+        };
+        
+        this.requestFailure = function(err) {
+            if (err.status == 400) {
+                console.error('Validation error');
+                return this.trigger(this.$node.find('.underneath'), 'addPropertyError', {});
             }
+            return 0;
         };
 
         this.onAddNewPropertiesClicked = function (evt) {
