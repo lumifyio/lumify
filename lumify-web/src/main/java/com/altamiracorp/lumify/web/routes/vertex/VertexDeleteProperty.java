@@ -47,6 +47,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graphVertex.removeProperty(propertyName);
 
         graphRepository.save(graphVertex, user);
+        graphRepository.commit();
 
         // TODO: add auditing
         // TODO: broadcast property delete
