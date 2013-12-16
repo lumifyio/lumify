@@ -89,18 +89,19 @@ define([
 
             config.teardownAllComponents();
 
-            var previousValue = this.attr.data.properties[propertyName];
+            var previousValue = this.attr.data.properties[propertyName],
+                isExistingProperty = !(typeof this.attr.data.properties[propertyName] === 'undefined');
+
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
-            var button = this.select('saveButtonSelector');
-            button.text(previousValue ? 'Update' : 'Add');
-            this.select('deleteButtonSelector').toggle(!!previousValue);
-            if (previousValue) {
-                button.removeAttr('disabled');
-            }
+            this.select('deleteButtonSelector').toggle(!!isExistingProperty);
+
+            var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
+            if (isExistingProperty) button.removeAttr('disabled');
+            else button.attr('disabled', true);
 
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
@@ -149,6 +150,7 @@ define([
         };
 
         this.onDelete = function() {
+            _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
                 property: this.currentProperty.title
             });
@@ -161,7 +163,7 @@ define([
                 propertyName = this.currentProperty.title,
                 value = this.currentValue;
 
-            _.defer(this.buttonLoading.bind(this));
+            _.defer(this.buttonLoading.bind(this, this.attr.saveButtonSelector));
 
             this.$node.find('input').removeClass('validation-error');
             if (propertyName.length && ((_.isString(value) && value.length) || value)) {

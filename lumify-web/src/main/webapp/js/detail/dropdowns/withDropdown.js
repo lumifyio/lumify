@@ -30,28 +30,20 @@ define([], function() {
             node.css({ height:form.outerHeight(true) + 'px' });
         };
 
-        this.after('clearLoading', function() {
-            $('.loading', this.select('buttonDivSelector')).remove();
-            this.select('buttonDivSelector').find('.btn')
-                .attr('disabled', false)
-                .removeClass('disabled');
-        });
-
         this.after('teardown', function() {
             this.$node.closest('.text').removeClass('dropdown');
-
             this.$node.remove();
         });
 
-        this.after('buttonLoading', function () {
-            var $loading = $("<span>")
-                .addClass("badge")
-                .addClass("loading");
-            this.select('buttonDivSelector').prepend($loading);
-            this.select('buttonDivSelector').find('.btn')
-                .attr('disabled', true)
-                .addClass('disabled');
-        });
+        this.buttonLoading = function(selector) {
+            selector = selector || '.btn-primary';
+            this.$node.find(selector).addClass('loading').attr('disabled', true);
+        };
+
+        this.clearLoading = function() {
+            this.$node.find('.btn:disabled').removeClass('loading').removeAttr('disabled');
+        };
+
 
         this.after('initialize', function() {
             this.$node.closest('.text').addClass('dropdown');
