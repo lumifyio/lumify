@@ -143,7 +143,7 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-elasticSearch</artifactId>
+            <artifactId>lumify-model-elasticsearch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
