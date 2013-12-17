@@ -9,8 +9,21 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>lumify-storm</artifactId>
-
     <name>Lumify Storm</name>
+
+    <inceptionYear>2013</inceptionYear>
+    <organization>
+        <name>Altamira Corporation</name>
+        <url>www.altamiracorp.com</url>
+    </organization>
+    <url>https://github.com/altamiracorp/lumify-twitter</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Veresion 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <profiles>
         <!-- Use this profile to build when deploying to a clustered environment. -->
@@ -90,19 +103,6 @@
             <version>${storm.slf4j.version}</version>
             <scope>${cluster.dependency.scope}</scope>
         </dependency>
-        <dependency>
-            <groupId>storm</groupId>
-            <artifactId>storm</artifactId>
-            <scope>${cluster.dependency.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- End Storm Dependencies -->
-
         <dependency>
             <groupId>storm</groupId>
             <artifactId>storm</artifactId>
