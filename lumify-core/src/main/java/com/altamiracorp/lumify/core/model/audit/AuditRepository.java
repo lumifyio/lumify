@@ -47,10 +47,6 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(user, "user cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(vertexId));
-        audit.getData()
-                .setMessage(message)
-                .setUser(user);
-        save(audit, user.getModelUserContext());
         return audit;
     }
 
