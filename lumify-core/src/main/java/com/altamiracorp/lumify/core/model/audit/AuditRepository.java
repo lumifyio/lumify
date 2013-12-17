@@ -63,7 +63,7 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public Audit auditEntityCreate(String vertexId, String process, String comment, User user) {
+    public Audit auditVertexCreate(String vertexId, String process, String comment, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
         checkNotNull(comment, "comment cannot be null");

@@ -139,7 +139,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         String artifactVertexId = graphSession.save(artifactVertex, user);
 
         if (newVertex) {
-            auditRepository.auditEntityCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
+            auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
         }
         auditRepository.audit(artifactVertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
 

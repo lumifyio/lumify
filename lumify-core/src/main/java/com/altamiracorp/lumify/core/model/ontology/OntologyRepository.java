@@ -300,7 +300,7 @@ public class OntologyRepository {
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
             String id = graphRepository.saveVertex(graphVertex, user);
-            auditRepository.auditEntityCreate(id, process, "", user);
+            auditRepository.auditVertexCreate(id, process, "", user);
             concept = getConceptById(id, user);
         }
         concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
