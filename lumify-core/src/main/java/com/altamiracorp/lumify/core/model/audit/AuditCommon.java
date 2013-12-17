@@ -3,6 +3,8 @@ package com.altamiracorp.lumify.core.model.audit;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
 import com.altamiracorp.lumify.core.user.User;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AuditCommon extends ColumnFamily {
     public static final String NAME = "common";
@@ -13,15 +15,15 @@ public class AuditCommon extends ColumnFamily {
     public static final String TYPE = "type";
     public static final String COMMENT = "comment";
 
-    public AuditCommon () {
-        super (NAME);
+    public AuditCommon() {
+        super(NAME);
     }
 
-    public String getActorType () {
+    public String getActorType() {
         return Value.toString(get(ACTOR_TYPE));
     }
 
-    public AuditCommon setActorType (String actorType) {
+    public AuditCommon setActorType(String actorType) {
         set(ACTOR_TYPE, actorType);
         return this;
     }
@@ -30,8 +32,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(USER_ID));
     }
 
-    public AuditCommon setUserId (String userId) {
-        set (USER_ID, userId);
+    public AuditCommon setUserId(String userId) {
+        set(USER_ID, userId);
         return this;
     }
 
@@ -39,8 +41,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(USER_NAME));
     }
 
-    public AuditCommon setUserName (String userName) {
-        set (USER_NAME, userName);
+    public AuditCommon setUserName(String userName) {
+        set(USER_NAME, userName);
         return this;
     }
 
@@ -48,8 +50,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(ACTION));
     }
 
-    public AuditCommon setAction (String action) {
-        set (ACTION, action);
+    public AuditCommon setAction(String action) {
+        set(ACTION, action);
         return this;
     }
 
@@ -57,8 +59,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(TYPE));
     }
 
-    public AuditCommon setType (String type) {
-        set (TYPE, type);
+    public AuditCommon setType(String type) {
+        set(TYPE, type);
         return this;
     }
 
@@ -66,8 +68,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(COMMENT));
     }
 
-    public AuditCommon setComment (String comment) {
-        set (COMMENT, comment);
+    public AuditCommon setComment(String comment) {
+        set(COMMENT, comment);
         return this;
     }
 
@@ -75,5 +77,21 @@ public class AuditCommon extends ColumnFamily {
         setUserId(user.getRowKey());
         setUserName(user.getUsername());
         return this;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("actorType", getActorType());
+            json.put("userId", getUserId());
+            json.put("userName", getUserName());
+            json.put("action", getAction());
+            json.put("type", getType());
+            json.put("comment", getComment());
+            return json;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
