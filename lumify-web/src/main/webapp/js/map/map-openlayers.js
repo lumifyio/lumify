@@ -63,6 +63,15 @@ define([
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
 
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Map',
+                shortcuts: {
+                    '-': { fire:'zoomOut', desc:'Zoom out' },
+                    '=': { fire:'zoomIn', desc:'Zoom in' },
+                    'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
+                }
+            });
+
             this.attachToZoomPanControls();
 
             var verticesInWorkspace = appData.verticesInWorkspace();
@@ -102,8 +111,8 @@ define([
                 var slowZoomIn = _.throttle(map.zoomIn.bind(map), 250, {trailing: false}),
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
-                this.on('zoom-in', function() { slowZoomIn(); });
-                this.on('zoom-out', function() { slowZoomOut(); });
+                this.on('zoomIn', function() { slowZoomIn(); });
+                this.on('zoomOut', function() { slowZoomOut(); });
             });
         };
 

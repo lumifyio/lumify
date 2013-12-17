@@ -1,44 +1,22 @@
 
 
-define(['flight/lib/component'],
-function(defineComponent) {
+define([
+    'flight/lib/component',
+    'util/formatters'
+], function(defineComponent, formatters) {
     'use strict';
-
-    var SYSTEM_WIDE_CODES = {
-            13: 'return',
-
-            17: 'controlKey',
-            18: 'altKey',
-
-            27: 'escape',
-
-            37: 'left',
-            38: 'up',
-            39: 'right',
-            40: 'down',
-
-            46: 'delete',
-            8: 'delete',
-
-            189: 'zoom-out',
-            187: 'zoom-in',
-
-            191: 'forwardSlash',
-
-            'CTRL-A': 'select-all',
-
-            'ALT-F': 'fit'
-        }, 
-        shouldFilter = function(e) {
-            return $(e.target).is('input,select,textarea:not(.clipboardManager)');
-        };
 
     return defineComponent(Keyboard);
 
+    function shouldFilter(e) {
+        return $(e.target).is('input,select,textarea:not(.clipboardManager)');
+    }
 
     function Keyboard() {
         this.after('initialize', function() {
-            this.codes = SYSTEM_WIDE_CODES;
+            this.shortcutsByScope = {};
+            this.shortcuts = {};
+            this.focusElementStack = [];
 
             this.fireEventUp = _.debounce(this.fireEvent.bind(this), 100);
             this.fireEvent = _.debounce(this.fireEvent.bind(this), 100, true);
@@ -47,27 +25,49 @@ function(defineComponent) {
             this.on('keyup', this.onKeyUp);
             this.on('didToggleDisplay', this.onToggleDisplay);
             this.on('focusLostByClipboard', this.onFocusLostByClipboard);
-            this.on('addKeyboardShortcuts', this.onAddKeyboardShortcuts);
+            this.on('focusComponent', this.onFocus);
+
+            this.on(document, 'requestKeyboardShortcuts', this.onRequestKeyboardShortcuts);
+            this.on(document, 'registerKeyboardShortcuts', this.onRegisterKeyboardShortcuts);
         });
+
+        this.onRequestKeyboardShortcuts = function() {
+            this.trigger('keyboardShortcutsRegistered', this.shortcutsByScope);
+        };
 
         this.onToggleDisplay = function(e, data) {
             if (!data.visible) return;
             if (data.name === 'map') {
-                this.triggerElement = $('.map-pane').focus()[0];
+                this.pushToStackIfNotLast($('.map-pane').get(0));
             } else if (data.name === 'graph') {
-                this.triggerElement = $('.graph-pane').focus()[0];
+                this.pushToStackIfNotLast($('.graph-pane').get(0));
             }
         };
 
-        this.onAddKeyboardShortcuts = function(e, data) {
-            var self = this;
+        this.onRegisterKeyboardShortcuts = function(e, data) {
+            var self = this,
+                scopes = ['Global'], 
+                shortcuts = this.shortcuts,
+                shortcutsByScope = this.shortcutsByScope;
 
-            if (data && data.shortcuts) {
-                Object.keys(data.shortcuts).forEach(function(shortcut) {
-                    var normalized = shortcut.replace(/\+/g, '-').toUpperCase();
-                    self.codes[normalized] = data.shortcuts[shortcut];
-                });
+            if (data.scope) {
+                if (_.isArray(data.scope)) {
+                    scopes = data.scope;
+                } else scopes = [data.scope];
             }
+
+            scopes.forEach(function(scope) {
+                Object.keys(data.shortcuts).forEach(function(key) {
+                    var shortcut = $.extend({}, data.shortcuts[key], formatters.object.shortcut(key));
+
+                    if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
+                    shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;
+                });
+            });
+        };
+
+        this.onFocus = function(e) {
+            this.pushToStackIfNotLast(e.target);
         };
 
         this.onFocusLostByClipboard = function(e) {
@@ -75,47 +75,73 @@ function(defineComponent) {
 
             if ($target.is('.clipboardManager')) return;
             if ($target.closest('.menubar-pane').length) return;
-            this.triggerElement = e.target;
+
+            this.pushToStackIfNotLast(e.target);
         };
 
-        this.codeKeyForEvent = function(event) {
-            var w = event.which,
-                s = String.fromCharCode(w);
+        this.shortcutForEvent = function(event) {
+            var w = event.which;
 
             if (event.metaKey || event.ctrlKey) {
-                return this.codes['CTRL-' + w] || this.codes['CTRL-' + s] || this.codes[w];
+                return this.shortcuts['CTRL-' + w] || this.shortcuts['META-' + w];
             }
             if (event.altKey) {
-                return this.codes['ALT-' + w] || this.codes['ALT-' + s] || this.codes[w];
+                return this.shortcuts['ALT-' + w];
+            }
+            if (event.shiftKey) {
+                return this.shortcuts['SHIFT-' + w];
             }
 
-            return this.codes[w] || this.codes[s];
+            return this.shortcuts[w];
         };
 
         this.onKeyUp = function(e) {
             if (shouldFilter(e)) return;
 
-            var eventToFire = this.codeKeyForEvent(e);
+            var shortcut = this.shortcutForEvent(e);
 
-            if (eventToFire) {
+            if (shortcut) {
                 e.preventDefault();
-                this.fireEventUp(this.triggerElement || this.node, eventToFire + 'Up', _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
+                this.fireEventUp(shortcut.fire + 'Up', _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         };
 
         this.onKeyDown = function(e) {
             if (shouldFilter(e)) return;
 
-            var eventToFire = this.codeKeyForEvent(e);
+            var shortcut = this.shortcutForEvent(e);
 
-            if (eventToFire) {
+            if (shortcut) {
                 e.preventDefault();
-                this.fireEvent(this.triggerElement || this.node, eventToFire, _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
+                this.fireEvent(shortcut.fire, _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         }
 
-        this.fireEvent = function(node, name, data) {
-            this.trigger(node, name, data);
+        this.pushToStackIfNotLast = function(el) {
+            if (!this.focusElementStack.length || this.focusElementStack[this.focusElementStack.length - 1] !== el) {
+                this.focusElementStack.push(el);
+            }
+        };
+
+        this.getTriggerElement = function() {
+            var triggerElement;
+
+            while (this.focusElementStack.length && !triggerElement) {
+                var lastElement = _.last(this.focusElementStack),
+                isVisible = $(lastElement).is(':visible');
+
+                if (isVisible) {
+                    triggerElement = lastElement;
+                } else {
+                    this.focusElementStack.pop();
+                }
+            }
+                
+            return triggerElement || this.$node;
+        };
+
+        this.fireEvent = function(name, data) {
+            this.trigger(this.getTriggerElement(), name, data);
         }
     }
 });
