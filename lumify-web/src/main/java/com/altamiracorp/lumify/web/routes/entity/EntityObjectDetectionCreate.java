@@ -48,7 +48,8 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
 
         // create new graph vertex
-        GraphVertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox, artifactId, user);
+        // TODO: replace "" when we implement commenting on ui
+        GraphVertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, "", artifactId, user);
 
         ArtifactDetectedObject newDetectedObject = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, conceptVertex);
 

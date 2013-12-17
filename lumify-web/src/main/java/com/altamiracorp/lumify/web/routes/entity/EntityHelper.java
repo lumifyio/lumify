@@ -75,7 +75,7 @@ public class EntityHelper {
         workQueueRepository.pushArtifactHighlight(artifactGraphVertexId);
     }
 
-    public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String boundingBox,
+    public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String comment,
                                          String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
@@ -98,8 +98,7 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactTitle), user);
-            auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
+            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, comment, user);
         }
         auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 
