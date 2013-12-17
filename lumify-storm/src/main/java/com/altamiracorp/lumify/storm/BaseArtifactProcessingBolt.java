@@ -4,30 +4,22 @@ package com.altamiracorp.lumify.storm;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
-import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
-import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.Path;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
+public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseArtifactProcessingBolt.class);
     private ThreadedInputStreamProcess<ArtifactExtractedInfo, AdditionalArtifactWorkData> threadedInputStreamProcess;
-    private ContentTypeExtractor contentTypeExtractor;
     private VideoFrameRepository videoFrameRepository;
-    protected WorkQueueRepository workQueueRepository;
 
     public BaseArtifactProcessingBolt() {
         LOGGER.toString();
@@ -102,7 +92,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
             in = getInputStream(primaryFile.getAbsolutePath(), artifactExtractedInfo);
             fileMetadata.setPrimaryFileFromArchive(primaryFile);
-            fileMetadata.setMimeType(contentTypeExtractor.extract(new FileInputStream(primaryFile), FilenameUtils.getExtension(primaryFile.getAbsoluteFile().toString())));
+            fileMetadata.setMimeType(getContentTypeExtractor().extract(new FileInputStream(primaryFile), FilenameUtils.getExtension(primaryFile.getAbsoluteFile().toString())));
         } else {
             in = getInputStream(fileMetadata.getFileName(), artifactExtractedInfo);
         }
@@ -151,33 +141,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
 
     protected File getPrimaryFileFromArchive(File archiveTempDir) {
         throw new RuntimeException("Not implemented for class " + getClass());
-    }
-
-    protected File extractArchive(FileMetadata fileMetadata) throws Exception {
-        File tempDir = Files.createTempDir();
-        LOGGER.debug("Extracting " + fileMetadata.getFileName() + " to " + tempDir);
-        InputStream in = getInputStream(fileMetadata.getFileName(), null);
-        try {
-            ArchiveInputStream input = new ArchiveStreamFactory().createArchiveInputStream(new BufferedInputStream(in));
-            try {
-                ArchiveEntry entry;
-                while ((entry = input.getNextEntry()) != null) {
-                    File outputFile = new File(tempDir, entry.getName());
-                    OutputStream out = new FileOutputStream(outputFile);
-                    try {
-                        long numberOfBytesExtracted = IOUtils.copyLarge(input, out);
-                        LOGGER.debug("Extracted (" + numberOfBytesExtracted + " bytes) to " + outputFile.getAbsolutePath());
-                    } finally {
-                        out.close();
-                    }
-                }
-            } finally {
-                input.close();
-            }
-        } finally {
-            in.close();
-        }
-        return tempDir;
     }
 
     private void saveVideoFrames(ArtifactRowKey artifactRowKey, List<ArtifactExtractedInfo.VideoFrame> videoFrames) throws IOException {
@@ -250,54 +213,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         }
     }
 
-    protected FileMetadata getFileMetadata(Tuple input) throws Exception {
-        String fileName = input.getString(0);
-        if (fileName == null || fileName.length() == 0) {
-            throw new RuntimeException("Invalid item on the queue.");
-        }
-        String mimeType = null;
-
-        if (fileName.startsWith("{")) {
-            JSONObject json = getJsonFromTuple(input);
-            fileName = json.optString("fileName");
-            mimeType = json.optString("mimeType");
-            if (fileName == null || fileName.length() == 0) {
-                throw new RuntimeException("Expected 'fileName' in JSON document but got.\n" + json.toString());
-            }
-        }
-        if (mimeType == null) {
-            mimeType = getMimeType(fileName);
-        }
-
-        return new FileMetadata(fileName, mimeType);
-    }
-
-    protected InputStream getInputStream(String fileName, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
-        InputStream in;
-        if (getFileSize(fileName) < Artifact.MAX_SIZE_OF_INLINE_FILE) {
-            InputStream rawIn = openFile(fileName);
-            byte[] data;
-            try {
-                data = IOUtils.toByteArray(rawIn);
-                if (artifactExtractedInfo != null) {
-                    artifactExtractedInfo.setRaw(data);
-                }
-            } finally {
-                rawIn.close();
-            }
-            in = new ByteArrayInputStream(data);
-        } else {
-            in = openFile(fileName);
-        }
-        return in;
-    }
-
-    private String getMimeType(String fileName) throws Exception {
-        InputStream in = getInputStream(fileName, null);
-        return contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
-    }
-
-
     protected String moveRawFile(String fileName, String rowKey) throws IOException {
         String rawArtifactHdfsPath = "/lumify/artifacts/raw/" + rowKey;
         if (getHdfsFileSystem().exists(new Path(rawArtifactHdfsPath))) {
@@ -307,7 +222,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         }
         return rawArtifactHdfsPath;
     }
-
 
     protected String moveTempTextFile(String fileName, String rowKey) throws IOException {
         return moveTempFile("/lumify/artifacts/text/", fileName, rowKey);
@@ -352,17 +266,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
     }
 
     @Inject
-    public void setContentTypeExtractor(ContentTypeExtractor contentTypeExtractor) {
-        this.contentTypeExtractor = contentTypeExtractor;
-    }
-
-    @Inject
     public void setVideoFrameRepository(VideoFrameRepository videoFrameRepository) {
         this.videoFrameRepository = videoFrameRepository;
-    }
-
-    @Inject
-    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
-        this.workQueueRepository = workQueueRepository;
     }
 }

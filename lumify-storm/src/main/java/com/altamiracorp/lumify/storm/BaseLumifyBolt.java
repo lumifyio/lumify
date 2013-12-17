@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
     private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
+    public static final String JSON_OUTPUT_FIELD = "json";
 
     private OutputCollector collector;
     protected ArtifactRepository artifactRepository;
@@ -107,7 +108,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("json"));
+        declarer.declare(new Fields(JSON_OUTPUT_FIELD));
     }
 
     @Override
@@ -285,6 +286,10 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         this.termMentionRepository = termMentionRepository;
     }
 
+    protected WorkQueueRepository getWorkQueueRepository() {
+        return workQueueRepository;
+    }
+    
     @Inject
     public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
