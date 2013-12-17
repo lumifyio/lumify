@@ -25,6 +25,18 @@ define(
             });
         };
 
+        RelationshipService.prototype.deleteProperty = function (propertyName, sourceId, destId, label) {
+            return this._ajaxPost({
+                url: 'relationship/property/delete',
+                data: {
+                    propertyName: propertyName,
+                    source: sourceId,
+                    dest: destId,
+                    relationshipLabel: label
+                }
+            });
+        };
+
         RelationshipService.prototype.createRelationship = function (createRequest) {
             return this._ajaxPost({
                 url: 'relationship/create',

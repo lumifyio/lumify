@@ -77,6 +77,8 @@ define([], function() {
                     var cache = this.updateCacheWithVertex({
                         id: json.vertex.graphVertexId,
                         properties: json.vertex
+                    }, {
+                        deletedProperty: json.deletedProperty
                     });
                     $.extend(true, json.vertex, cache.properties);
                     $.extend(true, json.properties, cache.properties);

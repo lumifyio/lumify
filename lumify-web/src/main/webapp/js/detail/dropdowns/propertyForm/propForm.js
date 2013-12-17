@@ -20,8 +20,8 @@ define([
 
         this.defaultAttrs({
             propertyListSelector: '.property-list',
-            addPropertySelector: '.add-property',
-            buttonDivSelector: '.buttons',
+            saveButtonSelector: '.btn-primary',
+            deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
             propertyInputSelector: '.input-row input'
         });
@@ -31,7 +31,8 @@ define([
                 vertex = this.attr.data;
 
             this.on('click', {
-                addPropertySelector: this.onAddPropertyClicked
+                saveButtonSelector: this.onSave,
+                deleteButtonSelector: this.onDelete
             });
             this.on('keyup', {
                 propertyInputSelector: this.onKeyup
@@ -44,7 +45,8 @@ define([
 
             this.$node.html(template({}));
 
-            self.select('addPropertySelector').attr('disabled', true);
+            self.select('saveButtonSelector').attr('disabled', true);
+            self.select('deleteButtonSelector').hide();
 
             (vertex.properties._subType ?
                 self.attr.service.propertiesByConceptId(vertex.properties._subType) :
@@ -87,17 +89,19 @@ define([
 
             config.teardownAllComponents();
 
-            var previousValue = this.attr.data.properties[propertyName];
+            var previousValue = this.attr.data.properties[propertyName],
+                isExistingProperty = !(typeof this.attr.data.properties[propertyName] === 'undefined');
+
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
             }
 
-            var button = this.select('addPropertySelector');
-            button.html((previousValue ? 'Update' : 'Add') + ' Property');
-            if (previousValue) {
-                button.removeAttr('disabled');
-            }
+            this.select('deleteButtonSelector').toggle(!!isExistingProperty);
+
+            var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
+            if (isExistingProperty) button.removeAttr('disabled');
+            else button.attr('disabled', true);
 
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
@@ -117,12 +121,12 @@ define([
             event.stopPropagation();
 
             this.invalid = true;
-            this.select('addPropertySelector').attr('disabled', true);
+            this.select('saveButtonSelector').attr('disabled', true);
         };
 
         this.onPropertyChange = function (event, data) {
             this.invalid = false;
-            this.select('addPropertySelector').removeAttr('disabled');
+            this.select('saveButtonSelector').removeAttr('disabled');
 
             event.stopPropagation();
 
@@ -141,18 +145,25 @@ define([
 
         this.onKeyup = function(evt) {
             if (evt.which === $.ui.keyCode.ENTER) {
-                this.onAddPropertyClicked();
+                this.onSave();
             }
         };
 
-        this.onAddPropertyClicked = function (evt) {
+        this.onDelete = function() {
+            _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
+            this.trigger('deleteProperty', {
+                property: this.currentProperty.title
+            });
+        };
+
+        this.onSave = function (evt) {
             if (this.invalid) return;
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
                 value = this.currentValue;
 
-            _.defer(this.buttonLoading.bind(this));
+            _.defer(this.buttonLoading.bind(this, this.attr.saveButtonSelector));
 
             this.$node.find('input').removeClass('validation-error');
             if (propertyName.length && ((_.isString(value) && value.length) || value)) {
