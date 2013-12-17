@@ -11,6 +11,7 @@ define([
     'service/vertex',
     'util/retina',
     'util/controls',
+    'util/formatters',
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,
@@ -23,6 +24,7 @@ define([
     VertexService,
     retina,
     Controls,
+    formatters,
     withAsyncQueue,
     withContextMenu) {
     'use strict';
@@ -53,7 +55,10 @@ define([
             this.initialized = false;
             this.setupAsyncQueue('openlayers');
             this.setupAsyncQueue('map');
-            this.$node.html(template({}));
+            this.$node.html(template({})).find('.shortcut').each(function() {
+                var $this = $(this), command = $this.text();
+                $this.text(formatters.string.shortcut($this.text()));
+            });
 
             this.on(document, 'mapShow', this.onMapShow);
             this.on(document, 'mapCenter', this.onMapCenter);

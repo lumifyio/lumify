@@ -1045,6 +1045,8 @@ define([
                     artifactConcept: concepts.artifactConcept,
                     pathHopOptions: ["2","3","4"]
                 };
+
+                // TODO: make context menus work better
                 self.$node.html(template(templateData)).find('.shortcut').each(function() {
                     var $this = $(this), command = $this.text();
                     $this.text(formatters.string.shortcut($this.text()));
