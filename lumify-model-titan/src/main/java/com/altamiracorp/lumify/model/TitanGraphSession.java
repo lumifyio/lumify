@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.model.index.utils.TitanGraphSearchIndexProviderUt
 import com.altamiracorp.lumify.model.query.utils.LuceneTokenizer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import com.thinkaurelius.titan.core.*;
 import com.thinkaurelius.titan.core.attribute.Geo;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
@@ -37,37 +38,26 @@ public class TitanGraphSession extends GraphSession {
     private static final String TITAN_PROP_KEY_PREFIX = "graph.titan";
     private static final String SEARCH_INDEX_PROVIDER_UTIL_CLASS = "storage.index.search.providerUtilClass";
 
-    private final TitanGraph graph;
-    private final TitanQueryFormatter queryFormatter;
-    private TitanGraphSearchIndexProviderUtil searchIndexProviderUtil;
+    private static Object graphLock = new Object();
+    private static TitanGraph graph;
+    private TitanQueryFormatter queryFormatter;
+    private final Configuration titanConfig;
 
     public TitanGraphSession(Configuration config) {
-        Configuration titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
+        titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
         PropertiesConfiguration conf = new PropertiesConfiguration();
         conf.setDelimiterParsingDisabled(true);
-
-        //load the storage specific configuration parameters
-
         for (String key : titanConfig.getKeys()) {
             conf.setProperty(key, titanConfig.get(key));
         }
         conf.setProperty("autotype", "none");
 
-        Class searchIndexProviderUtilClass = null;
-        try {
-            searchIndexProviderUtilClass = titanConfig.getClass(SEARCH_INDEX_PROVIDER_UTIL_CLASS);
-            Constructor<TitanGraphSearchIndexProviderUtil> searchIndexProviderUtilConstructor = searchIndexProviderUtilClass.getConstructor(Configuration.class);
-            searchIndexProviderUtil = searchIndexProviderUtilConstructor.newInstance(titanConfig);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("The provided search index utility " + searchIndexProviderUtilClass.getName() + " does not have the required constructor");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        synchronized (graphLock) {
+            if (graph == null) {
+                LOGGER.info("opening titan:\n" + confToString(conf));
+                graph = TitanFactory.open(conf);
+            }
         }
-
-        queryFormatter = new TitanQueryFormatter();
-
-        LOGGER.info("opening titan:\n" + confToString(conf));
-        graph = TitanFactory.open(conf);
     }
 
     private String confToString(PropertiesConfiguration conf) {
@@ -598,7 +588,17 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public void deleteSearchIndex(User user) {
-        searchIndexProviderUtil.deleteIndex();
+        Class searchIndexProviderUtilClass = null;
+        try {
+            searchIndexProviderUtilClass = titanConfig.getClass(SEARCH_INDEX_PROVIDER_UTIL_CLASS);
+            Constructor<TitanGraphSearchIndexProviderUtil> searchIndexProviderUtilConstructor = searchIndexProviderUtilClass.getConstructor(Configuration.class);
+            TitanGraphSearchIndexProviderUtil searchIndexProviderUtil = searchIndexProviderUtilConstructor.newInstance(titanConfig);
+            searchIndexProviderUtil.deleteIndex();
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("The provided search index utility " + searchIndexProviderUtilClass.getName() + " does not have the required constructor");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -716,6 +716,11 @@ public class TitanGraphSession extends GraphSession {
         }
 
         return relationships;
+    }
+
+    @Inject
+    public void setQueryFormatter(TitanQueryFormatter queryFormatter) {
+        this.queryFormatter = queryFormatter;
     }
 
     private class GraphRelationshipDateComparator implements Comparator<GraphRelationship> {
