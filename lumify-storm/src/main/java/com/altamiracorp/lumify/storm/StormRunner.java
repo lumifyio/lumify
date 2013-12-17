@@ -13,8 +13,6 @@ import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StormRunner extends CommandLineBase {
     private static final String CMD_OPT_LOCAL = "local";
@@ -56,6 +54,7 @@ public class StormRunner extends CommandLineBase {
         }
         conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS, 10000);
         conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 100);
+        conf.put(Config.WORKER_CHILDOPTS, " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1%ID% ");
         conf.setDebug(false);
         conf.setNumWorkers(2);
 

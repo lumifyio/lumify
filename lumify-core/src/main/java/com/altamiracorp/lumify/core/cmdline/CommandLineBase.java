@@ -25,7 +25,7 @@ public abstract class CommandLineBase {
     protected boolean initFramework = true;
 
     public int run(String[] args) throws Exception {
-        initLog4j();
+        ensureLoggerInitialized();
 
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -64,6 +64,12 @@ public abstract class CommandLineBase {
         }
 
         return run(cmd);
+    }
+
+    protected void ensureLoggerInitialized() {
+        if (LOGGER == null) {
+            initLog4j();
+        }
     }
 
     private void initLog4j() {

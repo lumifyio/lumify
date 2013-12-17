@@ -12,8 +12,6 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -70,11 +68,11 @@ public class OwlImport extends CommandLineBase {
     protected int run(CommandLine cmd) throws Exception {
         File inFile = new File(inFileName);
         importFile(inFile, getUser());
-
         return 0;
     }
 
     public void importFile(File inFile, User user) throws ParserConfigurationException, SAXException, IOException {
+        ensureLoggerInitialized();
         inDir = inFile.getParentFile();
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
