@@ -138,6 +138,9 @@ public abstract class BaseArtifactProcessingBolt extends BaseLumifyBolt {
         if (artifactExtractedInfo.getVideoFrames() != null) {
             saveVideoFrames(new ArtifactRowKey(artifactExtractedInfo.getRowKey()), artifactExtractedInfo.getVideoFrames());
         }
+        if (artifactExtractedInfo.getProcess() != null) {
+            artifactExtractedInfo.setProcess("");
+        }
 
         GraphVertex graphVertex = saveArtifact(artifactExtractedInfo);
 

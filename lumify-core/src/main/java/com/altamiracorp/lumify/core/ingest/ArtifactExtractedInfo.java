@@ -35,6 +35,7 @@ public class ArtifactExtractedInfo {
     private static final String URL = "url";
     private static final String SOURCE = "source";
     private static final String AUTHOR = "author";
+    private static final String PROCESS = "process";
 
     private HashMap<String, Object> properties = new HashMap<String, Object>();
 
@@ -278,6 +279,14 @@ public class ArtifactExtractedInfo {
 
     public void setAuthor (String author) {
         set (AUTHOR, author);
+    }
+
+    public String getProcess () {
+        return (String) properties.get(PROCESS);
+    }
+
+    public void setProcess (String process) {
+        set (PROCESS, process);
     }
 
     public static class VideoFrame {

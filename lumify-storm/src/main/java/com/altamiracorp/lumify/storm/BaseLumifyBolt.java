@@ -116,19 +116,19 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         processingCount.getAndIncrement();
         try {
             String auditMessage;
-            String graphVertexId = null;
+//            String graphVertexId = null;
             auditMessage = "BEGIN " + this.getClass().getName() + ": " + input;
             LOGGER.info(auditMessage);
-            JSONObject json = tryGetJsonFromTuple(input);
-            if (json != null) {
-                graphVertexId = json.optString("graphVertexId");
-                if (graphVertexId.length() == 0) {
-                    graphVertexId = null;
-                }
-                if (graphVertexId != null) {
-                    auditRepository.audit(graphVertexId, auditMessage, getUser());
-                }
-            }
+//            JSONObject json = tryGetJsonFromTuple(input);
+//            if (json != null) {
+//                graphVertexId = json.optString("graphVertexId");
+//                if (graphVertexId.length() == 0) {
+//                    graphVertexId = null;
+//                }
+//                if (graphVertexId != null) {
+//                    auditRepository.audit(graphVertexId, auditMessage, getUser());
+//                }
+//            }
             try {
                 safeExecute(input);
 
@@ -143,9 +143,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
 
             auditMessage = "END " + this.getClass().getName() + ": " + input;
             LOGGER.info(auditMessage);
-            if (graphVertexId != null) {
-                auditRepository.audit(graphVertexId, auditMessage, getUser());
-            }
+//            if (graphVertexId != null) {
+//                auditRepository.audit(graphVertexId, auditMessage, getUser());
+//            }
         } finally {
             processingCount.getAndDecrement();
             totalProcessedCount.getAndIncrement();
