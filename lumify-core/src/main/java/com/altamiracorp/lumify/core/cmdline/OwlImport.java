@@ -112,7 +112,7 @@ public class OwlImport extends CommandLineBase {
         if (parent == null) {
             throw new RuntimeException("Could not find parent " + parentName + " for " + about);
         }
-        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, labelText, user);
+        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, this.getClass().getName(), labelText, user);
 
         for (Element propertyElem : propertyElems) {
             String propertyName = propertyElem.getAttributeNS("http://altamiracorp.com/ontology#", "name");

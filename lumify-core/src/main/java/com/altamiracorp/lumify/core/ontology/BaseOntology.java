@@ -162,12 +162,14 @@ public class BaseOntology {
         }
         graph.commit();
 
-        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
+        String process = this.getClass().getName();
+
+        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, process, OntologyRepository.ROOT_CONCEPT_NAME, user);
         ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
         ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
         graph.commit();
 
-        Concept artifact = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ARTIFACT.toString(), "Artifact", user);
+        Concept artifact = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ARTIFACT.toString(), process, "Artifact", user);
         ontologyRepository.addPropertyTo(artifact, typeProperty.getName(), "Type", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(artifact, subTypeProperty.getName(), "Subtype", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(artifact, titleProperty.getName(), "Title", PropertyType.STRING, user);
@@ -184,11 +186,11 @@ public class BaseOntology {
         artifact.setProperty(PropertyName.GLYPH_ICON, artifactGlyphIconRowKey);
         graph.commit();
 
-        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), "Document", user);
-        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), "Video", user);
+        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), process, "Document", user);
+        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), process, "Video", user);
         graph.commit();
 
-        Concept image = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.IMAGE.toString(), "Image", user);
+        Concept image = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.IMAGE.toString(), process, "Image", user);
 
         // TermMention concept
         TitanKey rowKeyProperty = (TitanKey) graph.getType(PropertyName.ROW_KEY.toString());
@@ -199,7 +201,7 @@ public class BaseOntology {
         graph.commit();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ENTITY.toString(), "Entity", user);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ENTITY.toString(), process, "Entity", user);
         ontologyRepository.addPropertyTo(entity, typeProperty.getName(), "Type", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(entity, subTypeProperty.getName(), "Subtype", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", PropertyType.STRING, user);

@@ -50,18 +50,25 @@ public class AuditRepository extends Repository<Audit> {
         if (messages.size() < 1) {
             return;
         }
-
-        for (String message : messages) {
-            audit(vertexId, message, user);
-        }
     }
 
-    public Audit audit(String vertexId, String comment, User user) {
+    public Audit audit(String vertexId, String message, User user) {
+        checkNotNull(vertexId, "vertexId cannot be null");
+        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
+        checkNotNull(message, "message cannot be null");
+        checkArgument(message.length() > 0, "message cannot be empty");
+        checkNotNull(user, "user cannot be null");
+
+        Audit audit = new Audit(AuditRowKey.build(vertexId));
+        return audit;
+    }
+
+    public Audit auditEntityCreate(String vertexId, String process, String comment, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
         checkNotNull(comment, "comment cannot be null");
-        checkArgument(comment.length() > 0, "comment cannot be empty");
         checkNotNull(user, "user cannot be null");
+        checkNotNull(process, "process cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(vertexId));
         audit.getAuditCommon()
@@ -70,8 +77,40 @@ public class AuditRepository extends Repository<Audit> {
                 .setType(VertexType.ENTITY.toString())
                 .setComment(comment);
 
+        if (process.length() > 0) {
+            audit.getAuditCommon().setProcess(process);
+        }
+
         save(audit, user.getModelUserContext());
         return audit;
+    }
+
+    public List<Audit> auditEntityResolution(String entityId, String artifactId, String comment, User user) {
+        checkNotNull(entityId, "entityId cannot be null");
+        checkArgument(entityId.length() > 0, "entityId cannot be empty");
+        checkNotNull(artifactId, "artifactId cannot be null");
+        checkArgument(artifactId.length() > 0, "artifactId cannot be empty");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        Audit auditArtifact = new Audit(AuditRowKey.build(artifactId));
+        Audit auditEntity = new Audit(AuditRowKey.build(entityId));
+
+        auditEntity.getAuditCommon()
+                .setUser(user)
+                .setAction(AuditAction.CREATE.toString())
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment);
+
+        auditArtifact.getAuditCommon()
+                .setUser(user)
+                .setAction(AuditAction.CREATE.toString())
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment);
+
+        List<Audit> audits = Lists.newArrayList(auditEntity, auditArtifact);
+        saveMany(audits, user.getModelUserContext());
+        return audits;
     }
 
     public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {

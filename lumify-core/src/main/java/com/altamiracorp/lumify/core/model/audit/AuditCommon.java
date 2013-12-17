@@ -14,6 +14,7 @@ public class AuditCommon extends ColumnFamily {
     public static final String ACTION = "action";
     public static final String TYPE = "type";
     public static final String COMMENT = "comment";
+    public static final String PROCESS = "process";
 
     public AuditCommon() {
         super(NAME);
@@ -80,6 +81,15 @@ public class AuditCommon extends ColumnFamily {
         return this;
     }
 
+    public String getProcess () {
+        return Value.toString(get(PROCESS));
+    }
+
+    public AuditCommon setProcess (String process) {
+        set (PROCESS, process);
+        return this;
+    }
+
     @Override
     public JSONObject toJson() {
         try {
@@ -90,6 +100,7 @@ public class AuditCommon extends ColumnFamily {
             json.put("action", getAction());
             json.put("type", getType());
             json.put("comment", getComment());
+            json.put("process", getProcess());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

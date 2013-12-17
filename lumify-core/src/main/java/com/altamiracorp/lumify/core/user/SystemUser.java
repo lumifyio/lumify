@@ -4,12 +4,11 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.user.UserType;
 
 public class SystemUser extends User {
-    private static final String ROW_KEY = "system";
     private static final String USERNAME = "system";
     private static final String CURRENT_WORKSPACE = null;
 
     public SystemUser() {
-        super(ROW_KEY, USERNAME, CURRENT_WORKSPACE, getSystemUserContext(), UserType.SYSTEM.toString());
+        super("", USERNAME, CURRENT_WORKSPACE, getSystemUserContext(), UserType.SYSTEM.toString());
     }
 
     public static ModelUserContext getSystemUserContext() {

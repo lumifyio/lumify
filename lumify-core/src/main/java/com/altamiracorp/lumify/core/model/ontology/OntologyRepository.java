@@ -295,13 +295,12 @@ public class OntologyRepository {
         }
     }
 
-    public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName, User user) {
+    public Concept getOrCreateConcept(Concept parent, String conceptName, String process, String displayName, User user) {
         Concept concept = getConceptByName(conceptName, user);
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
             String id = graphRepository.saveVertex(graphVertex, user);
-            String comment = "create concept " + conceptName + " based on ontology";
-            auditRepository.audit(id, comment, user);
+            auditRepository.auditEntityCreate(id, process, "", user);
             concept = getConceptById(id, user);
         }
         concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
