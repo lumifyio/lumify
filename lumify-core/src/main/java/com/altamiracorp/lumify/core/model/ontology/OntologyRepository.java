@@ -1,11 +1,12 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.GraphSession;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tinkerpop.blueprints.Direction;
@@ -24,13 +25,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class OntologyRepository {
     private GraphRepository graphRepository;
+    private AuditRepository auditRepository;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     private final GraphSession graphSession;
 
     @Inject
-    public OntologyRepository(GraphRepository graphRepository, GraphSession graphSession) {
+    public OntologyRepository(GraphRepository graphRepository, GraphSession graphSession, AuditRepository auditRepository) {
         this.graphRepository = graphRepository;
         this.graphSession = graphSession;
+        this.auditRepository = auditRepository;
     }
 
     public List<Relationship> getRelationshipLabels(User user) {
@@ -134,10 +137,6 @@ public class OntologyRepository {
             return null;
         }
         return new GraphVertexConcept(vertex);
-    }
-
-    public GraphVertex getGraphVertexByTitleAndType(String title, VertexType type, User user) {
-        return graphSession.findVertexByOntologyTitleAndType(title, type, user);
     }
 
     public GraphVertex getGraphVertexByTitle(String title, User user) {
@@ -301,6 +300,8 @@ public class OntologyRepository {
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
             String id = graphRepository.saveVertex(graphVertex, user);
+            String comment = "create concept " + conceptName + " based on ontology";
+            auditRepository.audit(id, comment, user);
             concept = getConceptById(id, user);
         }
         concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
@@ -326,34 +327,6 @@ public class OntologyRepository {
         graphSession.commit();
 
         return property;
-    }
-
-    public Property addPropertyTo(String relationshipLabel, String propertyName, String displayName, PropertyType dataType, User user) {
-        Relationship vertex = getRelationshipByName(relationshipLabel, user);
-        return addPropertyTo(vertex, propertyName, displayName, dataType, user);
-    }
-
-    public Relationship getRelationshipByName(String title, User user) {
-        GraphVertex vertex = graphSession.findVertexByOntologyTitleAndType(title, VertexType.RELATIONSHIP, user);
-        if (vertex == null) {
-            return null;
-        }
-        Concept[] relatedConcepts = getRelationshipRelatedConcepts(vertex.getId(), (String) vertex.getProperty(PropertyName.ONTOLOGY_TITLE), user);
-        return new GraphVertexRelationship(vertex, relatedConcepts[0], relatedConcepts[1]);
-    }
-
-    protected Relationship getOrCreateRelationship(String relationshipLabel, String displayName, User user) {
-        Relationship relationship = getRelationshipByName(relationshipLabel, user);
-        if (relationship == null) {
-            InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
-            graphVertex.setProperty(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString());
-            graphVertex.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel);
-            graphRepository.saveVertex(graphVertex, user);
-            graphSession.commit();
-            relationship = getRelationshipByName(relationshipLabel, user);
-        }
-        relationship.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
-        return relationship;
     }
 
     public GraphVertex getOrCreateRelationshipType(GraphVertex fromVertex, GraphVertex toVertex, String relationshipName, String displayName, User user) {

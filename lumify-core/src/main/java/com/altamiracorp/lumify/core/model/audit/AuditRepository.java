@@ -4,7 +4,9 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -39,17 +41,6 @@ public class AuditRepository extends Repository<Audit> {
         return auditBuilder.getTableName();
     }
 
-    public Audit audit(String vertexId, String message, User user) {
-        checkNotNull(vertexId, "vertexId cannot be null");
-        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
-        checkNotNull(message, "message cannot be null");
-        checkArgument(message.length() > 0, "message cannot be empty");
-        checkNotNull(user, "user cannot be null");
-
-        Audit audit = new Audit(AuditRowKey.build(vertexId));
-        return audit;
-    }
-
     public void audit(String vertexId, ArrayList<String> messages, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
@@ -63,6 +54,24 @@ public class AuditRepository extends Repository<Audit> {
         for (String message : messages) {
             audit(vertexId, message, user);
         }
+    }
+
+    public Audit audit(String vertexId, String comment, User user) {
+        checkNotNull(vertexId, "vertexId cannot be null");
+        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
+        checkNotNull(comment, "comment cannot be null");
+        checkArgument(comment.length() > 0, "comment cannot be empty");
+        checkNotNull(user, "user cannot be null");
+
+        Audit audit = new Audit(AuditRowKey.build(vertexId));
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction(AuditAction.CREATE.toString())
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment);
+
+        save(audit, user.getModelUserContext());
+        return audit;
     }
 
     public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
@@ -82,7 +91,7 @@ public class AuditRepository extends Repository<Audit> {
         return messages;
     }
 
-    public String relationshipAuditMessageOnSource (String label, Object destTitle, String titleOfCreationLocation) {
+    public String relationshipAuditMessageOnSource(String label, Object destTitle, String titleOfCreationLocation) {
         String message = label + " relationship created to " + destTitle;
         if (titleOfCreationLocation != null && titleOfCreationLocation != "") {
             message = "In " + titleOfCreationLocation + ", " + message;
@@ -90,7 +99,7 @@ public class AuditRepository extends Repository<Audit> {
         return message;
     }
 
-    public String relationshipAuditMessageOnDest (String label, Object sourceTitle, String titleOfCreationLocation) {
+    public String relationshipAuditMessageOnDest(String label, Object sourceTitle, String titleOfCreationLocation) {
         String message = label + " relationship created from " + sourceTitle;
         if (titleOfCreationLocation != "") {
             message = "In " + titleOfCreationLocation + ", " + message;
@@ -98,7 +107,7 @@ public class AuditRepository extends Repository<Audit> {
         return message;
     }
 
-    public String relationshipAuditMessageOnArtifact (Object sourceTitle, Object destTitle, String label) {
+    public String relationshipAuditMessageOnArtifact(Object sourceTitle, Object destTitle, String label) {
         return label + " relationship created from " + sourceTitle + " to " + destTitle;
     }
 

@@ -76,6 +76,7 @@ public class AuditCommon extends ColumnFamily {
     public AuditCommon setUser(User user) {
         setUserId(user.getRowKey());
         setUserName(user.getUsername());
+        setActorType(user.getUserType());
         return this;
     }
 
