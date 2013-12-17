@@ -52,6 +52,7 @@ public class UserRepository extends Repository<UserRow> {
 
         user = new UserRow();
         user.getMetadata().setUserName(userName);
+        user.getMetadata().setUserType(UserType.USER.toString());
         save(user, authUser.getModelUserContext());
         return user;
     }

@@ -1,12 +1,12 @@
-package com.altamiracorp.lumify.core.model.audit;
+package com.altamiracorp.lumify.core.model.user;
 
-public enum ActorType {
+public enum UserType {
     USER("user"),
     SYSTEM("system");
 
     private final String type;
 
-    ActorType(String type) {
+    UserType(String type) {
         this.type = type;
     }
 
