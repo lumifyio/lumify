@@ -35,14 +35,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import org.codehaus.plexus.util.FileUtils;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
     private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
     public static final String JSON_OUTPUT_FIELD = "json";
+    
+    /**
+     * The file extensions that are considered archive files:
+     * - .zip
+     * - .tar
+     */
+    private static final Set<String> ARCHIVE_EXTENSIONS;
+    static {
+        Set<String> arcExts = new HashSet<String>();
+        arcExts.add("zip");
+        arcExts.add("tar");
+        ARCHIVE_EXTENSIONS = Collections.unmodifiableSet(arcExts);
+    }
 
     private OutputCollector collector;
     protected ArtifactRepository artifactRepository;
@@ -52,9 +69,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     protected AuditRepository auditRepository;
     protected TermMentionRepository termMentionRepository;
     private Injector injector;
-    private AtomicLong totalProcessedCount = new AtomicLong();
-    private AtomicLong processingCount = new AtomicLong();
-    private AtomicLong totalErrorCount = new AtomicLong();
+    private final AtomicLong totalProcessedCount = new AtomicLong();
+    private final AtomicLong processingCount = new AtomicLong();
+    private final AtomicLong totalErrorCount = new AtomicLong();
     private long averageProcessingTime;
     protected WorkQueueRepository workQueueRepository;
 
@@ -295,12 +312,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         this.workQueueRepository = workQueueRepository;
     }
 
-    protected boolean isArchive(String fileName) {
-        fileName = fileName.toLowerCase();
-        if (fileName.endsWith(".tar") || fileName.endsWith(".zip") || fileName.endsWith(".gz")) {
-            return true;
-        }
-        return false;
+    protected boolean isArchive(final String fileName) {
+        String extension = FileUtils.getExtension(fileName.toLowerCase());
+        return ARCHIVE_EXTENSIONS.contains(extension);
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.annotation.Nullable;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -72,8 +73,12 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     }
     
     protected String getMimeType(String fileName) throws Exception {
-        InputStream in = getInputStream(fileName, null);
-        return contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
+        String mimeType = null;
+        if (contentTypeExtractor != null) {
+            InputStream in = getInputStream(fileName, null);
+            mimeType = contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
+        }
+        return mimeType;
     }
     
     protected InputStream getInputStream(final String fileName, final ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
@@ -132,8 +137,8 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         return contentTypeExtractor;
     }
     
-    @Inject
-    public void setContentTypeExtractor(ContentTypeExtractor contentTypeExtractor) {
+    @Inject(optional=true)
+    public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
         this.contentTypeExtractor = contentTypeExtractor;
     }
 }
