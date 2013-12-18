@@ -43,6 +43,11 @@ define(['sf'], function() {
           '[': 219, ']': 221, '\\': 220
         };
 
+        // Set delete to equal backspace on mac
+        if (isMac) {
+            special.del = special['delete'] = special.backspace;
+        }
+
         return special[character.toLowerCase()] || character.toUpperCase().charCodeAt(0);
     }
 
