@@ -1,13 +1,13 @@
 package com.altamiracorp.lumify.core.model;
 
 import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
+import com.altamiracorp.lumify.core.user.User;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -82,4 +82,6 @@ public abstract class GraphSession {
     public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
 
     public abstract List<GraphVertex> searchAllVertices(long offset, long size, User user);
+
+    public abstract GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user);
 }

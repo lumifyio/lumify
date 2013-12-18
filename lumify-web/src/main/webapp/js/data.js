@@ -68,6 +68,7 @@ define([
 
         this.after('initialize', function() {
             this.setupAsyncQueue('workspace');
+            this.setupAsyncQueue('relationships');
             this.setupDroppable();
 
             this.onSaveWorkspace = _.debounce(this.onSaveWorkspace.bind(this), WORKSPACE_SAVE_DELAY);
@@ -92,6 +93,7 @@ define([
             this.on('workspaceDeleted', this.onWorkspaceDeleted);
             this.on('workspaceDeleting', this.onWorkspaceDeleting);
             this.on('workspaceCopied', this.onWorkspaceCopied);
+            this.on('reloadWorkspace', this.onReloadWorkspace);
 
             this.on('socketMessage', this.onSocketMessage);
 
@@ -158,6 +160,11 @@ define([
 
             self.workspaceReady(function(ws) {
                 ws.data.vertices = self.workspaceVertices;
+
+                Object.keys(ws.data.vertices).forEach(function(v) {
+                    delete ws.data.vertices[v].dropPosition;
+                });
+
                 self.trigger('workspaceSaving', ws);
 
                 saveFn(_.pick(ws, 'data')).done(function(data) {
@@ -172,8 +179,11 @@ define([
             var self = this,
                 ids = this.getIds();
 
+            this.relationshipsUnload();
+
             this.ucdService.getRelationships(ids)
                 .done(function(relationships) {
+                    self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });
                 });
         };
@@ -499,6 +509,14 @@ define([
             this.loadActiveWorkspace();
         }
 
+        this.onReloadWorkspace = function(evt, data) {
+            this.workspaceReady(function(workspace) {
+                this.relationshipsReady(function(relationships) {
+                    this.trigger('workspaceLoaded', workspace);
+                    this.trigger('relationshipsLoaded', { relationships:relationships });
+                });
+            });
+        };
 
         this.onWorkspaceDeleting = function (evt, data) {
             if (this.id == data._rowKey) {
@@ -514,6 +532,7 @@ define([
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
+            self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
                 self.getWorkspace(workspaceRowKey).done(function(workspace) {
@@ -521,12 +540,13 @@ define([
                         if (workspaceData && workspaceData.title) {
                             workspace.title = workspaceData.title;
                         }
+                        vertices.forEach(function(v) { delete v.dropPosition; });
                         workspace.data.vertices = freeze(vertices.sort(function(a,b) { 
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
                             return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
                         }));
-                        self.trigger('workspaceLoaded', workspace);
                         self.workspaceMarkReady(workspace);                        
+                        self.trigger('workspaceLoaded', workspace);
                     });
                 });
             });
@@ -580,6 +600,7 @@ define([
 
                     var vertices = serverVertices.map(function(vertex) {
                         var workspaceData = workspace.data.vertices[vertex.id];
+                        delete workspaceData.dropPosition;
 
                         var cache = self.updateCacheWithVertex(vertex);
                         cache.properties._refreshedFromServer = true;
