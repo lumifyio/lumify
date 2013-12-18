@@ -30,7 +30,6 @@ import java.util.List;
 public class OwlImport extends CommandLineBase {
     private OntologyRepository ontologyRepository;
     private ResourceRepository resourceRepository;
-    private AuditRepository auditRepository;
     private GraphSession graphSession;
     private String inFileName;
     private File inDir;
@@ -106,7 +105,6 @@ public class OwlImport extends CommandLineBase {
         Element subClassOf = getSingleChildElement(classElem, "http://www.w3.org/2000/01/rdf-schema#", "subClassOf");
         String subClassOfResource = subClassOf.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
         List<Element> propertyElems = getChildElements(classElem, "http://altamiracorp.com/ontology#", "property");
-        List<String> modifiedProperties = new ArrayList<String>();
 
         String parentName = getName(subClassOfResource);
 
@@ -129,13 +127,8 @@ public class OwlImport extends CommandLineBase {
                 propertyValue = importGlyphIconFile(propertyValue, user);
             }
             concept.setProperty(propertyName, propertyValue);
-            modifiedProperties.add(propertyName);
         }
         graphSession.commit();
-
-        for (String property : modifiedProperties) {
-            auditRepository.auditProperties(concept, property, this.getClass().getName(), "", user);
-        }
     }
 
     private Element getEnglishLanguageLabel(Element elem) {
@@ -241,9 +234,6 @@ public class OwlImport extends CommandLineBase {
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
     }
-
-    @Inject
-    public void setAuditRepository (AuditRepository auditRepository) { this.auditRepository = auditRepository; }
 
     @Inject
     public void setResourceRepository(ResourceRepository resourceRepository) {

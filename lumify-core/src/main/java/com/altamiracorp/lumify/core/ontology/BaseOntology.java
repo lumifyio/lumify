@@ -1,17 +1,11 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.ontology.Concept;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
@@ -32,14 +26,12 @@ public class BaseOntology {
 
     private final OntologyRepository ontologyRepository;
     private final ResourceRepository resourceRepository;
-    private final AuditRepository auditRepository;
     private final GraphSession graphSession;
 
     @Inject
-    public BaseOntology(OntologyRepository ontologyRepository, ResourceRepository resourceRepository, AuditRepository auditRepository, GraphSession graphSession) {
+    public BaseOntology(OntologyRepository ontologyRepository, ResourceRepository resourceRepository, GraphSession graphSession) {
         this.ontologyRepository = ontologyRepository;
         this.resourceRepository = resourceRepository;
-        this.auditRepository = auditRepository;
         this.graphSession = graphSession;
     }
 
@@ -189,8 +181,6 @@ public class BaseOntology {
         artifact.setProperty(PropertyName.GLYPH_ICON, artifactGlyphIconRowKey);
         graph.commit();
 
-        auditRepository.auditProperties(artifact, PropertyName.GLYPH_ICON.toString(), process, "", user);
-
         ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), process, "Document", user);
         ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), process, "Video", user);
         graph.commit();
@@ -219,8 +209,6 @@ public class BaseOntology {
         String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
         entity.setProperty(PropertyName.GLYPH_ICON, entityGlyphIconRowKey);
         graph.commit();
-
-        auditRepository.auditProperties(entity, PropertyName.GLYPH_ICON.toString(), process, "", user);
 
         // Image to Entity relationship
         GraphVertex containsImageOf = ontologyRepository.getOrCreateRelationshipType(image, entity, LabelName.CONTAINS_IMAGE_OF.toString(), "contains image of", user);

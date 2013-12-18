@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -25,15 +24,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class OntologyRepository {
     private GraphRepository graphRepository;
-    private AuditRepository auditRepository;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     private final GraphSession graphSession;
 
     @Inject
-    public OntologyRepository(GraphRepository graphRepository, GraphSession graphSession, AuditRepository auditRepository) {
+    public OntologyRepository(GraphRepository graphRepository, GraphSession graphSession) {
         this.graphRepository = graphRepository;
         this.graphSession = graphSession;
-        this.auditRepository = auditRepository;
     }
 
     public List<Relationship> getRelationshipLabels(User user) {
@@ -300,7 +297,6 @@ public class OntologyRepository {
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
             String id = graphRepository.saveVertex(graphVertex, user);
-            auditRepository.auditVertexCreate(id, process, "", user);
             concept = getConceptById(id, user);
         }
         concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
@@ -311,9 +307,6 @@ public class OntologyRepository {
         }
 
         graphSession.commit();
-        auditRepository.auditProperties(concept, PropertyName.TYPE.toString(), process, "", user);
-        auditRepository.auditProperties(concept, PropertyName.ONTOLOGY_TITLE.toString(), process, "", user);
-        auditRepository.auditProperties(concept, PropertyName.DISPLAY_NAME.toString(), process, "", user);
 
         return concept;
     }
@@ -327,8 +320,6 @@ public class OntologyRepository {
         Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
         property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
         graphSession.commit();
-
-        auditRepository.auditProperties(property, PropertyName.DISPLAY_NAME.toString(), process, "", user);
 
         findOrAddEdge(vertex, property, LabelName.HAS_PROPERTY.toString(), user);
         graphSession.commit();
