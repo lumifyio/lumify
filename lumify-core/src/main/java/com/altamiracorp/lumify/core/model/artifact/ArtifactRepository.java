@@ -141,7 +141,10 @@ public class ArtifactRepository extends Repository<Artifact> {
         if (newVertex) {
             auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
         }
-        auditRepository.audit(artifactVertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
+
+        for (String modifiedProperty : modifiedProperties) {
+           auditRepository.auditProperties(artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+         }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {
             artifact.getMetadata().setGraphVertexId(artifactVertexId);
