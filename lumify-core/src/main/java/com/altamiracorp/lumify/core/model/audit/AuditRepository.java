@@ -41,17 +41,6 @@ public class AuditRepository extends Repository<Audit> {
         return auditBuilder.getTableName();
     }
 
-    public Audit audit(String vertexId, String message, User user) {
-        checkNotNull(vertexId, "vertexId cannot be null");
-        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
-        checkNotNull(message, "message cannot be null");
-        checkArgument(message.length() > 0, "message cannot be empty");
-        checkNotNull(user, "user cannot be null");
-
-        Audit audit = new Audit(AuditRowKey.build(vertexId));
-        return audit;
-    }
-
     public Audit auditVertexCreate(String vertexId, String process, String comment, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");

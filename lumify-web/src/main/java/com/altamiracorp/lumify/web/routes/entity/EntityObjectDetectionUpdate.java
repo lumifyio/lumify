@@ -84,11 +84,6 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 // TODO: replace "" when we implement commenting on ui
                 auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
-                if (!oldCoordinates.equals(boundingBox)){
-                    String auditMessage = "Set coordinates from " + oldCoordinates + " to " + boundingBox;
-                    auditRepository.audit(artifactId, auditMessage, user);
-                }
-
                 JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);
 
