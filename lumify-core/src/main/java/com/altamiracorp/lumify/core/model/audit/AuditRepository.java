@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -139,41 +140,30 @@ public class AuditRepository extends Repository<Audit> {
 
         Audit auditSourceDest = new Audit(AuditRowKey.build(sourceVertex.getId(), destVertex.getId()));
         Audit auditDestSource = new Audit(AuditRowKey.build(destVertex.getId(), sourceVertex.getId()));
-
-        auditSourceDest.getAuditCommon()
-                .setUser(user)
-                .setAction(action)
-                .setType(VertexType.RELATIONSHIP.toString())
-                .setComment(comment)
-                .setProcess(process);
-
-        auditDestSource.getAuditCommon()
-                .setUser(user)
-                .setAction(action)
-                .setType(VertexType.RELATIONSHIP.toString())
-                .setComment(comment)
-                .setProcess(process);
-
-        auditSourceDest.getAuditRelationship()
-                .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
-                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
-                .setDestId(destVertex.getId())
-                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
-                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
-                .setLabel(label);
-
-        auditDestSource.getAuditRelationship()
-                .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
-                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
-                .setDestId(destVertex.getId())
-                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
-                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
-                .setLabel(label);
-
-        List<Audit> audits = Lists.newArrayList(auditDestSource, auditSourceDest);
+        
+        List<Audit> audits = new ArrayList<Audit>();
+        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex,destVertex,label,process,comment,user));
+        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex,destVertex,label,process,comment,user));
         saveMany(audits, user.getModelUserContext());
         return audits;
+    }
+
+    private Audit auditRelationshipHelper (Audit audit, String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.RELATIONSHIP.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        audit.getAuditRelationship()
+                .setSourceId(sourceVertex.getId())
+                .setSourceType(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestId(destVertex.getId())
+                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
+                .setLabel(label);
+        return audit;
     }
 }
