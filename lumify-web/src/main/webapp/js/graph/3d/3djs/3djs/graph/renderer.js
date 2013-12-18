@@ -32,6 +32,39 @@ define([
 
     GraphRenderer.prototype.teardown = function() {
         this.running = false;
+
+        this._pickingTexture.dispose();
+        this._pickingParticleSystem.geometry.dispose();
+        this._pickingParticleSystem.material.dispose();
+
+        this._renderer.clear();
+
+        var scene = this._scene;
+        scene.children.forEach(function(n) {
+            if (n.geometry) n.geometry.dispose(); 
+            if (n.material) n.material.dispose();
+            scene.remove(n);
+        });
+
+        scene = this._pickingScene;
+        scene.children.forEach(function(n) {
+            if (n.geometry) n.geometry.dispose();
+            if (n.material) n.material.dispose();
+            scene.remove(n);
+        });
+
+        scene.remove(this._camera);
+
+        this._camera = null;
+        this._renderer = null;
+        this._controls = null;
+        this._pickingParticleSystem = null;
+        this._scene = null;
+        this._pickingScene = null;
+
+
+        this._pickingData = [];
+
         this._layout.stop_calculating();
         this.teardownEvents();
     };
@@ -102,7 +135,7 @@ define([
                 projector.unprojectVector( vector, camera );
 
                 var dir = vector.sub( camera.position ).normalize();
-                var ray = new THREE.Raycaster( camera.position, dir );
+                //var ray = new THREE.Raycaster( camera.position, dir );
                 var distance = - camera.position.z / dir.z;
                 var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
             
@@ -145,6 +178,9 @@ define([
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
 
+            if (self._pickingTexture) {
+                self._pickingTexture.dispose();
+            }
             self._pickingTexture = new THREE.WebGLRenderTarget( width, height );
             self._pickingTexture.generateMipmaps = false;
 
@@ -316,6 +352,10 @@ define([
         // TODO: reuse line
         if (this._lines) {
             this._scene.remove(this._lines);
+            this._lines.forEach(function(l) {
+                l.geometry.dispose();
+                l.material.dispose();
+            });
             this._lines = null;
         }
         if (edgesLength) {

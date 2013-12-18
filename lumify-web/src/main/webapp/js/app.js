@@ -186,21 +186,18 @@ define([
             require(['graph/3d/graph'], function(Graph3D) {
                 if (!self._graphDimensions || self._graphDimensions === 2) {
                     Graph.teardownAll();
-                    Graph3D.attachTo(node, {
-                        vertices: data.verticesInWorkspace()
-                    });
+                    Graph3D.attachTo(node);
                     self._graphDimensions = 3;
                 } else {
                     Graph3D.teardownAll();
-                    Graph.attachTo(node, {
-                        vertices: data.verticesInWorkspace()
-                    });
+                    Graph.attachTo(node);
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }
 
+
                 self.trigger('selectObjects');
-                self.trigger('refreshRelationships');
+                self.trigger('reloadWorkspace');
             });
         };
 
