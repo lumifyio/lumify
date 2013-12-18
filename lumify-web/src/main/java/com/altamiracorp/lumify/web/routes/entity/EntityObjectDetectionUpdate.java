@@ -80,6 +80,9 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 result.put("entityVertex", entityTag);
                 graphRepository.save(artifactVertex, user);
 
+                // TODO: replace "" when we implement commenting on ui
+                auditRepository.auditProperties(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+
                 if (!oldCoordinates.equals(boundingBox)){
                     String auditMessage = "Set coordinates from " + oldCoordinates + " to " + boundingBox;
                     auditRepository.audit(artifactId, auditMessage, user);

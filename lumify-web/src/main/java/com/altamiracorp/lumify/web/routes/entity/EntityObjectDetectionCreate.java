@@ -65,9 +65,11 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         entityVertex.put("artifactId", artifactId);
         detectedObjectList.put(entityVertex);
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjectList.toString());
-        String auditMessage = "Set coordinates from undefined to " + boundingBox;
-        auditRepository.audit(artifactId, auditMessage, user);
         graphRepository.saveVertex(resolvedVertex, user);
+
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditProperties(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+
         result.put("entityVertex", entityVertex);
 
         JSONObject updatedArtifactVertex =

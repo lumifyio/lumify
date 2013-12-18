@@ -91,6 +91,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnailByRowKey.getUrl(artifact.getRowKey()));
         graphRepository.commit();
 
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditProperties(entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
+
         graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
         Object sourceTitle = entityVertex.getProperty(PropertyName.TITLE.toString());

@@ -309,6 +309,12 @@ public class OntologyRepository {
         if (parent != null) {
             graphRepository.findOrAddRelationship(concept, parent, LabelName.IS_A, user);
         }
+
+        graphSession.commit();
+        auditRepository.auditProperties(concept, PropertyName.TYPE.toString(), process, "", user);
+        auditRepository.auditProperties(concept, PropertyName.ONTOLOGY_TITLE.toString(), process, "", user);
+        auditRepository.auditProperties(concept, PropertyName.DISPLAY_NAME.toString(), process, "", user);
+
         return concept;
     }
 
@@ -316,11 +322,13 @@ public class OntologyRepository {
         graphSession.findOrAddEdge(fromVertex, toVertex, edgeLabel, user);
     }
 
-    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
+    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, String process, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
         Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
         property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
         graphSession.commit();
+
+        auditRepository.auditProperties(property, PropertyName.DISPLAY_NAME.toString(), process, "", user);
 
         findOrAddEdge(vertex, property, LabelName.HAS_PROPERTY.toString(), user);
         graphSession.commit();
