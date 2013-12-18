@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.core.contentTypeExtraction;
 
-import org.apache.hadoop.mapreduce.Mapper;
-
 import java.io.InputStream;
 import java.util.Map;
 
