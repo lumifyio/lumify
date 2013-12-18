@@ -33,6 +33,8 @@ define([
     GraphRenderer.prototype.teardown = function() {
         this.running = false;
 
+        this._renderer.context.viewport(0,0,1,1)
+
         this._pickingTexture.dispose();
         if (this._pickingParticleSystem) {
             this._pickingParticleSystem.geometry.dispose();
