@@ -19,7 +19,7 @@ public class AuditProperty extends ColumnFamily {
         return Value.toString(get(PREVIOUS_VALUE));
     }
 
-    public AuditProperty setPreviousValue (Value previousValue) {
+    public AuditProperty setPreviousValue (Object previousValue) {
         set (PREVIOUS_VALUE, previousValue);
         return this;
     }
@@ -28,7 +28,7 @@ public class AuditProperty extends ColumnFamily {
         return Value.toString(get(NEW_VALUE));
     }
 
-    public AuditProperty setNewValue (Value newValue) {
+    public AuditProperty setNewValue (Object newValue) {
         set (NEW_VALUE, newValue);
         return this;
     }

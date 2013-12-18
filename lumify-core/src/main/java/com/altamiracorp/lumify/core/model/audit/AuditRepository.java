@@ -116,6 +116,40 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
+    public List<Audit> auditProperties (GraphVertex entity, List<String> modifiedProperites, String process, String comment, User user) {
+        checkNotNull(entity, "entity cannot be null");
+        checkNotNull(modifiedProperites, "modified properties cannot be null");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
+
+        List<Audit> audits = new ArrayList<Audit> ();
+        Audit audit = new Audit (AuditRowKey.build(entity.getId()));
+        HashMap<String,Object> oldProperties = entity.getOldProperties();
+
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction (AuditAction.UPDATE.toString())
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        for (String modifiedProperty : modifiedProperites) {
+            Audit a = audit;
+            if (oldProperties.containsKey(modifiedProperty)) {
+                if (oldProperties.equals(entity.getProperty(modifiedProperty))) {
+                    continue;
+                } else {
+                    a.getAuditProperty().setPreviousValue(oldProperties.get(modifiedProperty));
+                }
+            }
+            a.getAuditProperty().setNewValue(entity.getProperty(modifiedProperty));
+            audits.add(a);
+        }
+
+        saveMany(audits, user.getModelUserContext());
+        return audits;
+    }
+
     public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
         ArrayList<String> messages = new ArrayList<String>();
         HashMap<String, Object> oldProperties = vertex.getOldProperties();
