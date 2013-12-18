@@ -78,7 +78,7 @@ define([
 
             this.onObjectsSelected(null, { edges:[], vertices:appData.selectedVertices});
 
-            this.on('select-all', this.onSelectAll);
+            this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
             this.on('up', this.move);
         });

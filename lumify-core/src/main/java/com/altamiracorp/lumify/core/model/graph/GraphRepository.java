@@ -4,10 +4,12 @@ import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import org.json.JSONArray;
 import org.slf4j.Logger;
@@ -44,6 +46,10 @@ public class GraphRepository {
 
     public GraphVertex findVertexByTitleAndType(String graphVertexTitle, VertexType type, User user) {
         return graphSession.findVertexByExactTitleAndType(graphVertexTitle, type, user);
+    }
+
+    public GraphVertex findVertexByPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
+        return graphSession.findVertexByExactPropertyAndType(property, graphVertexPropertyValue, type, user);
     }
 
     public List<GraphVertex> getRelatedVertices(String graphVertexId, User user) {

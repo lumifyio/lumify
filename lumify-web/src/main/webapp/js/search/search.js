@@ -347,6 +347,15 @@ define([
             });
 
             this.select('querySelector').on('focus', this.onQueryFocus.bind(this));
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Search',
+                shortcuts: {
+                    'meta-a': { fire:'selectAll', desc:'Select all search results' },
+                    'up': { fire:'up', desc:'Select previous result'},
+                    'down': { fire:'down', desc:'Select next result'}
+                }
+            });
         });
 
 

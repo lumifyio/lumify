@@ -114,7 +114,14 @@ public class HdfsFileSystemSpout extends BaseFileSystemSpout {
             if (file.isDirectory()) {
                 populateFilesToProcess(filePath);
             }
-            this.filesToProcess.add(filePath.toString());
+            String filePathString = filePath.toString();
+
+            // hdfs will use this string while a file is being copied into HDFS from the local filesystem.
+            if (filePathString.contains("_COPYING_")) {
+                continue;
+            }
+
+            this.filesToProcess.add(filePathString);
         }
     }
 

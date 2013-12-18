@@ -32,7 +32,6 @@ define([
             this.on(document, 'socketMessage', this.onSocketMessage);
 
             this.on(document, 'onlineStatusChanged', this.onOnlineStatusChanged);
-            this.on(document, 'objectsSelected', this.onObjectsSelected);
 
             for (var i in this.events) {
                 this.on(document, this.events[i], this.onSyncedEvent);
@@ -105,15 +104,6 @@ define([
             this.currentUser = data.user;
         };
 
-        // This function is to support sync'ing between multiple devices with the same user
-        this.onObjectsSelected = function (evt, data) {
-            if (!this.currentUser) {
-                return;
-            }
-
-            var vertexIds = _.pluck(data.vertices, 'id');
-            this.syncService.publishUserSyncEvent(evt.type, [this.currentUser.rowKey], vertexIds);
-        };
     }
 
 });
