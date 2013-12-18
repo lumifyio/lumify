@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -49,7 +50,9 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graphRepository.save(graphVertex, user);
         graphRepository.commit();
 
-        // TODO: add auditing
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
+        
         // TODO: broadcast property delete
 
         Map<String, String> properties = graphRepository.getVertexProperties(graphVertexId, user);
