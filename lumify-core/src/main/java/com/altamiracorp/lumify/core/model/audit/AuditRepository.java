@@ -187,20 +187,4 @@ public class AuditRepository extends Repository<Audit> {
         saveMany(audits, user.getModelUserContext());
         return audits;
     }
-
-    public String relationshipAuditMessageOnSource(String label, Object destTitle, String titleOfCreationLocation) {
-        String message = label + " relationship created to " + destTitle;
-        if (titleOfCreationLocation != null && titleOfCreationLocation != "") {
-            message = "In " + titleOfCreationLocation + ", " + message;
-        }
-        return message;
-    }
-
-    public String relationshipAuditMessageOnDest(String label, Object sourceTitle, String titleOfCreationLocation) {
-        String message = label + " relationship created from " + sourceTitle;
-        if (titleOfCreationLocation != "") {
-            message = "In " + titleOfCreationLocation + ", " + message;
-        }
-        return message;
-    }
 }
