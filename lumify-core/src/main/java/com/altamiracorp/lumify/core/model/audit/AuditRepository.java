@@ -107,11 +107,14 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     public Audit auditProperties(String action, GraphVertex entity, String propertyName, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(entity, "entity cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
         checkArgument(propertyName.length() > 0, "property name cannot be empty");
         checkNotNull(process, "process cannot be null");
         checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(entity.getId()));
         HashMap<String, Object> oldProperties = entity.getOldProperties();
@@ -151,9 +154,5 @@ public class AuditRepository extends Repository<Audit> {
 
     public String relationshipAuditMessageOnArtifact(Object sourceTitle, Object destTitle, String label) {
         return label + " relationship created from " + sourceTitle + " to " + destTitle;
-    }
-
-    public String deleteEntityAuditMessage(Object title) {
-        return "Deleted entity, " + title;
     }
 }
