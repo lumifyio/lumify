@@ -125,11 +125,14 @@ define([
             var self = this,
                 graph = this.graph;
 
+            this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data && workspace.data.vertices) {
                 this.addVertices(workspace.data.vertices);
             }
         };
         this.onVerticesAdded = function(event, data) {
+            if (!this.isWorkspaceEditable) return;
+
             if (data.vertices) {
                 this.addVertices(data.vertices);
             }

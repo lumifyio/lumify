@@ -34,8 +34,10 @@ define([
         this.running = false;
 
         this._pickingTexture.dispose();
-        this._pickingParticleSystem.geometry.dispose();
-        this._pickingParticleSystem.material.dispose();
+        if (this._pickingParticleSystem) {
+            this._pickingParticleSystem.geometry.dispose();
+            this._pickingParticleSystem.material.dispose();
+        }
 
         this._renderer.clear();
 
@@ -352,10 +354,6 @@ define([
         // TODO: reuse line
         if (this._lines) {
             this._scene.remove(this._lines);
-            this._lines.forEach(function(l) {
-                l.geometry.dispose();
-                l.material.dispose();
-            });
             this._lines = null;
         }
         if (edgesLength) {
