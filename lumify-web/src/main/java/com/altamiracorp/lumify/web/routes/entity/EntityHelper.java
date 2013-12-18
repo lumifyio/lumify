@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
-import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -55,8 +54,8 @@ public class EntityHelper {
         vertex.setProperty(PropertyName.TITLE, title);
         graphRepository.saveVertex(vertex, user);
 
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.SUBTYPE.toString(), process, comment, user);
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.SUBTYPE.toString(), process, comment, user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
     }
 
     public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, GraphVertex resolvedVertex, GraphVertex conceptVertex) {
@@ -106,7 +105,7 @@ public class EntityHelper {
         }
 
         for (String modifiedProperty : modifiedProperties) {
-            auditRepository.auditProperties(AuditAction.UPDATE.toString(), resolvedVertex, modifiedProperty, process, comment, user);
+            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), resolvedVertex, modifiedProperty, process, comment, user);
         }
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);

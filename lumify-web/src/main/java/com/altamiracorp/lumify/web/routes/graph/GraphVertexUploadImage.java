@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -94,7 +93,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         graphRepository.commit();
 
         // TODO: replace second"" when we implement commenting on ui
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
 
         graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);

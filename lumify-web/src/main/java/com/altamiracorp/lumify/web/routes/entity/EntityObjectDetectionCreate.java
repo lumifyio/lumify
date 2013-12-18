@@ -69,7 +69,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         graphRepository.saveVertex(resolvedVertex, user);
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
         result.put("entityVertex", entityVertex);
 

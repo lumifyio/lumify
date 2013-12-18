@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
-import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -63,8 +62,8 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, "", "", user);
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 

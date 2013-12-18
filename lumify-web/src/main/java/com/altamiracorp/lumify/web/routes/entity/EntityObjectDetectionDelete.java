@@ -73,7 +73,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         graphRepository.save(artifactVertex, user);
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);

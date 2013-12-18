@@ -144,7 +144,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         for (String modifiedProperty : modifiedProperties) {
-           auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+           auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
          }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {

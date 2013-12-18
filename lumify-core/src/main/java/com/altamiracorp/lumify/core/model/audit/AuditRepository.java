@@ -96,7 +96,7 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public Audit auditProperties(String action, GraphVertex entity, String propertyName, String process, String comment, User user) {
+    public Audit auditEntityProperties(String action, GraphVertex entity, String propertyName, String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
         checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(entity, "entity cannot be null");

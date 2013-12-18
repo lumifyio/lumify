@@ -74,7 +74,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         for (String modifiedProperty : modifiedProperties) {
             // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditProperties(AuditAction.UPDATE.toString(), graphVertex, modifiedProperty, "", "", user);
+            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), graphVertex, modifiedProperty, "", "", user);
         }
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));

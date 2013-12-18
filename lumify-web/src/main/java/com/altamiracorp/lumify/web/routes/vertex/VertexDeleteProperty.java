@@ -51,7 +51,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graphRepository.commit();
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
         
         // TODO: broadcast property delete
 
