@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.tinkerpop.blueprints.Edge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,14 +121,18 @@ public class AuditRepository extends Repository<Audit> {
         if (oldProperties.containsKey(propertyName)) {
             audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName).toString());
         }
-        audit.getAuditProperty().setNewValue(entity.getProperty(propertyName).toString());
+        if (action.equals(AuditAction.DELETE.toString())) {
+            audit.getAuditProperty().setNewValue("");
+        } else {
+            audit.getAuditProperty().setNewValue(entity.getProperty(propertyName).toString());
+        }
         audit.getAuditProperty().setPropertyName(propertyName);
 
         save(audit, user.getModelUserContext());
         return audit;
     }
 
-    public List<Audit> auditRelationships (String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+    public List<Audit> auditRelationships(String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(action.length() > 0, "action cannot be empty");
         checkNotNull(sourceVertex, "sourceVertex cannot be null");
@@ -140,15 +145,67 @@ public class AuditRepository extends Repository<Audit> {
 
         Audit auditSourceDest = new Audit(AuditRowKey.build(sourceVertex.getId(), destVertex.getId()));
         Audit auditDestSource = new Audit(AuditRowKey.build(destVertex.getId(), sourceVertex.getId()));
-        
+
         List<Audit> audits = new ArrayList<Audit>();
-        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex,destVertex,label,process,comment,user));
-        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex,destVertex,label,process,comment,user));
+        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, label, process, comment, user));
+        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, label, process, comment, user));
         saveMany(audits, user.getModelUserContext());
         return audits;
     }
 
-    private Audit auditRelationshipHelper (Audit audit, String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+    public List<Audit> auditRelationshipProperties(String action, String sourceId, String destId, String propertyName,
+                                                   Object oldValue, Edge edge, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkNotNull(action.length() > 0, "action cannot be empty");
+        checkNotNull(sourceId, "sourceId cannot be null");
+        checkNotNull(sourceId.length() > 0, "sourceId cannot be empty");
+        checkNotNull(destId, "destId cannot be null");
+        checkNotNull(destId.length() > 0, "destId cannot be empty");
+        checkNotNull(propertyName, "propertyName cannot be null");
+        checkNotNull(propertyName.length() > 0, "propertyName cannot be empty");
+        checkNotNull(oldValue, "oldValue cannot be null");
+        checkNotNull(edge, "edge cannot be null");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        Audit auditSourceDest = new Audit(AuditRowKey.build(sourceId, destId));
+        Audit auditDestSource = new Audit(AuditRowKey.build(destId, sourceId));
+
+        auditSourceDest.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        auditDestSource.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        if (!oldValue.equals("")) {
+            auditDestSource.getAuditProperty().setPreviousValue(oldValue);
+            auditSourceDest.getAuditProperty().setPreviousValue(oldValue);
+        }
+        if (action.equals(AuditAction.DELETE.toString())) {
+            auditDestSource.getAuditProperty().setNewValue("");
+            auditSourceDest.getAuditProperty().setNewValue("");
+        } else {
+            auditDestSource.getAuditProperty().setNewValue(edge.getProperty(propertyName));
+            auditSourceDest.getAuditProperty().setNewValue(edge.getProperty(propertyName));
+        }
+        auditDestSource.getAuditProperty().setPropertyName(propertyName);
+        auditSourceDest.getAuditProperty().setPropertyName(propertyName);
+
+        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource);
+        saveMany(audits, user.getModelUserContext());
+        return audits;
+    }
+
+    private Audit auditRelationshipHelper(Audit audit, String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)

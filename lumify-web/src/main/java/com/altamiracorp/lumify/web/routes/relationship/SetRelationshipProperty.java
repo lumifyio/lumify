@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -8,6 +10,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.vertex.VertexProperties;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import com.tinkerpop.blueprints.Edge;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +24,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
 
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
-    public SetRelationshipProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo) {
+    public SetRelationshipProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
         ontologyRepository = ontologyRepo;
         graphRepository = graphRepo;
+        auditRepository = auditRepo;
     }
 
     @Override
@@ -51,8 +56,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
             return;
         }
+        Edge edge = graphRepository.findEdge(sourceId, destId, relationshipLabel, user);
+        Object oldValue = edge.getProperty(propertyName);
 
         graphRepository.setPropertyEdge(sourceId, destId, relationshipLabel, propertyName, value, user);
+
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
 
         Map<String, String> properties = graphRepository.getEdgeProperties(sourceId, destId, relationshipLabel, user);
         for (Map.Entry<String, String> p : properties.entrySet()) {
