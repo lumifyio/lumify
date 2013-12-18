@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.common.collect.Lists;
@@ -136,6 +137,57 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
+    public List<Audit> auditRelationships (String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkNotNull(action.length() > 0, "action cannot be empty");
+        checkNotNull(sourceVertex, "sourceVertex cannot be null");
+        checkNotNull(destVertex, "destVertex cannot be null");
+        checkNotNull(label, "label cannot be null");
+        checkArgument(label.length() > 0, "label cannot be empty");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        Audit auditSourceDest = new Audit(AuditRowKey.build(sourceVertex.getId(), destVertex.getId()));
+        Audit auditDestSource = new Audit(AuditRowKey.build(destVertex.getId(), sourceVertex.getId()));
+
+        auditSourceDest.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.RELATIONSHIP.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        auditDestSource.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.RELATIONSHIP.toString())
+                .setComment(comment)
+                .setProcess(process);
+
+        auditSourceDest.getAuditRelationship()
+                .setSourceId(sourceVertex.getId())
+                .setSourceType(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestId(destVertex.getId())
+                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
+                .setLabel(label);
+
+        auditDestSource.getAuditRelationship()
+                .setSourceId(sourceVertex.getId())
+                .setSourceType(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestId(destVertex.getId())
+                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
+                .setLabel(label);
+
+        List<Audit> audits = Lists.newArrayList(auditDestSource, auditSourceDest);
+        saveMany(audits, user.getModelUserContext());
+        return audits;
+    }
+
     public String relationshipAuditMessageOnSource(String label, Object destTitle, String titleOfCreationLocation) {
         String message = label + " relationship created to " + destTitle;
         if (titleOfCreationLocation != null && titleOfCreationLocation != "") {
@@ -150,9 +202,5 @@ public class AuditRepository extends Repository<Audit> {
             message = "In " + titleOfCreationLocation + ", " + message;
         }
         return message;
-    }
-
-    public String relationshipAuditMessageOnArtifact(Object sourceTitle, Object destTitle, String label) {
-        return label + " relationship created from " + sourceTitle + " to " + destTitle;
     }
 }

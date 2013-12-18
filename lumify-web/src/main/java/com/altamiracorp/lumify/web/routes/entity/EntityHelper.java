@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -82,7 +83,7 @@ public class EntityHelper {
                                          String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
-        final Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
+        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
@@ -110,8 +111,8 @@ public class EntityHelper {
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString(), user);
-        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign, ""), user);
-        auditRepository.audit(resolvedVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle, ""), user);
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
 
         return resolvedVertex;
     }

@@ -16,4 +16,11 @@ public class AuditRowKey extends RowKey {
         Date date = new Date();
         return new AuditRowKey(RowKeyHelper.buildMinor(vertexId, dateFormat.format(date)));
     }
+
+    public static AuditRowKey build (String sourceId, String destId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date date = new Date();
+        String prefix = sourceId + ":" + destId;
+        return new AuditRowKey(RowKeyHelper.buildMinor(prefix, dateFormat.format(date)));
+    }
 }

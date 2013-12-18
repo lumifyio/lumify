@@ -23,7 +23,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_TYPE));
     }
 
-    public AuditRelationship setSourceType (String sourceType) {
+    public AuditRelationship setSourceType (Object sourceType) {
         set (SOURCE_TYPE, sourceType);
         return this;
     }
@@ -32,7 +32,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_TITLE));
     }
 
-    public AuditRelationship setSourceTitle (String sourceTitle) {
+    public AuditRelationship setSourceTitle (Object sourceTitle) {
         set (SOURCE_TITLE, sourceTitle);
         return this;
     }
@@ -50,7 +50,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_TYPE));
     }
 
-    public AuditRelationship setDestType (String destType) {
+    public AuditRelationship setDestType (Object destType) {
         set (DEST_TYPE, destType);
         return this;
     }
@@ -59,7 +59,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_TITLE));
     }
 
-    public AuditRelationship setDestTitle (String destTitle) {
+    public AuditRelationship setDestTitle (Object destTitle) {
         set (DEST_TITLE, destTitle);
         return this;
     }

@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -52,7 +53,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
-        final Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
+        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         final GraphVertex createdVertex = new InMemoryGraphVertex();
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
@@ -68,8 +69,8 @@ public class EntityTermCreate extends BaseRequestHandler {
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
-        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign, ""), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle, ""), user);
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
 
         TermMention termMention = new TermMention(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, conceptVertex, createdVertex, user);

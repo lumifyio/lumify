@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -38,24 +39,16 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
-        final String artifactId = getOptionalParameter(request, "artifactId");
-        final String workspaceRowKey = getOptionalParameter(request, "workspaceRowKey");
 
         User user = getUser(request);
         GraphRelationship relationship = graphRepository.saveRelationship(sourceGraphVertexId, destGraphVertexId, predicateLabel, user);
 
         String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel, user);
-        Object destTitle = graphRepository.findVertex(destGraphVertexId, user).getProperty(PropertyName.TITLE.toString());
-        Object sourceTitle = graphRepository.findVertex(sourceGraphVertexId, user).getProperty(PropertyName.TITLE.toString());
+        GraphVertex destVertex = graphRepository.findVertex(destGraphVertexId, user);
+        GraphVertex sourceVertex = graphRepository.findVertex(sourceGraphVertexId, user);
 
-        String locationOfCreation = null;
-        if (artifactId != null) {
-            auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnArtifact(sourceTitle, destTitle, relationshipDisplayName), user);
-            locationOfCreation = (String)graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
-        }
-
-        auditRepository.audit(sourceGraphVertexId, auditRepository.relationshipAuditMessageOnSource(relationshipDisplayName, destTitle, locationOfCreation), user);
-        auditRepository.audit(destGraphVertexId, auditRepository.relationshipAuditMessageOnDest(relationshipDisplayName, sourceTitle, locationOfCreation), user);
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), sourceVertex, destVertex, relationshipDisplayName, "", "", user);
 
         LOGGER.info("Statement created:\n" + relationship.toJson().toString(2));
 
