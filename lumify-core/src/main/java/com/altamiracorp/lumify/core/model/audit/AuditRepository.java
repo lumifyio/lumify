@@ -137,6 +137,7 @@ public class AuditRepository extends Repository<Audit> {
             audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName));
         }
         audit.getAuditProperty().setNewValue(entity.getProperty(propertyName));
+        audit.getAuditProperty().setPropertyName(propertyName);
 
         save(audit, user.getModelUserContext());
         return audit;
