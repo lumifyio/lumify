@@ -85,28 +85,31 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public List<Audit> auditEntityResolution(String entityId, String artifactId, String comment, User user) {
+    public List<Audit> auditEntityResolution(String entityId, String artifactId, String process, String comment, User user) {
         checkNotNull(entityId, "entityId cannot be null");
         checkArgument(entityId.length() > 0, "entityId cannot be empty");
         checkNotNull(artifactId, "artifactId cannot be null");
         checkArgument(artifactId.length() > 0, "artifactId cannot be empty");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
+        checkNotNull(process, "process cannot be null");
 
         Audit auditArtifact = new Audit(AuditRowKey.build(artifactId));
         Audit auditEntity = new Audit(AuditRowKey.build(entityId));
 
         auditEntity.getAuditCommon()
-                .setUser(user)
-                .setAction(AuditAction.CREATE.toString())
-                .setType(VertexType.ENTITY.toString())
-                .setComment(comment);
+            .setUser(user)
+            .setAction(AuditAction.CREATE.toString())
+            .setType(VertexType.ENTITY.toString())
+            .setComment(comment)
+            .setProcess(process);
 
         auditArtifact.getAuditCommon()
-                .setUser(user)
-                .setAction(AuditAction.CREATE.toString())
-                .setType(VertexType.ENTITY.toString())
-                .setComment(comment);
+            .setUser(user)
+            .setAction(AuditAction.CREATE.toString())
+            .setType(VertexType.ENTITY.toString())
+            .setComment(comment)
+            .setProcess(process);
 
         List<Audit> audits = Lists.newArrayList(auditEntity, auditArtifact);
         saveMany(audits, user.getModelUserContext());

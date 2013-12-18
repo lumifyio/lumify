@@ -98,7 +98,7 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, comment, user);
+            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, "", comment, user);
         }
         auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
 
