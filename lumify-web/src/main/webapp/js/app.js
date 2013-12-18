@@ -13,9 +13,9 @@ define([
     'graph/graph',
     'detail/detail',
     'map/map',
-    'util/keyboard',
+    'help/help',
     'util/mouseOverlay'
-], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Keyboard, MouseOverlay) {
+], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay) {
     'use strict';
 
     return defineComponent(App);
@@ -35,6 +35,7 @@ define([
             searchSelector: '.search-pane',
             workspacesSelector: '.workspaces-pane',
             workspaceOverlaySelector: '.workspace-overlay',
+            helpDialogSelector: '.help-dialog',
             usersSelector: '.users-pane',
             graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
@@ -56,13 +57,28 @@ define([
             this.on(document, 'toggleGraphDimensions', this.onToggleGraphDimensions);
             this.on(document, 'resizestart', this.onResizeStart);
             this.on(document, 'resizestop', this.onResizeStop);
-            this.on(document, 'forwardSlash', this.toggleSearchPane);
-            this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'windowResize', this.triggerPaneResized);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
-
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+
+            this.on(document, 'toggleSearchPane', this.toggleSearchPane);
+            this.on(document, 'escape', this.onEscapeKey);
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: ['Graph', 'Map'],
+                shortcuts: {
+                    'escape': { fire:'escape', desc:'Close all open panes and deselect objects' },
+                }
+            });
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Search',
+                shortcuts: {
+                    '/': { fire:'toggleSearchPane', desc:'Show search pane' }
+                }
+            });
+
 
             // Prevent the fragment identifier from changing after an anchor
             // with href="#" not stopPropagation'ed
@@ -76,9 +92,10 @@ define([
                 usersPane = content.filter('.users-pane').data(DATA_MENUBAR_NAME, 'users'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane'),
-                mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map');
+                mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
+                helpDialog = content.filter('.help-dialog');
 
-            Keyboard.attachTo(document);
+
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
             MouseOverlay.attachTo(document);
             Sync.attachTo(window);
@@ -88,7 +105,10 @@ define([
             Workspaces.attachTo(workspacesPane.find('.content'));
             Users.attachTo(usersPane.find('.content'));
             Graph.attachTo(graphPane);
+            Map.attachTo(mapPane);
             Detail.attachTo(detailPane.find('.content'));
+
+            Help.attachTo(helpDialog);
 
             // Configure splitpane resizing
             resizable(searchPane, 'e', 160, 200, this.onPaneResize.bind(this));
@@ -193,8 +213,6 @@ define([
                 this.trigger(document, 'graphShow');
             } else if (data.name === 'map' && !pane.hasClass('visible')) {
                 this.trigger(document, 'graphHide');
-                var mapPane = this.$node.find('.map-pane');
-                Map.attachTo(mapPane);
                 this.trigger(document, 'mapShow', (data && data.data) || {});
             }
 

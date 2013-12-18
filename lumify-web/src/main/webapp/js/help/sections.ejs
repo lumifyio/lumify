@@ -1,0 +1,11 @@
+<% Object.keys(shortcutsByScope).forEach(function(scope) {  %>
+  <li>
+    <h1 class="<%= scope.toLowerCase() %> "><%= scope %></h1>
+    <dl>
+    <% Object.keys(shortcutsByScope[scope]).forEach(function(key) { %>
+      <dt><%= prettyCommand(shortcutsByScope[scope][key]) %></dt>
+      <dd><%= shortcutsByScope[scope][key].desc %></dd>
+    <% }); %>
+    </dl>
+  </li>
+<% }); %>

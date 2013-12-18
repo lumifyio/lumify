@@ -1019,11 +1019,15 @@ define([
 
             this.on('loadRelatedItems', this.onLoadRelatedItems);
 
-            this.trigger(document, 'addKeyboardShortcuts', {
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Graph',
                 shortcuts: {
-                    'alt-r': 'loadRelatedItems'
+                    '-': { fire:'zoomOut', desc:'Zoom out' },
+                    '=': { fire:'zoomIn', desc:'Zoom in' },
+                    'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
+                    'alt-r': { fire:'loadRelatedItems', desc:'Add related items to workspace' },
                 }
-            })
+            });
 
             if (self.attr.vertices && self.attr.vertices.length) {
                 this.select('emptyGraphSelector').hide();
@@ -1041,7 +1045,12 @@ define([
                     artifactConcept: concepts.artifactConcept,
                     pathHopOptions: ["2","3","4"]
                 };
-                self.$node.html(template(templateData));
+
+                // TODO: make context menus work better
+                self.$node.html(template(templateData)).find('.shortcut').each(function() {
+                    var $this = $(this), command = $this.text();
+                    $this.text(formatters.string.shortcut($this.text()));
+                });
                 self.bindContextMenuClickEvent();
                 self.checkEmptyGraph();
 
@@ -1107,8 +1116,8 @@ define([
                             })
                         };
 
-                    self.on('zoom-in', function(e) { zoom(zoomFactor); });
-                    self.on('zoom-out', function(e) { zoom(-zoomFactor); });
+                    self.on('zoomIn', function(e) { zoom(zoomFactor); });
+                    self.on('zoomOut', function(e) { zoom(-zoomFactor); });
                 },
                 done: function() {
                     self.cytoscapeMarkReady(this);

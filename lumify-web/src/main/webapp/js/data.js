@@ -6,6 +6,7 @@ define([
     'data/withVertexCache',
     'data/withAjaxFilters',
     'util/withAsyncQueue',
+    'util/keyboard',
     'service/workspace',
     'service/ucd',
     'service/vertex',
@@ -15,9 +16,9 @@ define([
     // Flight
     defineComponent, registry,
     // Mixins
-    withVertexCache, withAjaxFilters, withAsyncQueue,
+    withVertexCache, withAjaxFilters, withAsyncQueue, 
     // Service
-    WorkspaceService, UcdService, VertexService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, UcdService, VertexService, undoManager, ClipboardManager) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1000,
@@ -73,6 +74,7 @@ define([
             this.refreshRelationships = _.debounce(this.refreshRelationships.bind(this), RELOAD_RELATIONSHIPS_DELAY);
 
             ClipboardManager.attachTo(this.node);
+            Keyboard.attachTo(this.node);
 
             // Vertices
             this.on('addVertices', this.onAddVertices);
@@ -93,8 +95,16 @@ define([
 
             this.on('socketMessage', this.onSocketMessage);
 
-            this.on('select-all', this.onSelectAll);
-            this.on('delete', this.onDelete);
+            this.on('selectAll', this.onSelectAll);
+            this.on('deleteSelected', this.onDelete);
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: ['Graph', 'Map'],
+                shortcuts: {
+                    'meta-a': { fire:'selectAll', desc:'Select all vertices' },
+                    'delete': { fire:'deleteSelected', desc:'Removes selected vertices from workspace, deletes selected relationships'}
+                }
+            });
 
             var self = this;
             this.setupAsyncQueue('socketSubscribe');
@@ -669,7 +679,7 @@ define([
                 },
                 drop: function( event, ui ) {
                     $('.draggable-wrapper').remove();
-                    
+
                     // Early exit if should leave to a different droppable
                     if (!enabled) return;
 

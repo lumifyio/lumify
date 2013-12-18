@@ -11,6 +11,7 @@ define([
     'service/vertex',
     'util/retina',
     'util/controls',
+    'util/formatters',
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,
@@ -23,6 +24,7 @@ define([
     VertexService,
     retina,
     Controls,
+    formatters,
     withAsyncQueue,
     withContextMenu) {
     'use strict';
@@ -53,7 +55,10 @@ define([
             this.initialized = false;
             this.setupAsyncQueue('openlayers');
             this.setupAsyncQueue('map');
-            this.$node.html(template({}));
+            this.$node.html(template({})).find('.shortcut').each(function() {
+                var $this = $(this), command = $this.text();
+                $this.text(formatters.string.shortcut($this.text()));
+            });
 
             this.on(document, 'mapShow', this.onMapShow);
             this.on(document, 'mapCenter', this.onMapCenter);
@@ -62,6 +67,15 @@ define([
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Map',
+                shortcuts: {
+                    '-': { fire:'zoomOut', desc:'Zoom out' },
+                    '=': { fire:'zoomIn', desc:'Zoom in' },
+                    'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
+                }
+            });
 
             this.attachToZoomPanControls();
 
@@ -102,8 +116,8 @@ define([
                 var slowZoomIn = _.throttle(map.zoomIn.bind(map), 250, {trailing: false}),
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
-                this.on('zoom-in', function() { slowZoomIn(); });
-                this.on('zoom-out', function() { slowZoomOut(); });
+                this.on('zoomIn', function() { slowZoomIn(); });
+                this.on('zoomOut', function() { slowZoomOut(); });
             });
         };
 
