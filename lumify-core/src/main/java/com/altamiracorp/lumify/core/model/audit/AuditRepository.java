@@ -153,14 +153,6 @@ public class AuditRepository extends Repository<Audit> {
         return label + " relationship created from " + sourceTitle + " to " + destTitle;
     }
 
-    public String resolvedEntityAuditMessageForArtifact(Object entityTitle) {
-        return "Resolved entity, " + entityTitle;
-    }
-
-    public String resolvedEntityAuditMessage(Object artifactTitle) {
-        return "Resolved entity from " + artifactTitle;
-    }
-
     public String deleteEntityAuditMessage(Object title) {
         return "Deleted entity, " + title;
     }
