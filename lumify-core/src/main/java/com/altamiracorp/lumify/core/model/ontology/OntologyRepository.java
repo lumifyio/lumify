@@ -1,11 +1,11 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tinkerpop.blueprints.Direction;
@@ -14,10 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -380,6 +377,38 @@ public class OntologyRepository {
                 filter.put("propertyName", property.getTitle());
                 filter.put("propertyDataType", property.getDataType());
             }
+        }
+    }
+
+    public Map<String, Concept> getAllConceptsById(User user) {
+        Map<String, Concept> results = new HashMap<String, Concept>();
+        Concept rootConcept = getRootConcept(user);
+        results.put(rootConcept.getId(), rootConcept);
+        getAllConceptsById(results, rootConcept, user);
+        return results;
+    }
+
+    private void getAllConceptsById(Map<String, Concept> concepts, Concept rootConcept, User user) {
+        List<Concept> childConcepts = getChildConcepts(rootConcept, user);
+        for (Concept c : childConcepts) {
+            concepts.put(c.getId(), c);
+            getAllConceptsById(concepts, c, user);
+        }
+    }
+
+    public Map<String, Concept> getAllConceptsByTitle(User user) {
+        Map<String, Concept> results = new HashMap<String, Concept>();
+        Concept rootConcept = getRootConcept(user);
+        results.put(rootConcept.getTitle(), rootConcept);
+        getAllConceptsByTitle(results, rootConcept, user);
+        return results;
+    }
+
+    private void getAllConceptsByTitle(Map<String, Concept> concepts, Concept rootConcept, User user) {
+        List<Concept> childConcepts = getChildConcepts(rootConcept, user);
+        for (Concept c : childConcepts) {
+            concepts.put(c.getTitle(), c);
+            getAllConceptsByTitle(concepts, c, user);
         }
     }
 }

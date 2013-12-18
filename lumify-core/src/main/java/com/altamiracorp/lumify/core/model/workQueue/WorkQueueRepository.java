@@ -16,7 +16,6 @@ public abstract class WorkQueueRepository {
     private static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
 
     public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
-    public static final String SEARCH_INDEX_QUEUE_NAME = "searchIndex";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
 
@@ -33,11 +32,6 @@ public abstract class WorkQueueRepository {
     public void pushProcessedVideo(final String artifactRowKey) {
         checkNotNull(artifactRowKey);
         writeToQueue(PROCESSED_VIDEO_QUEUE_NAME, ImmutableMap.<String, String>of(KEY_ARTIFACT_ROWKEY, artifactRowKey));
-    }
-
-    public void pushSearchIndex(final String graphVertexId) {
-        checkNotNull(graphVertexId);
-        writeToQueue(SEARCH_INDEX_QUEUE_NAME, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, graphVertexId));
     }
 
     private void writeToQueue(final String queueName, final Map<String, String> content) {
