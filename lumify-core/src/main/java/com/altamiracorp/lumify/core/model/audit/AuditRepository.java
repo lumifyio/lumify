@@ -41,17 +41,6 @@ public class AuditRepository extends Repository<Audit> {
         return auditBuilder.getTableName();
     }
 
-    public void audit(String vertexId, ArrayList<String> messages, User user) {
-        checkNotNull(vertexId, "vertexId cannot be null");
-        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
-        checkNotNull(messages, "message cannot be null");
-        checkNotNull(user, "user cannot be null");
-
-        if (messages.size() < 1) {
-            return;
-        }
-    }
-
     public Audit audit(String vertexId, String message, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
@@ -134,30 +123,13 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process);
 
         if (oldProperties.containsKey(propertyName)) {
-            audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName));
+            audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName).toString());
         }
-        audit.getAuditProperty().setNewValue(entity.getProperty(propertyName));
+        audit.getAuditProperty().setNewValue(entity.getProperty(propertyName).toString());
         audit.getAuditProperty().setPropertyName(propertyName);
 
         save(audit, user.getModelUserContext());
         return audit;
-    }
-
-    public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
-        ArrayList<String> messages = new ArrayList<String>();
-        HashMap<String, Object> oldProperties = vertex.getOldProperties();
-        for (String modifiedProperty : modifiedProperties) {
-            Object oldProperty = "undefined";
-            if (oldProperties.containsKey(modifiedProperty)) {
-                if (oldProperties.equals(vertex.getProperty(modifiedProperty))) {
-                    continue;
-                } else {
-                    oldProperty = oldProperties.get(modifiedProperty);
-                }
-            }
-            messages.add("Set " + modifiedProperty + " from " + oldProperty + " to " + vertex.getProperty(modifiedProperty));
-        }
-        return messages;
     }
 
     public String relationshipAuditMessageOnSource(String label, Object destTitle, String titleOfCreationLocation) {
