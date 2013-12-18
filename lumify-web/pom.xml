@@ -44,9 +44,32 @@
                             <warSourceExcludes>
                                 node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
                             </warSourceExcludes>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <build-timestamp>${timestamp}</build-timestamp>
+                                    <git-branch>${scmBranch}</git-branch>
+                                    <git-sha-1>${buildNumber}</git-sha-1>
+                                </manifestEntries>
+                            </archive>
+                            <webResources>
+                                <webResource>
+                                    <directory>${basedir}/src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                </webResource>
+                            </webResources>
                         </configuration>
                     </plugin>
+
                 </plugins>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
             </build>
         </profile>
     </profiles>
