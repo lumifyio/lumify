@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -143,7 +144,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         for (String modifiedProperty : modifiedProperties) {
-           auditRepository.auditProperties(artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+           auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
          }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {

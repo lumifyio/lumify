@@ -106,7 +106,7 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public Audit auditProperties(GraphVertex entity, String propertyName, String process, String comment, User user) {
+    public Audit auditProperties(String action, GraphVertex entity, String propertyName, String process, String comment, User user) {
         checkNotNull(entity, "entity cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
         checkArgument(propertyName.length() > 0, "property name cannot be empty");
@@ -118,7 +118,7 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditCommon()
                 .setUser(user)
-                .setAction(AuditAction.UPDATE.toString())
+                .setAction(action)
                 .setType(VertexType.PROPERTY.toString())
                 .setComment(comment)
                 .setProcess(process);

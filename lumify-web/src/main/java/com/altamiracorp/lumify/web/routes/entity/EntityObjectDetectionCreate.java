@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -68,7 +69,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         graphRepository.saveVertex(resolvedVertex, user);
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditProperties(artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+        auditRepository.auditProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
         result.put("entityVertex", entityVertex);
 
