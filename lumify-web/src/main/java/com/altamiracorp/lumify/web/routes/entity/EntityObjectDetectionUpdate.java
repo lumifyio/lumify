@@ -51,14 +51,15 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
         } else {
-            resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox,
-                    artifactId, user);
+            // TODO: replace second "" when we implement commenting on ui
+            resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
             resolvedGraphVertexId = resolvedVertex.getId();
         }
         GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
 
         // update graph vertex
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, user);
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
         // update the detected object property on the artifact
         JSONArray detectedObjects = new JSONArray(artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS).toString());

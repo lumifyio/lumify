@@ -52,7 +52,9 @@ public class EntityTermUpdate extends BaseRequestHandler {
         User user = getUser(request);
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
         GraphVertex resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, user);
+
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
         if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.HAS_ENTITY.toString(), user) == null) {
             graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.HAS_ENTITY, user);

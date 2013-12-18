@@ -48,11 +48,13 @@ public class EntityHelper {
         termMentionRepository.save(termMention, user.getModelUserContext());
     }
 
-    public void updateGraphVertex(GraphVertex vertex, String subType, String title, User user) {
+    public void updateGraphVertex(GraphVertex vertex, String subType, String title, String process, String comment, User user) {
         vertex.setProperty(PropertyName.SUBTYPE, subType);
         vertex.setProperty(PropertyName.TITLE, title);
         graphRepository.saveVertex(vertex, user);
-        auditRepository.audit(vertex.getId(), auditRepository.vertexPropertyAuditMessages(vertex, Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString())), user);
+
+        auditRepository.auditProperties(vertex, PropertyName.SUBTYPE.toString(), process, comment, user);
+        auditRepository.auditProperties(vertex, PropertyName.TITLE.toString(), process, comment, user);
     }
 
     public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, GraphVertex resolvedVertex, GraphVertex conceptVertex) {
@@ -75,7 +77,7 @@ public class EntityHelper {
         workQueueRepository.pushArtifactHighlight(artifactGraphVertexId);
     }
 
-    public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String comment,
+    public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String process, String comment,
                                          String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
@@ -98,9 +100,12 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, "", comment, user);
+            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, process, comment, user);
         }
-        auditRepository.audit(resolvedVertex.getId(), auditRepository.vertexPropertyAuditMessages(resolvedVertex, modifiedProperties), user);
+
+        for (String modifiedProperty : modifiedProperties) {
+            auditRepository.auditProperties(resolvedVertex, modifiedProperty, process, comment, user);
+        }
 
         graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString(), user);

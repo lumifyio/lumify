@@ -70,7 +70,11 @@ public class VertexSetProperty extends BaseRequestHandler {
             modifiedProperties.add(PropertyName.SOURCE.toString());
         }
         graphRepository.save(graphVertex, user);
-        auditRepository.audit(graphVertexId, auditRepository.vertexPropertyAuditMessages(graphVertex, modifiedProperties), user);
+
+        for (String modifiedProperty : modifiedProperties) {
+            // TODO: replace second "" when we implement commenting on ui
+            auditRepository.auditProperties(graphVertex, modifiedProperty, "", "", user);
+        }
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 

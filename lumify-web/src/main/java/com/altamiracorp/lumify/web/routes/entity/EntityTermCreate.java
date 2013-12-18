@@ -57,12 +57,13 @@ public class EntityTermCreate extends BaseRequestHandler {
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
-        entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(createdVertex, conceptId, sign, "", "", user);
 
-        // TODO: replace "" when we implement commenting on ui
+        // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditEntityResolution(createdVertex.getId(), artifactId, "", "", user);
-        auditRepository.audit(createdVertex.getId(),
-                auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);
+        auditRepository.auditProperties(createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
+        auditRepository.auditProperties(createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 
