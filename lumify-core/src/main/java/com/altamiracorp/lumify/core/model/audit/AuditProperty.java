@@ -9,6 +9,7 @@ public class AuditProperty extends ColumnFamily {
     public static final String NAME = "property";
     public static final String PREVIOUS_VALUE = "previousValue";
     public static final String NEW_VALUE = "newValue";
+    public static final String PROPERTY_NAME = "propertyName";
 
     public AuditProperty () {
 
@@ -33,12 +34,22 @@ public class AuditProperty extends ColumnFamily {
         return this;
     }
 
+    public String getPropertyName () {
+        return Value.toString(get(PROPERTY_NAME));
+    }
+
+    public AuditProperty setPropertyName (Object propertyName) {
+        set (PROPERTY_NAME, propertyName);
+        return this;
+    }
+
     @Override
     public JSONObject toJson () {
         try {
             JSONObject json = new JSONObject();
             json.put("previousValue", this.getPreviousValue());
             json.put("newValue", this.getNewValue());
+            json.put("propertyName", this.getPropertyName());
             return  json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
