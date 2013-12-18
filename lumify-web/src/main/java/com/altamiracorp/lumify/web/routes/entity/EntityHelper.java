@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -100,7 +101,7 @@ public class EntityHelper {
         graphRepository.saveVertex(resolvedVertex, user);
 
         if (newVertex) {
-            auditRepository.auditEntityResolution(resolvedVertex.getId(), artifactId, process, comment, user);
+            auditRepository.auditEntity(AuditAction.CREATE.toString(), resolvedVertex.getId(), artifactId, process, comment, user);
         }
 
         for (String modifiedProperty : modifiedProperties) {

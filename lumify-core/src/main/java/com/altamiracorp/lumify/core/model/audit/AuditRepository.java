@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,7 +73,9 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public List<Audit> auditEntityResolution(String entityId, String artifactId, String process, String comment, User user) {
+    public List<Audit> auditEntity(String action, String entityId, String artifactId, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(entityId, "entityId cannot be null");
         checkArgument(entityId.length() > 0, "entityId cannot be empty");
         checkNotNull(artifactId, "artifactId cannot be null");
@@ -88,14 +89,14 @@ public class AuditRepository extends Repository<Audit> {
 
         auditEntity.getAuditCommon()
                 .setUser(user)
-                .setAction(AuditAction.CREATE.toString())
+                .setAction(action)
                 .setType(VertexType.ENTITY.toString())
                 .setComment(comment)
                 .setProcess(process);
 
         auditArtifact.getAuditCommon()
                 .setUser(user)
-                .setAction(AuditAction.CREATE.toString())
+                .setAction(action)
                 .setType(VertexType.ENTITY.toString())
                 .setComment(comment)
                 .setProcess(process);

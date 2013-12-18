@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -14,7 +15,6 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +61,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, "", "", user);
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditEntityResolution(createdVertex.getId(), artifactId, "", "", user);
+        auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, "", "", user);
         auditRepository.auditProperties(createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
         auditRepository.auditProperties(createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
