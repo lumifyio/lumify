@@ -49,11 +49,11 @@ public class Audit extends Row<AuditRowKey> {
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
-            json.put("data", getAuditCommon().toJson());
-            if (getAuditCommon().getType().equals(VertexType.PROPERTY.toString())) {
-                json.put("propertyAudit", getAuditProperty().toJson());
+            json.put("data", this.getAuditCommon().toJson());
+            if (this.getAuditCommon().getType().equals(VertexType.PROPERTY.toString())) {
+                json.put("propertyAudit", this.getAuditProperty().toJson());
             } else {
-                json.put("relationshipAudit", getAuditRelationship().toJson());
+                json.put("relationshipAudit", this.getAuditRelationship().toJson());
             }
             String[] rowKey = RowKeyHelper.splitOnMinorFieldSeperator(getRowKey().toString());
             json.put("graphVertexID", rowKey[0]);
