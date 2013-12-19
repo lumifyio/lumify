@@ -60,7 +60,9 @@ define([
                 this.$node.modal('hide');
             } else {
                 this.$node.modal();
-                this.trigger('focusComponent');
+                _.defer(function() {
+                    this.trigger('focusComponent');
+                }.bind(this));
             }
         };
 
