@@ -125,6 +125,8 @@ define([
             data.loadActiveWorkspace();
 
             _.defer(this.triggerPaneResized.bind(this));
+
+            this.trigger(document, 'applicationReady');
         });
 
         this.toggleSearchPane = function() {
