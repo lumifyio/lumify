@@ -524,6 +524,18 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
+    public GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user) {
+        Iterable<Vertex> r = graph.query()
+                .has(propertyName, propertyValue)
+                .vertices();
+        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+        if (graphVertices.size() > 0) {
+            return graphVertices.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)

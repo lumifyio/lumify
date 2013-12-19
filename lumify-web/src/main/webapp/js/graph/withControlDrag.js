@@ -172,6 +172,9 @@ define([
                             self.trigger('finishedVertexConnection');
                             self.off(document, 'relationshipsLoaded', loaded);
                         });
+                        // TODO: should we send an expected relationship so
+                        // data.js will continue checking until it's eventually
+                        // consistent?
                         self.trigger('refreshRelationships');
                     });
             });

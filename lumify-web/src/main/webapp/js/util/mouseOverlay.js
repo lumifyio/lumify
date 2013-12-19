@@ -39,6 +39,7 @@ function(defineComponent) {
             var self = this;
 
             clearTimeout(this.timeout);
+            if (!this.position) return;
 
             this.tracking = true;
             this.textNode.text(data.message);

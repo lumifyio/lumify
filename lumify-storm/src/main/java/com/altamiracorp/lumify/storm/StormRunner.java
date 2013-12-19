@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.storm;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.storm.searchIndex.SearchIndexBolt;
 import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
 
 public class StormRunner extends StormRunnerBase {
@@ -24,7 +23,6 @@ public class StormRunner extends StormRunnerBase {
     public StormTopology createTopology() {
         TopologyBuilder builder = new TopologyBuilder();
         createArtifactHighlightingTopology(builder);
-        createSearchIndexTopology(builder);
         return builder.createTopology();
     }
 
@@ -33,12 +31,5 @@ public class StormRunner extends StormRunnerBase {
                 .setMaxTaskParallelism(1);
         builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), 1)
                 .shuffleGrouping("artifactHighlightSpout");
-    }
-
-    private void createSearchIndexTopology(TopologyBuilder builder) {
-        builder.setSpout("searchIndexSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.SEARCH_INDEX_QUEUE_NAME), 1)
-                .setMaxTaskParallelism(1);
-        builder.setBolt("searchIndexBolt", new SearchIndexBolt(), 1)
-                .shuffleGrouping("searchIndexSpout");
     }
 }

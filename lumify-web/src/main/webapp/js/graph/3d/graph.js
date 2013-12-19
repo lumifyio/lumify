@@ -18,7 +18,6 @@ define([
         }
 
         var deferred = $.Deferred();
-        imageCache[src] = deferred;
 
         var image = new Image();
         image.onload = function() {
@@ -37,6 +36,7 @@ define([
         this.defaultAttrs({ });
 
         this.after('teardown', function() {
+            imageCache = {};
             this.graphRenderer.teardown();
             this.$node.empty();
         });
@@ -81,14 +81,15 @@ define([
         };
 
         this.addVertices = function(vertices) {
-            var graph = this.graph,
+            var self = this,
+                graph = this.graph,
                 deferredImages = [];
 
             vertices.forEach(function(vertex) {
                 var node = new $3djs.Graph.Node(vertex.id);
 
-                node.data = vertex;
-                node.data.icon = vertex.properties._glyphIcon || this.icons[vertex.properties._subType];
+                node.data.vertex = vertex;
+                node.data.icon = vertex.properties._glyphIcon || self.icons[vertex.properties._subType];
 
                 if (node.data.icon) {
                     deferredImages.push(
@@ -103,9 +104,9 @@ define([
                 } else {
                     console.warn("No icon set for vertex: ", vertex);
                 }
-            }.bind(this));
+            });
 
-            $.when(deferredImages).done(function() {
+            $.when.apply(null, deferredImages).done(function() {
                 if (self.relationships && self.relationships.length) {
                     self.addEdges(self.relationships);
                 }
@@ -114,7 +115,7 @@ define([
             function addToGraph(width, height, node) {
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
-                node.data.label = node.data.properties.title;
+                node.data.label = node.data.vertex.properties.title;
                 node.needsUpdate = true;
                 graph.addNode(node);
             }
@@ -124,11 +125,14 @@ define([
             var self = this,
                 graph = this.graph;
 
+            this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data && workspace.data.vertices) {
                 this.addVertices(workspace.data.vertices);
             }
         };
         this.onVerticesAdded = function(event, data) {
+            if (!this.isWorkspaceEditable) return;
+
             if (data.vertices) {
                 this.addVertices(data.vertices);
             }
@@ -180,7 +184,7 @@ define([
             graphRenderer.addEventListener('node_click', function(event) {
                 var selected = [];
                 if (event.content) {
-                    var data = graph.node(event.content).data;
+                    var data = graph.node(event.content).data.vertex;
                     selected.push(data);
                 }
                 self.trigger('selectObjects', { vertices:selected });
