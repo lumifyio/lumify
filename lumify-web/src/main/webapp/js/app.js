@@ -60,7 +60,6 @@ define([
             this.on(document, 'windowResize', this.triggerPaneResized);
             this.on(document, 'mapCenter', this.onMapAction);
             this.on(document, 'changeView', this.onChangeView);
-            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
@@ -171,13 +170,6 @@ define([
                 this.trigger(document, 'menubarToggleDisplay', { name: pane.data(DATA_MENUBAR_NAME), data:data.data });
             } else {
                 console.log("View " + data.view + " isn't supported");
-            }
-        };
-
-
-        this.onWorkspaceLoaded = function(evt, workspace) {
-            if (!this.$node.find('.workspaces-pane').is('.visible') && workspace.data.vertices.length === 0) {
-                this.trigger(document, 'menubarToggleDisplay', { name:'search' });
             }
         };
 
