@@ -86,10 +86,6 @@
             <artifactId>json</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.lesscss</groupId>
-            <artifactId>lesscss</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
         </dependency>
@@ -159,15 +155,15 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${plugin.maven.exec.version}</version>
                 <executions>
-                    <!-- Install all javascript dependencies -->
+                    <!-- Install all webapp dependencies -->
                     <execution>
-                        <id>JavaScript Dependencies</id>
+                        <id>WebApp Dependencies and Minification</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${basedir}/src/main/scripts/js-dependencies.sh</executable>
+                            <executable>${basedir}/src/main/scripts/grunt.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
@@ -177,9 +173,9 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${plugin.maven.war.version}</version>
                 <configuration>
-                    <warSourceExcludes>
-                        node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
-                    </warSourceExcludes>
+                    <packagingExcludes>
+                        test/**,Gruntfile.js,karma.conf.js,bower.json,node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
+                    </packagingExcludes>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>

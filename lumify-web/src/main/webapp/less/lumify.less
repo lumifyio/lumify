@@ -13,13 +13,18 @@
 @import "util/context-menu";
 
 // Import bootstrap
-@import "/libs/bootstrap/less/bootstrap.less";
+@import "../libs/bootstrap/less/bootstrap.less";
 // Override sprite paths
 @iconSpritePath: "../libs/bootstrap/img/glyphicons-halflings.png";
 @iconWhiteSpritePath: "../libs/bootstrap/img/glyphicons-halflings-white.png";
-@import "/libs/bootstrap-datepicker/less/datepicker.less";
+@import "../libs/bootstrap-datepicker/less/datepicker.less";
 
-@import "/libs/video.js/video-js.css";
+@import "../libs/video.js/video-js.css";
+@import (less) "../libs/jquery-ui/themes/ui-lightness/jquery-ui.css";
+@import (less) "../libs/jquery-ui/themes/ui-lightness/jquery.ui.theme.css";
+
+// <link href='libs/jquery-ui/themes/ui-lightness/jquery-ui.css' rel='stylesheet' media='screen'>
+// <link href='libs/jquery-ui/themes/ui-lightness/jquery.ui.theme.css' rel='stylesheet' media='screen'>
 
 @import "sync/sync";
 @import "fields/fields";
@@ -182,7 +187,6 @@ html.fullscreenDetails {
 .detail-pane { 
   @import "detail/detail";
 }
-@import "detail/preview";
 
 .mode-select-pane {
     padding-left: 300px;

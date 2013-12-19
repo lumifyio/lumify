@@ -31,12 +31,41 @@ module.exports = function(grunt) {
             stdout: false,
             cwd: 'libs/cytoscape.js'
         }
+    },
+
+    less: {
+        development: {
+            options: {
+                paths: ["less"],
+                compress: true,
+                sourceMap: true,
+                sourceMapFilename: 'css/lumify.css.map',
+                sourceMapURL: 'lumify.css.map',
+                sourceMapRootpath: '../'
+            },
+            files: {
+                "css/lumify.css": "less/lumify.less"
+            }
+        }
+    },
+
+    watch: {
+        scripts: {
+            files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
+            tasks: ['less'],
+            options: {
+                spawn: false
+            }
+        }
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('deps', ['bower:install', 'bower:prune', 'exec']);
-  grunt.registerTask('default', ['deps']);
+  grunt.registerTask('minify', ['less']);
+  grunt.registerTask('default', ['deps', 'minify']);
 };
