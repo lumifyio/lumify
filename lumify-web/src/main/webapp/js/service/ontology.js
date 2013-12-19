@@ -63,11 +63,14 @@ define(
                 return null;
             }
 
-            function buildConceptMapById(concept, map) {
+            function buildConceptMapById(concept, map, parentId) {
                 map[concept.id] = concept;
+                if (parentId) {
+                    concept.parentId = parentId;
+                }
                 if (concept.children) {
                     for (var i = 0; i < concept.children.length; i++) {
-                        buildConceptMapById(concept.children[i], map);
+                        buildConceptMapById(concept.children[i], map, concept.id);
                     }
                 }
                 return map;

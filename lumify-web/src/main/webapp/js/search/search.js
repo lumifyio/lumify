@@ -148,19 +148,26 @@ define([
                     var sortVerticesIntoResults = function(v) {
                         var props = v.properties,
                             type = props._type,
-                            subType = props._subType;
+                            subType = props._subType,
+                            addToSearchResults = function(subType) {
+                                if (!results[type]) results[type] = {};
+                                if (!results[type][subType]) results[type][subType] = [];
+
+                                // Check for an existing result with the same id
+                                var resultFound = results[type][subType].some(function(result) { return result.id === v.id; });
+
+                                // Only store unique results
+                                if (resultFound === false) {
+                                    results[type][subType].push(v);
+                                }
+                            };
 
                         if (type === 'artifact') return;
 
-                        if (!results[type]) results[type] = {};
-                        if (!results[type][subType]) results[type][subType] = [];
-
-                        // Check for an existing result with the same id
-                        var resultFound = results[type][subType].some(function(result) { return result.id === v.id; });
-
-                        // Only store unique results
-                        if (resultFound === false) {
-                            results[type][subType].push(v);
+                        var vertexConcept = concepts.byId[subType];
+                        while (vertexConcept) {
+                            addToSearchResults(vertexConcept.id, v);
+                            vertexConcept = vertexConcept.parentId ? concepts.byId[vertexConcept.parentId] : null;
                         }
                     };
                     vertexSearch[0].vertices.forEach(sortVerticesIntoResults);
@@ -182,9 +189,15 @@ define([
                             headerTextNode[0].textContent = 'No Entities';
                         }
                     } else {
+                        var countMap = vertexSearch[0].verticesCount,
+                            summaryNode = self.select('resultsSummarySelector');
+
                         concepts.byTitle.forEach(function(concept) {
-                            var count = vertexSearch[0].verticesCount[concept.id] || 0;
-                            self.onEntitySearchResultsForConcept(self.select('resultsSummarySelector'), concept, results.entity, count);
+                            var count = countMap[concept.id] || 0,
+                                childrenCounts = _.pick(countMap, _.pluck(concept.children, 'id')),
+                                total = _.reduce(childrenCounts, function(memo, i) {return memo + i}, 0);
+
+                            self.onEntitySearchResultsForConcept(summaryNode, concept, results.entity, count + total);
                         });
                     }
 
