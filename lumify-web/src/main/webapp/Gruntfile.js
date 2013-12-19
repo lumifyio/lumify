@@ -41,7 +41,8 @@ module.exports = function(grunt) {
                 sourceMap: true,
                 sourceMapFilename: 'css/lumify.css.map',
                 sourceMapURL: 'lumify.css.map',
-                sourceMapRootpath: '../'
+                sourceMapRootpath: '/',
+                dumpLineNumbers: 'all'
             },
             files: {
                 "css/lumify.css": "less/lumify.less"
