@@ -41,19 +41,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.codehaus.plexus.util.FileUtils;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
     private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
     public static final String JSON_OUTPUT_FIELD = "json";
-    
+
     /**
      * The file extensions that are considered archive files:
      * - .zip
      * - .tar
      */
     private static final Set<String> ARCHIVE_EXTENSIONS;
+
     static {
         Set<String> arcExts = new HashSet<String>();
         arcExts.add("zip");
@@ -74,6 +76,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     private final AtomicLong totalErrorCount = new AtomicLong();
     private long averageProcessingTime;
     protected WorkQueueRepository workQueueRepository;
+    private User user;
 
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -81,6 +84,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         this.collector = collector;
         injector = Guice.createInjector(StormBootstrap.create(stormConf));
         injector.injectMembers(this);
+
+        user = (User) stormConf.get("user");
+        if (user == null) {
+            user = new SystemUser();
+        }
 
         Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
         try {
@@ -275,7 +283,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     }
 
     protected User getUser() {
-        return new SystemUser();
+        return user;
     }
 
     @Inject
@@ -306,7 +314,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     protected WorkQueueRepository getWorkQueueRepository() {
         return workQueueRepository;
     }
-    
+
     @Inject
     public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
