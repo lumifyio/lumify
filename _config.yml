@@ -5,3 +5,5 @@ safe: true
 lsi: false
 timezone: America/New_York
 google_analytics_ua: UA-74388-18
+paginate: 10
+paginate_path: "blog/page:num"

@@ -8,17 +8,21 @@ body {
 }
 
 a {
-  color: rgb(247, 245, 118);
+  color: rgb(43, 194, 227);
   text-decoration: none;
 }
 
 a:hover {
-  color: rgb(247, 245, 118);
+  color: rgb(43, 194, 227);
 }
 
 #intro h2, #screenshots h2 {
   font-size: 250%;
   margin: 1em 0;
+}
+
+#intro a, #intro a:hover {
+  color: rgb(247, 245, 118);
 }
 
 /* banner
@@ -91,4 +95,56 @@ footer .social {
 #screenshots .video {
   text-align: center;
   padding-bottom: 1em;
+}
+
+#blog {
+  background-color: silver;
+  padding: 30px;
+  margin-top: 4em;
+}
+
+#blog > h2 {
+  margin: 0 0 30px 0;
+  padding: 0;
+  font-weight: bold;
+}
+
+.post {
+  padding: 3em;
+  background-color: white;
+  margin-bottom: 3em;
+}
+
+.post .title {
+  margin-top: 0;
+  margin: 0 0 1em 0;
+}
+
+.post .title a {
+  color: inherit;
+}
+
+.post .title a:hover {
+  color: rgb(43, 194, 227);
+}
+
+.post .meta {
+  border-top: 1px solid silver;
+  border-bottom: 1px solid silver;
+  padding: 0.5em 0;
+  margin: 1em 0;
+}
+
+.post .byline, .post .share {
+  margin: 0;
+  padding: 0;
+}
+
+.post .share {
+  text-align: right;
+}
+
+.pagination {
+  margin: 0;
+  padding: 0;
 }

@@ -1,9 +1,20 @@
 ---
-layout: default
+layout: blog
 ---
-<h2>{{ page.title }}</h2>
-<p class="meta">{{ page.date | date_to_string }}</p>
-
 <div class="post">
-{{ content }}
+  <h2 class="title">{{ page.title }}</h2>
+  <div class="meta row">
+    <div class="byline col-md-6">
+      {{ page.date | date_to_string }}
+      {% if page.author %}, written by {{ page.author }}{% endif %}
+    </div>
+    <div class="share col-md-6">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="lumifyio">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </div>
+  </div>
+
+  <div class="post-content">
+  {{ content }}
+  </div>
 </div>
