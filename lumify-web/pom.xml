@@ -10,16 +10,23 @@
     </parent>
 
     <artifactId>lumify-web</artifactId>
-    <packaging>war</packaging>
+    <packaging>${packaging.type}</packaging>
+    <version>1.0-SNAPSHOT</version>
 
     <name>Lumify Web Interface</name>
 
     <properties>
+        <!--
+            Default packaging is jar.  Moved from "activeByDefault" profile because that
+            profile becomes inactive if any other profiles are activated.
+        -->
+        <packaging.type>jar</packaging.type>
+
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.3</plugin.maven.war.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
@@ -168,32 +175,52 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${plugin.maven.war.version}</version>
-                <configuration>
-                    <packagingExcludes>
-                        test/**,Gruntfile.js,karma.conf.js,bower.json,node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
-                    </packagingExcludes>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Built-On>${build.timestamp.formatted}</Built-On>
-                            <Built-On-Unix>${timestamp}</Built-On-Unix>
-                            <Git-Revision>${buildNumber}</Git-Revision>
-                        </manifestEntries>
-                    </archive>
-                    <webResources>
-                        <webResource>
-                            <directory>${basedir}/src/main/webapp</directory>
-                            <filtering>true</filtering>
-                        </webResource>
-                    </webResources>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Bundle the web interface as a war. -->
+        <profile>
+            <id>web-war</id>
+            <properties>
+                <packaging.type>war</packaging.type>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${plugin.maven.war.version}</version>
+                        <configuration>
+                            <packagingExcludes>
+                                test/**,Gruntfile.js,karma.conf.js,bower.json,node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
+                            </packagingExcludes>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <Built-On>${build.timestamp.formatted}</Built-On>
+                                    <Built-On-Unix>${timestamp}</Built-On-Unix>
+                                    <Git-Revision>${buildNumber}</Git-Revision>
+                                </manifestEntries>
+                            </archive>
+                            <webResources>
+                                <webResource>
+                                    <directory>${basedir}/src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                </webResource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>
