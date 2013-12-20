@@ -31,6 +31,9 @@ a:hover {
 #banner {
   background-color: white;
   border-bottom: 0.3em solid rgb(31, 42, 97);
+  -webkit-box-shadow: 0 8px 6px -6px #444;
+  -moz-box-shadow: 0 8px 6px -6px #444;
+  box-shadow: 0 8px 6px -6px #444;
 }
 
 #banner .container {
