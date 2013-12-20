@@ -20,15 +20,15 @@ npm install
 
 # Run `bower list` for previous `bower list` output
 mkdir -p ${DIR}/../../../target
-filename=${DIR}/../../../target/.js-dependencies.$(id -un)
-filename_previous=${DIR}/../../../target/.js-dependencies.previous.$(id -un)
+filename=${DIR}/../../../target/.webapp-build.$(id -un)
+filename_previous=${DIR}/../../../target/.webapp-build.previous.$(id -un)
 
 touch $filename
 mv $filename $filename_previous
 bower list --offline > $filename
 
 if diff $filename $filename_previous >/dev/null ; then
-  echo "Javascript dependencies up to date"
+  grunt minify
 else
   grunt
 fi

@@ -55,10 +55,8 @@ define([
         this.onEntitySearchResultsForConcept = function($searchResultsSummary, concept, entities, count, parentPropertyListElements) {
             var self = this,
                 resultsCount = count,
-                li = $searchResultsSummary.find('.concept-' + concept.id + ' .badge')
-                    .removeClass('loading')
-                    .text(resultsCount)
-                    .closest('li').toggle(resultsCount > 0);
+                badge = this.updateCountBadgeForSubtype('concept-' + concept.id, resultsCount),
+                li = badge.closest('li').toggle(resultsCount > 0);
 
             parentPropertyListElements = parentPropertyListElements || $();
 
@@ -112,6 +110,13 @@ define([
                 }
             });
             return html;
+        };
+
+        this.updateCountBadgeForSubtype = function(subType, count) {
+            return this.$node.find('.' + subType + ' .badge')
+                .removeClass('loading')
+                .data('count', count)
+                .text(formatters.number.pretty(count));
         };
 
         this.doSearch = function(evt, query) {
@@ -176,7 +181,7 @@ define([
                     Object.keys(results).forEach(function(type) {
                         if (type === 'artifact') {
                             Object.keys(results[type]).forEach(function(subType) {
-                                self.$node.find('.' + subType + ' .badge').removeClass('loading').text(formatters.number.pretty(artifactCounts[subType]));
+                                self.updateCountBadgeForSubtype(subType, artifactCounts[subType]);
                             });
                         }
                     });
@@ -225,7 +230,7 @@ define([
                 return this.close(evt);
             }
 
-            var count = +$target.find('.badge').text();
+            var count = $target.find('.badge').data('count');
             if (count === 0) {
                 return this.close(evt);
             }

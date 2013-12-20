@@ -43,6 +43,8 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
                 final User user = new SystemUser();
                 FrameworkUtils.initializeFramework(injector, user);
+
+                LOGGER.warn("JavaScript / Less modifications will not be reflected on server. Run `grunt watch` from webapp directory in development");
             } else {
                 LOGGER.error("Servlet context could not be acquired!");
             }

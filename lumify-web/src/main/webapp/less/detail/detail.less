@@ -2,7 +2,6 @@
 @import "../util/constants.less";
 @import "../util/selection.less";
 @import "../util/badge-loading";
-@import "highlighting";
 
 .content {
 
@@ -486,6 +485,12 @@
     background-color: red;
   }
 
-  .highlighting;
+  .entity, .artifact {
+    cursor: pointer;
+  }
+
+  .resolved {
+    font-weight: bold;
+  }
 }
 

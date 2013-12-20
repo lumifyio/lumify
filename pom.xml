@@ -15,6 +15,12 @@
 
     <name>Lumify</name>
 
+    <scm>
+        <url>https://github.com/altamiracorp/lumify</url>
+        <connection>scm:git:git://github.com:altamiracorp/lumify.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:altamiracorp/lumify.git</developerConnection>
+    </scm>
+
     <inceptionYear>2013</inceptionYear>
     <organization>
         <name>Altamira Corporation</name>

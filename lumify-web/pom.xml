@@ -10,46 +10,15 @@
     </parent>
 
     <artifactId>lumify-web</artifactId>
-    <packaging>${packaging.type}</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <name>Lumify Web Interface</name>
 
     <properties>
-        <!--
-            Default packaging is jar.  Moved from "activeByDefault" profile because that
-            profile becomes inactive if any other profiles are activated.
-        -->
-        <packaging.type>jar</packaging.type>
-        
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.3</plugin.maven.war.version>
     </properties>
-
-    <profiles>
-        <!-- Bundle the web interface as a war. -->
-        <profile>
-            <id>web-war</id>
-            <properties>
-                <packaging.type>war</packaging.type>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>${plugin.maven.war.version}</version>
-                        <configuration>
-                            <warSourceExcludes>
-                                node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
-                            </warSourceExcludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     
     <dependencies>
         <dependency>
@@ -117,10 +86,6 @@
             <artifactId>json</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.lesscss</groupId>
-            <artifactId>lesscss</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
         </dependency>
@@ -144,6 +109,22 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/lumify-build.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/lumify-build.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -163,6 +144,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
             <plugin>
@@ -170,18 +155,44 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${plugin.maven.exec.version}</version>
                 <executions>
-                    <!-- Install all javascript dependencies -->
+                    <!-- Install all webapp dependencies -->
                     <execution>
-                        <id>JavaScript Dependencies</id>
+                        <id>WebApp Dependencies and Minification</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${basedir}/src/main/scripts/js-dependencies.sh</executable>
+                            <executable>${basedir}/src/main/scripts/grunt.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${plugin.maven.war.version}</version>
+                <configuration>
+                    <packagingExcludes>
+                        test/**,Gruntfile.js,karma.conf.js,bower.json,node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
+                    </packagingExcludes>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Built-On>${build.timestamp.formatted}</Built-On>
+                            <Built-On-Unix>${timestamp}</Built-On-Unix>
+                            <Git-Revision>${buildNumber}</Git-Revision>
+                        </manifestEntries>
+                    </archive>
+                    <webResources>
+                        <webResource>
+                            <directory>${basedir}/src/main/webapp</directory>
+                            <filtering>true</filtering>
+                        </webResource>
+                    </webResources>
+                </configuration>
             </plugin>
         </plugins>
     </build>

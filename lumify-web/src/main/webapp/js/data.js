@@ -100,6 +100,11 @@ define([
             this.on('selectAll', this.onSelectAll);
             this.on('deleteSelected', this.onDelete);
 
+            this.on('applicationReady', this.onApplicationReady);
+        });
+
+        this.onApplicationReady = function() {
+
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
                 shortcuts: {
@@ -125,7 +130,7 @@ define([
                     self.socketSubscribeMarkReady(response);
                 }
             });
-        });
+        };
 
         this.onSocketMessage = function (evt, message) {
             var self = this;

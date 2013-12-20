@@ -116,8 +116,6 @@ public class Router extends HttpServlet {
             app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
             app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
 
-            LessRestlet.init(rootDir);
-            app.get("/css/{file}.css", LessRestlet.class);
         } catch (Exception ex) {
             LOGGER.error("Failed to initialize Router", ex);
             throw new RuntimeException("Failed to initialize " + getClass().getName(), ex);

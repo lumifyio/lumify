@@ -7,8 +7,7 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-bower-task": "~0.3.4",
@@ -24,7 +23,9 @@
     "karma-safari-launcher": "0.1.0",
     "karma-requirejs": "0.1.0",
     "karma-script-launcher": "0.1.0",
-    "jshint": "~2.3.0"
+    "jshint": "~2.3.0",
+    "grunt-contrib-less": "~0.8.3",
+    "grunt-contrib-watch": "~0.5.3"
   },
   "scripts": {
     "test": "karma start --single-run"

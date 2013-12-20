@@ -20,6 +20,14 @@ Lumify supplies a pre-built virtual machine to get you started quickly, but you 
     * ```type```: type of concept (see [VertexType.java](core/src/main/java/com/altamiracorp/lumify/core/model/ontology/VertexType.java))
 * Accumulo must have a row structure with a SHA256 hash for the row key
 
+## Less Source Maps in Chrome
+
+To get live editing of less files in chrome:
+
+1. Configure Chrome: [Working with CSS Preprocessors] (https://developers.google.com/chrome-developer-tools/docs/css-preprocessors)
+2. Configure a workspace in Chrome Web inspector and map a less file in sources tab to workspace file
+3. `src/main/webapp$ grunt watch` 
+
 ## License
 
 Copyright 2013 Altamira Technologies Corporation
