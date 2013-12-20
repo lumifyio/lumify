@@ -85,9 +85,11 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         InputStream in;
         LOGGER.info(String.format("Processing file: %s (mimeType: %s)", fileMetadata.getFileName(), fileMetadata.getMimeType()));
 
-        String fileName = getFileNameWithoutDateSuffix(fileMetadata.getFileName());
+        String fileName = fileMetadata.getFileNameWithoutDateSuffix();
         ArtifactExtractedInfo artifactExtractedInfo = new ArtifactExtractedInfo();
-        if (isArchive(fileName)) {
+        if (fileMetadata.getRaw() != null) {
+            in = new ByteArrayInputStream(fileMetadata.getRaw());
+        } else if (isArchive(fileName)) {
             archiveTempDir = extractArchive(fileMetadata);
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
             in = getInputStream(primaryFile.getAbsolutePath(), artifactExtractedInfo);
@@ -96,7 +98,12 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         } else {
             in = getInputStream(fileMetadata.getFileName(), artifactExtractedInfo);
         }
-        artifactExtractedInfo.setTitle(fileName);
+        if (fileMetadata.getTitle() != null) {
+            artifactExtractedInfo.setTitle(fileMetadata.getTitle());
+        }
+        if (fileMetadata.getSource() != null) {
+            artifactExtractedInfo.setSource(fileMetadata.getSource());
+        }
         artifactExtractedInfo.setFileExtension(FilenameUtils.getExtension(fileMetadata.getFileName()));
         artifactExtractedInfo.setMimeType(fileMetadata.getMimeType());
 

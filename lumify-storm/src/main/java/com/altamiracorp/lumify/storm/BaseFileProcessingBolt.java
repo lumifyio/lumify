@@ -23,13 +23,6 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.annotation.Nullable;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -39,6 +32,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import java.io.*;
+
 /**
  * Base class for bolts that process files from HDFS.
  */
@@ -47,20 +43,29 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
      * The class logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseFileProcessingBolt.class);
-    
+
     private ContentTypeExtractor contentTypeExtractor;
-    
+
     protected FileMetadata getFileMetadata(Tuple input) throws Exception {
         String fileName = input.getString(0);
         if (fileName == null || fileName.length() == 0) {
             throw new RuntimeException("Invalid item on the queue.");
         }
         String mimeType = null;
+        byte[] raw = null;
+        String source = null;
+        String title = null;
 
         if (fileName.startsWith("{")) {
             JSONObject json = getJsonFromTuple(input);
             fileName = json.optString("fileName");
             mimeType = json.optString("mimeType");
+            source = json.optString("source");
+            title = json.optString("title");
+            String rawString = json.optString("raw");
+            if (rawString != null) {
+                raw = rawString.getBytes();
+            }
             if (fileName == null || fileName.length() == 0) {
                 throw new RuntimeException("Expected 'fileName' in JSON document but got.\n" + json.toString());
             }
@@ -69,9 +74,19 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             mimeType = getMimeType(fileName);
         }
 
-        return new FileMetadata(fileName, mimeType);
+        FileMetadata fileMetadata = new FileMetadata()
+                .setFileName(fileName)
+                .setMimeType(mimeType)
+                .setRaw(raw)
+                .setSource(source);
+        if (title != null) {
+            fileMetadata.setTitle(title);
+        } else {
+            fileMetadata.setTitle(fileMetadata.getFileNameWithoutDateSuffix());
+        }
+        return fileMetadata;
     }
-    
+
     protected String getMimeType(String fileName) throws Exception {
         String mimeType = null;
         if (contentTypeExtractor != null) {
@@ -80,7 +95,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         }
         return mimeType;
     }
-    
+
     protected InputStream getInputStream(final String fileName, final ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
         InputStream in;
         if (getFileSize(fileName) < Artifact.MAX_SIZE_OF_INLINE_FILE) {
@@ -100,9 +115,10 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         }
         return in;
     }
-    
+
     /**
      * Extract an archive file to a local temporary directory.
+     *
      * @param fileMetadata the file metadata
      * @return the temporary directory containing the archive contents
      */
@@ -132,12 +148,12 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         }
         return tempDir;
     }
-    
+
     protected ContentTypeExtractor getContentTypeExtractor() {
         return contentTypeExtractor;
     }
-    
-    @Inject(optional=true)
+
+    @Inject(optional = true)
     public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
         this.contentTypeExtractor = contentTypeExtractor;
     }

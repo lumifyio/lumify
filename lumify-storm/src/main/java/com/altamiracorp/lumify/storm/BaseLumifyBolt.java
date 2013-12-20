@@ -337,15 +337,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         return this.totalErrorCount.get();
     }
 
-    public static String getFileNameWithoutDateSuffix(String fileName) {
-        fileName = FilenameUtils.getName(fileName);
-        int dateTimeSeparator = fileName.lastIndexOf("__");
-        if (dateTimeSeparator > 0) {
-            fileName = fileName.substring(0, dateTimeSeparator);
-        }
-        return fileName;
-    }
-
     public static String getFileNameWithDateSuffix(String fileName) {
         return FilenameUtils.getName(fileName) + "__" + fileNameSuffix.format(new Date());
     }
