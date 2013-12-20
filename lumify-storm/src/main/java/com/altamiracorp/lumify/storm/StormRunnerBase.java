@@ -83,7 +83,6 @@ public abstract class StormRunnerBase extends CommandLineBase {
         }
         conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS, 10000);
         conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 100);
-        conf.put(Config.WORKER_CHILDOPTS, " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1%ID% ");
         if (cmd.hasOption(CMD_OPT_TASKS_PER_BOLT)) {
             conf.put(Config.TOPOLOGY_TASKS, Integer.parseInt(cmd.getOptionValue(CMD_OPT_TASKS_PER_BOLT)));
         }
