@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.version.PropertyLumifyVersionService;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -22,11 +23,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class AuditRepository extends Repository<Audit> {
     private final AuditBuilder auditBuilder = new AuditBuilder();
+    private final PropertyLumifyVersionService propertyLumifyVersionService;
 
     @Inject
-    public AuditRepository(final ModelSession modelSession) {
+    public AuditRepository(final ModelSession modelSession, final PropertyLumifyVersionService propertyLumifyVersionService) {
         super(modelSession);
+        this.propertyLumifyVersionService = propertyLumifyVersionService;
     }
+
 
     @Override
     public Audit fromRow(Row row) {
@@ -55,7 +59,10 @@ public class AuditRepository extends Repository<Audit> {
                 .setUser(user)
                 .setAction(AuditAction.CREATE.toString())
                 .setType(VertexType.ENTITY.toString())
-                .setComment(comment);
+                .setComment(comment)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ?  propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         if (process.length() > 0) {
             audit.getAuditCommon().setProcess(process);
@@ -84,16 +91,21 @@ public class AuditRepository extends Repository<Audit> {
                 .setAction(action)
                 .setType(VertexType.ENTITY.toString())
                 .setComment(comment)
-                .setProcess(process);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ? propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         auditArtifact.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
                 .setType(VertexType.ENTITY.toString())
                 .setComment(comment)
-                .setProcess(process);
-
-        List<Audit> audits = Lists.newArrayList(auditEntity, auditArtifact);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ? propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
+         List<Audit> audits = Lists.newArrayList(auditEntity, auditArtifact);
         saveMany(audits, user.getModelUserContext());
         return audits;
     }
@@ -116,7 +128,10 @@ public class AuditRepository extends Repository<Audit> {
                 .setAction(action)
                 .setType(VertexType.PROPERTY.toString())
                 .setComment(comment)
-                .setProcess(process);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ? propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         if (oldProperties.containsKey(propertyName)) {
             audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName).toString());
@@ -177,14 +192,20 @@ public class AuditRepository extends Repository<Audit> {
                 .setAction(action)
                 .setType(VertexType.PROPERTY.toString())
                 .setComment(comment)
-                .setProcess(process);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ?  propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         auditDestSource.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
                 .setType(VertexType.PROPERTY.toString())
                 .setComment(comment)
-                .setProcess(process);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ? propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         if (!oldValue.equals("")) {
             auditDestSource.getAuditProperty().setPreviousValue(oldValue);
@@ -211,7 +232,10 @@ public class AuditRepository extends Repository<Audit> {
                 .setAction(action)
                 .setType(VertexType.RELATIONSHIP.toString())
                 .setComment(comment)
-                .setProcess(process);
+                .setProcess(process)
+                .setUnixBuildTime(propertyLumifyVersionService.getUnixBuildTime() != null ? propertyLumifyVersionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(propertyLumifyVersionService.getScmBuildNumber() != null ? propertyLumifyVersionService.getScmBuildNumber() : "")
+                .setVersion(propertyLumifyVersionService.getVersion() != null ? propertyLumifyVersionService.getVersion() : "");
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId())

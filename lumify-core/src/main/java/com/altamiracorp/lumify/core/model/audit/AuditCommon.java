@@ -15,6 +15,9 @@ public class AuditCommon extends ColumnFamily {
     public static final String TYPE = "type";
     public static final String COMMENT = "comment";
     public static final String PROCESS = "process";
+    public static final String UNIX_BUILD_TIME = "unixBuildTime";
+    public static final String VERSION = "version";
+    public static final String SCM_BUILD_NUMBER = "scmBuildNumber";
 
     public AuditCommon() {
         super(NAME);
@@ -81,12 +84,39 @@ public class AuditCommon extends ColumnFamily {
         return this;
     }
 
-    public String getProcess () {
+    public String getProcess() {
         return Value.toString(get(PROCESS));
     }
 
-    public AuditCommon setProcess (String process) {
-        set (PROCESS, process);
+    public AuditCommon setProcess(String process) {
+        set(PROCESS, process);
+        return this;
+    }
+
+    public Long getUnixBuildTime() {
+        return Value.toLong(get(UNIX_BUILD_TIME));
+    }
+
+    public AuditCommon setUnixBuildTime(Long unixBuildTime) {
+        set(UNIX_BUILD_TIME, unixBuildTime);
+        return this;
+    }
+
+    public String getVersion() {
+        return Value.toString(get(VERSION));
+    }
+
+    public AuditCommon setVersion(String version) {
+        set(VERSION, version);
+        return this;
+    }
+
+    public String getScmBuildNumber() {
+        return Value.toString(get(SCM_BUILD_NUMBER));
+    }
+
+    public AuditCommon setScmBuildNumber(String scmBuildNumber) {
+        set(SCM_BUILD_NUMBER, scmBuildNumber);
         return this;
     }
 
@@ -101,6 +131,9 @@ public class AuditCommon extends ColumnFamily {
             json.put("type", getType());
             json.put("comment", getComment());
             json.put("process", getProcess());
+            json.put("unixBuildTime", getUnixBuildTime());
+            json.put("version", getVersion());
+            json.put("scmBuildNumber", getScmBuildNumber());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
