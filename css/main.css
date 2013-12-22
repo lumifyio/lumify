@@ -46,6 +46,11 @@ a:hover {
   text-align: center;
 }
 
+#banner a {
+  text-decoration: none;
+  border: 0;
+}
+
 @media (min-width: 992px) {
   #banner .tagline {
     display: table-cell;
