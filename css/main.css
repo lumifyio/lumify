@@ -5,6 +5,7 @@ body, h1, h2, h3, h4 {
 
 body {
   background-color: rgb(43, 194, 227);
+  font-size: 170%;
 }
 
 a {
