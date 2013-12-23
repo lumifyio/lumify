@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.version;
 
-public interface LumifyVersionServiceMXBean {
+public interface VersionServiceMXBean {
     Long getUnixBuildTime();
 
     String getVersion();

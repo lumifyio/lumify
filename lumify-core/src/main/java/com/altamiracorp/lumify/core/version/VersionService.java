@@ -33,11 +33,13 @@ import java.util.Properties;
  * all methods will return <code>null</code>.
  */
 @Singleton
-public class PropertyLumifyVersionService implements LumifyVersionService, LumifyVersionServiceMXBean {
+public class VersionService implements VersionServiceMXBean {
+    public static String JMX_NAME = "com.altamiracorp.lumify:type=" + VersionService.class.getName();
+
     /**
      * The class logger.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyLumifyVersionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VersionService.class);
 
     /**
      * The name of the properties file to read.
@@ -74,10 +76,7 @@ public class PropertyLumifyVersionService implements LumifyVersionService, Lumif
      */
     private final Long unixBuildTime;
 
-    /**
-     * Create a new PropertyLumifyVersionService.
-     */
-    public PropertyLumifyVersionService() {
+    public VersionService() {
         String ver = null;
         String buildNum = null;
         Long buildTime = null;
@@ -115,7 +114,7 @@ public class PropertyLumifyVersionService implements LumifyVersionService, Lumif
 
     private void registerJmxBean() throws MalformedObjectNameException, NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        ObjectName mxbeanName = new ObjectName("com.altamiracorp.lumify:type=" + getClass().getName());
+        ObjectName mxbeanName = new ObjectName(JMX_NAME);
         mbs.registerMBean(this, mxbeanName);
     }
 

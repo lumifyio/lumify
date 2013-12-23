@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.version.VersionService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(GraphSession.class).toInstance(createGraphSession());
         bind(SearchProvider.class).toInstance(createSearchProvider(user));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
+        bind(VersionService.class).toInstance(new VersionService());
         bind(ContentTypeExtractor.class).toProvider(new Provider<ContentTypeExtractor>() {
             @Override
             public ContentTypeExtractor get() {
