@@ -61,6 +61,36 @@ a:hover {
   }
 }
 
+nav {
+  text-align: center;
+}
+
+nav ul {
+  list-style-type: none;
+  display: inline;
+  background-color: rgb(31, 42, 97);
+  margin: 0;
+  padding: 0 0 5px 0;
+  -webkit-box-shadow: 0 8px 6px -6px #444;
+  -moz-box-shadow: 0 8px 6px -6px #444;
+  box-shadow: 0 8px 6px -6px #444;
+}
+
+nav li {
+  display: inline;
+  margin: 1em;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: rgb(247, 245, 118);
+}
+
 #intro {
   color: white;
 }
