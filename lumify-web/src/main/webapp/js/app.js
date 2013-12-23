@@ -117,7 +117,7 @@ define([
             this.$node.html(content);
 
             // Open Page to Dashboard
-            this.trigger(document, 'menubarToggleDisplay', { name: dashboardPane.data(DATA_MENUBAR_NAME) });
+            this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
 
             this.setupWindowResizeTrigger();
 
