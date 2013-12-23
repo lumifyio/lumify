@@ -231,12 +231,12 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         if (artifactExtractedInfo.getUrl() != null && !artifactExtractedInfo.getUrl().isEmpty()) {
             artifactExtractedInfo.setSource(artifactExtractedInfo.getUrl());
         }
-        GraphVertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, getUser());
+        GraphVertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, user);
         return vertex;
     }
 
     private Artifact saveArtifactModel(ArtifactExtractedInfo artifactExtractedInfo) {
-        Artifact artifact = artifactRepository.findByRowKey(artifactExtractedInfo.getRowKey(), getUser().getModelUserContext());
+        Artifact artifact = artifactRepository.findByRowKey(artifactExtractedInfo.getRowKey(), user.getModelUserContext());
         if (artifact == null) {
             artifact = new Artifact(artifactExtractedInfo.getRowKey());
             if (artifactExtractedInfo.getDate() != null) {
@@ -305,6 +305,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
     }
+
+    @Inject
+    public void setUser (User user) { this.user = user; }
 
     @Inject
     public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
