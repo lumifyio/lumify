@@ -267,7 +267,7 @@ define([
                     }
                 }
             });
-            this.trigger('selectObjects', { vertices:vertices })
+            this.trigger('selectObjects', { vertices:vertices });
         };
 
         this.onFindPathHopsButton = function(e) {

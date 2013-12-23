@@ -11,5 +11,5 @@ node_modules/
 *.swp
 allCountries.txt
 coverage-error.log
-/web/src/main/webapp/npm-debug.log
+npm-debug.log
 /web/src/main/webapp/libs

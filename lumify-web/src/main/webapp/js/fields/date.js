@@ -2,25 +2,12 @@
 define([
     'flight/lib/component',
     'tpl!./date',
-    './withPropertyField'
-], function(defineComponent, template, withPropertyField) {
+    './withPropertyField',
+    'util/formatters'
+], function(defineComponent, template, withPropertyField, formatters) {
     'use strict';
 
     return defineComponent(DateField, withPropertyField);
-
-    function formatDate(date) {
-        if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) return '';
-                
-        return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
-
-        function pad(num) {
-            var str = '' + num;
-            while (str.length !== 2) {
-                str = '0' + str;
-            }
-            return str;
-        }
-    }
 
     function DateField() {
 
@@ -28,9 +15,7 @@ define([
             var value = '';
 
             if (this.attr.value) {
-                var millis = _.isString(this.attr.value) ? Number(this.attr.value) : this.attr.value,
-                    date = new Date(millis);
-                value = formatDate(date);
+                value = formatters.date.dateString(this.attr.value);
             }
 
             this.$node.html(template({

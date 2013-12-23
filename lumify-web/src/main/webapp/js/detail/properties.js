@@ -308,7 +308,7 @@ define([
                 displayName = ontologyProperty.displayName;
 
                 if (ontologyProperty.dataType == 'date') {
-                    value = sf("{0:yyyy/MM/dd}", new Date(parseInt(properties[name], 10)));
+                    value = formatters.date.dateString(parseInt(properties[name], 10));
                 } else {
                     value = properties[name];
                 }

@@ -17,12 +17,15 @@
 package com.altamiracorp.lumify.core.version;
 
 import com.google.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.management.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This implementation of the LumifyVersionService loads its configuration
@@ -30,51 +33,50 @@ import org.slf4j.LoggerFactory;
  * all methods will return <code>null</code>.
  */
 @Singleton
-public class PropertyLumifyVersionService implements LumifyVersionService {
+public class VersionService implements VersionServiceMXBean {
+    public static String JMX_NAME = "com.altamiracorp.lumify:type=" + VersionService.class.getName();
+
     /**
      * The class logger.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(PropertyLumifyVersionService.class);
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(VersionService.class);
+
     /**
      * The name of the properties file to read.
      */
     private static final String LUMIFY_BUILD_PROPERTIES = "lumify-build.properties";
-    
+
     /**
      * The Lumify version property.
      */
     private static final String LUMIFY_VERSION_PROPERTY = "lumify.version";
-    
+
     /**
      * The SCM build number property.
      */
     private static final String SCM_BUILD_NUMBER_PROPERTY = "lumify.buildNumber";
-    
+
     /**
      * The build timestamp property.
      */
     private static final String BUILD_TIME_PROPERTY = "lumify.buildTime";
-    
+
     /**
      * The Lumify version.
      */
     private final String version;
-    
+
     /**
      * The SCM build number.
      */
     private final String scmBuildNumber;
-    
+
     /**
      * The build timestamp.
      */
     private final Long unixBuildTime;
 
-    /**
-     * Create a new PropertyLumifyVersionService.
-     */
-    public PropertyLumifyVersionService() {
+    public VersionService() {
         String ver = null;
         String buildNum = null;
         Long buildTime = null;
@@ -93,17 +95,29 @@ public class PropertyLumifyVersionService implements LumifyVersionService {
                 try {
                     buildTime = Long.parseLong(strTime);
                 } catch (NumberFormatException nfe) {
-                    LOG.warn("Invalid build timestamp [%s].");
+                    LOGGER.warn("Invalid build timestamp [%s].");
                 }
             }
         } catch (IOException ioe) {
-            LOG.error("Unable to read Lumify version properties.", ioe);
+            LOGGER.error("Unable to read Lumify version properties.", ioe);
         }
         this.version = ver;
         this.scmBuildNumber = buildNum;
         this.unixBuildTime = buildTime;
+
+        try {
+            registerJmxBean();
+        } catch (Exception ex) {
+            LOGGER.error("Could not register JMX bean", ex);
+        }
     }
-    
+
+    private void registerJmxBean() throws MalformedObjectNameException, NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException {
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        ObjectName mxbeanName = new ObjectName(JMX_NAME);
+        mbs.registerMBean(this, mxbeanName);
+    }
+
     @Override
     public Long getUnixBuildTime() {
         return unixBuildTime;

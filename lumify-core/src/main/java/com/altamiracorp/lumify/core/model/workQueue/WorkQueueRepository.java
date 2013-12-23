@@ -18,6 +18,7 @@ public abstract class WorkQueueRepository {
     public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
+    public static final String DOCUMENT_QUEUE_NAME = "document";
 
     public void pushArtifactHighlight(final String artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
@@ -45,7 +46,7 @@ public abstract class WorkQueueRepository {
         pushOnQueue(queueName, data);
     }
 
-    protected abstract void pushOnQueue(String queueName, JSONObject json, String... extra);
+    public abstract void pushOnQueue(String queueName, JSONObject json, String... extra);
 
     public void init(Map map) {
 

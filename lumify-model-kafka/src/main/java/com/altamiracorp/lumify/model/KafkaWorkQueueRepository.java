@@ -43,7 +43,7 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    protected void pushOnQueue(String queueName, JSONObject json, String... extra) {
+    public void pushOnQueue(String queueName, JSONObject json, String... extra) {
         if (extra != null && extra.length > 0) {
             JSONArray extraArray = new JSONArray();
             for (String e : extra) {

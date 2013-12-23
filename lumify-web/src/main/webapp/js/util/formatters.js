@@ -119,6 +119,15 @@ define(['sf'], function() {
             }
         },
         date: {
+            dateString: function(millisStr) {
+                var millis = _.isString(millisStr) ? Number(millisStr) : millisStr,
+                    dateInLocale = new Date(millis),
+                    millisInMinutes = 1000 * 60,
+                    millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
+                    dateInUTC = new Date( dateInLocale.getTime() + millisFromLocaleToUTC );
+
+                return sf("{0:yyyy/MM/dd}", dateInUTC);
+            },
             relativeToNow: function(date) {
                 date = _.isDate(date) ? date : new Date(date);
 

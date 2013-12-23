@@ -67,6 +67,10 @@
             <artifactId>log4j</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
 
         <!-- Runtime Dependencies -->
         <dependency>
@@ -80,7 +84,21 @@
             <artifactId>hadoop-test</artifactId>
         </dependency>
     </dependencies>
-    
+
+    <profiles>
+        <profile>
+            <id>codeQuality</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>

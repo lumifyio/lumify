@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +110,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
         runWorkers(in, fileMetadata, artifactExtractedInfo, archiveTempDir);
 
-        String newRawArtifactHdfsPath = moveRawFile(fileMetadata.getFileName(), artifactExtractedInfo.getRowKey());
+        String newRawArtifactHdfsPath = moveRawFile(fileMetadata.getFileName(), artifactExtractedInfo.getRowKey(), fileMetadata.getRaw());
         artifactExtractedInfo.setRawHdfsPath(newRawArtifactHdfsPath);
 
         if (artifactExtractedInfo.getTextRowKey() != null && artifactExtractedInfo.getTextHdfsPath() != null) {
@@ -223,12 +224,21 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         }
     }
 
-    protected String moveRawFile(String fileName, String rowKey) throws IOException {
+    protected String moveRawFile(String fileName, String rowKey, byte[] raw) throws IOException {
         String rawArtifactHdfsPath = "/lumify/artifacts/raw/" + rowKey;
         if (getHdfsFileSystem().exists(new Path(rawArtifactHdfsPath))) {
             getHdfsFileSystem().delete(new Path(fileName), false);
         } else {
-            moveFile(fileName, rawArtifactHdfsPath);
+            if (raw != null) {
+                FSDataOutputStream rawFile = getHdfsFileSystem().create(new Path(rawArtifactHdfsPath));
+                try {
+                    rawFile.write(raw);
+                } finally {
+                    rawFile.close();
+                }
+            } else {
+                moveFile(fileName, rawArtifactHdfsPath);
+            }
         }
         return rawArtifactHdfsPath;
     }

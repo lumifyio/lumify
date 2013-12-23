@@ -115,7 +115,6 @@ public class Router extends HttpServlet {
             app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
             app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
             app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
-
         } catch (Exception ex) {
             LOGGER.error("Failed to initialize Router", ex);
             throw new RuntimeException("Failed to initialize " + getClass().getName(), ex);

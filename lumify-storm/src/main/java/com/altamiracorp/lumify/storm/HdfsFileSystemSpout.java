@@ -4,6 +4,8 @@ import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.codahale.metrics.Gauge;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -34,9 +36,9 @@ public class HdfsFileSystemSpout extends BaseFileSystemSpout {
 
     @Override
     public void open(Map stormConf, TopologyContext context, SpoutOutputCollector collector) {
-        super.open(stormConf, context, collector);
+        filesToProcess = new LinkedList<String>(); // needs to go before super.open because the metrics rely on it
 
-        filesToProcess = new LinkedList<String>();
+        super.open(stormConf, context, collector);
 
         String rootDataPath = (String) stormConf.get(BaseFileSystemSpout.DATADIR_CONFIG_NAME);
         checkNotNull(rootDataPath, BaseFileSystemSpout.DATADIR_CONFIG_NAME + " is a required configuration parameter");
@@ -126,12 +128,20 @@ public class HdfsFileSystemSpout extends BaseFileSystemSpout {
     }
 
     @Override
-    public long getToBeProcessedCount() {
-        return filesToProcess.size();
+    public String getPath() {
+        return this.subDir;
     }
 
     @Override
-    public String getName() {
-        return this.subDir;
+    protected void registerMetrics(MetricsManager metricsManager, String namePrefix) {
+        super.registerMetrics(metricsManager, namePrefix);
+
+        metricsManager.getRegistry().register(namePrefix + "pending",
+                new Gauge<Integer>() {
+                    @Override
+                    public Integer getValue() {
+                        return filesToProcess.size();
+                    }
+                });
     }
 }
