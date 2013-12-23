@@ -112,10 +112,14 @@ public class VersionService implements VersionServiceMXBean {
         }
     }
 
-    private void registerJmxBean() throws MalformedObjectNameException, NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException {
+    private void registerJmxBean() throws MalformedObjectNameException, NotCompliantMBeanException, MBeanRegistrationException {
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName mxbeanName = new ObjectName(JMX_NAME);
-        mbs.registerMBean(this, mxbeanName);
+        try {
+            mbs.registerMBean(this, mxbeanName);
+        } catch (InstanceAlreadyExistsException ex) {
+            // ignore
+        }
     }
 
     @Override
