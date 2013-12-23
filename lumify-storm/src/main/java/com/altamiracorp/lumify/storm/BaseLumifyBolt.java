@@ -307,7 +307,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setUser (User user) { this.user = user; }
+    public void setUser (SystemUser user) { this.user = user; }
 
     @Inject
     public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
