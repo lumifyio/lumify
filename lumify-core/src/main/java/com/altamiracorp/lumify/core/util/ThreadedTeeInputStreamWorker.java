@@ -1,49 +1,34 @@
 package com.altamiracorp.lumify.core.util;
 
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Runnable, ThreadedTeeInputStreamWorkerMXBean {
+public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadedTeeInputStreamWorker.class.getName());
+    private final Counter totalProcessedCounter;
+    private final Counter processingCounter;
+    private final Counter totalErrorCounter;
+    private final Timer processingTimeTimer;
     private boolean stopped;
     private final Queue<Work> workItems = new LinkedList<Work>();
     private final Queue<WorkResult<TResult>> workResults = new LinkedList<WorkResult<TResult>>();
-    private AtomicLong totalProcessedCount = new AtomicLong();
-    private AtomicLong processingCount = new AtomicLong();
-    private AtomicLong totalErrorCount = new AtomicLong();
-    private long averageProcessingTime;
 
     public ThreadedTeeInputStreamWorker() {
-        try {
-            registerJmxBean();
-        } catch (Exception ex) {
-            LOGGER.error("Could not register JMX Bean", ex);
-        }
-    }
-
-    protected void registerJmxBean() throws NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException, MalformedObjectNameException {
-        MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
-        for (int suffix = 0; ; suffix++) {
-            ObjectName beanName = new ObjectName(getBaseJmxObjectName() + ":type=" + getClass().getName() + "-" + suffix);
-            if (beanServer.isRegistered(beanName)) {
-                continue;
-            }
-            beanServer.registerMBean(this, beanName);
-            break;
-        }
-    }
-
-    protected String getBaseJmxObjectName() {
-        return "com.altamiracorp.lumify.worker";
+        MetricsManager metricsManager = MetricsManager.getInstance();
+        String namePrefix = metricsManager.getNamePrefix(this);
+        totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
+        processingCounter = metricsManager.getRegistry().counter(namePrefix + "processing");
+        totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
+        processingTimeTimer = metricsManager.getRegistry().timer(namePrefix + "processing-time");
     }
 
     @Override
@@ -59,27 +44,26 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
                     }
                     work = workItems.remove();
                 }
-                long startTime = System.currentTimeMillis();
-                processingCount.getAndIncrement();
                 InputStream in = work.getIn();
                 try {
                     LOGGER.debug("BEGIN doWork (" + getClass().getName() + ")");
                     TResult result;
+                    Timer.Context timerContext = processingTimeTimer.time();
+                    processingCounter.inc();
                     try {
                         result = doWork(in, work.getData());
                     } finally {
                         LOGGER.debug("END doWork (" + getClass().getName() + ")");
-                        processingCount.getAndDecrement();
-                        totalProcessedCount.getAndIncrement();
-                        long endTime = System.currentTimeMillis();
-                        long processingTime = endTime - startTime;
-                        this.averageProcessingTime = (((totalProcessedCount.get() - 1) * this.averageProcessingTime) + processingTime) / totalProcessedCount.get();
+                        processingCounter.dec();
+                        totalProcessedCounter.inc();
+                        timerContext.stop();
                     }
                     synchronized (workResults) {
                         workResults.add(new WorkResult<TResult>(result, null));
                         workResults.notifyAll();
                     }
                 } catch (Exception ex) {
+                    totalErrorCounter.inc();
                     synchronized (workResults) {
                         workResults.add(new WorkResult<TResult>(null, ex));
                         workResults.notifyAll();
@@ -164,25 +148,5 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
         public TResult getResult() {
             return result;
         }
-    }
-
-    @Override
-    public long getProcessingCount() {
-        return this.processingCount.get();
-    }
-
-    @Override
-    public long getTotalProcessedCount() {
-        return this.totalProcessedCount.get();
-    }
-
-    @Override
-    public long getAverageProcessingTime() {
-        return this.averageProcessingTime;
-    }
-
-    @Override
-    public long getTotalErrorCount() {
-        return this.totalErrorCount.get();
     }
 }

@@ -6,20 +6,27 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Gauge;
 import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class BaseFileSystemSpout extends BaseRichSpout implements LumifySpoutMXBean {
+public abstract class BaseFileSystemSpout extends BaseRichSpout {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseFileSystemSpout.class);
     public static final String DATADIR_CONFIG_NAME = "datadir";
     private SpoutOutputCollector collector;
     private Map<String, String> workingFiles;
-    private final AtomicLong totalProcessed = new AtomicLong();
-    private final AtomicLong totalErrorCount = new AtomicLong();
+    private Counter totalProcessedCounter;
+    private Counter totalErrorCounter;
+    private Injector injector;
+    private MetricsManager metricsManager;
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
@@ -30,14 +37,27 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout implements Lumif
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         LOGGER.info(String.format("Configuring environment for spout: %s-%d", context.getThisComponentId(), context.getThisTaskId()));
         this.collector = collector;
+        injector = Guice.createInjector(StormBootstrap.create(conf));
+        injector.injectMembers(this);
         workingFiles = Maps.newHashMap();
 
-        try {
-            JmxBeanHelper.registerJmxBean(this, JmxBeanHelper.SPOUT_PREFIX);
-        } catch (Exception ex) {
-            LOGGER.error("Could not register JMX bean", ex);
-        }
+        String namePrefix = metricsManager.getNamePrefix(this, getPath());
+        registerMetrics(metricsManager, namePrefix);
     }
+
+    protected void registerMetrics(MetricsManager metricsManager, String namePrefix) {
+        totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
+        totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
+        metricsManager.getRegistry().register(namePrefix + "in-process",
+                new Gauge<Integer>() {
+                    @Override
+                    public Integer getValue() {
+                        return workingFiles.size();
+                    }
+                });
+    }
+
+    protected abstract String getPath();
 
     protected SpoutOutputCollector getCollector() {
         return collector;
@@ -62,7 +82,7 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout implements Lumif
         LOGGER.debug("received ack on: " + msgId);
         try {
             safeAck(msgId);
-            totalProcessed.incrementAndGet();
+            totalProcessedCounter.inc();
             if (workingFiles.containsKey(msgId)) {
                 workingFiles.remove(msgId);
             }
@@ -79,25 +99,15 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout implements Lumif
     @Override
     public void fail(Object msgId) {
         LOGGER.error("received fail on: " + msgId);
-        totalErrorCount.incrementAndGet();
+        totalErrorCounter.inc();
         if (workingFiles.containsKey(msgId)) {
             workingFiles.remove(msgId);
         }
         super.fail(msgId);
     }
 
-    @Override
-    public long getWorkingCount() {
-        return workingFiles.size();
-    }
-
-    @Override
-    public long getTotalProcessedCount() {
-        return totalProcessed.get();
-    }
-
-    @Override
-    public long getTotalErrorCount() {
-        return totalErrorCount.get();
+    @Inject
+    public void setMetricsManager(MetricsManager metricsManager) {
+        this.metricsManager = metricsManager;
     }
 }

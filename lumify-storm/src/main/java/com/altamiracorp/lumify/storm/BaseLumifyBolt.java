@@ -8,6 +8,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -18,6 +19,8 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Timer;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -25,6 +28,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.codehaus.plexus.util.FileUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +39,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.*;
 
-import org.codehaus.plexus.util.FileUtils;
-
-public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltMXBean {
+public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
     private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
     public static final String JSON_OUTPUT_FIELD = "json";
@@ -71,10 +68,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
     protected AuditRepository auditRepository;
     protected TermMentionRepository termMentionRepository;
     private Injector injector;
-    private final AtomicLong totalProcessedCount = new AtomicLong();
-    private final AtomicLong processingCount = new AtomicLong();
-    private final AtomicLong totalErrorCount = new AtomicLong();
-    private long averageProcessingTime;
+    private Counter totalProcessedCounter;
+    private Counter processingCounter;
+    private Counter totalErrorCounter;
+    private Timer processingTimeTimer;
+    private MetricsManager metricsManager;
     protected WorkQueueRepository workQueueRepository;
     private User user;
 
@@ -85,6 +83,12 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         injector = Guice.createInjector(StormBootstrap.create(stormConf));
         injector.injectMembers(this);
 
+        String namePrefix = metricsManager.getNamePrefix(this);
+        totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
+        processingCounter = metricsManager.getRegistry().counter(namePrefix + "processing");
+        totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
+        processingTimeTimer = metricsManager.getRegistry().timer(namePrefix + "processing-time");
+
         user = (User) stormConf.get("user");
         if (user == null) {
             user = new SystemUser();
@@ -94,8 +98,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         try {
             String hdfsRootDir = (String) stormConf.get(com.altamiracorp.lumify.core.config.Configuration.HADOOP_URL);
             hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
-
-            JmxBeanHelper.registerJmxBean(this, JmxBeanHelper.BOLT_PREFIX);
         } catch (Exception e) {
             collector.reportError(e);
         }
@@ -138,8 +140,8 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
 
     @Override
     public final void execute(Tuple input) {
-        long startTime = System.currentTimeMillis();
-        processingCount.getAndIncrement();
+        processingCounter.inc();
+        Timer.Context processingTimeContext = processingTimeTimer.time();
         try {
             String auditMessage;
             String graphVertexId = null;
@@ -161,7 +163,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
                 LOGGER.debug("ack'ing: " + input);
                 getCollector().ack(input);
             } catch (Exception e) {
-                totalErrorCount.getAndIncrement();
+                totalErrorCounter.inc();
                 LOGGER.error("Error occurred during execution: " + input, e);
                 getCollector().reportError(e);
                 getCollector().fail(input);
@@ -173,11 +175,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
                 auditRepository.audit(graphVertexId, auditMessage, getUser());
             }
         } finally {
-            processingCount.getAndDecrement();
-            totalProcessedCount.getAndIncrement();
-            long endTime = System.currentTimeMillis();
-            long processingTime = endTime - startTime;
-            this.averageProcessingTime = (((totalProcessedCount.get() - 1) * this.averageProcessingTime) + processingTime) / totalProcessedCount.get();
+            processingCounter.dec();
+            totalProcessedCounter.inc();
+            processingTimeContext.stop();
         }
     }
 
@@ -320,29 +320,14 @@ public abstract class BaseLumifyBolt extends BaseRichBolt implements LumifyBoltM
         this.workQueueRepository = workQueueRepository;
     }
 
+    @Inject
+    public void setMetricsManager(MetricsManager metricsManager) {
+        this.metricsManager = metricsManager;
+    }
+
     protected boolean isArchive(final String fileName) {
         String extension = FileUtils.getExtension(fileName.toLowerCase());
         return ARCHIVE_EXTENSIONS.contains(extension);
-    }
-
-    @Override
-    public long getProcessingCount() {
-        return this.processingCount.get();
-    }
-
-    @Override
-    public long getTotalProcessedCount() {
-        return this.totalProcessedCount.get();
-    }
-
-    @Override
-    public long getAverageProcessingTime() {
-        return this.averageProcessingTime;
-    }
-
-    @Override
-    public long getTotalErrorCount() {
-        return this.totalErrorCount.get();
     }
 
     public static String getFileNameWithDateSuffix(String fileName) {
