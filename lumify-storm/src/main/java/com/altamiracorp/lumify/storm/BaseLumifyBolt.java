@@ -178,12 +178,16 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
     }
 
-    protected long getFileSize(String fileName) throws IOException {
+    protected long getFileSize(String path) throws IOException {
         // TODO probably a better way to handle this
         try {
-            return new File(fileName).length();
+            if (getHdfsFileSystem().exists(new Path(path))) {
+                return getHdfsFileSystem().getFileStatus(new Path(path)).getLen();
+            } else {
+                return new File(path).length();
+            }
         } catch (Exception ex) {
-            return getHdfsFileSystem().getStatus(new Path(fileName)).getUsed();
+            return getHdfsFileSystem().getStatus(new Path(path)).getUsed();
         }
     }
 
