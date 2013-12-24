@@ -314,11 +314,15 @@ public class TeeInputStream {
         }
 
         private void resumeTimer() {
-            this.pausableTimerContext.resume();
+            if (this.pausableTimerContext != null) {
+                this.pausableTimerContext.resume();
+            }
         }
 
         private void pauseTimer() {
-            this.pausableTimerContext.pause();
+            if (this.pausableTimerContext != null) {
+                this.pausableTimerContext.pause();
+            }
         }
     }
 }
