@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.PausableTimerContext;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
@@ -49,7 +50,7 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
                 try {
                     LOGGER.debug("BEGIN doWork (" + getClass().getName() + ")");
                     TResult result;
-                    Timer.Context timerContext = processingTimeTimer.time();
+                    PausableTimerContext timerContext = new PausableTimerContext(processingTimeTimer);
                     processingCounter.inc();
                     try {
                         result = doWork(in, work.getData());
