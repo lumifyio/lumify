@@ -13,6 +13,8 @@ import org.apache.commons.cli.Options;
 public abstract class StormRunnerBase extends CommandLineBase {
     private static final String CMD_OPT_LOCAL = "local";
     private static final String CMD_OPT_TASKS_PER_BOLT = "tasksperbolt";
+    private static final String CMD_OPT_NUM_WORKERS = "workers";
+    private static final String CMD_OPT_PARALLELISM_HINT = "parallelismhint";
     private boolean local;
 
     public StormRunnerBase() {
@@ -27,7 +29,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
                 OptionBuilder
                         .withLongOpt(CMD_OPT_LOCAL)
                         .withDescription("Run local")
-                        .create()
+                        .create("l")
         );
 
         opts.addOption(
@@ -39,6 +41,24 @@ public abstract class StormRunnerBase extends CommandLineBase {
                         .create("tpb")
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_NUM_WORKERS)
+                        .withDescription("Number of works")
+                        .hasArg()
+                        .withArgName("count")
+                        .create("w")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_PARALLELISM_HINT)
+                        .withDescription("Parallelism hint")
+                        .hasArg()
+                        .withArgName("count")
+                        .create("ph")
+        );
+
         return opts;
     }
 
@@ -46,11 +66,16 @@ public abstract class StormRunnerBase extends CommandLineBase {
     protected int run(CommandLine cmd) throws Exception {
         local = cmd.hasOption(CMD_OPT_LOCAL);
 
+        int parallelismHint = 1;
+        if (cmd.hasOption(CMD_OPT_PARALLELISM_HINT)) {
+            parallelismHint = Integer.parseInt(cmd.getOptionValue(CMD_OPT_PARALLELISM_HINT));
+        }
+
         Config conf = createConfig(cmd);
 
         beforeCreateTopology(cmd, conf);
 
-        StormTopology topology = createTopology();
+        StormTopology topology = createTopology(parallelismHint);
         LOGGER.info("Created topology layout: " + topology);
         LOGGER.info(String.format("Submitting topology '%s'", getTopologyName()));
 
@@ -86,14 +111,16 @@ public abstract class StormRunnerBase extends CommandLineBase {
         if (cmd.hasOption(CMD_OPT_TASKS_PER_BOLT)) {
             conf.put(Config.TOPOLOGY_TASKS, Integer.parseInt(cmd.getOptionValue(CMD_OPT_TASKS_PER_BOLT)));
         }
+        if (cmd.hasOption(CMD_OPT_NUM_WORKERS)) {
+            conf.setNumWorkers(Integer.parseInt(cmd.getOptionValue(CMD_OPT_NUM_WORKERS)));
+        }
         conf.setDebug(false);
-        conf.setNumWorkers(2);
         return conf;
     }
 
     protected abstract String getTopologyName();
 
-    protected abstract StormTopology createTopology();
+    protected abstract StormTopology createTopology(int parallelismHint);
 
     protected boolean isLocal() {
         return local;
