@@ -4,6 +4,7 @@ package com.altamiracorp.lumify.storm;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.tuple.Tuple;
+import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
@@ -58,8 +59,8 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         ServiceLoader services = getServiceLoader();
         for (Object service : services) {
             LOGGER.info(String.format("Adding service %s to %s", service.getClass().getName(), getClass().getName()));
-            inject(service);
-            TextExtractionWorkerPrepareData data = new TextExtractionWorkerPrepareData(stormConf, getUser(), getHdfsFileSystem(), getInjector());
+            InjectHelper.inject(service);
+            TextExtractionWorkerPrepareData data = new TextExtractionWorkerPrepareData(stormConf, getUser(), getHdfsFileSystem(), InjectHelper.getInjector());
             try {
                 ((TextExtractionWorker) service).prepare(data);
             } catch (Exception ex) {

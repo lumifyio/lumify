@@ -6,6 +6,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
@@ -21,9 +22,9 @@ import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -77,11 +78,15 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private User user;
 
     @Override
-    public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+    public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
         LOGGER.info(String.format("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId()));
         this.collector = collector;
-        injector = Guice.createInjector(StormBootstrap.create(stormConf));
-        injector.injectMembers(this);
+        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
+            @Override
+            public Module createModule() {
+                return StormBootstrap.create(stormConf);
+            }
+        });
 
         String namePrefix = metricsManager.getNamePrefix(this);
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
@@ -118,15 +123,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         } catch (Exception ex) {
             return null;
         }
-    }
-
-    public Injector getInjector() {
-        return injector;
-    }
-
-    protected <T> T inject(T obj) {
-        getInjector().injectMembers(obj);
-        return obj;
     }
 
     protected FileSystem getHdfsFileSystem() {
@@ -311,7 +307,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setUser (SystemUser user) { this.user = user; }
+    public void setUser(SystemUser user) {
+        this.user = user;
+    }
 
     @Inject
     public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
