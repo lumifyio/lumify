@@ -44,7 +44,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
         opts.addOption(
                 OptionBuilder
                         .withLongOpt(CMD_OPT_NUM_WORKERS)
-                        .withDescription("Number of works")
+                        .withDescription("Number of workers")
                         .hasArg()
                         .withArgName("count")
                         .create("w")
