@@ -1,11 +1,13 @@
 package com.altamiracorp.lumify.core.util;
 
+import com.altamiracorp.lumify.core.metrics.PausableTimerContext;
+import com.altamiracorp.lumify.core.metrics.PausableTimerContextAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TeeInputStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(TeeInputStream.class.getName());
@@ -165,10 +167,11 @@ public class TeeInputStream {
         return tees[teeIndex].getMaxNonblockingReadLength();
     }
 
-    private class MyInputStream extends InputStream {
+    private class MyInputStream extends InputStream implements PausableTimerContextAware {
         private final String splitName;
         private boolean closed;
         private long offset;
+        private PausableTimerContext pausableTimerContext;
 
         public MyInputStream(String splitName) {
             closed = false;
@@ -178,36 +181,46 @@ public class TeeInputStream {
 
         @Override
         public int read() throws IOException {
-            synchronized (cyclicBufferLock) {
-                if (closed) {
-                    return -1;
-                }
+            pauseTimer();
+            try {
+                synchronized (cyclicBufferLock) {
+                    if (closed) {
+                        return -1;
+                    }
 
-                int result = readInternal();
-                if (result != -1) {
-                    offset++;
+                    int result = readInternal();
+                    if (result != -1) {
+                        offset++;
+                    }
+                    cyclicBufferLock.notifyAll();
+                    return result;
                 }
-                cyclicBufferLock.notifyAll();
-                return result;
+            } finally {
+                resumeTimer();
             }
         }
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
-            synchronized (cyclicBufferLock) {
-                if (closed) {
-                    return -1;
-                }
-                if (b.length == 0 || len == 0) {
-                    return 0;
-                }
+            pauseTimer();
+            try {
+                synchronized (cyclicBufferLock) {
+                    if (closed) {
+                        return -1;
+                    }
+                    if (b.length == 0 || len == 0) {
+                        return 0;
+                    }
 
-                int readLength = readInternal(b, off, len);
-                if (readLength != -1) {
-                    offset += readLength;
+                    int readLength = readInternal(b, off, len);
+                    if (readLength != -1) {
+                        offset += readLength;
+                    }
+                    cyclicBufferLock.notifyAll();
+                    return readLength;
                 }
-                cyclicBufferLock.notifyAll();
-                return readLength;
+            } finally {
+                resumeTimer();
             }
         }
 
@@ -292,6 +305,23 @@ public class TeeInputStream {
         public int getMaxNonblockingReadLength() {
             synchronized (cyclicBufferLock) {
                 return (int) (cyclicBufferValidSize - (offset - cyclicBufferOffset));
+            }
+        }
+
+        @Override
+        public void setPausableTimerContext(PausableTimerContext pausableTimerContext) {
+            this.pausableTimerContext = pausableTimerContext;
+        }
+
+        private void resumeTimer() {
+            if (this.pausableTimerContext != null) {
+                this.pausableTimerContext.resume();
+            }
+        }
+
+        private void pauseTimer() {
+            if (this.pausableTimerContext != null) {
+                this.pausableTimerContext.pause();
             }
         }
     }

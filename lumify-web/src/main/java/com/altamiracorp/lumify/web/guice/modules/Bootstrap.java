@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.guice.modules;
 import com.altamiracorp.lumify.core.BootstrapBase;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
+import com.google.inject.Module;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,14 +11,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Wires up the required injections for the web application
  */
 public class Bootstrap extends BootstrapBase {
-
     private final Configuration configuration;
 
-    public Bootstrap(final Configuration config) {
+    protected Bootstrap(final Configuration config) {
         super(config);
-        checkNotNull(config);
-
         configuration = config;
+    }
+
+    public static Module create(Configuration config) {
+        checkNotNull(config);
+        return new Bootstrap(config);
     }
 
     @Override

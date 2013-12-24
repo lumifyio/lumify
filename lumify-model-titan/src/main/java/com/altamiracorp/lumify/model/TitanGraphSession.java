@@ -180,6 +180,7 @@ public class TitanGraphSession extends GraphSession {
                 case DATE:
                     vertexDataType = Long.class;
                     break;
+                case DOUBLE:
                 case CURRENCY:
                     vertexDataType = Double.class;
                     break;
@@ -189,6 +190,10 @@ public class TitanGraphSession extends GraphSession {
                     break;
                 case GEO_LOCATION:
                     vertexDataType = Geoshape.class;
+                    break;
+                default:
+                    LOGGER.error(String.format("Unknown PropertyType [%s] for Property [%s].  Using String type.", dataType, name));
+                    vertexDataType = String.class;
                     break;
             }
             v = new VertexProperty(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey());

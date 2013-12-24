@@ -3,10 +3,13 @@ package com.altamiracorp.lumify.storm;
 import backtype.storm.spout.Scheme;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
+import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.model.KafkaJsonEncoder;
 import com.codahale.metrics.Counter;
+import com.google.inject.Inject;
+import com.google.inject.Module;
 import storm.kafka.KafkaConfig;
 import storm.kafka.KafkaSpout;
 import storm.kafka.SpoutConfig;
@@ -17,6 +20,7 @@ public class LumifyKafkaSpout extends KafkaSpout {
     private final String queueName;
     private Counter totalProcessedCounter;
     private Counter totalErrorCounter;
+    private MetricsManager metricsManager;
 
     public LumifyKafkaSpout(Configuration configuration, String queueName) {
         super(createConfig(configuration, queueName, null));
@@ -37,14 +41,18 @@ public class LumifyKafkaSpout extends KafkaSpout {
     }
 
     @Override
-    public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector collector) {
-        MetricsManager metricsManager = MetricsManager.getInstance();
-
+    public void open(final Map conf, TopologyContext topologyContext, SpoutOutputCollector collector) {
+        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
+            @Override
+            public Module createModule() {
+                return StormBootstrap.create(conf);
+            }
+        });
         String namePrefix = metricsManager.getNamePrefix(this, queueName);
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
         totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
 
-        super.open(map, topologyContext, collector);
+        super.open(conf, topologyContext, collector);
     }
 
     @Override
@@ -57,5 +65,10 @@ public class LumifyKafkaSpout extends KafkaSpout {
     public void fail(Object o) {
         super.fail(o);
         totalErrorCounter.inc();
+    }
+
+    @Inject
+    public void setMetricsManager(MetricsManager metricsManager) {
+        this.metricsManager = metricsManager;
     }
 }

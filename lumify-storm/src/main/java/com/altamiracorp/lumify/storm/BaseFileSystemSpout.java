@@ -6,13 +6,14 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.google.common.collect.Maps;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +35,15 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
     }
 
     @Override
-    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+    public void open(final Map conf, TopologyContext context, SpoutOutputCollector collector) {
         LOGGER.info(String.format("Configuring environment for spout: %s-%d", context.getThisComponentId(), context.getThisTaskId()));
         this.collector = collector;
-        injector = Guice.createInjector(StormBootstrap.create(conf));
-        injector.injectMembers(this);
+        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
+            @Override
+            public Module createModule() {
+                return StormBootstrap.create(conf);
+            }
+        });
         workingFiles = Maps.newHashMap();
 
         String namePrefix = metricsManager.getNamePrefix(this, getPath());

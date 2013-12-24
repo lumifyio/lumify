@@ -1,8 +1,11 @@
 package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.PausableTimerContext;
+import com.altamiracorp.lumify.core.metrics.PausableTimerContextAware;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,25 +17,25 @@ import java.util.Queue;
 
 public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadedTeeInputStreamWorker.class.getName());
-    private final Counter totalProcessedCounter;
-    private final Counter processingCounter;
-    private final Counter totalErrorCounter;
-    private final Timer processingTimeTimer;
+    private Counter totalProcessedCounter = null;
+    private Counter processingCounter;
+    private Counter totalErrorCounter;
+    private Timer processingTimeTimer;
     private boolean stopped;
     private final Queue<Work> workItems = new LinkedList<Work>();
     private final Queue<WorkResult<TResult>> workResults = new LinkedList<WorkResult<TResult>>();
-
-    public ThreadedTeeInputStreamWorker() {
-        MetricsManager metricsManager = MetricsManager.getInstance();
-        String namePrefix = metricsManager.getNamePrefix(this);
-        totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
-        processingCounter = metricsManager.getRegistry().counter(namePrefix + "processing");
-        totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
-        processingTimeTimer = metricsManager.getRegistry().timer(namePrefix + "processing-time");
-    }
+    private MetricsManager metricsManager;
 
     @Override
     public final void run() {
+        if (totalProcessedCounter == null) {
+            String namePrefix = metricsManager.getNamePrefix(this);
+            totalProcessedCounter = metricsManager.counter(namePrefix + "total-processed");
+            processingCounter = metricsManager.counter(namePrefix + "processing");
+            totalErrorCounter = metricsManager.counter(namePrefix + "total-errors");
+            processingTimeTimer = metricsManager.timer(namePrefix + "processing-time");
+        }
+
         stopped = false;
         try {
             while (!stopped) {
@@ -48,7 +51,10 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
                 try {
                     LOGGER.debug("BEGIN doWork (" + getClass().getName() + ")");
                     TResult result;
-                    Timer.Context timerContext = processingTimeTimer.time();
+                    PausableTimerContext timerContext = new PausableTimerContext(processingTimeTimer);
+                    if (in instanceof PausableTimerContextAware) {
+                        ((PausableTimerContextAware) in).setPausableTimerContext(timerContext);
+                    }
                     processingCounter.inc();
                     try {
                         result = doWork(in, work.getData());
@@ -148,5 +154,10 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
         public TResult getResult() {
             return result;
         }
+    }
+
+    @Inject
+    public void setMetricsManager(MetricsManager metricsManager) {
+        this.metricsManager = metricsManager;
     }
 }

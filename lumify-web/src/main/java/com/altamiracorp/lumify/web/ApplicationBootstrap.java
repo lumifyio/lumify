@@ -1,12 +1,13 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.FrameworkUtils;
+import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.guice.modules.Bootstrap;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +37,18 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 final Configuration config = fetchApplicationConfiguration(context);
                 LOGGER.info("Running application with configuration: " + config);
 
-                final Injector injector = Guice.createInjector(new Bootstrap(config));
+                InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
+                    @Override
+                    public Module createModule() {
+                        return Bootstrap.create(config);
+                    }
+                });
 
                 // Store the injector in the context for a servlet to access later
-                context.setAttribute(Injector.class.getName(), injector);
+                context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
 
                 final User user = new SystemUser();
-                FrameworkUtils.initializeFramework(injector, user);
+                FrameworkUtils.initializeFramework(InjectHelper.getInjector(), user);
 
                 LOGGER.warn("JavaScript / Less modifications will not be reflected on server. Run `grunt watch` from webapp directory in development");
             } else {
