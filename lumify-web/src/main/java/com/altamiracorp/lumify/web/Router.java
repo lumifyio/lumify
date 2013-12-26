@@ -20,7 +20,6 @@ import com.altamiracorp.lumify.web.routes.workspace.*;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticFileHandler;
 import com.google.inject.Injector;
-import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +32,11 @@ import java.io.IOException;
 
 public class Router extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(Router.class);
+    /**
+     * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
+     * TODO: Examine why this is necessary and how it can be abstracted to any servlet container.
+     */
+    private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
     final File rootDir = new File("./lumify-web/src/main/webapp");
@@ -125,7 +129,7 @@ public class Router extends HttpServlet {
     public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
         try {
             if (req.getContentType() != null && req.getContentType().startsWith("multipart/form-data")) {
-                req.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
+                req.setAttribute(JETTY_MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
             }
 
             HttpServletResponse httpResponse = (HttpServletResponse) resp;
