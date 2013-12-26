@@ -1,7 +1,7 @@
 
 define([
-    'service/ucd'
-], function(Ucd) {
+    'service/service'
+], function(Service) {
 
     return withVertexCache;
 
@@ -9,8 +9,8 @@ define([
 
         this.cachedVertices = {};
         this.workspaceVertices = {};
-        if (!this.ucdService) {
-            this.ucdService = new Ucd();
+        if (!this.service) {
+            this.service = new Service();
         }
 
 
@@ -65,14 +65,14 @@ define([
                 deferred = null;
 
             if (_.isString(vertex)) {
-                deferred = this.ucdService.getVertexProperties(vertex);
+                deferred = this.service.getVertexProperties(vertex);
             } else if (vertex.properties._type === 'artifact' && vertex.properties._rowKey) { 
                 deferred = $.when(
-                    this.ucdService.getArtifactById(vertex.properties._rowKey),
-                    this.ucdService.getVertexProperties(vertex.id)
+                    this.service.getArtifactById(vertex.properties._rowKey),
+                    this.service.getVertexProperties(vertex.id)
                 );
             } else {
-                deferred = this.ucdService.getVertexProperties(vertex.id);
+                deferred = this.service.getVertexProperties(vertex.id);
             }
 
             return deferred.then(function() {

@@ -105,7 +105,7 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.ucdService.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
+            this.service.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
                 self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
                 self.updateEntityAndArtifactDraggables();
 

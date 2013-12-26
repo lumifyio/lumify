@@ -3,7 +3,7 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'data',
-    'service/ucd',
+    'service/service',
     'service/ontology',
     'util/vertexList/list',
     'util/formatters',
@@ -18,7 +18,7 @@ define([
     defineComponent,
     registry,
     appData,
-    UCD,
+    Service,
     OntologyService,
     VertexList,
     formatters,
@@ -34,7 +34,7 @@ define([
     return defineComponent(Search);
 
     function Search() {
-        this.ucd = new UCD();
+        this.service = new Service();
         this.ontologyService = new OntologyService();
         this.currentQuery = null;
 
@@ -134,8 +134,8 @@ define([
 
                 var paging = { offset:0, size:100 };
                 $.when(
-                    this.ucd.artifactSearch(query || this.select('querySelector').val(), this.filters, null, paging),
-                    this.ucd.graphVertexSearch(query || this.select('querySelector').val(), this.filters, null, paging)
+                    this.service.artifactSearch(query || this.select('querySelector').val(), this.filters, null, paging),
+                    this.service.graphVertexSearch(query || this.select('querySelector').val(), this.filters, null, paging)
                 ).done(function(artifactSearch, vertexSearch) {
                     var results = {
                         artifact: artifactSearch[0],
@@ -393,7 +393,7 @@ define([
                 query = this.select('querySelector').val();
 
             if (data.verticesType === 'artifact') {
-                this.ucd.artifactSearch(
+                this.service.artifactSearch(
                         query,
                         this.filters,
                         data.verticesSubType,
@@ -412,7 +412,7 @@ define([
                     );
                 });
             } else {
-                this.ucd.graphVertexSearch(
+                this.service.graphVertexSearch(
                         query,
                         this.filters,
                         data.verticesSubType,

@@ -47,7 +47,7 @@ define([
             var self = this,
                 data = this.attr.data;
 
-            this.ucdService.getVertexToVertexRelationshipDetails(
+            this.service.getVertexToVertexRelationshipDetails(
                     data.properties.source,
                     data.properties.target,
                     data.properties.relationshipType
