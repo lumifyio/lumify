@@ -1,6 +1,9 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
@@ -14,6 +17,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,15 +28,21 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     @Mock
     private GraphRepository mockGraphRepository;
     @Mock
+    private AuditRepository mockAuditRepository;
+    @Mock
     private User mockUser;
     @Mock
     private HttpSession mockHttpSession;
+    @Mock
+    private GraphVertex mockSourceVertex;
+    @Mock
+    private GraphVertex mockDestVertex;
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraphRepository);
+        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraphRepository, mockAuditRepository);
     }
 
     @Test
@@ -42,9 +53,13 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
 
         when(mockRequest.getSession()).thenReturn(mockHttpSession);
         when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
+        when(mockGraphRepository.findVertex("sourceId", mockUser)).thenReturn(mockSourceVertex);
+        when(mockGraphRepository.findVertex("targetId", mockUser)).thenReturn(mockDestVertex);
 
         vertexRelationshipRemoval.handle(mockRequest, mockResponse, mockHandlerChain);
         JSONObject response = new JSONObject(responseStringWriter.getBuffer().toString());
         assertTrue(response.getBoolean("success"));
+
+        verify(mockAuditRepository, times(1)).auditRelationships(AuditAction.DELETE.toString(), mockSourceVertex, mockDestVertex, "label", "", "", mockUser);
     }
 }
