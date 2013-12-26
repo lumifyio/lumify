@@ -491,6 +491,8 @@ define([
         };
 
         this.createMap = function(ol, ClusterStrategy) {
+            ol.ImgPath = "/libs/openlayers/img";
+
             var self = this,
                 controls = new ol.Control.Navigation({
                     handleRightClicks: true,
@@ -501,6 +503,7 @@ define([
                 map = new ol.Map('map', { 
                     zoomDuration: 0,
                     numZoomLevels: 18,
+                    theme: null,
                     displayProjection: new ol.Projection("EPSG:4326"),
                     controls: [ controls ]
                 }),
