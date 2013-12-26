@@ -7,7 +7,8 @@ define([
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
     'service/ucd',
-    'detail/detail'
+    'detail/detail',
+    'util/jquery.removePrefixedClasses'
 ], function(defineComponent, registry, template, errorTemplate, VertexService, UCD, Detail) {
     'use strict';
 

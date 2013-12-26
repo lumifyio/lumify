@@ -50,10 +50,51 @@ module.exports = function(grunt) {
         }
     },
 
+    requirejs: {
+        compile: {
+            options: {
+                mainConfigFile: 'js/require.config.js',
+                dir: 'jsc',
+                baseUrl: 'js',
+                preserveLicenseComments: false,
+                optimize: 'uglify2',
+                generateSourceMaps: true,
+                logLevel: 2,
+                modules: [
+                    { name: 'lumify' },
+                    { name: 'app' },
+                    { name: 'appFullscreenDetails' },
+                    { name: 'detail/artifact/artifact' },
+                    { name: 'detail/entity/entity' }
+                ]
+            }
+        }
+    },
+
+    uglify: {
+        development: {
+            options: {
+                sourceMap: 'path/to/source-map.js',
+                sourceMapRoot: 'http://example.com/path/to/src/', // the location to find your original source
+                sourceMapIn: 'example/coffeescript-sourcemap.js', // input sourcemap from a previous compilation
+            },
+            files: {
+                'dest/output.min.js': ['src/input.js'],
+            },
+        },
+    },
+
     watch: {
-        scripts: {
+        css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
             tasks: ['less'],
+            options: {
+                spawn: false
+            }
+        },
+        scripts: {
+            files: ['js/**/*.js'],
+            tasks: ['requirejs'],
             options: {
                 spawn: false
             }
@@ -65,8 +106,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   grunt.registerTask('deps', ['bower:install', 'bower:prune', 'exec']);
-  grunt.registerTask('minify', ['less']);
+  grunt.registerTask('minify', ['less', 'requirejs']);
   grunt.registerTask('default', ['deps', 'minify']);
 };

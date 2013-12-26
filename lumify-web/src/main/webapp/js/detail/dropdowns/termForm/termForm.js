@@ -9,7 +9,8 @@ define([
     'tpl!./entity',
     'service/ucd',
     'service/entity',
-    'service/ontology'
+    'service/ontology',
+    'util/jquery.removePrefixedClasses'
 ], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, Ucd, EntityService, OntologyService) {
     'use strict';
 

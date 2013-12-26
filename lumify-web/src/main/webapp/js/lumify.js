@@ -11,6 +11,12 @@ window.requestAnimationFrame =
       window.msRequestAnimationFrame || function(callback) { setTimeout(callback, 1000/60); } );
 
 require([
+    'jquery', 
+    'jqueryui',
+    'bootstrap',
+    'es5shim',
+    'es5sham',
+
     'flight/lib/compose',
     'flight/lib/registry',
     'flight/lib/advice',
@@ -22,15 +28,11 @@ require([
 
     'util/visibility',
 
-    // Make jQuery plugins available
-    'withinScrollable',
-    'flightJquery',
     'easing',
     'scrollStop',
-    'bootstrap-datepicker',
-    'removePrefixedClasses'
+    'bootstrap-datepicker'
 ],
-function(compose, registry, advice, withLogging, debug, _, Visibility) {
+function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advice, withLogging, debug, _, Visibility) {
     'use strict';
 
     configureApplication();
