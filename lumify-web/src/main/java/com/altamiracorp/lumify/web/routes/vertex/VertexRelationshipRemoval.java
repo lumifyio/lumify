@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,5 +26,10 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
 
         User user = getUser(request);
         graphRepository.removeRelationship(source, target, label, user);
+
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("success", true);
+
+        respondWithJson(response, resultJson);
     }
 }
