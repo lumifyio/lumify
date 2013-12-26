@@ -75,7 +75,7 @@ public class EntityHelper {
     }
 
     public void scheduleHighlight(String artifactGraphVertexId, User user) {
-        workQueueRepository.pushArtifactHighlight(artifactGraphVertexId);
+        workQueueRepository.pushUserArtifactHighlight(artifactGraphVertexId);
     }
 
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String process, String comment,

@@ -43,7 +43,6 @@ public class WorkspaceCopy extends BaseRequestHandler {
         workspaceRepository.save(workspace,authUser.getModelUserContext());
         request.getSession().setAttribute("activeWorkspace", workspace.getRowKey().toString());
 
-
         JSONObject resultJson = workspace.toJson(authUser);
 
         respondWithJson(response, resultJson);
