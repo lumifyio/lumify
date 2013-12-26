@@ -23,21 +23,16 @@ public class StormRunner extends StormRunnerBase {
     public StormTopology createTopology(int parallelismHint) {
         TopologyBuilder builder = new TopologyBuilder();
         createArtifactHighlightingTopology(builder, parallelismHint);
-        createUserArtifactHighlightingTopology(builder, parallelismHint);
         return builder.createTopology();
     }
 
     private void createArtifactHighlightingTopology(TopologyBuilder builder, int parallelismHint) {
         builder.setSpout("artifactHighlightSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), parallelismHint)
-                .shuffleGrouping("artifactHighlightSpout");
-    }
-
-    private void createUserArtifactHighlightingTopology (TopologyBuilder builder, int parallelismHint) {
         builder.setSpout("userArtifactHighlightSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setBolt("userArtifactHighlightBolt", new ArtifactHighlightingBolt(), parallelismHint)
+        builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), parallelismHint)
+                .shuffleGrouping("artifactHighlightSpout")
                 .shuffleGrouping("userArtifactHighlightSpout");
     }
 }
