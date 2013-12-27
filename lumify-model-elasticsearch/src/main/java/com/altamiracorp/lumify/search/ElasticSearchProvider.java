@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.search;
 
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
@@ -8,6 +9,7 @@ import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
+import com.codahale.metrics.Timer;
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -56,8 +58,13 @@ public class ElasticSearchProvider extends SearchProvider {
     private static final int ES_QUERY_MAX_SIZE = 100;
 
     private static TransportClient client;
+    private Timer processingTimeTimer;
 
-    public ElasticSearchProvider(Configuration config, User user) {
+    @Override
+    public void init(Configuration config, User user, MetricsManager metricsManager) {
+        String namePrefix = metricsManager.getNamePrefix(this);
+        processingTimeTimer = metricsManager.getRegistry().timer(namePrefix + "processing-time");
+
         String[] esLocations = config.get(ES_LOCATIONS_PROP_KEY).split(",");
         setup(esLocations, user);
     }
@@ -120,12 +127,17 @@ public class ElasticSearchProvider extends SearchProvider {
             jsonBuilder = jsonBuilder.field(FIELD_GEO_LOCATION_DESCRIPTION, geoLocationDescription);
         }
 
-        IndexResponse response = client.prepareIndex(ES_INDEX, ES_INDEX_TYPE, id)
-                .setSource(jsonBuilder.endObject())
-                .execute().actionGet();
+        Timer.Context processingTimeTimerContext = processingTimeTimer.time();
+        try {
+            IndexResponse response = client.prepareIndex(ES_INDEX, ES_INDEX_TYPE, id)
+                    .setSource(jsonBuilder.endObject())
+                    .execute().actionGet();
 
-        if (response.getId() == null) {
-            LOGGER.error("Failed to index artifact " + id + " with elastic search");
+            if (response.getId() == null) {
+                LOGGER.error("Failed to index artifact " + id + " with elastic search");
+            }
+        } finally {
+            processingTimeTimerContext.stop();
         }
     }
 
