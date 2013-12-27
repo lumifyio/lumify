@@ -26,7 +26,6 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
     private Map<String, String> workingFiles;
     private Counter totalProcessedCounter;
     private Counter totalErrorCounter;
-    private Injector injector;
     private MetricsManager metricsManager;
 
     @Override
