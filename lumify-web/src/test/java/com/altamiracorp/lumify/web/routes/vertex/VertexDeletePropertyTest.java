@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -21,7 +22,9 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VertexDeletePropertyTest extends RouteTestBase {
@@ -81,5 +84,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
         assertEquals(AUTHOR, responseProperties.getString(PropertyName.AUTHOR.toString()));
         assertEquals(SUBTYPE, responseProperties.getString(PropertyName.SUBTYPE.toString()));
         assertEquals(TYPE, responseProperties.getString(PropertyName.TYPE.toString()));
+
+        verify(mockAuditRepository, times(1)).auditEntityProperties(AuditAction.DELETE.toString(), vertex, PropertyName.TITLE.toString(), "", "", mockUser);
     }
 }
