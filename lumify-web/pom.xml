@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>lumify-web</artifactId>
-    <packaging>war</packaging>
+    <packaging>${packaging.type}</packaging>
 
     <name>Lumify Web Interface</name>
 
@@ -20,9 +20,14 @@
         <jetty.ssl.port>8443</jetty.ssl.port>
         <jetty.maxIdleTime>60000</jetty.maxIdleTime>
         
+        <!-- Default packaging is jar.  Use web-war profile to package as war. -->
+        <packaging.type>jar</packaging.type>
+        <!-- Grunt Execution Target.  Valid values are [ development | production ] -->
+        <grunt.target>development</grunt.target>
+        
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
-        <plugin.maven.war.version>2.3</plugin.maven.war.version>
+        <plugin.maven.war.version>2.4</plugin.maven.war.version>
     </properties>
 
     <dependencies>
@@ -157,7 +162,7 @@
                         </goals>
                         <configuration>
                             <executable>${basedir}/src/main/scripts/grunt.sh</executable>
-                            <commandlineArgs>${project.activeProfiles[0].id}</commandlineArgs>
+                            <commandlineArgs>${grunt.target}</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>
@@ -184,13 +189,13 @@
             </plugin>
         </plugins>
     </build>
-
+    
     <profiles>
-        <!-- Bundle the web interface as a war. -->
         <profile>
             <id>web-war</id>
             <properties>
                 <packaging.type>war</packaging.type>
+                <grunt.target>production</grunt.target>
             </properties>
             <build>
                 <plugins>
@@ -199,9 +204,18 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${plugin.maven.war.version}</version>
                         <configuration>
-                            <packagingExcludes>
-                                test/**,Gruntfile.js,karma.conf.js,bower.json,node_modules/**,libs/sinon/**,libs/sinon-chai/**,libs/flight-mocha/**,libs/chai/**
-                            </packagingExcludes>
+                            <warSourceExcludes>
+                                index.html,
+                                test/**,
+                                Gruntfile.js,
+                                karma.conf.js,
+                                bower.json,
+                                node_modules/**,
+                                libs/sinon/**,
+                                libs/sinon-chai/**,
+                                libs/flight-mocha/**,
+                                libs/chai/**
+                            </warSourceExcludes>
                             <archive>
                                 <manifest>
                                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -213,20 +227,17 @@
                                 </manifestEntries>
                             </archive>
                             <webResources>
-                                <webResource>
-                                    <directory>${basedir}/src/main/webapp</directory>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
                                     <filtering>true</filtering>
-                                </webResource>
+                                    <includes>
+                                        <include>index.html</include>
+                                    </includes>
+                                </resource>
                             </webResources>
                         </configuration>
                     </plugin>
                 </plugins>
-                <resources>
-                    <resource>
-                        <directory>${basedir}/src/main/resources</directory>
-                        <filtering>true</filtering>
-                    </resource>
-                </resources>
             </build>
         </profile>
     </profiles>

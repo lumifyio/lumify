@@ -23,19 +23,28 @@ public class KafkaJsonEncoder implements Encoder<JSONObject>, Scheme {
 
     @Override
     public List<Object> deserialize(byte[] ser) {
-        ArrayList<Object> results = new ArrayList<Object>();
-        JSONObject json = new JSONObject(new String(ser));
-        results.add(json.toString());
+        String serString = new String(ser);
+        try {
+            ArrayList<Object> results = new ArrayList<Object>();
+            JSONObject json = new JSONObject(serString);
+            results.add(json.toString());
 
-        JSONArray extra = json.optJSONArray(EXTRA);
-        if (extra != null) {
-            for (int i = 0; i < extra.length(); i++) {
-                results.add(extra.get(i));
+            JSONArray extra = json.optJSONArray(EXTRA);
+            if (extra != null) {
+                for (int i = 0; i < extra.length(); i++) {
+                    results.add(extra.get(i));
+                }
             }
-        }
 
-        LOGGER.info("deserialize: " + json.toString() + " (size: " + results.size() + ")");
-        return results;
+            LOGGER.info("deserialize: " + json.toString() + " (size: " + results.size() + ")");
+            return results;
+        } catch (Exception ex) {
+            String head = serString;
+            if (head.length() > 20) {
+                head = head.substring(0, 20);
+            }
+            throw new RuntimeException("Could not deserialize [" + head + "]", ex);
+        }
     }
 
     @Override

@@ -28,17 +28,9 @@ mv $filename $filename_previous
 bower list --offline > $filename
 
 if diff $filename $filename_previous >/dev/null ; then
-  if [ "$1" = "web-war" ]; then
-    grunt production
-  else
-    grunt development
-  fi
+  grunt $1
 else
-  if [ "$1" = "web-war" ]; then
-    grunt deps production
-  else
-    grunt deps development
-  fi
+  grunt deps $1
 fi
 
 cd - >/dev/null
