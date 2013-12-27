@@ -15,7 +15,9 @@ public abstract class StormRunnerBase extends CommandLineBase {
     private static final String CMD_OPT_TASKS_PER_BOLT = "tasksperbolt";
     private static final String CMD_OPT_NUM_WORKERS = "workers";
     private static final String CMD_OPT_PARALLELISM_HINT = "parallelismhint";
+    private static final String CMD_OPT_REPROCESS_ALL_QUEUES = "reprocessallqueues";
     private boolean local;
+    private boolean reprocessAllQueues;
 
     public StormRunnerBase() {
         initFramework = true;
@@ -59,12 +61,20 @@ public abstract class StormRunnerBase extends CommandLineBase {
                         .create("ph")
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_REPROCESS_ALL_QUEUES)
+                        .withDescription("Tells kafka spouts to start from earliest offset.")
+                        .create("raq")
+        );
+
         return opts;
     }
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
         local = cmd.hasOption(CMD_OPT_LOCAL);
+        reprocessAllQueues = cmd.hasOption(CMD_OPT_REPROCESS_ALL_QUEUES);
 
         int parallelismHint = 1;
         if (cmd.hasOption(CMD_OPT_PARALLELISM_HINT)) {
@@ -124,5 +134,12 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
     protected boolean isLocal() {
         return local;
+    }
+
+    public Long getQueueStartOffsetTime() {
+        if (this.reprocessAllQueues) {
+            return LumifyKafkaSpout.KAFKA_START_OFFSET_TIME_EARLIEST;
+        }
+        return null;
     }
 }
