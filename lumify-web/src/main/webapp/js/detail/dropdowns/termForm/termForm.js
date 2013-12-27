@@ -496,8 +496,8 @@ define([
                 if (self.attr.detectedObject) {
                     vertexInfo = self.attr.resolvedVertex;
                 } else {
-                    var mentionVertex = $(self.attr.mentionNode),
-                        vertexInfo = mentionVertex.data('info');
+                    var mentionVertex = $(self.attr.mentionNode);
+                    vertexInfo = mentionVertex.data('info');
                 }
 
                 self.allConcepts = concepts.byTitle;

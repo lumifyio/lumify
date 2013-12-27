@@ -9,9 +9,9 @@ define([
     // Limit previews to 1MB since it's a dataUri
     var MAX_PREVIEW_FILE_SIZE = 1024 * 1024; 
 
-    return defineComponent(Image);
+    return defineComponent(ImageView);
 
-    function Image() {
+    function ImageView() {
 
         this.defaultAttrs({
             canvasSelector: 'canvas',

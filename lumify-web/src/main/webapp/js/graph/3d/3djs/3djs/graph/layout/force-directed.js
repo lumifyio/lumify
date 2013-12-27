@@ -87,12 +87,13 @@ define( [], function() {
       this.generate = function() {
         if(layout_iterations < this.max_iterations && temperature > 0.000001) {
           var start = new Date().getTime();
+          var delta_length, delta_length_z, delta_x, delta_y, delta_z, i, force_z, force;
           
           // calculate repulsion
-          for(var i=0; i < nodes_length; i++) {
+          for(i=0; i < nodes_length; i++) {
             var node_v = graph.nodes[i];
             node_v.layout = node_v.layout || {};
-            if(i==0) {
+            if(i===0) {
               node_v.layout.offset_x = 0;
               node_v.layout.offset_y = 0;
               if(this.layout === "3d") {
@@ -107,6 +108,7 @@ define( [], function() {
               node_v.layout.tmp_pos_z = node_v.layout.tmp_pos_z || node_v.position.z;
             }
 
+
             for(var j=i+1; j < nodes_length; j++) {
               var node_u = graph.nodes[j];
               if(i != j) {
@@ -117,20 +119,20 @@ define( [], function() {
                   node_u.layout.tmp_pos_z = node_u.layout.tmp_pos_z || node_u.position.z;
                 }
 
-                var delta_x = node_v.layout.tmp_pos_x - node_u.layout.tmp_pos_x;
-                var delta_y = node_v.layout.tmp_pos_y - node_u.layout.tmp_pos_y;
+                delta_x = node_v.layout.tmp_pos_x - node_u.layout.tmp_pos_x;
+                delta_y = node_v.layout.tmp_pos_y - node_u.layout.tmp_pos_y;
                 if(this.layout === "3d") {
-                  var delta_z = node_v.layout.tmp_pos_z - node_u.layout.tmp_pos_z;
+                  delta_z = node_v.layout.tmp_pos_z - node_u.layout.tmp_pos_z;
                 }
 
-                var delta_length = Math.max(EPSILON, Math.sqrt((delta_x * delta_x) + (delta_y * delta_y)));
+                delta_length = Math.max(EPSILON, Math.sqrt((delta_x * delta_x) + (delta_y * delta_y)));
                 if(this.layout === "3d") {
-                  var delta_length_z = Math.max(EPSILON, Math.sqrt((delta_z * delta_z) + (delta_y * delta_y)));
+                  delta_length_z = Math.max(EPSILON, Math.sqrt((delta_z * delta_z) + (delta_y * delta_y)));
                 }
 
-                var force = (repulsion_constant * repulsion_constant) / delta_length;
+                force = (repulsion_constant * repulsion_constant) / delta_length;
                 if(this.layout === "3d") {
-                  var force_z = (repulsion_constant * repulsion_constant) / delta_length_z;
+                  force_z = (repulsion_constant * repulsion_constant) / delta_length_z;
                 }
 
                 node_v.layout.force += force;
@@ -139,7 +141,7 @@ define( [], function() {
                 node_v.layout.offset_x += (delta_x / delta_length) * force;
                 node_v.layout.offset_y += (delta_y / delta_length) * force;
 
-                if(i==0) {
+                if(i===0) {
                   node_u.layout.offset_x = 0;
                   node_u.layout.offset_y = 0;
                   if(this.layout === "3d") {
@@ -158,22 +160,21 @@ define( [], function() {
           }
           
           // calculate attraction
-          for(var i=0; i < edges_length; i++) {
+          for(i=0; i < edges_length; i++) {
             var edge = graph.edges[i];
-            if (!edge.target.layout) debugger;
-            var delta_x = edge.source.layout.tmp_pos_x - edge.target.layout.tmp_pos_x;
-            var delta_y = edge.source.layout.tmp_pos_y - edge.target.layout.tmp_pos_y;
+            delta_x = edge.source.layout.tmp_pos_x - edge.target.layout.tmp_pos_x;
+            delta_y = edge.source.layout.tmp_pos_y - edge.target.layout.tmp_pos_y;
             if(this.layout === "3d") {
-              var delta_z = edge.source.layout.tmp_pos_z - edge.target.layout.tmp_pos_z;
+              delta_z = edge.source.layout.tmp_pos_z - edge.target.layout.tmp_pos_z;
             }  
 
-            var delta_length = Math.max(EPSILON, Math.sqrt((delta_x * delta_x) + (delta_y * delta_y)));
+            delta_length = Math.max(EPSILON, Math.sqrt((delta_x * delta_x) + (delta_y * delta_y)));
             if(this.layout === "3d") {
-              var delta_length_z = Math.max(EPSILON, Math.sqrt((delta_z * delta_z) + (delta_y * delta_y)));
+              delta_length_z = Math.max(EPSILON, Math.sqrt((delta_z * delta_z) + (delta_y * delta_y)));
             }
-            var force = (delta_length * delta_length) / attraction_constant;
+            force = (delta_length * delta_length) / attraction_constant;
             if(this.layout === "3d") {
-              var force_z = (delta_length_z * delta_length_z) / attraction_constant;
+              force_z = (delta_length_z * delta_length_z) / attraction_constant;
             }
 
             edge.source.layout.force -= force;
@@ -193,11 +194,11 @@ define( [], function() {
           }
           
           // calculate positions
-          for(var i=0; i < nodes_length; i++) {
+          for(i=0; i < nodes_length; i++) {
             var node = graph.nodes[i];
-            var delta_length = Math.max(EPSILON, Math.sqrt(node.layout.offset_x * node.layout.offset_x + node.layout.offset_y * node.layout.offset_y));
+            delta_length = Math.max(EPSILON, Math.sqrt(node.layout.offset_x * node.layout.offset_x + node.layout.offset_y * node.layout.offset_y));
             if(this.layout === "3d") {
-              var delta_length_z = Math.max(EPSILON, Math.sqrt(node.layout.offset_z * node.layout.offset_z + node.layout.offset_y * node.layout.offset_y));
+              delta_length_z = Math.max(EPSILON, Math.sqrt(node.layout.offset_z * node.layout.offset_z + node.layout.offset_y * node.layout.offset_y));
             }
 
             node.layout.tmp_pos_x += (node.layout.offset_x / delta_length) * Math.min(delta_length, temperature);

@@ -214,7 +214,7 @@ define([
 
             $target.text('Copying...').attr('disabled', true);
 
-            this.workspaceService['copy'](_rowKey)
+            this.workspaceService.copy(_rowKey)
                 .fail(function(xhr) {
                     if (xhr.status === 403) {
                         // TODO: alert user with error:
@@ -227,7 +227,7 @@ define([
                 .done(function(workspace) {
                     self.trigger(document, 'workspaceCopied', { _rowKey:workspace._rowKey });
                 });
-        }
+        };
 
         this.onRevokeAccess = function(event) {
             var list = $(event.target).closest('.permissions-list'),

@@ -82,7 +82,7 @@ define([
 
         this.updateCacheWithArtifact = function(artifact, subType) {
             // Determine differences between artifact search and artifact get requests
-            var id = artifact.graphVertexId || artifact.Generic_Metadata['graphVertexId'],
+            var id = artifact.graphVertexId || artifact.Generic_Metadata.graphVertexId,
                 rowKey = artifact._rowKey || artifact.key.value,
                 content = artifact.Generic_Metadata;
 

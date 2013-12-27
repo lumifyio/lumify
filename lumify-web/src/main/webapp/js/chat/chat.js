@@ -55,17 +55,15 @@ define([
                 return $('#chat-window-' + chat.rowKey).show().find('.message').focus();
             }
 
-            var chat = {
+            chat = {
                 rowKey: userData.rowKey,
                 users: [userData]
             };
             this.openChats[chat.rowKey] = chat;
-            console.log('onUserSelected chatCreated', chat);
             this.trigger(document, 'chatCreated', chat);
         };
 
         this.onChatCreated = function (evt, chat) {
-            console.log('onChatCreated', chat);
             this.createChatWindowAndFocus(chat);
         };
 
@@ -81,7 +79,6 @@ define([
         };
 
         this.addMessage = function (messageData) {
-            console.log('addMessage', messageData);
             if (messageData.tempId) {
                 $('#' + messageData.tempId).remove();
             }
@@ -102,7 +99,6 @@ define([
 
         this.checkChatWindow = function (messageData) {
             var $chatWindow = $('#chat-window-' + messageData.chatRowKey);
-            console.log('checkChatWindow', messageData, $chatWindow);
             if ($chatWindow.length === 0) {
                 var chat = this.openChats[messageData.chatRowKey];
                 if (!chat) {
@@ -122,7 +118,6 @@ define([
         };
 
         this.scrollWindowToBottom = function (chatWindow) {
-            console.log('scrollWindowToBottom', chatWindow);
             clearTimeout(this.scrollTimeout);
             this.scrollTimeout = setTimeout(function () {
                 var bottom = chatWindow.get(0).scrollHeight - chatWindow.height();
@@ -135,14 +130,12 @@ define([
 
             switch (data.type) {
                 case 'chatMessage':
-                    console.log('onSocketMessage: chatMessage:', data);
                     self.trigger(document, 'chatMessage', data.data);
                     break;
             }
         };
 
         this.onChatMessage = function (evt, message) {
-            console.log('onChatMessage', message);
             this.addMessage(message);
         };
 

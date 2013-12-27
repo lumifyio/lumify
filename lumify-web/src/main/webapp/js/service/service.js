@@ -5,7 +5,7 @@ define(
 function(ServiceBase) {
     'use strict';
 
-    function Service()
+    function Service() {
         ServiceBase.call(this);
 
         return this;

@@ -84,6 +84,19 @@ module.exports = function(grunt) {
         },
     },
 
+    jshint: {
+            loose: {
+                files: {
+                    src: ['js/**/*.js']
+                },
+                options: {
+                    browser: true,
+                    '-W033': true, // Semicolons
+                    '-W040': true, // Ignore Strict violations from flight idioms
+                }
+            }
+    },
+
     watch: {
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
@@ -98,6 +111,10 @@ module.exports = function(grunt) {
             options: {
                 spawn: false
             }
+        },
+        lint: {
+            files: ['Gruntfile.js', 'js/**/*.js'],
+            tasks: ['jshint'],
         }
     }
   });
@@ -108,6 +125,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('deps', ['bower:install', 'bower:prune', 'exec']);
   grunt.registerTask('minify', ['less', 'requirejs']);

@@ -224,14 +224,14 @@ define([
 
                             var index, map = {};
                             for (var i = 0; i < notInWorkspace.length; i++) {
-                                paths: for (var j = 0; j < paths.length; j++) {
+                                path_loop: for (var j = 0; j < paths.length; j++) {
                                     for (var x = 0; x < paths[j].length; x++) {
                                         if (paths[j][x].id === notInWorkspace[i].id) {
                                             map[notInWorkspace[i].id] = {
                                                 sourceId: paths[j][x-1].id,
                                                 targetId: paths[j][x+1].id
                                             };
-                                            break paths;
+                                            break path_loop;
                                         }
                                     }
                                 }

@@ -52,6 +52,8 @@ define(['openlayers'], function(OpenLayers) {
         },
 
         cluster: function(event) {
+            var i;
+
             if((!event || event.zoomChanged) && this.features) {
                 var resolution = this.layer.map.getResolution();
                 if(resolution != this.resolution || !this.clustersExist() || this.previousCount != this.features.length) {
@@ -59,7 +61,7 @@ define(['openlayers'], function(OpenLayers) {
                     this.resolution = resolution;
                     var clusters = [];
                     var feature, clustered, cluster;
-                    for(var i=0; i<this.features.length; ++i) {
+                    for(i=0; i<this.features.length; ++i) {
                         feature = this.features[i];
                         if(feature.geometry) {
                             clustered = false;
@@ -84,7 +86,7 @@ define(['openlayers'], function(OpenLayers) {
                             var clone = clusters.slice();
                             clusters = [];
                             var candidate;
-                            for(var i=0, len=clone.length; i<len; ++i) {
+                            for(i=0, len=clone.length; i<len; ++i) {
                                 candidate = clone[i];
                                 if(candidate.attributes.count < this.threshold) {
                                     Array.prototype.push.apply(clusters, candidate.cluster);
