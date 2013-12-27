@@ -22,12 +22,15 @@ public class LumifyKafkaSpout extends KafkaSpout {
     private Counter totalErrorCounter;
     private MetricsManager metricsManager;
 
-    public LumifyKafkaSpout(Configuration configuration, String queueName) {
-        super(createConfig(configuration, queueName, null));
+    public static final long KAFKA_START_OFFSET_TIME_LATEST = -1;
+    public static final long KAFKA_START_OFFSET_TIME_EARLIEST = -2;
+
+    public LumifyKafkaSpout(Configuration configuration, String queueName, Long startOffsetTime) {
+        super(createConfig(configuration, queueName, null, startOffsetTime));
         this.queueName = queueName;
     }
 
-    private static SpoutConfig createConfig(Configuration configuration, String queueName, Scheme scheme) {
+    private static SpoutConfig createConfig(Configuration configuration, String queueName, Scheme scheme, Long startOffsetTime) {
         if (scheme == null) {
             scheme = new KafkaJsonEncoder();
         }
@@ -37,6 +40,9 @@ public class LumifyKafkaSpout extends KafkaSpout {
                 "/kafka/consumers",
                 queueName);
         spoutConfig.scheme = scheme;
+        if (startOffsetTime != null) {
+            spoutConfig.forceStartOffsetTime(startOffsetTime);
+        }
         return spoutConfig;
     }
 

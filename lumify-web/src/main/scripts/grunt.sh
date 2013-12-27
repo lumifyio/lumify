@@ -28,9 +28,17 @@ mv $filename $filename_previous
 bower list --offline > $filename
 
 if diff $filename $filename_previous >/dev/null ; then
-  grunt minify
+  if [ "$1" = "web-war" ]; then
+    grunt production
+  else
+    grunt development
+  fi
 else
-  grunt
+  if [ "$1" = "web-war" ]; then
+    grunt deps production
+  else
+    grunt deps development
+  fi
 fi
 
 cd - >/dev/null

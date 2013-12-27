@@ -6,9 +6,9 @@ define([
 ], function(defineComponent, template, blur, Jcrop) {
     'use strict';
 
-    return defineComponent(Image);
+    return defineComponent(ImageView);
 
-    function Image() {
+    function ImageView() {
 
         this.defaultAttrs({
             imageSelector: 'img',

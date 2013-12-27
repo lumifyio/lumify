@@ -5,7 +5,7 @@
     "bootstrap": "http://getbootstrap.com/2.3.2/assets/bootstrap.zip",
     "bootstrap-datepicker": "~1.2.0",
     "color-js": "~1.0.1",
-    "cytoscape.js": "git://github.com/nearinfinity/cytoscape.js.git#6d7bb93fbd4956da6d632ba4fa90f8d421bc9a1f",
+    "cytoscape.js": "git://github.com/altamiracorp/cytoscape.js.git#6d7bb93fbd4956da6d632ba4fa90f8d421bc9a1f",
     "d3": "~3.3.2",
     "flight": "~1.1.1",
     "intercom": "~0.1.4",
@@ -18,13 +18,14 @@
     "openlayers": "~2.13.1",
     "requirejs": "~2.1.9",
     "requirejs-domready": "~2.0.1",
-    "requirejs-ejs": "git://github.com/nearinfinity/requirejs-ejs.git",
+    "requirejs-ejs": "git://github.com/altamiracorp/requirejs-ejs.git",
     "requirejs-text": "~2.0.10",
-    "sf": "git://github.com/nearinfinity/node-sf.git",
+    "sf": "git://github.com/joeferner/node-sf.git",
     "threejs": "*",
     "underscore": "~1.5.1",
     "video.js": "~4.3.0",
-    "PathFinding.js": "*"
+    "PathFinding.js": "*",
+    "requirejs-plugins": "~1.0.2"
   },
   "resolutions": {
     "bootstrap": "*"

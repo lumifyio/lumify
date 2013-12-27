@@ -7,6 +7,7 @@ define([
     'tpl!./item',
     'util/previews',
     'util/video/scrubber',
+    'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
 ], function(defineComponent, registry, appData, template, vertexTemplate, previews, VideoScrubber) {
     'use strict';

@@ -42,7 +42,7 @@ define([], function() {
                 return {
                     x: 0,
                     y: 0
-                }
+                };
             }
             return {
                 x: position.x / self.devicePixelRatio,
@@ -54,7 +54,7 @@ define([], function() {
                 return {
                     x: 0,
                     y: 0
-                }
+                };
             }
             return {
                 x: position.x * self.devicePixelRatio,

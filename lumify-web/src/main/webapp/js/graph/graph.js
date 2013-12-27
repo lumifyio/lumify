@@ -13,7 +13,7 @@ define([
     'util/throttle',
     'util/previews',
     'util/formatters',
-    'service/ucd',
+    'service/service',
     'service/ontology',
     'util/retina',
     'util/withContextMenu',
@@ -32,7 +32,7 @@ define([
     throttle,
     previews,
     formatters,
-    UCD,
+    Service,
     OntologyService,
     retina,
     withContextMenu,
@@ -52,7 +52,7 @@ define([
     return defineComponent(Graph, withAsyncQueue, withContextMenu, withGraphContextMenuItems, withControlDrag);
 
     function Graph() {
-        this.ucd = new UCD();
+        this.service = new Service();
         this.ontologyService = new OntologyService();
 
         var LAYOUT_OPTIONS = {
@@ -950,7 +950,7 @@ define([
                 data = data[0];
             }
 
-            this.ucd.getRelatedVertices(data)
+            this.service.getRelatedVertices(data)
                 .done(function(data) {
                     var added = data.vertices;
                     

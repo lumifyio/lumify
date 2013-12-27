@@ -1,10 +1,10 @@
 
 define([
-    'service/ucd',
+    'service/service',
     'tpl!./toolbar/fullscreen',
     'tpl!./toolbar/fullscreen-item',
     'tpl!./toolbar/audits'
-], function(UCD, fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
+], function(Service, fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
     'use strict';
 
     var intercomInstance;
@@ -13,7 +13,7 @@ define([
 
     function withTypeContent() {
 
-        this.ucdService = new UCD();
+        this.service = new Service();
         this._xhrs = [];
 
         this.defaultAttrs({

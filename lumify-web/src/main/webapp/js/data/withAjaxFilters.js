@@ -40,9 +40,9 @@ define([], function() {
             },
 
             function vertexProperties(json, updated) {
-                var updated;
+                var cache;
                 if (_.isString(json.id) && _.isObject(json.properties)) {
-                    var cache = this.updateCacheWithVertex(json);
+                    cache = this.updateCacheWithVertex(json);
                     $.extend(true, json, cache);
                     updated.push(cache);
 

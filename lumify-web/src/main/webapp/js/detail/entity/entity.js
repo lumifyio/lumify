@@ -95,7 +95,7 @@ define([
 
                 $.when(
                     self.handleCancelling(self.ontologyService.relationships()),
-                    self.handleCancelling(self.ucdService.getVertexRelationships(self.attr.data.id))
+                    self.handleCancelling(self.service.getVertexRelationships(self.attr.data.id))
                 ).done(self.loadRelationships.bind(self, vertex));
             });
         };
@@ -208,7 +208,7 @@ define([
         this.handleReferenceLoadingRequest = function(evt, data) {
             var self = this;
 
-            this.handleCancelling(this.ucdService.getVertexRelationships(this.attr.data.id, data.paging))
+            this.handleCancelling(this.service.getVertexRelationships(this.attr.data.id, data.paging))
                 .done(function(response) {
                     var relationships = response.relationships,
                         total = response.totalReferences;

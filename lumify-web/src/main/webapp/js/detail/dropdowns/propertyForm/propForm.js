@@ -90,7 +90,7 @@ define([
             config.teardownAllComponents();
 
             var previousValue = this.attr.data.properties[propertyName],
-                isExistingProperty = !(typeof this.attr.data.properties[propertyName] === 'undefined');
+                isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {

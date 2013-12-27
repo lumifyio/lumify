@@ -5,15 +5,15 @@ define(
 function(ServiceBase) {
     'use strict';
 
-    function Ucd() {
+    function Service() {
         ServiceBase.call(this);
 
         return this;
     }
 
-    Ucd.prototype = Object.create(ServiceBase.prototype);
+    Service.prototype = Object.create(ServiceBase.prototype);
 
-    Ucd.prototype.getRelationships = function(ids) {
+    Service.prototype.getRelationships = function(ids) {
         return this._ajaxPost({
             url: 'entity/relationships',
             data: {
@@ -22,7 +22,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.deleteEdge = function(sourceId, targetId, label) {
+    Service.prototype.deleteEdge = function(sourceId, targetId, label) {
         return this._ajaxPost({
             url: '/vertex/removeRelationship',
             data: {
@@ -33,7 +33,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.getVertexToVertexRelationshipDetails = function (source, target, label) {
+    Service.prototype.getVertexToVertexRelationshipDetails = function (source, target, label) {
         return this._ajaxGet({
             url: 'vertex/relationship',
             data: {
@@ -44,7 +44,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.locationSearch = function(lat, lon, radiuskm) {
+    Service.prototype.locationSearch = function(lat, lon, radiuskm) {
         return this._ajaxGet({
             url: 'graph/vertex/geoLocationSearch',
             data: {
@@ -55,11 +55,11 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.getStatementByRowKey = function(statementRowKey) {
+    Service.prototype.getStatementByRowKey = function(statementRowKey) {
         return this._get("statement", statementRowKey);
     };
 
-    Ucd.prototype.artifactSearch = function(query, filters, subType, paging) {
+    Service.prototype.artifactSearch = function(query, filters, subType, paging) {
         if (typeof filters === 'function') {
             callback = filters;
             filters = [];
@@ -85,18 +85,18 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.getArtifactById = function (id) {
+    Service.prototype.getArtifactById = function (id) {
         return this._get("artifact", id);
     };
 
-    Ucd.prototype.getArtifactHighlightedTextById = function(graphVertexId) {
+    Service.prototype.getArtifactHighlightedTextById = function(graphVertexId) {
         return this._ajaxGet({
             dataType: 'html',
             url: "artifact/" + graphVertexId + "/highlightedText"
         });
     };
 
-    Ucd.prototype.getRawArtifactById = function (id) {
+    Service.prototype.getRawArtifactById = function (id) {
         //maybe it's an object for future options stuff?
         var i = typeof id == "object" ? id.id : id;
 
@@ -105,7 +105,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.graphVertexSearch = function (query, filters, subType, paging) {
+    Service.prototype.graphVertexSearch = function (query, filters, subType, paging) {
         if (typeof filters === 'function') {
             callback = filters;
             filters = [];
@@ -128,7 +128,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.getRelatedVertices = function(data) {
+    Service.prototype.getRelatedVertices = function(data) {
         return this._ajaxGet({
             url: 'graph/' + encodeURIComponent(data.graphVertexId) + '/relatedVertices',
             data: {
@@ -137,18 +137,18 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype.getVertexRelationships = function(graphVertexId, paging) {
+    Service.prototype.getVertexRelationships = function(graphVertexId, paging) {
         return this._ajaxGet({
             url: 'vertex/' + graphVertexId + '/relationships',
             data: paging || {}
         });
     };
 
-    Ucd.prototype.getVertexProperties = function(graphVertexId) {
+    Service.prototype.getVertexProperties = function(graphVertexId) {
         return this._ajaxGet({ url: 'vertex/' + graphVertexId + '/properties'});
     };
 
-    Ucd.prototype._search = function (resource, query) {
+    Service.prototype._search = function (resource, query) {
         //maybe it's an object for future options stuff?
         var q = typeof query == "object" ? query.query : query;
         var url = resource + "/search";
@@ -161,7 +161,7 @@ function(ServiceBase) {
         });
     };
 
-    Ucd.prototype._get = function (resource, id) {
+    Service.prototype._get = function (resource, id) {
         if(!id) {
             throw new Error("Invalid or no id specified for resource '" + resource + "'");
         }
@@ -173,5 +173,5 @@ function(ServiceBase) {
         });
     };
 
-    return Ucd;
+    return Service;
 });

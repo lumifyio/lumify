@@ -7,7 +7,7 @@ define([
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/ucd',
+    'service/service',
     'service/vertex',
     'util/retina',
     'util/controls',
@@ -20,7 +20,7 @@ define([
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    UcdService,
+    Service,
     VertexService,
     retina,
     Controls,
@@ -40,7 +40,7 @@ define([
 
         var ol;
 
-        this.ucdService = new UcdService();
+        this.service = new Service();
         this.vertexService = new VertexService();
         this.mode = MODE_NORMAL;
 
@@ -449,7 +449,7 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.ucdService.locationSearch(
+                    self.service.locationSearch(
                         lonlat.lat,
                         lonlat.lon,
                         radius).done(
@@ -491,6 +491,8 @@ define([
         };
 
         this.createMap = function(ol, ClusterStrategy) {
+            ol.ImgPath = "/libs/openlayers/img";
+
             var self = this,
                 controls = new ol.Control.Navigation({
                     handleRightClicks: true,
@@ -501,6 +503,7 @@ define([
                 map = new ol.Map('map', { 
                     zoomDuration: 0,
                     numZoomLevels: 18,
+                    theme: null,
                     displayProjection: new ol.Projection("EPSG:4326"),
                     controls: [ controls ]
                 }),

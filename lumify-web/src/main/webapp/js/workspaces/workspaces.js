@@ -7,7 +7,8 @@ define([
     './form/form',
     'tpl!./workspaces',
     'tpl!./list',
-    'tpl!./item'
+    'tpl!./item',
+    'util/jquery.flight'
 ], function(defineComponent,
     appData,
     WorkspaceService,

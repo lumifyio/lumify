@@ -1,12 +1,12 @@
 
 define([
-    'service/ucd',
+    'service/service',
     'tpl!./previews'
 ], 
 /**
  * Generate preview screenshots of artifact rendering (with highlighting)
  */
-function(UCD, template) {
+function(Service, template) {
     'use strict';
 
     var PREVIEW_CACHE = {};
@@ -34,7 +34,7 @@ function(UCD, template) {
 
     Preview.prototype.start = function() {
         var self = this;
-        new UCD().getArtifactById(this._rowKey)
+        new Service().getArtifactById(this._rowKey)
             .fail(function() {
                 self.callback();
             })

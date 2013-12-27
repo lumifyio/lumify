@@ -139,13 +139,12 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         processingCounter.inc();
         Timer.Context processingTimeContext = processingTimeTimer.time();
         try {
-            String auditMessage;
-            auditMessage = "BEGIN " + this.getClass().getName() + ": " + input;
-            LOGGER.info(auditMessage);
+            LOGGER.info(String.format("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId()));
+            LOGGER.trace(String.format("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input));
             try {
                 safeExecute(input);
-
-                LOGGER.debug("ack'ing: " + input);
+                LOGGER.info(String.format("ACK'ing: [MessageID: %s]", input.getMessageId()));
+                LOGGER.trace(String.format("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input));
                 getCollector().ack(input);
             } catch (Exception e) {
                 totalErrorCounter.inc();
@@ -154,8 +153,8 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
                 getCollector().fail(input);
             }
 
-            auditMessage = "END " + this.getClass().getName() + ": " + input;
-            LOGGER.info(auditMessage);
+            LOGGER.info(String.format("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId()));
+            LOGGER.trace(String.format("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input));
         } finally {
             processingCounter.dec();
             totalProcessedCounter.inc();

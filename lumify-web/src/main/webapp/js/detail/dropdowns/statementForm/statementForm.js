@@ -82,7 +82,7 @@ define([
         };
 
         this.onSelection = function (e) {
-            if (this.select('relationshipSelector').val() == '') {
+            if (this.select('relationshipSelector').val().length === 0) {
                 this.select('createStatementButtonSelector')
                     .attr('disabled', true);
                 return;

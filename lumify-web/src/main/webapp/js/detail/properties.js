@@ -88,7 +88,7 @@ define([
                 this.auditRequest = this.auditService.getAudits(this.attr.data.id)
                     .done(function(auditResponse) {
                         var audits = auditResponse.auditHistory.reverse(),
-                            propertyAudits = _.filter(audits, function(a) { return /^Set/i.test(a.message); });
+                            propertyAudits = _.filter(audits, function(a) { return (/^Set/i).test(a.message); });
 
                         self.select('entityAuditsSelector').html(auditsListTemplate({
                             audits: audits,
