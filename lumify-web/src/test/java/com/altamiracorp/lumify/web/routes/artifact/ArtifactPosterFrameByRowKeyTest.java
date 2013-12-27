@@ -31,12 +31,6 @@ import com.altamiracorp.lumify.web.routes.RouteTestBase;
 public class ArtifactPosterFrameByRowKeyTest extends RouteTestBase {
     private ArtifactPosterFrameByRowKey artifactPosterFrameByRowKey;
 
-    @Mock
-    private User user;
-
-    @Mock
-    private HttpSession mockSession;
-
     @Override
     @Before
     public void setUp() throws Exception {
@@ -50,11 +44,10 @@ public class ArtifactPosterFrameByRowKeyTest extends RouteTestBase {
     public void testHandle() throws Exception {
         ArtifactRowKey artifactRowKey = ArtifactRowKey.build("testContents".getBytes());
         when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
-        when(mockRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(user);
+        when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
-        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext())).thenReturn(artifact);
+        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
         when(mockArtifactRepository.getRawPosterFrame(artifact.getRowKey().toString())).thenReturn(testInputStream);

@@ -34,16 +34,10 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
     private ArtifactRawByRowKey artifactRawByRowKey;
 
     @Mock
-    private User user;
-
-    @Mock
     private GraphVertex vertex;
 
     @Mock
     private VideoPlaybackDetails mockVideoDetails;
-
-    @Mock
-    private HttpSession mockSession;
 
     @Mock
     private GraphRepository mockGraphRepository;
@@ -62,8 +56,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         when(mockRequest.getParameter("download")).thenReturn(null);
         when(mockRequest.getParameter("playback")).thenReturn(null);
         when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
-        when(mockRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(user);
+        when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
@@ -71,11 +64,11 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
                 .setFileName("testFile")
                 .setFileExtension("testExt")
                 .setMimeType("text/plain");
-        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext())).thenReturn(artifact);
-        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), user)).thenReturn(vertex);
+        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
+        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
-        when(mockArtifactRepository.getRaw(artifact, vertex, user)).thenReturn(testInputStream);
+        when(mockArtifactRepository.getRaw(artifact, vertex, mockUser)).thenReturn(testInputStream);
 
         doAnswer(new Answer<Void>() {
             @Override
@@ -105,8 +98,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         when(mockRequest.getParameter("type")).thenReturn("video/mp4");
         when(mockRequest.getHeader("Range")).thenReturn("bytes=1-4");
         when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
-        when(mockRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(user);
+        when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
@@ -114,8 +106,8 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
                 .setFileName("testFile")
                 .setFileExtension("testExt")
                 .setMimeType("video/mp4");
-        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext())).thenReturn(artifact);
-        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), user)).thenReturn(vertex);
+        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
+        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
         when(mockVideoDetails.getVideoStream()).thenReturn(testInputStream);

@@ -4,8 +4,6 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserRowKey;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -14,9 +12,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpSession;
-import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MeGetTest extends RouteTestBase {
@@ -24,22 +21,16 @@ public class MeGetTest extends RouteTestBase {
 
     @Mock
     private UserRepository mockUserRepository;
-    @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
 
     @Before
     @Override
-    public void setUp () throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         meGet = new MeGet(mockUserRepository);
     }
 
     @Test
-    public void testHandle () throws Exception {
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
+    public void testHandle() throws Exception {
         when(mockUser.getUsername()).thenReturn("testUserName");
 
         UserRow user = new UserRow(new UserRowKey("testUserRowKey"));
