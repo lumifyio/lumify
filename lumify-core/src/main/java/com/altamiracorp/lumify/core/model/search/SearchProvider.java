@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.model.search;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 
@@ -8,6 +10,8 @@ import java.util.Collection;
 
 public abstract class SearchProvider {
     public static final String SEARCH_PROVIDER_PROP_KEY = "search.provider";
+
+    public abstract void init(Configuration config, User user, MetricsManager metricManager);
 
     public abstract void add(GraphVertex graphVertex, InputStream textIn) throws Exception;
 
