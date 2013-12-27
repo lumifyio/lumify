@@ -3,8 +3,6 @@ package com.altamiracorp.lumify.web.routes.vertex;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -13,13 +11,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VertexPropertiesTest extends RouteTestBase {
@@ -33,23 +30,17 @@ public class VertexPropertiesTest extends RouteTestBase {
 
     @Mock
     private GraphRepository mockGraphRepository;
-    @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
 
     @Before
     @Override
-    public void setUp () throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         vertexProperties = new VertexProperties(mockGraphRepository);
     }
 
     @Test
-    public void testHandle () throws Exception {
+    public void testHandle() throws Exception {
         when(mockRequest.getAttribute("graphVertexId")).thenReturn(ID);
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
 
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(PropertyName.TITLE.toString(), TITLE);
@@ -57,7 +48,7 @@ public class VertexPropertiesTest extends RouteTestBase {
         properties.put(PropertyName.TYPE.toString(), TYPE);
         properties.put(PropertyName.SUBTYPE.toString(), SUBTYPE);
 
-        when (mockGraphRepository.getVertexProperties(ID, mockUser)).thenReturn(properties);
+        when(mockGraphRepository.getVertexProperties(ID, mockUser)).thenReturn(properties);
 
         vertexProperties.handle(mockRequest, mockResponse, mockHandlerChain);
 

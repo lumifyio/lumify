@@ -4,8 +4,6 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -14,12 +12,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpSession;
-
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VertexRelationshipRemovalTest extends RouteTestBase {
@@ -29,10 +23,6 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     private GraphRepository mockGraphRepository;
     @Mock
     private AuditRepository mockAuditRepository;
-    @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
     @Mock
     private GraphVertex mockSourceVertex;
     @Mock
@@ -51,8 +41,6 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
         when(mockRequest.getParameter("targetId")).thenReturn("targetId");
         when(mockRequest.getParameter("label")).thenReturn("label");
 
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
         when(mockGraphRepository.findVertex("sourceId", mockUser)).thenReturn(mockSourceVertex);
         when(mockGraphRepository.findVertex("targetId", mockUser)).thenReturn(mockDestVertex);
 

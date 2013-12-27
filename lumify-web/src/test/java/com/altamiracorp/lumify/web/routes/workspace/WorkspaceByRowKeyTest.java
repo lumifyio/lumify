@@ -4,8 +4,6 @@ import com.altamiracorp.lumify.core.model.user.UserRowKey;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -15,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -28,10 +25,6 @@ public class WorkspaceByRowKeyTest extends RouteTestBase {
 
     @Mock
     private WorkspaceRepository mockWorkspaceRespository;
-    @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
 
     @Before
     @Override
@@ -41,8 +34,6 @@ public class WorkspaceByRowKeyTest extends RouteTestBase {
         workspaceByRowKey = new WorkspaceByRowKey(mockWorkspaceRespository);
         workspaceRowKey = new WorkspaceRowKey("lumify", "Default - lumify");
         when(mockRequest.getAttribute("workspaceRowKey")).thenReturn(workspaceRowKey.toString());
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
     }
 
     @Test

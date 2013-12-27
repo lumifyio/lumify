@@ -3,8 +3,6 @@ package com.altamiracorp.lumify.web.routes.workspace;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -12,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -26,10 +22,6 @@ public class WorkspaceDeleteTest extends RouteTestBase {
 
     @Mock
     private WorkspaceRepository mockWorkspaceRepository;
-    @Mock
-    private HttpSession mockHttpSession;
-    @Mock
-    private User mockUser;
 
     @Before
     @Override
@@ -41,8 +33,6 @@ public class WorkspaceDeleteTest extends RouteTestBase {
     @Test
     public void testHandle() throws Exception {
         when(mockRequest.getAttribute("workspaceRowKey")).thenReturn("workspaceRowKey");
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
 
         workspaceDelete.handle(mockRequest, mockResponse, mockHandlerChain);
         verify(mockWorkspaceRepository, times(1)).delete(any(WorkspaceRowKey.class), any(ModelUserContext.class));

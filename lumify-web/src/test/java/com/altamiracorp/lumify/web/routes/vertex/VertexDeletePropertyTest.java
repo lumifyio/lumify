@@ -8,8 +8,6 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -18,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,10 +37,6 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     @Mock
     private AuditRepository mockAuditRepository;
     @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
-    @Mock
     private Property mockProperty;
 
     @Before
@@ -51,9 +44,6 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     public void setUp() throws Exception {
         super.setUp();
         vertexDeleteProperty = new VertexDeleteProperty(mockOntologyRepository, mockGraphRepository, mockAuditRepository);
-
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
     }
 
     @Test(expected = RuntimeException.class)

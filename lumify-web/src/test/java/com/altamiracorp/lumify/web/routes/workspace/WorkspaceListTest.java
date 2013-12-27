@@ -3,8 +3,6 @@ package com.altamiracorp.lumify.web.routes.workspace;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import com.google.common.collect.Lists;
 import org.json.JSONObject;
@@ -14,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -27,10 +24,6 @@ public class WorkspaceListTest extends RouteTestBase {
 
     @Mock
     private WorkspaceRepository mockWorkspaceRepository;
-    @Mock
-    private User mockUser;
-    @Mock
-    private HttpSession mockHttpSession;
 
     @Override
     @Before
@@ -41,8 +34,6 @@ public class WorkspaceListTest extends RouteTestBase {
 
     @Test
     public void testHandle() throws Exception {
-        when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
         when(mockUser.getRowKey()).thenReturn("lumify");
 
         WorkspaceRowKey activeRK = new WorkspaceRowKey("lumify", "active");

@@ -1,10 +1,13 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import javax.servlet.http.HttpSession;
-
+import com.altamiracorp.lumify.core.model.artifact.Artifact;
+import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
+import com.altamiracorp.lumify.core.model.graph.GraphRepository;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.web.AuthenticationProvider;
+import com.altamiracorp.lumify.web.routes.RouteTestBase;
+import com.google.common.net.MediaType;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,25 +15,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
-import com.altamiracorp.lumify.web.routes.RouteTestBase;
-import com.google.common.net.MediaType;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ArtifactByRowKeyTest extends RouteTestBase {
     private ArtifactByRowKey artifactByRowKey;
-
-    @Mock
-    private User user;
-
-    @Mock
-    private HttpSession mockSession;
 
     @Mock
     private GraphRepository mockGraphRepository;
@@ -50,15 +40,14 @@ public class ArtifactByRowKeyTest extends RouteTestBase {
     public void testHandle() throws Exception {
         ArtifactRowKey artifactRowKey = ArtifactRowKey.build("testContents".getBytes());
         when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
-        when(mockRequest.getSession()).thenReturn(mockSession);
-        when(mockSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(user);
+        when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata().setMimeType(MediaType.PDF.toString());
 
         when(mockVertex.getProperty(PropertyName.SUBTYPE)).thenReturn("document");
-        when(mockGraphRepository.findVertexByRowKey(artifactRowKey.toString(), user)).thenReturn(mockVertex);
-        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext())).thenReturn(artifact);
+        when(mockGraphRepository.findVertexByRowKey(artifactRowKey.toString(), mockUser)).thenReturn(mockVertex);
+        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
 
         artifactByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
 

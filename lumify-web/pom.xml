@@ -10,18 +10,16 @@
     </parent>
 
     <artifactId>lumify-web</artifactId>
-    <packaging>${packaging.type}</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <name>Lumify Web Interface</name>
 
     <properties>
-        <!--
-            Default packaging is jar.  Moved from "activeByDefault" profile because that
-            profile becomes inactive if any other profiles are activated.
-        -->
-        <packaging.type>jar</packaging.type>
-
+        <!-- Default Jetty Configuration Properties -->
+        <jetty.port>8080</jetty.port>
+        <jetty.ssl.port>8443</jetty.ssl.port>
+        <jetty.maxIdleTime>60000</jetty.maxIdleTime>
+        
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.3</plugin.maven.war.version>
@@ -77,6 +75,10 @@
             <artifactId>guice</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-annotations</artifactId>
         </dependency>
@@ -91,22 +93,6 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlets</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -174,6 +160,26 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>${jetty.port}</port>
+                            <confidentialPort>${jetty.ssl.port}</confidentialPort>
+                            <maxIdleTime>${jetty.maxIdleTime}</maxIdleTime>
+                        </connector>
+                        <connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+                            <port>${jetty.ssl.port}</port>
+                            <maxIdleTime>${jetty.maxIdleTime}</maxIdleTime>
+                            <keystore>${jetty.keystore.path}</keystore>
+                            <password>${jetty.keystore.password}</password>
+                            <keyPassword>${jetty.keystore.password}</keyPassword>
+                        </connector>
+                    </connectors>
+                </configuration>
             </plugin>
         </plugins>
     </build>
