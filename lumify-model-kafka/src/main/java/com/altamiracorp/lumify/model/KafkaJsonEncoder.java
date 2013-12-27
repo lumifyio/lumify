@@ -36,7 +36,9 @@ public class KafkaJsonEncoder implements Encoder<JSONObject>, Scheme {
                 }
             }
 
-            LOGGER.info("deserialize: " + json.toString() + " (size: " + results.size() + ")");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("deserialize: " + json.toString() + " (size: " + results.size() + ")");
+            }
             return results;
         } catch (Exception ex) {
             String head = serString;
