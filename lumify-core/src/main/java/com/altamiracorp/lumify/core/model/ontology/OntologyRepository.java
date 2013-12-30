@@ -6,6 +6,8 @@ import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.user.User;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tinkerpop.blueprints.Direction;
@@ -15,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -23,6 +26,9 @@ public class OntologyRepository {
     private GraphRepository graphRepository;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     private final GraphSession graphSession;
+    private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build();
 
     @Inject
     public OntologyRepository(GraphRepository graphRepository, GraphSession graphSession) {
@@ -126,11 +132,18 @@ public class OntologyRepository {
     }
 
     public Concept getConceptByName(String title, User user) {
+        Concept concept = conceptsCache.getIfPresent(title);
+        if (concept != null) {
+            return concept;
+        }
+
         GraphVertex vertex = graphSession.findVertexByOntologyTitleAndType(title, VertexType.CONCEPT, user);
         if (vertex == null) {
             return null;
         }
-        return new GraphVertexConcept(vertex);
+        concept = new GraphVertexConcept(vertex);
+        conceptsCache.put(title, concept);
+        return concept;
     }
 
     public GraphVertex getGraphVertexByTitleAndType(String title, VertexType type, User user) {
