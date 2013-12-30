@@ -13,7 +13,11 @@
   <link href='css/lumify.css' rel='stylesheet' media='screen'>
 
   <script src='js/require.config.js'></script>
-  <!--script>require.baseUrl = 'js';</script-->
+  <script>
+    // Uncomment to run without requirejs concatenation (faster)
+    // require.baseUrl = 'js';
+    // require.urlArgs = "cache-bust=" +  Date.now();
+  </script>
   <script data-main="lumify" src='libs/requirejs/require.js'></script>
 </head>
 <body>
