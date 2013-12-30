@@ -63,7 +63,6 @@ public class ArtifactExtractedInfo {
             mergedText = artifactExtractedInfo.getText();
         } else {
             StringBuilder sb = new StringBuilder(getText())
-                    .append("\n\n")
                     .append(artifactExtractedInfo.getText());
             mergedText = sb.toString();
         }

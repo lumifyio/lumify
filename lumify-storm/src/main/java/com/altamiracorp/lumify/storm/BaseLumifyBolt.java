@@ -258,7 +258,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             if (artifactExtractedInfo.getText() == null) {
                 artifactExtractedInfo.setText(artifactExtractedInfo.getVideoTranscript().toString());
             } else {
-                artifactExtractedInfo.setText(artifactExtractedInfo.getText() + "\n\n" + artifactExtractedInfo.getVideoTranscript().toString());
+                artifactExtractedInfo.setText(artifactExtractedInfo.getText() + artifactExtractedInfo.getVideoTranscript().toString());
             }
         }
         if (artifactExtractedInfo.getText() != null) {
