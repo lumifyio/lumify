@@ -3,23 +3,7 @@
   <ul class="nav nav-list">
 
     <% properties.forEach(function(property) { %>
-      <% if(property.key == 'title') { return; } %>
-      <li class="property property-<%= property.key %>">
-      <strong><%= property.displayName %></strong>
-      <% if (property.key === 'geoLocation' && property.value) { %>
-        <span class="value">
-            <% if (!popout) { %>
-                <a href="#" class="map-coordinates" data-latitude="<%= property.value.latitude %>" data-longitude="<%= property.value.longitude %>">
-                    <%= property.value.title || (property.value.latitude + ', ' + property.value.longitude) %>
-                </a>
-            <% } else { %>
-                <span class="value"><%= property.value.title || (property.value.latitude + ', ' + property.value.longitude) %></span>
-            <% } %>
-        </span>
-      <% } else { %>
-        <span class="value"><%= property.value !== undefined && property.value !== null ? property.value : '' %></span>
-      <% } %>
-      </li>
+      <% include detail/propertiesItem %>
     <% }); %>
 
     <li class="buttons">

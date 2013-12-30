@@ -66,7 +66,8 @@ define([
                 highlightTypeSelector: this.onHighlightTypeClicked
             });
             this.on('mousedown mouseup click dblclick', this.trackMouse.bind(this));
-            this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables);
+            this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
+            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
             this.applyHighlightStyle();
         });

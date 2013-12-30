@@ -61,6 +61,19 @@ define(['sf'], function() {
                 } else return sf('{0:#,###}', number);
             }
         },
+        geoLocation: {
+            parse: function(str) {
+                var m = str && str.match(/point\[(.*?),(.*?)\]/);
+                if (m) {
+                    var latitude = m[1];
+                    var longitude = m[2];
+                    return {
+                        latitude: latitude,
+                        longitude: longitude
+                    };
+                }
+            }
+        },
         object: {
             shortcut: function(key) {
                 var normalized = key.replace(/\+/g, '-').toUpperCase(),
@@ -119,19 +132,19 @@ define(['sf'], function() {
             }
         },
         date: {
-            dateString: function(millisStr) {
-                var millis = _.isString(millisStr) ? Number(millisStr) : millisStr,
-                    dateInLocale = new Date(millis),
+            utc: function(str) {
+                var millis = _.isString(str) && !isNaN(Number(str)) ? Number(str) : str,
+                    dateInLocale = _.isDate(millis) ? millis : new Date(millis),
                     millisInMinutes = 1000 * 60,
                     millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
                     dateInUTC = new Date( dateInLocale.getTime() + millisFromLocaleToUTC );
-
-                return sf("{0:yyyy/MM/dd}", dateInUTC);
+                return dateInUTC;
+            },
+            dateString: function(millisStr) {
+                return sf("{0:yyyy/MM/dd}", FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
-                date = _.isDate(date) ? date : new Date(date);
-
-                var span = new sf.TimeSpan(Date.now() - date),
+                var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
                     time = '';
 
                 if (span.years > 1) {

@@ -15,13 +15,34 @@
   .audit-list {
     list-style: none;
     margin: 0 1em;    
+    &.showAll {
+      //max-height: 10em;
+      //overflow: auto;
+      .show-all-button-row { display:none; }
+      .hidden { display: block; }
+    }
+    .show-all-button-row button { padding-left: 0; }
     li {
       font-size: 90%;
       color: #555;
+      clear: both;
+      &.hidden { display:none; }
     }
     .audit-from { display:none; }
-    .audit-date { float:right; }
-    .audit-to { font-style: italic; }
+    .audit-date { 
+      .disable-text-selection;
+    }
+    .audit-subtitle { float: right; }
+    .audit-to { 
+      font-style: italic;
+      &:empty { visibility: hidden; }
+      &:before { content: '\201C'; }
+      &:after { content: '\201D'; }
+    }
+  }
+  .audit-only-property {
+    & > .value { text-decoration: line-through; }
+    &.property-title > .value { text-decoration: none; }
   }
   .property .audit-list {
     margin: 0 -1em 1em;

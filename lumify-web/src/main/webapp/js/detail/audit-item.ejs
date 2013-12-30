@@ -1,25 +1,46 @@
-<% if (!hideRegex || !hideRegex.test(audit.message)) { %>
-  <li>
-    <% if (audit.fromValue && audit.toValue) { %>
-      <span class="audit-user"><%= audit.user %></span> set 
-      <span class="audit-date" data-date-relative="<%= formatters.date.relativeToNow(audit.dateTime) %>" data-date="<%= sf('{0:yyyy-MM-dd HH:mm}', new Date(audit.dateTime)) %>"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
-      <span class="audit-from"><%= audit.fromValue %></span>
-      <span class="audit-to">
-        <% if (audit.geoLocation) { %>
-          <a href="#" 
-            class="map-coordinates"
-            data-latitude="<%= audit.geoLocation.latitude %>"
-            data-longitude="<%= audit.geoLocation.longitude %>">
-              <%= audit.geoLocation.latitude %>, <%= audit.geoLocation.longitude %>
-          </a>
+  <li class="<%= shouldHide ? 'hidden' : '' %>">
+    <% var relativeDate = formatters.date.relativeToNow(new Date(audit.dateTime)),
+           absoluteDate = sf('{0:yyyy-MM-dd HH:mm}', new Date(audit.dateTime)); %>
+
+    <% if (audit.propertyAudit) { 
+       var to = formatValue(audit.propertyAudit.newValue, audit.propertyAudit.propertyName); %>
+       <span class="audit-to"><%= to %></span>
+       <span class="audit-subtitle">
+          <span class="audit-action"><%= audit.data.action %></span> by
+          <span class="audit-user" 
+                data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
+          <span class="audit-date" 
+                data-date-relative="<%= relativeDate %>"
+                data-date="<%= absoluteDate %>"><%= relativeDate %></span>
+       </span>
+    <% } else if (audit.relationshipAudit && audit.relationshipAudit.label) { %>
+       <span class="audit-message">
+        <%= audit.data.action %>
+        <span class="audit-to"><%= audit.relationshipAudit.label %></span>
+        <%= audit.data.type %> 
+        <% if (currentVertexId === audit.relationshipAudit.sourceId) { %>
+          to <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'dest') %>" href="#v=<%= audit.relationshipAudit.destId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.destTitle %></a>
         <% } else { %>
-          <%= audit.toValue %>
+          from <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'source') %>" href="#v=<%= audit.relationshipAudit.sourceId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.sourceTitle %></a>
         <% } %>
-      </span>
+       </span>
+       <span class="audit-subtitle">
+          <span class="audit-user" 
+                data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
+          <span class="audit-date" 
+                data-date-relative="<%= relativeDate %>"
+                data-date="<%= absoluteDate %>"><%= relativeDate %></span>
+       </span>
+
+
     <% } else { %>
-       <span class="audit-message">  <%= audit.message %></span> by 
-       <span class="audit-date" data-date-relative="<%= formatters.date.relativeToNow(audit.dateTime) %>" data-date="<%= sf('{0:yyyy-MM-dd HH:mm}', new Date(audit.dateTime)) %>"><%= formatters.date.relativeToNow(audit.dateTime) %></span>
-       <span class="audit-user"><%= audit.user %></span>
+       <span class="audit-message"><%= audit.data.action %> <%= audit.data.type %></span>
+       <span class="audit-subtitle">
+          <span class="audit-user" 
+                data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
+          <span class="audit-date" 
+                data-date-relative="<%= relativeDate %>"
+                data-date="<%= absoluteDate %>"><%= relativeDate %></span>
+       </span>
     <% } %>
-  </li>
-<% } %>
+</li>
