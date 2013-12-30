@@ -1,15 +1,12 @@
 package com.altamiracorp.lumify.core.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ThreadedInputStreamProcess<TResult, TData> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadedInputStreamProcess.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ThreadedInputStreamProcess.class);
 
     private final Thread[] workerThreads;
     private final ThreadedTeeInputStreamWorker<TResult, TData>[] workers;
@@ -65,7 +62,7 @@ public class ThreadedInputStreamProcess<TResult, TData> {
         }
         for (Thread t : this.workerThreads) {
             try {
-                LOGGER.debug("joining thread: " + t);
+                LOGGER.debug("joining thread: %s", t);
                 t.join();
             } catch (Exception ex) {
                 LOGGER.error("Could not join thread: " + t, ex);

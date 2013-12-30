@@ -1,16 +1,16 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MessagingFilter implements PerRequestBroadcastFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessagingFilter.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MessagingFilter.class);
 
     @Override
     public BroadcastAction filter(AtmosphereResource r, Object originalMessage, Object message) {

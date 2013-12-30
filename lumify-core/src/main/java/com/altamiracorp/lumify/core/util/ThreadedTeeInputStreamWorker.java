@@ -6,8 +6,6 @@ import com.altamiracorp.lumify.core.metrics.PausableTimerContextAware;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +14,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadedTeeInputStreamWorker.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ThreadedTeeInputStreamWorker.class);
     private Counter totalProcessedCounter = null;
     private Counter processingCounter;
     private Counter totalErrorCounter;
@@ -49,7 +47,7 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
                 }
                 InputStream in = work.getIn();
                 try {
-                    LOGGER.debug("BEGIN doWork (" + getClass().getName() + ")");
+                    LOGGER.debug("BEGIN doWork (%s)", getClass().getName());
                     TResult result;
                     PausableTimerContext timerContext = new PausableTimerContext(processingTimeTimer);
                     if (in instanceof PausableTimerContextAware) {
@@ -59,7 +57,7 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
                     try {
                         result = doWork(in, work.getData());
                     } finally {
-                        LOGGER.debug("END doWork (" + getClass().getName() + ")");
+                        LOGGER.debug("END doWork (%s)", getClass().getName());
                         processingCounter.dec();
                         totalProcessedCounter.inc();
                         timerContext.stop();

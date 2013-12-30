@@ -20,6 +20,8 @@ import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
@@ -29,8 +31,6 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -39,10 +39,7 @@ import java.io.*;
  * Base class for bolts that process files from HDFS.
  */
 public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
-    /**
-     * The class logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseFileProcessingBolt.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseFileProcessingBolt.class);
 
     private ContentTypeExtractor contentTypeExtractor;
 
@@ -124,7 +121,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
      */
     protected File extractArchive(final FileMetadata fileMetadata) throws Exception {
         File tempDir = Files.createTempDir();
-        LOGGER.debug("Extracting " + fileMetadata.getFileName() + " to " + tempDir);
+        LOGGER.debug("Extracting %s to %s", fileMetadata.getFileName(), tempDir);
         InputStream in = getInputStream(fileMetadata.getFileName(), null);
         try {
             ArchiveInputStream input = new ArchiveStreamFactory().createArchiveInputStream(new BufferedInputStream(in));
@@ -135,7 +132,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
                     OutputStream out = new FileOutputStream(outputFile);
                     try {
                         long numberOfBytesExtracted = IOUtils.copyLarge(input, out);
-                        LOGGER.debug("Extracted (" + numberOfBytesExtracted + " bytes) to " + outputFile.getAbsolutePath());
+                        LOGGER.debug("Extracted (%d bytes) to %s", numberOfBytesExtracted, outputFile.getAbsolutePath());
                     } finally {
                         out.close();
                     }

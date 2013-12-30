@@ -1,7 +1,12 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,18 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.altamiracorp.lumify.core.config.Configuration;
-import com.google.inject.Inject;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FileImporter {
     private static final String UNKNOWN_DATA_DIR = "/lumify/data/unknown";
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileImporter.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImporter.class);
     private final FileSystem hdfsFileSystem;
 
     @Inject
@@ -40,7 +39,7 @@ public class FileImporter {
         checkArgument(!uploadFileName.isEmpty());
 
         final File tempFile = File.createTempFile("fileImport", "bin");
-        LOGGER.debug("Writing stream to temporary file location: " + tempFile.getAbsolutePath());
+        LOGGER.debug("Writing stream to temporary file location: %s", tempFile.getAbsolutePath());
         writeToTempFile(fileStream, tempFile);
 
         hdfsFileSystem.copyFromLocalFile(true, true, new Path(tempFile.getAbsolutePath()), new Path(UNKNOWN_DATA_DIR, uploadFileName));

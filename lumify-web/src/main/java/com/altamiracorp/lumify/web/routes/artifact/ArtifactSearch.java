@@ -10,8 +10,6 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ArtifactSearch extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactSearch.class);
-
     private final ArtifactRepository artifactRepository;
     private final OntologyRepository ontologyRepository;
 

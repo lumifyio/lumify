@@ -9,6 +9,8 @@ import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Timer;
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -32,8 +34,6 @@ import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.facet.FacetBuilders;
 import org.elasticsearch.search.facet.terms.TermsFacet;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -44,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ElasticSearchProvider extends SearchProvider {
     public static final String ES_LOCATIONS_PROP_KEY = "search.elasticsearch.locations";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchProvider.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ElasticSearchProvider.class);
     private static final String ES_INDEX = "atc";
     private static final String ES_INDEX_TYPE = "artifact";
     private static final String FIELD_TEXT = "text";
@@ -96,7 +96,7 @@ public class ElasticSearchProvider extends SearchProvider {
         checkNotNull(graphVertex);
         checkNotNull(textIn);
 
-        LOGGER.info(String.format("Adding data from graph vertex (id: %s) to elastic search index", graphVertex.getId()));
+        LOGGER.info("Adding data from graph vertex (id: %s) to elastic search index", graphVertex.getId());
 
         String id = (String) graphVertex.getProperty(PropertyName.ROW_KEY);
         String graphVertexId = graphVertex.getId();
@@ -134,7 +134,7 @@ public class ElasticSearchProvider extends SearchProvider {
                     .execute().actionGet();
 
             if (response.getId() == null) {
-                LOGGER.error("Failed to index artifact " + id + " with elastic search");
+                LOGGER.error("Failed to index artifact %s with elastic search", id);
             }
         } finally {
             processingTimeTimerContext.stop();
@@ -213,7 +213,7 @@ public class ElasticSearchProvider extends SearchProvider {
     public void deleteIndex(User user) {
         DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest(ES_INDEX)).actionGet();
         if (!response.isAcknowledged()) {
-            LOGGER.error("Failed to delete elastic search index named " + ES_INDEX);
+            LOGGER.error("Failed to delete elastic search index named %s", ES_INDEX);
         }
     }
 
@@ -222,7 +222,7 @@ public class ElasticSearchProvider extends SearchProvider {
         try {
             IndicesExistsResponse existsResponse = client.admin().indices().exists(new IndicesExistsRequest(ES_INDEX)).actionGet();
             if (existsResponse.isExists()) {
-                LOGGER.info("Elastic search index " + ES_INDEX + " already exists, skipping creation.");
+                LOGGER.info("Elastic search index %s already exists, skipping creation.", ES_INDEX);
                 return;
             }
 
@@ -244,7 +244,7 @@ public class ElasticSearchProvider extends SearchProvider {
             CreateIndexResponse response = client.admin().indices().create(request).actionGet();
 
             if (!response.isAcknowledged()) {
-                LOGGER.error("Failed to create elastic search index named " + ES_INDEX);
+                LOGGER.error("Failed to create elastic search index named %s", ES_INDEX);
             }
         } catch (Exception e) {
             throw new RuntimeException("Unable to create Elastic Search index named " + ES_INDEX, e);

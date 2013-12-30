@@ -20,6 +20,8 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
@@ -31,8 +33,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.codehaus.plexus.util.FileUtils;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseLumifyBolt.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
     private static final SimpleDateFormat fileNameSuffix = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ssZ");
     public static final String JSON_OUTPUT_FIELD = "json";
 
@@ -79,7 +79,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
     @Override
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
-        LOGGER.info(String.format("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId()));
+        LOGGER.info("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
         InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
             @Override
@@ -141,7 +141,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         try {
             String auditMessage;
             String graphVertexId = null;
-            LOGGER.info(String.format("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId()));
+            LOGGER.info("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
             auditMessage = String.format("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
             LOGGER.trace(auditMessage);
             JSONObject json = tryGetJsonFromTuple(input);
@@ -156,8 +156,8 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             }
             try {
                 safeExecute(input);
-                LOGGER.info(String.format("ACK'ing: [MessageID: %s]", input.getMessageId()));
-                LOGGER.trace(String.format("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input));
+                LOGGER.info("ACK'ing: [MessageID: %s]", input.getMessageId());
+                LOGGER.trace("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input);
                 getCollector().ack(input);
             } catch (Exception e) {
                 totalErrorCounter.inc();
@@ -166,7 +166,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
                 getCollector().fail(input);
             }
 
-            LOGGER.info(String.format("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId()));
+            LOGGER.info("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
             auditMessage = String.format("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
             LOGGER.trace(auditMessage);
             if (graphVertexId != null) {
@@ -211,7 +211,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     protected void moveFile(String sourceFileName, String destFileName) throws IOException {
-        LOGGER.info("moving file " + sourceFileName + " -> " + destFileName);
+        LOGGER.info("moving file %s -> %s", sourceFileName, destFileName);
         Path sourcePath = new Path(sourceFileName);
         Path destPath = new Path(destFileName);
         if (!getHdfsFileSystem().rename(sourcePath, destPath)) {

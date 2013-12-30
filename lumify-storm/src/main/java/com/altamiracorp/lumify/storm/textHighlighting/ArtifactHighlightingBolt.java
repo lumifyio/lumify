@@ -6,16 +6,16 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.BaseTextProcessingBolt;
 import com.google.inject.Inject;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactHighlightingBolt.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightingBolt.class);
     private TermMentionRepository termMentionRepository;
     private EntityHighlighter entityHighlighter;
 
@@ -27,14 +27,12 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
         GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, getUser());
         if (graphVertex != null) {
             String artifactRowKey = (String) graphVertex.getProperty(PropertyName.ROW_KEY);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(String.format("Processing graph vertex [%s] for artifact: %s", graphVertex.getId(), artifactRowKey));
-            }
+            LOGGER.debug("Processing graph vertex [%s] for artifact: %s", graphVertex.getId(), artifactRowKey);
 
             List<TermMention> termMentions = termMentionRepository.findByGraphVertexId(graphVertex.getId(), getUser());
             performHighlighting(artifactRowKey, graphVertex, termMentions);
         } else {
-            LOGGER.warn("Could not find vertex with id: " + graphVertexId);
+            LOGGER.warn("Could not find vertex with id: %s", graphVertexId);
         }
     }
 

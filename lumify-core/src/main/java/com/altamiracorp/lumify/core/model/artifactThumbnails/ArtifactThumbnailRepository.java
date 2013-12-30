@@ -1,29 +1,22 @@
 package com.altamiracorp.lumify.core.model.artifactThumbnails;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import com.altamiracorp.bigtable.model.*;
+import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.inject.Inject;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
-import javax.imageio.ImageIO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.altamiracorp.bigtable.model.Column;
-import com.altamiracorp.bigtable.model.ColumnFamily;
-import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.bigtable.model.Repository;
-import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.user.User;
-import com.google.inject.Inject;
-
 public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactThumbnailRepository.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnailRepository.class);
 
     @Inject
     public ArtifactThumbnailRepository(final ModelSession modelSession) {
@@ -75,9 +68,10 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         int[] newImageDims = getScaledDimension(originalImageDims, boundaryDims);
 
         if (newImageDims[0] >= originalImageDims[0] || newImageDims[1] >= originalImageDims[1]) {
-            LOGGER.info("Original image dimensions " + originalImageDims[0] + "x" + originalImageDims[1] + " are smaller "
-                    + "than requested dimensions " + newImageDims[0] + "x" + newImageDims[1]
-                    + " returning original.");
+            LOGGER.info("Original image dimensions %d x %d are smaller "
+                    + "than requested dimensions %d x %d returning original.",
+                    originalImageDims[0], originalImageDims[1],
+                    newImageDims[0], newImageDims[1]);
         }
 
         int type = thumnbailType(originalImage);

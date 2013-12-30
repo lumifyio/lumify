@@ -13,6 +13,8 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
@@ -23,8 +25,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.List;
@@ -32,14 +32,10 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseArtifactProcessingBolt.class);
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseArtifactProcessingBolt.class);
     private ThreadedInputStreamProcess<ArtifactExtractedInfo, AdditionalArtifactWorkData> threadedInputStreamProcess;
     private VideoFrameRepository videoFrameRepository;
-
-    public BaseArtifactProcessingBolt() {
-        LOGGER.toString();
-    }
 
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -58,7 +54,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
         ServiceLoader services = getServiceLoader();
         for (Object service : services) {
-            LOGGER.info(String.format("Adding service %s to %s", service.getClass().getName(), getClass().getName()));
+            LOGGER.info("Adding service %s to %s", service.getClass().getName(), getClass().getName());
             InjectHelper.inject(service);
             TextExtractionWorkerPrepareData data = new TextExtractionWorkerPrepareData(stormConf, getUser(), getHdfsFileSystem(), InjectHelper.getInjector());
             try {
@@ -87,7 +83,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         File archiveTempDir = null;
         InputStream in;
         int rawSize;
-        LOGGER.info(String.format("Processing file: %s (mimeType: %s)", fileMetadata.getFileName(), fileMetadata.getMimeType()));
+        LOGGER.info("Processing file: %s (mimeType: %s)", fileMetadata.getFileName(), fileMetadata.getMimeType());
 
         String fileName = fileMetadata.getFileNameWithoutDateSuffix();
         ArtifactExtractedInfo artifactExtractedInfo = new ArtifactExtractedInfo();
@@ -152,7 +148,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             FileUtils.deleteDirectory(archiveTempDir);
             LOGGER.debug("Deleted temporary directory holding archive content");
         }
-        LOGGER.debug("Created graph vertex [" + graphVertex.getId() + "] for " + artifactExtractedInfo.getTitle());
+        LOGGER.debug("Created graph vertex [%s] for %s", graphVertex.getId(), artifactExtractedInfo.getTitle());
         return graphVertex;
     }
 
@@ -205,11 +201,11 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     private File copyFileToLocalFile(InputStream in) throws IOException {
         File localFile = File.createTempFile("fileProcessing", "");
-        LOGGER.debug("Copying file locally for processing: " + localFile);
+        LOGGER.debug("Copying file locally for processing: %s", localFile);
         OutputStream localFileOut = new FileOutputStream(localFile);
         try {
             long numberOfBytesCopied = IOUtils.copyLarge(in, localFileOut);
-            LOGGER.debug("Copied " + numberOfBytesCopied + " to file " + localFile);
+            LOGGER.debug("Copied %d to file %s", numberOfBytesCopied, localFile);
         } finally {
             localFileOut.close();
             in.close();
@@ -271,7 +267,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     private String moveTempFile(String path, String fileName, String rowKey) throws IOException {
         String newPath = path + rowKey;
-        LOGGER.info("Moving file " + fileName + " -> " + newPath);
+        LOGGER.info("Moving file %s -> %s", fileName, newPath);
         getHdfsFileSystem().delete(new Path(newPath), false);
         getHdfsFileSystem().rename(new Path(fileName), new Path(newPath));
         return newPath;

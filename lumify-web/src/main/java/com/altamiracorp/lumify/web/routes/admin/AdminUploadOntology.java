@@ -2,6 +2,8 @@ package com.altamiracorp.lumify.web.routes.admin;
 
 import com.altamiracorp.lumify.core.cmdline.OwlImport;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.common.io.Files;
@@ -10,8 +12,6 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminUploadOntology extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminUploadOntology.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AdminUploadOntology.class);
     private final OwlImport owlImport;
 
     @Inject
@@ -58,7 +58,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
         if (zipped.isValidZipFile()) {
             File tempDir = Files.createTempDir();
             try {
-                LOGGER.info("Extracting: " + file.getAbsoluteFile() + " to " + tempDir.getAbsolutePath());
+                LOGGER.info("Extracting: %s to %s", file.getAbsoluteFile(), tempDir.getAbsolutePath());
                 zipped.extractAll(tempDir.getAbsolutePath());
 
                 File owlFile = findOwlFile(tempDir);

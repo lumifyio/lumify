@@ -1,8 +1,10 @@
 package com.altamiracorp.lumify.web;
 
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.apache.commons.lang.StringUtils;
@@ -16,8 +18,6 @@ import org.atmosphere.interceptor.HeartbeatInterceptor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
                 HeartbeatInterceptor.class
         })
 public class Messaging implements AtmosphereHandler { //extends AbstractReflectorAtmosphereHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Messaging.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Messaging.class);
 
     private UserRepository userRepository;
 
@@ -158,7 +158,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             authUser.setCurrentWorkspace(workspaceRowKey);
             userRepository.save(user, authUser.getModelUserContext());
 
-            LOGGER.debug("User " + user.getRowKey() + " switched current workspace to " + workspaceRowKey);
+            LOGGER.debug("User %s switched current workspace to %s", user.getRowKey(), workspaceRowKey);
         }
     }
 

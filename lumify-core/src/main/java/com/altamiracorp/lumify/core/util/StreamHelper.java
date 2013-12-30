@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.util;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
 
 import java.io.*;
 
@@ -24,7 +23,7 @@ public class StreamHelper extends Thread {
     /**
      * Append messages to this logger
      */
-    protected Logger logger = null;
+    protected LumifyLogger logger = null;
 
     /**
      * True to keep reading the streams
@@ -60,12 +59,12 @@ public class StreamHelper extends Thread {
      * @param logger        the logger to append to
      * @param contentBuffer the buffer to write the captured output to
      */
-    public StreamHelper(InputStream inputStream, Logger logger,
+    public StreamHelper(InputStream inputStream, LumifyLogger logger,
                         StringBuffer contentBuffer) {
         this(inputStream, null, logger, contentBuffer, null);
     }
 
-    public StreamHelper(InputStream inputStream, Logger logger, String prefix) {
+    public StreamHelper(InputStream inputStream, LumifyLogger logger, String prefix) {
         this(inputStream, null, logger, null, prefix);
     }
 
@@ -94,7 +93,7 @@ public class StreamHelper extends Thread {
      * @param contentBuffer the buffer to write the captured output to
      */
     public StreamHelper(InputStream inputStream, OutputStream redirect,
-                        Logger logger, StringBuffer contentBuffer, String prefix) {
+                        LumifyLogger logger, StringBuffer contentBuffer, String prefix) {
         this.inputStream = inputStream;
         this.outputStream = redirect;
         this.logger = logger;
@@ -170,7 +169,7 @@ public class StreamHelper extends Thread {
      */
     protected void log(String output) {
         if (logger != null) {
-            logger.info(output);
+            logger.info("%s", output);
         }
     }
 }

@@ -16,9 +16,9 @@
 
 package com.altamiracorp.lumify.core.version;
 
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.management.*;
 import java.io.FileNotFoundException;
@@ -34,12 +34,8 @@ import java.util.Properties;
  */
 @Singleton
 public class VersionService implements VersionServiceMXBean {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VersionService.class);
     public static String JMX_NAME = "com.altamiracorp.lumify:type=" + VersionService.class.getName();
-
-    /**
-     * The class logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(VersionService.class);
 
     /**
      * The name of the properties file to read.
@@ -95,7 +91,7 @@ public class VersionService implements VersionServiceMXBean {
                 try {
                     buildTime = Long.parseLong(strTime);
                 } catch (NumberFormatException nfe) {
-                    LOGGER.warn("Invalid build timestamp [%s].");
+                    LOGGER.warn("Invalid build timestamp [%s].", strTime);
                 }
             }
         } catch (IOException ioe) {

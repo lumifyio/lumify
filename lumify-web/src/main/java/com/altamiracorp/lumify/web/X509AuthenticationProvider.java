@@ -1,12 +1,12 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 
 public abstract class X509AuthenticationProvider extends AuthenticationProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(X509AuthenticationProvider.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
 
     protected abstract String getUsername(X509Certificate cert);
 
@@ -55,9 +55,9 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             cert.checkValidity();
             return false;
         } catch (CertificateExpiredException e) {
-            LOGGER.warn("Authentication attempt with expired certificate: " + cert.getSubjectDN());
+            LOGGER.warn("Authentication attempt with expired certificate: %s", cert.getSubjectDN());
         } catch (CertificateNotYetValidException e) {
-            LOGGER.warn("Authentication attempt with certificate that's not yet valid: " + cert.getSubjectDN());
+            LOGGER.warn("Authentication attempt with certificate that's not yet valid: %s", cert.getSubjectDN());
         }
 
         return true;

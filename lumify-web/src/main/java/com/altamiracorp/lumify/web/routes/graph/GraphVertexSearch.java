@@ -1,28 +1,25 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 public class GraphVertexSearch extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GraphVertexSearch.class);
-
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
 
@@ -54,14 +51,14 @@ public class GraphVertexSearch extends BaseRequestHandler {
         int verticesCount = 0;
         for (Map.Entry<String, List<GraphVertex>> entry : pagedResults.getResults().entrySet()) {
             JSONArray temp = GraphVertex.toJson(entry.getValue());
-            for (int i = 0; i < temp.length(); i ++ ) {
+            for (int i = 0; i < temp.length(); i++) {
                 vertices.put(temp.getJSONObject(i));
             }
             Integer count = pagedResults.getCount().get(entry.getKey());
             verticesCount += count.intValue();
             counts.put(entry.getKey(), count);
         }
-        LOGGER.info("Number of vertices returned for query: " + verticesCount);
+        LOGGER.info("Number of vertices returned for query: %d", verticesCount);
 
         JSONObject results = new JSONObject();
         results.put("vertices", vertices);

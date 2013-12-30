@@ -7,29 +7,25 @@ import com.altamiracorp.lumify.core.ingest.document.DocumentTextExtractionWorker
 import com.altamiracorp.lumify.core.ingest.image.ImageTextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.structuredData.StructuredDataExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.video.VideoTextExtractionWorker;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
 public class HashCalculationWorker
         extends ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>
         implements DocumentTextExtractionWorker, ImageTextExtractionWorker, VideoTextExtractionWorker, StructuredDataExtractionWorker {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HashCalculationWorker.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HashCalculationWorker.class);
 
     @Override
     protected ArtifactExtractedInfo doWork(InputStream work, AdditionalArtifactWorkData additionalArtifactWorkData) throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calculating Hash [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
-        }
+        LOGGER.debug("Calculating Hash [HashCalculationWorker]: %s", additionalArtifactWorkData.getFileName());
         ArtifactExtractedInfo info = new ArtifactExtractedInfo();
         info.setRowKey(RowKeyHelper.buildSHA256KeyString(work));
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calculated hash: " + info.getRowKey());
-            LOGGER.debug("Finished [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
-        }
+        LOGGER.debug("Calculated hash: %s", info.getRowKey());
+        LOGGER.debug("Finished [HashCalculationWorker]: %s", additionalArtifactWorkData.getFileName());
         return info;
     }
 

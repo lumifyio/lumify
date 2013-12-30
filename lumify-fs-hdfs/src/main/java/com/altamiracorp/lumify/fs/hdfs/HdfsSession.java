@@ -3,14 +3,14 @@ package com.altamiracorp.lumify.fs.hdfs;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +18,7 @@ import java.net.URI;
 import java.util.UUID;
 
 public class HdfsSession extends FileSystemSession {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HdfsSession.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsSession.class);
     private final FileSystem hdfsFileSystem;
     private final String hdfsRootDir;
 
@@ -59,7 +58,7 @@ public class HdfsSession extends FileSystemSession {
             String rowKeyNoSpecialChars = rowKey.replaceAll("" + RowKeyHelper.MINOR_FIELD_SEPARATOR, "").replaceAll("\\x1F", "");
             String path = dataRoot + rowKeyNoSpecialChars;
             this.hdfsFileSystem.rename(new Path(tempPath), new Path(path));
-            LOGGER.info("file saved: " + path);
+            LOGGER.info("file saved: %s", path);
             return new SaveFileResults(rowKey, "/data/" + rowKeyNoSpecialChars);
         } catch (IOException ex) {
             throw new RuntimeException("could not save file to HDFS", ex);
@@ -69,7 +68,7 @@ public class HdfsSession extends FileSystemSession {
     @Override
     public InputStream loadFile(String path) {
         try {
-            LOGGER.info("Loading file: " + path);
+            LOGGER.info("Loading file: %s", path);
             return this.hdfsFileSystem.open(new Path(path));
         } catch (IOException ex) {
             throw new RuntimeException(ex);

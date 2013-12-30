@@ -5,12 +5,12 @@ import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.guice.modules.Bootstrap;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -21,7 +21,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class ApplicationBootstrap implements ServletContextListener {
-    private static Logger LOGGER;
+    private static LumifyLogger LOGGER;
     public static final String APP_CONFIG_LOCATION = "application.config.location";
     public static final String APP_LOG4J_LOCATION = "application.config.log4j.location";
 
@@ -35,7 +35,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
         try {
             if (context != null) {
                 final Configuration config = fetchApplicationConfiguration(context);
-                LOGGER.info("Running application with configuration: " + config);
+                LOGGER.info("Running application with configuration: %s", config);
 
                 InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
                     @Override
@@ -74,8 +74,8 @@ public final class ApplicationBootstrap implements ServletContextListener {
         }
 
         DOMConfigurator.configure(log4jFile);
-        LOGGER = LoggerFactory.getLogger(ApplicationBootstrap.class);
-        LOGGER.info("Using log4j.xml: " + log4jFile);
+        LOGGER = LumifyLoggerFactory.getLogger(ApplicationBootstrap.class);
+        LOGGER.info("Using log4j.xml: %s", log4jFile);
     }
 
     @Override

@@ -1,26 +1,23 @@
 package com.altamiracorp.lumify.core.model.graph;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import org.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 
 @Singleton
 public class GraphRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GraphRepository.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphRepository.class);
     private final GraphSession graphSession;
 
     @Inject
@@ -106,7 +103,7 @@ public class GraphRepository {
     }
 
     public List<GraphVertex> findByGeoLocation(double latitude, double longitude, double radius, User user) {
-        LOGGER.info("findByGeoLocation latitude: " + latitude + ", longitude: " + longitude + ", radius: " + radius);
+        LOGGER.info("findByGeoLocation latitude: %d, longitude: %d, radius: %d", latitude, longitude, radius);
         return graphSession.findByGeoLocation(latitude, longitude, radius, user);
     }
 
@@ -161,7 +158,7 @@ public class GraphRepository {
     public void setPropertyEdge(String sourceId, String destId, String label, String propertyName, Object value, User user) {
         Edge edge = findEdge(sourceId, destId, label, user);
         edge.setProperty(propertyName, value);
-        LOGGER.info("set property of vertex: " + edge.getId() + ", property name: " + propertyName + ", value: " + value);
+        LOGGER.info("set property of vertex: %s, property name: %s, value: %s", edge.getId(), propertyName, value);
         graphSession.commit();
     }
 

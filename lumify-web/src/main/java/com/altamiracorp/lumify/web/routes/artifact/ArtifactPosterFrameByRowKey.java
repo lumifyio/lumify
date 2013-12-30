@@ -1,27 +1,25 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import java.io.InputStream;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 
 public class ArtifactPosterFrameByRowKey extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArtifactPosterFrameByRowKey.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactPosterFrameByRowKey.class);
 
     private final ArtifactRepository artifactRepository;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
@@ -52,7 +50,7 @@ public class ArtifactPosterFrameByRowKey extends BaseRequestHandler {
 
             byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactRowKey, "poster-frame", boundaryDims[0], boundaryDims[1], user);
             if (thumbnailData != null) {
-                LOGGER.debug("Cache hit for: " + artifactRowKey.toString() + " (poster-frame) " + boundaryDims[0] + "x" + boundaryDims[1]);
+                LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();
@@ -70,7 +68,7 @@ public class ArtifactPosterFrameByRowKey extends BaseRequestHandler {
         InputStream in = artifactRepository.getRawPosterFrame(artifactRowKey.toString());
         try {
             if (widthStr != null) {
-                LOGGER.info("Cache miss for: " + artifactRowKey.toString() + " (poster-frame) " + boundaryDims[0] + "x" + boundaryDims[1]);
+                LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
                 byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifact.getRowKey(), "poster-frame", in, boundaryDims, user).getMetadata().getData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);

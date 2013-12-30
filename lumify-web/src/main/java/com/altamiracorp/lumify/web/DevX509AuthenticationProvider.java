@@ -1,9 +1,9 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
@@ -11,7 +11,7 @@ import javax.naming.ldap.Rdn;
 import java.security.cert.X509Certificate;
 
 public class DevX509AuthenticationProvider extends X509AuthenticationProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DevX509AuthenticationProvider.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DevX509AuthenticationProvider.class);
 
     @Inject
     public DevX509AuthenticationProvider(UserRepository userRepository) {
@@ -24,7 +24,7 @@ public class DevX509AuthenticationProvider extends X509AuthenticationProvider {
         try {
             return getCn(dn);
         } catch (InvalidNameException e) {
-            LOGGER.error("Unable to parse CN from X509 certificate DN: " + dn);
+            LOGGER.error("Unable to parse CN from X509 certificate DN: %s", dn);
             return null;
         }
     }

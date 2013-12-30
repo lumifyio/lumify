@@ -2,18 +2,18 @@ package com.altamiracorp.lumify.model;
 
 import backtype.storm.spout.Scheme;
 import backtype.storm.tuple.Fields;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import kafka.message.Message;
 import kafka.serializer.Encoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class KafkaJsonEncoder implements Encoder<JSONObject>, Scheme {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaJsonEncoder.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaJsonEncoder.class);
     public static final String EXTRA = "_extra";
 
     @Override
@@ -37,7 +37,7 @@ public class KafkaJsonEncoder implements Encoder<JSONObject>, Scheme {
             }
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deserialize: " + json.toString() + " (size: " + results.size() + ")");
+                LOGGER.debug("deserialize: %s (size: %d)", json.toString(), results.size());
             }
             return results;
         } catch (Exception ex) {

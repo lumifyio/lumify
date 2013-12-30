@@ -1,11 +1,11 @@
 package com.altamiracorp.lumify.core.config;
 
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationMap;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,9 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * configuration values to the application
  */
 public final class Configuration {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
-
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     public static final String HADOOP_URL = "hadoop.url";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
@@ -115,7 +113,7 @@ public final class Configuration {
         checkNotNull(configDirectory, "The specified config file URL was null");
         checkArgument(!configDirectory.isEmpty(), "The specified config file URL was empty");
 
-        LOGGER.debug(String.format("Attempting to load configuration from directory: %s", configDirectory));
+        LOGGER.debug("Attempting to load configuration from directory: %s", configDirectory);
         if (configDirectory.startsWith("file://")) {
             configDirectory = configDirectory.substring("file://".length());
         }
@@ -152,12 +150,12 @@ public final class Configuration {
     }
 
     private static void processFile(final String fileName, final PropertiesConfiguration propertiesConfiguration) throws IOException {
-        LOGGER.info("Loading config file: " + fileName);
+        LOGGER.info("Loading config file: %s", fileName);
         FileInputStream in = new FileInputStream(fileName);
         try {
             propertiesConfiguration.load(in);
         } catch (ConfigurationException e) {
-            LOGGER.info("Could not find file to load: " + fileName);
+            LOGGER.info("Could not find file to load: ", fileName);
         } finally {
             in.close();
         }

@@ -1,19 +1,19 @@
 package com.altamiracorp.lumify.web.routes.map;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.resources.Resource;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 public class MapMarkerImage extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MapMarkerImage.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
 
     private final OntologyRepository ontologyRepository;
     private final ResourceRepository resourceRepository;
@@ -52,7 +52,7 @@ public class MapMarkerImage extends BaseRequestHandler {
         String cacheKey = typeStr + scale + heading + (selected ? "selected" : "unselected");
         byte[] imageData = imageCache.getIfPresent(cacheKey);
         if (imageData == null) {
-            LOGGER.info("map marker cache miss " + typeStr + " (scale: " + scale + ", heading: " + heading + ")");
+            LOGGER.info("map marker cache miss %s (scale: %d, heading: %d)", typeStr, scale, heading);
 
             Concept concept = ontologyRepository.getConceptById(typeStr, user);
             if (concept == null) {

@@ -8,19 +8,18 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Module;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public abstract class BaseFileSystemSpout extends BaseRichSpout {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseFileSystemSpout.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseFileSystemSpout.class);
     public static final String DATADIR_CONFIG_NAME = "datadir";
     private SpoutOutputCollector collector;
     private Map<String, String> workingFiles;
@@ -35,7 +34,7 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
 
     @Override
     public void open(final Map conf, TopologyContext context, SpoutOutputCollector collector) {
-        LOGGER.info(String.format("Configuring environment for spout: %s-%d", context.getThisComponentId(), context.getThisTaskId()));
+        LOGGER.info("Configuring environment for spout: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
         InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
             @Override
@@ -77,13 +76,13 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
 
     protected void emit(String path) {
         workingFiles.put(path, path);
-        LOGGER.info("Emitting value: " + path);
+        LOGGER.debug("Emitting value: %s", path);
         collector.emit(new Values(path), path);
     }
 
     @Override
     public final void ack(Object msgId) {
-        LOGGER.debug("received ack on: " + msgId);
+        LOGGER.debug("received ack on: %s", msgId);
         try {
             safeAck(msgId);
             totalProcessedCounter.inc();
@@ -102,7 +101,7 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
 
     @Override
     public void fail(Object msgId) {
-        LOGGER.error("received fail on: " + msgId);
+        LOGGER.error("received fail on: %s", msgId);
         totalErrorCounter.inc();
         if (workingFiles.containsKey(msgId)) {
             workingFiles.remove(msgId);

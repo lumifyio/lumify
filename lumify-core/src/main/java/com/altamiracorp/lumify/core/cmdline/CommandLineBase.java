@@ -6,18 +6,18 @@ import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Module;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
 
 public abstract class CommandLineBase {
-    protected Logger LOGGER;
+    protected LumifyLogger LOGGER;
     private String configLocation = "/opt/lumify/config/";
     private Configuration configuration;
     private User user = new SystemUser();
@@ -83,8 +83,8 @@ public abstract class CommandLineBase {
         }
 
         DOMConfigurator.configure(log4jFile);
-        LOGGER = LoggerFactory.getLogger(getClass());
-        LOGGER.info("Using log4j.xml: " + log4jFile);
+        LOGGER = LumifyLoggerFactory.getLogger(getClass());
+        LOGGER.info("Using log4j.xml: %s", log4jFile);
     }
 
     protected void printHelp(Options options) {

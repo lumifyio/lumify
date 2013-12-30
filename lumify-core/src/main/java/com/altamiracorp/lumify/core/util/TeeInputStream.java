@@ -2,15 +2,13 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.metrics.PausableTimerContext;
 import com.altamiracorp.lumify.core.metrics.PausableTimerContextAware;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
 public class TeeInputStream {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TeeInputStream.class.getName());
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TeeInputStream.class);
     private static final int DEFAULT_BUFFER_SIZE = 1 * 1024 * 1024;
     public static final int LOOP_REPORT_INTERVAL = 10 * 1000; // report to the user every 10 seconds that a queue is waiting
     private final InputStream source;
@@ -74,7 +72,7 @@ public class TeeInputStream {
                         if (teeWithLowestOffset == null) {
                             LOGGER.debug("All tees are complete");
                         } else {
-                            LOGGER.debug("Waiting for tee: " + teeWithLowestOffset.splitName + " (offset: " + teeWithLowestOffset.offset + ")");
+                            LOGGER.debug("Waiting for tee: %s (offset: %d)", teeWithLowestOffset.splitName, teeWithLowestOffset.offset);
                         }
                         lastReport = new Date().getTime();
                     }

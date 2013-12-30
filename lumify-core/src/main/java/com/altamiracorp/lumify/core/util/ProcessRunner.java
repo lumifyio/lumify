@@ -2,8 +2,6 @@ package com.altamiracorp.lumify.core.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +11,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class ProcessRunner {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRunner.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ProcessRunner.class);
 
     public Process execute(final String programName, final String[] programArgs, OutputStream out, final String logPrefix) throws IOException, InterruptedException {
         final List<String> arguments = Lists.newArrayList(programName);
@@ -27,15 +25,15 @@ public class ProcessRunner {
         final ProcessBuilder procBuilder = new ProcessBuilder(arguments);
         final Map<String, String> sortedEnv = new TreeMap<String, String>(procBuilder.environment());
 
-        LOGGER.info(logPrefix + "Running: " + arrayToString(arguments));
+        LOGGER.info("%s Running: %s", logPrefix, arrayToString(arguments));
 
         if (!sortedEnv.isEmpty()) {
-            LOGGER.info(logPrefix + "Spawned program environment: ");
+            LOGGER.info("%s Spawned program environment: ", logPrefix);
             for (final Map.Entry<String, String> entry : sortedEnv.entrySet()) {
-                LOGGER.info(logPrefix + String.format("%s:%s", entry.getKey(), entry.getValue()));
+                LOGGER.info("%s %s:%s", logPrefix, entry.getKey(), entry.getValue());
             }
         } else {
-            LOGGER.info(logPrefix + "Running program environment is empty");
+            LOGGER.info("%s Running program environment is empty", logPrefix);
         }
 
         final Process proc = procBuilder.start();

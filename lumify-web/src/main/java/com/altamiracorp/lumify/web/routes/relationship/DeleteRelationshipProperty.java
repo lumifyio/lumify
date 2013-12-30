@@ -10,16 +10,12 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import com.tinkerpop.blueprints.Edge;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class DeleteRelationshipProperty extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeleteRelationshipProperty.class);
-
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
 

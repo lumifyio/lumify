@@ -5,6 +5,8 @@ import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
 import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.index.utils.TitanGraphSearchIndexProviderUtil;
 import com.altamiracorp.lumify.model.query.utils.LuceneTokenizer;
 import com.google.common.base.Preconditions;
@@ -24,8 +26,6 @@ import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.branch.LoopPipe;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -33,8 +33,7 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TitanGraphSession extends GraphSession {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TitanGraphSession.class);
-
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TitanGraphSession.class);
     private static final String TITAN_PROP_KEY_PREFIX = "graph.titan";
     private static final String SEARCH_INDEX_PROVIDER_UTIL_CLASS = "storage.index.search.providerUtilClass";
 
@@ -56,7 +55,7 @@ public class TitanGraphSession extends GraphSession {
 
         synchronized (graphLock) {
             if (graph == null) {
-                LOGGER.info("opening titan:\n" + confToString(conf));
+                LOGGER.info("opening titan:\n%s", confToString(conf));
                 graph = TitanFactory.open(conf);
             }
         }
@@ -192,7 +191,7 @@ public class TitanGraphSession extends GraphSession {
                     vertexDataType = Geoshape.class;
                     break;
                 default:
-                    LOGGER.error(String.format("Unknown PropertyType [%s] for Property [%s].  Using String type.", dataType, name));
+                    LOGGER.error("Unknown PropertyType [%s] for Property [%s].  Using String type.", dataType, name);
                     vertexDataType = String.class;
                     break;
             }
@@ -320,13 +319,13 @@ public class TitanGraphSession extends GraphSession {
             adjVerticesPipeline.both();
 
             final List<Vertex> adjacentVertices = adjVerticesPipeline.toList();
-            LOGGER.info(String.format("Found %d vertices adjacent to vertex id: %s", adjacentVertices.size(), graphVertexId));
+            LOGGER.info("Found %d vertices adjacent to vertex id: %s", adjacentVertices.size(), graphVertexId);
 
             for (final Vertex adjVertex : adjacentVertices) {
                 relatedVertices.add(new TitanGraphVertex(adjVertex));
             }
         } else {
-            LOGGER.warn("Could not find graph vertex with id: " + graphVertexId);
+            LOGGER.warn("Could not find graph vertex with id: %s", graphVertexId);
         }
 
         return relatedVertices;

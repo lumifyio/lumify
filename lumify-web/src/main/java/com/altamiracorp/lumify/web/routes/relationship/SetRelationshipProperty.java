@@ -1,23 +1,23 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Property;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.vertex.VertexProperties;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class SetRelationshipProperty extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SetRelationshipProperty.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetRelationshipProperty.class);
 
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
@@ -47,7 +47,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         try {
             value = property.convertString(valueStr);
         } catch (Exception ex) {
-            LOGGER.warn("Validation error propertyName: " + propertyName + ", valueStr: " + valueStr, ex);
+            LOGGER.warn(String.format("Validation error propertyName: %s, valueStr: %s", propertyName, valueStr), ex);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
             return;
         }

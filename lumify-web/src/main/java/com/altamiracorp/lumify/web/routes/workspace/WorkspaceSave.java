@@ -1,20 +1,20 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.Column;
-import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspacePermissions;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkspaceSave extends BaseRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WorkspaceSave.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceSave.class);
     private static final String DEFAULT_WORKSPACE_TITLE = "Default";
 
     private final WorkspaceRepository workspaceRepository;
@@ -50,7 +50,7 @@ public class WorkspaceSave extends BaseRequestHandler {
             workspace = workspaceRepository.findByRowKey(workspaceRowKeyString, authUser.getModelUserContext());
         }
 
-        LOGGER.info("Saving workspace: " + workspace.getRowKey() + "\ntitle: " + workspace.getMetadata().getTitle() + "\ndata: " + data);
+        LOGGER.info("Saving workspace: %s\ntitle: %s\ndata: %s", workspace.getRowKey(), workspace.getMetadata().getTitle(), data);
 
         Boolean shouldSave = false;
 

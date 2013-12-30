@@ -1,16 +1,16 @@
 package com.altamiracorp.lumify.core.model.workQueue;
 
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.common.collect.ImmutableMap;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkQueueRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WorkQueueRepository.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
 
     private static final String KEY_ARTIFACT_ROWKEY = "artifactRowKey";
     private static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
@@ -48,7 +48,7 @@ public abstract class WorkQueueRepository {
             data.put(entry.getKey(), entry.getValue());
         }
 
-        LOGGER.debug(String.format("Writing data: %s to queue [%s]", data, queueName));
+        LOGGER.debug("Writing data: %s to queue [%s]", data, queueName);
         pushOnQueue(queueName, data);
     }
 

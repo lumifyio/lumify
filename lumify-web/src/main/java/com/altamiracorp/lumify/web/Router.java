@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.routes.admin.*;
 import com.altamiracorp.lumify.web.routes.artifact.*;
 import com.altamiracorp.lumify.web.routes.audit.VertexAudit;
@@ -20,8 +22,6 @@ import com.altamiracorp.lumify.web.routes.workspace.*;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticFileHandler;
 import com.google.inject.Injector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Router extends HttpServlet {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Router.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);
     /**
      * Copied from org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT.
      * TODO: Examine why this is necessary and how it can be abstracted to any servlet container.

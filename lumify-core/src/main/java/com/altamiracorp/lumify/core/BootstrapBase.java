@@ -10,18 +10,18 @@ import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BootstrapBase extends AbstractModule {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BootstrapBase.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BootstrapBase.class);
 
     private final Configuration config;
 
@@ -63,7 +63,7 @@ public abstract class BootstrapBase extends AbstractModule {
             contentTypeExtractor.init(config.toMap());
             return contentTypeExtractor;
         } catch (ClassNotFoundException e) {
-            LOGGER.warn("Could not load class " + config.get(Configuration.CONTENT_TYPE_EXTRACTOR));
+            LOGGER.warn("Could not load class %s", config.get(Configuration.CONTENT_TYPE_EXTRACTOR));
             return null;
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("The provided model provider " + contentTypeExtractorClass.getName() + " does not have the required constructor");

@@ -1,21 +1,21 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class WorkspaceDelete extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceDelete.class);
     private final WorkspaceRepository workspaceRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(WorkspaceDelete.class);
 
     @Inject
     public WorkspaceDelete(final WorkspaceRepository workspaceRepository) {
@@ -30,7 +30,7 @@ public class WorkspaceDelete extends BaseRequestHandler {
             User user = getUser(request);
             WorkspaceRowKey rowKey = new WorkspaceRowKey(strRowKey);
 
-            LOGGER.info("Deleting workspace with id: " + strRowKey);
+            LOGGER.info("Deleting workspace with id: %s", strRowKey);
             workspaceRepository.delete(rowKey, user.getModelUserContext());
 
             JSONObject resultJson = new JSONObject();

@@ -2,14 +2,14 @@ package com.altamiracorp.lumify.model;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Singleton;
 import kafka.javaapi.producer.Producer;
 import kafka.javaapi.producer.ProducerData;
 import kafka.producer.ProducerConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Properties;
@@ -17,9 +17,9 @@ import java.util.Properties;
 @Singleton
 public class KafkaWorkQueueRepository extends WorkQueueRepository {
     public static final String KAFKA_PATH_PREFIX = "/kafka";
-    private static Object kafkaProducerLock = new Object();
+    private static final Object kafkaProducerLock = new Object();
     private static Producer<String, JSONObject> kafkaProducer;
-    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaWorkQueueRepository.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaWorkQueueRepository.class);
 
     @Override
     public void init(Map config) {
@@ -28,7 +28,7 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
         synchronized (kafkaProducerLock) {
             if (kafkaProducer == null) {
                 String zkServerNames = config.get(Configuration.ZK_SERVERS) + KAFKA_PATH_PREFIX;
-                LOGGER.info("Kafka Work Queue Repository zkServerNames: " + zkServerNames);
+                LOGGER.info("Kafka Work Queue Repository zkServerNames: %s", zkServerNames);
                 Properties props = new Properties();
                 props.put("zk.connect", zkServerNames);
                 props.put("serializer.class", KafkaJsonEncoder.class.getName());
