@@ -258,10 +258,18 @@ define([
             this.attr.data.users.push(userPermission);
 
             badge.addClass('loading');
-            this.saveWorkspace(true).
-                done(function() {
+            this.saveWorkspace(true)
+                .always(function() {
                     badge.removeClass('loading');
                     badge.popover('destroy');
+                })
+                .fail(function() {
+                    badge.addClass('badge-important').text('Error');
+                    _.delay(function() {
+                        row.remove();
+                    }, 2000);
+                })
+                .done(function() {
                     _.defer(function() {
                         self.makePopover(badge);
                     });
