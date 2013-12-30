@@ -104,6 +104,26 @@
             <artifactId>log4j</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -166,26 +186,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>${jetty.port}</port>
-                            <confidentialPort>${jetty.ssl.port}</confidentialPort>
-                            <maxIdleTime>${jetty.maxIdleTime}</maxIdleTime>
-                        </connector>
-                        <connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
-                            <port>${jetty.ssl.port}</port>
-                            <maxIdleTime>${jetty.maxIdleTime}</maxIdleTime>
-                            <keystore>${jetty.keystore.path}</keystore>
-                            <password>${jetty.keystore.password}</password>
-                            <keyPassword>${jetty.keystore.password}</keyPassword>
-                        </connector>
-                    </connectors>
-                </configuration>
             </plugin>
         </plugins>
     </build>

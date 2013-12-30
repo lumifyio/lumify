@@ -21,11 +21,15 @@ public class HashCalculationWorker
 
     @Override
     protected ArtifactExtractedInfo doWork(InputStream work, AdditionalArtifactWorkData additionalArtifactWorkData) throws Exception {
-        LOGGER.debug("Calculating Hash [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calculating Hash [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
+        }
         ArtifactExtractedInfo info = new ArtifactExtractedInfo();
         info.setRowKey(RowKeyHelper.buildSHA256KeyString(work));
-        LOGGER.info("Calculated hash: " + info.getRowKey());
-        LOGGER.debug("Finished [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calculated hash: " + info.getRowKey());
+            LOGGER.debug("Finished [HashCalculationWorker]: " + additionalArtifactWorkData.getFileName());
+        }
         return info;
     }
 
