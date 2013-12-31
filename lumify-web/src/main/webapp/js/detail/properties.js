@@ -216,13 +216,25 @@ define([
         };
 
         this.createInfoJsonFromAudit = function(audit, direction) {
-            var type = audit[direction + 'Type'],
+            var info;
+
+            if (direction) {
+                var type = audit[direction + 'Type'];
+
                 info = {
                     _type: audit[direction + 'Type'],
                     _subType: audit[direction + 'SubType'],
                     title: audit[direction + 'Title'],
                     graphVertexId: audit[direction + 'Id']
                 };
+            } else {
+                info = {
+                    _type: audit.type,
+                    _subType: audit.subType,
+                    title: audit.title,
+                    graphVertexId: audit.id
+                };
+            }
 
             return JSON.stringify(info);
         };
