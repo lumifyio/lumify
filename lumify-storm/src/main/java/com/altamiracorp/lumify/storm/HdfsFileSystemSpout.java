@@ -26,9 +26,9 @@ public class HdfsFileSystemSpout extends BaseFileSystemSpout {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsFileSystemSpout.class);
 
     private final String subDir;
-    private FileSystem hdfsFileSystem;
-    private String readPath;
-    private Queue<String> filesToProcess;
+    protected FileSystem hdfsFileSystem;
+    protected String readPath;
+    protected Queue<String> filesToProcess;
 
     public HdfsFileSystemSpout(String subDir) {
         this.subDir = subDir;
