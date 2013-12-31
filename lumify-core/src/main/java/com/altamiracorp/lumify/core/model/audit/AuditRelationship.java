@@ -9,10 +9,12 @@ public class AuditRelationship extends ColumnFamily{
     public static final String NAME = "relationship";
     public static final String SOURCE_TYPE = "sourceType";
     public static final String SOURCE_TITLE = "sourceTitle";
+    public static final String SOURCE_SUBTYPE = "sourceSubtype";
     public static final String SOURCE_ID = "sourceId";
     public static final String DEST_TYPE = "destType";
     public static final String DEST_TITLE = "destTitle";
     public static final String DEST_ID = "destId";
+    public static final String DEST_SUBTYPE = "destSubtype";
     public static final String LABEL = "label";
 
     public AuditRelationship () {
@@ -82,6 +84,24 @@ public class AuditRelationship extends ColumnFamily{
         return this;
     }
 
+    public String getDestSubtype() {
+        return Value.toString(get(DEST_SUBTYPE));
+    }
+
+    public AuditRelationship setDestSubtype (Object destSubtype) {
+        set (DEST_SUBTYPE, destSubtype);
+        return this;
+    }
+
+    public String getSourceSubtype() {
+        return Value.toString(get(SOURCE_SUBTYPE));
+    }
+
+    public AuditRelationship setSourceSubtype (Object source) {
+        set (SOURCE_SUBTYPE, source);
+        return this;
+    }
+
     @Override
     public JSONObject toJson () {
         try {
@@ -89,9 +109,11 @@ public class AuditRelationship extends ColumnFamily{
             json.put(SOURCE_ID, this.getSourceId());
             json.put(SOURCE_TITLE, this.getSourceTitle());
             json.put(SOURCE_TYPE, this.getSourceType());
+            json.put(SOURCE_SUBTYPE, this.getSourceSubtype());
             json.put(DEST_ID, this.getDestId());
             json.put(DEST_TITLE, this.getDestTitle());
             json.put(DEST_TYPE, this.getDestType());
+            json.put(DEST_SUBTYPE, this.getDestSubtype());
             json.put(LABEL, this.getLabel());
             return json;
         } catch (JSONException e) {
