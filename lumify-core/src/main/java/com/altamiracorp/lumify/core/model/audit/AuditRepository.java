@@ -93,8 +93,8 @@ public class AuditRepository extends Repository<Audit> {
         Audit auditEntity = new Audit(AuditRowKey.build(entityId));
 
         List<Audit> audits = new ArrayList<Audit>();
-        audits.add(auditEntityHelper(auditEntity, action, entityTitle, entitySubtype, process, comment, user));
-        audits.add(auditEntityHelper(auditArtifact, action, entityTitle, entitySubtype, process, comment, user));
+        audits.add(auditEntityHelper(auditEntity, action, entityId, entityTitle, entitySubtype, process, comment, user));
+        audits.add(auditEntityHelper(auditArtifact, action, entityId, entityTitle, entitySubtype, process, comment, user));
         saveMany(audits, user.getModelUserContext());
         return audits;
     }
@@ -215,7 +215,7 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    private Audit auditEntityHelper(Audit audit, String action, String entityTitle, String entitySubtype, String process, String comment, User user) {
+    private Audit auditEntityHelper(Audit audit, String action, String entityID, String entityTitle, String entitySubtype, String process, String comment, User user) {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
@@ -229,7 +229,8 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditEntity()
                 .setTitle(entityTitle)
                 .setType(VertexType.ENTITY.toString())
-                .setSubtype(entitySubtype);
+                .setSubtype(entitySubtype)
+                .setID(entityID);
         return audit;
     }
 

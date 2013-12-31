@@ -10,6 +10,7 @@ public class AuditEntity extends ColumnFamily {
     public static final String TITLE = "title";
     public static final String TYPE = "type";
     public static final String SUBTYPE = "subtype";
+    public static final String ID = "id";
 
     public AuditEntity () {
         super (NAME);
@@ -20,7 +21,7 @@ public class AuditEntity extends ColumnFamily {
     }
 
     public AuditEntity setTitle (Object title) {
-        set (TITLE, title);
+        set(TITLE, title);
         return this;
     }
 
@@ -41,6 +42,14 @@ public class AuditEntity extends ColumnFamily {
         set (SUBTYPE, subtype);
         return this;
     }
+     public String getId () {
+        return Value.toString(get(ID));
+    }
+
+    public AuditEntity setID (String id) {
+        set (ID, id);
+        return this;
+    }
 
     @Override
     public JSONObject toJson () {
@@ -49,6 +58,7 @@ public class AuditEntity extends ColumnFamily {
             json.put("title", this.getTitle());
             json.put("type", this.getType());
             json.put("subType", this.getSubtype());
+            json.put("id", this.getId());
             return  json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
