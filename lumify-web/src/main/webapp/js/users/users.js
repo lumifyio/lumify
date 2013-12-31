@@ -31,12 +31,25 @@ define([
             this.on(document, 'chatMessage', this.onChatMessage);
             this.on(document, 'socketMessage', this.onSocketMessage);
             this.on(document, 'chatCreated', this.onChatCreated);
+            this.on(document, 'startChat', this.onStartChat);
             this.on('click', {
                 userListItemSelector: this.onUserListItemClicked
             });
 
             this.on(document, 'subscribeSocketOpened', this.doGetOnline.bind(this));
         });
+
+        this.onStartChat = function(event, data) {
+
+            if (data.userId !== this.currentUserRowKey &&
+                this.$node.find('.user-' + data.userId).is('.online')) 
+            {
+
+                this.trigger(document, 'userSelected', {
+                    rowKey: data.userId
+                });
+            }
+        };
 
         this.onUserListItemClicked = function (evt) {
             evt.preventDefault();

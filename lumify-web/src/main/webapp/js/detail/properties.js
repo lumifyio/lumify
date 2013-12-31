@@ -49,6 +49,7 @@ define([
             entityAuditsSelector: '.entity_audit_events',
             auditShowAllSelector: '.audit-list button',
             auditDateSelector: '.audit-date',
+            auditUserSelector: '.audit-user',
             auditEntitySelector: '.resolved'
         });
 
@@ -56,6 +57,7 @@ define([
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
+                auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
                 auditEntitySelector: this.onEntitySelected
             });
@@ -108,6 +110,13 @@ define([
             this.$node.find('.audit-date').each(function() {
                 $(this).text($(this).data(AUDIT_DATE_DISPLAY[CURRENT_DATE_DISPLAY]));
             });
+        };
+
+        this.onAuditUserClicked = function(event) {
+            var userId = $(event.target).data('userId');
+            if (userId) {
+                this.trigger('startChat', { userId:userId });
+            }
         };
 
         this.onToggleAuditing = function(event, data) {
