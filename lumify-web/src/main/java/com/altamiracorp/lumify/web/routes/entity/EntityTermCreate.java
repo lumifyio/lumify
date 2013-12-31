@@ -61,7 +61,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         entityHelper.updateGraphVertex(createdVertex, conceptId, sign, "", "", user);
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, "", "", user);
+        auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, sign, conceptId ,"", "", user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
 

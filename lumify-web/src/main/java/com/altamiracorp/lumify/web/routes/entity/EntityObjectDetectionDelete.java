@@ -50,7 +50,8 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.CONTAINS_IMAGE_OF.toString(), user);
         } else {
             // TODO: replace "" when we implement commenting on ui
-            auditRepository.auditEntity(AuditAction.DELETE.toString(), graphVertexId, artifactVertex.getId(), "", "", user);
+            auditRepository.auditEntity(AuditAction.DELETE.toString(), graphVertexId, artifactVertex.getId(), jsonObject.getString("title"),
+                    jsonObject.getString("_subType"), "", "", user);
             graphRepository.remove(graphVertexId, user);
             obj.put("remove", true);
         }

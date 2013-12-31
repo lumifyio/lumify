@@ -12,7 +12,6 @@ public class AuditProperty extends ColumnFamily {
     public static final String PROPERTY_NAME = "propertyName";
 
     public AuditProperty () {
-
         super (NAME);
     }
 

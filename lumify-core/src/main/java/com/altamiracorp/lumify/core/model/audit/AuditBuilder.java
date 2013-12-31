@@ -15,12 +15,15 @@ public class AuditBuilder extends BaseBuilder<Audit> {
             if (columnFamily.getColumnFamilyName().equals(AuditCommon.NAME)) {
                 Collection<Column> columns = columnFamily.getColumns();
                 audit.addColumnFamily(new AuditCommon().addColumns(columns));
-            } else if (columnFamily.getColumnFamilyName().equals(AuditProperty.NAME)){
+            } else if (columnFamily.getColumnFamilyName().equals(AuditProperty.NAME)) {
                 Collection<Column> columns = columnFamily.getColumns();
                 audit.addColumnFamily(new AuditProperty().addColumns(columns));
-            } else if (columnFamily.getColumnFamilyName().equals(AuditRelationship.NAME)){
+            } else if (columnFamily.getColumnFamilyName().equals(AuditRelationship.NAME)) {
                 Collection<Column> columns = columnFamily.getColumns();
                 audit.addColumnFamily(new AuditRelationship().addColumns(columns));
+            } else if (columnFamily.getColumnFamilyName().equals(AuditEntity.NAME)) {
+                Collection<Column> columns = columnFamily.getColumns();
+                audit.addColumnFamily(new AuditEntity().addColumns(columns));
             } else {
                 audit.addColumnFamily(columnFamily);
             }

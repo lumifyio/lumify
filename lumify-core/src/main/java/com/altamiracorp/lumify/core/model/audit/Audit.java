@@ -30,6 +30,14 @@ public class Audit extends Row<AuditRowKey> {
         return get(AuditCommon.NAME);
     }
 
+    public AuditEntity getAuditEntity() {
+        AuditEntity auditEntity = get(AuditEntity.NAME);
+        if (auditEntity == null) {
+            addColumnFamily(new AuditEntity());
+        }
+        return get(AuditEntity.NAME);
+    }
+
     public AuditRelationship getAuditRelationship() {
         AuditRelationship auditRelationship = get(AuditRelationship.NAME);
         if (auditRelationship == null) {
@@ -52,8 +60,10 @@ public class Audit extends Row<AuditRowKey> {
             json.put("data", this.getAuditCommon().toJson());
             if (this.getAuditCommon().getType().equals(VertexType.PROPERTY.toString())) {
                 json.put("propertyAudit", this.getAuditProperty().toJson());
-            } else {
+            } else if (this.getAuditCommon().getType().equals(VertexType.RELATIONSHIP.toString())) {
                 json.put("relationshipAudit", this.getAuditRelationship().toJson());
+            } else {
+                json.put("entityAudit", this.getAuditEntity().toJson());
             }
             String[] rowKey = RowKeyHelper.splitOnMinorFieldSeperator(getRowKey().toString());
             json.put("graphVertexID", rowKey[0]);
