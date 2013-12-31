@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -14,7 +15,6 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,23 +52,24 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
 
-        final Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
+        final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         final GraphVertex createdVertex = new InMemoryGraphVertex();
         createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
-        entityHelper.updateGraphVertex(createdVertex, conceptId, sign, user);
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(createdVertex, conceptId, sign, "", "", user);
 
-        auditRepository.audit(artifactId, auditRepository.resolvedEntityAuditMessageForArtifact(sign), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.resolvedEntityAuditMessage(artifactTitle), user);
-        auditRepository.audit(createdVertex.getId(),
-                auditRepository.vertexPropertyAuditMessages(createdVertex, Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString())), user);
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
-        auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign, ""), user);
-        auditRepository.audit(createdVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle, ""), user);
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
 
         TermMention termMention = new TermMention(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, conceptVertex, createdVertex, user);

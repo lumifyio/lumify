@@ -139,21 +139,8 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         processingCounter.inc();
         Timer.Context processingTimeContext = processingTimeTimer.time();
         try {
-            String auditMessage;
-            String graphVertexId = null;
             LOGGER.info("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
-            auditMessage = String.format("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
-            LOGGER.trace(auditMessage);
-            JSONObject json = tryGetJsonFromTuple(input);
-            if (json != null) {
-                graphVertexId = json.optString("graphVertexId");
-                if (graphVertexId.length() == 0) {
-                    graphVertexId = null;
-                }
-                if (graphVertexId != null) {
-                    auditRepository.audit(graphVertexId, auditMessage, getUser());
-                }
-            }
+            LOGGER.trace("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
             try {
                 safeExecute(input);
                 LOGGER.info("ACK'ing: [MessageID: %s]", input.getMessageId());
@@ -167,11 +154,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             }
 
             LOGGER.info("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
-            auditMessage = String.format("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
-            LOGGER.trace(auditMessage);
-            if (graphVertexId != null) {
-                auditRepository.audit(graphVertexId, auditMessage, getUser());
-            }
+            LOGGER.trace("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
         } finally {
             processingCounter.dec();
             totalProcessedCounter.inc();

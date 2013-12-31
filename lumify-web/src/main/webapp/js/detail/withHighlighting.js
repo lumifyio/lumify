@@ -66,7 +66,8 @@ define([
                 highlightTypeSelector: this.onHighlightTypeClicked
             });
             this.on('mousedown mouseup click dblclick', this.trackMouse.bind(this));
-            this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables);
+            this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
+            this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
             this.applyHighlightStyle();
         });
@@ -371,8 +372,7 @@ define([
 
                         StatementForm.attachTo(form, {
                             sourceTerm: ui.draggable,
-                            destTerm: destTerm,
-                            artifactId: self.$node.find('.artifact-title').data('vertex-id')
+                            destTerm: destTerm
                         });
                     }
                 });

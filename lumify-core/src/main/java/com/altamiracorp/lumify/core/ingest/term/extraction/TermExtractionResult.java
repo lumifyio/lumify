@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
+import com.altamiracorp.bigtable.model.Value;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class TermExtractionResult {
         private final boolean resolved;
         private final Map<String, Object> propertyValue;
         private final boolean useExisting;
+        private String process = "";
 
         public TermMention(int start, int end, String sign, String ontologyClassUri, boolean resolved, Map<String, Object> propertyValue, String relationshipLabel, boolean useExisting) {
             this.start = start;
@@ -101,6 +103,10 @@ public class TermExtractionResult {
         public boolean getUseExisting() {
             return useExisting;
         }
+
+        public String getProcess () { return process; }
+
+        public void setProcess (String process) { this.process = process; }
 
         public String toString () {
             return getSign() + ": " + getStart() + ": " + getEnd();

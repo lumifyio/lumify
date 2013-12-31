@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -139,9 +140,12 @@ public class ArtifactRepository extends Repository<Artifact> {
         String artifactVertexId = graphSession.save(artifactVertex, user);
 
         if (newVertex) {
-            auditRepository.audit(artifactVertexId, auditRepository.resolvedEntityAuditMessageForArtifact(artifactExtractedInfo.getTitle()), user);
+            auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
         }
-        auditRepository.audit(artifactVertexId, auditRepository.vertexPropertyAuditMessages(artifactVertex, modifiedProperties), user);
+
+        for (String modifiedProperty : modifiedProperties) {
+           auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+         }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {
             artifact.getMetadata().setGraphVertexId(artifactVertexId);

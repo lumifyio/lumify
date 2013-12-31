@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -52,14 +53,16 @@ public class EntityTermUpdate extends BaseRequestHandler {
         User user = getUser(request);
         GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
         GraphVertex resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, user);
+
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
         if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.HAS_ENTITY.toString(), user) == null) {
             graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.HAS_ENTITY, user);
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
-            Object artifactTitle = graphRepository.findVertex(artifactId, user).getProperty(PropertyName.TITLE.toString());
-            auditRepository.audit(artifactId, auditRepository.relationshipAuditMessageOnSource(labelDisplayName, sign, ""), user);
-            auditRepository.audit(resolvedVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplayName, artifactTitle, ""), user);
+            GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
+            // TODO: replace second "" when we implement commenting on ui
+            auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
         }
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);

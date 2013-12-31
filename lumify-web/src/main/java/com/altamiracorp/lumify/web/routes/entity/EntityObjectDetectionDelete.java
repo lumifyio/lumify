@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRelationship;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
@@ -9,7 +10,6 @@ import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,8 +49,8 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             obj.put("edgeId", edgeId);
             graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.CONTAINS_IMAGE_OF.toString(), user);
         } else {
-            auditRepository.audit(artifactVertex.getId(), auditRepository.deleteEntityAuditMessage(jsonObject.get("title")), user);
-            auditRepository.audit(graphVertexId, auditRepository.deleteEntityAuditMessage(jsonObject.get("title")), user);
+            // TODO: replace "" when we implement commenting on ui
+            auditRepository.auditEntity(AuditAction.DELETE.toString(), graphVertexId, artifactVertex.getId(), "", "", user);
             graphRepository.remove(graphVertexId, user);
             obj.put("remove", true);
         }
@@ -71,6 +71,9 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         }
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjects.toString());
         graphRepository.save(artifactVertex, user);
+
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);

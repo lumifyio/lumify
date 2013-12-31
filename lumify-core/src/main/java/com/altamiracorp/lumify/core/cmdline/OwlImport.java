@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.cmdline;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -112,7 +113,7 @@ public class OwlImport extends CommandLineBase {
         if (parent == null) {
             throw new RuntimeException("Could not find parent " + parentName + " for " + about);
         }
-        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, labelText, user);
+        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, this.getClass().getName(), labelText, user);
 
         for (Element propertyElem : propertyElems) {
             String propertyName = propertyElem.getAttributeNS("http://altamiracorp.com/ontology#", "name");
@@ -167,7 +168,7 @@ public class OwlImport extends CommandLineBase {
         PropertyType propertyType = PropertyType.convert(rangeResourceName);
         graphSession.commit();
 
-        ontologyRepository.addPropertyTo(domain, about, labelText, propertyType, user);
+        ontologyRepository.addPropertyTo(domain, about, labelText, this.getClass().getName(), propertyType, user);
         graphSession.commit();
     }
 

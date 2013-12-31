@@ -8,7 +8,9 @@ define([
     'util/formatters',
     './dropdowns/propertyForm/propForm',
     'tpl!./properties',
+    'tpl!./propertiesItem',
     'tpl!./audit-list',
+    'data',
     'sf'
 ], function (
     defineComponent,
@@ -19,7 +21,9 @@ define([
     formatters,
     PropertyForm,
     propertiesTemplate,
+    propertiesItemTemplate,
     auditsListTemplate,
+    appData,
     sf) {
     'use strict';
 
@@ -27,6 +31,7 @@ define([
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
+        MAX_AUDIT_ITEMS = 5,
         CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE;
 
     component.filterPropertiesForDisplay = filterPropertiesForDisplay;
@@ -42,13 +47,17 @@ define([
         this.defaultAttrs({
             addNewPropertiesSelector: '.add-new-properties',
             entityAuditsSelector: '.entity_audit_events',
-            auditDateSelector: '.audit-date'
+            auditShowAllSelector: '.audit-list button',
+            auditDateSelector: '.audit-date',
+            auditEntitySelector: '.resolved'
         });
 
         this.after('initialize', function () {
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
-                auditDateSelector: this.onAuditDateClicked
+                auditDateSelector: this.onAuditDateClicked,
+                auditShowAllSelector: this.onAuditShowAll,
+                auditEntitySelector: this.onEntitySelected
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
@@ -69,6 +78,30 @@ define([
             }
         });
 
+        this.onAuditShowAll = function(event) {
+            $(event.target).closest('.audit-list').addClass('showAll');
+        };
+
+        this.onEntitySelected = function(event) {
+            var self = this,
+                $target = $(event.target),
+                info = $target.data('info');
+
+            if (info) {
+                event.preventDefault();
+
+                var vertexId = info.graphVertexId,
+                    vertex = appData.vertex(vertexId);
+                if (!vertex) {
+                    appData.refresh(vertexId).done(function(v) {
+                        self.trigger('selectObjects', { vertices:[v] });
+                    });
+                } else {
+                    this.trigger('selectObjects', { vertices:[vertex] });
+                }
+            }
+        };
+
         this.onAuditDateClicked = function(event) {
             CURRENT_DATE_DISPLAY = (CURRENT_DATE_DISPLAY + 1) % AUDIT_DATE_DISPLAY.length;
 
@@ -87,69 +120,111 @@ define([
 
                 this.auditRequest = this.auditService.getAudits(this.attr.data.id)
                     .done(function(auditResponse) {
-                        var audits = auditResponse.auditHistory.reverse(),
-                            propertyAudits = _.filter(audits, function(a) { return (/^Set/i).test(a.message); });
+                        var audits = _.sortBy(auditResponse.auditHistory, function(a) { 
+                                return new Date(a.dateTime).getTime() * -1; 
+                            }),
+                            auditGroups = _.groupBy(audits, function(a) {
+                                return a.propertyAudit ? 'property' : 'other';
+                                       //a.relationshipAudit ? 'relation' : 'other';
+                            });
 
                         self.select('entityAuditsSelector').html(auditsListTemplate({
-                            audits: audits,
+                            audits: auditGroups.other || [],
                             formatters: formatters,
-                            hideRegex: /^(BEGIN|END|Set)/i
+                            formatValue: self.formatValue.bind(self),
+                            currentVertexId: self.attr.data.id,
+                            createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
+                            MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
                         }));
 
-                        self.updatePropertyAudits(propertyAudits);
+                        if (auditGroups.property) {
+                            self.updatePropertyAudits(auditGroups.property);
+                        }
                         auditsEl.show();                        
+
+                        self.trigger('updateDraggables');
                     });
             } else {
                 auditsEl.hide();
                 this.$node.find('.audit-list').remove();
+                this.$node.find('.audit-only-property').remove();
             }
+        };
+
+        this.formatValue = function(v, propertyName, audit) {
+            var property = this.ontologyProperties.byTitle[propertyName],
+                dataType = property && property.dataType || 'string';
+
+            switch (dataType) {
+                case 'date': return formatters.date.dateString(v);
+                case 'number': return formatters.number.pretty(v);
+                case 'geoLocation': 
+                    var geo = formatters.geoLocation.parse(v);
+                    return geo ? (geo.latitude + ',' + geo.longitude) : v;
+                default:
+                    return v;
+            }
+            
+            //audit.toValue = sf("{0:yyyy/MM/dd}", new Date(audit.toValue + " 00:00"));
         };
 
         this.updatePropertyAudits = function(audits) {
             var self = this,
-                extractRegex = /^Set\s+([^\s]+)\s+from\s+([^\s]+)\s+to\s+(.+)$/,
-                auditsByProperty = {};
+                auditsByProperty = _.groupBy(audits, function(a) { 
+                    return a.propertyAudit.propertyName; 
+                });
 
-            audits.forEach(function(audit) {
-                var match = audit.message.match(extractRegex);
-                if (match && match.length === 4) {
-                    match.shift();
-                    var propertyName = match.shift(),
-                        fromValue = match.shift(),
-                        toValue = match.shift();
-
-                    if (!auditsByProperty[propertyName]) {
-                        auditsByProperty[propertyName] = [];
-                    }
-
-                    audit.fromValue = fromValue;
-                    audit.toValue = toValue;
-                    if (!$('#app').hasClass('fullscreen-details')) {
-                        var geoMatch = audit.toValue.match(/^point\(([\d.-]+)\s*,\s*([\d.-]+)\s*\)$/);
-                        if (geoMatch && geoMatch.length === 3) {
-                            audit.geoLocation = {
-                                latitude: geoMatch[1],
-                                longitude: geoMatch[2]
-                            };
-                        }
-                    }
-                    if (/^\d+-\d+-\d+$/.test(audit.toValue)) {
-                        audit.toValue = sf("{0:yyyy/MM/dd}", new Date(audit.toValue + " 00:00"));
-                    }
-
-                    auditsByProperty[propertyName].push(audit);
-                        
-                } else console.warn('Unable to extract property audit details: ', audit.message);
-            });
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
                 var propLi = self.$node.find('.property-' + propertyName);
+                if (!propLi.length && !(/^_/).test(propertyName)) {
+                    var property = self.ontologyProperties.byTitle[propertyName],
+                        value;
+
+                    for (var i = 0; i < auditsByProperty[propertyName].length; i++) {
+                        var propAudit = auditsByProperty[propertyName][i].propertyAudit;
+                        value = propAudit.newValue || propAudit.previousValue;
+                        if (value) {
+                            break;
+                        }
+                    }
+
+                    if (property.dataType === 'geoLocation') {
+                        value = formatters.geoLocation.parse(value);
+                    }
+
+                    propLi = $(
+                        propertiesItemTemplate({
+                            property: {
+                                key: property.title,
+                                displayName: property.displayName,
+                                value: value || 'deleted'
+                            },
+                            popout: false
+                        })
+                    ).addClass('audit-only-property').insertBefore(self.$node.find('ul .buttons'));
+                }
                 propLi.append(auditsListTemplate({
                     audits: auditsByProperty[propertyName],
                     formatters: formatters,
-                    hideRegex: null
+                    formatValue: self.formatValue.bind(self),
+                    currentVertexId: self.attr.data.id,
+                    createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
+                    MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
                 }));
             });
+        };
+
+        this.createInfoJsonFromAudit = function(audit, direction) {
+            var type = audit[direction + 'Type'],
+                info = {
+                    _type: audit[direction + 'Type'],
+                    _subType: audit[direction + 'SubType'],
+                    title: audit[direction + 'Title'],
+                    graphVertexId: audit[direction + 'Id']
+                };
+
+            return JSON.stringify(info);
         };
 
         this.onVerticesUpdated = function(event, data) {
@@ -260,23 +335,25 @@ define([
         this.displayProperties = function (properties){
             var self = this;
 
-            this.ontologyService.properties().done(function(ontologyProperties) {
-                var filtered = filterPropertiesForDisplay(properties, ontologyProperties);
+            this.ontologyService.properties()
+                .done(function(ontologyProperties) {
+                    self.ontologyProperties = ontologyProperties;
+                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties);
 
-                var iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
+                    var iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
 
-                if (iconProperty) {
-                    self.trigger(self.select('glyphIconSelector'), 'iconUpdated', { src: iconProperty.value });
-                }
-                var popoutEnabled = false;
+                    if (iconProperty) {
+                        self.trigger(self.select('glyphIconSelector'), 'iconUpdated', { src: iconProperty.value });
+                    }
+                    var popoutEnabled = false;
 
-                if ($('#app').hasClass('fullscreen-details')) {
-                    popoutEnabled = true;
-                }
+                    if ($('#app').hasClass('fullscreen-details')) {
+                        popoutEnabled = true;
+                    }
 
-                var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
-                self.$node.html(props);
-            });
+                    var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
+                    self.$node.html(props);
+                });
             self.trigger('toggleAuditDisplay', { displayed: false })
         };
     }
@@ -316,6 +393,7 @@ define([
                 var isRelationshipSourceProperty = name === 'source' && properties._type === 'relationship';
                 if (/^[^_]/.test(name) && 
                     name !== 'boundingBox' &&
+                    name !== 'title' &&
                     !isRelationshipSourceProperty) {
                     addProperty(name, displayName, value);
                 }

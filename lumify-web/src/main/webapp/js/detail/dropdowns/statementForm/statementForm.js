@@ -114,8 +114,7 @@ define([
                 parameters = {
                     sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId || this.attr.sourceTerm.data('vertex-id'),
                     destGraphVertexId: this.attr.destTerm.data('info').graphVertexId || this.attr.destTerm.data('vertex-id'),
-                    predicateLabel: this.select('relationshipSelector').val(),
-                    artifactId: this.attr.artifactId
+                    predicateLabel: this.select('relationshipSelector').val()
                 };
 
             if (this.select('formSelector').hasClass('invert')) {

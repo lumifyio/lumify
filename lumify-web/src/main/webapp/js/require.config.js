@@ -1,7 +1,6 @@
 
 var require = {
     baseUrl: 'jsc',
-    //urlArgs: "cache-bust=" +  Date.now(),
     paths: {
         'arbor': '../libs/cytoscape.js/lib/arbor',
         'async' : '../libs/requirejs-plugins/src/async',
@@ -33,7 +32,7 @@ var require = {
     },
     shim: {
         'atmosphere': { exports: 'jQuery' },
-        'bootstrap': { exports: 'jQuery', deps:['jquery'] },
+        'bootstrap': { exports: 'jQuery', deps:['jquery', 'jqueryui'] },
         'bootstrap-datepicker': { exports: 'jQuery', deps:['bootstrap'] },
         'colorjs': { init: function() { return this.net.brehaut.Color; } },
         'cytoscape': { exports: 'cytoscape', deps:['arbor'] },
@@ -52,14 +51,3 @@ var require = {
     }
 };
 
-
-/*
-try {
-// For testing to use this configuration test/runner/main.js
-if ('define' in window) {
-    define([], function() {
-        return require;
-    });
-}
-} catch() { }
-*/

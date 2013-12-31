@@ -4,9 +4,14 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.version.VersionService;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.tinkerpop.blueprints.Edge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +23,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class AuditRepository extends Repository<Audit> {
     private final AuditBuilder auditBuilder = new AuditBuilder();
+    private final VersionService versionService;
 
     @Inject
-    public AuditRepository(final ModelSession modelSession) {
+    public AuditRepository(final ModelSession modelSession, final VersionService versionService) {
         super(modelSession);
+        this.versionService = versionService;
     }
+
 
     @Override
     public Audit fromRow(Row row) {
@@ -39,82 +47,206 @@ public class AuditRepository extends Repository<Audit> {
         return auditBuilder.getTableName();
     }
 
-    public Audit audit(String vertexId, String message, User user) {
+    public Audit auditVertexCreate(String vertexId, String process, String comment, User user) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
-        checkNotNull(message, "message cannot be null");
-        checkArgument(message.length() > 0, "message cannot be empty");
+        checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
+        checkNotNull(process, "process cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(vertexId));
-        audit.getData()
-                .setMessage(message)
-                .setUser(user);
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction(AuditAction.CREATE.toString())
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ?  versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+
+        if (process.length() > 0) {
+            audit.getAuditCommon().setProcess(process);
+        }
+
         save(audit, user.getModelUserContext());
         return audit;
     }
 
-    public void audit(String vertexId, ArrayList<String> messages, User user) {
-        checkNotNull(vertexId, "vertexId cannot be null");
-        checkArgument(vertexId.length() > 0, "vertexId cannot be empty");
-        checkNotNull(messages, "message cannot be null");
+    public List<Audit> auditEntity(String action, String entityId, String artifactId, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkArgument(action.length() > 0, "action cannot be empty");
+        checkNotNull(entityId, "entityId cannot be null");
+        checkArgument(entityId.length() > 0, "entityId cannot be empty");
+        checkNotNull(artifactId, "artifactId cannot be null");
+        checkArgument(artifactId.length() > 0, "artifactId cannot be empty");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+        checkNotNull(process, "process cannot be null");
+
+        Audit auditArtifact = new Audit(AuditRowKey.build(artifactId));
+        Audit auditEntity = new Audit(AuditRowKey.build(entityId));
+
+        auditEntity.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+
+        auditArtifact.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.ENTITY.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+         List<Audit> audits = Lists.newArrayList(auditEntity, auditArtifact);
+        saveMany(audits, user.getModelUserContext());
+        return audits;
+    }
+
+    public Audit auditEntityProperties(String action, GraphVertex entity, String propertyName, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkArgument(action.length() > 0, "action cannot be empty");
+        checkNotNull(entity, "entity cannot be null");
+        checkNotNull(propertyName, "propertyName cannot be null");
+        checkArgument(propertyName.length() > 0, "property name cannot be empty");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
 
-        if (messages.size() < 1) {
-            return;
+        Audit audit = new Audit(AuditRowKey.build(entity.getId()));
+        HashMap<String, Object> oldProperties = entity.getOldProperties();
+
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+
+        if (oldProperties.containsKey(propertyName)) {
+            audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName).toString());
         }
-
-        for (String message : messages) {
-            audit(vertexId, message, user);
+        if (action.equals(AuditAction.DELETE.toString())) {
+            audit.getAuditProperty().setNewValue("");
+        } else {
+            audit.getAuditProperty().setNewValue(entity.getProperty(propertyName).toString());
         }
+        audit.getAuditProperty().setPropertyName(propertyName);
+
+        save(audit, user.getModelUserContext());
+        return audit;
     }
 
-    public ArrayList<String> vertexPropertyAuditMessages(GraphVertex vertex, List<String> modifiedProperties) {
-        ArrayList<String> messages = new ArrayList<String>();
-        HashMap<String, Object> oldProperties = vertex.getOldProperties();
-        for (String modifiedProperty : modifiedProperties) {
-            Object oldProperty = "undefined";
-            if (oldProperties.containsKey(modifiedProperty)) {
-                if (oldProperties.equals(vertex.getProperty(modifiedProperty))) {
-                    continue;
-                } else {
-                    oldProperty = oldProperties.get(modifiedProperty);
-                }
-            }
-            messages.add("Set " + modifiedProperty + " from " + oldProperty + " to " + vertex.getProperty(modifiedProperty));
+    public List<Audit> auditRelationships(String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkNotNull(action.length() > 0, "action cannot be empty");
+        checkNotNull(sourceVertex, "sourceVertex cannot be null");
+        checkNotNull(destVertex, "destVertex cannot be null");
+        checkNotNull(label, "label cannot be null");
+        checkArgument(label.length() > 0, "label cannot be empty");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        Audit auditSourceDest = new Audit(AuditRowKey.build(sourceVertex.getId(), destVertex.getId()));
+        Audit auditDestSource = new Audit(AuditRowKey.build(destVertex.getId(), sourceVertex.getId()));
+
+        List<Audit> audits = new ArrayList<Audit>();
+        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, label, process, comment, user));
+        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, label, process, comment, user));
+        saveMany(audits, user.getModelUserContext());
+        return audits;
+    }
+
+    public List<Audit> auditRelationshipProperties(String action, String sourceId, String destId, String propertyName,
+                                                   Object oldValue, Edge edge, String process, String comment, User user) {
+        checkNotNull(action, "action cannot be null");
+        checkNotNull(action.length() > 0, "action cannot be empty");
+        checkNotNull(sourceId, "sourceId cannot be null");
+        checkNotNull(sourceId.length() > 0, "sourceId cannot be empty");
+        checkNotNull(destId, "destId cannot be null");
+        checkNotNull(destId.length() > 0, "destId cannot be empty");
+        checkNotNull(propertyName, "propertyName cannot be null");
+        checkNotNull(propertyName.length() > 0, "propertyName cannot be empty");
+        checkNotNull(oldValue, "oldValue cannot be null");
+        checkNotNull(edge, "edge cannot be null");
+        checkNotNull(process, "process cannot be null");
+        checkNotNull(comment, "comment cannot be null");
+        checkNotNull(user, "user cannot be null");
+
+        Audit auditSourceDest = new Audit(AuditRowKey.build(sourceId, destId));
+        Audit auditDestSource = new Audit(AuditRowKey.build(destId, sourceId));
+
+        auditSourceDest.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ?  versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+
+        auditDestSource.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.PROPERTY.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
+
+        if (!oldValue.equals("")) {
+            auditDestSource.getAuditProperty().setPreviousValue(oldValue);
+            auditSourceDest.getAuditProperty().setPreviousValue(oldValue);
         }
-        return messages;
-    }
-
-    public String relationshipAuditMessageOnSource (String label, Object destTitle, String titleOfCreationLocation) {
-        String message = label + " relationship created to " + destTitle;
-        if (titleOfCreationLocation != null && titleOfCreationLocation != "") {
-            message = "In " + titleOfCreationLocation + ", " + message;
+        if (action.equals(AuditAction.DELETE.toString())) {
+            auditDestSource.getAuditProperty().setNewValue("");
+            auditSourceDest.getAuditProperty().setNewValue("");
+        } else {
+            auditDestSource.getAuditProperty().setNewValue(edge.getProperty(propertyName));
+            auditSourceDest.getAuditProperty().setNewValue(edge.getProperty(propertyName));
         }
-        return message;
+        auditDestSource.getAuditProperty().setPropertyName(propertyName);
+        auditSourceDest.getAuditProperty().setPropertyName(propertyName);
+
+        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource);
+        saveMany(audits, user.getModelUserContext());
+        return audits;
     }
 
-    public String relationshipAuditMessageOnDest (String label, Object sourceTitle, String titleOfCreationLocation) {
-        String message = label + " relationship created from " + sourceTitle;
-        if (titleOfCreationLocation != "") {
-            message = "In " + titleOfCreationLocation + ", " + message;
-        }
-        return message;
-    }
+    private Audit auditRelationshipHelper(Audit audit, String action, GraphVertex sourceVertex, GraphVertex destVertex, String label, String process, String comment, User user) {
+        audit.getAuditCommon()
+                .setUser(user)
+                .setAction(action)
+                .setType(VertexType.RELATIONSHIP.toString())
+                .setComment(comment)
+                .setProcess(process)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
 
-    public String relationshipAuditMessageOnArtifact (Object sourceTitle, Object destTitle, String label) {
-        return label + " relationship created from " + sourceTitle + " to " + destTitle;
-    }
-
-    public String resolvedEntityAuditMessageForArtifact(Object entityTitle) {
-        return "Resolved entity, " + entityTitle;
-    }
-
-    public String resolvedEntityAuditMessage(Object artifactTitle) {
-        return "Resolved entity from " + artifactTitle;
-    }
-
-    public String deleteEntityAuditMessage(Object title) {
-        return "Deleted entity, " + title;
+        audit.getAuditRelationship()
+                .setSourceId(sourceVertex.getId())
+                .setSourceType(sourceVertex.getProperty(PropertyName.TYPE.toString()))
+                .setSourceSubtype(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestId(destVertex.getId())
+                .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
+                .setDestSubtype(destVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setLabel(label);
+        return audit;
     }
 }

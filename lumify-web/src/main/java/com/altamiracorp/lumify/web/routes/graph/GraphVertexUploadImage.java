@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactMetadata;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -89,13 +90,13 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnailByRowKey.getUrl(artifact.getRowKey()));
         graphRepository.commit();
 
+        // TODO: replace second"" when we implement commenting on ui
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
+
         graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
-        Object sourceTitle = entityVertex.getProperty(PropertyName.TITLE.toString());
-        Object destTitle = artifactVertex.getProperty(PropertyName.TITLE.toString());
-        auditRepository.audit(entityVertex.getId(), auditRepository.relationshipAuditMessageOnSource(labelDisplay, destTitle, ""), user);
-        auditRepository.audit(artifactVertex.getId(), auditRepository.relationshipAuditMessageOnDest(labelDisplay, sourceTitle, ""), user);
-        graphRepository.commit();
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
 
         respondWithJson(response, entityVertex.toJson());
     }

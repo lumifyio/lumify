@@ -64,7 +64,7 @@ define([
             var self = this,
                 deferred = null;
 
-            if (_.isString(vertex)) {
+            if (_.isString(vertex) || _.isNumber(vertex)) {
                 deferred = this.service.getVertexProperties(vertex);
             } else if (vertex.properties._type === 'artifact' && vertex.properties._rowKey) { 
                 deferred = $.when(
@@ -75,8 +75,8 @@ define([
                 deferred = this.service.getVertexProperties(vertex.id);
             }
 
-            return deferred.then(function() {
-                return self.vertex(vertex.id);
+            return deferred.then(function(v) {
+                return self.vertex((v && v.id) || vertex.id);
             });
         };
 

@@ -33,6 +33,7 @@ public abstract class AuthenticationProvider implements Handler {
                 user.getRowKey().toString(),
                 user.getMetadata().getUserName(),
                 user.getMetadata().getCurrentWorkspace(),
-                modelUserContext);
+                modelUserContext,
+                user.getMetadata().getUserType());
     }
 }

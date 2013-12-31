@@ -44,6 +44,7 @@ public class UserRow extends Row<UserRowKey> {
             json.put("rowKey", getRowKey().toString());
             json.put("userName", getMetadata().getUserName());
             json.put("status", getMetadata().getStatus().toString().toLowerCase());
+            json.put("userType", getMetadata().getUserType());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

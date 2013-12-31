@@ -1,5 +1,8 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -12,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class VertexRelationshipRemoval extends BaseRequestHandler {
     private final GraphRepository graphRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
-    public VertexRelationshipRemoval(final GraphRepository repo) {
-        graphRepository = repo;
+    public VertexRelationshipRemoval(final GraphRepository graphRepo, final AuditRepository auditRepo) {
+        graphRepository = graphRepo;
+        auditRepository = auditRepo;
     }
 
     @Override
@@ -26,6 +31,11 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
 
         User user = getUser(request);
         graphRepository.removeRelationship(source, target, label, user);
+
+        GraphVertex sourceVertex = graphRepository.findVertex(source, user);
+        GraphVertex destVertex = graphRepository.findVertex(target, user);
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.DELETE.toString(), sourceVertex, destVertex, label, "", "", user);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("success", true);

@@ -7,12 +7,14 @@ public class User {
     private String rowKey;
     private String currentWorkspace;
     private ModelUserContext modelUserContext;
+    private String userType;
 
-    public User(String rowKey, String username, String currentWorkspace, ModelUserContext modelUserContext) {
+    public User(String rowKey, String username, String currentWorkspace, ModelUserContext modelUserContext, String userType) {
         this.rowKey = rowKey;
         this.username = username;
         this.currentWorkspace = currentWorkspace;
         this.modelUserContext = modelUserContext;
+        this.userType = userType;
     }
 
     public ModelUserContext getModelUserContext() {
@@ -34,4 +36,6 @@ public class User {
     public void setCurrentWorkspace(String currentWorkspace) {
         this.currentWorkspace = currentWorkspace;
     }
+
+    public String getUserType () { return userType; }
 }

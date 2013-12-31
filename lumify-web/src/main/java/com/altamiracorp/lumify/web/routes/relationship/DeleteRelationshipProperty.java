@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Property;
@@ -18,11 +20,13 @@ import java.util.Map;
 public class DeleteRelationshipProperty extends BaseRequestHandler {
     private final GraphRepository graphRepository;
     private final OntologyRepository ontologyRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
-    public DeleteRelationshipProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo) {
+    public DeleteRelationshipProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
         ontologyRepository = ontologyRepo;
         graphRepository = graphRepo;
+        auditRepository = auditRepo;
     }
 
     @Override
@@ -40,8 +44,12 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         }
 
         Edge edge = graphRepository.findEdge(sourceId, destId, relationshipLabel, user);
+        Object oldValue = edge.getProperty(propertyName);
         edge.removeProperty(propertyName);
         graphRepository.commit();
+
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
 
         Map<String, String> properties = graphRepository.getEdgeProperties(sourceId, destId, relationshipLabel, user);
         for (Map.Entry<String, String> p : properties.entrySet()) {

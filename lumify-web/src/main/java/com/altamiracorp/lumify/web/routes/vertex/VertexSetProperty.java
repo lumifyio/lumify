@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -70,7 +71,11 @@ public class VertexSetProperty extends BaseRequestHandler {
             modifiedProperties.add(PropertyName.SOURCE.toString());
         }
         graphRepository.save(graphVertex, user);
-        auditRepository.audit(graphVertexId, auditRepository.vertexPropertyAuditMessages(graphVertex, modifiedProperties), user);
+
+        for (String modifiedProperty : modifiedProperties) {
+            // TODO: replace second "" when we implement commenting on ui
+            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), graphVertex, modifiedProperty, "", "", user);
+        }
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 

@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -48,7 +49,8 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
 
         // create new graph vertex
-        GraphVertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox, artifactId, user);
+        // TODO: replace second "" when we implement commenting on ui
+        GraphVertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
 
         ArtifactDetectedObject newDetectedObject = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, conceptVertex);
 
@@ -64,9 +66,11 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         entityVertex.put("artifactId", artifactId);
         detectedObjectList.put(entityVertex);
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjectList.toString());
-        String auditMessage = "Set coordinates from undefined to " + boundingBox;
-        auditRepository.audit(artifactId, auditMessage, user);
         graphRepository.saveVertex(resolvedVertex, user);
+
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+
         result.put("entityVertex", entityVertex);
 
         JSONObject updatedArtifactVertex =

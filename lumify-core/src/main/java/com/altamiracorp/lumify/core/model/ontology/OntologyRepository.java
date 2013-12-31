@@ -146,10 +146,6 @@ public class OntologyRepository {
         return concept;
     }
 
-    public GraphVertex getGraphVertexByTitleAndType(String title, VertexType type, User user) {
-        return graphSession.findVertexByOntologyTitleAndType(title, type, user);
-    }
-
     public GraphVertex getGraphVertexByTitle(String title, User user) {
         return graphSession.findVertexByOntologyTitle(title, user);
     }
@@ -306,7 +302,7 @@ public class OntologyRepository {
         }
     }
 
-    public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName, User user) {
+    public Concept getOrCreateConcept(Concept parent, String conceptName, String process, String displayName, User user) {
         Concept concept = getConceptByName(conceptName, user);
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
@@ -319,6 +315,9 @@ public class OntologyRepository {
         if (parent != null) {
             graphRepository.findOrAddRelationship(concept, parent, LabelName.IS_A, user);
         }
+
+        graphSession.commit();
+
         return concept;
     }
 
@@ -326,7 +325,7 @@ public class OntologyRepository {
         graphSession.findOrAddEdge(fromVertex, toVertex, edgeLabel, user);
     }
 
-    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
+    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, String process, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
         Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
         property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
@@ -336,34 +335,6 @@ public class OntologyRepository {
         graphSession.commit();
 
         return property;
-    }
-
-    public Property addPropertyTo(String relationshipLabel, String propertyName, String displayName, PropertyType dataType, User user) {
-        Relationship vertex = getRelationshipByName(relationshipLabel, user);
-        return addPropertyTo(vertex, propertyName, displayName, dataType, user);
-    }
-
-    public Relationship getRelationshipByName(String title, User user) {
-        GraphVertex vertex = graphSession.findVertexByOntologyTitleAndType(title, VertexType.RELATIONSHIP, user);
-        if (vertex == null) {
-            return null;
-        }
-        Concept[] relatedConcepts = getRelationshipRelatedConcepts(vertex.getId(), (String) vertex.getProperty(PropertyName.ONTOLOGY_TITLE), user);
-        return new GraphVertexRelationship(vertex, relatedConcepts[0], relatedConcepts[1]);
-    }
-
-    protected Relationship getOrCreateRelationship(String relationshipLabel, String displayName, User user) {
-        Relationship relationship = getRelationshipByName(relationshipLabel, user);
-        if (relationship == null) {
-            InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
-            graphVertex.setProperty(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString());
-            graphVertex.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel);
-            graphRepository.saveVertex(graphVertex, user);
-            graphSession.commit();
-            relationship = getRelationshipByName(relationshipLabel, user);
-        }
-        relationship.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
-        return relationship;
     }
 
     public GraphVertex getOrCreateRelationshipType(GraphVertex fromVertex, GraphVertex toVertex, String relationshipName, String displayName, User user) {

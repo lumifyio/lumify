@@ -1,23 +1,20 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final GraphRepository graphRepository;
@@ -51,14 +48,15 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
         } else {
-            resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing, boundingBox,
-                    artifactId, user);
+            // TODO: replace second "" when we implement commenting on ui
+            resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
             resolvedGraphVertexId = resolvedVertex.getId();
         }
         GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
 
         // update graph vertex
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, user);
+        // TODO: replace second "" when we implement commenting on ui
+        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
         // update the detected object property on the artifact
         JSONArray detectedObjects = new JSONArray(artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS).toString());
@@ -79,10 +77,8 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 result.put("entityVertex", entityTag);
                 graphRepository.save(artifactVertex, user);
 
-                if (!oldCoordinates.equals(boundingBox)){
-                    String auditMessage = "Set coordinates from " + oldCoordinates + " to " + boundingBox;
-                    auditRepository.audit(artifactId, auditMessage, user);
-                }
+                // TODO: replace "" when we implement commenting on ui
+                auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
                 JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);
