@@ -10,7 +10,7 @@
     </parent>
     <artifactId>lumify-model-accumulo</artifactId>
 
-    <name>Lumify Model: Accumulo</name>
+    <name>Lumify: Model: Accumulo</name>
 
     <dependencies>
         <dependency>

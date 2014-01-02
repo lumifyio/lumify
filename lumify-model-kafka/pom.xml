@@ -10,7 +10,7 @@
     </parent>
     <artifactId>lumify-model-kafka</artifactId>
 
-    <name>Lumify Model: Kafka</name>
+    <name>Lumify: Model: Kafka</name>
 
     <profiles>
         <!-- Use this profile to build when deploying to a clustered environment. -->

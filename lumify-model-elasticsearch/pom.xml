@@ -10,7 +10,7 @@
     </parent>
     <artifactId>lumify-model-elasticsearch</artifactId>
 
-    <name>Lumify Model: ElasticSearch</name>
+    <name>Lumify: Model: ElasticSearch</name>
 
     <dependencies>
         <dependency>

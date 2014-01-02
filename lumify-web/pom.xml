@@ -12,7 +12,7 @@
     <artifactId>lumify-web</artifactId>
     <packaging>${packaging.type}</packaging>
 
-    <name>Lumify Web Interface</name>
+    <name>Lumify: Web Interface</name>
 
     <properties>
         <!-- Default Jetty Configuration Properties -->
