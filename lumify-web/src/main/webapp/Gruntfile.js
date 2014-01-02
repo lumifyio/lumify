@@ -64,7 +64,7 @@ module.exports = function(grunt) {
             dir: 'jsc',
             baseUrl: 'js',
             preserveLicenseComments: false,
-            removeCombined: true,
+            removeCombined: false,
             modules: [
                 { name: 'lumify' },
                 { name: 'app' },
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
             }
         },
         scripts: {
-            files: ['js/**/*.js'],
+            files: ['Gruntfile.js', 'js/**/*.js'],
             tasks: ['requirejs:development'],
             options: {
                 spawn: true
