@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.artifact;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
@@ -154,6 +155,62 @@ public class ArtifactRepository extends Repository<Artifact> {
         return artifactVertex;
     }
 
+    public GraphVertex saveArtifact(final ArtifactExtractedInfo artifactExtractedInfo, final User user) {
+        Artifact artifact = saveArtifactModel(artifactExtractedInfo, user.getModelUserContext());
+        String url = artifactExtractedInfo.getUrl();
+        if (url != null && !url.trim().isEmpty()) {
+            artifactExtractedInfo.setSource(url.trim());
+        }
+        return saveToGraph(artifact, artifactExtractedInfo, user);
+    }
+    
+    private Artifact saveArtifactModel(final ArtifactExtractedInfo artifactExtractedInfo, final ModelUserContext userContext) {
+        Artifact artifact = findByRowKey(artifactExtractedInfo.getRowKey(), userContext);
+        if (artifact == null) {
+            artifact = new Artifact(artifactExtractedInfo.getRowKey());
+            if (artifactExtractedInfo.getDate() != null) {
+                artifact.getMetadata().setCreateDate(artifactExtractedInfo.getDate());
+            } else {
+                artifact.getMetadata().setCreateDate(new Date());
+            }
+        }
+        if (artifactExtractedInfo.getRaw() != null) {
+            artifact.getMetadata().setRaw(artifactExtractedInfo.getRaw());
+        }
+        if (artifactExtractedInfo.getVideoTranscript() != null) {
+            artifact.getMetadata().setVideoTranscript(artifactExtractedInfo.getVideoTranscript());
+            artifact.getMetadata().setVideoDuration(Long.toString(artifactExtractedInfo.getVideoDuration()));
+
+            // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
+            if (artifactExtractedInfo.getText() == null) {
+                artifactExtractedInfo.setText(artifactExtractedInfo.getVideoTranscript().toString());
+            } else {
+                artifactExtractedInfo.setText(artifactExtractedInfo.getText() + artifactExtractedInfo.getVideoTranscript().toString());
+            }
+        }
+        if (artifactExtractedInfo.getText() != null) {
+            artifact.getMetadata().setText(artifactExtractedInfo.getText());
+            if (artifact.getMetadata().getHighlightedText() == null) {
+                artifact.getMetadata().setHighlightedText(artifactExtractedInfo.getText());
+            }
+        }
+        if (artifactExtractedInfo.getMappingJson() != null) {
+            artifact.getMetadata().setMappingJson(artifactExtractedInfo.getMappingJson());
+        }
+        if (artifactExtractedInfo.getTitle() != null) {
+            artifact.getMetadata().setFileName(artifactExtractedInfo.getTitle());
+        }
+        if (artifactExtractedInfo.getFileExtension() != null) {
+            artifact.getMetadata().setFileExtension(artifactExtractedInfo.getFileExtension());
+        }
+        if (artifactExtractedInfo.getMimeType() != null) {
+            artifact.getMetadata().setMimeType(artifactExtractedInfo.getMimeType());
+        }
+
+        save(artifact, userContext);
+        return artifact;
+    }
+    
     public GraphPagedResults search(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
         ArtifactSearchPagedResults artifactSearchResults;
         GraphPagedResults pagedResults = new GraphPagedResults();
