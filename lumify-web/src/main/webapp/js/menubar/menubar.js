@@ -14,7 +14,6 @@ define([
         // Add class name of <li> buttons here
         var BUTTONS = 'dashboard graph map search workspaces activity users metrics prefs';
         var TOOLTIPS = {
-            dashboard: 'Dashboard',
             graph: 'Graph',
             map: 'Map',
             search: 'Search',
