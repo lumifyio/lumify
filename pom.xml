@@ -44,6 +44,7 @@
         <module>lumify-model-titan</module>
         <module>lumify-storm</module>
         <module>lumify-web</module>
+        <module>lumify-web-server</module>
     </modules>
     
     <repositories>
