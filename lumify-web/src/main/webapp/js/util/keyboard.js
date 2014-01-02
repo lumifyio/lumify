@@ -80,8 +80,19 @@ define([
         };
 
         this.shortcutForEvent = function(event) {
-            var w = event.which;
+            var w = event.which,
+                keys = {
+                    16: 'shiftKey',
+                    17: 'controlKey',
+                    18: 'altKey',
+                    91: 'metaKey',
+                    93: 'metaKey'
+                };
 
+
+            if (keys[w]) {
+                return { preventDefault: false, fire:keys[w] };
+            }
             if (event.metaKey || event.ctrlKey) {
                 return this.shortcuts['CTRL-' + w] || this.shortcuts['META-' + w];
             }
@@ -101,7 +112,9 @@ define([
             var shortcut = this.shortcutForEvent(e);
 
             if (shortcut) {
-                e.preventDefault();
+                if (shortcut.preventDefault !== false) {
+                    e.preventDefault();
+                }
                 this.fireEventUp(shortcut.fire + 'Up', _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         };
@@ -112,7 +125,9 @@ define([
             var shortcut = this.shortcutForEvent(e);
 
             if (shortcut) {
-                e.preventDefault();
+                if (shortcut.preventDefault !== false) {
+                    e.preventDefault();
+                }
                 this.fireEvent(shortcut.fire, _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         }
