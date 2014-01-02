@@ -10,7 +10,7 @@
     </parent>
     <artifactId>lumify-fs-hdfs</artifactId>
 
-    <name>Lumify Filesystem: HDFS</name>
+    <name>Lumify: Filesystem: HDFS</name>
 
     <dependencies>
         <dependency>

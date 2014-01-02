@@ -11,7 +11,7 @@
     <artifactId>lumify-core</artifactId>
     <packaging>jar</packaging>
 
-    <name>Lumify Core</name>
+    <name>Lumify: Core</name>
 
     <dependencies>
         <dependency>

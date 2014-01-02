@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>lumify-storm</artifactId>
-    <name>Lumify Storm</name>
+    <name>Lumify: Storm</name>
 
     <inceptionYear>2013</inceptionYear>
     <organization>

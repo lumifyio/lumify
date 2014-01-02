@@ -12,7 +12,7 @@
     <artifactId>lumify-web-server</artifactId>
     <packaging>jar</packaging>
 
-    <name>Lumify Web Interface Server</name>
+    <name>Lumify: Web Interface Server</name>
 
     <dependencies>
         <dependency>

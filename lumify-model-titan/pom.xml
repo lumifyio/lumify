@@ -10,7 +10,7 @@
     </parent>
     <artifactId>lumify-model-titan</artifactId>
 
-    <name>Lumify Model: Titan</name>
+    <name>Lumify: Model: Titan</name>
 
     <dependencies>
         <dependency>
