@@ -37,7 +37,7 @@ define([
             workspaceOverlaySelector: '.workspace-overlay',
             helpDialogSelector: '.help-dialog',
             usersSelector: '.users-pane',
-            graphSelector: '.graph-pane',
+            graphSelector: '.graph-pane-2d',
             mapSelector: '.map-pane',
             detailPaneSelector: '.detail-pane'
         });
@@ -104,7 +104,7 @@ define([
             Search.attachTo(searchPane.find('.content'));
             Workspaces.attachTo(workspacesPane.find('.content'));
             Users.attachTo(usersPane.find('.content'));
-            Graph.attachTo(graphPane);
+            Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
             Detail.attachTo(detailPane.find('.content'));
 
@@ -176,23 +176,27 @@ define([
 
         this.onToggleGraphDimensions = function(e) {
             var self = this,
-                node = this.$node.find('.graph-pane');
+                node2d = this.$node.find('.graph-pane-2d'),
+                node3d = this.$node.find('.graph-pane-3d'),
+                reloadWorkspace = !this._graphDimensions;
+
+            // TODO: redraw graph
 
             require(['graph/3d/graph'], function(Graph3D) {
                 if (!self._graphDimensions || self._graphDimensions === 2) {
-                    Graph.teardownAll();
-                    Graph3D.attachTo(node);
+                    node2d.hide();
+                    Graph3D.attachTo(node3d.show());
                     self._graphDimensions = 3;
                 } else {
-                    Graph3D.teardownAll();
-                    Graph.attachTo(node);
+                    node3d.hide();
+                    Graph.attachTo(node2d.show());
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }
 
 
                 self.trigger('selectObjects');
-                self.trigger('reloadWorkspace');
+                if (reloadWorkspace) self.trigger('reloadWorkspace');
             });
         };
 

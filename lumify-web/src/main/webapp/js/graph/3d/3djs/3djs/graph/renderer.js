@@ -113,6 +113,8 @@ define([
         renderer.domElement.addEventListener( 'mousedown', downHandler);
         renderer.domElement.addEventListener( 'mouseup', upHandler);
         renderer.domElement.addEventListener( 'click', clickHandler);
+
+        windowResizeHandler = _.throttle(windowResizeHandler, 250);
         window.addEventListener( 'resize', windowResizeHandler, false );
 
         self.teardownEvents = function() {
@@ -176,8 +178,9 @@ define([
             self.dispatchEvent( { type: 'node_click', content: self.currentNodeId } );
         }
         function windowResizeHandler() {
-            width = self.domElement.offsetWidth;
-            height = self.domElement.offsetHeight;
+            var el = $(self.domElement),
+                width = el.width(),
+                height = el.height();
 
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
