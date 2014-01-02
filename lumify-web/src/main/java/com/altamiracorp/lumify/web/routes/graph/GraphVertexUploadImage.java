@@ -38,6 +38,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final String ATTR_GRAPH_VERTEX_ID = "graphVertexId";
     private static final String DEFAULT_MIME_TYPE = "image";
     private static final String SOURCE_UPLOAD = "User Upload";
+    private static final String PROCESS = GraphVertexUploadImage.class.getName();
 
     private final ArtifactRepository artifactRepository;
     private final GraphRepository graphRepository;
@@ -78,6 +79,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         artifactDetails.setArtifactType(ArtifactType.IMAGE.toString());
         artifactDetails.setTitle("Image of " + entityVertex.getProperty(PropertyName.TITLE));
         artifactDetails.setSource(SOURCE_UPLOAD);
+        artifactDetails.setProcess(PROCESS);
 
         GraphVertex artifactVertex = null;
         if (artifact.getMetadata().getGraphVertexId() != null) {
