@@ -10,7 +10,12 @@ import org.json.JSONObject;
 
 import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
 import com.google.common.collect.Lists;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ArtifactExtractedInfo {
     private static final String ROW_KEY = "rowKey";
@@ -39,7 +44,7 @@ public class ArtifactExtractedInfo {
     private static final String AUTHOR = "author";
     private static final String PROCESS = "process";
 
-    private HashMap<String, Object> properties = new HashMap<String, Object>();
+    private final HashMap<String, Object> properties = new HashMap<String, Object>();
 
     public void mergeFrom(ArtifactExtractedInfo artifactExtractedInfo) {
         if (artifactExtractedInfo == null) {
@@ -548,7 +553,90 @@ public class ArtifactExtractedInfo {
         setProcess(process);
         return this;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + (this.properties != null ? this.properties.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ArtifactExtractedInfo other = (ArtifactExtractedInfo) obj;
+        if (!mapEquals(this.properties, other.properties)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Rewriting map equality to account for array-valued properties.  Arrays,
+     * such as byte[], do not have a .equals() method and fail the equality
+     * check even if Arrays.equals(a, b) returns true.
+     * @param map1 the first map
+     * @param map2 the second map
+     * @return true if the maps are equal
+     */
+    private <K, V> boolean mapEquals(Map<K, V> map1, Map<K, V> map2) {
+        if (map2 == map1) {
+            return true;
+        }
+        if (map2.size() != map1.size()) {
+            return false;
+        }
+        
+        try {
+            for (Map.Entry<K, V> entry : map1.entrySet()) {
+                K key = entry.getKey();
+                V value = entry.getValue();
+                if (value == null) {
+                    if (!(map2.get(key)==null && map2.containsKey(key)))
+                        return false;
+                } else if (value.getClass().isArray()) {
+                    // need to use reflection since we don't know what type the Array is
+                    Method m = Arrays.class.getMethod("equals", value.getClass(), value.getClass());
+                    if (m == null) {
+                        m = Arrays.class.getMethod("equals", Object[].class, Object[].class);
+                    }
+                    Boolean eq = (Boolean) m.invoke(null, value, map2.get(key));
+                    if (!eq.booleanValue()) {
+                        return false;
+                    }
+                } else {
+                    if (!value.equals(map2.get(key)))
+                        return false;
+                }
+            }
+        } catch (ClassCastException unused) {
+            return false;
+        } catch (NullPointerException unused) {
+            return false;
+        } catch (NoSuchMethodException unused) {
+            return false;
+        } catch (SecurityException unused) {
+            return false;
+        } catch (IllegalAccessException unused) {
+            return false;
+        } catch (IllegalArgumentException unused) {
+            return false;
+        } catch (InvocationTargetException unused) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static class VideoFrame {
         private final String hdfsPath;
         private final long frameStartTime;

@@ -104,4 +104,49 @@ public abstract class GraphVertex {
         }
         return result;
     }
+    
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (!(other instanceof GraphVertex)) {
+            return false;
+        }
+        GraphVertex otherVertex = (GraphVertex) other;
+        
+        String myId = getId();
+        String theirId = otherVertex.getId();
+        if (myId != theirId && (myId == null || !myId.equals(theirId))) {
+            return false;
+        }
+        
+        Set<String> myProps = getPropertyKeys();
+        Set<String> theirProps = otherVertex.getPropertyKeys();
+        if (myProps != theirProps && (myProps == null || !myProps.equals(theirProps))) {
+            return false;
+        }
+        for (String key : myProps) {
+            Object myVal = getProperty(key);
+            Object theirVal = otherVertex.getProperty(key);
+            if (myVal != theirVal && (myVal == null || !myVal.equals(theirVal))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + (getId() != null ? getId().hashCode() : 0);
+        for (String key : getPropertyKeys()) {
+            Object val = getProperty(key);
+            hash = 53 * hash + (val != null ? val.hashCode() : 0);
+        }
+        return hash;
+    }
 }
