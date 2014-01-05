@@ -55,6 +55,8 @@ define([
                 }
                 if (isSwitch && icon.hasClass('active')) {
 
+                    icon.toggleClass('toggled');
+
                     // Special case to toggle 2d/3d graph
                     if (name === 'graph') {
                         this.trigger(document, 'toggleGraphDimensions');

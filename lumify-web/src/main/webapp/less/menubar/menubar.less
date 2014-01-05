@@ -46,8 +46,14 @@ background: @menubar-background;
     background-image: url(/img/glyphicons/white/glyphicons_153_more_windows@2x.png);
   }
 
-  .graph a { 
-    background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+  .graph { 
+    a {
+      background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+    }
+    &.toggled a {
+      background-image: url(/img/graph-3d.png);
+      background-size: 80%;
+    }
   }
   .map a { 
     background-image: url(/img/glyphicons/white/glyphicons_242_google_maps@2x.png);
