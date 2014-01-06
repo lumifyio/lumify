@@ -154,6 +154,7 @@ define([
 
         this.onVerticesDropped = function(evt, data) {
             if (!this.isWorkspaceEditable) return;
+            if (!this.$node.is(':visible')) return;
             this.cytoscapeReady(function(cy) {
                 var self = this,
                     vertices = data.vertices, 
@@ -979,7 +980,7 @@ define([
         };
 
         this.onMenubarToggleDisplay = function(e, data) {
-            if (data.name === 'graph') {
+            if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
                     cy.renderer().notify({type:'viewport'});
 
