@@ -101,7 +101,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         artifactVertex.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString());
-        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user));
+        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId());
         artifactVertex.setProperty(PropertyName.TITLE, artifactExtractedInfo.getTitle());
 
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());

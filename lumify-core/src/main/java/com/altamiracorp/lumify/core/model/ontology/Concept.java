@@ -17,6 +17,8 @@ public abstract class Concept extends GraphVertex {
 
     public abstract String getDisplayName();
 
+    public abstract String getDisplayType();
+
     public abstract Vertex getVertex();
 
     public JSONObject toJson() {
@@ -25,6 +27,7 @@ public abstract class Concept extends GraphVertex {
             result.put("id", getId());
             result.put("title", getTitle());
             result.put("displayName", getDisplayName());
+            result.put("displayType", getDisplayType());
             if (getGlyphIconResourceRowKey() != null) {
                 result.put("glyphIconResourceRowKey", getGlyphIconResourceRowKey());
                 result.put("glyphIconHref", "/resource/" + getGlyphIconResourceRowKey());
