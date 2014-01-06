@@ -532,16 +532,14 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
-        // TODO remove-artifacts
-//        Iterable<Vertex> r = graph.query()
-//                .has(property, graphVertexPropertyValue)
-//                .has(PropertyName.TYPE.toString(), type.toString())
-//                .vertices();
-//        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-//        if (graphVertices.size() > 0) {
-//            return graphVertices.get(0);
-//        }
+    public GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user) {
+        Iterable<Vertex> r = graph.query()
+                .has(property, graphVertexPropertyValue)
+                .vertices();
+        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+        if (graphVertices.size() > 0) {
+            return graphVertices.get(0);
+        }
         return null;
     }
 
