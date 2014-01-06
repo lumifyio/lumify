@@ -48,7 +48,7 @@ public abstract class GraphSession {
     // TODO: this is a dangerous method because nothing is unique by property value. Anyone calling this is probably wrong!
     public abstract GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user);
 
-    public abstract GraphVertex findVertexByOntologyTitleAndType(String title, VertexType concept, User user);
+    public abstract GraphVertex findOntologyConceptByTitle(String title, User user);
 
     public abstract GraphVertex findVertexByOntologyTitle(String title, User user);
 
