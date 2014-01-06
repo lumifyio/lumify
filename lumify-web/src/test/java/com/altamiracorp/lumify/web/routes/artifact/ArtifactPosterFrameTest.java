@@ -9,12 +9,9 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpSession;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -23,13 +20,12 @@ import org.mockito.stubbing.Answer;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ArtifactPosterFrameByRowKeyTest extends RouteTestBase {
-    private ArtifactPosterFrameByRowKey artifactPosterFrameByRowKey;
+public class ArtifactPosterFrameTest extends RouteTestBase {
+    private ArtifactPosterFrame artifactPosterFrame;
 
     @Override
     @Before
@@ -37,7 +33,7 @@ public class ArtifactPosterFrameByRowKeyTest extends RouteTestBase {
         super.setUp();
 
         final ArtifactThumbnailRepository mockThumbnailRepository = Mockito.mock(ArtifactThumbnailRepository.class);
-        artifactPosterFrameByRowKey = new ArtifactPosterFrameByRowKey(mockArtifactRepository, mockThumbnailRepository);
+        artifactPosterFrame = new ArtifactPosterFrame(mockArtifactRepository, mockThumbnailRepository);
     }
 
     @Test
@@ -66,7 +62,7 @@ public class ArtifactPosterFrameByRowKeyTest extends RouteTestBase {
             }
         }).when(mockResponseOutputStream).write(any(byte[].class), any(Integer.class), any(Integer.class));
 
-        artifactPosterFrameByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
+        artifactPosterFrame.handle(mockRequest, mockResponse, mockHandlerChain);
 
         verify(mockResponse).setContentType("image/png");
     }

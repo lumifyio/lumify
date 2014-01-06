@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpSession;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +23,12 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ArtifactRawByRowKeyTest extends RouteTestBase {
-    private ArtifactRawByRowKey artifactRawByRowKey;
+public class ArtifactRawTest extends RouteTestBase {
+    private ArtifactRaw artifactRaw;
 
     @Mock
     private GraphVertex vertex;
@@ -47,7 +44,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
     public void setUp() throws Exception {
         super.setUp();
 
-        artifactRawByRowKey = new ArtifactRawByRowKey(mockArtifactRepository, mockGraphRepository);
+        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraphRepository);
     }
 
     @Test
@@ -84,7 +81,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
             }
         }).when(mockResponseOutputStream).write(any(byte[].class), any(Integer.class), any(Integer.class));
 
-        artifactRawByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
+        artifactRaw.handle(mockRequest, mockResponse, mockHandlerChain);
 
         verify(mockResponse).setContentType("text/plain");
         verify(mockResponse).addHeader("Content-Disposition", "inline; filename=testFile.testExt");
@@ -129,7 +126,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
             }
         }).when(mockResponseOutputStream).write(any(byte[].class), any(Integer.class), any(Integer.class));
 
-        artifactRawByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
+        artifactRaw.handle(mockRequest, mockResponse, mockHandlerChain);
 
         verify(mockResponse).setContentType("video/mp4");
         verify(mockResponse).addHeader("Content-Disposition", "attachment; filename=testFile.testExt");
