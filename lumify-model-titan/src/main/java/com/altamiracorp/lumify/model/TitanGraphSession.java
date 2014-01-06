@@ -530,18 +530,6 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByRowKey(String rowKey, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.ROW_KEY.toString(), rowKey)
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
     public GraphVertex findGraphVertex(String graphVertexId, User user) {
         Vertex vertex = findVertex(graphVertexId);
         if (vertex == null) {

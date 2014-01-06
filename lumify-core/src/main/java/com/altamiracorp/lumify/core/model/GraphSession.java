@@ -61,8 +61,6 @@ public abstract class GraphSession {
 
     public abstract List<List<GraphVertex>> findPath(GraphVertex sourceVertex, GraphVertex destVertex, int dept, int hops, User user);
 
-    public abstract GraphVertex findVertexByRowKey(String rowKey, User user);
-
     public abstract Edge findEdge(String sourceId, String destId, String label, User user);
 
     public abstract Property getOrCreatePropertyType(String propertyName, PropertyType dataType, User user);

@@ -33,10 +33,6 @@ public class GraphRepository {
         return graphSession.findGraphVertex(graphVertexId, user);
     }
 
-    public GraphVertex findVertexByRowKey(String rowKey, User user) {
-        return graphSession.findVertexByRowKey(rowKey, user);
-    }
-
     public List<GraphVertex> findVertices(String[] vertexIds, User user) {
         return graphSession.findGraphVertices(vertexIds, user);
     }
