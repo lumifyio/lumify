@@ -4,6 +4,8 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
 import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
+import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -382,6 +384,30 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public GraphPagedResults search(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
+        try {
+            GraphPagedResults titanResults = this.searchTitan(query, filterJson, user, offsetStart, offsetEnd, subType);
+            GraphPagedResults searchIndexResults = this.searchIndex(query, filterJson, user, (int) offsetStart, (int) offsetEnd, subType);
+
+            Map<String, List<GraphVertex>> combinedResults = titanResults.getResults();
+            Map<String, List<GraphVertex>> indexResults = searchIndexResults.getResults();
+
+            for (String type : indexResults.keySet()) {
+                List<GraphVertex> typeVertices = indexResults.get(type);
+                if (combinedResults.containsKey(type)) {
+                    combinedResults.get(type).addAll(typeVertices);
+                } else {
+                    combinedResults.put(type, typeVertices);
+                }
+            }
+
+            return titanResults;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public GraphPagedResults searchTitan(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
         GraphPagedResults results = new GraphPagedResults();
         final List<String> tokens = LuceneTokenizer.standardTokenize(query);
 
@@ -429,38 +455,53 @@ public class TitanGraphSession extends GraphSession {
             }
         }
 
-        // TODO remove-artifacts
-//    public GraphPagedResults search(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
-//        ArtifactSearchPagedResults artifactSearchResults;
-//        GraphPagedResults pagedResults = new GraphPagedResults();
-//
-//        // Disable paging if filtering since we filter after results are retrieved
-//        if (filter.length() > 0) {
-//            page = 0;
-//            pageSize = 100;
-//        }
-//
-//        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, subType);
-//
-//        for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
-//            List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());
-//            List<GraphVertex> vertices = graphSession.searchVerticesWithinGraphVertexIds(artifactGraphVertexIds, filter, user);
-//            pagedResults.getResults().put(entry.getKey(), vertices);
-//            pagedResults.getCount().put(entry.getKey(), artifactSearchResults.getCount().get(entry.getKey()));
-//        }
-//
-//        return pagedResults;
-//    }
-//
-//    private List<String> getGraphVertexIds(Collection<ArtifactSearchResult> artifactSearchResults) {
-//        ArrayList<String> results = new ArrayList<String>();
-//        for (ArtifactSearchResult artifactSearchResult : artifactSearchResults) {
-//            Preconditions.checkNotNull(artifactSearchResult.getGraphVertexId(), "graph vertex cannot be null for artifact " + artifactSearchResult.getRowKey());
-//            results.add(artifactSearchResult.getGraphVertexId());
-//        }
-//        return results;
-//    }
+        return results;
+    }
 
+    public GraphPagedResults searchIndex(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
+        ArtifactSearchPagedResults artifactSearchResults;
+        GraphPagedResults pagedResults = new GraphPagedResults();
+
+        // Disable paging if filtering since we filter after results are retrieved
+        if (filter.length() > 0) {
+            page = 0;
+            pageSize = 100;
+        }
+
+        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, subType);
+
+        for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
+            List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());
+            List<GraphVertex> vertices = this.searchVerticesWithinGraphVertexIds(artifactGraphVertexIds, filter, user);
+            pagedResults.getResults().put(entry.getKey(), vertices);
+            pagedResults.getCount().put(entry.getKey(), artifactSearchResults.getCount().get(entry.getKey()));
+        }
+
+        return pagedResults;
+    }
+
+    private List<GraphVertex> searchVerticesWithinGraphVertexIds(final List<String> vertexIds, JSONArray filterJson, User user) {
+        ArrayList<Vertex> r = new ArrayList<Vertex>();
+        for (String vertexId : vertexIds) {
+            r.add(findVertex(vertexId));
+        }
+
+        GremlinPipeline<Vertex, Vertex> queryPipeline = queryFormatter.createQueryPipeline(r, filterJson);
+        ArrayList<Vertex> results = new ArrayList<Vertex>();
+        for (Vertex v : queryPipeline.toList()) {
+            if (vertexIds.contains(v.getId().toString())) {
+                results.add(v);
+            }
+        }
+        return toGraphVertices(results);
+    }
+
+    private List<String> getGraphVertexIds(Collection<ArtifactSearchResult> artifactSearchResults) {
+        ArrayList<String> results = new ArrayList<String>();
+        for (ArtifactSearchResult artifactSearchResult : artifactSearchResults) {
+            Preconditions.checkNotNull(artifactSearchResult.getGraphVertexId(), "graph vertex cannot be null for artifact " + artifactSearchResult.getRowKey());
+            results.add(artifactSearchResult.getGraphVertexId());
+        }
         return results;
     }
 
