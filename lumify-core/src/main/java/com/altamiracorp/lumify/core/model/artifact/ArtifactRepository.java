@@ -10,25 +10,20 @@ import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphPagedResults;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.VertexType;
-import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
-import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
-import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.json.JSONArray;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -141,8 +136,8 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         for (String modifiedProperty : modifiedProperties) {
-           auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
-         }
+            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+        }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {
             artifact.getMetadata().setGraphVertexId(artifactVertexId);
@@ -194,5 +189,13 @@ public class ArtifactRepository extends Repository<Artifact> {
 
         String path = String.format("%s/%s/%s", VIDEO_STORAGE_HDFS_PATH, videoType, artifactRowKey);
         return new VideoPlaybackDetails(fsSession.loadFile(path), fsSession.getFileLength(path));
+    }
+
+    public ArtifactRowKey findRowKeyByGraphVertexId(String graphVertexId, User user) {
+        GraphVertex vertex = graphSession.findGraphVertex(graphVertexId, user);
+        if (vertex == null) {
+            return null;
+        }
+        return new ArtifactRowKey(vertex.getProperty(PropertyName.ROW_KEY).toString());
     }
 }

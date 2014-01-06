@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
@@ -32,50 +31,49 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO remove-artifacts: change to use graphVertexId
-//        User user = getUser(request);
-//        ArtifactRowKey artifactRowKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "_rowKey")));
-//
-//        String widthStr = getOptionalParameter(request, "width");
-//        int[] boundaryDims = new int[]{200, 200};
-//
-//        if (widthStr != null) {
-//            boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
-//
-//            response.setContentType("image/jpeg");
-//            response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
-//
-//            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactRowKey, "poster-frame", boundaryDims[0], boundaryDims[1], user);
-//            if (thumbnailData != null) {
-//                LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
-//                ServletOutputStream out = response.getOutputStream();
-//                out.write(thumbnailData);
-//                out.close();
-//                return;
-//            }
-//        }
-//
-//        Artifact artifact = artifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext());
-//        if (artifact == null) {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            chain.next(request, response);
-//            return;
-//        }
-//
-//        InputStream in = artifactRepository.getRawPosterFrame(artifactRowKey.toString());
-//        try {
-//            if (widthStr != null) {
-//                LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
-//                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifact.getRowKey(), "poster-frame", in, boundaryDims, user).getMetadata().getData();
-//                ServletOutputStream out = response.getOutputStream();
-//                out.write(thumbnailData);
-//                out.close();
-//            } else {
-//                response.setContentType("image/png");
-//                IOUtils.copy(in, response.getOutputStream());
-//            }
-//        } finally {
-//            in.close();
-//        }
+        User user = getUser(request);
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+
+        String widthStr = getOptionalParameter(request, "width");
+        int[] boundaryDims = new int[]{200, 200};
+
+        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactRowKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        if (widthStr != null) {
+            boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
+
+            response.setContentType("image/jpeg");
+            response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
+
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactRowKey, "poster-frame", boundaryDims[0], boundaryDims[1], user);
+            if (thumbnailData != null) {
+                LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
+                ServletOutputStream out = response.getOutputStream();
+                out.write(thumbnailData);
+                out.close();
+                return;
+            }
+        }
+
+        InputStream in = artifactRepository.getRawPosterFrame(artifactRowKey.toString());
+        try {
+            if (widthStr != null) {
+                LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactRowKey, "poster-frame", in, boundaryDims, user).getMetadata().getData();
+                ServletOutputStream out = response.getOutputStream();
+                out.write(thumbnailData);
+                out.close();
+            } else {
+                response.setContentType("image/png");
+                IOUtils.copy(in, response.getOutputStream());
+            }
+        } finally {
+            in.close();
+        }
     }
 }
