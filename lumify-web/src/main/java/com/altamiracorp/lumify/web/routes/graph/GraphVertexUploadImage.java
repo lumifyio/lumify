@@ -17,7 +17,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnailByRowKey;
+import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -89,7 +89,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             artifactVertex = artifactRepository.saveToGraph(artifact, artifactDetails, user);
         }
 
-        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnailByRowKey.getUrl(artifact.getRowKey()));
+        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnail.getUrl(artifact.getRowKey()));
         graphRepository.commit();
 
         // TODO: replace second"" when we implement commenting on ui
