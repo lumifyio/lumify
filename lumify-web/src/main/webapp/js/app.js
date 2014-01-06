@@ -189,7 +189,7 @@ define([
                     self._graphDimensions = 3;
                 } else {
                     node3d.removeClass('visible');
-                    Graph.attachTo(node2d.addClass('visible'));
+                    node2d.addClass('visible');
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }

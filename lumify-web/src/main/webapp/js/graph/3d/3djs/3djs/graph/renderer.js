@@ -293,6 +293,8 @@ define([
             pickingGeometry;
 
         pickingData.length = 0;
+        pickingGeometry = new THREE.Geometry();
+        /*
         if (this._pickingParticleSystem) {
             pickingGeometry = this._pickingParticleSystem.geometry;
             pickingGeometry.vertices.length = 0;
@@ -300,11 +302,13 @@ define([
         } else {
             pickingGeometry = new THREE.Geometry();
         }
+        */
 
 
         for (var i = 0; i < len; i++) {
             var node = nodes[i],
                 vertex = node.position;
+
 
             if ( !vertex ) {
                 vertex = new THREE.Vector3();
@@ -314,7 +318,9 @@ define([
                 node.position = vertex;
             }
 
-            if (node._sprite && !node.needsUpdate) {
+            if (node._sprite && node.needsRemove) {
+                this._scene.remove(node._sprite);
+            } else if (node._sprite && !node.needsUpdate) {
                 // do nothing
             } else if (node._sprite && node.needsUpdate) {
                 this._scene.remove(node._sprite);
@@ -325,30 +331,28 @@ define([
             }
             node.needsUpdate = false;
 
-            pickingGeometry.vertices.push( vertex );
+            if (!node.needsRemove) {
+                pickingGeometry.vertices.push( vertex );
 
-            // TODO: generate these
-            pickingGeometry.colors.push(new THREE.Color(i));
-            pickingData[i] = node.id;
+                pickingGeometry.colors.push(new THREE.Color(i));
+                pickingData[i] = node.id;
+            }
         }
 
         if (this._pickingParticleSystem) {
-            this._pickingParticleSystem.geometry = pickingGeometry;
-        } else {
-            var pickingMaterial = new THREE.ParticleBasicMaterial({ 
-                size: 100,
-                vertexColors: true
-            });
-
-            this._pickingParticleSystem = new THREE.ParticleSystem( 
-                pickingGeometry,
-                pickingMaterial 
-            );
-            this._pickingScene.add(this._pickingParticleSystem);
-            //this._scene.add(this._pickingParticleSystem);
+            this._pickingScene.remove(this._pickingParticleSystem);
         }
+        var pickingMaterial = new THREE.ParticleBasicMaterial({ 
+            size: 200,
+            vertexColors: true
+        });
 
-        // TODO: remove nodes that were removed
+        this._pickingParticleSystem = new THREE.ParticleSystem( 
+            pickingGeometry,
+            pickingMaterial 
+        );
+        this._pickingScene.add(this._pickingParticleSystem);
+
 
         //this.graph.calculateEdges();
 
@@ -369,8 +373,10 @@ define([
             for (var edgeIndex = 0; edgeIndex < edgesLength; edgeIndex++) {
                 var edge = edges[edgeIndex];
 
-                geometry.vertices.push( edge.source.position );
-                geometry.vertices.push( edge.target.position );
+                if (!edge.source.needsRemove && !edge.target.needsRemove) {
+                    geometry.vertices.push( edge.source.position );
+                    geometry.vertices.push( edge.target.position );
+                }
             }
             this._scene.add(this._lines);
         }
