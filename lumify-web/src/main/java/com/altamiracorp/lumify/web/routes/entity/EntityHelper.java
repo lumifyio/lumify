@@ -86,7 +86,7 @@ public class EntityHelper {
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
-            resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
+            resolvedVertex = graphRepository.findVertexByExactTitle(sign, user);
         } else {
             newVertex = true;
             resolvedVertex = new InMemoryGraphVertex();

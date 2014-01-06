@@ -45,8 +45,6 @@ public abstract class GraphSession {
 
     public abstract Graph getGraph();
 
-    public abstract GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType graphVertexType, User user);
-
     public abstract GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType graphVertexType, User user);
 
     public abstract GraphVertex findVertexByOntologyTitleAndType(String title, VertexType concept, User user);
@@ -72,4 +70,6 @@ public abstract class GraphSession {
     public abstract List<Vertex> getRelationships(Concept sourceConcept, Concept destConcept, User user);
 
     public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
+
+    public abstract GraphVertex findVertexByExactTitle(String title, User user);
 }
