@@ -137,7 +137,7 @@ public class OntologyRepository {
             return concept;
         }
 
-        GraphVertex vertex = graphSession.findVertexByOntologyTitleAndType(title, VertexType.CONCEPT, user);
+        GraphVertex vertex = graphSession.findOntologyConceptByTitle(title, user);
         if (vertex == null) {
             return null;
         }

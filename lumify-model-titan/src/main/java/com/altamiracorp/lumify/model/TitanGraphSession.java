@@ -544,16 +544,15 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
-        // TODO remove-artifacts
-//        Iterable<Vertex> r = graph.query()
-//                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-//                .has(PropertyName.TYPE.toString(), type.toString())
-//                .vertices();
-//        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-//        if (graphVertices.size() > 0) {
-//            return graphVertices.get(0);
-//        }
+    public GraphVertex findOntologyConceptByTitle(String title, User user) {
+        Iterable<Vertex> r = graph.query()
+                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.CONCEPT.toString())
+                .vertices();
+        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+        if (graphVertices.size() > 0) {
+            return graphVertices.get(0);
+        }
         return null;
     }
 
