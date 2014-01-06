@@ -61,7 +61,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
     }
 
     private boolean isLimited(List<Concept> limitConcepts, GraphVertex graphVertex) {
-        //TODO remove-artifact
+        //TODO remove-artifacts
 //        String type = (String) graphVertex.getProperty(PropertyName.TYPE);
 //        if (type.equals(VertexType.ENTITY.toString())) {
 //            String conceptId = (String) graphVertex.getProperty(PropertyName.SUBTYPE);

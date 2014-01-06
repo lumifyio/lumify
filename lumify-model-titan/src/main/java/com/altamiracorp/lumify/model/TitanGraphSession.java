@@ -521,7 +521,7 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType type, User user) {
-        // TODO remove-artifact
+        // TODO remove-artifacts
 //        Iterable<Vertex> r = graph.query()
 //                .has(PropertyName.TITLE.toString(), graphVertexTitle)
 //                .has(PropertyName.TYPE.toString(), type.toString())
@@ -535,7 +535,7 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
-        // TODO remove-artifact
+        // TODO remove-artifacts
 //        Iterable<Vertex> r = graph.query()
 //                .has(property, graphVertexPropertyValue)
 //                .has(PropertyName.TYPE.toString(), type.toString())
@@ -549,7 +549,7 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
-        // TODO remove-artifact
+        // TODO remove-artifacts
 //        Iterable<Vertex> r = graph.query()
 //                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
 //                .has(PropertyName.TYPE.toString(), type.toString())
