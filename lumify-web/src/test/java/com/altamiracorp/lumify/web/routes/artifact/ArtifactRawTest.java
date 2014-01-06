@@ -52,7 +52,7 @@ public class ArtifactRawTest extends RouteTestBase {
         ArtifactRowKey artifactRowKey = ArtifactRowKey.build("testContents".getBytes());
         when(mockRequest.getParameter("download")).thenReturn(null);
         when(mockRequest.getParameter("playback")).thenReturn(null);
-        when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
+        when(mockRequest.getAttribute("graphVertexId")).thenReturn("123");
         when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
@@ -61,6 +61,7 @@ public class ArtifactRawTest extends RouteTestBase {
                 .setFileName("testFile")
                 .setFileExtension("testExt")
                 .setMimeType("text/plain");
+        when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
@@ -94,7 +95,7 @@ public class ArtifactRawTest extends RouteTestBase {
         when(mockRequest.getParameter("playback")).thenReturn("true");
         when(mockRequest.getParameter("type")).thenReturn("video/mp4");
         when(mockRequest.getHeader("Range")).thenReturn("bytes=1-4");
-        when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
+        when(mockRequest.getAttribute("graphVertexId")).thenReturn("123");
         when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
@@ -103,6 +104,7 @@ public class ArtifactRawTest extends RouteTestBase {
                 .setFileName("testFile")
                 .setFileExtension("testExt")
                 .setMimeType("video/mp4");
+        when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
