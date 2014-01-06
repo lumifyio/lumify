@@ -41,58 +41,64 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO remove-artifacts: change to use graphVertexId
-//        User user = getUser(request);
-//        ArtifactRowKey artifactRowKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "_rowKey")));
-//
-//        String widthStr = getOptionalParameter(request, "width");
-//        int[] boundaryDims = new int[]{200, 200};
-//        if (widthStr != null) {
-//            boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
-//        }
-//
-//        byte[] thumbnailData;
-//        com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactRowKey, "raw", boundaryDims[0], boundaryDims[1], user);
-//        if (thumbnail != null) {
-//            String format = thumbnail.getMetadata().getFormat();
-//            response.setContentType("image/" + format);
-//            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
-//
-//            thumbnailData = thumbnail.getMetadata().getData();
-//            if (thumbnailData != null) {
-//                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
-//                ServletOutputStream out = response.getOutputStream();
-//                out.write(thumbnailData);
-//                out.close();
-//                return;
-//            }
-//        }
-//
-//        Artifact artifact = artifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext());
-//        if (artifact == null) {
-//            LOGGER.warn("Cannot find artifact with row key: %s", artifactRowKey.toString());
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            chain.next(request, response);
-//            return;
-//        }
-//
-//        GraphVertex vertex = graphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), user);
-//
-//        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
-//        InputStream in = artifactRepository.getRaw(artifact, vertex, user);
-//        try {
-//            thumbnail = artifactThumbnailRepository.createThumbnail(artifact.getRowKey(), "raw", in, boundaryDims, user);
-//
-//            String format = thumbnail.getMetadata().getFormat();
-//            response.setContentType("image/" + format);
-//            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
-//
-//            thumbnailData = thumbnail.getMetadata().getData();
-//        } finally {
-//            in.close();
-//        }
-//        ServletOutputStream out = response.getOutputStream();
-//        out.write(thumbnailData);
-//        out.close();
+        User user = getUser(request);
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+
+        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactRowKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        String widthStr = getOptionalParameter(request, "width");
+        int[] boundaryDims = new int[]{200, 200};
+        if (widthStr != null) {
+            boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
+        }
+
+        byte[] thumbnailData;
+        com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactRowKey, "raw", boundaryDims[0], boundaryDims[1], user);
+        if (thumbnail != null) {
+            String format = thumbnail.getMetadata().getFormat();
+            response.setContentType("image/" + format);
+            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
+
+            thumbnailData = thumbnail.getMetadata().getData();
+            if (thumbnailData != null) {
+                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
+                ServletOutputStream out = response.getOutputStream();
+                out.write(thumbnailData);
+                out.close();
+                return;
+            }
+        }
+
+        Artifact artifact = artifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext());
+        if (artifact == null) {
+            LOGGER.warn("Cannot find artifact with row key: %s", artifactRowKey.toString());
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        GraphVertex vertex = graphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), user);
+
+        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
+        InputStream in = artifactRepository.getRaw(artifact, vertex, user);
+        try {
+            thumbnail = artifactThumbnailRepository.createThumbnail(artifact.getRowKey(), "raw", in, boundaryDims, user);
+
+            String format = thumbnail.getMetadata().getFormat();
+            response.setContentType("image/" + format);
+            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
+
+            thumbnailData = thumbnail.getMetadata().getData();
+        } finally {
+            in.close();
+        }
+        ServletOutputStream out = response.getOutputStream();
+        out.write(thumbnailData);
+        out.close();
     }
 }
