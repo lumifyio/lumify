@@ -61,21 +61,12 @@ define(['./node'], function( Node ) {
         }
     };
 
-    Graph.prototype.removeNode = function( node ) {
-        
-        for (var i = 0; i < this.edges.length; i++) {
-            // TODO
-            /*
-            var edge = this.edges[i];
-            if (edge.source.id === node.id) {
+    Graph.prototype.removeNode = function( nodeId ) {
+        var node = this.nodeSet[nodeId];
 
-                edge.target.connections
-            }
-            if (edge.source.id === node.id || edge.target.id === node.id) {
-            }
-            */
+        if (node) {
+            node.needsRemove = true;
         }
-        
     };
 
     Graph.prototype.connect = function( node, nodeToConnect, options ) {

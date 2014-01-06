@@ -230,25 +230,26 @@ define([
         };
 
         this.workspaceDataForItemRow = function(w) {
-            var createdBy = w.createdBy,
-                foundUsers = this.usersByRowKey[w.createdBy];
+            var row = $.extend({}, w),
+                createdBy = row.createdBy,
+                foundUsers = this.usersByRowKey[row.createdBy];
 
             if (foundUsers && foundUsers.length) {
                 createdBy = foundUsers[0].userName;
             }
 
-            var text = w.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
-                people = (w.permissions && w.permissions.length) ||
-                        (w.users && w.users.length) || 0;
+            var text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
+                people = (row.permissions && row.permissions.length) ||
+                        (row.users && row.users.length) || 0;
 
             if (people === 1) {
-                w.sharingSubtitle = text + ' 1 person';
+                row.sharingSubtitle = text + ' 1 person';
             } else if (people) {
-                w.sharingSubtitle = text + ' ' + people + ' people';
+                row.sharingSubtitle = text + ' ' + people + ' people';
             } else {
-                w.sharingSubtitle = null;
+                row.sharingSubtitle = null;
             }
-            return w;
+            return row;
         };
 
         this.onToggleMenu = function(event, data) {

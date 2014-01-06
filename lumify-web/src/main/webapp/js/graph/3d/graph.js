@@ -137,7 +137,14 @@ define([
                 this.addVertices(data.vertices);
             }
         };
-        this.onVerticesDeleted = function() {
+        this.onVerticesDeleted = function(event, data) {
+            var self = this;
+
+            data.vertices.forEach(function(v) {
+                self.graph.removeNode(v.id);
+            });
+
+            self.graph.needsUpdate = true;
         };
         this.onVerticesUpdated = function() {
         };
