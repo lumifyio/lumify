@@ -165,6 +165,7 @@ define([
 
                 vertices.forEach(function(vertex, i) {
                     var node = cy.getElementById('NEW-' + vertex.id);
+                    if (node.length === 0) return;
                     if (i === 0) position = node.position();
                     if (node.hasClass('existing')) {
                         var existingNode = cy.getElementById(node.id().replace(/^NEW-/, ''));
