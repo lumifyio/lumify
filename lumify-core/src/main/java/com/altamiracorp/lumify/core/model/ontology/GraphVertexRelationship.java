@@ -2,14 +2,14 @@ package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class GraphVertexRelationship extends Relationship {
     private final GraphVertex vertex;
     private final Concept sourceConcept;
     private final Concept destConcept;
-    private HashMap<String, Object> oldProperties;
+    private final Map<String, Object> oldProperties;
 
     public GraphVertexRelationship(GraphVertex vertex, Concept sourceConcept, Concept destConcept) {
         this.vertex = vertex;
@@ -69,7 +69,7 @@ public class GraphVertexRelationship extends Relationship {
     }
 
     @Override
-    public HashMap<String, Object> getOldProperties () {
+    public Map<String, Object> getOldProperties () {
         return oldProperties;
     }
 }
