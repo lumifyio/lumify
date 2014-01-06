@@ -1,8 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 public enum PropertyName {
-    TYPE("_type"),
-    SUBTYPE("_subType"),
+    CONCEPT_TYPE("_conceptType"),
     DATA_TYPE("_dataType"),
     TITLE("title"),
     ONTOLOGY_TITLE("ontologyTitle"),

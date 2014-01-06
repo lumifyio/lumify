@@ -187,7 +187,7 @@ public class BaseOntology {
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptByName(VertexType.ARTIFACT.toString(), user);
+            Concept concept = ontologyRepository.getConceptByName(VertexType.ENTITY.toString(), user);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(PropertyName.ONTOLOGY_TITLE.toString())) {

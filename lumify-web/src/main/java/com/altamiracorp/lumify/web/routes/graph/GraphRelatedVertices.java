@@ -61,24 +61,25 @@ public class GraphRelatedVertices extends BaseRequestHandler {
     }
 
     private boolean isLimited(List<Concept> limitConcepts, GraphVertex graphVertex) {
-        String type = (String) graphVertex.getProperty(PropertyName.TYPE);
-        if (type.equals(VertexType.ENTITY.toString())) {
-            String conceptId = (String) graphVertex.getProperty(PropertyName.SUBTYPE);
-            for (Concept concept : limitConcepts) {
-                if (concept.getId().equals(conceptId)) {
-                    return false;
-                }
-            }
-        } else if (type.equals(VertexType.ARTIFACT.toString())) {
-            for (Concept concept : limitConcepts) {
-                if (concept.getTitle().equals(VertexType.ARTIFACT.toString())) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return true;
-        }
+        //TODO remove-artifact
+//        String type = (String) graphVertex.getProperty(PropertyName.TYPE);
+//        if (type.equals(VertexType.ENTITY.toString())) {
+//            String conceptId = (String) graphVertex.getProperty(PropertyName.SUBTYPE);
+//            for (Concept concept : limitConcepts) {
+//                if (concept.getId().equals(conceptId)) {
+//                    return false;
+//                }
+//            }
+//        } else if (type.equals(VertexType.ARTIFACT.toString())) {
+//            for (Concept concept : limitConcepts) {
+//                if (concept.getTitle().equals(VertexType.ARTIFACT.toString())) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        } else {
+//            return true;
+//        }
 
         return true;
     }

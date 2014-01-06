@@ -29,8 +29,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class VertexDeletePropertyTest extends RouteTestBase {
     private final String AUTHOR = "foo";
-    private final String TYPE = VertexType.ENTITY.toString();
-    private final String SUBTYPE = "28";
+    private final String CONCEPT_TYPE = "28";
     private VertexDeleteProperty vertexDeleteProperty;
 
     @Mock
@@ -68,8 +67,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
 
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(PropertyName.AUTHOR.toString(), AUTHOR);
-        properties.put(PropertyName.SUBTYPE.toString(), SUBTYPE);
-        properties.put(PropertyName.TYPE.toString(), TYPE);
+        properties.put(PropertyName.CONCEPT_TYPE.toString(), CONCEPT_TYPE);
 
         when(mockGraphRepository.findVertex(vertex.getId(), mockUser)).thenReturn(vertex);
         when(mockGraphRepository.getVertexProperties(vertex.getId(), mockUser)).thenReturn(properties);
@@ -82,8 +80,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
         assertEquals(vertex.getId(), response.getJSONObject("vertex").getString("graphVertexId"));
         assertTrue(responseProperties.length() > 0);
         assertEquals(AUTHOR, responseProperties.getString(PropertyName.AUTHOR.toString()));
-        assertEquals(SUBTYPE, responseProperties.getString(PropertyName.SUBTYPE.toString()));
-        assertEquals(TYPE, responseProperties.getString(PropertyName.TYPE.toString()));
+        assertEquals(CONCEPT_TYPE, responseProperties.getString(PropertyName.CONCEPT_TYPE.toString()));
 
         verify(mockAuditRepository, times(1)).auditEntityProperties(AuditAction.DELETE.toString(), vertex, PropertyName.TITLE.toString(), "", "", mockUser);
     }
