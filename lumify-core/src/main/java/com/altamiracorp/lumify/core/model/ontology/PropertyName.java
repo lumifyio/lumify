@@ -7,6 +7,7 @@ public enum PropertyName {
     TITLE("title"),
     ONTOLOGY_TITLE("ontologyTitle"),
     DISPLAY_NAME("displayName"),
+    DISPLAY_TYPE("displayType"),
     GEO_LOCATION("geoLocation"),
     GEO_LOCATION_DESCRIPTION("_geoLocationDescription"),
     ROW_KEY("_rowKey"),
