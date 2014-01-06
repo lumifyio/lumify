@@ -18,6 +18,8 @@ define([
             this.shortcuts = {};
             this.focusElementStack = [];
 
+            this.fireEventMetas = this.fireEvent;
+
             this.fireEventUp = _.debounce(this.fireEvent.bind(this), 100);
             this.fireEvent = _.debounce(this.fireEvent.bind(this), 100, true);
 
@@ -40,7 +42,7 @@ define([
             if (data.name === 'map') {
                 this.pushToStackIfNotLast($('.map-pane').get(0));
             } else if (data.name === 'graph') {
-                this.pushToStackIfNotLast($('.graph-pane').get(0));
+                this.pushToStackIfNotLast($('.graph-pane:visible').get(0));
             }
         };
 
@@ -112,10 +114,13 @@ define([
             var shortcut = this.shortcutForEvent(e);
 
             if (shortcut) {
+                var f = this.fireEventUp;
                 if (shortcut.preventDefault !== false) {
                     e.preventDefault();
+                    f = this.fireEventMetas;
                 }
-                this.fireEventUp(shortcut.fire + 'Up', _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
+
+                f.call(this, shortcut.fire + 'Up', _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         };
 
@@ -125,10 +130,13 @@ define([
             var shortcut = this.shortcutForEvent(e);
 
             if (shortcut) {
+                var f = this.fireEvent;
                 if (shortcut.preventDefault !== false) {
                     e.preventDefault();
+                    f = this.fireEventMetas;
                 }
-                this.fireEvent(shortcut.fire, _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
+
+                f.call(this, shortcut.fire, _.pick(e, 'metaKey', 'ctrlKey', 'shiftKey'));
             }
         }
 
@@ -156,7 +164,8 @@ define([
         };
 
         this.fireEvent = function(name, data) {
-            this.trigger(this.getTriggerElement(), name, data);
+            var te = this.getTriggerElement();
+            this.trigger(te, name, data);
         }
     }
 });

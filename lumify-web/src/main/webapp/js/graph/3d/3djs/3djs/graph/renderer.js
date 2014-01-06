@@ -161,7 +161,7 @@ define([
             }
             self.mousedown = true;
 
-            self.dispatchEvent( { type: 'node_mousedown', content: self.currentNodeId } );
+            //self.dispatchEvent( { type: 'node_mousedown', content: self.currentNodeId } );
         }
         function upHandler(e) { 
             if (self.dragging) {
@@ -170,12 +170,12 @@ define([
             }
             controls.noZoom = controls.noRotate = controls.noZoom = false;
             self.mousedown = false;
-            self.dispatchEvent( { type: 'node_mouseup', content: self.currentNodeId } );
+            //self.dispatchEvent( { type: 'node_mouseup', content: self.currentNodeId } );
         }
         function clickHandler(e) { 
             controls.noZoom = controls.noRotate = controls.noZoom = false;
             self.mousedown = false;
-            self.dispatchEvent( { type: 'node_click', content: self.currentNodeId } );
+            self.checkPick = true;
         }
         function windowResizeHandler() {
             var el = $(self.domElement),
@@ -239,10 +239,12 @@ define([
                 var nodeId = self._pickingData[ id ];
                 if (nodeId) {
                     self.currentNodeId = nodeId;
-                    self.dispatchEvent( { type: 'node_hover', content: nodeId } );
+                    self.dispatchEvent( { type: 'node_click', content: self.currentNodeId } );
+                    //self.dispatchEvent( { type: 'node_hover', content: nodeId } );
                 } else {
                     self.currentNodeId = undefined;
-                    self.dispatchEvent( { type: 'node_hover' } );
+                    self.dispatchEvent( { type: 'node_click', content: null } );
+                    //self.dispatchEvent( { type: 'node_hover' } );
                 }
             }
         }
@@ -272,8 +274,9 @@ define([
                 self._updateGeometry();
             }
 
-            if (!self.mousedown) {
+            if (!self.mousedown && self.checkPick) {
                 pick();
+                self.checkPick = false;
             }
 
             renderer.render(self._scene, camera);
