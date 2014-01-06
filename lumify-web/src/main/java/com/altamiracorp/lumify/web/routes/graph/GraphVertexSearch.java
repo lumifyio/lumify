@@ -44,7 +44,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         graphRepository.commit();
 
-        GraphPagedResults pagedResults = graphRepository.searchVerticesByTitle(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, subType);
+        GraphPagedResults pagedResults = graphRepository.search(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, subType);
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
