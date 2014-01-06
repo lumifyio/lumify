@@ -4,11 +4,12 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class GraphVertexConcept extends Concept {
     private final GraphVertex graphVertex;
-    private HashMap<String, Object> oldProperties;
+    private final Map<String, Object> oldProperties;
 
     public GraphVertexConcept(GraphVertex graphVertex) {
         this.graphVertex = graphVertex;
@@ -71,7 +72,7 @@ public class GraphVertexConcept extends Concept {
     }
 
     @Override
-    public HashMap<String, Object> getOldProperties () {
+    public Map<String, Object> getOldProperties () {
         return oldProperties;
     }
 
