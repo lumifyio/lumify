@@ -142,7 +142,7 @@ define([
             this.isWorkspaceEditable = workspaceData.isEditable;
             this.mapReady(function(map) {
                 map.featuresLayer.removeAllFeatures();
-                this.updateOrAddVertices(workspaceData.data.vertices, { adding:true });
+                this.updateOrAddVertices(workspaceData.data.vertices, { adding:true, preventShake:true });
             });
         };
 
