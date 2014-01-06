@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.google.common.collect.Lists;
@@ -38,17 +39,20 @@ public class ArtifactRepository extends Repository<Artifact> {
     private final FileSystemSession fsSession;
     private final GraphSession graphSession;
     private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public ArtifactRepository(
             final ModelSession modelSession,
             final FileSystemSession fsSession,
             final GraphSession graphSession,
-            final AuditRepository auditRepository) {
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository) {
         super(modelSession);
         this.fsSession = fsSession;
         this.graphSession = graphSession;
         this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -97,7 +101,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         artifactVertex.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString());
-        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, artifactExtractedInfo.getArtifactType());
+        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user));
         artifactVertex.setProperty(PropertyName.TITLE, artifactExtractedInfo.getTitle());
 
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());

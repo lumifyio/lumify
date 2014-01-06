@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.core.model.search;
 
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
-
 import java.util.Date;
 
 public class ArtifactSearchResult {
@@ -9,15 +7,13 @@ public class ArtifactSearchResult {
     private final String rowKey;
     private final String subject;
     private final Date publishedDate;
-    private final ArtifactType artifactType;
     private final String graphVertexId;
 
-    public ArtifactSearchResult(String rowKey, String subject, Date publishedDate, String source, ArtifactType artifactType, String graphVertexId) {
+    public ArtifactSearchResult(String rowKey, String subject, Date publishedDate, String source, String graphVertexId) {
         this.rowKey = rowKey;
         this.subject = subject;
         this.publishedDate = publishedDate;
         this.source = source;
-        this.artifactType = artifactType;
         this.graphVertexId = graphVertexId;
     }
 
@@ -44,9 +40,5 @@ public class ArtifactSearchResult {
     @Override
     public String toString() {
         return "rowKey: " + getRowKey() + ", subject: " + getSubject() + ", publishedDate: " + getPublishedDate() + ", source: " + getSource() + ", graphVertexId: " + getGraphVertexId();
-    }
-
-    public ArtifactType getType() {
-        return this.artifactType;
     }
 }
