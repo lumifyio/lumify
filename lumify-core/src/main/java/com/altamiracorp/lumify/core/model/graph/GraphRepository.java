@@ -37,10 +37,6 @@ public class GraphRepository {
         return graphSession.findGraphVertices(vertexIds, user);
     }
 
-    public GraphVertex findVertexByTitleAndType(String graphVertexTitle, VertexType type, User user) {
-        return graphSession.findVertexByExactTitleAndType(graphVertexTitle, type, user);
-    }
-
     public GraphVertex findVertexByPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
         return graphSession.findVertexByExactPropertyAndType(property, graphVertexPropertyValue, type, user);
     }
@@ -147,5 +143,10 @@ public class GraphRepository {
 
     public void commit() {
         graphSession.commit();
+    }
+
+    // TODO: this is a dangerous method because nothing is unique by title. Anyone calling this is probably wrong!
+    public GraphVertex findVertexByExactTitle(String title, User user) {
+        return this.graphSession.findVertexByExactTitle(title, user);
     }
 }
