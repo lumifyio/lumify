@@ -36,44 +36,48 @@ public class ArtifactRaw extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO remove-artifacts: change to use graphVertexId
-//        boolean download = getOptionalParameter(request, "download") != null;
-//        boolean videoPlayback = getOptionalParameter(request, "playback") != null;
-//
-//        User user = getUser(request);
-//        ArtifactRowKey artifactKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "graphVertexId")));
-//        Artifact artifact = artifactRepository.findByRowKey(artifactKey.toString(), user.getModelUserContext());
-//
-//        if (artifact == null) {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            chain.next(request, response);
-//            return;
-//        }
-//
-//        String graphVertexId = artifact.getMetadata().getGraphVertexId();
-//        GraphVertex vertex = graphRepository.findVertex(graphVertexId, user);
-//
-//
-//        String fileName = getFileName(artifact);
-//        if (videoPlayback) {
-//            handlePartialPlayback(request, response, artifact, fileName);
-//        } else {
-//            String mimeType = getMimeType(artifact);
-//            response.setContentType(mimeType);
-//            if (download) {
-//                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
-//            } else {
-//                response.addHeader("Content-Disposition", "inline; filename=" + fileName);
-//            }
-//            InputStream in = artifactRepository.getRaw(artifact, vertex, user);
-//            try {
-//                IOUtils.copy(in, response.getOutputStream());
-//            } finally {
-//                in.close();
-//            }
-//        }
-//
-//        chain.next(request, response);
+        boolean download = getOptionalParameter(request, "download") != null;
+        boolean videoPlayback = getOptionalParameter(request, "playback") != null;
+
+        User user = getUser(request);
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+
+        ArtifactRowKey artifactKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        Artifact artifact = artifactRepository.findByRowKey(artifactKey.toString(), user.getModelUserContext());
+        if (artifact == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        GraphVertex vertex = graphRepository.findVertex(graphVertexId, user);
+
+        String fileName = getFileName(artifact);
+        if (videoPlayback) {
+            handlePartialPlayback(request, response, artifact, fileName);
+        } else {
+            String mimeType = getMimeType(artifact);
+            response.setContentType(mimeType);
+            if (download) {
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+            } else {
+                response.addHeader("Content-Disposition", "inline; filename=" + fileName);
+            }
+            InputStream in = artifactRepository.getRaw(artifact, vertex, user);
+            try {
+                IOUtils.copy(in, response.getOutputStream());
+            } finally {
+                in.close();
+            }
+        }
+
+        chain.next(request, response);
     }
 
     private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Artifact artifact, String fileName) throws IOException {
