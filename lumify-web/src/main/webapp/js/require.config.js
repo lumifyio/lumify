@@ -35,7 +35,7 @@ var require = {
         'bootstrap': { exports: 'jQuery', deps:['jquery', 'jqueryui'] },
         'bootstrap-datepicker': { exports: 'jQuery', deps:['bootstrap'] },
         'colorjs': { init: function() { return this.net.brehaut.Color; } },
-        'cytoscape': { exports: 'cytoscape', deps:['arbor'] },
+        'cytoscape': { exports: 'cytoscape', deps:['arbor', 'easing'] },
         'd3': { exports: 'd3' },
         'easing': { exports: 'jQuery', deps:['jquery', 'jqueryui'] },
         'ejs': { exports: 'ejs' },
