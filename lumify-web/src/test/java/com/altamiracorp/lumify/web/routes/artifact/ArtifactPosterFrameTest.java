@@ -1,14 +1,9 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
+import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
+import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.web.AuthenticationProvider;
+import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +12,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
-import com.altamiracorp.lumify.web.routes.RouteTestBase;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ArtifactPosterFrameTest extends RouteTestBase {
@@ -39,14 +35,13 @@ public class ArtifactPosterFrameTest extends RouteTestBase {
     @Test
     public void testHandle() throws Exception {
         ArtifactRowKey artifactRowKey = ArtifactRowKey.build("testContents".getBytes());
-        when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
+        when(mockRequest.getAttribute("graphVertexId")).thenReturn("id");
         when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
-        Artifact artifact = new Artifact(artifactRowKey);
-        when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
+        when(mockArtifactRepository.findRowKeyByGraphVertexId("id", mockUser)).thenReturn(artifactRowKey);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
-        when(mockArtifactRepository.getRawPosterFrame(artifact.getRowKey().toString())).thenReturn(testInputStream);
+        when(mockArtifactRepository.getRawPosterFrame(artifactRowKey.toString())).thenReturn(testInputStream);
 
         doAnswer(new Answer<Void>() {
             @Override
