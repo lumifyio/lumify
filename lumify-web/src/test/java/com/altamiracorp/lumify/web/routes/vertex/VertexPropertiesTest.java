@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;

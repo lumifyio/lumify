@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.core.model.artifactHighlighting;
 
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +32,7 @@ public class TermMentionOffsetItem extends OffsetItem {
 
     @Override
     public String getType() {
-        return VertexType.ENTITY.toString();
+        return OntologyRepository.ENTITY.toString();
     }
 
     public String getConceptGraphVertexId() {
