@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
 import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -41,6 +42,7 @@ public class TitanGraphSession extends GraphSession {
     private static TitanGraph graph;
     private TitanQueryFormatter queryFormatter;
     private final Configuration titanConfig;
+    private SearchProvider searchProvider;
 
     public TitanGraphSession(Configuration config) {
         titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
@@ -379,44 +381,24 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson) {
-        List<GraphVertex> vertices = Lists.newArrayList();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
-
-        if (title.equals("*")) {
-            tokens.add("*");
-        }
-
-        if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
-
-            final GremlinPipeline<Vertex, Vertex> queryPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
-
-            vertices = toGraphVertices(queryPipeline.toList());
-        }
-
-        return vertices;
-    }
-
-    @Override
-    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
+    public GraphPagedResults search(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
         GraphPagedResults results = new GraphPagedResults();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
+        final List<String> tokens = LuceneTokenizer.standardTokenize(query);
 
-        if (title.equals("*")) {
+        if (query.equals("*")) {
             tokens.add("*");
         }
 
         if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
+            final TitanGraphQuery q = generateTitleQuery(tokens);
             GremlinPipeline<Vertex, Vertex> vertexPipeline;
             GremlinPipeline<Vertex, Vertex> countPipeline;
             if (filterJson.length() > 0) {
-                vertexPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
-                countPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
+                vertexPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
+                countPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
             } else {
-                vertexPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
-                countPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
+                vertexPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
+                countPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
             }
 
             HashMap<Object, Number> map = new HashMap<Object, Number>();
@@ -447,46 +429,39 @@ public class TitanGraphSession extends GraphSession {
             }
         }
 
+        // TODO remove-artifacts
+//    public GraphPagedResults search(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
+//        ArtifactSearchPagedResults artifactSearchResults;
+//        GraphPagedResults pagedResults = new GraphPagedResults();
+//
+//        // Disable paging if filtering since we filter after results are retrieved
+//        if (filter.length() > 0) {
+//            page = 0;
+//            pageSize = 100;
+//        }
+//
+//        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, subType);
+//
+//        for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
+//            List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());
+//            List<GraphVertex> vertices = graphSession.searchVerticesWithinGraphVertexIds(artifactGraphVertexIds, filter, user);
+//            pagedResults.getResults().put(entry.getKey(), vertices);
+//            pagedResults.getCount().put(entry.getKey(), artifactSearchResults.getCount().get(entry.getKey()));
+//        }
+//
+//        return pagedResults;
+//    }
+//
+//    private List<String> getGraphVertexIds(Collection<ArtifactSearchResult> artifactSearchResults) {
+//        ArrayList<String> results = new ArrayList<String>();
+//        for (ArtifactSearchResult artifactSearchResult : artifactSearchResults) {
+//            Preconditions.checkNotNull(artifactSearchResult.getGraphVertexId(), "graph vertex cannot be null for artifact " + artifactSearchResult.getRowKey());
+//            results.add(artifactSearchResult.getGraphVertexId());
+//        }
+//        return results;
+//    }
+
         return results;
-    }
-
-    @Override
-    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
-        GremlinPipeline<Vertex, Vertex> pipeline = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
-        List<Vertex> vertexList = pipeline.range((int) offset, (int) (offset + size - 1)).toList();
-        return toGraphVertices(vertexList);
-    }
-
-    @Override
-    public List<GraphVertex> searchVerticesWithinGraphVertexIds(final List<String> vertexIds, JSONArray filterJson, User user) {
-        ArrayList<Vertex> r = new ArrayList<Vertex>();
-        for (String vertexId : vertexIds) {
-            r.add(findVertex(vertexId));
-        }
-
-        GremlinPipeline<Vertex, Vertex> queryPipeline = queryFormatter.createQueryPipeline(r, filterJson);
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
-        for (Vertex v : queryPipeline.toList()) {
-            if (vertexIds.contains(v.getId().toString())) {
-                results.add(v);
-            }
-        }
-        return toGraphVertices(results);
-    }
-
-    @Override
-    public List<GraphVertex> searchVerticesByTitleAndType(String title, VertexType type, User user) {
-        List<GraphVertex> vertices = Lists.newArrayList();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
-
-        if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
-            query.has(PropertyName.TYPE.toString(), type.toString());
-
-            vertices = toGraphVertices(query.vertices());
-        }
-
-        return vertices;
     }
 
     private TitanGraphQuery generateTitleQuery(final List<String> titleTokens) {
@@ -521,18 +496,6 @@ public class TitanGraphSession extends GraphSession {
         Iterable<Vertex> r = graph.query()
                 .has(property, graphVertexPropertyValue)
                 .has(PropertyName.TYPE.toString(), type.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(propertyName, propertyValue)
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
@@ -739,6 +702,11 @@ public class TitanGraphSession extends GraphSession {
     @Inject
     public void setQueryFormatter(TitanQueryFormatter queryFormatter) {
         this.queryFormatter = queryFormatter;
+    }
+
+    @Inject
+    public void setSearchProvider(SearchProvider searchProvider) {
+        this.searchProvider = searchProvider;
     }
 
     private class GraphRelationshipDateComparator implements Comparator<GraphRelationship> {

@@ -41,15 +41,9 @@ public abstract class GraphSession {
 
     public abstract List<GraphVertex> findByGeoLocation(double latitude, double longitude, double radius, User user);
 
-    public abstract List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson);
-
-    public abstract GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offset, long size, String subType);
-
-    public abstract List<GraphVertex> searchVerticesWithinGraphVertexIds(List<String> artifactGraphVertexIds, JSONArray filterJson, User user);
+    public abstract GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String subType);
 
     public abstract Graph getGraph();
-
-    public abstract List<GraphVertex> searchVerticesByTitleAndType(String query, VertexType type, User user);
 
     public abstract GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType graphVertexType, User user);
 
@@ -80,8 +74,4 @@ public abstract class GraphSession {
     public abstract List<Vertex> getRelationships(Concept sourceConcept, Concept destConcept, User user);
 
     public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
-
-    public abstract List<GraphVertex> searchAllVertices(long offset, long size, User user);
-
-    public abstract GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user);
 }

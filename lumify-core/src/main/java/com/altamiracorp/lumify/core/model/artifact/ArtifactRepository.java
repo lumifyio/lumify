@@ -43,7 +43,6 @@ public class ArtifactRepository extends Repository<Artifact> {
     private final ArtifactBuilder artifactBuilder = new ArtifactBuilder();
     private final FileSystemSession fsSession;
     private final GraphSession graphSession;
-    private final SearchProvider searchProvider;
     private final AuditRepository auditRepository;
 
     @Inject
@@ -51,12 +50,10 @@ public class ArtifactRepository extends Repository<Artifact> {
             final ModelSession modelSession,
             final FileSystemSession fsSession,
             final GraphSession graphSession,
-            final SearchProvider searchProvider,
             final AuditRepository auditRepository) {
         super(modelSession);
         this.fsSession = fsSession;
         this.graphSession = graphSession;
-        this.searchProvider = searchProvider;
         this.auditRepository = auditRepository;
     }
 
@@ -152,38 +149,6 @@ public class ArtifactRepository extends Repository<Artifact> {
             save(artifact, user.getModelUserContext());
         }
         return artifactVertex;
-    }
-
-    public GraphPagedResults search(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
-        ArtifactSearchPagedResults artifactSearchResults;
-        GraphPagedResults pagedResults = new GraphPagedResults();
-
-        // Disable paging if filtering since we filter after results are retrieved
-        if (filter.length() > 0) {
-            page = 0;
-            pageSize = 100;
-        }
-
-        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, subType);
-
-        for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
-            List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());
-            List<GraphVertex> vertices = graphSession.searchVerticesWithinGraphVertexIds(artifactGraphVertexIds, filter, user);
-            pagedResults.getResults().put(entry.getKey(), vertices);
-            pagedResults.getCount().put(entry.getKey(), artifactSearchResults.getCount().get(entry.getKey()));
-        }
-
-        return pagedResults;
-    }
-
-
-    private List<String> getGraphVertexIds(Collection<ArtifactSearchResult> artifactSearchResults) {
-        ArrayList<String> results = new ArrayList<String>();
-        for (ArtifactSearchResult artifactSearchResult : artifactSearchResults) {
-            Preconditions.checkNotNull(artifactSearchResult.getGraphVertexId(), "graph vertex cannot be null for artifact " + artifactSearchResult.getRowKey());
-            results.add(artifactSearchResult.getGraphVertexId());
-        }
-        return results;
     }
 
     public InputStream getHighlightedText(GraphVertex artifactVertex, User user) throws IOException {

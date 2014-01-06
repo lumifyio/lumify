@@ -107,25 +107,12 @@ public class GraphRepository {
         return graphSession.findByGeoLocation(latitude, longitude, radius, user);
     }
 
-    public List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson) {
-        return graphSession.searchVerticesByTitle(title, filterJson);
-    }
-
-    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offset, long size, String subType) {
-        return graphSession.searchVerticesByTitle(title, filterJson, user, offset, size, subType);
-    }
-
-    public List<GraphVertex> searchVerticesByTitleAndType(String query, VertexType type, User user) {
-        return graphSession.searchVerticesByTitleAndType(query, type, user);
-    }
-
-    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
-        return graphSession.searchAllVertices(offset, size, user);
+    public GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String subType) {
+        return graphSession.search(title, filterJson, user, offset, size, subType);
     }
 
     public void removeRelationship(String source, String target, String label, User user) {
         graphSession.removeRelationship(source, target, label, user);
-        return;
     }
 
     public GraphRelationship findOrAddRelationship(String sourceVertexId, String targetVertexId, String label, User user) {
