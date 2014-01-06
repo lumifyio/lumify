@@ -4,11 +4,11 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactMetadata;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.DisplayType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
@@ -76,7 +76,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         artifactRepository.save(artifact, user.getModelUserContext());
 
         ArtifactExtractedInfo artifactDetails = new ArtifactExtractedInfo();
-        artifactDetails.setArtifactType(ArtifactType.IMAGE.toString());
+        artifactDetails.setConceptType(ontologyRepository.getConceptByName(DisplayType.IMAGE.toString(), user).getId());
         artifactDetails.setTitle("Image of " + entityVertex.getProperty(PropertyName.TITLE));
         artifactDetails.setSource(SOURCE_UPLOAD);
         artifactDetails.setProcess(PROCESS);

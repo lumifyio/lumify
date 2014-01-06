@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.search;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
@@ -192,7 +191,6 @@ public class ElasticSearchProvider extends SearchProvider {
             String subject = getString(fields, FIELD_SUBJECT);
             String source = getString(fields, FIELD_SOURCE);
             String graphVertexId = getString(fields, FIELD_GRAPH_VERTEX_ID);
-            ArtifactType type = ArtifactType.convert(getString(fields, FIELD_CONCEPT_TYPE));
 
             Date publishedDate = new Date();
             String publishedDateString = getString(fields, FIELD_PUBLISHED_DATE);
@@ -200,7 +198,7 @@ public class ElasticSearchProvider extends SearchProvider {
                 publishedDate = dateFormat.parse(publishedDateString);
             }
 
-            ArtifactSearchResult result = new ArtifactSearchResult(id, subject, publishedDate, source, type, graphVertexId);
+            ArtifactSearchResult result = new ArtifactSearchResult(id, subject, publishedDate, source, graphVertexId);
 
             pagedResults.getResults().get(getString(fields, FIELD_CONCEPT_TYPE)).add(result);
         }
