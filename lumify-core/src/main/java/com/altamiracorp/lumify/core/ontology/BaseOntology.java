@@ -1,8 +1,6 @@
 package com.altamiracorp.lumify.core.ontology;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -18,8 +16,6 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.io.InputStream;
-
-import static org.mockito.internal.util.Checks.checkNotNull;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
@@ -157,11 +153,9 @@ public class BaseOntology {
         }
         graph.commit();
 
-        String process = this.getClass().getName();
-
-        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, process, OntologyRepository.ROOT_CONCEPT_NAME, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", process, PropertyType.IMAGE, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", process, PropertyType.IMAGE, user);
+        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
+        ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
+        ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
         graph.commit();
 
         // TermMention concept
@@ -173,9 +167,9 @@ public class BaseOntology {
         graph.commit();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ENTITY.toString(), process, "Entity", user);
-        ontologyRepository.addPropertyTo(entity, typeProperty.getName(), "Type", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", process, PropertyType.STRING, user);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ENTITY.toString(), "Entity", user);
+        ontologyRepository.addPropertyTo(entity, typeProperty.getName(), "Type", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", PropertyType.STRING, user);
 
         graph.commit();
 

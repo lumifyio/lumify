@@ -302,7 +302,7 @@ public class OntologyRepository {
         }
     }
 
-    public Concept getOrCreateConcept(Concept parent, String conceptName, String process, String displayName, User user) {
+    public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName, User user) {
         Concept concept = getConceptByName(conceptName, user);
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
@@ -325,7 +325,7 @@ public class OntologyRepository {
         graphSession.findOrAddEdge(fromVertex, toVertex, edgeLabel, user);
     }
 
-    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, String process, PropertyType dataType, User user) {
+    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
         Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
         property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
