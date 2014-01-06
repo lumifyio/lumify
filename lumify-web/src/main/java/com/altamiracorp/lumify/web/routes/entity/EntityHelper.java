@@ -9,7 +9,6 @@ import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -90,8 +89,6 @@ public class EntityHelper {
         } else {
             newVertex = true;
             resolvedVertex = new InMemoryGraphVertex();
-            resolvedVertex.setType(VertexType.ENTITY);
-            modifiedProperties.add(PropertyName.CONCEPT_TYPE.toString());
         }
 
         String conceptId = conceptVertex.getId();

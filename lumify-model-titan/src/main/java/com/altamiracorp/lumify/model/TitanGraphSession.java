@@ -234,7 +234,7 @@ public class TitanGraphSession extends GraphSession {
         } else {
             v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
         }
-        v.setProperty(PropertyName.CONCEPT_TYPE.toString(), VertexType.RELATIONSHIP.toString());
+        v.setProperty(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
         return v;
     }
@@ -547,7 +547,7 @@ public class TitanGraphSession extends GraphSession {
     public GraphVertex findOntologyConceptByTitle(String title, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.CONCEPT.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.CONCEPT.toString())
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
