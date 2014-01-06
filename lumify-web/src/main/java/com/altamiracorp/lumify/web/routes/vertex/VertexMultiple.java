@@ -35,10 +35,11 @@ public class VertexMultiple extends BaseRequestHandler {
                 i.remove();
 
             } else {
-                Object type = vertex.getProperty(PropertyName.TYPE.toString());
-                if (!type.equals("entity") && !type.equals("artifact")) {
-                    i.remove();
-                }
+                //TODO remove-artifact
+//                Object type = vertex.getProperty(PropertyName.TYPE.toString());
+//                if (!type.equals("entity") && !type.equals("artifact")) {
+//                    i.remove();
+//                }
             }
         }
 

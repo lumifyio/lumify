@@ -50,11 +50,11 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, String process, String comment, User user) {
-        vertex.setProperty(PropertyName.SUBTYPE, subType);
+        vertex.setProperty(PropertyName.CONCEPT_TYPE, subType);
         vertex.setProperty(PropertyName.TITLE, title);
         graphRepository.saveVertex(vertex, user);
 
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.SUBTYPE.toString(), process, comment, user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.CONCEPT_TYPE.toString(), process, comment, user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
     }
 
@@ -81,7 +81,7 @@ public class EntityHelper {
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String process, String comment,
                                          String artifactId, User user) {
         boolean newVertex = false;
-        List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
+        List<String> modifiedProperties = Lists.newArrayList(PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());
         final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
@@ -91,11 +91,11 @@ public class EntityHelper {
             newVertex = true;
             resolvedVertex = new InMemoryGraphVertex();
             resolvedVertex.setType(VertexType.ENTITY);
-            modifiedProperties.add(PropertyName.TYPE.toString());
+            modifiedProperties.add(PropertyName.CONCEPT_TYPE.toString());
         }
 
         String conceptId = conceptVertex.getId();
-        resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptId);
+        resolvedVertex.setProperty(PropertyName.CONCEPT_TYPE, conceptId);
         resolvedVertex.setProperty(PropertyName.TITLE, sign);
 
         graphRepository.saveVertex(resolvedVertex, user);

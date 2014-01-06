@@ -54,7 +54,6 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         final GraphVertex createdVertex = new InMemoryGraphVertex();
-        createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
         // TODO: replace second "" when we implement commenting on ui
@@ -63,7 +62,6 @@ public class EntityTermCreate extends BaseRequestHandler {
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, sign, conceptId ,"", "", user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 

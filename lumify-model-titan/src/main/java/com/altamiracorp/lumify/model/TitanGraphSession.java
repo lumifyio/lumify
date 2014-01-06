@@ -201,7 +201,7 @@ public class TitanGraphSession extends GraphSession {
             }
             v = new VertexProperty(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey());
         }
-        v.setProperty(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString());
+//        v.setProperty(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name);
         v.setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString());
         return v;
@@ -234,7 +234,7 @@ public class TitanGraphSession extends GraphSession {
         } else {
             v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
         }
-        v.setProperty(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString());
+        v.setProperty(PropertyName.CONCEPT_TYPE.toString(), VertexType.RELATIONSHIP.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
         return v;
     }
@@ -430,11 +430,11 @@ public class TitanGraphSession extends GraphSession {
             HashMap<Object, Number> map = new HashMap<Object, Number>();
             Collection<Vertex> vertexList;
             if (subType != null) {
-                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.SUBTYPE.toString(), Tokens.T.eq, subType).range((int) offsetStart, (int) offsetEnd).toList();
+                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, subType).range((int) offsetStart, (int) offsetEnd).toList();
                 map.put(subType, vertexList.size());
             } else {
                 vertexList = vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
-                countPipeline.property(PropertyName.SUBTYPE.toString()).groupCount(map).iterate();
+                countPipeline.property(PropertyName.CONCEPT_TYPE.toString()).groupCount(map).iterate();
             }
 
             for (Object key : map.keySet()) {
@@ -448,7 +448,7 @@ public class TitanGraphSession extends GraphSession {
             }
 
             for (Vertex v : vertexList) {
-                String key = v.getProperty(PropertyName.SUBTYPE.toString());
+                String key = v.getProperty(PropertyName.CONCEPT_TYPE.toString());
                 if (key != null) {
                     results.getResults().get(key).add(new TitanGraphVertex(v));
                 }
@@ -521,40 +521,43 @@ public class TitanGraphSession extends GraphSession {
 
     @Override
     public GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType type, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.TITLE.toString(), graphVertexTitle)
-                .has(PropertyName.TYPE.toString(), type.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
+        // TODO remove-artifact
+//        Iterable<Vertex> r = graph.query()
+//                .has(PropertyName.TITLE.toString(), graphVertexTitle)
+//                .has(PropertyName.TYPE.toString(), type.toString())
+//                .vertices();
+//        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+//        if (graphVertices.size() > 0) {
+//            return graphVertices.get(0);
+//        }
         return null;
     }
 
     @Override
     public GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(property, graphVertexPropertyValue)
-                .has(PropertyName.TYPE.toString(), type.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
+        // TODO remove-artifact
+//        Iterable<Vertex> r = graph.query()
+//                .has(property, graphVertexPropertyValue)
+//                .has(PropertyName.TYPE.toString(), type.toString())
+//                .vertices();
+//        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+//        if (graphVertices.size() > 0) {
+//            return graphVertices.get(0);
+//        }
         return null;
     }
 
     @Override
     public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .has(PropertyName.TYPE.toString(), type.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
+        // TODO remove-artifact
+//        Iterable<Vertex> r = graph.query()
+//                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
+//                .has(PropertyName.TYPE.toString(), type.toString())
+//                .vertices();
+//        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
+//        if (graphVertices.size() > 0) {
+//            return graphVertices.get(0);
+//        }
         return null;
     }
 

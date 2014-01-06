@@ -38,14 +38,14 @@ public class OntologyRepository {
 
     public List<Relationship> getRelationshipLabels(User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.RELATIONSHIP.toString())
                 .vertices();
         return toRelationships(vertices, user);
     }
 
     public String getDisplayNameForLabel(String relationshipLabel, User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.RELATIONSHIP.toString())
                 .vertices();
         for (Vertex vertex : vertices) {
             if (vertex.getProperty(PropertyName.ONTOLOGY_TITLE.toString()).equals(relationshipLabel))
@@ -57,7 +57,7 @@ public class OntologyRepository {
     public List<Property> getProperties(User user) {
         List<Property> properties = new ArrayList<Property>();
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.PROPERTY.toString())
                 .vertices()
                 .iterator();
         while (vertices.hasNext()) {
@@ -69,7 +69,7 @@ public class OntologyRepository {
 
     public Property getProperty(String propertyName, User user) {
         Iterator<Vertex> properties = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.PROPERTY.toString())
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
                 .vertices()
                 .iterator();
@@ -86,7 +86,7 @@ public class OntologyRepository {
 
     public Concept getRootConcept(User user) {
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.CONCEPT.toString())
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), OntologyRepository.ROOT_CONCEPT_NAME)
                 .vertices()
                 .iterator();
@@ -183,7 +183,7 @@ public class OntologyRepository {
         Concept[] sourceAndDestConcept = new Concept[2];
         Map<GraphRelationship, GraphVertex> related = graphSession.getRelationships(vertexId, user);
         for (Map.Entry<GraphRelationship, GraphVertex> relatedVertex : related.entrySet()) {
-            String type = (String) relatedVertex.getValue().getProperty(PropertyName.TYPE);
+            String type = (String) relatedVertex.getValue().getProperty(PropertyName.CONCEPT_TYPE);
             if (type.equals(VertexType.CONCEPT.toString())) {
                 String destVertexId = relatedVertex.getKey().getDestVertexId();
                 String sourceVertexId = relatedVertex.getKey().getSourceVertexId();
@@ -287,7 +287,7 @@ public class OntologyRepository {
 
     private Vertex getRelationshipVertexId(String relationshipLabel, User user) {
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), VertexType.RELATIONSHIP.toString())
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel)
                 .vertices()
                 .iterator();
@@ -309,7 +309,7 @@ public class OntologyRepository {
             String id = graphRepository.saveVertex(graphVertex, user);
             concept = getConceptById(id, user);
         }
-        concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
+        concept.setProperty(PropertyName.CONCEPT_TYPE.toString(), VertexType.CONCEPT.toString());
         concept.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName);
         concept.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
         if (parent != null) {

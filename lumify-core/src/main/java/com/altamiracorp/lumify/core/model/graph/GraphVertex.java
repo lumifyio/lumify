@@ -83,7 +83,7 @@ public abstract class GraphVertex {
     }
 
     public void setType(String vertexType) {
-        setProperty(PropertyName.TYPE, vertexType);
+        setProperty(PropertyName.CONCEPT_TYPE, vertexType);
     }
 
     public Vertex getVertex() {

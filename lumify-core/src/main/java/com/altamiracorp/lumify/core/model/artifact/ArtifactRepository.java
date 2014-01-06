@@ -98,11 +98,10 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
 
         artifactVertex.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString());
-        artifactVertex.setProperty(PropertyName.TYPE, VertexType.ARTIFACT.toString());
-        artifactVertex.setProperty(PropertyName.SUBTYPE, artifactExtractedInfo.getArtifactType());
+        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, artifactExtractedInfo.getArtifactType());
         artifactVertex.setProperty(PropertyName.TITLE, artifactExtractedInfo.getTitle());
 
-        List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.TYPE.toString(), PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
+        List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());
 
         if (artifactExtractedInfo.getSource() != null) {
             artifactVertex.setProperty(PropertyName.SOURCE, artifactExtractedInfo.getSource());
