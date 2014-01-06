@@ -463,6 +463,10 @@ define([
                     this.trigger('saveWorkspace');
                 }
                 if (toDelete.length) {
+                    var ids = _.pluck(toDelete, 'id');
+                    ws.data.vertices = _.filter(ws.data.vertices, function(v) {
+                        return ids.indexOf(v.id) === -1;
+                    });
                     this.trigger('verticesDeleted', { 
                         vertices:freeze(toDelete),
                         remoteEvent: data.remoteEvent
@@ -517,7 +521,6 @@ define([
 
         this.onReloadWorkspace = function(evt, data) {
             this.workspaceReady(function(workspace) {
-                console.log('reload workspace = ', workspace);
                 this.relationshipsReady(function(relationships) {
                     this.trigger('workspaceLoaded', freeze(workspace));
                     this.trigger('relationshipsLoaded', { relationships:relationships });
