@@ -1,9 +1,8 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -33,13 +32,6 @@ public class VertexMultiple extends BaseRequestHandler {
             GraphVertex vertex = i.next();
             if (vertex == null) {
                 i.remove();
-
-            } else {
-                //TODO remove-artifacts
-//                Object type = vertex.getProperty(PropertyName.TYPE.toString());
-//                if (!type.equals("entity") && !type.equals("artifact")) {
-//                    i.remove();
-//                }
             }
         }
 
