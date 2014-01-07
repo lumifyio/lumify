@@ -37,7 +37,7 @@ var require = {
         'colorjs': { init: function() { return this.net.brehaut.Color; } },
         'cytoscape': { exports: 'cytoscape', deps:['arbor'] },
         'd3': { exports: 'd3' },
-        'easing': { exports: 'jQuery', deps:['jquery'] },
+        'easing': { exports: 'jQuery', deps:['jquery', 'jqueryui'] },
         'ejs': { exports: 'ejs' },
         'intercom': { exports:'Intercom' },
         'jquery': { exports:'jQuery' },
