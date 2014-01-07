@@ -69,12 +69,20 @@ define([
 
 
         this.after('initialize', function() {
+            var self = this;
+
             this.setupAsyncQueue('workspace');
             this.setupAsyncQueue('relationships');
             this.setupDroppable();
 
             this.onSaveWorkspace = _.debounce(this.onSaveWorkspace.bind(this), WORKSPACE_SAVE_DELAY);
             this.refreshRelationships = _.debounce(this.refreshRelationships.bind(this), RELOAD_RELATIONSHIPS_DELAY);
+
+            this.cachedConceptsDeferred = $.Deferred();
+            this.ontologyService.concepts().done(function(concepts) {
+                self.cachedConcepts = concepts;
+                self.cachedConceptsDeferred.resolve(concepts);
+            })
 
             ClipboardManager.attachTo(this.node);
             Keyboard.attachTo(this.node);
@@ -102,7 +110,11 @@ define([
             this.on('selectAll', this.onSelectAll);
             this.on('deleteSelected', this.onDelete);
 
-            this.on('applicationReady', this.onApplicationReady);
+            this.on('applicationReady', function() {
+                self.cachedConceptsDeferred.done(function() {
+                    self.onApplicationReady();
+                });
+            });
         });
 
         this.onApplicationReady = function() {
@@ -545,25 +557,22 @@ define([
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
-
-                $.when(self.ontologyService.concepts(), self.getWorkspace(workspaceRowKey))
-                    .done(function(concepts, workspace) {
-                        self.cachedConcepts = concepts;
-                        self.loadWorkspaceVertices(workspace).done(function(vertices) {
-                            if (workspaceData && workspaceData.title) {
-                                workspace.title = workspaceData.title;
-                            }
-                            vertices.forEach(function(v) { delete v.dropPosition; });
-                            workspace.data.vertices = vertices.sort(function(a,b) { 
-                                if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
-                                return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
-                            });
-                            workspace.data.verticesById = _.groupBy(vertices, 'id');
-                            
-                            self.workspaceMarkReady(workspace);                        
-                            self.trigger('workspaceLoaded', freeze(workspace));
+                self.getWorkspace(workspaceRowKey).done(function(workspace) {
+                    self.loadWorkspaceVertices(workspace).done(function(vertices) {
+                        if (workspaceData && workspaceData.title) {
+                            workspace.title = workspaceData.title;
+                        }
+                        vertices.forEach(function(v) { delete v.dropPosition; });
+                        workspace.data.vertices = vertices.sort(function(a,b) { 
+                            if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
+                            return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
                         });
+                        workspace.data.verticesById = _.groupBy(vertices, 'id');
+
+                        self.workspaceMarkReady(workspace);                        
+                        self.trigger('workspaceLoaded', freeze(workspace));
                     });
+                });
             });
         };
 
