@@ -9,6 +9,7 @@ define([
     'util/keyboard',
     'service/workspace',
     'service/vertex',
+    'service/ontology',
     'util/undoManager',
     'util/clipboardManager'
 ], function(
@@ -17,7 +18,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue, 
     // Service
-    Keyboard, WorkspaceService, VertexService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, VertexService, OntologyService, undoManager, ClipboardManager) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1000,
@@ -55,6 +56,7 @@ define([
 
         this.workspaceService = new WorkspaceService();
         this.vertexService = new VertexService();
+        this.ontologyService = new OntologyService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
         this.id = null;
@@ -538,20 +540,23 @@ define([
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
-                self.getWorkspace(workspaceRowKey).done(function(workspace) {
-                    self.loadWorkspaceVertices(workspace).done(function(vertices) {
-                        if (workspaceData && workspaceData.title) {
-                            workspace.title = workspaceData.title;
-                        }
-                        vertices.forEach(function(v) { delete v.dropPosition; });
-                        workspace.data.vertices = freeze(vertices.sort(function(a,b) { 
-                            if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
-                            return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
-                        }));
-                        self.workspaceMarkReady(workspace);                        
-                        self.trigger('workspaceLoaded', workspace);
+
+                $.when(self.ontologyService.concepts(), self.getWorkspace(workspaceRowKey))
+                    .done(function(concepts, workspace) {
+                        self.cachedConcepts = concepts;
+                        self.loadWorkspaceVertices(workspace).done(function(vertices) {
+                            if (workspaceData && workspaceData.title) {
+                                workspace.title = workspaceData.title;
+                            }
+                            vertices.forEach(function(v) { delete v.dropPosition; });
+                            workspace.data.vertices = freeze(vertices.sort(function(a,b) { 
+                                if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
+                                return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
+                            }));
+                            self.workspaceMarkReady(workspace);                        
+                            self.trigger('workspaceLoaded', workspace);
+                        });
                     });
-                });
             });
         };
 

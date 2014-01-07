@@ -75,14 +75,12 @@ define([
                 entities = this.vertices.length;
 
             this.$node
-                .removePrefixedClasses('vertices- entities- artifacts- has- entity-cols-')
+                .removePrefixedClasses('vertices- entities- has- entity-cols-')
                 .addClass([
                     this.vertices.length <= 4 ? 'vertices-' + this.vertices.length : 'vertices-many',
                     'entities-' + entities,
                     'entity-cols-' + _.find([4,3,2,1], function(i) { return entities % i === 0; }),
-                    entities ? 'has-entities' : '',
-                    'artifacts-' + artifacts,
-                    artifacts ? 'has-artifacts' : ''
+                    entities ? 'has-entities' : ''
                 ].join(' '));
         };
 
