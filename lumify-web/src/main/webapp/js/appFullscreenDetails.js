@@ -1,6 +1,7 @@
 
 
 define([
+    'data',
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./appFullscreenDetails',
@@ -8,7 +9,7 @@ define([
     'service/vertex',
     'detail/detail',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, registry, template, errorTemplate, VertexService, Detail) {
+], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -35,9 +36,12 @@ define([
 
             this.$node.addClass('fullscreen-details');
 
-            this.vertexService
-                .getMultiple(this.attr.graphVertexIds)
-                .done(this.handleVerticesLoaded.bind(this));
+            var self = this;
+            appData.cachedConceptsDeferred.done(function() {
+                self.vertexService
+                    .getMultiple(self.attr.graphVertexIds)
+                    .done(self.handleVerticesLoaded.bind(self));
+            });
         });
 
         this.onClose = function(event) {
