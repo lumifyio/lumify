@@ -93,52 +93,6 @@ define(
             return this._get("statement", statementRowKey);
         };
 
-        VertexService.prototype.artifactSearch = function(query, filters, subType, paging) {
-            if (typeof filters === 'function') {
-                callback = filters;
-                filters = [];
-            }
-
-            var parameters = {
-                q: query.query || query,
-                filter: JSON.stringify(filters || [])
-            };
-
-            if (subType) {
-                parameters.subType = subType;
-            }
-
-            if (paging) {
-                if (paging.offset) parameters.offset = paging.offset;
-                if (paging.size) parameters.size = paging.size;
-            }
-
-            return this._ajaxGet({
-                url: 'artifact/search',
-                data: parameters
-            });
-        };
-
-        VertexService.prototype.getArtifactById = function (id) {
-            return this._get("artifact", id);
-        };
-
-        VertexService.prototype.getArtifactHighlightedTextById = function(graphVertexId) {
-            return this._ajaxGet({
-                dataType: 'html',
-                url: "artifact/" + graphVertexId + "/highlightedText"
-            });
-        };
-
-        VertexService.prototype.getRawArtifactById = function (id) {
-            //maybe it's an object for future options stuff?
-            var i = typeof id == "object" ? id.id : id;
-
-            return this._ajaxGet({
-                url: "artifact/" + i + "/raw",
-            });
-        };
-
         VertexService.prototype.graphVertexSearch = function (query, filters, subType, paging) {
             if (typeof filters === 'function') {
                 callback = filters;
