@@ -65,6 +65,7 @@ module.exports = function(grunt) {
             baseUrl: 'js',
             preserveLicenseComments: false,
             removeCombined: false,
+            /*
             modules: [
                 { name: 'lumify' },
                 { name: 'app' },
@@ -72,6 +73,7 @@ module.exports = function(grunt) {
                 { name: 'detail/artifact/artifact' },
                 { name: 'detail/entity/entity' }
             ]
+                */
         },
         development: {
             options: {
