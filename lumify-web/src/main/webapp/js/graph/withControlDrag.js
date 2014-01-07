@@ -483,8 +483,8 @@ define([
         
         this.getRelationshipLabels = function (source, dest) {
             var self = this,
-                sourceConceptTypeId = source.data('_subType');
-                destConceptTypeId = dest.data('_subType');
+                sourceConceptTypeId = source.data('_conceptType');
+                destConceptTypeId = dest.data('_conceptType');
 
             return $.when(
                 this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
