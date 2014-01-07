@@ -38,31 +38,7 @@ define([
                 'shape': 'roundrectangle'
             })
 
-            .selector('node.artifact')
-            .css({
-                'shape': 'rectangle',
-                'width': 45 * 1.3 * retina.devicePixelRatio,
-                'height': 45 * retina.devicePixelRatio,
-                'border-color': '#ccc'
-            })
-
-            .selector('node.concept-document')
-            .css({
-                'background-image': '/img/glyphicons/glyphicons_036_file@2x.png',
-                'width': 30 * retina.devicePixelRatio,
-                'height': 30 * 1.2 * retina.devicePixelRatio
-            })
-
-            .selector('node.concept-video')
-            .css({
-                'background-image': '/img/glyphicons/glyphicons_036_file@2x.png',
-                'shape': 'movieStrip'
-            })
-
-            .selector('node.concept-image')
-            .css({
-                'background-image': '/img/glyphicons/glyphicons_036_file@2x.png',
-            })
+            // TODO: make shape movieStrip if video type
 
             .selector('node.hasCustomGlyph')
             .css({

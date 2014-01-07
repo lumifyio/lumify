@@ -315,15 +315,6 @@ define([
                             });
                         }
 
-                        if (vertex.properties._type === 'artifact' && /^(image|video)$/i.test(vertex.properties._subType)) {
-                            _.delay(function() {
-                                previews.generatePreview(vertex.properties._rowKey, { width:178 * retina.devicePixelRatio }, function(dataUri) {
-                                    if (dataUri) {
-                                        cyNode.css('background-image', dataUri);
-                                    }
-                                });
-                            }, 500);
-                        }
                     });
 
                     if (options.fit && cy.nodes().length) {
@@ -349,8 +340,7 @@ define([
         this.classesForVertex = function(vertex) {
             var cls = [];
 
-            if (vertex.properties._subType) cls.push('concept-' + vertex.properties._subType);
-            if (vertex.properties._type) cls.push(vertex.properties._type);
+            if (vertex.properties._conceptType) cls.push('concept-' + vertex.properties._conceptType);
             if (vertex.properties._glyphIcon) cls.push('hasCustomGlyph');
             
             return cls.join(' ');
@@ -363,7 +353,7 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_subType', '_type', '_glyphIcon', 'title')); 
+            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title')); 
             merged.truncatedTitle = truncatedTitle;
 
             return merged;
@@ -487,8 +477,7 @@ define([
             var data = {
                 _rowKey: currentVertexRK,
                 graphVertexId: graphVertexId,
-                originalPosition: currentVertexOriginalPosition,
-                _type : menu.data("currentVertexType")
+                originalPosition: currentVertexOriginalPosition
             };
             return data;
         };
@@ -743,8 +732,6 @@ define([
                 menu.data("currentVertexGraphVertexId", event.cyTarget.id());
                 menu.data("currentVertexPositionX", event.cyTarget.position ('x'));
                 menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
-                menu.data("currentVertexType", event.cyTarget.data('_type'));
-                menu.data("currentVertexSubtype", event.cyTarget.data('_subType'));
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             }

@@ -741,12 +741,6 @@ define([
                         var info = a.data('info') || a.closest('li').data('info');
                         if (info && info.graphVertexId) {
 
-                            // TODO: fix on server
-                            if (info.type) {
-                                info._type = info.type;
-                                delete info.type;
-                            }
-
                             self.updateCacheWithVertex({
                                 id: info.graphVertexId,
                                 properties: _.omit(info, 'start', 'end', 'graphVertexId')

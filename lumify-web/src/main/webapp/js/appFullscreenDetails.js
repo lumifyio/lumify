@@ -13,13 +13,6 @@ define([
 
     return defineComponent(FullscreenDetails);
 
-    function filterEntity(v) {
-        return v.properties._type === 'entity';
-    }
-    function filterArtifacts(v) {
-        return v.properties._type === 'artifact';
-    }
-
     function FullscreenDetails() {
         this.vertexService = new VertexService();
 
@@ -79,8 +72,7 @@ define([
             this.$node.toggleClass('onlyone', this.vertices.length === 1);
 
             var verts = this.vertices.length,
-                entities = _.filter(this.vertices, filterEntity).length,
-                artifacts = _.filter(this.vertices, filterArtifacts).length;
+                entities = this.vertices.length;
 
             this.$node
                 .removePrefixedClasses('vertices- entities- artifacts- has- entity-cols-')
@@ -117,11 +109,7 @@ define([
             this.vertices = _.sortBy(vertices, function(v) {
                 var descriptors = [];
 
-                // Entities first
-                descriptors.push(v.properties._type === 'entity' ? 0 : 1);
-
-                // Image/Video before documents
-                descriptors.push(/^(image|video)$/i.test(v.properties._subType) ? 0 : 1);
+                // TODO: Image/Video before documents
 
                 // Sort by title
                 descriptors.push(v.properties.title);
@@ -129,13 +117,11 @@ define([
             });
             
             this.vertices.forEach(function(v) {
-                var node = v.properties._type === 'entity' ? 
-                    this.$node.find('.entities-container') : this.$node.find('.artifacts-container');
+                var node = this.$node.find('.entities-container');
 
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
-                Detail.attachTo(this.$node.find('.detail-pane').last()
-                                .addClass('type-' + v.properties._type + ' subType-' + v.properties._subType)
-                                .find('.content'), {
+                // TODO: add classes that determine displayType
+                Detail.attachTo(this.$node.find('.detail-pane').last().find('.content'), {
                     loadGraphVertexData: v,
                     highlightStyle: 2
                 });

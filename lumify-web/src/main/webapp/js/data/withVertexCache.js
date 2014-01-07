@@ -66,11 +66,6 @@ define([
 
             if (_.isString(vertex) || _.isNumber(vertex)) {
                 deferred = this.vertexService.getVertexProperties(vertex);
-            } else if (vertex.properties._type === 'artifact' && vertex.properties._rowKey) { 
-                deferred = $.when(
-                    this.vertexService.getArtifactById(vertex.properties._rowKey),
-                    this.vertexService.getVertexProperties(vertex.id)
-                );
             } else {
                 deferred = this.vertexService.getVertexProperties(vertex.id);
             }
