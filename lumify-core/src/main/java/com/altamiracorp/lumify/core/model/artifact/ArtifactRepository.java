@@ -38,6 +38,7 @@ public class ArtifactRepository extends Repository<Artifact> {
     public static final String VIDEO_STORAGE_HDFS_PATH = "/lumify/artifacts/video";
     public static final String LUMIFY_VIDEO_PREVIEW_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/preview/";
     public static final String LUMIFY_VIDEO_POSTER_FRAME_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/posterFrame/";
+    private static final String LUMIFY_RAW_HDFS_PATH_FMT = "/lumify/artifacts/raw/%s";
     public static final int FRAMES_PER_PREVIEW = 20;
     public static final int PREVIEW_FRAME_WIDTH = 360;
     public static final int PREVIEW_FRAME_HEIGHT = 240;
@@ -174,8 +175,16 @@ public class ArtifactRepository extends Repository<Artifact> {
                 artifact.getMetadata().setCreateDate(new Date());
             }
         }
-        if (artifactExtractedInfo.getRaw() != null) {
-            artifact.getMetadata().setRaw(artifactExtractedInfo.getRaw());
+        byte[] rawBytes = artifactExtractedInfo.getRaw();
+        if (rawBytes != null) {
+            if (rawBytes.length > Artifact.MAX_SIZE_OF_INLINE_FILE) {
+                String rawPath = String.format(LUMIFY_RAW_HDFS_PATH_FMT, artifactExtractedInfo.getRowKey());
+                fsSession.saveFile(rawPath, new ByteArrayInputStream(rawBytes));
+                artifactExtractedInfo.setRaw(null);
+                artifact.getMetadata().set(PropertyName.RAW_HDFS_PATH.toString(), rawPath);
+            } else {
+                artifact.getMetadata().setRaw(rawBytes);
+            }
         }
         if (artifactExtractedInfo.getVideoTranscript() != null) {
             artifact.getMetadata().setVideoTranscript(artifactExtractedInfo.getVideoTranscript());
