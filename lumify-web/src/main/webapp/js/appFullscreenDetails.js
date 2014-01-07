@@ -6,10 +6,9 @@ define([
     'tpl!./appFullscreenDetails',
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
-    'service/service',
     'detail/detail',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, registry, template, errorTemplate, VertexService, Service, Detail) {
+], function(defineComponent, registry, template, errorTemplate, VertexService, Detail) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -23,7 +22,6 @@ define([
 
     function FullscreenDetails() {
         this.vertexService = new VertexService();
-        this.service = new Service();
 
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',

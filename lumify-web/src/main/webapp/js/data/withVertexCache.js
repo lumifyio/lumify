@@ -1,7 +1,7 @@
 
 define([
-    'service/service'
-], function(Service) {
+    'service/vertex'
+], function(VertexService) {
 
     return withVertexCache;
 
@@ -9,8 +9,8 @@ define([
 
         this.cachedVertices = {};
         this.workspaceVertices = {};
-        if (!this.service) {
-            this.service = new Service();
+        if (!this.vertexService) {
+            this.vertexService = new VertexService();
         }
 
 
@@ -65,14 +65,14 @@ define([
                 deferred = null;
 
             if (_.isString(vertex) || _.isNumber(vertex)) {
-                deferred = this.service.getVertexProperties(vertex);
+                deferred = this.vertexService.getVertexProperties(vertex);
             } else if (vertex.properties._type === 'artifact' && vertex.properties._rowKey) { 
                 deferred = $.when(
-                    this.service.getArtifactById(vertex.properties._rowKey),
-                    this.service.getVertexProperties(vertex.id)
+                    this.vertexService.getArtifactById(vertex.properties._rowKey),
+                    this.vertexService.getVertexProperties(vertex.id)
                 );
             } else {
-                deferred = this.service.getVertexProperties(vertex.id);
+                deferred = this.vertexService.getVertexProperties(vertex.id);
             }
 
             return deferred.then(function(v) {

@@ -8,7 +8,6 @@ define([
     'util/withAsyncQueue',
     'util/keyboard',
     'service/workspace',
-    'service/service',
     'service/vertex',
     'util/undoManager',
     'util/clipboardManager'
@@ -18,7 +17,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue, 
     // Service
-    Keyboard, WorkspaceService, Service, VertexService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, VertexService, undoManager, ClipboardManager) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1000,
@@ -55,7 +54,6 @@ define([
     function Data() {
 
         this.workspaceService = new WorkspaceService();
-        this.service = new Service();
         this.vertexService = new VertexService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
@@ -186,7 +184,7 @@ define([
 
             this.relationshipsUnload();
 
-            this.service.getRelationships(ids)
+            this.vertexService.getRelationships(ids)
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });
@@ -201,7 +199,7 @@ define([
             var self = this,
                 edge = data.edges[0];
 
-            this.service.deleteEdge(
+            this.vertexService.deleteEdge(
                 edge.properties.source,
                 edge.properties.target,
                 edge.properties.relationshipType).done(function() {

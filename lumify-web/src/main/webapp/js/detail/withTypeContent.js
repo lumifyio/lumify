@@ -1,10 +1,9 @@
 
 define([
-    'service/service',
     'tpl!./toolbar/fullscreen',
     'tpl!./toolbar/fullscreen-item',
     'tpl!./toolbar/audits'
-], function(Service, fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
+], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
     'use strict';
 
     var intercomInstance;
@@ -13,7 +12,6 @@ define([
 
     function withTypeContent() {
 
-        this.service = new Service();
         this._xhrs = [];
 
         this.defaultAttrs({

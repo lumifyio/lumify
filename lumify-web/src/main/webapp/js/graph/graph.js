@@ -13,7 +13,7 @@ define([
     'util/throttle',
     'util/previews',
     'util/formatters',
-    'service/service',
+    'service/vertex',
     'service/ontology',
     'util/retina',
     'util/withContextMenu',
@@ -32,7 +32,7 @@ define([
     throttle,
     previews,
     formatters,
-    Service,
+    VertexService,
     OntologyService,
     retina,
     withContextMenu,
@@ -52,7 +52,7 @@ define([
     return defineComponent(Graph, withAsyncQueue, withContextMenu, withGraphContextMenuItems, withControlDrag);
 
     function Graph() {
-        this.service = new Service();
+        this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
 
         var LAYOUT_OPTIONS = {
@@ -950,7 +950,7 @@ define([
                 data = data[0];
             }
 
-            this.service.getRelatedVertices(data)
+            this.vertexService.getRelatedVertices(data)
                 .done(function(data) {
                     var added = data.vertices;
                     

@@ -2,8 +2,8 @@ define([
     'data',
     'util/retina',
     'util/formatters',
-    'service/graph'
-], function(appData, retina, formatters, GraphService) {
+    'service/vertex'
+], function(appData, retina, formatters, VertexService) {
     'with strict';
 
     var STATE_NONE = 0,
@@ -21,8 +21,8 @@ define([
             hops,
             connectionType;
 
-        if (!this.graphService) {
-            this.graphService = new GraphService();
+        if (!this.vertexService) {
+            this.vertexService = new VertexService();
         }
 
         this.defaultAttrs({
@@ -462,7 +462,7 @@ define([
                 hops: hops
             };
 
-            return this.graphService.findPath(parameters)
+            return this.vertexService.findPath(parameters)
                         .then(function (data) {
                             var vertices = [], added = {};
                             data.paths.forEach(function (path) {
