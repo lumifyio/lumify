@@ -48,7 +48,7 @@ define([
 
         this.onWorkspaceSaved = function(event, data) {
             clearTimeout(this.updateTimer);
-            this.lastSaved = Date.now();
+            this.lastSaved = formatters.date.utc(Date.now());
 
             if (data.title) {
                 this.select('nameSelector').text(data.title);
@@ -60,7 +60,7 @@ define([
                     this.updateTimer = setTimeout(function () {
 
                         var time = formatters.date.relativeToNow(this.lastSaved);
-                        subtitle.text(prefix + time + ' ago');
+                        subtitle.text(prefix + time);
 
                         setTimer();
                     }.bind(this), LAST_SAVED_UPDATE_FREQUENCY_SECONDS * 1000);
