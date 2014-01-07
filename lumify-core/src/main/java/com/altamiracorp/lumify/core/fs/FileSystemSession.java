@@ -4,11 +4,12 @@ import com.altamiracorp.lumify.core.model.SaveFileResults;
 
 import java.io.InputStream;
 
-public abstract class FileSystemSession {
+public interface FileSystemSession {
+    void saveFile(String path, InputStream in);
+    
+    SaveFileResults saveFile (InputStream in);
 
-    public abstract SaveFileResults saveFile (InputStream in);
+    InputStream loadFile (String path);
 
-    public abstract InputStream loadFile (String path);
-
-    public abstract long getFileLength (String path);
+    long getFileLength (String path);
 }

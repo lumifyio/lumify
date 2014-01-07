@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.UUID;
+import org.apache.commons.io.IOUtils;
 
-public class HdfsSession extends FileSystemSession {
+public class HdfsSession implements FileSystemSession {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsSession.class);
     private final FileSystem hdfsFileSystem;
     private final String hdfsRootDir;
@@ -32,6 +33,21 @@ public class HdfsSession extends FileSystemSession {
         }
     }
 
+    @Override
+    public void saveFile(String path, InputStream in) {
+        try {
+            FSDataOutputStream hdfsOut = hdfsFileSystem.create(new Path(path));
+            try {
+                IOUtils.copyLarge(in, hdfsOut);
+            } finally {
+                hdfsOut.close();
+            }
+            LOGGER.info("file saved: %s", path);
+        } catch (IOException ioe) {
+            throw new RuntimeException("could not save file to HDFS", ioe);
+        }
+    }
+    
     @Override
     public SaveFileResults saveFile(InputStream in) {
         try {
