@@ -1042,7 +1042,6 @@ define([
 
                 var templateData = {
                     firstLevelConcepts: concepts.entityConcept.children || [],
-                    artifactConcept: concepts.artifactConcept,
                     pathHopOptions: ["2","3","4"]
                 };
 
