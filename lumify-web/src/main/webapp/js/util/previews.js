@@ -1,12 +1,12 @@
 
 define([
-    'service/service',
+    'service/vertex',
     'tpl!./previews'
 ], 
 /**
  * Generate preview screenshots of artifact rendering (with highlighting)
  */
-function(Service, template) {
+function(VertexService, template) {
     'use strict';
 
     var PREVIEW_CACHE = {};
@@ -34,7 +34,10 @@ function(Service, template) {
 
     Preview.prototype.start = function() {
         var self = this;
-        new Service().getArtifactById(this._rowKey)
+        // TODO
+        self.callback();
+        /*
+        new VertexService().getProperties(this._rowKey)
             .fail(function() {
                 self.callback();
             })
@@ -62,6 +65,7 @@ function(Service, template) {
                     self.callback();
                 }
             });
+            */
     };
 
 

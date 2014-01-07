@@ -7,20 +7,18 @@ define([
     'tpl!./termForm',
     'tpl!./concept-options',
     'tpl!./entity',
-    'service/service',
-    'service/entity',
+    'service/vertex',
     'service/ontology',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, Service, EntityService, OntologyService) {
+], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown);
 
 
     function TermForm() {
-        this.entityService = new EntityService();
+        this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
-        this.service = new Service();
 
         this.defaultAttrs({
             entityConceptMenuSelector: '.underneath .dropdown-menu a',
@@ -114,7 +112,7 @@ define([
             }
 
             if (newGraphVertexId) {
-                this.service.getVertexProperties(newGraphVertexId)
+                this.vertexService.getVertexProperties(newGraphVertexId)
                     .done(this.updateResolveImageIcon.bind(this));
             } else this.updateResolveImageIcon();
         };
@@ -515,7 +513,7 @@ define([
 
 
         this.runQuery = function(query) {
-            return this.service.graphVertexSearch(query)
+            return this.vertexService.graphVertexSearch(query)
                 .then(function(response) {
                     return _.filter(response.vertices, function(v) { return v.properties._type === 'entity'; });
                 }).done(this.updateQueryCountBadge.bind(this));

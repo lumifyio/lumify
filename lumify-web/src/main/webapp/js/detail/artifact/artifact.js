@@ -10,7 +10,7 @@ define([
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'service/ontology',
-    'service/entity',
+    'service/vertex',
     'data'
 ], function(
     defineComponent,
@@ -22,7 +22,7 @@ define([
     template,
     transcriptEntryTemplate,
     OntologyService,
-    EntityService,
+    VertexService,
     appData) {
     'use strict';
 
@@ -31,7 +31,7 @@ define([
     function Artifact() {
 
         this.ontologyService = new OntologyService();
-        this.entityService = new EntityService();
+        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             previewSelector: '.preview',

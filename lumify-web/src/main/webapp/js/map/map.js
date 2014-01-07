@@ -7,7 +7,6 @@ define([
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/service',
     'service/vertex',
     'util/retina',
     'util/controls',
@@ -20,7 +19,6 @@ define([
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    Service,
     VertexService,
     retina,
     Controls,
@@ -40,7 +38,6 @@ define([
 
         var ol;
 
-        this.service = new Service();
         this.vertexService = new VertexService();
         this.mode = MODE_NORMAL;
 
@@ -449,7 +446,7 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.service.locationSearch(
+                    self.vertexService.locationSearch(
                         lonlat.lat,
                         lonlat.lon,
                         radius).done(
