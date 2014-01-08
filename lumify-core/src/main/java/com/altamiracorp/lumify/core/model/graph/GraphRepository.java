@@ -98,8 +98,8 @@ public class GraphRepository {
         return graphSession.findByGeoLocation(latitude, longitude, radius, user);
     }
 
-    public GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String subType) {
-        return graphSession.search(title, filterJson, user, offset, size, subType);
+    public GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String conceptType) {
+        return graphSession.search(title, filterJson, user, offset, size, conceptType);
     }
 
     public void removeRelationship(String source, String target, String label, User user) {

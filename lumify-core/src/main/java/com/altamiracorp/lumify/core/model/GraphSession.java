@@ -40,7 +40,7 @@ public abstract class GraphSession {
 
     public abstract List<GraphVertex> findByGeoLocation(double latitude, double longitude, double radius, User user);
 
-    public abstract GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String subType);
+    public abstract GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String conceptType);
 
     public abstract Graph getGraph();
 

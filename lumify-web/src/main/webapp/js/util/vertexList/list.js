@@ -179,7 +179,7 @@ define([
             }
 
             if (loadingListElement.length) {
-                var data = _.pick(this.attr, 'verticesType', 'verticesSubType');
+                var data = { conceptType: this.attr.verticesConceptId };
                 if (!this.offset) this.offset = this.attr.vertices.length;
                 data.paging = {
                     offset: this.offset
