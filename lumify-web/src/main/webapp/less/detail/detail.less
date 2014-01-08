@@ -11,9 +11,18 @@
     cursor: pointer;
   }
 
+  .entity_audit_events .audit-list {
+    li {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+  }
+
   .audit-list {
     list-style: none;
     margin: 0 1em;    
+    font-size: 95%;
+
     &.showAll {
       //max-height: 10em;
       //overflow: auto;
@@ -22,6 +31,9 @@
     }
     .show-all-button-row button { padding-left: 0; }
     li {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      overflow: auto;
       font-size: 90%;
       color: #555;
       clear: both;
@@ -35,7 +47,11 @@
       text-decoration: underline;
       cursor: pointer;
     }
-    .audit-subtitle { float: right; }
+    .audit-subtitle { 
+      float: right; 
+      padding-left: 0.5em;
+      color: #999;
+    }
     .audit-to { 
       font-style: italic;
       &:empty { visibility: hidden; }
@@ -379,7 +395,7 @@
   }
 
   .nav-with-background {
-    margin: 118px -1em 0 -1em;
+    margin: 125px -1em 0 -1em;
 
     .relationships {
       padding-bottom: 1em;

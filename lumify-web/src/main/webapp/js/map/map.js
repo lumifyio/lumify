@@ -64,6 +64,7 @@ define([
             this.on(document, 'mapCenter', this.onMapCenter);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'verticesAdded', this.onVerticesAdded);
+            this.on(document, 'verticesDropped', this.onVerticesDropped);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
@@ -142,8 +143,14 @@ define([
             this.isWorkspaceEditable = workspaceData.isEditable;
             this.mapReady(function(map) {
                 map.featuresLayer.removeAllFeatures();
-                this.updateOrAddVertices(workspaceData.data.vertices, { adding:true });
+                this.updateOrAddVertices(workspaceData.data.vertices, { adding:true, preventShake:true });
             });
+        };
+
+        this.onVerticesDropped = function(evt, data) {
+            if (this.$node.is(':visible')) {
+                this.trigger(document, 'addVertices', data);
+            }
         };
 
         this.onVerticesAdded = function(evt, data) {

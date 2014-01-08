@@ -47,6 +47,8 @@ define([
             return _.map(obj, function(v) {
                 return Object.freeze(Object.create(v));
             });
+        } else if (obj.vertices) {
+            obj.vertices = Object.freeze(obj.vertices);
         }
 
         return Object.freeze(obj);
@@ -164,15 +166,13 @@ define([
             }
 
             self.workspaceReady(function(ws) {
-                ws.data.vertices = self.workspaceVertices;
-
-                Object.keys(ws.data.vertices).forEach(function(v) {
-                    delete ws.data.vertices[v].dropPosition;
+                _.values(self.workspaceVertices).forEach(function(wv) {
+                    delete wv.dropPosition;
                 });
 
                 self.trigger('workspaceSaving', ws);
 
-                saveFn(_.pick(ws, 'data')).done(function(data) {
+                saveFn({ data:{ workspaceVertices:self.workspaceVertices }}).done(function(data) {
                     self.id = data._rowKey;
                     self.trigger('workspaceSaved', data);
                 });
@@ -291,6 +291,7 @@ define([
                     self.trigger('refreshRelationships');
                     if (!data.remoteEvent) self.trigger('saveWorkspace');
                     if (added.length) {
+                        ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
                             vertices:freeze(added),
                             remoteEvent: data.remoteEvent,
@@ -462,6 +463,10 @@ define([
                     this.trigger('saveWorkspace');
                 }
                 if (toDelete.length) {
+                    var ids = _.pluck(toDelete, 'id');
+                    ws.data.vertices = _.filter(ws.data.vertices, function(v) {
+                        return ids.indexOf(v.id) === -1;
+                    });
                     this.trigger('verticesDeleted', { 
                         vertices:freeze(toDelete),
                         remoteEvent: data.remoteEvent
@@ -517,7 +522,7 @@ define([
         this.onReloadWorkspace = function(evt, data) {
             this.workspaceReady(function(workspace) {
                 this.relationshipsReady(function(relationships) {
-                    this.trigger('workspaceLoaded', workspace);
+                    this.trigger('workspaceLoaded', freeze(workspace));
                     this.trigger('relationshipsLoaded', { relationships:relationships });
                 });
             });
@@ -546,12 +551,14 @@ define([
                             workspace.title = workspaceData.title;
                         }
                         vertices.forEach(function(v) { delete v.dropPosition; });
-                        workspace.data.vertices = freeze(vertices.sort(function(a,b) { 
+                        workspace.data.vertices = vertices.sort(function(a,b) { 
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
                             return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
-                        }));
+                        });
+                        workspace.data.verticesById = _.groupBy(vertices, 'id');
+                        
                         self.workspaceMarkReady(workspace);                        
-                        self.trigger('workspaceLoaded', workspace);
+                        self.trigger('workspaceLoaded', freeze(workspace));
                     });
                 });
             });
@@ -579,13 +586,9 @@ define([
             return deferred.then(function(workspace) {
                     workspace = workspace || {};
                     workspace.data = workspace.data || {};
-                    workspace.data.vertices = workspace.data.vertices || {};
-
-                    if (_.isArray(workspace.data.vertices)) {
-                        console.warn('Legacy workspace found, resetting');
-                        workspace.data.vertices = {};
-                        self.trigger('saveWorkspace');
-                    }
+                    workspace.data.workspaceVertices = workspace.data.workspaceVertices || {};
+                    workspace.data.vertices = workspace.data.vertices || [];
+                    workspace.data.verticesById = {};
 
                     return workspace;
                 });
@@ -594,7 +597,7 @@ define([
         this.loadWorkspaceVertices = function(workspace) {
             var self = this,
                 deferred = $.Deferred(),
-                ids = Object.keys(workspace.data.vertices);
+                ids = _.keys(workspace.data.workspaceVertices);
 
             _.each(_.values(self.cachedVertices), function(v) {
                 v.workspace = {};
@@ -604,7 +607,7 @@ define([
                 self.vertexService.getMultiple(ids).done(function(serverVertices) {
 
                     var vertices = serverVertices.map(function(vertex) {
-                        var workspaceData = workspace.data.vertices[vertex.id];
+                        var workspaceData = workspace.data.workspaceVertices[vertex.id];
                         delete workspaceData.dropPosition;
 
                         var cache = self.updateCacheWithVertex(vertex);
@@ -613,8 +616,10 @@ define([
                         cache.workspace.selected = false;
                         self.workspaceVertices[vertex.id] = cache.workspace;
 
+                        workspace.data.verticesById[vertex.id] = cache;
                         return cache;
                     });
+                    workspace.data.vertices = vertices;
 
                     undoManager.reset();
 
@@ -667,7 +672,7 @@ define([
                 over: function( event, ui ) {
                     var draggable = ui.draggable,
                         start = true,
-                        graphVisible = $('.graph-pane').is('.visible'),
+                        graphVisible = $('.graph-pane-2d').is('.visible'),
                         dashboardVisible = $('.dashboard-pane').is('.visible'),
                         vertices,
                         wrapper = $('.draggable-wrapper');
@@ -691,15 +696,18 @@ define([
                             dashboardVisible = false;
                             graphVisible = true;
                         }
-                        if (enabled) {
-                            self.trigger('verticesHovering', {
-                                vertices: vertices,
-                                start: start,
-                                position: { x: event.pageX, y: event.pageY }
-                            });
-                            start = false;
-                        } else {
-                            self.trigger('verticesHoveringEnded');
+
+                        if (graphVisible) {
+                            if (enabled) {
+                                self.trigger('verticesHovering', {
+                                    vertices: vertices,
+                                    start: start,
+                                    position: { x: event.pageX, y: event.pageY }
+                                });
+                                start = false;
+                            } else {
+                                self.trigger('verticesHoveringEnded');
+                            }
                         }
                     });
                 },
@@ -710,7 +718,7 @@ define([
                     if (!enabled) return;
 
                     var vertices = verticesFromDraggable(ui.draggable),
-                        graphVisible = $('.graph-pane').is('.visible');
+                        graphVisible = $('.graph-pane-2d').is('.visible');
 
                     if (graphVisible && vertices.length) {
                         vertices[0].workspace.dropPosition = { x: event.clientX, y: event.clientY };

@@ -2,6 +2,11 @@ var tests = Object.keys(window.__karma__.files).filter(function (file) {
     return (/^\/base\/test\/spec\/.*\.js$/).test(file);
 });
 
+requirejs.config({
+    shim: {
+        '/base/js/require.config.js': { exports: 'require' }
+    }
+});
 requirejs(['/base/js/require.config.js'], function(cfg) {
 
     var requireConfig = $.extend(true, {}, cfg, {
@@ -27,7 +32,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             'chai', 
             'sinon', 
             '../libs/es5-shim/es5-shim',
-            '../libs/es5-shim/es5-sham'  
+            '../libs/es5-shim/es5-sham',
+            '../libs/underscore/underscore'
         ],
 
         callback: function(chai, sinon) {

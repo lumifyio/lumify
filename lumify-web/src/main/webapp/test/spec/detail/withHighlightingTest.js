@@ -133,7 +133,7 @@ define([
             setTimeout(function() {
                 var e = this.component.$node.find('.artifact');
 
-                expect(e.eq(0).css('border-bottom-color')).to.equal('rgb(255, 0, 0)');
+                expect(e.eq(0).css('border-bottom-color')).to.equal('rgb(51, 51, 51)');
 
                 done();
             }.bind(this), 500);
@@ -143,11 +143,15 @@ define([
         it("should highlight entities", function(done) {
             this.component.$node.html('<span class="entity subType-1"></span>');
             this.component.$node.append('<span class="entity subType-2"></span>');
+            this.component.$node.append('<span class="entity resolved subType-1"></span>');
+            this.component.$node.append('<span class="entity resolved subType-2"></span>');
             setTimeout(function() {
                 var e = this.component.$node.find('.entity');
 
-                expect(e.eq(0).css('border-bottom-color')).to.equal('rgb(255, 0, 0)');
-                expect(e.eq(1).css('border-bottom-color')).to.equal('rgb(0, 0, 255)');
+                expect(e.eq(0).css('border-bottom-color')).to.equal('rgb(51, 51, 51)');
+                expect(e.eq(1).css('border-bottom-color')).to.equal('rgb(51, 51, 51)');
+                expect(e.eq(2).css('border-bottom-color')).to.equal('rgb(255, 0, 0)');
+                expect(e.eq(3).css('border-bottom-color')).to.equal('rgb(0, 0, 255)');
 
                 done();
             }.bind(this), 500);

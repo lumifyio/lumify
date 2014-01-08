@@ -63,6 +63,9 @@ public abstract class Property extends GraphVertex {
                 break;
             case CURRENCY:
                 value = Double.parseDouble(valueStr);
+                break;
+            case DOUBLE:
+                value = Double.parseDouble(valueStr);
         }
         return value;
     }
