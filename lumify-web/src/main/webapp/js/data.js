@@ -73,6 +73,7 @@ define([
 
             this.setupAsyncQueue('workspace');
             this.setupAsyncQueue('relationships');
+            this.setupAsyncQueue('socketSubscribe');
             this.setupDroppable();
 
             this.onSaveWorkspace = _.debounce(this.onSaveWorkspace.bind(this), WORKSPACE_SAVE_DELAY);
@@ -118,6 +119,7 @@ define([
         });
 
         this.onApplicationReady = function() {
+            var self = this;
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
@@ -127,8 +129,6 @@ define([
                 }
             });
 
-            var self = this;
-            this.setupAsyncQueue('socketSubscribe');
             this.workspaceService.subscribe({
                 onMessage: function (err, message) {
                     if (err) {
