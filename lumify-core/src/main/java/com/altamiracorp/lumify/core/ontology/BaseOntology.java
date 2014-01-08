@@ -35,9 +35,15 @@ public class BaseOntology {
         // concept properties
         TitanGraph graph = (TitanGraph) this.graphSession.getGraph();
 
-        TitanKey typeProperty = (TitanKey) graph.getType(PropertyName.CONCEPT_TYPE.toString());
-        if (typeProperty == null) {
-            typeProperty = graph.makeType().name(PropertyName.CONCEPT_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
+        TitanKey conceptType = (TitanKey) graph.getType(PropertyName.CONCEPT_TYPE.toString());
+        if (conceptType == null) {
+            conceptType = graph.makeType().name(PropertyName.CONCEPT_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
+        }
+
+
+        TitanKey displayTypeProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_TYPE.toString());
+        if (displayTypeProperty == null) {
+            graph.makeType().name(PropertyName.DISPLAY_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
         }
 
         TitanKey dataTypeProperty = (TitanKey) graph.getType(PropertyName.DATA_TYPE.toString());
@@ -99,11 +105,6 @@ public class BaseOntology {
         TitanKey displayNameProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_NAME.toString());
         if (displayNameProperty == null) {
             graph.makeType().name(PropertyName.DISPLAY_NAME.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
-        }
-
-        TitanKey displayTypeProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_TYPE.toString());
-        if (displayTypeProperty == null) {
-            graph.makeType().name(PropertyName.DISPLAY_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
         }
 
         TitanKey titleProperty = (TitanKey) graph.getType(PropertyName.TITLE.toString());
@@ -169,7 +170,7 @@ public class BaseOntology {
 
         // Entity concept
         Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.ENTITY.toString(), "Entity", user);
-        ontologyRepository.addPropertyTo(entity, typeProperty.getName(), "Type", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(entity, conceptType.getName(), "Type", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", PropertyType.STRING, user);
 
         graph.commit();

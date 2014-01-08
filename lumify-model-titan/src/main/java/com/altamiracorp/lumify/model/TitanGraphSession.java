@@ -201,7 +201,7 @@ public class TitanGraphSession extends GraphSession {
             }
             v = new VertexProperty(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey());
         }
-//        v.setProperty(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString());
+        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name);
         v.setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString());
         return v;
@@ -234,7 +234,7 @@ public class TitanGraphSession extends GraphSession {
         } else {
             v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
         }
-        v.setProperty(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
+        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
         return v;
     }

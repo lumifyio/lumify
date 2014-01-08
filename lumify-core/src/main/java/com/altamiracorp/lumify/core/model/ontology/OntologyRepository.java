@@ -25,9 +25,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OntologyRepository {
     private GraphRepository graphRepository;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
-    public static final String RELATIONSHIP_CONCEPT = "relationshipConcept";
+    public static final String RELATIONSHIP_CONCEPT = "relationship";
     public static final String CONCEPT = "concept";
-    public static final String PROPERTY_CONCEPT = "propertyConcept";
+    public static final String PROPERTY_CONCEPT = "property";
     public static final String ENTITY = "entity";
     private final GraphSession graphSession;
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
@@ -61,7 +61,7 @@ public class OntologyRepository {
     public List<Property> getProperties(User user) {
         List<Property> properties = new ArrayList<Property>();
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.CONCEPT_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
                 .vertices()
                 .iterator();
         while (vertices.hasNext()) {
