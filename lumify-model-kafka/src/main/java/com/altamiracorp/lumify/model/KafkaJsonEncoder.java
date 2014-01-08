@@ -1,9 +1,10 @@
 package com.altamiracorp.lumify.model;
 
-import backtype.storm.spout.MultiScheme;
+import backtype.storm.spout.Scheme;
 import backtype.storm.tuple.Fields;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import kafka.message.Message;
 import kafka.serializer.Encoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,17 +12,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KafkaJsonEncoder implements Encoder<JSONObject>, MultiScheme {
+public class KafkaJsonEncoder implements Encoder<JSONObject>, Scheme {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaJsonEncoder.class);
     public static final String EXTRA = "_extra";
 
     @Override
-    public byte[] toBytes(JSONObject json) {
-        return json.toString().getBytes();
+    public Message toMessage(JSONObject json) {
+        return new Message(json.toString().getBytes());
     }
 
     @Override
-    public Iterable<List<Object>> deserialize(byte[] ser) {
+    public List<Object> deserialize(byte[] ser) {
         String serString = new String(ser);
         try {
             ArrayList<Object> results = new ArrayList<Object>();
@@ -38,9 +39,7 @@ public class KafkaJsonEncoder implements Encoder<JSONObject>, MultiScheme {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deserialize: %s (size: %d)", json.toString(), results.size());
             }
-            List<List<Object>> it = new ArrayList<List<Object>>();
-            it.add(results);
-            return it;
+            return results;
         } catch (Exception ex) {
             String head = serString;
             if (head.length() > 20) {
