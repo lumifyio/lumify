@@ -26,6 +26,10 @@ public class LumifyKafkaSpout extends KafkaSpout {
     public static final long KAFKA_START_OFFSET_TIME_EARLIEST = -2;
 
     public LumifyKafkaSpout(Configuration configuration, String queueName, Long startOffsetTime) {
+        this(configuration, queueName, null, startOffsetTime);
+    }
+    
+    protected LumifyKafkaSpout(Configuration configuration, String queueName, Scheme scheme, Long startOffsetTime) {
         super(createConfig(configuration, queueName, null, startOffsetTime));
         this.queueName = queueName;
     }
