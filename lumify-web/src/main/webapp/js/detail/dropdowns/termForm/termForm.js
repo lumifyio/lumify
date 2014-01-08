@@ -178,7 +178,7 @@ define([
             }
 
             if (!this.currentGraphVertexId) {
-                this.entityService.createTerm(parameters)
+                this.vertexService.createTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -188,7 +188,7 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             } else {
-                this.entityService.updateTerm(parameters)
+                this.vertexService.updateTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -231,7 +231,7 @@ define([
         this.createEntity = function (parameters) {
             var self = this;
 
-            this.entityService.resolveDetectedObject(parameters)
+            this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
                     var resolvedVertex ={
                         graphVertexId: data.entityVertex.graphVertexId,
@@ -285,7 +285,7 @@ define([
 
         this.updateEntity = function (parameters) {
             var self = this;
-            this.entityService.updateDetectedObject(parameters).done(function(data) {
+            this.vertexService.updateDetectedObject(parameters).done(function(data) {
                 self.updateEntityTag(data, parameters.conceptId);
             });
         };
