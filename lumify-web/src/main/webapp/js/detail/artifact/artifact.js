@@ -87,8 +87,8 @@ define([
 
         this.handleVertexLoaded = function(vertex) {
             var self = this;
-            this.videoTranscript = vertex.artifact.videoTranscript;
-            this.videoDuration = vertex.artifact.videoDuration;
+            this.videoTranscript = vertex.videoTranscript;
+            this.videoDuration = vertex.videoDuration;
 
             if (vertex.properties._detectedObjects) {
                 vertex.properties._detectedObjects = JSON.parse(vertex.properties._detectedObjects).sort(function(a, b){
@@ -105,12 +105,12 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.service.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
+            this.vertexService.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
                 self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
                 self.updateEntityAndArtifactDraggables();
 
-                if (self[vertex.properties._subType + 'Setup']) {
-                    self[vertex.properties._subType + 'Setup'](vertex);
+                if (self[vertex.concept.displayType + 'Setup']) {
+                    self[vertex.concept.displayType + 'Setup'](vertex);
                 }
             });
         };
@@ -237,9 +237,9 @@ define([
 
         this.videoSetup = function(vertex) {
             VideoScrubber.attachTo(this.select('previewSelector'), {
-                rawUrl: vertex.artifact.rawUrl,
-                posterFrameUrl: vertex.artifact.posterFrameUrl,
-                videoPreviewImageUrl: vertex.artifact.videoPreviewImageUrl,
+                rawUrl: '/artifact/' + vertex.id + "/raw",
+                posterFrameUrl: '/artifact/' + vertex.id + "/poster-frame",
+                videoPreviewImageUrl: '/artifact/' + vertex.id + "/video-preview",
                 allowPlayback: true
             });
         };
@@ -247,7 +247,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this;
             var data = {
-                src: vertex.artifact.rawUrl,
+                src: '/artifact/' + vertex.id + "/raw",
                 id: vertex.id
             };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });

@@ -6,8 +6,8 @@
       <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">
-      <li><a class="" href="/artifact/<%= vertex.properties._rowKey %>/raw" target="_blank">Open <%= vertex.artifact.Generic_Metadata.fileExtension %> <%= vertex.properties._subType %></a></li>
-      <li><a class="" href="/artifact/<%= vertex.properties._rowKey %>/raw?download=true" target="_blank">Download <%= vertex.artifact.Generic_Metadata.fileExtension %> <%= vertex.properties._subType %></a></li>
+      <li><a class="" href="/artifact/<%= vertex.id %>/raw" target="_blank">Open <%= vertex.properties._conceptType %></a></li>
+      <li><a class="" href="/artifact/<%= vertex.id %>/raw?download=true" target="_blank">Download <%= vertex.properties._conceptType %></a></li>
     </ul>
   </div>
 
@@ -18,20 +18,20 @@
 
 <h1 class="generic-draggable artifact-title" data-vertex-id='<%= vertex.id %>'><%= vertex.properties.title %></h1>
 
-<% if(vertex.properties._subType == 'video') { %>
+<% if(vertex.concept.displayType == 'video') { %>
   <div class="preview"/>
   <div class="currentTranscript"/>
 <% } %>
-<% if(vertex.properties._subType == 'image') { %>
+<% if(vertex.concept.displayType == 'image') { %>
   <div class="image-preview opens-dropdown">
-    <img class="target" src='/artifact/<%= vertex.properties._rowKey %>/raw' width="auto" height="300"/>
+    <img class="target" src='/artifact/<%= vertex.id %>/raw' width="auto" height="300"/>
   </div>
 <% } %>
 
 <div class='detected-object-labels'>
   <% (vertex.properties._detectedObjects || []).forEach(function(object) {
     if (object.graphVertexId) {
-        var classes = 'label-info detected-object resolved entity subType-' + object._subType;%>
+        var classes = 'label-info detected-object resolved entity subType-' + object._conceptType;%>
         <span class="label detected-object-tag">
             <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.concept %></a><a class="delete-tag">&times;</a>
         </span>
