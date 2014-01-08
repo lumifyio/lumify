@@ -5,6 +5,7 @@ import backtype.storm.tuple.Fields;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import kafka.serializer.Encoder;
+import kafka.utils.VerifiableProperties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,6 +15,10 @@ import java.util.List;
 public class KafkaJsonEncoder implements Encoder<JSONObject>, MultiScheme {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaJsonEncoder.class);
     public static final String EXTRA = "_extra";
+
+    public KafkaJsonEncoder(VerifiableProperties properties) {
+
+    }
 
     @Override
     public byte[] toBytes(JSONObject json) {
