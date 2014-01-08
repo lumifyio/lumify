@@ -95,7 +95,7 @@ define([
 
                 $.when(
                     self.handleCancelling(self.ontologyService.relationships()),
-                    self.handleCancelling(self.service.getVertexRelationships(self.attr.data.id))
+                    self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
                 ).done(self.loadRelationships.bind(self, vertex));
             });
         };

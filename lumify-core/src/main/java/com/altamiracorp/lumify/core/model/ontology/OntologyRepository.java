@@ -42,14 +42,14 @@ public class OntologyRepository {
 
     public List<Relationship> getRelationshipLabels(User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.CONCEPT_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .vertices();
         return toRelationships(vertices, user);
     }
 
     public String getDisplayNameForLabel(String relationshipLabel, User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.CONCEPT_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .vertices();
         for (Vertex vertex : vertices) {
             if (vertex.getProperty(PropertyName.ONTOLOGY_TITLE.toString()).equals(relationshipLabel))
@@ -291,7 +291,7 @@ public class OntologyRepository {
 
     private Vertex getRelationshipVertexId(String relationshipLabel, User user) {
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.CONCEPT_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel)
                 .vertices()
                 .iterator();
