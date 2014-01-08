@@ -20,6 +20,7 @@ import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -67,6 +68,11 @@ public abstract class BaseArtifactProcessor {
      */
     private WorkQueueRepository workQueueRepository;
 
+    /**
+     * The Search Provider.
+     */
+    private SearchProvider searchProvider;
+    
     protected final ArtifactRepository getArtifactRepository() {
         return artifactRepository;
     }
@@ -128,5 +134,14 @@ public abstract class BaseArtifactProcessor {
     @Inject
     public final void setUser(final User user) {
         this.user = user;
+    }
+    
+    protected final SearchProvider getSearchProvider() {
+        return searchProvider;
+    }
+    
+    @Inject
+    public final void setSearchProvider(final SearchProvider provider) {
+        searchProvider = provider;
     }
 }
