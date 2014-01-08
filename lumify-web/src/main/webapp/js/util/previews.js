@@ -1,7 +1,6 @@
 
 define([
-    'service/vertex',
-    'tpl!./previews'
+    'service/vertex'
 ], 
 /**
  * Generate preview screenshots of artifact rendering (with highlighting)
@@ -11,9 +10,9 @@ function(VertexService, template) {
 
     var PREVIEW_CACHE = {};
 
-    function Preview(_rowKey, options, callback) {
+    function Preview(vertex, options, callback) {
         this.options = options || {};
-        this._rowKey = _rowKey;
+        this.vertex = vertex;
         this.callback = this._cacheResult(callback);
     }
 
@@ -22,7 +21,7 @@ function(VertexService, template) {
         return function() {
             var args = jQuery.makeArray(arguments);
             if (args.length) {
-                PREVIEW_CACHE[self._rowKey] = args;
+                PREVIEW_CACHE[self.vertex.id] = args;
             }
             callback.apply(undefined, args);
 
@@ -33,39 +32,26 @@ function(VertexService, template) {
     };
 
     Preview.prototype.start = function() {
-        var self = this;
-        // TODO
-        self.callback();
-        /*
-        new VertexService().getProperties(this._rowKey)
-            .fail(function() {
+        var self = this,
+            vertex = this.vertex;
+
+        if (!vertex || !vertex.concept) return self.callback();
+
+
+        switch (vertex.concept.displayType) {
+            case "image":
+                var url = '/artifact/' + vertex.id + '/raw'
+                self.callback(url, url);
+                break;
+            case "video":
+                self.callback(
+                    '/artifact/' + vertex.id + '/poster-frame',
+                    '/artifact/' + vertex.id + '/video-preview'
+                );
+                break;
+            default:
                 self.callback();
-            })
-            .done(function(artifact) {
-                if (artifact.type == 'image') {
-                    var thumbnailUrl = artifact.thumbnailUrl;
-                    if(thumbnailUrl) {
-                        if(self.options.width) {
-                            thumbnailUrl += '?width=' + self.options.width;
-                        }
-                    } else {
-                        thumbnailUrl = artifact.rawUrl;
-                    }
-                    self.callback(thumbnailUrl, thumbnailUrl);
-                } else if (artifact.type == 'video') {
-                    var posterFrameUrl = artifact.posterFrameUrl;
-                    var videoPreviewImageUrl = artifact.videoPreviewImageUrl;
-                    if(self.options.width) {
-                        posterFrameUrl += '?width=' + self.options.width;
-                        videoPreviewImageUrl += '?width=' + self.options.width;
-                    }
-                    self.callback(posterFrameUrl, videoPreviewImageUrl);
-                } else {
-                    // TODO: Generate artifact preview on server
-                    self.callback();
-                }
-            });
-            */
+        }
     };
 
 
@@ -86,7 +72,7 @@ function(VertexService, template) {
 
         if (this.executing.length < this.options.maxConcurrent) {
             var task = this.items.shift();
-            var cache = PREVIEW_CACHE[task._rowKey];
+            var cache = PREVIEW_CACHE[task.vertex.id];
             if (cache) {
                 task.callback.apply(null, cache);
                 setTimeout(function() {
@@ -138,13 +124,13 @@ function(VertexService, template) {
         /**
          * Add a preview generation task to the queue
          *
-         * @param _rowKey The artifact _rowKey
+         * @param vertex The vertex to generate
          * @param opts Options for preview generation
          * @param opts.width Width of the preview image preferred
          * @param opts.queueName Optional queue name to use
          * @param callback Task completion notification callback
          */
-        generatePreview: function(_rowKey, opts, callback) {
+        generatePreview: function(vertex, opts, callback) {
             var options = $.extend({
                 width: 200,
                 queueName: 'default'
@@ -158,7 +144,7 @@ function(VertexService, template) {
             delete options.queueOptions;
             delete options.queueName;
 
-            queue.addTask( new Preview(_rowKey, options, callback) );
+            queue.addTask( new Preview(vertex, options, callback) );
         }
     };
 });
