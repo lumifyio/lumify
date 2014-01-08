@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.storm;
 
-import backtype.storm.spout.MultiScheme;
+import backtype.storm.spout.Scheme;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import com.altamiracorp.lumify.core.InjectHelper;
@@ -10,10 +10,9 @@ import com.altamiracorp.lumify.model.KafkaJsonEncoder;
 import com.codahale.metrics.Counter;
 import com.google.inject.Inject;
 import com.google.inject.Module;
-import storm.kafka.BrokerHosts;
+import storm.kafka.KafkaConfig;
 import storm.kafka.KafkaSpout;
 import storm.kafka.SpoutConfig;
-import storm.kafka.ZkHosts;
 
 import java.util.Map;
 
@@ -31,13 +30,12 @@ public class LumifyKafkaSpout extends KafkaSpout {
         this.queueName = queueName;
     }
 
-    private static SpoutConfig createConfig(Configuration configuration, String queueName, MultiScheme scheme, Long startOffsetTime) {
+    private static SpoutConfig createConfig(Configuration configuration, String queueName, Scheme scheme, Long startOffsetTime) {
         if (scheme == null) {
             scheme = new KafkaJsonEncoder();
         }
-        BrokerHosts hosts = new ZkHosts(configuration.get(Configuration.ZK_SERVERS), "/kafka/brokers");
         SpoutConfig spoutConfig = new SpoutConfig(
-                hosts,
+                new KafkaConfig.ZkHosts(configuration.get(Configuration.ZK_SERVERS), "/kafka/brokers"),
                 queueName,
                 "/kafka/consumers",
                 queueName);
