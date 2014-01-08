@@ -6,7 +6,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Singleton;
 import kafka.javaapi.producer.Producer;
-import kafka.javaapi.producer.ProducerData;
+import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,7 +54,7 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
 
         json.put("sourceBolt", getClass().getName());
 
-        ProducerData<String, JSONObject> data = new ProducerData<String, JSONObject>(queueName, json);
+        KeyedMessage<String, JSONObject> data = new KeyedMessage<String, JSONObject>(queueName, json);
         kafkaProducer.send(data);
     }
 }
