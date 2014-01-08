@@ -49,8 +49,8 @@
             <scope>${cluster.dependency.scope}</scope>
         </dependency>
         <dependency>
-            <groupId>storm</groupId>
-            <artifactId>storm-kafka</artifactId>
+            <groupId>net.wurstmeister.storm</groupId>
+            <artifactId>storm-kafka-0.8-plus</artifactId>
         </dependency>
     </dependencies>
 
