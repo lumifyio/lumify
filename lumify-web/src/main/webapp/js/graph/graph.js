@@ -317,6 +317,16 @@ define([
                             });
                         }
 
+                        if (/^(image|video)$/i.test(vertex.concept.displayType)) {
+                            _.delay(function() {
+                                previews.generatePreview(vertex, { width:178 * retina.devicePixelRatio }, function(dataUri) {
+                                    if (dataUri) {
+                                        cyNode.css('background-image', dataUri);
+                                    }
+                                });
+                            }, 500);
+                        }
+
                     });
 
                     if (options.fit && cy.nodes().length) {
