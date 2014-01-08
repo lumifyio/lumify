@@ -209,8 +209,7 @@ define([
                 .done(function(data) {
                     var resolvedVertex = {
                         id: data.entityVertex.id,
-                        _conceptType: data.entityVertex.properties._conceptType,
-                        _type: data.entityVertex.properties._type
+                        _conceptType: data.entityVertex.properties._conceptType
                     };
                     $detectedObjectTag.parent().remove();
                     self.trigger('DetectedObjectLeave', $detectedObjectTag.data('info'));
