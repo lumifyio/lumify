@@ -14,13 +14,8 @@
                 data-date-relative="<%= relativeDate %>"
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
-
     <% } else if (audit.entityAudit && audit.entityAudit.title) { %>
 
-       <span class="audit-message">
-        <%= audit.data.action %>
-        <%= audit.data.type %> 
-        <a data-info="<%= createInfoJsonFromAudit(audit.entityAudit) %>" href="#v=<%= audit.entityAudit.id %>" class="audit-to entity resolved"><%= audit.entityAudit.title %></a>
        <span class="audit-subtitle">
           <span class="audit-user" 
                 data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
@@ -28,8 +23,21 @@
                 data-date-relative="<%= relativeDate %>"
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
+       <span class="audit-message">
+        <%= audit.data.action %>
+        <%= audit.data.type %> 
+        <a data-info="<%= createInfoJsonFromAudit(audit.entityAudit) %>" href="#v=<%= audit.entityAudit.id %>" class="audit-to entity resolved"><%= audit.entityAudit.title %></a>
+       </span>
 
     <% } else if (audit.relationshipAudit && audit.relationshipAudit.label) { %>
+
+       <span class="audit-subtitle">
+          <span class="audit-user" 
+                data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
+          <span class="audit-date" 
+                data-date-relative="<%= relativeDate %>"
+                data-date="<%= absoluteDate %>"><%= relativeDate %></span>
+       </span>
 
        <span class="audit-message">
         <%= audit.data.action %>
@@ -42,17 +50,9 @@
         <% } %>
        </span>
 
-       <span class="audit-subtitle">
-          <span class="audit-user" 
-                data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
-          <span class="audit-date" 
-                data-date-relative="<%= relativeDate %>"
-                data-date="<%= absoluteDate %>"><%= relativeDate %></span>
-       </span>
 
 
     <% } else { %>
-       <span class="audit-message"><%= audit.data.action %> <%= audit.data.type %></span>
        <span class="audit-subtitle">
           <span class="audit-user" 
                 data-user-id="<%= audit.data.userId %>"><%= audit.data.userName %></span>,
@@ -60,5 +60,6 @@
                 data-date-relative="<%= relativeDate %>"
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
+       <span class="audit-message"><%= audit.data.action %> <%= audit.data.type %></span>
     <% } %>
 </li>

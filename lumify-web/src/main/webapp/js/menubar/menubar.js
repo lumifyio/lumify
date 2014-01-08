@@ -15,7 +15,7 @@ define([
         var BUTTONS = 'dashboard graph map search workspaces activity users metrics prefs';
         var TOOLTIPS = {
             dashboard: 'Dashboard',
-            graph: 'Graph',
+            graph: { html:'Graph<span class="subtitle">2D / 3D</span>' },
             map: 'Map',
             search: 'Search',
             workspaces: 'Workspaces',
@@ -55,6 +55,8 @@ define([
                 }
                 if (isSwitch && icon.hasClass('active')) {
 
+                    icon.toggleClass('toggled');
+
                     // Special case to toggle 2d/3d graph
                     if (name === 'graph') {
                         this.trigger(document, 'toggleGraphDimensions');
@@ -73,7 +75,8 @@ define([
             Object.keys(TOOLTIPS).forEach(function(selectorClass) {
                 self.$node.find('.' + selectorClass).tooltip({ 
                     placement: 'right',
-                    title: TOOLTIPS[selectorClass],
+                    html: true,
+                    title: TOOLTIPS[selectorClass].html || TOOLTIPS[selectorClass],
                     delay: { show: 250, hide:0 }
                 });
             });

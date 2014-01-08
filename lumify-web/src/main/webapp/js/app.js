@@ -37,7 +37,7 @@ define([
             workspaceOverlaySelector: '.workspace-overlay',
             helpDialogSelector: '.help-dialog',
             usersSelector: '.users-pane',
-            graphSelector: '.graph-pane-2d',
+            graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
             detailPaneSelector: '.detail-pane'
         });
@@ -184,12 +184,12 @@ define([
 
             require(['graph/3d/graph'], function(Graph3D) {
                 if (!self._graphDimensions || self._graphDimensions === 2) {
-                    node2d.hide();
-                    Graph3D.attachTo(node3d.show());
+                    node2d.removeClass('visible');
+                    Graph3D.attachTo(node3d.addClass('visible'));
                     self._graphDimensions = 3;
                 } else {
-                    node3d.hide();
-                    Graph.attachTo(node2d.show());
+                    node3d.removeClass('visible');
+                    node2d.addClass('visible');
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }
@@ -201,35 +201,36 @@ define([
         };
 
         this.toggleDisplay = function(e, data) {
-            var SLIDE_OUT = 'search workspaces';
-            var pane = this.select(data.name + 'Selector');
+            var SLIDE_OUT = 'search workspaces',
+                pane = this.select(data.name + 'Selector'),
+                isVisible = pane.is('.visible');
 
-            if (data.name === 'graph' && !pane.hasClass('visible')) {
-                this.trigger(document, 'mapHide');
-                this.trigger(document, 'graphShow');
-            } else if (data.name === 'map' && !pane.hasClass('visible')) {
-                this.trigger(document, 'graphHide');
+            if (data.name === 'map' && !pane.hasClass('visible')) {
                 this.trigger(document, 'mapShow', (data && data.data) || {});
             }
 
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
-                var self = this, 
-                    visible = pane.hasClass('visible');
+                var self = this;
 
                 pane.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
                     pane.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
-                    if (!visible) {
+                    if (!isVisible) {
                         self.trigger(data.name + 'PaneVisible');
                     }
                     self.triggerPaneResized();
                 });
             } else this.triggerPaneResized();
 
-            pane.toggleClass('visible');
+            // Can't toggleClass because if only one is visible we want to hide all
+            if (isVisible) {
+                pane.removeClass('visible');
+            } else if (data.name === 'graph') {
+                pane.filter('.graph-pane-' + (this._graphDimensions || 2) + 'd').addClass('visible');
+            } else pane.addClass('visible');
 
             this.trigger('didToggleDisplay', {
                 name: data.name,
-                visible: pane.is('.visible')
+                visible: isVisible
             })
         };
 
@@ -323,7 +324,7 @@ define([
             this.collapseAllPanes();
 
             var graph = this.select('graphSelector');
-            if ( ! graph.hasClass('visible') ) {
+            if ( ! graph.is('.visible') ) {
                 self.trigger(document, 'menubarToggleDisplay', { name:graph.data(DATA_MENUBAR_NAME), syncToRemote:false });
             }
         };

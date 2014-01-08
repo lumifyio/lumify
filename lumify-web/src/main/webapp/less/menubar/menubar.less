@@ -10,17 +10,31 @@ background: @menubar-background;
   .reset-list;
 
   a {
-    opacity: 0.5;
-    font-size: 0;
-    display: block;
-    height: 40px;
-    cursor: pointer;
     background: transparent;
-    background-size: 65%;
-    background-position: center;
+    background-size: auto 20px;
     background-repeat: no-repeat;
+    background-position: center 5px;
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-family: "HelveticaNeue-CondensedBold";        
+    font-size: 70%;
+    margin: 2px 0;
+    opacity: 0.5;
+    padding-top: 25px;
+    padding-bottom: 5px;
+    text-align: center;    
+    text-decoration: none;
 
     .transition(opacity 0.2s ease-in-out);
+  }
+
+  .activity, .dashboard {
+    background-position: center;    
+    font-size: 0;
+    a {
+      padding: 5px 0;
+    }
   }
 
   li.active a {
@@ -46,12 +60,27 @@ background: @menubar-background;
     background-image: url(/img/glyphicons/white/glyphicons_153_more_windows@2x.png);
   }
 
-  .graph a { 
-    background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+  .graph { 
+    a {
+      background-image: url(/img/glyphicons/white/glyphicons_326_share@2x.png);
+    }
+    &.toggled a {
+      background-image: url(/img/graph-3d.png);
+      background-position: center top;
+      background-size: 80%;
+    }
   }
+
+  .tooltip-inner .subtitle {
+    margin-left: 0.5em;
+    color: #ccc;
+    white-space: nowrap;
+    font-size: 90%;
+  }
+
   .map a { 
     background-image: url(/img/glyphicons/white/glyphicons_242_google_maps@2x.png);
-    background-size: 51%;
+    background-size: auto 23px;
   }
 
   .search a { 
@@ -67,8 +96,7 @@ background: @menubar-background;
 
     a {
       background-image: url(/img/glyphicons/white/glyphicons_245_chat@2x.png);
-      background-size: 70%;
-
+      background-size: auto 19px;
     }
   }
   .metrics a { background-image: url(/img/glyphicons/white/glyphicons_041_charts@2x.png); }

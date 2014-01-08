@@ -76,6 +76,8 @@ define([
         });
 
         this.onVerticesDropped = function(event, data) {
+            if (!this.$node.is(':visible')) return;
+
             this.addVertices(data.vertices);
             this.trigger(document, 'addVertices', data);
         };
@@ -137,7 +139,14 @@ define([
                 this.addVertices(data.vertices);
             }
         };
-        this.onVerticesDeleted = function() {
+        this.onVerticesDeleted = function(event, data) {
+            var self = this;
+
+            data.vertices.forEach(function(v) {
+                self.graph.removeNode(v.id);
+            });
+
+            self.graph.needsUpdate = true;
         };
         this.onVerticesUpdated = function() {
         };

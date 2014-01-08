@@ -144,7 +144,7 @@ public class ArtifactRawByRowKey extends BaseRequestHandler {
     }
 
     private String getFileName(Artifact artifact) {
-        return artifact.getMetadata().getFileName() + "." + artifact.getMetadata().getFileExtension();
+        return artifact.getMetadata().getFileName();
     }
 
     private String getMimeType(Artifact artifact) {
