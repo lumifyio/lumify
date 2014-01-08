@@ -40,7 +40,7 @@ define(
             });
         };
 
-        VertexService.prototype.getRelationships = function(ids) {
+        VertexService.prototype.getRelationships = function (ids) {
             return this._ajaxPost({
                 url: 'entity/relationships',
                 data: {
@@ -49,7 +49,7 @@ define(
             });
         };
 
-        VertexService.prototype.deleteEdge = function(sourceId, targetId, label) {
+        VertexService.prototype.deleteEdge = function (sourceId, targetId, label) {
             return this._ajaxPost({
                 url: '/vertex/removeRelationship',
                 data: {
@@ -71,14 +71,14 @@ define(
             });
         };
 
-        VertexService.prototype.findPath = function(data) {
+        VertexService.prototype.findPath = function (data) {
             return this._ajaxGet({
                 url: 'graph/findPath',
                 data: data
             });
         };
 
-        VertexService.prototype.locationSearch = function(lat, lon, radiuskm) {
+        VertexService.prototype.locationSearch = function (lat, lon, radiuskm) {
             return this._ajaxGet({
                 url: 'graph/vertex/geoLocationSearch',
                 data: {
@@ -89,7 +89,7 @@ define(
             });
         };
 
-        VertexService.prototype.getStatementByRowKey = function(statementRowKey) {
+        VertexService.prototype.getStatementByRowKey = function (statementRowKey) {
             return this._get("statement", statementRowKey);
         };
 
@@ -110,13 +110,21 @@ define(
             data.q = query.query || query;
             data.filter = JSON.stringify(filters || []);
 
-            return this._ajaxGet({ 
+            return this._ajaxGet({
                 url: 'graph/vertex/search',
                 data: data
             });
         };
 
-        VertexService.prototype.getRelatedVertices = function(data) {
+        VertexService.prototype.getArtifactHighlightedTextById = function (graphVertexId) {
+            return this._ajaxGet({
+                dataType: 'html',
+                url: "artifact/" + graphVertexId + "/highlightedText"
+            });
+        };
+
+
+        VertexService.prototype.getRelatedVertices = function (data) {
             return this._ajaxGet({
                 url: 'graph/' + encodeURIComponent(data.graphVertexId) + '/relatedVertices',
                 data: {
@@ -125,14 +133,14 @@ define(
             });
         };
 
-        VertexService.prototype.getVertexRelationships = function(graphVertexId, paging) {
+        VertexService.prototype.getVertexRelationships = function (graphVertexId, paging) {
             return this._ajaxGet({
                 url: 'vertex/' + graphVertexId + '/relationships',
                 data: paging || {}
             });
         };
 
-        VertexService.prototype.getVertexProperties = function(graphVertexId) {
+        VertexService.prototype.getVertexProperties = function (graphVertexId) {
             return this._ajaxGet({ url: 'vertex/' + graphVertexId + '/properties'});
         };
 
@@ -144,13 +152,13 @@ define(
             return this._ajaxGet({
                 url: url,
                 data: {
-                    'q' : q
+                    'q': q
                 }
             });
         };
 
         VertexService.prototype._get = function (resource, id) {
-            if(!id) {
+            if (!id) {
                 throw new Error("Invalid or no id specified for resource '" + resource + "'");
             }
 
@@ -161,35 +169,35 @@ define(
             });
         };
 
-        VertexService.prototype.createTerm = function(createRequest) {
+        VertexService.prototype.createTerm = function (createRequest) {
             return this._ajaxPost({
                 url: 'entity/createTerm',
                 data: createRequest
             });
         };
 
-        VertexService.prototype.updateTerm = function(updateRequest) {
+        VertexService.prototype.updateTerm = function (updateRequest) {
             return this._ajaxPost({
                 url: 'entity/updateTerm',
                 data: updateRequest
             });
         };
 
-        VertexService.prototype.resolveDetectedObject = function(createRequest) {
+        VertexService.prototype.resolveDetectedObject = function (createRequest) {
             return this._ajaxPost({
                 url: 'entity/createResolvedDetectedObject',
                 data: createRequest
             });
         };
 
-        VertexService.prototype.updateDetectedObject = function(updateRequest) {
+        VertexService.prototype.updateDetectedObject = function (updateRequest) {
             return this._ajaxPost({
                 url: 'entity/updateResolvedDetectedObject',
                 data: updateRequest
             });
         };
 
-        VertexService.prototype.deleteDetectedObject = function(deleteRequest) {
+        VertexService.prototype.deleteDetectedObject = function (deleteRequest) {
             return this._ajaxPost({
                 url: 'entity/deleteResolvedDetectedObject',
                 data: deleteRequest
