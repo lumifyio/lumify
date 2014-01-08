@@ -33,7 +33,7 @@ public class LumifyKafkaSpout extends KafkaSpout {
 
     private static SpoutConfig createConfig(Configuration configuration, String queueName, MultiScheme scheme, Long startOffsetTime) {
         if (scheme == null) {
-            scheme = new KafkaJsonEncoder(null);
+            scheme = new KafkaJsonEncoder();
         }
         BrokerHosts hosts = new ZkHosts(configuration.get(Configuration.ZK_SERVERS), "/kafka/brokers");
         SpoutConfig spoutConfig = new SpoutConfig(

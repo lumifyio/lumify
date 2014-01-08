@@ -20,8 +20,8 @@ public class SystemUser extends User {
         String className = "com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext";
         try {
             return (ModelUserContext) Class.forName(className).newInstance();
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create: " + className, ex);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not create: " + className);
         }
     }
 }
