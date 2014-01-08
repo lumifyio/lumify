@@ -40,7 +40,6 @@ public class BaseOntology {
             conceptType = graph.makeType().name(PropertyName.CONCEPT_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
         }
 
-
         TitanKey displayTypeProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_TYPE.toString());
         if (displayTypeProperty == null) {
             graph.makeType().name(PropertyName.DISPLAY_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
@@ -126,33 +125,23 @@ public class BaseOntology {
         if (colorProperty == null) {
             graph.makeType().name(PropertyName.COLOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
         }
+        graph.commit();
 
         TitanKey geoLocationProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION.toString());
         if (geoLocationProperty == null) {
-            graph.makeType().name(PropertyName.GEO_LOCATION.toString()).dataType(Geoshape.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, user);
         }
 
         TitanKey geoLocationDescriptionProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         if (geoLocationDescriptionProperty == null) {
-            graph.makeType().name(PropertyName.GEO_LOCATION_DESCRIPTION.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING, user);
         }
-
-        TitanKey publishedDateProperty = (TitanKey) graph.getType(PropertyName.PUBLISHED_DATE.toString());
-        if (publishedDateProperty == null) {
-            graph.makeType().name(PropertyName.PUBLISHED_DATE.toString()).dataType(Long.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
-        TitanKey sourceProperty = (TitanKey) graph.getType(PropertyName.SOURCE.toString());
-        if (sourceProperty == null) {
-            graph.makeType().name(PropertyName.SOURCE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
 
         TitanKey authorProperty = (TitanKey) graph.getType(PropertyName.AUTHOR.toString());
         if (authorProperty == null) {
-            graph.makeType().name(PropertyName.AUTHOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
         }
-        graph.commit();
+        graphSession.commit();
 
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
         ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
