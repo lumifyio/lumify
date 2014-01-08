@@ -6,8 +6,8 @@
       <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">
-      <li><a class="" href="/artifact/<%= vertex.id %>/raw" target="_blank">Open <%= vertex.properties._conceptType %></a></li>
-      <li><a class="" href="/artifact/<%= vertex.id %>/raw?download=true" target="_blank">Download <%= vertex.properties._conceptType %></a></li>
+      <li><a class="" href="/artifact/<%= vertex.id %>/raw" target="_blank">Open <%= vertex.concept.displayType %></a></li>
+      <li><a class="" href="/artifact/<%= vertex.id %>/raw?download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
     </ul>
   </div>
 
