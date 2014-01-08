@@ -65,8 +65,11 @@ define([
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
                     type = vertices[0].concept.displayType;
-
-                moduleName = (((type != 'document' && type != 'image' && type != 'video') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+                if (type === 'relationship') {
+                    moduleName = type;
+                } else {
+                    moduleName = (((type != 'document' && type != 'image' && type != 'video') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+                }
                 moduleData = vertex;
             } else {
                 moduleName = edges[0].properties._type;
