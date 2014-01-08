@@ -92,7 +92,7 @@ public class TermMentionOffsetItem extends OffsetItem {
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
             if (getConceptGraphVertexId() != null) {
-                infoJson.put("_subType", getConceptGraphVertexId());
+                infoJson.put("_conceptType", getConceptGraphVertexId());
             }
             if (getLongitude() != null && getLatitude() != null) {
                 infoJson.put("longitude", getLongitude());
@@ -112,7 +112,7 @@ public class TermMentionOffsetItem extends OffsetItem {
             classes.add("resolved");
         }
         if (getConceptGraphVertexId() != null) {
-            classes.add("subType-" + getConceptGraphVertexId());
+            classes.add("conceptType-" + getConceptGraphVertexId());
         }
         return classes;
     }
