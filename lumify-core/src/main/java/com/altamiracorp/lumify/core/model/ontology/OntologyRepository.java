@@ -73,7 +73,7 @@ public class OntologyRepository {
 
     public Property getProperty(String propertyName, User user) {
         Iterator<Vertex> properties = graphSession.getGraph().query()
-                .has(PropertyName.CONCEPT_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
                 .vertices()
                 .iterator();

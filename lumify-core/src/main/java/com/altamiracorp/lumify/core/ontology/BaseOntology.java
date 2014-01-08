@@ -157,7 +157,6 @@ public class BaseOntology {
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
         ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
         ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.DISPLAY_TYPE.toString(), "display type", PropertyType.STRING, user);
         graph.commit();
 
         // TermMention concept
