@@ -151,12 +151,12 @@ define([
             var cls = [],
                 props = vertex.properties || vertex;
 
-            if (props._type === 'artifact') {
+            if (vertex.concept.displayType === 'document' || vertex.concept.displayType === 'image' || vertex.concept.displayType === 'video') {
                 cls.push('artifact');
-                cls.push(props._subType);
+                cls.push(props._conceptType);
             } else {
                 cls.push('entity resolved');
-                cls.push('subType-' + props._subType);
+                cls.push('conceptType-' + props._conceptType);
             }
             cls.push('gId-' + (vertex.id || props.graphNodeId));
 

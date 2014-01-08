@@ -205,11 +205,11 @@ define([
             $detectedObjectTag.closest('.detected-object-tag').addClass('loading');
             $(event.target).replaceWith($loading);
 
-            this.entityService.deleteDetectedObject(info)
+            this.vertexService.deleteDetectedObject(info)
                 .done(function(data) {
                     var resolvedVertex = {
                         id: data.entityVertex.id,
-                        _subType: data.entityVertex.properties._subType,
+                        _conceptType: data.entityVertex.properties._conceptType,
                         _type: data.entityVertex.properties._type
                     };
                     $detectedObjectTag.parent().remove();
@@ -264,7 +264,7 @@ define([
             var resolvedVertex = {
                 graphVertexId: dataInfo.graphVertexId,
                 _rowKey: dataInfo._rowKey,
-                _subType: dataInfo._subType,
+                _conceptType: dataInfo._conceptType,
                 title: dataInfo.title
             };
 

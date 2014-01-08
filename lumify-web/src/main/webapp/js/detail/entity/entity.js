@@ -73,7 +73,7 @@ define([
                 this.handleCancelling(appData.refresh(this.attr.data)),
                 this.handleCancelling(ontologyService.concepts())
             ).done(function(vertex, concepts) {
-                var concept = concepts.byId[self.attr.data.properties._subType];
+                var concept = concepts.byId[self.attr.data.properties._conceptType];
 
                 self.$node.html(template({
                     vertex: self.attr.data,
@@ -83,7 +83,7 @@ define([
 
                 Image.attachTo(self.select('glyphIconSelector'), {
                     data: self.attr.data,
-                    service: self.entityService,
+                    service: self.vertexService,
                     defaultIconSrc: concept && concept.glyphIconHref || ''
                 });
 

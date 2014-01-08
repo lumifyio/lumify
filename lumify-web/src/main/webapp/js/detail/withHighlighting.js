@@ -162,7 +162,7 @@ define([
                                         DIM: 2,
                                         TERM: 3
                                     },
-                                    className = concept.className || 'entity.subType-' + concept.id,
+                                    className = concept.className || 'entity.conceptType-' + concept.id,
                                     definition = function(state) {
                                         return tpl({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
                                     };

@@ -39,7 +39,7 @@ define([
             var info = $(this.attr.mentionNode).removeClass('focused').data('info');
 
             if (info) {
-                this.updateConceptLabel(info._subType);
+                this.updateConceptLabel(info._conceptType);
             }
 
             // Remove extra textNodes
@@ -99,7 +99,7 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                this.updateConceptSelect(info && info._subType || '').show();
+                this.updateConceptSelect(info && info._conceptType || '').show();
                 if (newGraphVertexId && initial && !this.attr.coords) {
                     this.select('resolveButtonSelector')
                         .hide();
@@ -236,7 +236,7 @@ define([
                     var resolvedVertex ={
                         graphVertexId: data.entityVertex.graphVertexId,
                         _rowKey: data.entityVertex._rowKey,
-                        _subType: data.entityVertex._subType,
+                        _conceptType: data.entityVertex._conceptType,
                         _type: data.entityVertex._type,
                         title: data.entityVertex.title,
                         info: data.entityVertex.info
@@ -262,14 +262,14 @@ define([
 
                     $allDetectedObjectLabels.each(function(){
                         if(parseFloat($(this).data("info").x1) > data.entityVertex.x1){
-                            $tag.removePrefixedClasses('subType-').addClass('subType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
+                            $tag.removePrefixedClasses('conceptType-').addClass('conceptType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
                             added = true;
                             return false;
                         }
                     });
 
                     if (!added){
-                        $tag.addClass('subType-' + parameters.conceptId);
+                        $tag.addClass('conceptType-' + parameters.conceptId);
                         $allDetectedObjects.append($parentSpan);
                     }
                     $tag.attr('data-info', JSON.stringify(data.entityVertex));
@@ -295,7 +295,7 @@ define([
             var resolvedVertex = {
                 graphVertexId: data.entityVertex.graphVertexId,
                 _rowKey: data.entityVertex._rowKey,
-                _subType: data.entityVertex._subType,
+                _conceptType: data.entityVertex._conceptType,
                 _type: data.entityVertex._type,
                 title: data.entityVertex.title,
                 info: data.entityVertex.info
@@ -303,8 +303,8 @@ define([
             var $focused = $('.focused');
             var $tag = $focused.find('.label-info');
 
-            $tag.text(data.entityVertex.title).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('subType-');
-            $tag.addClass('resolved entity subType-' + conceptId);
+            $tag.text(data.entityVertex.title).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
+            $tag.addClass('resolved entity conceptType-' + conceptId);
 
             if (!$focused.children().hasClass('delete-tag')){
                 var $buttonTag = $('<span>').addClass('delete-tag').text('x');
@@ -336,7 +336,7 @@ define([
             if (this.allConcepts && this.allConcepts.length) {
 
                 vertex = $(vertex || this.promoted || this.attr.mentionNode);
-                var classPrefix = 'subType-',
+                var classPrefix = 'conceptType-',
                     labels = this.allConcepts.map(function(c) {
                         return classPrefix + c.id;
                     });
@@ -413,7 +413,7 @@ define([
 
             if (!vertex && info && !conceptId) {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var concept = self.conceptForSubType(info._subType, allConcepts);
+                    var concept = self.conceptForConceptType(info._conceptType, allConcepts);
                     if (concept) {
                         updateCss(concept.glyphIconHref);
                     }
@@ -422,9 +422,9 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var subType = conceptId || (vertex && vertex.properties._subType);
-                    if (subType) {
-                        var concept = self.conceptForSubType(subType, allConcepts);
+                    var conceptType = conceptId || (vertex && vertex.properties._conceptType);
+                    if (conceptType) {
+                        var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {
                             updateCss(concept.glyphIconHref);
                             return;
@@ -451,8 +451,8 @@ define([
             }
         };
 
-        this.conceptForSubType = function(subType, allConcepts) {
-            return _.findWhere(allConcepts, { id:subType });
+        this.conceptForConceptType = function(conceptType, allConcepts) {
+            return _.findWhere(allConcepts, { id:conceptType });
         };
 
         this.registerEvents = function() {
@@ -502,7 +502,7 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (self.attr.existing && vertexInfo && vertexInfo._subType) || ''
+                    selectedConceptId: (self.attr.existing && vertexInfo && vertexInfo._conceptType) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -629,7 +629,7 @@ define([
                                 item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title]),
                             icon = '',
                             concept = _.find(self.allConcepts, function(c) { 
-                                    return item.properties && c.id === item.properties._subType; 
+                                    return item.properties && c.id === item.properties._conceptType;
                             });
 
                         if (item.properties) {

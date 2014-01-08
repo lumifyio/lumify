@@ -31,7 +31,7 @@
 <div class='detected-object-labels'>
   <% (vertex.properties._detectedObjects || []).forEach(function(object) {
     if (object.graphVertexId) {
-        var classes = 'label-info detected-object resolved entity subType-' + object._conceptType;%>
+        var classes = 'label-info detected-object resolved entity conceptType-' + object._conceptType;%>
         <span class="label detected-object-tag">
             <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.concept %></a><a class="delete-tag">&times;</a>
         </span>
