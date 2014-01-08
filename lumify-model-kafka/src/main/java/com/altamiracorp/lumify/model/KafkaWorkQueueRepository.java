@@ -27,10 +27,10 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
 
         synchronized (kafkaProducerLock) {
             if (kafkaProducer == null) {
-                String zkServerNames = config.get(Configuration.ZK_SERVERS) + KAFKA_PATH_PREFIX;
+                String zkServerNames = fixZkServerNames("" + config.get(Configuration.ZK_SERVERS));
                 LOGGER.info("Kafka Work Queue Repository zkServerNames: %s", zkServerNames);
                 Properties props = new Properties();
-                props.put("zk.connect", zkServerNames);
+                props.put("metadata.broker.list", zkServerNames);
                 props.put("serializer.class", KafkaJsonEncoder.class.getName());
                 ProducerConfig producerConfig = new ProducerConfig(props);
                 try {
@@ -40,6 +40,21 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
                 }
             }
         }
+    }
+
+    private String fixZkServerNames(String zkServerNames) {
+        String[] zkServerNamesArray = zkServerNames.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < zkServerNamesArray.length; i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(zkServerNamesArray[i]);
+            if (zkServerNamesArray[i].indexOf(':') < 0) {
+                sb.append(":9092");
+            }
+        }
+        return sb.toString();
     }
 
     @Override
