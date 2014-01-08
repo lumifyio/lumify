@@ -93,7 +93,7 @@ define(
             return this._get("statement", statementRowKey);
         };
 
-        VertexService.prototype.graphVertexSearch = function (query, filters, subType, paging) {
+        VertexService.prototype.graphVertexSearch = function (query, filters, conceptType, paging) {
             if (typeof filters === 'function') {
                 callback = filters;
                 filters = [];
@@ -101,7 +101,7 @@ define(
 
             var data = {};
 
-            if (subType) data.subType = subType;
+            if (conceptType) data.conceptType = conceptType;
             if (paging) {
                 if (paging.offset) data.offset = paging.offset;
                 if (paging.size) data.size = paging.size;

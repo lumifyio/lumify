@@ -383,10 +383,10 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphPagedResults search(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
+    public GraphPagedResults search(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String conceptType) {
         try {
-            GraphPagedResults titanResults = this.searchTitan(query, filterJson, user, offsetStart, offsetEnd, subType);
-            GraphPagedResults searchIndexResults = this.searchIndex(query, filterJson, user, (int) offsetStart, (int) offsetEnd, subType);
+            GraphPagedResults titanResults = this.searchTitan(query, filterJson, user, offsetStart, offsetEnd, conceptType);
+            GraphPagedResults searchIndexResults = this.searchIndex(query, filterJson, user, (int) offsetStart, (int) offsetEnd, conceptType);
 
             Map<String, List<GraphVertex>> combinedResults = titanResults.getResults();
             Map<String, Integer> combinedCount = titanResults.getCount();
@@ -410,7 +410,7 @@ public class TitanGraphSession extends GraphSession {
         }
     }
 
-    public GraphPagedResults searchTitan(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
+    public GraphPagedResults searchTitan(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String conceptType) {
         GraphPagedResults results = new GraphPagedResults();
         final List<String> tokens = LuceneTokenizer.standardTokenize(query);
 
@@ -432,9 +432,24 @@ public class TitanGraphSession extends GraphSession {
 
             HashMap<Object, Number> map = new HashMap<Object, Number>();
             Collection<Vertex> vertexList;
-            if (subType != null) {
-                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, subType).range((int) offsetStart, (int) offsetEnd).toList();
-                map.put(subType, vertexList.size());
+            if (conceptType != null) {
+                Vertex concept = graph.getVertex(conceptType);
+                if (concept != null) {
+
+                    // FIXME: filter if doesn't match any of the types
+                    // vertexPipeline.or() ?
+                    vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, concept.getId());
+
+                    Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
+                    if (children != null) {
+                        for (Vertex child : children) {
+                            vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, child.getId());
+                        }
+                    }
+                }
+
+                vertexList = (Collection<Vertex>) vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
+                map.put(conceptType, vertexList.size());
             } else {
                 vertexList = vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
                 countPipeline.property(PropertyName.CONCEPT_TYPE.toString()).groupCount(map).iterate();
@@ -461,7 +476,7 @@ public class TitanGraphSession extends GraphSession {
         return results;
     }
 
-    public GraphPagedResults searchIndex(String query, JSONArray filter, User user, int page, int pageSize, String subType) throws Exception {
+    public GraphPagedResults searchIndex(String query, JSONArray filter, User user, int page, int pageSize, String conceptType) throws Exception {
         ArtifactSearchPagedResults artifactSearchResults;
         GraphPagedResults pagedResults = new GraphPagedResults();
 
@@ -471,7 +486,7 @@ public class TitanGraphSession extends GraphSession {
             pageSize = 100;
         }
 
-        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, subType);
+        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, conceptType);
 
         for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
             List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());

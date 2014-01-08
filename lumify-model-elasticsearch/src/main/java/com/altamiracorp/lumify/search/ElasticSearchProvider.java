@@ -153,7 +153,7 @@ public class ElasticSearchProvider extends SearchProvider {
     }
 
     @Override
-    public ArtifactSearchPagedResults searchArtifacts(String query, User user, int offset, int size, String subType) throws Exception {
+    public ArtifactSearchPagedResults searchArtifacts(String query, User user, int offset, int size, String conceptType) throws Exception {
 
         SearchRequestBuilder requestBuilder = client.prepareSearch(ES_INDEX)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
@@ -164,8 +164,8 @@ public class ElasticSearchProvider extends SearchProvider {
                 .addFacet(FacetBuilders.termsFacet(FIELD_CONCEPT_TYPE).field(FIELD_CONCEPT_TYPE))
                 .addFields(FIELD_SUBJECT, FIELD_GRAPH_VERTEX_ID, FIELD_SOURCE, FIELD_PUBLISHED_DATE, FIELD_CONCEPT_TYPE);
 
-        if (subType != null) {
-            requestBuilder.setFilter(FilterBuilders.inFilter(FIELD_CONCEPT_TYPE, subType));
+        if (conceptType != null) {
+            requestBuilder.setFilter(FilterBuilders.inFilter(FIELD_CONCEPT_TYPE, conceptType));
         }
 
         SearchResponse response = requestBuilder.execute().actionGet();

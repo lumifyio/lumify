@@ -358,7 +358,7 @@ define([
             this.vertexService.graphVertexSearch(
                     query,
                     this.filters,
-                    data.verticesSubType,
+                    data.conceptType,
                     data.paging
             ).done(function(results) {
 
