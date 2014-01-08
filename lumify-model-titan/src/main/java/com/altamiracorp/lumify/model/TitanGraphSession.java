@@ -389,14 +389,17 @@ public class TitanGraphSession extends GraphSession {
             GraphPagedResults searchIndexResults = this.searchIndex(query, filterJson, user, (int) offsetStart, (int) offsetEnd, subType);
 
             Map<String, List<GraphVertex>> combinedResults = titanResults.getResults();
+            Map<String, Integer> combinedCount = titanResults.getCount();
             Map<String, List<GraphVertex>> indexResults = searchIndexResults.getResults();
 
             for (String type : indexResults.keySet()) {
                 List<GraphVertex> typeVertices = indexResults.get(type);
+                int size = typeVertices.size();
                 if (combinedResults.containsKey(type)) {
                     combinedResults.get(type).addAll(typeVertices);
                 } else {
                     combinedResults.put(type, typeVertices);
+                    combinedCount.put(type, size);
                 }
             }
 
