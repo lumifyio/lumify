@@ -27,17 +27,16 @@ require([
     'underscore',
 
     'util/visibility',
+    'service/user',
 
     'easing',
     'scrollStop',
     'bootstrap-datepicker'
 ],
-function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advice, withLogging, debug, _, Visibility) {
+function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advice, withLogging, debug, _, Visibility, UserService) {
     'use strict';
 
     configureApplication();
-
-    loadApplicationTypeBasedOnUrlHash();
 
     function configureApplication() {
         // Flight Logging
@@ -50,6 +49,8 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
 
         Visibility.attachTo(document);
         $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
+
+        loadApplicationTypeBasedOnUrlHash();
     }
 
     /**
@@ -72,27 +73,43 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
             return;
         }
 
-        $('html')
-            .toggleClass('fullscreenApp', mainApp)
-            .toggleClass('fullscreenDetails', popoutDetails)
-        window.isFullscreenDetails = popoutDetails;
-        
-        if (popoutDetails) {
-            require(['appFullscreenDetails'], function(PopoutDetailsApp) {
-                PopoutDetailsApp.teardownAll();
-                PopoutDetailsApp.attachTo('#app', {
-                    graphVertexIds: ids
+        new UserService().isLoginRequired()
+            .done(function() {
+                attachApplication(false);
+            })
+            .fail(function() {
+                attachApplication(true);
+            });
+
+
+        function attachApplication(loginRequired) {
+            $('html')
+                .toggleClass('fullscreenApp', mainApp)
+                .toggleClass('fullscreenDetails', popoutDetails)
+            window.isFullscreenDetails = popoutDetails;
+            
+            if (loginRequired) {
+                require(['login'], function(Login) {
+                    Login.teardownAll();
+                    Login.attachTo('#app');
                 });
-            });
-        } else {
-            require(['app'], function(App) {
-                if (event) {
-                    location.replace(location.href);
-                } else {
-                    App.teardownAll();
-                    App.attachTo('#app');
-                }
-            });
+            } else if (popoutDetails) {
+                require(['appFullscreenDetails'], function(PopoutDetailsApp) {
+                    PopoutDetailsApp.teardownAll();
+                    PopoutDetailsApp.attachTo('#app', {
+                        graphVertexIds: ids
+                    });
+                });
+            } else {
+                require(['app'], function(App) {
+                    if (event) {
+                        location.replace(location.href);
+                    } else {
+                        App.teardownAll();
+                        App.attachTo('#app');
+                    }
+                });
+            }
         }
     }
 
