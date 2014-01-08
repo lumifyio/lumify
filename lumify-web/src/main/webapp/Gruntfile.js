@@ -113,7 +113,7 @@ module.exports = function(grunt) {
             }
         },
         scripts: {
-            files: ['Gruntfile.js', 'js/**/*.js'],
+            files: ['Gruntfile.js', 'js/**/*.js', 'js/**/*.ejs'],
             tasks: ['requirejs:development'],
             options: {
                 spawn: true
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
                 spawn: true
             }
         }
-    },
+    }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
