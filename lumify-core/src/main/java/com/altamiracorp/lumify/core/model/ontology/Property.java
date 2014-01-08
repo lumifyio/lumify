@@ -28,6 +28,8 @@ public abstract class Property extends GraphVertex {
 
     public abstract String getDisplayName();
 
+    public abstract String getDisplayType();
+
     public abstract PropertyType getDataType();
 
     public static JSONArray toJsonProperties(List<Property> properties) {
@@ -44,6 +46,7 @@ public abstract class Property extends GraphVertex {
             json.put("id", getId());
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
+            json.put("displayType", getDisplayType());
             json.put("dataType", getDataType().toString());
             return json;
         } catch (JSONException e) {
