@@ -51,11 +51,11 @@ define([
 
             var self = this,
                 button = self.select('loginButtonSelector').attr('disabled', true).addClass('loading'),
-                error = self.select('errorSelector').addClass('no-error');
+                error = self.select('errorSelector').addClass('no-error'),
+                user = self.select('usernameSelector'),
+                password = self.select('passwordSelector');
 
-            new UserService().login(
-                self.select('usernameSelector').val(),
-                self.select('passwordSelector').val())
+            new UserService().login(user.val(), password.val())
                 
                 .done(function() {
                     // TODO: make more seamless, but for now this should work
@@ -65,6 +65,7 @@ define([
                 .fail(function() {
                     error.removeClass('no-error');
                     button.removeClass('loading').attr('disabled', false);
+                    password.focus().get(0).select();
                 });
         }
     }
