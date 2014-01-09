@@ -436,16 +436,23 @@ public class TitanGraphSession extends GraphSession {
                 Vertex concept = graph.getVertex(conceptType);
                 if (concept != null) {
 
-                    // FIXME: filter if doesn't match any of the types
-                    // vertexPipeline.or() ?
-                    vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, concept.getId());
+                    final Collection <String> concepts = new ArrayList<String>();
+                    concepts.add(conceptType);
 
                     Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
                     if (children != null) {
                         for (Vertex child : children) {
-                            vertexPipeline.has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, child.getId());
+                            concepts.add(child.getId().toString());
                         }
                     }
+
+                    // TODO when we upgrade to titan 0.4.0 and gremlin 2.4.0 replace filter () with has() using Tokens.T.in
+                    vertexPipeline.filter(new PipeFunction<Vertex, Boolean>() {
+                        @Override
+                        public Boolean compute(Vertex v) {
+                            return concepts.contains(v.getProperty(PropertyName.CONCEPT_TYPE.toString()));
+                        }
+                    });
                 }
 
                 vertexList = (Collection<Vertex>) vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
@@ -467,7 +474,9 @@ public class TitanGraphSession extends GraphSession {
 
             for (Vertex v : vertexList) {
                 String key = v.getProperty(PropertyName.CONCEPT_TYPE.toString());
-                if (key != null) {
+                if (conceptType != null) {
+                    results.getResults().get(conceptType).add(new TitanGraphVertex(v));
+                } else if (key != null) {
                     results.getResults().get(key).add(new TitanGraphVertex(v));
                 }
             }
