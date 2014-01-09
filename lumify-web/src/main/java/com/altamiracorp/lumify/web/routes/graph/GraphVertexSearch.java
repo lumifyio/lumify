@@ -35,7 +35,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         final String filter = getRequiredParameter(request, "filter");
         final long offset = getOptionalParameterLong(request, "offset", 0);
         final long size = getOptionalParameterLong(request, "size", 100);
-        final String subType = getOptionalParameter(request, "subType");
+        final String conceptType = getOptionalParameter(request, "conceptType");
 
         User user = getUser(request);
         JSONArray filterJson = new JSONArray(filter);
@@ -44,7 +44,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         graphRepository.commit();
 
-        GraphPagedResults pagedResults = graphRepository.searchVerticesByTitle(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, subType);
+        GraphPagedResults pagedResults = graphRepository.search(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, conceptType);
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();

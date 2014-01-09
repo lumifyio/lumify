@@ -29,7 +29,7 @@ public class ArtifactExtractedInfo {
     private static final String VIDEO_DURATION = "videoDuration";
     private static final String VIDEO_FRAMES = "videoFrames";
     private static final String MAPPING_JSON = "mappingJson";
-    private static final String ARTIFACT_TYPE = "artifactType";
+    private static final String CONCEPT_TYPE = "conceptType";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String URL = "url";
@@ -232,12 +232,12 @@ public class ArtifactExtractedInfo {
         return null;
     }
 
-    public String getArtifactType () {
-        return (String) properties.get(ARTIFACT_TYPE);
+    public String getConceptType() {
+        return (String) properties.get(CONCEPT_TYPE);
     }
 
-    public void setArtifactType (String artifactType) {
-        set (ARTIFACT_TYPE, artifactType);
+    public void setConceptType(String conceptType) {
+        set (CONCEPT_TYPE, conceptType);
     }
 
     public String getMimeType() {

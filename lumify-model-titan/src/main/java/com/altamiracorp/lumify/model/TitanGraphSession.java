@@ -4,6 +4,9 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
 import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
+import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
+import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -41,6 +44,7 @@ public class TitanGraphSession extends GraphSession {
     private static TitanGraph graph;
     private TitanQueryFormatter queryFormatter;
     private final Configuration titanConfig;
+    private SearchProvider searchProvider;
 
     public TitanGraphSession(Configuration config) {
         titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
@@ -197,7 +201,7 @@ public class TitanGraphSession extends GraphSession {
             }
             v = new VertexProperty(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey());
         }
-        v.setProperty(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString());
+        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name);
         v.setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString());
         return v;
@@ -230,7 +234,7 @@ public class TitanGraphSession extends GraphSession {
         } else {
             v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
         }
-        v.setProperty(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString());
+        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
         v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
         return v;
     }
@@ -379,54 +383,83 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson) {
-        List<GraphVertex> vertices = Lists.newArrayList();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
+    public GraphPagedResults search(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String conceptType) {
+        try {
+            GraphPagedResults titanResults = this.searchTitan(query, filterJson, user, offsetStart, offsetEnd, conceptType);
+            GraphPagedResults searchIndexResults = this.searchIndex(query, filterJson, user, (int) offsetStart, (int) offsetEnd, conceptType);
 
-        if (title.equals("*")) {
-            tokens.add("*");
+            Map<String, List<GraphVertex>> combinedResults = titanResults.getResults();
+            Map<String, Integer> combinedCount = titanResults.getCount();
+            Map<String, List<GraphVertex>> indexResults = searchIndexResults.getResults();
+
+            for (String type : indexResults.keySet()) {
+                List<GraphVertex> typeVertices = indexResults.get(type);
+                int size = typeVertices.size();
+                if (combinedResults.containsKey(type)) {
+                    combinedResults.get(type).addAll(typeVertices);
+                } else {
+                    combinedResults.put(type, typeVertices);
+                    combinedCount.put(type, size);
+                }
+            }
+
+            return titanResults;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
-
-            final GremlinPipeline<Vertex, Vertex> queryPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
-
-            vertices = toGraphVertices(queryPipeline.toList());
-        }
-
-        return vertices;
     }
 
-    @Override
-    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String subType) {
+    public GraphPagedResults searchTitan(String query, JSONArray filterJson, User user, long offsetStart, long offsetEnd, String conceptType) {
         GraphPagedResults results = new GraphPagedResults();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
+        final List<String> tokens = LuceneTokenizer.standardTokenize(query);
 
-        if (title.equals("*")) {
+        if (query.equals("*")) {
             tokens.add("*");
         }
 
         if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
+            final TitanGraphQuery q = generateTitleQuery(tokens);
             GremlinPipeline<Vertex, Vertex> vertexPipeline;
             GremlinPipeline<Vertex, Vertex> countPipeline;
             if (filterJson.length() > 0) {
-                vertexPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
-                countPipeline = queryFormatter.createQueryPipeline(query.vertices(), filterJson);
+                vertexPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
+                countPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
             } else {
-                vertexPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
-                countPipeline = new GremlinPipeline<Vertex, Vertex>(query.vertices());
+                vertexPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
+                countPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
             }
 
             HashMap<Object, Number> map = new HashMap<Object, Number>();
             Collection<Vertex> vertexList;
-            if (subType != null) {
-                vertexList = (Collection<Vertex>) vertexPipeline.has(PropertyName.SUBTYPE.toString(), Tokens.T.eq, subType).range((int) offsetStart, (int) offsetEnd).toList();
-                map.put(subType, vertexList.size());
+            if (conceptType != null) {
+                Vertex concept = graph.getVertex(conceptType);
+                if (concept != null) {
+
+                    final Collection <String> concepts = new ArrayList<String>();
+                    concepts.add(conceptType);
+
+                    Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
+                    if (children != null) {
+                        for (Vertex child : children) {
+                            concepts.add(child.getId().toString());
+                        }
+                    }
+
+                    // TODO when we upgrade to titan 0.4.0 and gremlin 2.4.0 replace filter () with has() using Tokens.T.in
+                    vertexPipeline.filter(new PipeFunction<Vertex, Boolean>() {
+                        @Override
+                        public Boolean compute(Vertex v) {
+                            return concepts.contains(v.getProperty(PropertyName.CONCEPT_TYPE.toString()));
+                        }
+                    });
+                }
+
+                vertexList = (Collection<Vertex>) vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
+                map.put(conceptType, vertexList.size());
             } else {
                 vertexList = vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
-                countPipeline.property(PropertyName.SUBTYPE.toString()).groupCount(map).iterate();
+                countPipeline.property(PropertyName.CONCEPT_TYPE.toString()).groupCount(map).iterate();
             }
 
             for (Object key : map.keySet()) {
@@ -440,8 +473,10 @@ public class TitanGraphSession extends GraphSession {
             }
 
             for (Vertex v : vertexList) {
-                String key = v.getProperty(PropertyName.SUBTYPE.toString());
-                if (key != null) {
+                String key = v.getProperty(PropertyName.CONCEPT_TYPE.toString());
+                if (conceptType != null) {
+                    results.getResults().get(conceptType).add(new TitanGraphVertex(v));
+                } else if (key != null) {
                     results.getResults().get(key).add(new TitanGraphVertex(v));
                 }
             }
@@ -450,15 +485,29 @@ public class TitanGraphSession extends GraphSession {
         return results;
     }
 
-    @Override
-    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
-        GremlinPipeline<Vertex, Vertex> pipeline = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
-        List<Vertex> vertexList = pipeline.range((int) offset, (int) (offset + size - 1)).toList();
-        return toGraphVertices(vertexList);
+    public GraphPagedResults searchIndex(String query, JSONArray filter, User user, int page, int pageSize, String conceptType) throws Exception {
+        ArtifactSearchPagedResults artifactSearchResults;
+        GraphPagedResults pagedResults = new GraphPagedResults();
+
+        // Disable paging if filtering since we filter after results are retrieved
+        if (filter.length() > 0) {
+            page = 0;
+            pageSize = 100;
+        }
+
+        artifactSearchResults = searchProvider.searchArtifacts(query, user, page, pageSize, conceptType);
+
+        for (Map.Entry<String, Collection<ArtifactSearchResult>> entry : artifactSearchResults.getResults().entrySet()) {
+            List<String> artifactGraphVertexIds = getGraphVertexIds(entry.getValue());
+            List<GraphVertex> vertices = this.searchVerticesWithinGraphVertexIds(artifactGraphVertexIds, filter, user);
+            pagedResults.getResults().put(entry.getKey(), vertices);
+            pagedResults.getCount().put(entry.getKey(), artifactSearchResults.getCount().get(entry.getKey()));
+        }
+
+        return pagedResults;
     }
 
-    @Override
-    public List<GraphVertex> searchVerticesWithinGraphVertexIds(final List<String> vertexIds, JSONArray filterJson, User user) {
+    private List<GraphVertex> searchVerticesWithinGraphVertexIds(final List<String> vertexIds, JSONArray filterJson, User user) {
         ArrayList<Vertex> r = new ArrayList<Vertex>();
         for (String vertexId : vertexIds) {
             r.add(findVertex(vertexId));
@@ -474,19 +523,13 @@ public class TitanGraphSession extends GraphSession {
         return toGraphVertices(results);
     }
 
-    @Override
-    public List<GraphVertex> searchVerticesByTitleAndType(String title, VertexType type, User user) {
-        List<GraphVertex> vertices = Lists.newArrayList();
-        final List<String> tokens = LuceneTokenizer.standardTokenize(title);
-
-        if (!tokens.isEmpty()) {
-            final TitanGraphQuery query = generateTitleQuery(tokens);
-            query.has(PropertyName.TYPE.toString(), type.toString());
-
-            vertices = toGraphVertices(query.vertices());
+    private List<String> getGraphVertexIds(Collection<ArtifactSearchResult> artifactSearchResults) {
+        ArrayList<String> results = new ArrayList<String>();
+        for (ArtifactSearchResult artifactSearchResult : artifactSearchResults) {
+            Preconditions.checkNotNull(artifactSearchResult.getGraphVertexId(), "graph vertex cannot be null for artifact " + artifactSearchResult.getRowKey());
+            results.add(artifactSearchResult.getGraphVertexId());
         }
-
-        return vertices;
+        return results;
     }
 
     private TitanGraphQuery generateTitleQuery(final List<String> titleTokens) {
@@ -504,10 +547,9 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType type, User user) {
+    public GraphVertex findVertexByExactTitle(String graphVertexTitle, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.TITLE.toString(), graphVertexTitle)
-                .has(PropertyName.TYPE.toString(), type.toString())
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
@@ -517,10 +559,9 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
+    public GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(property, graphVertexPropertyValue)
-                .has(PropertyName.TYPE.toString(), type.toString())
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
@@ -530,22 +571,10 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(propertyName, propertyValue)
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public GraphVertex findVertexByOntologyTitleAndType(String title, VertexType type, User user) {
+    public GraphVertex findOntologyConceptByTitle(String title, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .has(PropertyName.TYPE.toString(), type.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.CONCEPT.toString())
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
@@ -558,18 +587,6 @@ public class TitanGraphSession extends GraphSession {
     public GraphVertex findVertexByOntologyTitle(String title, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public GraphVertex findVertexByRowKey(String rowKey, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.ROW_KEY.toString(), rowKey)
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
@@ -739,6 +756,11 @@ public class TitanGraphSession extends GraphSession {
     @Inject
     public void setQueryFormatter(TitanQueryFormatter queryFormatter) {
         this.queryFormatter = queryFormatter;
+    }
+
+    @Inject
+    public void setSearchProvider(SearchProvider searchProvider) {
+        this.searchProvider = searchProvider;
     }
 
     private class GraphRelationshipDateComparator implements Comparator<GraphRelationship> {

@@ -1,7 +1,8 @@
 package com.altamiracorp.lumify.core.model.graph;
 
+import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
 import com.tinkerpop.blueprints.Vertex;
 import org.json.JSONArray;
@@ -78,12 +79,12 @@ public abstract class GraphVertex {
         setProperty(propertyName.toString(), value);
     }
 
-    public void setType(VertexType vertexType) {
-        setType(vertexType.toString());
-    }
+//    public void setType(Concept conceptType) {
+//        setType(conceptType.toString());
+//    }
 
     public void setType(String vertexType) {
-        setProperty(PropertyName.TYPE, vertexType);
+        setProperty(PropertyName.CONCEPT_TYPE, vertexType);
     }
 
     public Vertex getVertex() {

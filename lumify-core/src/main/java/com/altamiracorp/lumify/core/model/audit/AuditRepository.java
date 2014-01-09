@@ -4,8 +4,8 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
 import com.google.common.collect.Lists;
@@ -58,7 +58,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(AuditAction.CREATE.toString())
-                .setType(VertexType.ENTITY.toString())
+                .setType(OntologyRepository.ENTITY.toString())
                 .setComment(comment)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
@@ -115,7 +115,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(VertexType.PROPERTY.toString())
+                .setType(OntologyRepository.PROPERTY_CONCEPT.toString())
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -179,7 +179,7 @@ public class AuditRepository extends Repository<Audit> {
         auditSourceDest.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(VertexType.PROPERTY.toString())
+                .setType(OntologyRepository.PROPERTY_CONCEPT.toString())
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -189,7 +189,7 @@ public class AuditRepository extends Repository<Audit> {
         auditDestSource.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(VertexType.PROPERTY.toString())
+                .setType(OntologyRepository.PROPERTY_CONCEPT.toString())
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -219,7 +219,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(VertexType.ENTITY.toString())
+                .setType(OntologyRepository.ENTITY.toString())
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -228,7 +228,7 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditEntity()
                 .setTitle(entityTitle)
-                .setType(VertexType.ENTITY.toString())
+                .setType(OntologyRepository.ENTITY.toString())
                 .setSubtype(entitySubtype)
                 .setID(entityID);
         return audit;
@@ -238,7 +238,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(VertexType.RELATIONSHIP.toString())
+                .setType(OntologyRepository.RELATIONSHIP_CONCEPT.toString())
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -247,13 +247,11 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getProperty(PropertyName.TYPE.toString()))
-                .setSourceSubtype(sourceVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setSourceType(sourceVertex.getProperty(PropertyName.CONCEPT_TYPE.toString()))
                 .setSourceTitle(sourceVertex.getProperty(PropertyName.TITLE.toString()))
                 .setDestId(destVertex.getId())
                 .setDestTitle(destVertex.getProperty(PropertyName.TITLE.toString()))
-                .setDestType(destVertex.getProperty(PropertyName.TYPE.toString()))
-                .setDestSubtype(destVertex.getProperty(PropertyName.SUBTYPE.toString()))
+                .setDestType(destVertex.getProperty(PropertyName.CONCEPT_TYPE.toString()))
                 .setLabel(label);
         return audit;
     }
