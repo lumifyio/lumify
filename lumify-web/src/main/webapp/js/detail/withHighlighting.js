@@ -5,9 +5,9 @@ define([
     './dropdowns/statementForm/statementForm',
     'util/css-stylesheet',
     'colorjs',
-    'service/entity',
+    'service/vertex',
     'service/ontology'
-], function(TermForm, StatementForm, stylesheet, colorjs, EntityService, OntologyService) {
+], function(TermForm, StatementForm, stylesheet, colorjs, VertexService, OntologyService) {
     'use strict';
 
     var HIGHLIGHT_STYLES = [
@@ -22,7 +22,7 @@ define([
     return WithHighlighting;
 
     function WithHighlighting() {
-        this.entityService = new EntityService();
+        this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
@@ -162,7 +162,7 @@ define([
                                         DIM: 2,
                                         TERM: 3
                                     },
-                                    className = concept.className || 'entity.subType-' + concept.id,
+                                    className = concept.className || 'entity.conceptType-' + concept.id,
                                     definition = function(state) {
                                         return tpl({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
                                     };

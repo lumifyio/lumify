@@ -78,7 +78,7 @@ define([
                             return d;
                         }
                     };
-                    this.entityService.createTerm = function(p, callback) {
+                    this.vertexService.createTerm = function(p, callback) {
                         callback(undefined, {
                             info: {},
                             cssClasses: ['subType-1']

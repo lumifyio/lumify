@@ -63,6 +63,11 @@ public class VertexConcept extends Concept {
     }
 
     @Override
+    public String getDisplayType() {
+        return getVertex().getProperty(PropertyName.DISPLAY_TYPE.toString());
+    }
+
+    @Override
     public HashMap<String, Object> getOldProperties () {
         return this.oldProperties;
     }
