@@ -76,7 +76,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         artifactRepository.save(artifact, user.getModelUserContext());
 
         ArtifactExtractedInfo artifactDetails = new ArtifactExtractedInfo();
-        artifactDetails.setConceptType(ontologyRepository.getConceptByName(DisplayType.IMAGE.toString(), user).getId());
+        artifactDetails.setConceptType(ontologyRepository.getConceptByName(DisplayType.IMAGE.toString(), user).getId().toString());
         artifactDetails.setTitle("Image of " + entityVertex.getProperty(PropertyName.TITLE));
         artifactDetails.setSource(SOURCE_UPLOAD);
         artifactDetails.setProcess(PROCESS);

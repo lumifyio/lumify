@@ -1,15 +1,16 @@
 package com.altamiracorp.lumify.core.ontology;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
+import com.altamiracorp.securegraph.Visibility;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
 import com.thinkaurelius.titan.core.TitanLabel;
-import com.thinkaurelius.titan.core.TypeMaker;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +51,7 @@ public class BaseOntologyTest {
     TitanLabel titanLabel;
 
     private BaseOntology baseOntology;
+
     @Before
     public void setUp() {
         baseOntology = new BaseOntology(ontologyRepository, resourceRepository, graphSession);
@@ -92,10 +94,10 @@ public class BaseOntologyTest {
 
         baseOntology.defineOntology(user);
 
-        verify(ontologyRepository, times(2)).addPropertyTo(eq(rootConcept), anyString(), anyString(), any(PropertyType.class), eq(user));
-        verify(ontologyRepository, times(2)).addPropertyTo(eq(entityConcept), anyString(), anyString(), any(PropertyType.class), eq(user));
+        verify(ontologyRepository, times(2)).addPropertyTo(eq(rootConcept.getVertex()), anyString(), anyString(), any(PropertyType.class), eq(user));
+        verify(ontologyRepository, times(2)).addPropertyTo(eq(entityConcept.getVertex()), anyString(), anyString(), any(PropertyType.class), eq(user));
 
-        verify(entityConcept).setProperty(PropertyName.GLYPH_ICON, "rowKey");
+        verify(entityConcept).setProperty(PropertyName.GLYPH_ICON.toString(), "rowKey", (Visibility) any());
     }
 
     @Test
@@ -112,13 +114,13 @@ public class BaseOntologyTest {
         assertEquals(false, result);
     }
 
-    @Test (expected = RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public void testIsOntologyDefinedException() {
         when(ontologyRepository.getConceptByName(ontologyRepository.ENTITY.toString(), user)).thenThrow(new RuntimeException("test", new Throwable("testing exception")));
         baseOntology.isOntologyDefined(user);
     }
 
-    @Test 
+    @Test
     public void testIsOntologyDefinedExceptionWithFalse() {
         when(ontologyRepository.getConceptByName(ontologyRepository.ENTITY.toString(), user)).thenThrow(new RuntimeException("ontologyTitle", new Throwable("testing exception")));
         boolean result = baseOntology.isOntologyDefined(user);
