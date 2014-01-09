@@ -50,6 +50,10 @@ public class Property {
         return PropertyType.convert((toStringOrNull(this.vertex.getPropertyValue(PropertyName.DATA_TYPE.toString(), 0))));
     }
 
+    public Vertex getVertex() {
+        return vertex;
+    }
+
     public static JSONArray toJsonProperties(List<Property> properties) {
         JSONArray json = new JSONArray();
         for (Property property : properties) {
