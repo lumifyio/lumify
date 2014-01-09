@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
+    private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
 
     private final OntologyRepository ontologyRepository;
     private final ResourceRepository resourceRepository;
@@ -125,26 +127,26 @@ public class BaseOntology {
             graph.makeType().name(PropertyName.COLOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
         }
         graph.commit();
-        
+
         TitanKey geoLocationProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION.toString());
         if (geoLocationProperty == null) {
-            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, user);
+            ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, user);
         }
 
         TitanKey geoLocationDescriptionProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         if (geoLocationDescriptionProperty == null) {
-            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING, user);
+            ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING, user);
         }
 
         TitanKey authorProperty = (TitanKey) graph.getType(PropertyName.AUTHOR.toString());
         if (authorProperty == null) {
-            graphSession.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
+            ontologyRepository.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
         }
         graphSession.commit();
 
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
         graph.commit();
 
         // TermMention concept
@@ -157,14 +159,14 @@ public class BaseOntology {
 
         // Entity concept
         Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.ENTITY.toString(), "Entity", user);
-        ontologyRepository.addPropertyTo(entity, conceptType.getName(), "Type", PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(entity.getVertex(), conceptType.getName(), "Type", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(entity.getVertex(), titleProperty.getName(), "Title", PropertyType.STRING, user);
 
         graph.commit();
 
         InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
         String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
-        entity.setProperty(PropertyName.GLYPH_ICON, entityGlyphIconRowKey);
+        entity.setProperty(PropertyName.GLYPH_ICON.toString(), entityGlyphIconRowKey, DEFAULT_VISIBILITY);
         graph.commit();
     }
 

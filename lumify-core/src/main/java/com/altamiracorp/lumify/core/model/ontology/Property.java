@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.securegraph.Vertex;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +13,9 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Property extends GraphVertex {
+import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
+
+public class Property {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     public static Pattern GEO_LOCATION_FORMAT = Pattern.compile("POINT\\((.*?),(.*?)\\)", Pattern.CASE_INSENSITIVE);
     public static Pattern GEO_LOCATION_ALTERNATE_FORMAT = Pattern.compile("(.*?),(.*)", Pattern.CASE_INSENSITIVE);
@@ -22,15 +24,31 @@ public abstract class Property extends GraphVertex {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    public abstract String getId();
+    private final Vertex vertex;
 
-    public abstract String getTitle();
+    public Property(Vertex vertex) {
+        this.vertex = vertex;
+    }
 
-    public abstract String getDisplayName();
+    public Object getId() {
+        return this.vertex.getId();
+    }
 
-    public abstract String getDisplayType();
+    public String getTitle() {
+        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0));
+    }
 
-    public abstract PropertyType getDataType();
+    public String getDisplayName() {
+        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0));
+    }
+
+    public String getDisplayType() {
+        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_TYPE.toString(), 0));
+    }
+
+    public PropertyType getDataType() {
+        return PropertyType.convert((toStringOrNull(this.vertex.getPropertyValue(PropertyName.DATA_TYPE.toString(), 0))));
+    }
 
     public static JSONArray toJsonProperties(List<Property> properties) {
         JSONArray json = new JSONArray();

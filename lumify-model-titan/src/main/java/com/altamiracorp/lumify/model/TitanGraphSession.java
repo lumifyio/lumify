@@ -3,7 +3,8 @@ package com.altamiracorp.lumify.model;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
-import com.altamiracorp.lumify.core.model.ontology.*;
+import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
 import com.altamiracorp.lumify.core.model.search.SearchProvider;
@@ -15,7 +16,9 @@ import com.altamiracorp.lumify.model.query.utils.LuceneTokenizer;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.thinkaurelius.titan.core.*;
+import com.thinkaurelius.titan.core.TitanFactory;
+import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TitanGraphQuery;
 import com.thinkaurelius.titan.core.attribute.Geo;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
 import com.thinkaurelius.titan.core.attribute.Text;
@@ -23,7 +26,6 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.gremlin.Tokens;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.branch.LoopPipe;
@@ -172,42 +174,6 @@ public class TitanGraphSession extends GraphSession {
     }
 
     @Override
-    public Property getOrCreatePropertyType(String name, PropertyType dataType, User user) {
-        TitanKey typeProperty = (TitanKey) graph.getType(name);
-        VertexProperty v;
-        if (typeProperty != null) {
-            v = new VertexProperty(typeProperty);
-        } else {
-            Class vertexDataType = String.class;
-            switch (dataType) {
-                case DATE:
-                    vertexDataType = Long.class;
-                    break;
-                case DOUBLE:
-                case CURRENCY:
-                    vertexDataType = Double.class;
-                    break;
-                case IMAGE:
-                case STRING:
-                    vertexDataType = String.class;
-                    break;
-                case GEO_LOCATION:
-                    vertexDataType = Geoshape.class;
-                    break;
-                default:
-                    LOGGER.error("Unknown PropertyType [%s] for Property [%s].  Using String type.", dataType, name);
-                    vertexDataType = String.class;
-                    break;
-            }
-            v = new VertexProperty(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey());
-        }
-        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString());
-        v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name);
-        v.setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString());
-        return v;
-    }
-
-    @Override
     public void findOrAddEdge(GraphVertex fromVertex, GraphVertex toVertex, String edgeLabel, User user) {
         checkNotNull(fromVertex, "fromVertex was null");
         checkNotNull(toVertex, "toVertex was null");
@@ -223,75 +189,6 @@ public class TitanGraphSession extends GraphSession {
             }
         }
         titanFromVertex.addEdge(edgeLabel, titanToVertex);
-    }
-
-    @Override
-    public GraphVertex getOrCreateRelationshipType(String relationshipName, User user) {
-        TitanType relationshipLabel = graph.getType(relationshipName);
-        TitanGraphVertex v;
-        if (relationshipLabel != null) {
-            v = new TitanGraphVertex(relationshipLabel);
-        } else {
-            v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
-        }
-        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
-        v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
-        return v;
-    }
-
-    @Override
-    public List<Vertex> getRelationships(Concept sourceConcept, final Concept destConcept, User user) {
-        List<Vertex> sourceAndParents = getConceptParents(sourceConcept, user);
-        List<Vertex> destAndParents = getConceptParents(destConcept, user);
-
-        List<Vertex> allRelationshipTypes = new ArrayList<Vertex>();
-        for (Vertex s : sourceAndParents) {
-            for (Vertex d : destAndParents) {
-                allRelationshipTypes.addAll(getRelationshipsShallow(s, d));
-            }
-        }
-
-        return allRelationshipTypes;
-    }
-
-    private List<Vertex> getRelationshipsShallow(Vertex source, final Vertex dest) {
-        return new GremlinPipeline(source)
-                .outE(LabelName.HAS_EDGE.toString())
-                .inV()
-                .as("edgeTypes")
-                .outE(LabelName.HAS_EDGE.toString())
-                .inV()
-                .filter(new PipeFunction<Vertex, Boolean>() {
-                    @Override
-                    public Boolean compute(Vertex vertex) {
-                        return vertex.getId().equals(dest.getId());
-                    }
-                })
-                .back("edgeTypes")
-                .toList();
-    }
-
-    private List<Vertex> getConceptParents(Concept concept, User user) {
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
-        results.add(concept.getVertex());
-        Vertex v = concept.getVertex();
-        while ((v = getParentConceptVertex(v, user)) != null) {
-            results.add(v);
-        }
-        return results;
-    }
-
-    @Override
-    public Vertex getParentConceptVertex(Vertex conceptVertex, User user) {
-        Iterator<Vertex> parents = conceptVertex.getVertices(Direction.OUT, LabelName.IS_A.toString()).iterator();
-        if (!parents.hasNext()) {
-            return null;
-        }
-        Vertex v = parents.next();
-        if (parents.hasNext()) {
-            throw new RuntimeException("Unexpected number of parents for concept: " + conceptVertex.getProperty(PropertyName.TITLE.toString()));
-        }
-        return v;
     }
 
     private ArrayList<GraphVertex> toGraphVertices(Iterable<Vertex> vertices) {
@@ -436,7 +333,7 @@ public class TitanGraphSession extends GraphSession {
                 Vertex concept = graph.getVertex(conceptType);
                 if (concept != null) {
 
-                    final Collection <String> concepts = new ArrayList<String>();
+                    final Collection<String> concepts = new ArrayList<String>();
                     concepts.add(conceptType);
 
                     Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
@@ -562,31 +459,6 @@ public class TitanGraphSession extends GraphSession {
     public GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user) {
         Iterable<Vertex> r = graph.query()
                 .has(property, graphVertexPropertyValue)
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public GraphVertex findOntologyConceptByTitle(String title, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.CONCEPT.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public GraphVertex findVertexByOntologyTitle(String title, User user) {
-        Iterable<Vertex> r = graph.query()
-                .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
                 .vertices();
         ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
         if (graphVertices.size() > 0) {
