@@ -10,8 +10,6 @@ import com.google.inject.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,10 +18,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class OntologyRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OntologyRepository.class);
     private static final Authorizations AUTHORIZATIONS = new Authorizations();
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
-    private Graph graph;
+    private final Graph graph;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     public static final String RELATIONSHIP_CONCEPT = "relationship";
     public static final String CONCEPT = "concept";
@@ -341,7 +338,6 @@ public class OntologyRepository {
             Vertex vertex = graph.addVertex(DEFAULT_VISIBILITY);
             concept = new Concept(vertex);
         }
-        graph = concept.getVertex().getGraph();
         concept.getVertex().setProperties(
                 graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), CONCEPT, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY),

@@ -186,8 +186,8 @@ public class OwlImport extends CommandLineBase {
         String rangeResourceName = getName(rangeResource);
 
         LOGGER.info("importObjectPropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        Concept domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
-        Concept range = ontologyRepository.getGraphVertexByTitle(rangeResourceName, user);
+        Concept domain = ontologyRepository.getConceptByName(domainResourceName, user);
+        Concept range = ontologyRepository.getConceptByName(rangeResourceName, user);
 
         ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText, user);
         graphSession.commit();
