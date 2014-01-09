@@ -1,15 +1,12 @@
 package com.altamiracorp.lumify.core.model.user;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.altamiracorp.bigtable.model.Column;
-import com.altamiracorp.bigtable.model.ColumnFamily;
-import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.bigtable.model.Repository;
-import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.*;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import java.util.Collection;
+import java.util.List;
 
 @Singleton
 public class UserRepository extends Repository<UserRow> {
@@ -65,5 +62,14 @@ public class UserRepository extends Repository<UserRow> {
             }
         }
         return null;
+    }
+
+    public UserRow addUser(String username, String password, User authUser) {
+        UserRow user = new UserRow();
+        user.getMetadata().setUserName(username);
+        user.setPassword(password);
+        user.getMetadata().setUserType(UserType.USER.toString());
+        save(user, authUser.getModelUserContext());
+        return user;
     }
 }
