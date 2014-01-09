@@ -47,7 +47,8 @@ define([
 
             this.$node.tooltip({ 
                 placement: 'right',
-                title: 'No activity' 
+                html: true,
+                title: 'No&nbsp;activity' 
             });
 
         });
