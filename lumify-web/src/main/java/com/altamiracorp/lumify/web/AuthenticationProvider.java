@@ -36,4 +36,6 @@ public abstract class AuthenticationProvider implements Handler {
                 modelUserContext,
                 user.getMetadata().getUserType());
     }
+
+    public abstract boolean login(HttpServletRequest request);
 }
