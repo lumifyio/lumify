@@ -43,6 +43,13 @@ public class UserAdd extends CommandLineBase {
                         .create("p")
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt("reset")
+                        .withDescription("If the password should be reset")
+                        .create("r")
+        );
+
         return options;
     }
 
@@ -67,13 +74,24 @@ public class UserAdd extends CommandLineBase {
         System.out.println("Adding user: " + this.username);
 
         UserRow user = this.userRepository.findByUserName(this.username, new SystemUser());
-        if (user != null) {
-            System.err.println("username already exists");
-            return 3;
-        }
 
-        user = this.userRepository.addUser(this.username, this.password, new SystemUser());
-        System.out.println("User added: " + user.getRowKey());
+        if (cmd.hasOption("reset")) {
+            if (user == null) {
+                System.err.println("password reset requested but user not found");
+                return 4;
+            }
+            user.setPassword(this.password);
+            this.userRepository.save(user, SystemUser.getSystemUserContext());
+            System.out.println("User password reset: " + user.getRowKey());
+        }
+        else {
+            if (user != null) {
+                System.err.println("username already exists");
+                return 3;
+            }
+            user = this.userRepository.addUser(this.username, this.password, new SystemUser());
+            System.out.println("User added: " + user.getRowKey());
+        }
 
         return 0;
     }
