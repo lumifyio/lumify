@@ -8,8 +8,8 @@ define([
     'util/withAsyncQueue',
     'util/keyboard',
     'service/workspace',
-    'service/service',
     'service/vertex',
+    'service/ontology',
     'util/undoManager',
     'util/clipboardManager'
 ], function(
@@ -18,7 +18,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue, 
     // Service
-    Keyboard, WorkspaceService, Service, VertexService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, VertexService, OntologyService, undoManager, ClipboardManager) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1000,
@@ -57,8 +57,8 @@ define([
     function Data() {
 
         this.workspaceService = new WorkspaceService();
-        this.service = new Service();
         this.vertexService = new VertexService();
+        this.ontologyService = new OntologyService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
         this.id = null;
@@ -69,12 +69,21 @@ define([
 
 
         this.after('initialize', function() {
+            var self = this;
+
             this.setupAsyncQueue('workspace');
             this.setupAsyncQueue('relationships');
+            this.setupAsyncQueue('socketSubscribe');
             this.setupDroppable();
 
             this.onSaveWorkspace = _.debounce(this.onSaveWorkspace.bind(this), WORKSPACE_SAVE_DELAY);
             this.refreshRelationships = _.debounce(this.refreshRelationships.bind(this), RELOAD_RELATIONSHIPS_DELAY);
+
+            this.cachedConceptsDeferred = $.Deferred();
+            this.ontologyService.concepts().done(function(concepts) {
+                self.cachedConcepts = concepts;
+                self.cachedConceptsDeferred.resolve(concepts);
+            })
 
             ClipboardManager.attachTo(this.node);
             Keyboard.attachTo(this.node);
@@ -102,10 +111,15 @@ define([
             this.on('selectAll', this.onSelectAll);
             this.on('deleteSelected', this.onDelete);
 
-            this.on('applicationReady', this.onApplicationReady);
+            this.on('applicationReady', function() {
+                self.cachedConceptsDeferred.done(function() {
+                    self.onApplicationReady();
+                });
+            });
         });
 
         this.onApplicationReady = function() {
+            var self = this;
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
@@ -115,8 +129,6 @@ define([
                 }
             });
 
-            var self = this;
-            this.setupAsyncQueue('socketSubscribe');
             this.workspaceService.subscribe({
                 onMessage: function (err, message) {
                     if (err) {
@@ -186,7 +198,7 @@ define([
 
             this.relationshipsUnload();
 
-            this.service.getRelationships(ids)
+            this.vertexService.getRelationships(ids)
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });
@@ -201,7 +213,7 @@ define([
             var self = this,
                 edge = data.edges[0];
 
-            this.service.deleteEdge(
+            this.vertexService.deleteEdge(
                 edge.properties.source,
                 edge.properties.target,
                 edge.properties.relationshipType).done(function() {
@@ -556,8 +568,8 @@ define([
                             return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
                         });
                         workspace.data.verticesById = _.groupBy(vertices, 'id');
-                        
-                        self.workspaceMarkReady(workspace);                        
+
+                        self.workspaceMarkReady(workspace);
                         self.trigger('workspaceLoaded', freeze(workspace));
                     });
                 });
@@ -750,12 +762,6 @@ define([
                         // Highlighted entities (legacy info)
                         var info = a.data('info') || a.closest('li').data('info');
                         if (info && info.graphVertexId) {
-
-                            // TODO: fix on server
-                            if (info.type) {
-                                info._type = info.type;
-                                delete info.type;
-                            }
 
                             self.updateCacheWithVertex({
                                 id: info.graphVertexId,

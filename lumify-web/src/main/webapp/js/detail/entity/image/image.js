@@ -115,7 +115,7 @@ define([
 
             formData.append('file', file);
 
-            // TODO: move to entityService
+            // TODO: move to vertexService
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/graph/vertex/' + this.attr.data.id + '/uploadImage');
             xhr.onload = function(event) {

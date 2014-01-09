@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.web.routes.artifact;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
@@ -20,17 +19,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
-public class ArtifactThumbnailByRowKey extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnailByRowKey.class);
+public class ArtifactThumbnail extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
 
     private final ArtifactRepository artifactRepository;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
     private final GraphRepository graphRepository;
 
     @Inject
-    public ArtifactThumbnailByRowKey(final ArtifactRepository artifactRepo,
-                                     final ArtifactThumbnailRepository thumbnailRepo,
-                                     final GraphRepository graphRepository) {
+    public ArtifactThumbnail(final ArtifactRepository artifactRepo,
+                             final ArtifactThumbnailRepository thumbnailRepo,
+                             final GraphRepository graphRepository) {
         artifactRepository = artifactRepo;
         artifactThumbnailRepository = thumbnailRepo;
         this.graphRepository = graphRepository;
@@ -43,7 +42,14 @@ public class ArtifactThumbnailByRowKey extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        ArtifactRowKey artifactRowKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "_rowKey")));
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+
+        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactRowKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
 
         String widthStr = getOptionalParameter(request, "width");
         int[] boundaryDims = new int[]{200, 200};
@@ -52,7 +58,7 @@ public class ArtifactThumbnailByRowKey extends BaseRequestHandler {
         }
 
         byte[] thumbnailData;
-        ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactRowKey, "raw", boundaryDims[0], boundaryDims[1], user);
+        com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactRowKey, "raw", boundaryDims[0], boundaryDims[1], user);
         if (thumbnail != null) {
             String format = thumbnail.getMetadata().getFormat();
             response.setContentType("image/" + format);

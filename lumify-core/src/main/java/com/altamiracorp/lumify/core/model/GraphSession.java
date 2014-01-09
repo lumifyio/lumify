@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
@@ -41,21 +40,14 @@ public abstract class GraphSession {
 
     public abstract List<GraphVertex> findByGeoLocation(double latitude, double longitude, double radius, User user);
 
-    public abstract List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson);
-
-    public abstract GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offset, long size, String subType);
-
-    public abstract List<GraphVertex> searchVerticesWithinGraphVertexIds(List<String> artifactGraphVertexIds, JSONArray filterJson, User user);
+    public abstract GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String conceptType);
 
     public abstract Graph getGraph();
 
-    public abstract List<GraphVertex> searchVerticesByTitleAndType(String query, VertexType type, User user);
+    // TODO: this is a dangerous method because nothing is unique by property value. Anyone calling this is probably wrong!
+    public abstract GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user);
 
-    public abstract GraphVertex findVertexByExactTitleAndType(String graphVertexTitle, VertexType graphVertexType, User user);
-
-    public abstract GraphVertex findVertexByExactPropertyAndType(String property, String graphVertexPropertyValue, VertexType graphVertexType, User user);
-
-    public abstract GraphVertex findVertexByOntologyTitleAndType(String title, VertexType concept, User user);
+    public abstract GraphVertex findOntologyConceptByTitle(String title, User user);
 
     public abstract GraphVertex findVertexByOntologyTitle(String title, User user);
 
@@ -66,8 +58,6 @@ public abstract class GraphSession {
     public abstract void remove(String graphVertexId, User user);
 
     public abstract List<List<GraphVertex>> findPath(GraphVertex sourceVertex, GraphVertex destVertex, int dept, int hops, User user);
-
-    public abstract GraphVertex findVertexByRowKey(String rowKey, User user);
 
     public abstract Edge findEdge(String sourceId, String destId, String label, User user);
 
@@ -81,7 +71,6 @@ public abstract class GraphSession {
 
     public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
 
-    public abstract List<GraphVertex> searchAllVertices(long offset, long size, User user);
-
-    public abstract GraphVertex findVertexByProperty(String propertyName, Object propertyValue, User user);
+    // TODO: this is a dangerous method because nothing is unique by title. Anyone calling this is probably wrong!
+    public abstract GraphVertex findVertexByExactTitle(String title, User user);
 }

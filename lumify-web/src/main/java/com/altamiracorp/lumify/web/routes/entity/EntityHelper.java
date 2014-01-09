@@ -9,7 +9,6 @@ import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -50,11 +49,11 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(GraphVertex vertex, String subType, String title, String process, String comment, User user) {
-        vertex.setProperty(PropertyName.SUBTYPE, subType);
+        vertex.setProperty(PropertyName.CONCEPT_TYPE, subType);
         vertex.setProperty(PropertyName.TITLE, title);
         graphRepository.saveVertex(vertex, user);
 
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.SUBTYPE.toString(), process, comment, user);
+        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.CONCEPT_TYPE.toString(), process, comment, user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
     }
 
@@ -81,21 +80,19 @@ public class EntityHelper {
     public GraphVertex createGraphVertex(GraphVertex conceptVertex, String sign, String existing, String process, String comment,
                                          String artifactId, User user) {
         boolean newVertex = false;
-        List<String> modifiedProperties = Lists.newArrayList(PropertyName.SUBTYPE.toString(), PropertyName.TITLE.toString());
+        List<String> modifiedProperties = Lists.newArrayList(PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());
         final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         GraphVertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
-            resolvedVertex = graphRepository.findVertexByTitleAndType(sign, VertexType.ENTITY, user);
+            resolvedVertex = graphRepository.findVertexByExactTitle(sign, user);
         } else {
             newVertex = true;
             resolvedVertex = new InMemoryGraphVertex();
-            resolvedVertex.setType(VertexType.ENTITY);
-            modifiedProperties.add(PropertyName.TYPE.toString());
         }
 
         String conceptId = conceptVertex.getId();
-        resolvedVertex.setProperty(PropertyName.SUBTYPE, conceptId);
+        resolvedVertex.setProperty(PropertyName.CONCEPT_TYPE, conceptId);
         resolvedVertex.setProperty(PropertyName.TITLE, sign);
 
         graphRepository.saveVertex(resolvedVertex, user);

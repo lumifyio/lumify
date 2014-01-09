@@ -5,6 +5,7 @@ define([
     '../withHighlighting',
     'tpl!./relationship',
     'service/relationship',
+    'service/vertex',
     'detail/properties',
     'sf'
 ], function(
@@ -14,11 +15,13 @@ define([
     withHighlighting,
     template,
     RelationshipService,
+    VertexService,
     Properties,
     sf) {
     'use strict';
 
     var relationshipService = new RelationshipService();
+    var vertexService = new VertexService();
 
     return defineComponent(Relationship, withTypeContent, withHighlighting);
 
@@ -47,7 +50,7 @@ define([
             var self = this,
                 data = this.attr.data;
 
-            this.service.getVertexToVertexRelationshipDetails(
+            this.vertexService.getVertexToVertexRelationshipDetails(
                     data.properties.source,
                     data.properties.target,
                     data.properties.relationshipType
