@@ -166,6 +166,9 @@ public class OwlImport extends CommandLineBase {
 
         LOGGER.info("importDatatypePropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
         Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
+        if (domain == null) {
+            throw new RuntimeException("Could not find domain: " + domainResourceName);
+        }
         PropertyType propertyType = PropertyType.convert(rangeResourceName);
         graphSession.commit();
 
