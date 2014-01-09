@@ -1,19 +1,12 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.util.FilterIterable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.thinkaurelius.titan.core.TitanKey;
-import com.thinkaurelius.titan.core.TitanType;
-import com.thinkaurelius.titan.core.TypeMaker;
-import com.thinkaurelius.titan.core.attribute.Geoshape;
-import com.tinkerpop.gremlin.java.GremlinPipeline;
-import com.tinkerpop.pipes.PipeFunction;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OntologyRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(OntologyRepository.class);
     private static final Authorizations AUTHORIZATIONS = new Authorizations();
+    private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private Graph graph;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     public static final String RELATIONSHIP_CONCEPT = "relationship";
@@ -64,12 +58,10 @@ public class OntologyRepository {
 
     public List<Property> getProperties(User user) {
         List<Property> properties = new ArrayList<Property>();
-        Iterator<Vertex> vertices = graph.query(AUTHORIZATIONS)
+        Iterable<Vertex> vertices = graph.query(AUTHORIZATIONS)
                 .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
-                .vertices()
-                .iterator();
-        while (vertices.hasNext()) {
-            Vertex vertex = vertices.next();
+                .vertices();
+        for (Vertex vertex : vertices) {
             properties.add(new Property(vertex));
         }
         return properties;
@@ -85,6 +77,26 @@ public class OntologyRepository {
             Property property = new Property(properties.next());
             if (properties.hasNext()) {
                 throw new RuntimeException("Too many \"" + propertyName + "\" properties");
+            }
+            return property;
+        } else {
+            return null;
+        }
+    }
+
+    public Relationship getRelationship(String propertyName, User user) {
+        Iterator<Vertex> relationshipVertices = graph.query(AUTHORIZATIONS)
+                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
+                .vertices()
+                .iterator();
+        if (relationshipVertices.hasNext()) {
+            Vertex vertex = relationshipVertices.next();
+            Concept from = getConceptById(vertex.getVertices(Direction.IN, AUTHORIZATIONS).iterator().next().getId(), user);
+            Concept to = getConceptById(vertex.getVertices(Direction.OUT, AUTHORIZATIONS).iterator().next().getId(), user);
+            Relationship property = new Relationship(vertex, from, to);
+            if (relationshipVertices.hasNext()) {
+                throw new RuntimeException("Too many \"" + propertyName + "\" relationshipVertices");
             }
             return property;
         } else {
@@ -326,48 +338,54 @@ public class OntologyRepository {
     public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName, User user) {
         Concept concept = getConceptByName(conceptName, user);
         if (concept == null) {
-            InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
-            String id = graphRepository.saveVertex(graphVertex, user);
-            concept = getConceptById(id, user);
+            Vertex vertex = graph.addVertex(DEFAULT_VISIBILITY);
+            concept = new Concept(vertex);
         }
-        concept.setProperty(PropertyName.CONCEPT_TYPE.toString(), CONCEPT);
-        concept.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName);
-        concept.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
+        graph = concept.getVertex().getGraph();
+        concept.getVertex().setProperties(
+                graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), CONCEPT, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+        );
         if (parent != null) {
-            graphRepository.findOrAddRelationship(concept, parent, LabelName.IS_A, user);
+            findOrAddEdge(concept.getVertex(), parent.getVertex(), LabelName.IS_A.toString(), user);
         }
-
-        graphSession.commit();
 
         return concept;
     }
 
-    protected void findOrAddEdge(GraphVertex fromVertex, GraphVertex toVertex, String edgeLabel, User user) {
-        graphSession.findOrAddEdge(fromVertex, toVertex, edgeLabel, user);
+    protected void findOrAddEdge(Vertex fromVertex, final Vertex toVertex, String edgeLabel, User user) {
+        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.BOTH, edgeLabel, AUTHORIZATIONS)) {
+            @Override
+            protected boolean isIncluded(Vertex vertex) {
+                return vertex.getId().equals(toVertex.getId());
+            }
+        }.iterator();
+        if (!matchingEdges.hasNext()) {
+            fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY);
+        }
     }
 
     public Property addPropertyTo(Vertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
-        Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
-        property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
-        graphSession.commit();
+        Property property = getOrCreatePropertyType(propertyName, dataType, user);
+        property.getVertex().setProperties(
+                property.getVertex().getGraph().createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+        );
 
-        findOrAddEdge(vertex, property, LabelName.HAS_PROPERTY.toString(), user);
-        graphSession.commit();
+        findOrAddEdge(vertex, property.getVertex(), LabelName.HAS_PROPERTY.toString(), user);
 
         return property;
     }
 
-    public GraphVertex getOrCreateRelationshipType(Vertex fromVertex, Vertex toVertex, String relationshipName, String displayName, User user) {
-        GraphVertex relationshipLabel = graphSession.getOrCreateRelationshipType(relationshipName, user);
-        relationshipLabel.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
-        graphSession.commit();
+    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipName, String displayName, User user) {
+        Relationship relationship = getOrCreateRelationshipType(relationshipName, from, to, user);
+        relationship.getVertex().setProperties(graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY));
 
-        findOrAddEdge(fromVertex, relationshipLabel, LabelName.HAS_EDGE.toString(), user);
-        findOrAddEdge(relationshipLabel, toVertex, LabelName.HAS_EDGE.toString(), user);
-        graphSession.commit();
+        findOrAddEdge(from.getVertex(), relationship.getVertex(), LabelName.HAS_EDGE.toString(), user);
+        findOrAddEdge(relationship.getVertex(), to.getVertex(), LabelName.HAS_EDGE.toString(), user);
 
-        return relationshipLabel;
+        return relationship;
     }
 
     public void resolvePropertyIds(JSONArray filterJson, User user) throws JSONException {
@@ -385,15 +403,15 @@ public class OntologyRepository {
         }
     }
 
-    public Map<String, Concept> getAllConceptsById(User user) {
-        Map<String, Concept> results = new HashMap<String, Concept>();
+    public Map<Object, Concept> getAllConceptsById(User user) {
+        Map<Object, Concept> results = new HashMap<Object, Concept>();
         Concept rootConcept = getRootConcept(user);
         results.put(rootConcept.getId(), rootConcept);
         getAllConceptsById(results, rootConcept, user);
         return results;
     }
 
-    private void getAllConceptsById(Map<String, Concept> concepts, Concept rootConcept, User user) {
+    private void getAllConceptsById(Map<Object, Concept> concepts, Concept rootConcept, User user) {
         List<Concept> childConcepts = getChildConcepts(rootConcept, user);
         for (Concept c : childConcepts) {
             concepts.put(c.getId(), c);
@@ -418,60 +436,37 @@ public class OntologyRepository {
     }
 
     public Property getOrCreatePropertyType(String name, PropertyType dataType, User user) {
-        TitanKey typeProperty = (TitanKey) graph.getType(name);
-        Property v;
-        if (typeProperty != null) {
-            v = new Property(typeProperty);
-        } else {
-            Class vertexDataType = String.class;
-            switch (dataType) {
-                case DATE:
-                    vertexDataType = Long.class;
-                    break;
-                case DOUBLE:
-                case CURRENCY:
-                    vertexDataType = Double.class;
-                    break;
-                case IMAGE:
-                case STRING:
-                    vertexDataType = String.class;
-                    break;
-                case GEO_LOCATION:
-                    vertexDataType = Geoshape.class;
-                    break;
-                default:
-                    LOGGER.error("Unknown PropertyType [%s] for Property [%s].  Using String type.", dataType, name);
-                    vertexDataType = String.class;
-                    break;
-            }
-            v = new Property(graph.makeType().name(name).dataType(vertexDataType).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(com.tinkerpop.blueprints.Vertex.class).makePropertyKey());
+        Property typeProperty = getProperty(name, user);
+        if (typeProperty == null) {
+            typeProperty = new Property(graph.addVertex(DEFAULT_VISIBILITY));
         }
-        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString());
-        v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name);
-        v.setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString());
-        return v;
+        typeProperty.getVertex().setProperties(
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString(), DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
+        );
+        return typeProperty;
     }
 
-    private GraphVertex getOrCreateRelationshipType(String relationshipName, User user) {
-        TitanType relationshipLabel = graph.getType(relationshipName);
-        TitanGraphVertex v;
-        if (relationshipLabel != null) {
-            v = new TitanGraphVertex(relationshipLabel);
-        } else {
-            v = new TitanGraphVertex(graph.makeType().name(relationshipName).directed().makeEdgeLabel());
+    private Relationship getOrCreateRelationshipType(String relationshipName, Concept from, Concept to, User user) {
+        Relationship relationship = getRelationship(relationshipName, user);
+        if (relationship == null) {
+            relationship = new Relationship(graph.addVertex(DEFAULT_VISIBILITY), from, to);
         }
-        v.setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString());
-        v.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName);
-        return v;
+        relationship.getVertex().setProperties(
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString(), DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
+        );
+        return relationship;
     }
 
     private List<Vertex> getRelationships(Concept sourceConcept, final Concept destConcept, User user) {
-        List<com.tinkerpop.blueprints.Vertex> sourceAndParents = getConceptParents(sourceConcept, user);
-        List<com.tinkerpop.blueprints.Vertex> destAndParents = getConceptParents(destConcept, user);
+        List<Vertex> sourceAndParents = getConceptParents(sourceConcept, user);
+        List<Vertex> destAndParents = getConceptParents(destConcept, user);
 
-        List<com.tinkerpop.blueprints.Vertex> allRelationshipTypes = new ArrayList<com.tinkerpop.blueprints.Vertex>();
-        for (com.tinkerpop.blueprints.Vertex s : sourceAndParents) {
-            for (com.tinkerpop.blueprints.Vertex d : destAndParents) {
+        List<Vertex> allRelationshipTypes = new ArrayList<Vertex>();
+        for (Vertex s : sourceAndParents) {
+            for (Vertex d : destAndParents) {
                 allRelationshipTypes.addAll(getRelationshipsShallow(s, d));
             }
         }
@@ -479,16 +474,16 @@ public class OntologyRepository {
         return allRelationshipTypes;
     }
 
-    private List<com.tinkerpop.blueprints.Vertex> getRelationshipsShallow(com.tinkerpop.blueprints.Vertex source, final com.tinkerpop.blueprints.Vertex dest) {
+    private List<Vertex> getRelationshipsShallow(Vertex source, final Vertex dest) {
         return new GremlinPipeline(source)
                 .outE(LabelName.HAS_EDGE.toString())
                 .inV()
                 .as("edgeTypes")
                 .outE(LabelName.HAS_EDGE.toString())
                 .inV()
-                .filter(new PipeFunction<com.tinkerpop.blueprints.Vertex, Boolean>() {
+                .filter(new PipeFunction<Vertex, Boolean>() {
                     @Override
-                    public Boolean compute(com.tinkerpop.blueprints.Vertex vertex) {
+                    public Boolean compute(Vertex vertex) {
                         return vertex.getId().equals(dest.getId());
                     }
                 })
@@ -496,10 +491,10 @@ public class OntologyRepository {
                 .toList();
     }
 
-    private List<com.tinkerpop.blueprints.Vertex> getConceptParents(Concept concept, User user) {
-        ArrayList<com.tinkerpop.blueprints.Vertex> results = new ArrayList<com.tinkerpop.blueprints.Vertex>();
+    private List<Vertex> getConceptParents(Concept concept, User user) {
+        ArrayList<Vertex> results = new ArrayList<Vertex>();
         results.add(concept.getVertex());
-        com.tinkerpop.blueprints.Vertex v = concept.getVertex();
+        Vertex v = concept.getVertex();
         while ((v = getParentConceptVertex(v, user)) != null) {
             results.add(v);
         }
@@ -507,36 +502,36 @@ public class OntologyRepository {
     }
 
     private Vertex getParentConceptVertex(Vertex conceptVertex, User user) {
-        Iterator<com.tinkerpop.blueprints.Vertex> parents = conceptVertex.getVertices(Direction.OUT, LabelName.IS_A.toString()).iterator();
+        Iterator<Vertex> parents = conceptVertex.getVertices(Direction.OUT, LabelName.IS_A.toString(), AUTHORIZATIONS).iterator();
         if (!parents.hasNext()) {
             return null;
         }
-        com.tinkerpop.blueprints.Vertex v = parents.next();
+        Vertex v = parents.next();
         if (parents.hasNext()) {
-            throw new RuntimeException("Unexpected number of parents for concept: " + conceptVertex.getProperty(PropertyName.TITLE.toString()));
+            throw new RuntimeException("Unexpected number of parents for concept: " + conceptVertex.getPropertyValue(PropertyName.TITLE.toString(), 0));
         }
         return v;
     }
 
     private Vertex findOntologyConceptByTitle(String title, User user) {
-        Iterable<com.tinkerpop.blueprints.Vertex> r = graph.query()
+        Iterator<Vertex> r = graph.query(AUTHORIZATIONS)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
                 .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.CONCEPT.toString())
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
+                .vertices()
+                .iterator();
+        if (r.hasNext()) {
+            return r.next();
         }
         return null;
     }
 
     private Vertex findVertexByOntologyTitle(String title, User user) {
-        Iterable<com.tinkerpop.blueprints.Vertex> r = graph.query()
+        Iterator<Vertex> r = graph.query(AUTHORIZATIONS)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .vertices();
-        ArrayList<GraphVertex> graphVertices = toGraphVertices(r);
-        if (graphVertices.size() > 0) {
-            return graphVertices.get(0);
+                .vertices()
+                .iterator();
+        if (r.hasNext()) {
+            return r.next();
         }
         return null;
     }

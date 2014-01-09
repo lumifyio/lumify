@@ -40,6 +40,10 @@ public class Relationship {
         return this.destConcept;
     }
 
+    public Vertex getVertex() {
+        return vertex;
+    }
+
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
