@@ -1,5 +1,5 @@
 
-define( [], function() {
+define(['jquery', 'jqueryui'], function() {
     'use strict';
 
     $.ui.plugin.add( "draggable", "multi", {
