@@ -110,6 +110,17 @@ public class OntologyRepository {
         return toConcepts(conceptVertex.getVertices(Direction.IN, LabelName.IS_A.toString()));
     }
 
+    public List<String> getAllSubChildrenConceptsIds (Vertex concept, List<String> conceptIds) {
+        Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
+        if (children != null) {
+            for (Vertex child : children) {
+                conceptIds.add(child.getId().toString());
+                getAllSubChildrenConceptsIds(child, conceptIds);
+            }
+        }
+        return conceptIds;
+    }
+
     public Concept getParentConcept(String conceptId, User user) {
         Vertex conceptVertex = graphSession.getGraph().getVertex(conceptId);
         Vertex parentConceptVertex = graphSession.getParentConceptVertex(conceptVertex, user);
