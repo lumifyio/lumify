@@ -35,8 +35,8 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         this.graphRepository = graphRepository;
     }
 
-    public static String getUrl(ArtifactRowKey artifactKey) {
-        return "/artifact/" + UrlUtils.urlEncode(artifactKey.toString()) + "/thumbnail";
+    public static String getUrl(String graphVertexId) {
+        return "/artifact/" + graphVertexId + "/thumbnail";
     }
 
     @Override
