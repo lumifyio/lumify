@@ -421,12 +421,15 @@ public class TitanGraphSession extends GraphSession {
         if (!tokens.isEmpty()) {
             final TitanGraphQuery q = generateTitleQuery(tokens);
             GremlinPipeline<Vertex, Vertex> vertexPipeline;
+            GremlinPipeline<Vertex, Vertex> conceptPipeline;
             GremlinPipeline<Vertex, Vertex> countPipeline;
             if (filterJson.length() > 0) {
                 vertexPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
+                conceptPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
                 countPipeline = queryFormatter.createQueryPipeline(q.vertices(), filterJson);
             } else {
                 vertexPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
+                conceptPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
                 countPipeline = new GremlinPipeline<Vertex, Vertex>(q.vertices());
             }
 
@@ -437,7 +440,6 @@ public class TitanGraphSession extends GraphSession {
                 if (concept != null) {
 
                     final Collection <String> concepts = new ArrayList<String>();
-                    concepts.add(conceptType);
 
                     Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
                     if (children != null) {
@@ -446,13 +448,15 @@ public class TitanGraphSession extends GraphSession {
                         }
                     }
 
-                    // TODO when we upgrade to titan 0.4.0 and gremlin 2.4.0 replace filter () with has() using Tokens.T.in
-                    vertexPipeline.filter(new PipeFunction<Vertex, Boolean>() {
-                        @Override
-                        public Boolean compute(Vertex v) {
-                            return concepts.contains(v.getProperty(PropertyName.CONCEPT_TYPE.toString()));
-                        }
-                    });
+                    // TODO when we upgrade to gremlin 2.4.0 replace query below with a has() query using Tokens.T.in
+                    vertexPipeline.copySplit(new GremlinPipeline<Vertex, Vertex>().has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, conceptType),
+                            new GremlinPipeline<Vertex, Vertex>().filter(new PipeFunction<Vertex, Boolean>() {
+                                @Override
+                                public Boolean compute(Vertex vertex) {
+                                    return concepts.contains(vertex.getProperty(PropertyName.CONCEPT_TYPE.toString()));
+                                }
+                            })
+                    ).exhaustMerge();
                 }
 
                 vertexList = (Collection<Vertex>) vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();
