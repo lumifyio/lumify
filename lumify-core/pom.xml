@@ -71,6 +71,14 @@
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-inmemory</artifactId>
+        </dependency>
 
         <!-- Runtime Dependencies -->
         <dependency>

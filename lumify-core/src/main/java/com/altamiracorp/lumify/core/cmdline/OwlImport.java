@@ -1,13 +1,14 @@
 package com.altamiracorp.lumify.core.cmdline;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OwlImport extends CommandLineBase {
+    private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private OntologyRepository ontologyRepository;
     private ResourceRepository resourceRepository;
     private GraphSession graphSession;
@@ -125,7 +127,7 @@ public class OwlImport extends CommandLineBase {
                 propertyName = PropertyName.MAP_GLYPH_ICON.toString();
                 propertyValue = importGlyphIconFile(propertyValue, user);
             }
-            concept.setProperty(propertyName, propertyValue);
+            concept.setProperty(propertyName, propertyValue, DEFAULT_VISIBILITY);
         }
         graphSession.commit();
     }
@@ -163,7 +165,7 @@ public class OwlImport extends CommandLineBase {
         String rangeResourceName = getName(rangeResource);
 
         LOGGER.info("importDatatypePropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        GraphVertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
+        Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
         PropertyType propertyType = PropertyType.convert(rangeResourceName);
         graphSession.commit();
 
@@ -184,8 +186,8 @@ public class OwlImport extends CommandLineBase {
         String rangeResourceName = getName(rangeResource);
 
         LOGGER.info("importObjectPropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        GraphVertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
-        GraphVertex range = ontologyRepository.getGraphVertexByTitle(rangeResourceName, user);
+        Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
+        Vertex range = ontologyRepository.getGraphVertexByTitle(rangeResourceName, user);
 
         ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText, user);
         graphSession.commit();

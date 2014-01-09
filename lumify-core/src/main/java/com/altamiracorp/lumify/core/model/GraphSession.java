@@ -47,10 +47,6 @@ public abstract class GraphSession {
     // TODO: this is a dangerous method because nothing is unique by property value. Anyone calling this is probably wrong!
     public abstract GraphVertex findVertexByExactProperty(String property, String graphVertexPropertyValue, User user);
 
-    public abstract GraphVertex findOntologyConceptByTitle(String title, User user);
-
-    public abstract GraphVertex findVertexByOntologyTitle(String title, User user);
-
     public abstract void removeRelationship(String source, String target, String label, User user);
 
     public abstract void commit();
@@ -61,15 +57,7 @@ public abstract class GraphSession {
 
     public abstract Edge findEdge(String sourceId, String destId, String label, User user);
 
-    public abstract Property getOrCreatePropertyType(String propertyName, PropertyType dataType, User user);
-
     public abstract void findOrAddEdge(GraphVertex fromVertex, GraphVertex toVertex, String edgeLabel, User user);
-
-    public abstract GraphVertex getOrCreateRelationshipType(String relationshipName, User user);
-
-    public abstract List<Vertex> getRelationships(Concept sourceConcept, Concept destConcept, User user);
-
-    public abstract Vertex getParentConceptVertex(Vertex vertex, User user);
 
     // TODO: this is a dangerous method because nothing is unique by title. Anyone calling this is probably wrong!
     public abstract GraphVertex findVertexByExactTitle(String title, User user);
