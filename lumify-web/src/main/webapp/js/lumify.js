@@ -90,12 +90,14 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
                 .toggleClass('fullscreenDetails', popoutDetails)
             window.isFullscreenDetails = popoutDetails;
             
+
             if (loginRequired) {
                 require(['login'], function(Login) {
                     Login.teardownAll();
-                    Login.attachTo('#app');
+                    Login.attachTo('#login');
                 });
             } else if (popoutDetails) {
+                $('#login').remove();
                 require(['appFullscreenDetails'], function(PopoutDetailsApp) {
                     PopoutDetailsApp.teardownAll();
                     PopoutDetailsApp.attachTo('#app', {
@@ -103,6 +105,7 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
                     });
                 });
             } else {
+                $('#login').remove();
                 require(['app'], function(App) {
                     if (event) {
                         location.replace(location.href);

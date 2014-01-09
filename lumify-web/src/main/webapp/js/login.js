@@ -21,6 +21,10 @@ define([
             errorSelector: '.text-error'
         });
 
+        this.before('teardown', function() {
+            this.$node.remove();
+        });
+
         this.after('initialize', function() {
             this.$node.html(template({}));
             this.select('loginButtonSelector').attr('disabled', true);
@@ -58,8 +62,16 @@ define([
             new UserService().login(user.val(), password.val())
                 
                 .done(function() {
-                    // TODO: make more seamless, but for now this should work
-                    window.location.reload();
+                    if ((/^#?v=/).test(location.hash)) {
+                        window.location.reload();
+                    } else {
+                        require(['app'], function(App) {
+                            App.attachTo('#app', {
+                                animateFromLogin: true
+                            });
+                            _.delay(function() { self.teardown(); }, 2000);
+                        });
+                    }
                 })
 
                 .fail(function() {
