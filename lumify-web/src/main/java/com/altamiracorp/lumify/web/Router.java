@@ -15,6 +15,8 @@ import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipPropert
 import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
 import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
+import com.altamiracorp.lumify.web.routes.user.Login;
+import com.altamiracorp.lumify.web.routes.user.Logout;
 import com.altamiracorp.lumify.web.routes.user.MeGet;
 import com.altamiracorp.lumify.web.routes.user.UserList;
 import com.altamiracorp.lumify.web.routes.vertex.*;
@@ -53,7 +55,9 @@ public class Router extends HttpServlet {
             AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
             Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-            app.get("/index.html", authenticatorInstance, new StaticFileHandler(config));
+            app.get("/index.html", new StaticFileHandler(config));
+            app.post("/login", Login.class);
+            app.post("/logout", Logout.class);
 
             app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
             app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);

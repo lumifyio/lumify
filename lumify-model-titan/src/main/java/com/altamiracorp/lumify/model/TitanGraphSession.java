@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.model;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
@@ -26,6 +26,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.Tokens;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.branch.LoopPipe;
@@ -47,6 +48,7 @@ public class TitanGraphSession extends GraphSession {
     private TitanQueryFormatter queryFormatter;
     private final Configuration titanConfig;
     private SearchProvider searchProvider;
+    private OntologyRepository ontologyRepository;
 
     public TitanGraphSession(Configuration config) {
         titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
@@ -65,6 +67,11 @@ public class TitanGraphSession extends GraphSession {
                 graph = TitanFactory.open(conf);
             }
         }
+    }
+
+    @Inject
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
     }
 
     private String confToString(PropertiesConfiguration conf) {
@@ -332,24 +339,17 @@ public class TitanGraphSession extends GraphSession {
             if (conceptType != null) {
                 Vertex concept = graph.getVertex(conceptType);
                 if (concept != null) {
+                    final Collection<String> concepts = ontologyRepository.getAllSubChildrenConceptsIds(concept.getId(), new ArrayList<String>(), user);
 
-                    final Collection<String> concepts = new ArrayList<String>();
-                    concepts.add(conceptType);
-
-                    Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
-                    if (children != null) {
-                        for (Vertex child : children) {
-                            concepts.add(child.getId().toString());
-                        }
-                    }
-
-                    // TODO when we upgrade to titan 0.4.0 and gremlin 2.4.0 replace filter () with has() using Tokens.T.in
-                    vertexPipeline.filter(new PipeFunction<Vertex, Boolean>() {
-                        @Override
-                        public Boolean compute(Vertex v) {
-                            return concepts.contains(v.getProperty(PropertyName.CONCEPT_TYPE.toString()));
-                        }
-                    });
+                    // TODO when we upgrade to gremlin 2.4.0 replace query below with a has() query using Tokens.T.in
+                    vertexPipeline.copySplit(new GremlinPipeline<Vertex, Vertex>().has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, conceptType),
+                            new GremlinPipeline<Vertex, Vertex>().filter(new PipeFunction<Vertex, Boolean>() {
+                                @Override
+                                public Boolean compute(Vertex vertex) {
+                                    return concepts.contains(vertex.getProperty(PropertyName.CONCEPT_TYPE.toString()));
+                                }
+                            })
+                    ).exhaustMerge();
                 }
 
                 vertexList = (Collection<Vertex>) vertexPipeline.range((int) offsetStart, (int) offsetEnd).toList();

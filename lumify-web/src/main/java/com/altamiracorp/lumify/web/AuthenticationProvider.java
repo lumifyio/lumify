@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 public abstract class AuthenticationProvider implements Handler {
     public static final String CURRENT_USER_REQ_ATTR_NAME = "user.current";
 
-    protected void setUser(HttpServletRequest request, User user) {
+    public void setUser(HttpServletRequest request, User user) {
         request.getSession().setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);
     }
 
@@ -25,7 +25,7 @@ public abstract class AuthenticationProvider implements Handler {
         return AuthenticationProvider.getUser(request.getSession());
     }
 
-    protected User createFromModelUser(UserRow user) {
+    public User createFromModelUser(UserRow user) {
         // TODO change to user specific authorization
         ModelUserContext modelUserContext = SystemUser.getSystemUserContext();
 
@@ -36,4 +36,6 @@ public abstract class AuthenticationProvider implements Handler {
                 modelUserContext,
                 user.getMetadata().getUserType());
     }
+
+    public abstract boolean login(HttpServletRequest request);
 }

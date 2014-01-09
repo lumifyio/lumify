@@ -49,7 +49,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         graphRepository.commit();
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
+        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, property.getDisplayName(), oldValue, edge, "", "", user);
 
         Map<String, String> properties = graphRepository.getEdgeProperties(sourceId, destId, relationshipLabel, user);
         for (Map.Entry<String, String> p : properties.entrySet()) {
