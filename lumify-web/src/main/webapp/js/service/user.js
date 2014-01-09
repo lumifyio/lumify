@@ -13,6 +13,24 @@ define(
 
         UserService.prototype = Object.create(ServiceBase.prototype);
 
+        UserService.prototype.isLoginRequired = function() {
+            return this._ajaxGet({ url:'user/me' });
+        };
+
+        UserService.prototype.login = function(username, password) {
+            return this._ajaxPost({ 
+                url:'login',
+                data: {
+                    username: username,
+                    password: password
+                }
+            });
+        };
+
+        UserService.prototype.logout = function() {
+            return this._ajaxPost({ url:'logout' });
+        };
+
         UserService.prototype.getOnline = function() {
             var self = this;
             var result = {};

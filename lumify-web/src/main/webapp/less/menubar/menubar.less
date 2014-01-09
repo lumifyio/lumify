@@ -30,7 +30,7 @@ background: @menubar-background;
     .transition(opacity 0.2s ease-in-out);
   }
 
-  .activity, .dashboard {
+  .activity, .dashboard, .logout {
     background-position: center;    
     font-size: 0;
     a {
@@ -48,6 +48,11 @@ background: @menubar-background;
     width: 75%;
     margin: auto;
     height: 0px;
+  }
+
+  li.spacer {
+    height: 0.5em;
+    display: block;
   }
 }
 
@@ -120,6 +125,12 @@ background: @menubar-background;
     &.animating a:before, 
     &.animating a:after { 
         .animation-play-state(running);
+    }
+  }
+
+  .logout {
+    a {
+      background-image: url(/img/glyphicons/white/glyphicons_halflings_162_log_out@2x.png);
     }
   }
 }

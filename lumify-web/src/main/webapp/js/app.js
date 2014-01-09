@@ -14,8 +14,9 @@ define([
     'detail/detail',
     'map/map',
     'help/help',
-    'util/mouseOverlay'
-], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay) {
+    'util/mouseOverlay',
+    'service/user'
+], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay, UserService) {
     'use strict';
 
     return defineComponent(App);
@@ -204,6 +205,11 @@ define([
             var SLIDE_OUT = 'search workspaces',
                 pane = this.select(data.name + 'Selector'),
                 isVisible = pane.is('.visible');
+
+            if (data.name === 'logout') {
+                new UserService().logout().done(function() { window.location.reload(); });
+                return;
+            }
 
             if (data.name === 'map' && !pane.hasClass('visible')) {
                 this.trigger(document, 'mapShow', (data && data.data) || {});
