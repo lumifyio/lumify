@@ -5,13 +5,14 @@ import com.altamiracorp.bigtable.model.RowKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 public class UserRow extends Row<UserRowKey> {
     public static final String TABLE_NAME = "atc_user";
-    private static Random random = new Random();
 
     public UserRow(UserRowKey rowKey) {
         super(TABLE_NAME, rowKey);
@@ -58,41 +59,50 @@ public class UserRow extends Row<UserRowKey> {
 
     public void setPassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] salt = createSalt();
-            md.update(salt);
-            md.update(password.getBytes());
+            byte[] salt = getSalt();
             getMetadata().setPasswordSalt(salt);
-            getMetadata().setPassword(md.digest());
-        } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException("Could not find md5", ex);
+            getMetadata().setPassword(hashPassword(password, salt));
+        } catch (Exception ex) {
+            throw new RuntimeException("error setting password", ex);
         }
-    }
-
-    private byte[] createSalt() {
-        byte[] salt = new byte[4];
-        random.nextBytes(salt);
-        return salt;
     }
 
     public boolean isPasswordValid(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(getMetadata().getPasswordSalt());
-            md.update(password.getBytes());
-            byte[] existingPassword = getMetadata().getPassword();
-            byte[] checkPassword = md.digest();
-            if (existingPassword.length != checkPassword.length) {
+            return validatePassword(password, getMetadata().getPasswordSalt(), getMetadata().getPassword());
+        } catch (Exception ex) {
+            throw new RuntimeException("error validating password", ex);
+        }
+    }
+
+    private static final int SALT_LENGTH = 16;
+    private static final int ITERATION_COUNT = 1000;
+    private static final int KEY_LENGTH = 64 * 8;
+
+    private byte[] getSalt() throws NoSuchAlgorithmException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[SALT_LENGTH];
+        sr.nextBytes(salt);
+        return salt;
+    }
+
+    private byte[] hashPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        return skf.generateSecret(spec).getEncoded();
+    }
+
+    private boolean validatePassword(String password, byte[] salt, byte[] storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] hashedPassword = hashPassword(password, salt);
+
+        if (hashedPassword.length != storedPassword.length) {
+            return false;
+        }
+        for (int i = 0; i < storedPassword.length; i++) {
+            if (hashedPassword[i] != storedPassword[i]) {
                 return false;
             }
-            for (int i = 0; i < existingPassword.length; i++) {
-                if (existingPassword[i] != checkPassword[i]) {
-                    return false;
-                }
-            }
-            return true;
-        } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException("Could not find md5", ex);
         }
+        return true;
     }
 }
