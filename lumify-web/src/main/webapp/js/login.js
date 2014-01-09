@@ -59,7 +59,7 @@ define([
                 
                 .done(function() {
                     // TODO: make more seamless, but for now this should work
-                    window.location.refresh();
+                    window.location.reload();
                 })
 
                 .fail(function() {
