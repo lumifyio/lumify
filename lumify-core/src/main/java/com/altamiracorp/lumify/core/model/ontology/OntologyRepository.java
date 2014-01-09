@@ -31,7 +31,8 @@ public class OntologyRepository {
             .build();
 
     @Inject
-    public OntologyRepository() {
+    public OntologyRepository(Graph graph) {
+        this.graph = graph;
     }
 
     public List<Relationship> getRelationshipLabels(User user) {
@@ -195,8 +196,7 @@ public class OntologyRepository {
             }
         }
 
-        List<Vertex> relationshipTypes = getRelationships(sourceConcept, destConcept, user);
-        return toRelationships(relationshipTypes, user);
+        return getRelationships(sourceConcept, destConcept, user);
     }
 
     private List<Relationship> toRelationships(Iterable<Vertex> relationshipTypes, User user) {
@@ -437,7 +437,7 @@ public class OntologyRepository {
             typeProperty = new Property(graph.addVertex(DEFAULT_VISIBILITY));
         }
         typeProperty.getVertex().setProperties(
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT.toString(), DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
         );
@@ -450,41 +450,39 @@ public class OntologyRepository {
             relationship = new Relationship(graph.addVertex(DEFAULT_VISIBILITY), from, to);
         }
         relationship.getVertex().setProperties(
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT.toString(), DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
         );
         return relationship;
     }
 
-    private List<Vertex> getRelationships(Concept sourceConcept, final Concept destConcept, User user) {
+    private List<Relationship> getRelationships(Concept sourceConcept, final Concept destConcept, User user) {
         List<Vertex> sourceAndParents = getConceptParents(sourceConcept, user);
         List<Vertex> destAndParents = getConceptParents(destConcept, user);
 
-        List<Vertex> allRelationshipTypes = new ArrayList<Vertex>();
+        List<Relationship> allRelationshipTypes = new ArrayList<Relationship>();
         for (Vertex s : sourceAndParents) {
             for (Vertex d : destAndParents) {
-                allRelationshipTypes.addAll(getRelationshipsShallow(s, d));
+                allRelationshipTypes.addAll(getRelationshipsShallow(s, d, user));
             }
         }
 
         return allRelationshipTypes;
     }
 
-    private List<Vertex> getRelationshipsShallow(Vertex source, final Vertex dest) {
-        return new GremlinPipeline(source)
-                .outE(LabelName.HAS_EDGE.toString())
-                .inV()
-                .as("edgeTypes")
-                .outE(LabelName.HAS_EDGE.toString())
-                .inV()
-                .filter(new PipeFunction<Vertex, Boolean>() {
+    private List<Relationship> getRelationshipsShallow(Vertex source, final Vertex dest, User user) {
+        FilterIterable<Vertex> relationships = new FilterIterable<Vertex>(source.getVertices(Direction.BOTH, LabelName.HAS_EDGE.toString(), AUTHORIZATIONS)) {
+            @Override
+            protected boolean isIncluded(Vertex vertex) {
+                return new FilterIterable<Vertex>(vertex.getVertices(Direction.BOTH, LabelName.HAS_EDGE.toString(), AUTHORIZATIONS)) {
                     @Override
-                    public Boolean compute(Vertex vertex) {
+                    protected boolean isIncluded(Vertex vertex) {
                         return vertex.getId().equals(dest.getId());
                     }
-                })
-                .back("edgeTypes")
-                .toList();
+                }.iterator().hasNext();
+            }
+        };
+        return toRelationships(relationships, user);
     }
 
     private List<Vertex> getConceptParents(Concept concept, User user) {
