@@ -76,7 +76,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         artifactRepository.save(artifact, user.getModelUserContext());
 
         ArtifactExtractedInfo artifactDetails = new ArtifactExtractedInfo();
-        artifactDetails.setConceptType(ontologyRepository.getConceptByName(DisplayType.IMAGE.toString(), user).getId());
+        artifactDetails.setConceptType(DisplayType.IMAGE.toString());
         artifactDetails.setTitle("Image of " + entityVertex.getProperty(PropertyName.TITLE));
         artifactDetails.setSource(SOURCE_UPLOAD);
         artifactDetails.setProcess(PROCESS);
@@ -89,7 +89,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             artifactVertex = artifactRepository.saveToGraph(artifact, artifactDetails, user);
         }
 
-        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnail.getUrl(artifact.getRowKey()));
+        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnail.getUrl(artifactVertex.getId()));
         graphRepository.commit();
 
         // TODO: replace second"" when we implement commenting on ui
