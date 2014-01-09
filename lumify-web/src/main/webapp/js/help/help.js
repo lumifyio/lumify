@@ -10,6 +10,7 @@ define([
     helpTemplate,
     sectionsTemplate) {
 
+    var SCOPE_SORTING_HINTS = 'Lumify Search Graph Map'.split(' ');
 
     return defineComponent(Help);
 
@@ -50,7 +51,16 @@ define([
             this.$node.find('ul').html(
                 sectionsTemplate({
                     shortcutsByScope:data,
-                    prettyCommand: prettyCommand
+                    prettyCommand: prettyCommand,
+                    sortFunction: function(s1, s2) {
+                        var i1 = SCOPE_SORTING_HINTS.indexOf(s1),
+                            i2 = SCOPE_SORTING_HINTS.indexOf(s2);
+
+                        if (i1 < 0) i1 = SCOPE_SORTING_HINTS.length;
+                        if (i2 < 0) i2 = SCOPE_SORTING_HINTS.length;
+
+                        return i1 === i2 ? 0 : i1 > i2;
+                    }
                 })
             );
         };
