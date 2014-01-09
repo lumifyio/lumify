@@ -13,6 +13,8 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.GraphFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 
@@ -49,6 +51,11 @@ public abstract class BootstrapBase extends AbstractModule {
                 return createContentTypeExtractor();
             }
         });
+        bind(Graph.class).toInstance(createGraph());
+    }
+
+    private Graph createGraph() {
+        return new GraphFactory().createGraph(config.getSubset("graph").toMap());
     }
 
     private ContentTypeExtractor createContentTypeExtractor() {
