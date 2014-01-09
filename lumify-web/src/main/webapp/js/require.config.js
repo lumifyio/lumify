@@ -25,7 +25,7 @@ var require = {
         'scrollStop': '../libs/jquery-scrollstop/jquery.scrollstop',
         'sf': '../libs/sf/sf',
         'text': '../libs/requirejs-text/text',
-        'three': '../libs/threejs/build/three.min',
+        'three': '../libs/threejs/build/three',
         'tpl': '../libs/requirejs-ejs/rejs',
         'underscore': '../libs/underscore/underscore',
         'videojs': '../libs/video.js/video',

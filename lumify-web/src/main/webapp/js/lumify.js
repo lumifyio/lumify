@@ -31,7 +31,9 @@ require([
 
     'easing',
     'scrollStop',
-    'bootstrap-datepicker'
+    'bootstrap-datepicker',
+    'util/jquery.flight',
+    'util/jquery.removePrefixedClasses'
 ],
 function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advice, withLogging, debug, _, Visibility, UserService) {
     'use strict';
