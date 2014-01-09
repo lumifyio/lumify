@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpSession;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +23,12 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ArtifactRawByRowKeyTest extends RouteTestBase {
-    private ArtifactRawByRowKey artifactRawByRowKey;
+public class ArtifactRawTest extends RouteTestBase {
+    private ArtifactRaw artifactRaw;
 
     @Mock
     private GraphVertex vertex;
@@ -47,7 +44,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
     public void setUp() throws Exception {
         super.setUp();
 
-        artifactRawByRowKey = new ArtifactRawByRowKey(mockArtifactRepository, mockGraphRepository);
+        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraphRepository);
     }
 
     @Test
@@ -55,15 +52,16 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         ArtifactRowKey artifactRowKey = ArtifactRowKey.build("testContents".getBytes());
         when(mockRequest.getParameter("download")).thenReturn(null);
         when(mockRequest.getParameter("playback")).thenReturn(null);
-        when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
+        when(mockRequest.getAttribute("graphVertexId")).thenReturn("123");
         when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
                 .setGraphVertexId("123")
-                .setFileName("testFile")
-                .setFileExtension("testExt")
+                .setFileName("testFile.testExt")
+                .setFileExtension("testExt_2014-01-08T13-24-09-0500")
                 .setMimeType("text/plain");
+        when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
@@ -84,7 +82,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
             }
         }).when(mockResponseOutputStream).write(any(byte[].class), any(Integer.class), any(Integer.class));
 
-        artifactRawByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
+        artifactRaw.handle(mockRequest, mockResponse, mockHandlerChain);
 
         verify(mockResponse).setContentType("text/plain");
         verify(mockResponse).addHeader("Content-Disposition", "inline; filename=testFile.testExt");
@@ -97,15 +95,16 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         when(mockRequest.getParameter("playback")).thenReturn("true");
         when(mockRequest.getParameter("type")).thenReturn("video/mp4");
         when(mockRequest.getHeader("Range")).thenReturn("bytes=1-4");
-        when(mockRequest.getAttribute("_rowKey")).thenReturn(artifactRowKey.toString());
+        when(mockRequest.getAttribute("graphVertexId")).thenReturn("123");
         when(mockHttpSession.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME)).thenReturn(mockUser);
 
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
                 .setGraphVertexId("123")
-                .setFileName("testFile")
-                .setFileExtension("testExt")
+                .setFileName("testFile.testExt")
+                .setFileExtension("testExt_2014-01-08T13-24-09-0500")
                 .setMimeType("video/mp4");
+        when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
 
@@ -129,7 +128,7 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
             }
         }).when(mockResponseOutputStream).write(any(byte[].class), any(Integer.class), any(Integer.class));
 
-        artifactRawByRowKey.handle(mockRequest, mockResponse, mockHandlerChain);
+        artifactRaw.handle(mockRequest, mockResponse, mockHandlerChain);
 
         verify(mockResponse).setContentType("video/mp4");
         verify(mockResponse).addHeader("Content-Disposition", "attachment; filename=testFile.testExt");

@@ -7,20 +7,18 @@ define([
     'tpl!./termForm',
     'tpl!./concept-options',
     'tpl!./entity',
-    'service/service',
-    'service/entity',
+    'service/vertex',
     'service/ontology',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, Service, EntityService, OntologyService) {
+], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown);
 
 
     function TermForm() {
-        this.entityService = new EntityService();
+        this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
-        this.service = new Service();
 
         this.defaultAttrs({
             entityConceptMenuSelector: '.underneath .dropdown-menu a',
@@ -41,7 +39,7 @@ define([
             var info = $(this.attr.mentionNode).removeClass('focused').data('info');
 
             if (info) {
-                this.updateConceptLabel(info._subType);
+                this.updateConceptLabel(info._conceptType);
             }
 
             // Remove extra textNodes
@@ -101,7 +99,7 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                this.updateConceptSelect(info && info._subType || '').show();
+                this.updateConceptSelect(info && info._conceptType || '').show();
                 if (newGraphVertexId && initial && !this.attr.coords) {
                     this.select('resolveButtonSelector')
                         .hide();
@@ -114,7 +112,7 @@ define([
             }
 
             if (newGraphVertexId) {
-                this.service.getVertexProperties(newGraphVertexId)
+                this.vertexService.getVertexProperties(newGraphVertexId)
                     .done(this.updateResolveImageIcon.bind(this));
             } else this.updateResolveImageIcon();
         };
@@ -180,7 +178,7 @@ define([
             }
 
             if (!this.currentGraphVertexId) {
-                this.entityService.createTerm(parameters)
+                this.vertexService.createTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -190,7 +188,7 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             } else {
-                this.entityService.updateTerm(parameters)
+                this.vertexService.updateTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -233,12 +231,12 @@ define([
         this.createEntity = function (parameters) {
             var self = this;
 
-            this.entityService.resolveDetectedObject(parameters)
+            this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
                     var resolvedVertex ={
                         graphVertexId: data.entityVertex.graphVertexId,
                         _rowKey: data.entityVertex._rowKey,
-                        _subType: data.entityVertex._subType,
+                        _conceptType: data.entityVertex._conceptType,
                         _type: data.entityVertex._type,
                         title: data.entityVertex.title,
                         info: data.entityVertex.info
@@ -264,14 +262,14 @@ define([
 
                     $allDetectedObjectLabels.each(function(){
                         if(parseFloat($(this).data("info").x1) > data.entityVertex.x1){
-                            $tag.removePrefixedClasses('subType-').addClass('subType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
+                            $tag.removePrefixedClasses('conceptType-').addClass('conceptType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
                             added = true;
                             return false;
                         }
                     });
 
                     if (!added){
-                        $tag.addClass('subType-' + parameters.conceptId);
+                        $tag.addClass('conceptType-' + parameters.conceptId);
                         $allDetectedObjects.append($parentSpan);
                     }
                     $tag.attr('data-info', JSON.stringify(data.entityVertex));
@@ -287,7 +285,7 @@ define([
 
         this.updateEntity = function (parameters) {
             var self = this;
-            this.entityService.updateDetectedObject(parameters).done(function(data) {
+            this.vertexService.updateDetectedObject(parameters).done(function(data) {
                 self.updateEntityTag(data, parameters.conceptId);
             });
         };
@@ -297,7 +295,7 @@ define([
             var resolvedVertex = {
                 graphVertexId: data.entityVertex.graphVertexId,
                 _rowKey: data.entityVertex._rowKey,
-                _subType: data.entityVertex._subType,
+                _conceptType: data.entityVertex._conceptType,
                 _type: data.entityVertex._type,
                 title: data.entityVertex.title,
                 info: data.entityVertex.info
@@ -305,8 +303,8 @@ define([
             var $focused = $('.focused');
             var $tag = $focused.find('.label-info');
 
-            $tag.text(data.entityVertex.title).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('subType-');
-            $tag.addClass('resolved entity subType-' + conceptId);
+            $tag.text(data.entityVertex.title).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
+            $tag.addClass('resolved entity conceptType-' + conceptId);
 
             if (!$focused.children().hasClass('delete-tag')){
                 var $buttonTag = $('<span>').addClass('delete-tag').text('x');
@@ -338,7 +336,7 @@ define([
             if (this.allConcepts && this.allConcepts.length) {
 
                 vertex = $(vertex || this.promoted || this.attr.mentionNode);
-                var classPrefix = 'subType-',
+                var classPrefix = 'conceptType-',
                     labels = this.allConcepts.map(function(c) {
                         return classPrefix + c.id;
                     });
@@ -415,7 +413,7 @@ define([
 
             if (!vertex && info && !conceptId) {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var concept = self.conceptForSubType(info._subType, allConcepts);
+                    var concept = self.conceptForConceptType(info._conceptType, allConcepts);
                     if (concept) {
                         updateCss(concept.glyphIconHref);
                     }
@@ -424,9 +422,9 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var subType = conceptId || (vertex && vertex.properties._subType);
-                    if (subType) {
-                        var concept = self.conceptForSubType(subType, allConcepts);
+                    var conceptType = conceptId || (vertex && vertex.properties._conceptType);
+                    if (conceptType) {
+                        var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {
                             updateCss(concept.glyphIconHref);
                             return;
@@ -453,8 +451,8 @@ define([
             }
         };
 
-        this.conceptForSubType = function(subType, allConcepts) {
-            return _.findWhere(allConcepts, { id:subType });
+        this.conceptForConceptType = function(conceptType, allConcepts) {
+            return _.findWhere(allConcepts, { id:conceptType });
         };
 
         this.registerEvents = function() {
@@ -504,7 +502,7 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (self.attr.existing && vertexInfo && vertexInfo._subType) || ''
+                    selectedConceptId: (self.attr.existing && vertexInfo && vertexInfo._conceptType) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -515,7 +513,7 @@ define([
 
 
         this.runQuery = function(query) {
-            return this.service.graphVertexSearch(query)
+            return this.vertexService.graphVertexSearch(query)
                 .then(function(response) {
                     return _.filter(response.vertices, function(v) { return v.properties._type === 'entity'; });
                 }).done(this.updateQueryCountBadge.bind(this));
@@ -631,7 +629,7 @@ define([
                                 item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title]),
                             icon = '',
                             concept = _.find(self.allConcepts, function(c) { 
-                                    return item.properties && c.id === item.properties._subType; 
+                                    return item.properties && c.id === item.properties._conceptType;
                             });
 
                         if (item.properties) {

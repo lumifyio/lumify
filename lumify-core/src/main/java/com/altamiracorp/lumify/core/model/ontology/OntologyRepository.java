@@ -25,6 +25,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OntologyRepository {
     private GraphRepository graphRepository;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
+    public static final String RELATIONSHIP_CONCEPT = "relationship";
+    public static final String CONCEPT = "concept";
+    public static final String PROPERTY_CONCEPT = "property";
+    public static final String ENTITY = "entity";
     private final GraphSession graphSession;
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
@@ -38,14 +42,14 @@ public class OntologyRepository {
 
     public List<Relationship> getRelationshipLabels(User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .vertices();
         return toRelationships(vertices, user);
     }
 
     public String getDisplayNameForLabel(String relationshipLabel, User user) {
         Iterable<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .vertices();
         for (Vertex vertex : vertices) {
             if (vertex.getProperty(PropertyName.ONTOLOGY_TITLE.toString()).equals(relationshipLabel))
@@ -57,7 +61,7 @@ public class OntologyRepository {
     public List<Property> getProperties(User user) {
         List<Property> properties = new ArrayList<Property>();
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString())
+                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
                 .vertices()
                 .iterator();
         while (vertices.hasNext()) {
@@ -69,7 +73,7 @@ public class OntologyRepository {
 
     public Property getProperty(String propertyName, User user) {
         Iterator<Vertex> properties = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.PROPERTY.toString())
+                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
                 .vertices()
                 .iterator();
@@ -86,7 +90,7 @@ public class OntologyRepository {
 
     public Concept getRootConcept(User user) {
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), OntologyRepository.ROOT_CONCEPT_NAME)
                 .vertices()
                 .iterator();
@@ -137,7 +141,7 @@ public class OntologyRepository {
             return concept;
         }
 
-        GraphVertex vertex = graphSession.findVertexByOntologyTitleAndType(title, VertexType.CONCEPT, user);
+        GraphVertex vertex = graphSession.findOntologyConceptByTitle(title, user);
         if (vertex == null) {
             return null;
         }
@@ -183,8 +187,8 @@ public class OntologyRepository {
         Concept[] sourceAndDestConcept = new Concept[2];
         Map<GraphRelationship, GraphVertex> related = graphSession.getRelationships(vertexId, user);
         for (Map.Entry<GraphRelationship, GraphVertex> relatedVertex : related.entrySet()) {
-            String type = (String) relatedVertex.getValue().getProperty(PropertyName.TYPE);
-            if (type.equals(VertexType.CONCEPT.toString())) {
+            String type = (String) relatedVertex.getValue().getProperty(PropertyName.CONCEPT_TYPE);
+            if (type.equals(CONCEPT)) {
                 String destVertexId = relatedVertex.getKey().getDestVertexId();
                 String sourceVertexId = relatedVertex.getKey().getSourceVertexId();
                 if (sourceVertexId.equals(vertexId)) {
@@ -287,29 +291,29 @@ public class OntologyRepository {
 
     private Vertex getRelationshipVertexId(String relationshipLabel, User user) {
         Iterator<Vertex> vertices = graphSession.getGraph().query()
-                .has(PropertyName.TYPE.toString(), VertexType.RELATIONSHIP.toString())
+                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel)
                 .vertices()
                 .iterator();
         if (vertices.hasNext()) {
             Vertex vertex = vertices.next();
             if (vertices.hasNext()) {
-                throw new RuntimeException("Too many \"" + VertexType.RELATIONSHIP + "\" vertices");
+                throw new RuntimeException("Too many \"" + RELATIONSHIP_CONCEPT + "\" vertices");
             }
             return vertex;
         } else {
-            throw new RuntimeException("Could not find \"" + VertexType.RELATIONSHIP + "\" vertex");
+            throw new RuntimeException("Could not find \"" + RELATIONSHIP_CONCEPT + "\" vertex");
         }
     }
 
-    public Concept getOrCreateConcept(Concept parent, String conceptName, String process, String displayName, User user) {
+    public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName, User user) {
         Concept concept = getConceptByName(conceptName, user);
         if (concept == null) {
             InMemoryGraphVertex graphVertex = new InMemoryGraphVertex();
             String id = graphRepository.saveVertex(graphVertex, user);
             concept = getConceptById(id, user);
         }
-        concept.setProperty(PropertyName.TYPE.toString(), VertexType.CONCEPT.toString());
+        concept.setProperty(PropertyName.CONCEPT_TYPE.toString(), CONCEPT);
         concept.setProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName);
         concept.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);
         if (parent != null) {
@@ -325,7 +329,7 @@ public class OntologyRepository {
         graphSession.findOrAddEdge(fromVertex, toVertex, edgeLabel, user);
     }
 
-    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, String process, PropertyType dataType, User user) {
+    public Property addPropertyTo(GraphVertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
         Property property = graphSession.getOrCreatePropertyType(propertyName, dataType, user);
         property.setProperty(PropertyName.DISPLAY_NAME.toString(), displayName);

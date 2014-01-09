@@ -2,7 +2,7 @@ package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,9 +58,9 @@ public class Audit extends Row<AuditRowKey> {
         try {
             JSONObject json = new JSONObject();
             json.put("data", this.getAuditCommon().toJson());
-            if (this.getAuditCommon().getType().equals(VertexType.PROPERTY.toString())) {
+            if (this.getAuditCommon().getType().equals(OntologyRepository.PROPERTY_CONCEPT.toString())) {
                 json.put("propertyAudit", this.getAuditProperty().toJson());
-            } else if (this.getAuditCommon().getType().equals(VertexType.RELATIONSHIP.toString())) {
+            } else if (this.getAuditCommon().getType().equals(OntologyRepository.RELATIONSHIP_CONCEPT.toString())) {
                 json.put("relationshipAudit", this.getAuditRelationship().toJson());
             } else {
                 json.put("entityAudit", this.getAuditEntity().toJson());

@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -24,6 +25,8 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     @Mock
     private AuditRepository mockAuditRepository;
     @Mock
+    private OntologyRepository mockOntologyRepositiory;
+    @Mock
     private GraphVertex mockSourceVertex;
     @Mock
     private GraphVertex mockDestVertex;
@@ -32,7 +35,7 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraphRepository, mockAuditRepository);
+        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraphRepository, mockAuditRepository, mockOntologyRepositiory);
     }
 
     @Test
@@ -43,6 +46,7 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
 
         when(mockGraphRepository.findVertex("sourceId", mockUser)).thenReturn(mockSourceVertex);
         when(mockGraphRepository.findVertex("targetId", mockUser)).thenReturn(mockDestVertex);
+        when (mockOntologyRepositiory.getDisplayNameForLabel("label", mockUser)).thenReturn("label");
 
         vertexRelationshipRemoval.handle(mockRequest, mockResponse, mockHandlerChain);
         JSONObject response = new JSONObject(responseStringWriter.getBuffer().toString());

@@ -1,29 +1,21 @@
 
 
 define([
+    'data',
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./appFullscreenDetails',
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
-    'service/service',
     'detail/detail',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, registry, template, errorTemplate, VertexService, Service, Detail) {
+], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
 
-    function filterEntity(v) {
-        return v.properties._type === 'entity';
-    }
-    function filterArtifacts(v) {
-        return v.properties._type === 'artifact';
-    }
-
     function FullscreenDetails() {
         this.vertexService = new VertexService();
-        this.service = new Service();
 
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',
@@ -44,9 +36,12 @@ define([
 
             this.$node.addClass('fullscreen-details');
 
-            this.vertexService
-                .getMultiple(this.attr.graphVertexIds)
-                .done(this.handleVerticesLoaded.bind(this));
+            var self = this;
+            appData.cachedConceptsDeferred.done(function() {
+                self.vertexService
+                    .getMultiple(self.attr.graphVertexIds)
+                    .done(self.handleVerticesLoaded.bind(self));
+            });
         });
 
         this.onClose = function(event) {
@@ -81,18 +76,15 @@ define([
             this.$node.toggleClass('onlyone', this.vertices.length === 1);
 
             var verts = this.vertices.length,
-                entities = _.filter(this.vertices, filterEntity).length,
-                artifacts = _.filter(this.vertices, filterArtifacts).length;
+                entities = this.vertices.length;
 
             this.$node
-                .removePrefixedClasses('vertices- entities- artifacts- has- entity-cols-')
+                .removePrefixedClasses('vertices- entities- has- entity-cols-')
                 .addClass([
                     this.vertices.length <= 4 ? 'vertices-' + this.vertices.length : 'vertices-many',
                     'entities-' + entities,
                     'entity-cols-' + _.find([4,3,2,1], function(i) { return entities % i === 0; }),
-                    entities ? 'has-entities' : '',
-                    'artifacts-' + artifacts,
-                    artifacts ? 'has-artifacts' : ''
+                    entities ? 'has-entities' : ''
                 ].join(' '));
         };
 
@@ -119,11 +111,7 @@ define([
             this.vertices = _.sortBy(vertices, function(v) {
                 var descriptors = [];
 
-                // Entities first
-                descriptors.push(v.properties._type === 'entity' ? 0 : 1);
-
-                // Image/Video before documents
-                descriptors.push(/^(image|video)$/i.test(v.properties._subType) ? 0 : 1);
+                // TODO: Image/Video before documents
 
                 // Sort by title
                 descriptors.push(v.properties.title);
@@ -131,13 +119,11 @@ define([
             });
             
             this.vertices.forEach(function(v) {
-                var node = v.properties._type === 'entity' ? 
-                    this.$node.find('.entities-container') : this.$node.find('.artifacts-container');
+                var node = this.$node.find('.entities-container');
 
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
-                Detail.attachTo(this.$node.find('.detail-pane').last()
-                                .addClass('type-' + v.properties._type + ' subType-' + v.properties._subType)
-                                .find('.content'), {
+                // TODO: add classes that determine displayType
+                Detail.attachTo(this.$node.find('.detail-pane').last().find('.content'), {
                     loadGraphVertexData: v,
                     highlightStyle: 2
                 });

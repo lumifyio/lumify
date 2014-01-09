@@ -1,4 +1,3 @@
-@import (reference) "../util/lists";
 @import (reference) "../util/animation";
 
 background: @menubar-background;
@@ -7,7 +6,9 @@ background: @menubar-background;
 
 
 .menu-top, .menu-bottom {
-  .reset-list;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 
   a {
     background: transparent;
