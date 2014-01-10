@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ public class VertexProperties extends BaseRequestHandler {
         respondWithJson(response, json);
     }
 
-    public static JSONObject propertiesToJson(Map<String, String> properties) throws JSONException {
+    public static JSONObject propertiesToJson(Iterable<Property> properties) throws JSONException {
         JSONObject resultsJson = new JSONObject();
         for (Map.Entry<String, String> property : properties.entrySet()) {
             resultsJson.put(property.getKey(), property.getValue());
