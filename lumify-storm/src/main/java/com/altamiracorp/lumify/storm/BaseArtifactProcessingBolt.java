@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.storm;
 
-
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.tuple.Tuple;
@@ -88,7 +87,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         String fileName = fileMetadata.getFileNameWithoutDateSuffix();
         ArtifactExtractedInfo artifactExtractedInfo = new ArtifactExtractedInfo();
         if (fileMetadata.getRaw() != null) {
-            in = new ByteArrayInputStream(fileMetadata.getRaw());
+            in = fileMetadata.getRaw();
         } else if (isArchive(fileName)) {
             archiveTempDir = extractArchive(fileMetadata);
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
@@ -229,7 +228,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         }
     }
 
-    protected String moveRawFile(String fileName, String rowKey, byte[] raw) throws IOException {
+    protected String moveRawFile(String fileName, String rowKey, InputStream raw) throws IOException {
         String rawArtifactHdfsPath = "/lumify/artifacts/raw/" + rowKey;
         if (getHdfsFileSystem().exists(new Path(rawArtifactHdfsPath))) {
             getHdfsFileSystem().delete(new Path(fileName), false);
@@ -237,7 +236,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             if (raw != null) {
                 FSDataOutputStream rawFile = getHdfsFileSystem().create(new Path(rawArtifactHdfsPath));
                 try {
-                    rawFile.write(raw);
+                    rawFile.write(IOUtils.toByteArray(raw));
                 } finally {
                     rawFile.close();
                 }

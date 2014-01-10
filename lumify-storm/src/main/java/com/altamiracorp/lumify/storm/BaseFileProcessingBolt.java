@@ -20,6 +20,8 @@ import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
+import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
@@ -49,7 +51,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             throw new RuntimeException("Invalid item on the queue.");
         }
         String mimeType = null;
-        byte[] raw = null;
+        InputStream raw = null;
         String source = null;
         String title = null;
 
@@ -60,11 +62,19 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             source = json.optString("source");
             title = json.optString("title");
             String rawString = json.optString("raw");
-            if (rawString != null) {
-                raw = rawString.getBytes();
-            }
-            if (fileName == null || fileName.length() == 0) {
-                throw new RuntimeException("Expected 'fileName' in JSON document but got.\n" + json.toString());
+
+            String vertexId = json.optString("graphVertexId");
+            if (vertexId != null) {
+                GraphVertex vertex = graphRepository.findVertex(vertexId, getUser());
+                String rowKey = (String) vertex.getProperty(PropertyName.ROW_KEY.toString());
+                Artifact artifact = artifactRepository.findByRowKey(rowKey, getUser().getModelUserContext());
+                fileName = artifact.getMetadata().getFileName();
+                mimeType = artifact.getMetadata().getMimeType();
+                source = (String) vertex.getProperty(PropertyName.SOURCE.toString());
+                title = (String) vertex.getProperty(PropertyName.TITLE.toString());
+                raw = artifactRepository.getRaw(artifact, vertex, getUser());
+            } else if (rawString != null) {
+                raw = new ByteArrayInputStream(rawString.getBytes());
             }
         }
         if (mimeType == null) {
