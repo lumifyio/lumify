@@ -3,11 +3,12 @@ package com.altamiracorp.lumify.storm.file;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class FileMetadata {
     private String fileName;
     private String mimeType;
-    private byte[] raw;
+    private InputStream raw;
     private String title;
     private String source;
     private File primaryFileFromArchive;
@@ -41,11 +42,11 @@ public class FileMetadata {
         this.primaryFileFromArchive = primaryFileFromArchive;
     }
 
-    public byte[] getRaw() {
+    public InputStream getRaw() {
         return raw;
     }
 
-    public FileMetadata setRaw(byte[] raw) {
+    public FileMetadata setRaw(InputStream raw) {
         this.raw = raw;
         return this;
     }
