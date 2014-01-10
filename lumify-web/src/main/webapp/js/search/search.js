@@ -144,7 +144,7 @@ define([
                             sortVerticesIntoResults = function(v) {
                                 var props = v.properties,
                                     conceptType = props._conceptType,
-                                    addToSearchResults = function(subType) {
+                                    addToSearchResults = function(conceptType) {
                                         if (!results[conceptType]) results[conceptType] = [];
 
                                         // Check for an existing result with the same id
