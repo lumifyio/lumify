@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.util;
 
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import org.apache.commons.io.IOUtils;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ThreadedInputStreamProcessTest {
     @Mock
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
 
     @Mock
     private Counter metricCounter;

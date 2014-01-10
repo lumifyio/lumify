@@ -61,8 +61,8 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
                 .setGraphVertexId("123")
-                .setFileName("testFile")
-                .setFileExtension("testExt")
+                .setFileName("testFile.testExt")
+                .setFileExtension("testExt_2014-01-08T13-24-09-0500")
                 .setMimeType("text/plain");
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
@@ -103,8 +103,8 @@ public class ArtifactRawByRowKeyTest extends RouteTestBase {
         Artifact artifact = new Artifact(artifactRowKey);
         artifact.getMetadata()
                 .setGraphVertexId("123")
-                .setFileName("testFile")
-                .setFileExtension("testExt")
+                .setFileName("testFile.testExt")
+                .setFileExtension("testExt_2014-01-08T13-24-09-0500")
                 .setMimeType("video/mp4");
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
         when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);

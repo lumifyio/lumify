@@ -11,7 +11,7 @@ import java.util.Collection;
 public abstract class SearchProvider {
     public static final String SEARCH_PROVIDER_PROP_KEY = "search.provider";
 
-    public abstract void init(Configuration config, User user, MetricsManager metricManager);
+    public abstract void init(Configuration config, User user, MetricsManager manager);
 
     public abstract void add(GraphVertex graphVertex, InputStream textIn) throws Exception;
 
