@@ -22,20 +22,16 @@ import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArtifactRawByRowKey extends BaseRequestHandler {
+public class ArtifactRaw extends BaseRequestHandler {
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
 
     private final ArtifactRepository artifactRepository;
     private final GraphRepository graphRepository;
 
     @Inject
-    public ArtifactRawByRowKey(final ArtifactRepository repo, final GraphRepository graphRepository) {
+    public ArtifactRaw(final ArtifactRepository repo, final GraphRepository graphRepository) {
         this.graphRepository = graphRepository;
         artifactRepository = repo;
-    }
-
-    public static String getUrl(ArtifactRowKey artifactKey) {
-        return "/artifact/" + UrlUtils.urlEncode(artifactKey.toString()) + "/raw";
     }
 
     @Override
@@ -44,18 +40,23 @@ public class ArtifactRawByRowKey extends BaseRequestHandler {
         boolean videoPlayback = getOptionalParameter(request, "playback") != null;
 
         User user = getUser(request);
-        ArtifactRowKey artifactKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "_rowKey")));
-        Artifact artifact = artifactRepository.findByRowKey(artifactKey.toString(), user.getModelUserContext());
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
+        ArtifactRowKey artifactKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        Artifact artifact = artifactRepository.findByRowKey(artifactKey.toString(), user.getModelUserContext());
         if (artifact == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
             return;
         }
 
-        String graphVertexId = artifact.getMetadata().getGraphVertexId();
         GraphVertex vertex = graphRepository.findVertex(graphVertexId, user);
-
 
         String fileName = getFileName(artifact);
         if (videoPlayback) {

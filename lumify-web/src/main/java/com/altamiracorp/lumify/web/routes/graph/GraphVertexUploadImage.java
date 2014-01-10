@@ -4,11 +4,11 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactMetadata;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.DisplayType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
@@ -17,7 +17,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnailByRowKey;
+import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -76,7 +76,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         artifactRepository.save(artifact, user.getModelUserContext());
 
         ArtifactExtractedInfo artifactDetails = new ArtifactExtractedInfo();
-        artifactDetails.setArtifactType(ArtifactType.IMAGE.toString());
+        artifactDetails.setConceptType(DisplayType.IMAGE.toString());
         artifactDetails.setTitle("Image of " + entityVertex.getProperty(PropertyName.TITLE));
         artifactDetails.setSource(SOURCE_UPLOAD);
         artifactDetails.setProcess(PROCESS);
@@ -89,7 +89,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             artifactVertex = artifactRepository.saveToGraph(artifact, artifactDetails, user);
         }
 
-        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnailByRowKey.getUrl(artifact.getRowKey()));
+        entityVertex.setProperty(PropertyName.GLYPH_ICON, ArtifactThumbnail.getUrl(artifactVertex.getId()));
         graphRepository.commit();
 
         // TODO: replace second"" when we implement commenting on ui

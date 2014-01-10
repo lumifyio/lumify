@@ -1,6 +1,6 @@
 
 
-define(['service/service'], function(Service) {
+define(['service/vertex'], function(Service) {
 
     describe('Service', function() {
 

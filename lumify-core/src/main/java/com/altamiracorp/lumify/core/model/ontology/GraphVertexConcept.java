@@ -67,6 +67,11 @@ public class GraphVertexConcept extends Concept {
     }
 
     @Override
+    public String getDisplayType() {
+        return (String) graphVertex.getProperty(PropertyName.DISPLAY_TYPE);
+    }
+
+    @Override
     public Vertex getVertex() {
         return graphVertex.getVertex();
     }

@@ -86,7 +86,6 @@
     <ul class="dropdown-menu">
         <li><a class="has-shortcut has-subtitle" data-func="loadRelatedItems" tabindex="-1" href="#">Items<span class="shortcut">alt+r</span></a></li>
         <li class="divider"></li>
-        <li><a data-func="loadRelatedItemsOfConcept" data-args="[<%= artifactConcept.id %>]" tabindex="-1" href="#"><%= artifactConcept.pluralDisplayName %></a></li>
         <% firstLevelConcepts.forEach(function(concept) { %>
             <li><a data-func="loadRelatedItemsOfConcept" data-args="[<%= concept.id %>]" tabindex="-1" href="#"><%= concept.pluralDisplayName %></a></li>
         <% }) %>

@@ -1,4 +1,3 @@
-@import (reference) "../util/lists.less";
 @import (reference) "../util/constants.less";
 @import (reference) "../util/selection.less";
 
@@ -12,16 +11,18 @@
   }
 
   .entity_audit_events .audit-list {
+    margin: 1em 0 0 0;
     li {
-      margin-top: 1em;
-      margin-bottom: 1em;
+      padding: 0;
     }
   }
 
   .audit-list {
     list-style: none;
-    margin: 0 1em;    
     font-size: 95%;
+    margin: 1em -1em 1em;
+    padding: 1em;
+    background: #eee;
 
     &.showAll {
       //max-height: 10em;
@@ -31,8 +32,8 @@
     }
     .show-all-button-row button { padding-left: 0; }
     li {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+      margin-top: 0.6em;
+      margin-bottom: 0.6em;
       overflow: auto;
       font-size: 90%;
       color: #555;
@@ -50,6 +51,7 @@
     .audit-subtitle { 
       float: right; 
       padding-left: 0.5em;
+      max-width: 50%;
       color: #999;
     }
     .audit-to { 
@@ -64,9 +66,6 @@
     &.property-title > .value { text-decoration: none; }
   }
   .property .audit-list {
-    margin: 0 -1em 1em;
-    background: #eee;
-    padding: 1em;
   }
 
   .currentTranscript {
@@ -136,20 +135,28 @@
     @import "dropdown";
   }
 
-  .btn-toolbar {
+  .detail-toolbar {
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 1em;
+    background: fadeout(@pane-background, 20%);
     white-space: nowrap;
+    z-index: 1;
 
-    .checked a {
-      background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
-      background-repeat: no-repeat;
-      background-position: 5px center;
-      background-size: 10px;
-    }
+    .btn-toolbar {
 
-    li.checked:hover a {
-      background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
+      .checked a {
+        background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
+        background-repeat: no-repeat;
+        background-position: 5px center;
+        background-size: 10px;
+      }
+
+      li.checked:hover a {
+        background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
+      }
     }
   }
 
@@ -431,9 +438,13 @@
     z-index: 1;
     .box-sizing(border-box);
 
+    .detail-toolbar {
+      z-index: 4;
+      background: transparent;
+    }
+
     .btn {
       position: relative;
-      z-index: 5;
       .opacity(40);
       &:hover {
         .opacity(100);

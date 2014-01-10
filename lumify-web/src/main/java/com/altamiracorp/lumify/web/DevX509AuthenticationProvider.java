@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
+import javax.servlet.http.HttpServletRequest;
 import java.security.cert.X509Certificate;
 
 public class DevX509AuthenticationProvider extends X509AuthenticationProvider {
@@ -37,5 +38,10 @@ public class DevX509AuthenticationProvider extends X509AuthenticationProvider {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean login(HttpServletRequest request) {
+        return false;
     }
 }

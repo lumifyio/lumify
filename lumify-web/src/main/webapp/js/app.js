@@ -14,8 +14,9 @@ define([
     'detail/detail',
     'map/map',
     'help/help',
-    'util/mouseOverlay'
-], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay) {
+    'util/mouseOverlay',
+    'service/user'
+], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay, UserService) {
     'use strict';
 
     return defineComponent(App);
@@ -42,6 +43,9 @@ define([
             detailPaneSelector: '.detail-pane'
         });
 
+        this.before('teardown', function() {
+            this.$node.empty();
+        });
 
         this.after('initialize', function() {
             window.lumifyApp = this;
@@ -64,6 +68,7 @@ define([
 
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
+            this.on(document, 'logout', this.logout);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
@@ -76,6 +81,13 @@ define([
                 scope: 'Search',
                 shortcuts: {
                     '/': { fire:'toggleSearchPane', desc:'Show search pane' }
+                }
+            });
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: 'Lumify',
+                shortcuts: {
+                    'alt-l': { fire:'logout', desc:'Log out of Lumify' }
                 }
             });
 
@@ -117,6 +129,8 @@ define([
 
             this.$node.html(content);
 
+            $(document.body).toggleClass('animatelogin', !!this.attr.animateFromLogin)
+
             // Open Page to Dashboard
             this.trigger(document, 'menubarToggleDisplay', { name: graphPane.data(DATA_MENUBAR_NAME) });
 
@@ -124,9 +138,15 @@ define([
 
             data.loadActiveWorkspace();
 
-            _.defer(this.triggerPaneResized.bind(this));
-
             this.trigger(document, 'applicationReady');
+
+            var self = this;
+            _.defer(function() {
+                self.triggerPaneResized();
+                if (self.attr.animateFromLogin) {
+                    $(document.body).addClass('animateloginstart');
+                }
+            });
         });
 
         this.toggleSearchPane = function() {
@@ -200,10 +220,18 @@ define([
             });
         };
 
+        this.logout = function() {
+            new UserService().logout().done(function() { window.location.reload(); });
+        };
+
         this.toggleDisplay = function(e, data) {
             var SLIDE_OUT = 'search workspaces',
                 pane = this.select(data.name + 'Selector'),
                 isVisible = pane.is('.visible');
+
+            if (data.name === 'logout') {
+                return this.logout();
+            }
 
             if (data.name === 'map' && !pane.hasClass('visible')) {
                 this.trigger(document, 'mapShow', (data && data.data) || {});

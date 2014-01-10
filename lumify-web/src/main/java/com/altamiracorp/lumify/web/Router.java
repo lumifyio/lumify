@@ -15,6 +15,8 @@ import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipPropert
 import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
 import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
+import com.altamiracorp.lumify.web.routes.user.Login;
+import com.altamiracorp.lumify.web.routes.user.Logout;
 import com.altamiracorp.lumify.web.routes.user.MeGet;
 import com.altamiracorp.lumify.web.routes.user.UserList;
 import com.altamiracorp.lumify.web.routes.vertex.*;
@@ -53,7 +55,9 @@ public class Router extends HttpServlet {
             AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
             Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-            app.get("/index.html", authenticatorInstance, new StaticFileHandler(config));
+            app.get("/index.html", new StaticFileHandler(config));
+            app.post("/login", Login.class);
+            app.post("/logout", Logout.class);
 
             app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
             app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
@@ -65,13 +69,11 @@ public class Router extends HttpServlet {
 
             app.get("/resource/{_rowKey}", authenticator, ResourceGet.class);
 
-            app.get("/artifact/search", authenticator, ArtifactSearch.class);
             app.get("/artifact/{graphVertexId}/highlightedText", authenticator, ArtifactHighlightedText.class);
-            app.get("/artifact/{_rowKey}/raw", authenticator, ArtifactRawByRowKey.class);
-            app.get("/artifact/{_rowKey}/thumbnail", authenticator, ArtifactThumbnailByRowKey.class);
-            app.get("/artifact/{_rowKey}/poster-frame", authenticator, ArtifactPosterFrameByRowKey.class);
-            app.get("/artifact/{_rowKey}/video-preview", authenticator, ArtifactVideoPreviewImageByRowKey.class);
-            app.get("/artifact/{_rowKey}", authenticator, ArtifactByRowKey.class);
+            app.get("/artifact/{graphVertexId}/raw", authenticator, ArtifactRaw.class);
+            app.get("/artifact/{graphVertexId}/thumbnail", authenticator, ArtifactThumbnail.class);
+            app.get("/artifact/{graphVertexId}/poster-frame", authenticator, ArtifactPosterFrame.class);
+            app.get("/artifact/{graphVertexId}/video-preview", authenticator, ArtifactVideoPreviewImage.class);
             app.post("/artifact/import", authenticator, ArtifactImport.class);
 
             app.post("/entity/relationships", authenticator, EntityRelationships.class);

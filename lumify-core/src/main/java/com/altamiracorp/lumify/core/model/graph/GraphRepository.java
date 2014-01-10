@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.core.model.graph;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -33,20 +32,12 @@ public class GraphRepository {
         return graphSession.findGraphVertex(graphVertexId, user);
     }
 
-    public GraphVertex findVertexByRowKey(String rowKey, User user) {
-        return graphSession.findVertexByRowKey(rowKey, user);
-    }
-
     public List<GraphVertex> findVertices(String[] vertexIds, User user) {
         return graphSession.findGraphVertices(vertexIds, user);
     }
 
-    public GraphVertex findVertexByTitleAndType(String graphVertexTitle, VertexType type, User user) {
-        return graphSession.findVertexByExactTitleAndType(graphVertexTitle, type, user);
-    }
-
-    public GraphVertex findVertexByPropertyAndType(String property, String graphVertexPropertyValue, VertexType type, User user) {
-        return graphSession.findVertexByExactPropertyAndType(property, graphVertexPropertyValue, type, user);
+    public GraphVertex findVertexByProperty(String property, String graphVertexPropertyValue, User user) {
+        return graphSession.findVertexByExactProperty(property, graphVertexPropertyValue, user);
     }
 
     public List<GraphVertex> getRelatedVertices(String graphVertexId, User user) {
@@ -107,25 +98,12 @@ public class GraphRepository {
         return graphSession.findByGeoLocation(latitude, longitude, radius, user);
     }
 
-    public List<GraphVertex> searchVerticesByTitle(String title, JSONArray filterJson) {
-        return graphSession.searchVerticesByTitle(title, filterJson);
-    }
-
-    public GraphPagedResults searchVerticesByTitle(String title, JSONArray filterJson, User user, long offset, long size, String subType) {
-        return graphSession.searchVerticesByTitle(title, filterJson, user, offset, size, subType);
-    }
-
-    public List<GraphVertex> searchVerticesByTitleAndType(String query, VertexType type, User user) {
-        return graphSession.searchVerticesByTitleAndType(query, type, user);
-    }
-
-    public List<GraphVertex> searchAllVertices(long offset, long size, User user) {
-        return graphSession.searchAllVertices(offset, size, user);
+    public GraphPagedResults search(String title, JSONArray filterJson, User user, long offset, long size, String conceptType) {
+        return graphSession.search(title, filterJson, user, offset, size, conceptType);
     }
 
     public void removeRelationship(String source, String target, String label, User user) {
         graphSession.removeRelationship(source, target, label, user);
-        return;
     }
 
     public GraphRelationship findOrAddRelationship(String sourceVertexId, String targetVertexId, String label, User user) {
@@ -164,5 +142,9 @@ public class GraphRepository {
 
     public void commit() {
         graphSession.commit();
+    }
+
+    public GraphVertex findVertexByExactTitle(String title, User user) {
+        return this.graphSession.findVertexByExactTitle(title, user);
     }
 }

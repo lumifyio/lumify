@@ -1,8 +1,6 @@
 package com.altamiracorp.lumify.core.ontology;
 
 import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -13,13 +11,10 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
 import com.thinkaurelius.titan.core.TitanLabel;
 import com.thinkaurelius.titan.core.TypeMaker;
-import com.thinkaurelius.titan.core.attribute.Geoshape;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.io.InputStream;
-
-import static org.mockito.internal.util.Checks.checkNotNull;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
@@ -39,9 +34,14 @@ public class BaseOntology {
         // concept properties
         TitanGraph graph = (TitanGraph) this.graphSession.getGraph();
 
-        TitanKey typeProperty = (TitanKey) graph.getType(PropertyName.TYPE.toString());
-        if (typeProperty == null) {
-            typeProperty = graph.makeType().name(PropertyName.TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
+        TitanKey conceptType = (TitanKey) graph.getType(PropertyName.CONCEPT_TYPE.toString());
+        if (conceptType == null) {
+            conceptType = graph.makeType().name(PropertyName.CONCEPT_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
+        }
+
+        TitanKey displayTypeProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_TYPE.toString());
+        if (displayTypeProperty == null) {
+            graph.makeType().name(PropertyName.DISPLAY_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
         }
 
         TitanKey dataTypeProperty = (TitanKey) graph.getType(PropertyName.DATA_TYPE.toString());
@@ -100,11 +100,6 @@ public class BaseOntology {
             graph.makeType().name(PropertyName.DETECTED_OBJECTS.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
         }
 
-        TitanKey subTypeProperty = (TitanKey) graph.getType(PropertyName.SUBTYPE.toString());
-        if (subTypeProperty == null) {
-            subTypeProperty = graph.makeType().name(PropertyName.SUBTYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
-        }
-
         TitanKey displayNameProperty = (TitanKey) graph.getType(PropertyName.DISPLAY_NAME.toString());
         if (displayNameProperty == null) {
             graph.makeType().name(PropertyName.DISPLAY_NAME.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
@@ -129,63 +124,28 @@ public class BaseOntology {
         if (colorProperty == null) {
             graph.makeType().name(PropertyName.COLOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).makePropertyKey();
         }
-
+        graph.commit();
+        
         TitanKey geoLocationProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION.toString());
         if (geoLocationProperty == null) {
-            geoLocationProperty = graph.makeType().name(PropertyName.GEO_LOCATION.toString()).dataType(Geoshape.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, user);
         }
 
         TitanKey geoLocationDescriptionProperty = (TitanKey) graph.getType(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         if (geoLocationDescriptionProperty == null) {
-            geoLocationDescriptionProperty = graph.makeType().name(PropertyName.GEO_LOCATION_DESCRIPTION.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING, user);
         }
-
-        TitanKey publishedDateProperty = (TitanKey) graph.getType(PropertyName.PUBLISHED_DATE.toString());
-        if (publishedDateProperty == null) {
-            publishedDateProperty = graph.makeType().name(PropertyName.PUBLISHED_DATE.toString()).dataType(Long.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
-        TitanKey sourceProperty = (TitanKey) graph.getType(PropertyName.SOURCE.toString());
-        if (sourceProperty == null) {
-            sourceProperty = graph.makeType().name(PropertyName.SOURCE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
-        }
-
 
         TitanKey authorProperty = (TitanKey) graph.getType(PropertyName.AUTHOR.toString());
         if (authorProperty == null) {
-            authorProperty = graph.makeType().name(PropertyName.AUTHOR.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed("search", Vertex.class).makePropertyKey();
+            graphSession.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
         }
+        graphSession.commit();
+
+        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
+        ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
+        ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
         graph.commit();
-
-        String process = this.getClass().getName();
-
-        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, process, OntologyRepository.ROOT_CONCEPT_NAME, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.GLYPH_ICON.toString(), "glyph icon", process, PropertyType.IMAGE, user);
-        ontologyRepository.addPropertyTo(rootConcept, PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", process, PropertyType.IMAGE, user);
-        graph.commit();
-
-        Concept artifact = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ARTIFACT.toString(), process, "Artifact", user);
-        ontologyRepository.addPropertyTo(artifact, typeProperty.getName(), "Type", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(artifact, subTypeProperty.getName(), "Subtype", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(artifact, titleProperty.getName(), "Title", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(artifact, geoLocationProperty.getName(), "Geo-location", process, PropertyType.GEO_LOCATION, user);
-        ontologyRepository.addPropertyTo(artifact, geoLocationDescriptionProperty.getName(), "Geo-location Description", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(artifact, publishedDateProperty.getName(), "Published Date", process, PropertyType.DATE, user);
-        ontologyRepository.addPropertyTo(artifact, sourceProperty.getName(), "Source", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(artifact, authorProperty.getName(), "Author", process, PropertyType.STRING, user);
-        graph.commit();
-
-        InputStream artifactGlyphIconInputStream = this.getClass().getResourceAsStream("artifact.png");
-        checkNotNull(artifactGlyphIconInputStream, "artifact.png not found");
-        String artifactGlyphIconRowKey = resourceRepository.importFile(artifactGlyphIconInputStream, "png", user);
-        artifact.setProperty(PropertyName.GLYPH_ICON, artifactGlyphIconRowKey);
-        graph.commit();
-
-        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.DOCUMENT.toString(), process, "Document", user);
-        ontologyRepository.getOrCreateConcept(artifact, ArtifactType.VIDEO.toString(), process, "Video", user);
-        graph.commit();
-
-        Concept image = ontologyRepository.getOrCreateConcept(artifact, ArtifactType.IMAGE.toString(), process, "Image", user);
 
         // TermMention concept
         TitanKey rowKeyProperty = (TitanKey) graph.getType(PropertyName.ROW_KEY.toString());
@@ -196,12 +156,9 @@ public class BaseOntology {
         graph.commit();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, VertexType.ENTITY.toString(), process, "Entity", user);
-        ontologyRepository.addPropertyTo(entity, typeProperty.getName(), "Type", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(entity, subTypeProperty.getName(), "Subtype", process, PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", process, PropertyType.STRING, user);
-
-        ontologyRepository.getOrCreateRelationshipType(entity, artifact, LabelName.HAS_IMAGE.toString(), "has image", user);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.ENTITY.toString(), "Entity", user);
+        ontologyRepository.addPropertyTo(entity, conceptType.getName(), "Type", PropertyType.STRING, user);
+        ontologyRepository.addPropertyTo(entity, titleProperty.getName(), "Title", PropertyType.STRING, user);
 
         graph.commit();
 
@@ -209,19 +166,11 @@ public class BaseOntology {
         String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
         entity.setProperty(PropertyName.GLYPH_ICON, entityGlyphIconRowKey);
         graph.commit();
-
-        // Image to Entity relationship
-        GraphVertex containsImageOf = ontologyRepository.getOrCreateRelationshipType(image, entity, LabelName.CONTAINS_IMAGE_OF.toString(), "contains image of", user);
-        graph.commit();
-
-        // Artifact to TermMention relationship
-        ontologyRepository.getOrCreateRelationshipType(artifact, entity, LabelName.HAS_ENTITY.toString(), "has entity", user);
-        graph.commit();
     }
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptByName(VertexType.ARTIFACT.toString(), user);
+            Concept concept = ontologyRepository.getConceptByName(OntologyRepository.ENTITY.toString(), user);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(PropertyName.ONTOLOGY_TITLE.toString())) {

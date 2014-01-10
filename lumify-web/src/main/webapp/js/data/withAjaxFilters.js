@@ -7,50 +7,15 @@ define([], function() {
         VERTICES_RESPONSE_KEYPATHS = ['vertices', 'data.vertices'],
 
         // Custom converters for routes that are more complicated than above,
-        // call updateCacheWithArtifact/Vertex and append to updated, return
+        // call updateCacheWithVertex and append to updated, return
         // true if handled
         JSON_CONVERTERS = [
-
-            function artifactSearches(json, updated) {
-                var self = this;
-
-                if (json.document || json.image || json.video) {
-                    Object.keys(json).forEach(function(type) {
-                        if (type !== 'counts') {
-                            json[type].forEach(function(artifact) {
-                                var cache = self.updateCacheWithVertex(artifact);
-                                $.extend(true, json[type], cache);
-                                updated.push(cache);
-                            });
-                        }
-                    });
-
-                    return true;
-                }
-            },
-
-            function artifactGetByRow(json, updated) {
-                if (json.tableName === 'atc_artifact') {
-                    var cache = this.updateCacheWithArtifact(json);
-                    $.extend(true, json, cache.artifact);
-                    updated.push(cache);
-
-                    return true;
-                }
-            },
 
             function vertexProperties(json, updated) {
                 var cache;
                 if (_.isString(json.id) && _.isObject(json.properties)) {
                     cache = this.updateCacheWithVertex(json);
                     $.extend(true, json, cache);
-                    updated.push(cache);
-
-                    updated = true;
-                }
-                if (_.isObject (json.updatedArtifactVertex)) {
-                    cache = this.updateCacheWithVertex(json.updatedArtifactVertex);
-                    $.extend(true, json.updatedArtifactVertex, cache);
                     updated.push(cache);
 
                     updated = true;

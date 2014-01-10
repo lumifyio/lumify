@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -23,7 +22,6 @@ public class VertexPropertiesTest extends RouteTestBase {
     private final String ID = "40004";
     private final String TITLE = "testVertex";
     private final String AUTHOR = "lumify";
-    private final String TYPE = VertexType.ENTITY.toString();
     private final String SUBTYPE = "28";
 
     private VertexProperties vertexProperties;
@@ -45,8 +43,7 @@ public class VertexPropertiesTest extends RouteTestBase {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(PropertyName.TITLE.toString(), TITLE);
         properties.put(PropertyName.AUTHOR.toString(), AUTHOR);
-        properties.put(PropertyName.TYPE.toString(), TYPE);
-        properties.put(PropertyName.SUBTYPE.toString(), SUBTYPE);
+        properties.put(PropertyName.CONCEPT_TYPE.toString(), SUBTYPE);
 
         when(mockGraphRepository.getVertexProperties(ID, mockUser)).thenReturn(properties);
 
@@ -56,8 +53,7 @@ public class VertexPropertiesTest extends RouteTestBase {
         assertEquals(ID, response.getString("id"));
         assertTrue(response.getJSONObject("properties").length() > 0);
         assertEquals(TITLE, response.getJSONObject("properties").getString(PropertyName.TITLE.toString()));
-        assertEquals(SUBTYPE, response.getJSONObject("properties").getString(PropertyName.SUBTYPE.toString()));
+        assertEquals(SUBTYPE, response.getJSONObject("properties").getString(PropertyName.CONCEPT_TYPE.toString()));
         assertEquals(AUTHOR, response.getJSONObject("properties").getString(PropertyName.AUTHOR.toString()));
-        assertEquals(TYPE, response.getJSONObject("properties").getString(PropertyName.TYPE.toString()));
     }
 }
