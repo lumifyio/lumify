@@ -437,12 +437,12 @@ public class ArtifactExtractedInfo {
     }
 
     /**
-     * Builder pattern for the artifactType property.
-     * @param artifactType the artifactType
+     * Builder pattern for the conceptType property.
+     * @param conceptType the concept type
      * @return this
      */
-    public ArtifactExtractedInfo artifactType(final String artifactType) {
-        setArtifactType(artifactType);
+    public ArtifactExtractedInfo conceptType(final String conceptType) {
+        setConceptType(conceptType);
         return this;
     }
     

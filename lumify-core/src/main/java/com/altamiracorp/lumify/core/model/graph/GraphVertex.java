@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.core.model.graph;
 
-import com.altamiracorp.lumify.core.model.ontology.Concept;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.thinkaurelius.titan.core.attribute.Geoshape;
 import com.tinkerpop.blueprints.Vertex;
@@ -44,9 +42,7 @@ public abstract class GraphVertex {
             json.put(SER_ID_PROPERTY, getId());
             JSONObject propertiesJson = new JSONObject();
             for (String key : getPropertyKeys()) {
-                if (key.equals(PropertyName.TYPE.toString())) {
-                    propertiesJson.put(key, getProperty(key).toString().toLowerCase());
-                } else if (key.equals(PropertyName.GEO_LOCATION.toString())) {
+                if (key.equals(PropertyName.GEO_LOCATION.toString())) {
                     Double[] latlong = parseLatLong(getProperty(key));
                     propertiesJson.put(SER_LATITUDE_PROPERTY, latlong[0]);
                     propertiesJson.put(SER_LONGITUDE_PROPERTY, latlong[1]);
