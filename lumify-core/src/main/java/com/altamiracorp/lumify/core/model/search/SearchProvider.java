@@ -17,7 +17,7 @@ public abstract class SearchProvider {
 
     public abstract Collection<ArtifactSearchResult> searchArtifacts(String query, User user) throws Exception;
 
-    public abstract ArtifactSearchPagedResults searchArtifacts(String query, User user, int from, int size, String subType) throws Exception;
+    public abstract ArtifactSearchPagedResults searchArtifacts(String query, User user, int from, int size, String conceptType) throws Exception;
 
     public abstract void deleteIndex(User user);
 

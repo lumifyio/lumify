@@ -9,7 +9,6 @@ import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.ontology.VertexType;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
@@ -54,7 +53,6 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         final GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
         final GraphVertex createdVertex = new InMemoryGraphVertex();
-        createdVertex.setType(VertexType.ENTITY);
         createdVertex.setProperty(PropertyName.ROW_KEY, termMentionRowKey.toString());
 
         // TODO: replace second "" when we implement commenting on ui
@@ -63,7 +61,6 @@ public class EntityTermCreate extends BaseRequestHandler {
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, sign, conceptId ,"", "", user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.TYPE.toString(), "", "", user);
 
         graphRepository.saveRelationship(artifactId, createdVertex.getId(), LabelName.HAS_ENTITY, user);
 

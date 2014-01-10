@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.search;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactType;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
@@ -53,7 +52,7 @@ public class ElasticSearchProvider extends SearchProvider {
     private static final String FIELD_PUBLISHED_DATE = "publishedDate";
     private static final String FIELD_GRAPH_VERTEX_ID = "graphVertexId";
     private static final String FIELD_SOURCE = "source";
-    private static final String FIELD_ARTIFACT_TYPE = "type";
+    private static final String FIELD_CONCEPT_TYPE = "conceptType";
     private static final String FIELD_GEO_LOCATION_DESCRIPTION = "geoLocationDescription";
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     private static final int ES_QUERY_MAX_SIZE = 100;
@@ -113,7 +112,7 @@ public class ElasticSearchProvider extends SearchProvider {
                 .startObject()
                 .field(FIELD_TEXT, text)
                 .field(FIELD_SUBJECT, subject)
-                .field(FIELD_ARTIFACT_TYPE, graphVertex.getProperty(PropertyName.SUBTYPE))
+                .field(FIELD_CONCEPT_TYPE, graphVertex.getProperty(PropertyName.CONCEPT_TYPE))
                 .field(FIELD_GRAPH_VERTEX_ID, graphVertexId);
 
         if (publishedDate != null) {
@@ -155,7 +154,7 @@ public class ElasticSearchProvider extends SearchProvider {
     }
 
     @Override
-    public ArtifactSearchPagedResults searchArtifacts(String query, User user, int offset, int size, String subType) throws Exception {
+    public ArtifactSearchPagedResults searchArtifacts(String query, User user, int offset, int size, String conceptType) throws Exception {
 
         SearchRequestBuilder requestBuilder = client.prepareSearch(ES_INDEX)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
@@ -163,11 +162,11 @@ public class ElasticSearchProvider extends SearchProvider {
                 .setQuery(new QueryStringQueryBuilder(query).defaultField("_all"))
                 .setFrom(offset)
                 .setSize(size)
-                .addFacet(FacetBuilders.termsFacet(FIELD_ARTIFACT_TYPE).field(FIELD_ARTIFACT_TYPE))
-                .addFields(FIELD_SUBJECT, FIELD_GRAPH_VERTEX_ID, FIELD_SOURCE, FIELD_PUBLISHED_DATE, FIELD_ARTIFACT_TYPE);
+                .addFacet(FacetBuilders.termsFacet(FIELD_CONCEPT_TYPE).field(FIELD_CONCEPT_TYPE))
+                .addFields(FIELD_SUBJECT, FIELD_GRAPH_VERTEX_ID, FIELD_SOURCE, FIELD_PUBLISHED_DATE, FIELD_CONCEPT_TYPE);
 
-        if (subType != null) {
-            requestBuilder.setFilter(FilterBuilders.inFilter(FIELD_ARTIFACT_TYPE, subType));
+        if (conceptType != null) {
+            requestBuilder.setFilter(FilterBuilders.inFilter(FIELD_CONCEPT_TYPE, conceptType));
         }
 
         SearchResponse response = requestBuilder.execute().actionGet();
@@ -176,7 +175,7 @@ public class ElasticSearchProvider extends SearchProvider {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         ArtifactSearchPagedResults pagedResults = new ArtifactSearchPagedResults();
 
-        TermsFacet facet = response.getFacets().facet(FIELD_ARTIFACT_TYPE);
+        TermsFacet facet = response.getFacets().facet(FIELD_CONCEPT_TYPE);
         for (TermsFacet.Entry entry : facet) {
             String term = entry.getTerm().toString();
 
@@ -193,7 +192,6 @@ public class ElasticSearchProvider extends SearchProvider {
             String subject = getString(fields, FIELD_SUBJECT);
             String source = getString(fields, FIELD_SOURCE);
             String graphVertexId = getString(fields, FIELD_GRAPH_VERTEX_ID);
-            ArtifactType type = ArtifactType.convert(getString(fields, FIELD_ARTIFACT_TYPE));
 
             Date publishedDate = new Date();
             String publishedDateString = getString(fields, FIELD_PUBLISHED_DATE);
@@ -201,9 +199,9 @@ public class ElasticSearchProvider extends SearchProvider {
                 publishedDate = dateFormat.parse(publishedDateString);
             }
 
-            ArtifactSearchResult result = new ArtifactSearchResult(id, subject, publishedDate, source, type, graphVertexId);
+            ArtifactSearchResult result = new ArtifactSearchResult(id, subject, publishedDate, source, graphVertexId);
 
-            pagedResults.getResults().get(getString(fields, FIELD_ARTIFACT_TYPE)).add(result);
+            pagedResults.getResults().get(getString(fields, FIELD_CONCEPT_TYPE)).add(result);
         }
 
 
@@ -234,7 +232,7 @@ public class ElasticSearchProvider extends SearchProvider {
             properties.put(FIELD_SUBJECT, new JSONObject().put("type", "string").put("store", "yes"));
             properties.put(FIELD_GRAPH_VERTEX_ID, new JSONObject().put("type", "string").put("store", "yes"));
             properties.put(FIELD_SOURCE, new JSONObject().put("type", "string").put("store", "yes"));
-            properties.put(FIELD_ARTIFACT_TYPE, new JSONObject().put("type", "string").put("store", "yes"));
+            properties.put(FIELD_CONCEPT_TYPE, new JSONObject().put("type", "string").put("store", "yes"));
             properties.put(FIELD_PUBLISHED_DATE, new JSONObject().put("type", "date").put("store", "yes"));
             properties.put(FIELD_GEO_LOCATION_DESCRIPTION, new JSONObject().put("type", "string").put("store", "no"));
             indexConfig.put("properties", properties);

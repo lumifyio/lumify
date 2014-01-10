@@ -6,6 +6,8 @@ import com.altamiracorp.bigtable.model.Value;
 public class UserMetadata extends ColumnFamily {
     public static final String NAME = "metadata";
     public static final String USER_NAME = "userName";
+    public static final String PASSWORD = "password";
+    public static final String PASSWORD_SALT = "password_salt";
     public static final String STATUS = "status";
     public static final String CURRENT_WORKSPACE = "current_workspace";
     public static final String USER_TYPE = "userType";
@@ -20,6 +22,24 @@ public class UserMetadata extends ColumnFamily {
 
     public UserMetadata setUserName(String userName) {
         set(USER_NAME, userName);
+        return this;
+    }
+
+    public byte[] getPassword() {
+        return Value.toBytes(get(PASSWORD));
+    }
+
+    public UserMetadata setPassword(byte[] password) {
+        set(PASSWORD, password);
+        return this;
+    }
+
+    public byte[] getPasswordSalt() {
+        return Value.toBytes(get(PASSWORD_SALT));
+    }
+
+    public UserMetadata setPasswordSalt(byte[] passwordSalt) {
+        set(PASSWORD_SALT, passwordSalt);
         return this;
     }
 
@@ -45,12 +65,12 @@ public class UserMetadata extends ColumnFamily {
         return this;
     }
 
-    public String getUserType () {
+    public String getUserType() {
         return Value.toString(get(USER_TYPE));
     }
 
-    public UserMetadata setUserType (String userType) {
-        set (USER_TYPE, userType);
+    public UserMetadata setUserType(String userType) {
+        set(USER_TYPE, userType);
         return this;
     }
 }

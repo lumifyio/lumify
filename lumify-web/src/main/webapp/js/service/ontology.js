@@ -35,11 +35,9 @@ define(
                 url: 'ontology/concept'
             }).then(function(response) {
                 var entityConcept = findConceptByTitle(response, 'entity');
-                var artifactConcept = findConceptByTitle(response, 'artifact');
                 return {
                     tree: response,
                     entityConcept: entityConcept,
-                    artifactConcept: artifactConcept,
                     byId: buildConceptMapById(response, {}),
                     byTitle: flattenConcepts(entityConcept)
                 };

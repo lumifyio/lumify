@@ -51,7 +51,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         } else {
             // TODO: replace "" when we implement commenting on ui
             auditRepository.auditEntity(AuditAction.DELETE.toString(), graphVertexId, artifactVertex.getId(), jsonObject.getString("title"),
-                    jsonObject.getString("_subType"), "", "", user);
+                    jsonObject.getString("_conceptType"), "", "", user);
             graphRepository.remove(graphVertexId, user);
             obj.put("remove", true);
         }

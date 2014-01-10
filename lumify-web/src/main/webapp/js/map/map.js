@@ -7,7 +7,6 @@ define([
     'tpl!./instructions/regionCenter',
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
-    'service/service',
     'service/vertex',
     'util/retina',
     'util/controls',
@@ -20,7 +19,6 @@ define([
     centerTemplate,
     radiusTemplate,
     loadingTemplate,
-    Service,
     VertexService,
     retina,
     Controls,
@@ -40,7 +38,6 @@ define([
 
         var ol;
 
-        this.service = new Service();
         this.vertexService = new VertexService();
         this.mode = MODE_NORMAL;
 
@@ -226,10 +223,10 @@ define([
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
                 geoLocation = vertex.properties.geoLocation,
-                subType = vertex.properties._subType,
+                conceptType = vertex.properties._conceptType,
                 heading = vertex.properties.heading,
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
-                iconUrl =  '/map/marker/' + subType + '/image?scale=' + (retina.devicePixelRatio > 1 ? '2' : '1');
+                iconUrl =  '/map/marker/' + conceptType + '/image?scale=' + (retina.devicePixelRatio > 1 ? '2' : '1');
 
             if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
 
@@ -456,7 +453,7 @@ define([
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
 
-                    self.service.locationSearch(
+                    self.vertexService.locationSearch(
                         lonlat.lat,
                         lonlat.lon,
                         radius).done(

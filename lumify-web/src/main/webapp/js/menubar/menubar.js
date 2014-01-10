@@ -12,14 +12,15 @@ define([
     function Menubar() {
 
         // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces activity users metrics prefs';
+        var BUTTONS = 'dashboard graph map search workspaces activity users logout';
         var TOOLTIPS = {
             dashboard: 'Dashboard',
             graph: { html:'Graph<span class="subtitle">2D / 3D</span>' },
             map: 'Map',
             search: 'Search',
             workspaces: 'Workspaces',
-            users: 'Chat'
+            users: 'Chat',
+            logout: 'Log&nbsp;out'
         };
 
         // Which cannot both be active
@@ -29,7 +30,9 @@ define([
         ];
 
         // Don't change state to highlighted on click
-        var DISABLE_ACTIVE_SWITCH = 'activity metrics prefs'.split(' ');
+        var DISABLE_ACTIVE_SWITCH = 'activity metrics prefs logout'.split(' ');
+
+        var DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
 
         this.activities = 0;
 
@@ -50,7 +53,7 @@ define([
                     });
                 }
                 var icon = this.select(sel);
-                if (name !== 'activity') {
+                if (!_.contains(DISABLE_HIDE_TOOLTIP_ON_CLICK, name)) {
                     icon.tooltip('hide');
                 }
                 if (isSwitch && icon.hasClass('active')) {

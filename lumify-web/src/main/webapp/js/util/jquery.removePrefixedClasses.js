@@ -1,5 +1,5 @@
 
-;(function( $, window, undefined ) {
+define(['jquery'], function() {
     'use strict';
   
     $.fn.removePrefixedClasses = function(prefix) {
@@ -18,5 +18,4 @@
             });
         });
     };
-
-})(jQuery, window);
+});

@@ -389,6 +389,8 @@ define([
     };
 
     GraphRenderer.prototype._spriteForNode = function(node) {
+        THREE.ImageUtils.crossOrigin = undefined;
+
         var texture = THREE.ImageUtils.loadTexture( node.data.icon );
         texture.needsUpdate = true;
 

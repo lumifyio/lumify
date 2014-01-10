@@ -17,26 +17,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
-public class ArtifactVideoPreviewImageByRowKey extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImageByRowKey.class);
+public class ArtifactVideoPreviewImage extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
     private final ArtifactRepository artifactRepository;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
 
     @Inject
-    public ArtifactVideoPreviewImageByRowKey(final ArtifactRepository artifactRepo,
-                                             final ArtifactThumbnailRepository thumbnailRepo) {
+    public ArtifactVideoPreviewImage(final ArtifactRepository artifactRepo,
+                                     final ArtifactThumbnailRepository thumbnailRepo) {
         artifactRepository = artifactRepo;
         artifactThumbnailRepository = thumbnailRepo;
-    }
-
-    public static String getUrl(HttpServletRequest request, ArtifactRowKey artifactKey) {
-        return UrlUtils.getRootRef(request) + "/artifact/" + UrlUtils.urlEncode(artifactKey.toString()) + "/video-preview";
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        ArtifactRowKey artifactRowKey = new ArtifactRowKey(UrlUtils.urlDecode(getAttributeString(request, "_rowKey")));
+
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+
+        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
+        if (artifactRowKey == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
 
         String widthStr = getOptionalParameter(request, "width");
         int[] boundaryDims = new int[]{200 * ArtifactRepository.FRAMES_PER_PREVIEW, 200};

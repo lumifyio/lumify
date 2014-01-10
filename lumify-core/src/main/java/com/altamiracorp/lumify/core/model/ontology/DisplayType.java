@@ -1,15 +1,13 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-public enum VertexType {
-    CONCEPT("concept"),
-    ARTIFACT("artifact"),
-    ENTITY("entity"),
-    PROPERTY("property"),
-    RELATIONSHIP("relationship");
+public enum DisplayType {
+    IMAGE("image"),
+    VIDEO("video"),
+    DOCUMENT("document");
 
     private final String text;
 
-    VertexType(String text) {
+    DisplayType(String text) {
         this.text = text;
     }
 

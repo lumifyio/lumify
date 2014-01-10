@@ -10,7 +10,7 @@ define([
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'service/ontology',
-    'service/entity',
+    'service/vertex',
     'data'
 ], function(
     defineComponent,
@@ -22,7 +22,7 @@ define([
     template,
     transcriptEntryTemplate,
     OntologyService,
-    EntityService,
+    VertexService,
     appData) {
     'use strict';
 
@@ -31,7 +31,7 @@ define([
     function Artifact() {
 
         this.ontologyService = new OntologyService();
-        this.entityService = new EntityService();
+        this.vertexService = new VertexService();
 
         this.defaultAttrs({
             previewSelector: '.preview',
@@ -87,8 +87,8 @@ define([
 
         this.handleVertexLoaded = function(vertex) {
             var self = this;
-            this.videoTranscript = vertex.artifact.videoTranscript;
-            this.videoDuration = vertex.artifact.videoDuration;
+            this.videoTranscript = vertex.videoTranscript;
+            this.videoDuration = vertex.videoDuration;
 
             if (vertex.properties._detectedObjects) {
                 vertex.properties._detectedObjects = JSON.parse(vertex.properties._detectedObjects).sort(function(a, b){
@@ -105,12 +105,12 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.service.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
+            this.vertexService.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
                 self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
                 self.updateEntityAndArtifactDraggables();
 
-                if (self[vertex.properties._subType + 'Setup']) {
-                    self[vertex.properties._subType + 'Setup'](vertex);
+                if (self[vertex.concept.displayType + 'Setup']) {
+                    self[vertex.concept.displayType + 'Setup'](vertex);
                 }
             });
         };
@@ -205,12 +205,11 @@ define([
             $detectedObjectTag.closest('.detected-object-tag').addClass('loading');
             $(event.target).replaceWith($loading);
 
-            this.entityService.deleteDetectedObject(info)
+            this.vertexService.deleteDetectedObject(info)
                 .done(function(data) {
                     var resolvedVertex = {
                         id: data.entityVertex.id,
-                        _subType: data.entityVertex.properties._subType,
-                        _type: data.entityVertex.properties._type
+                        _conceptType: data.entityVertex.properties._conceptType
                     };
                     $detectedObjectTag.parent().remove();
                     self.trigger('DetectedObjectLeave', $detectedObjectTag.data('info'));
@@ -237,9 +236,9 @@ define([
 
         this.videoSetup = function(vertex) {
             VideoScrubber.attachTo(this.select('previewSelector'), {
-                rawUrl: vertex.artifact.rawUrl,
-                posterFrameUrl: vertex.artifact.posterFrameUrl,
-                videoPreviewImageUrl: vertex.artifact.videoPreviewImageUrl,
+                rawUrl: '/artifact/' + vertex.id + "/raw",
+                posterFrameUrl: '/artifact/' + vertex.id + "/poster-frame",
+                videoPreviewImageUrl: '/artifact/' + vertex.id + "/video-preview",
                 allowPlayback: true
             });
         };
@@ -247,7 +246,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this;
             var data = {
-                src: vertex.artifact.rawUrl,
+                src: '/artifact/' + vertex.id + "/raw",
                 id: vertex.id
             };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });
@@ -264,7 +263,7 @@ define([
             var resolvedVertex = {
                 graphVertexId: dataInfo.graphVertexId,
                 _rowKey: dataInfo._rowKey,
-                _subType: dataInfo._subType,
+                _conceptType: dataInfo._conceptType,
                 title: dataInfo.title
             };
 

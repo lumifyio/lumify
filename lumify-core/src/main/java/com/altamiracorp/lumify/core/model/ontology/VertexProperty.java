@@ -55,6 +55,11 @@ public class VertexProperty extends Property {
     }
 
     @Override
+    public String getDisplayType() {
+        return getVertex().getProperty(PropertyName.DISPLAY_TYPE.toString());
+    }
+
+    @Override
     public PropertyType getDataType() {
         return PropertyType.convert((String) getVertex().getProperty(PropertyName.DATA_TYPE.toString()));
     }

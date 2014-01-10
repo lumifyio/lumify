@@ -1,4 +1,4 @@
-<% Object.keys(shortcutsByScope).forEach(function(scope) {  %>
+<% Object.keys(shortcutsByScope).sort(sortFunction).forEach(function(scope) {  %>
   <li>
     <h1 class="<%= scope.toLowerCase() %> "><%= scope %></h1>
     <dl>

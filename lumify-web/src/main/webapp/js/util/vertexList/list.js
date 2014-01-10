@@ -14,6 +14,11 @@ define([
 
     return defineComponent(List);
 
+    function hasPreview(vertex) {
+        return (/^(image|video)$/).test(vertex.concept.displayType) || 
+            !!vertex.properties._glyphIcon;
+    }
+
     function List() {
 
         this.defaultAttrs({
@@ -45,7 +50,7 @@ define([
                 if ( vertexState.inGraph ) classes.push('graph-displayed');
                 if ( vertexState.inMap ) classes.push('map-displayed');
 
-                if (v.properties._subType === 'video' || v.properties._subType === 'image' || v.properties._glyphIcon) {
+                if (hasPreview(v)) {
                     classes.push('has_preview');
                 }
 
@@ -179,7 +184,7 @@ define([
             }
 
             if (loadingListElement.length) {
-                var data = _.pick(this.attr, 'verticesType', 'verticesSubType');
+                var data = { conceptType: this.attr.verticesConceptId };
                 if (!this.offset) this.offset = this.attr.vertices.length;
                 data.paging = {
                     offset: this.offset
@@ -241,9 +246,7 @@ define([
                 
                 if (!vertex) return;
 
-                if ((vertex.properties._subType === 'video' || 
-                     vertex.properties._subType === 'image' || 
-                     vertex.properties._glyphIcon) && !li.data('preview-loaded')) {
+                if (hasPreview(vertex) && !li.data('preview-loaded')) {
 
                         if (li.data('previewloaded')) return;
 
@@ -254,16 +257,16 @@ define([
                                 .data('preview-loaded', true)
                                 .find('.preview').html("<img src='" + vertex.properties._glyphIcon + "' />");
                         } else {
-                            previews.generatePreview(vertex.properties._rowKey, { width: 200 }, function(poster, frames) {
+                            previews.generatePreview(vertex, { width: 200 }, function(poster, frames) {
                                 li.removeClass('preview-loading')
                                   .data('preview-loaded', true);
 
-                                if(vertex.properties._subType === 'video') {
+                                if(vertex.concept.displayType === 'video') {
                                     VideoScrubber.attachTo(li.find('.preview'), {
                                         posterFrameUrl: poster,
                                         videoPreviewImageUrl: frames
                                     });
-                                } else if(vertex.properties._subType === 'image') {
+                                } else if(vertex.concept.displayType === 'image') {
                                     li.find('.preview').html("<img src='" + poster + "' />");
                                 }
                             });
@@ -339,21 +342,19 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    hasPreview = false;
+                    src = vertex.properties._glyphIcon || 
+                        (
+                            vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
+                            vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null
+                        );
 
-                if (vertex.properties._type === 'artifact') {
-                    newAnchor.find('.preview').replaceWith(currentAnchor.find('.preview').clone());
-                    hasPreview = true;
-                } else {
-                    if (vertex.properties._glyphIcon) {
-                        $('<img/>').attr('src', vertex.properties._glyphIcon).appendTo(newAnchor.find('.preview'));
-                    }
-                    hasPreview = !!vertex.properties._glyphIcon;
+                if (src) {
+                    $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
                 }
 
                 var newHtml = newAnchor.html();
                 if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', hasPreview);
+                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', !!src);
                 }
             });
         };

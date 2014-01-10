@@ -1,6 +1,6 @@
 <% if (item.properties) { %>
   
-  <div class="existing gId-<%= item.id %> <%= iconSrc ? 'has_preview' : '' %> subType-<%= item.properties._subType %>">
+  <div class="existing gId-<%= item.id %> <%= iconSrc ? 'has_preview' : '' %> conceptType-<%= item.properties._conceptType %>">
 
     <% if (iconSrc) { %>
       <div class="preview" style="background-image:url(<%= iconSrc %>)" />

@@ -78,7 +78,7 @@ define([
                 }
             });
 
-            applyToElement.addClass('concepticon-' + el.data('info')._subType);
+            applyToElement.addClass('concepticon-' + el.data('info')._conceptType);
         };
 
         this.onSelection = function (e) {
@@ -133,8 +133,8 @@ define([
 
         this.getRelationshipLabels = function () {
             var self = this;
-            var sourceConceptTypeId = this.attr.sourceTerm.data('info')._subType;
-            var destConceptTypeId = this.attr.destTerm.data('info')._subType;
+            var sourceConceptTypeId = this.attr.sourceTerm.data('info')._conceptType;
+            var destConceptTypeId = this.attr.destTerm.data('info')._conceptType;
             self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (results) {
                 self.displayRelationships(results.relationships);
             });
