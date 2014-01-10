@@ -1,14 +1,13 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
-import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
 import com.thinkaurelius.titan.core.TitanLabel;
 import com.thinkaurelius.titan.core.TypeMaker;
@@ -23,19 +22,17 @@ public class BaseOntology {
 
     private final OntologyRepository ontologyRepository;
     private final ResourceRepository resourceRepository;
-    private final GraphSession graphSession;
+    private final Graph graph;
 
     @Inject
-    public BaseOntology(OntologyRepository ontologyRepository, ResourceRepository resourceRepository, GraphSession graphSession) {
+    public BaseOntology(OntologyRepository ontologyRepository, ResourceRepository resourceRepository, Graph graph) {
         this.ontologyRepository = ontologyRepository;
         this.resourceRepository = resourceRepository;
-        this.graphSession = graphSession;
+        this.graph = graph;
     }
 
     public void defineOntology(User user) {
         // concept properties
-        TitanGraph graph = (TitanGraph) this.graphSession.getGraph();
-
         TitanKey conceptType = (TitanKey) graph.getType(PropertyName.CONCEPT_TYPE.toString());
         if (conceptType == null) {
             conceptType = graph.makeType().name(PropertyName.CONCEPT_TYPE.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
@@ -142,12 +139,12 @@ public class BaseOntology {
         if (authorProperty == null) {
             ontologyRepository.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
         }
-        graphSession.commit();
+        graph.flush();
 
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
         ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
         ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
-        graph.commit();
+        graph.flush();
 
         // TermMention concept
         TitanKey rowKeyProperty = (TitanKey) graph.getType(PropertyName.ROW_KEY.toString());
@@ -155,19 +152,19 @@ public class BaseOntology {
             graph.makeType().name(PropertyName.ROW_KEY.toString()).dataType(String.class).unique(Direction.OUT, TypeMaker.UniquenessConsistency.NO_LOCK).indexed(Vertex.class).makePropertyKey();
         }
 
-        graph.commit();
+        graph.flush();
 
         // Entity concept
         Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY.toString(), "Entity", user);
         ontologyRepository.addPropertyTo(entity.getVertex(), conceptType.getName(), "Type", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(entity.getVertex(), titleProperty.getName(), "Title", PropertyType.STRING, user);
 
-        graph.commit();
+        graph.flush();
 
         InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
         String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
         entity.setProperty(PropertyName.GLYPH_ICON.toString(), entityGlyphIconRowKey, DEFAULT_VISIBILITY);
-        graph.commit();
+        graph.flush();
     }
 
     public boolean isOntologyDefined(User user) {

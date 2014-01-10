@@ -1,12 +1,12 @@
 package com.altamiracorp.lumify.core.cmdline;
 
-import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
@@ -31,7 +31,7 @@ public class OwlImport extends CommandLineBase {
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private OntologyRepository ontologyRepository;
     private ResourceRepository resourceRepository;
-    private GraphSession graphSession;
+    private Graph graph;
     private String inFileName;
     private File inDir;
     public static String NS_XML_URI = "http://www.w3.org/XML/1998/namespace";
@@ -129,7 +129,7 @@ public class OwlImport extends CommandLineBase {
             }
             concept.setProperty(propertyName, propertyValue, DEFAULT_VISIBILITY);
         }
-        graphSession.commit();
+        graph.flush();
     }
 
     private Element getEnglishLanguageLabel(Element elem) {
@@ -170,10 +170,9 @@ public class OwlImport extends CommandLineBase {
             throw new RuntimeException("Could not find domain: " + domainResourceName);
         }
         PropertyType propertyType = PropertyType.convert(rangeResourceName);
-        graphSession.commit();
+        graph.flush();
 
         ontologyRepository.addPropertyTo(domain, about, labelText, propertyType, user);
-        graphSession.commit();
     }
 
     private void importObjectPropertyElement(Element objectPropertyElem, User user) {
@@ -193,7 +192,6 @@ public class OwlImport extends CommandLineBase {
         Concept range = ontologyRepository.getConceptByName(rangeResourceName, user);
 
         ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText, user);
-        graphSession.commit();
     }
 
     private Element getSingleChildElement(Element elem, String ns, String localName) {
@@ -245,7 +243,7 @@ public class OwlImport extends CommandLineBase {
     }
 
     @Inject
-    public void setGraphSession(GraphSession graphSession) {
-        this.graphSession = graphSession;
+    public void setGraph(Graph graph) {
+        this.graph = graph;
     }
 }

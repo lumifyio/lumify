@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.ingest;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +9,7 @@ public class ArtifactDetectedObject {
     private String concept;
     private String graphVertexId;
     private String rowKey;
-    private GraphVertex resolvedVertex;
+    private Vertex resolvedVertex;
     private String x1;
     private String y1;
     private String x2;
@@ -78,11 +79,11 @@ public class ArtifactDetectedObject {
         this.rowKey = rowKey;
     }
 
-    public GraphVertex getResolvedVertex() {
+    public Vertex getResolvedVertex() {
         return resolvedVertex;
     }
 
-    public void setResolvedVertex(GraphVertex resolvedVertex) {
+    public void setResolvedVertex(Vertex resolvedVertex) {
         this.resolvedVertex = resolvedVertex;
     }
 
@@ -90,10 +91,11 @@ public class ArtifactDetectedObject {
         try {
             JSONObject json = new JSONObject();
             if (resolvedVertex != null && resolvedVertex.getId() != null) {
-                GraphVertex vertex = getResolvedVertex();
+                Vertex vertex = getResolvedVertex();
                 json.put("graphVertexId", resolvedVertex.getId());
-                for (String property : vertex.getPropertyKeys()) {
-                    json.put(property, vertex.getProperty(property));
+                for (Property property : vertex.getProperties()) {
+                    // TODO handle multi-valued properties
+                    json.put(property.getName(), property.getValue());
                 }
             }
             json.put("concept", getConcept());

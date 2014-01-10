@@ -15,12 +15,12 @@ public class AuditRowKey extends RowKey {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    public static AuditRowKey build(String vertexId) {
+    public static AuditRowKey build(Object vertexId) {
         Date date = new Date();
-        return new AuditRowKey(RowKeyHelper.buildMinor(vertexId, dateFormat.format(date)));
+        return new AuditRowKey(RowKeyHelper.buildMinor(vertexId.toString(), dateFormat.format(date)));
     }
 
-    public static AuditRowKey build (String sourceId, String destId) {
+    public static AuditRowKey build (Object sourceId, Object destId) {
         Date date = new Date();
         String prefix = sourceId + ":" + destId;
         return new AuditRowKey(RowKeyHelper.buildMinor(prefix, dateFormat.format(date)));

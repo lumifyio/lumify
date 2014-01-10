@@ -1,9 +1,10 @@
 package com.altamiracorp.lumify.core.model.artifactHighlighting;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,9 +14,9 @@ import java.util.List;
 public class TermMentionOffsetItem extends OffsetItem {
 
     private final TermMention termMention;
-    private final GraphVertex graphVertex;
+    private final Vertex graphVertex;
 
-    public TermMentionOffsetItem(TermMention termMention, GraphVertex graphVertex) {
+    public TermMentionOffsetItem(TermMention termMention, Vertex graphVertex) {
         this.termMention = termMention;
         this.graphVertex = graphVertex;
     }
@@ -49,7 +50,7 @@ public class TermMentionOffsetItem extends OffsetItem {
         if (graphVertex == null) {
             return null;
         }
-        return (String) graphVertex.getProperty(PropertyName.GLYPH_ICON);
+        return (String) graphVertex.getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
     }
 
     @Override
@@ -63,17 +64,17 @@ public class TermMentionOffsetItem extends OffsetItem {
 
 
     private Double getLatitude() {
-        if (graphVertex == null || graphVertex.getProperty(PropertyName.GEO_LOCATION) == null) {
+        if (graphVertex == null || graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0) == null) {
             return null;
         }
-        return GraphVertex.parseLatLong(graphVertex.getProperty(PropertyName.GEO_LOCATION))[0];
+        return ((GeoPoint) graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0)).getLatitude();
     }
 
     private Double getLongitude() {
-        if (graphVertex == null || graphVertex.getProperty(PropertyName.GEO_LOCATION) == null) {
+        if (graphVertex == null || graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0) == null) {
             return null;
         }
-        return GraphVertex.parseLatLong(graphVertex.getProperty(PropertyName.GEO_LOCATION))[1];
+        return ((GeoPoint) graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0)).getLongitude();
     }
 
     @Override
