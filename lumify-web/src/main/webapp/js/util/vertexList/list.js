@@ -15,7 +15,7 @@ define([
     return defineComponent(List);
 
     function hasPreview(vertex) {
-        return /^(image|video)$/.test(vertex.concept.displayType) || 
+        return (/^(image|video)$/).test(vertex.concept.displayType) || 
             vertex.properties._glyphIcon;
     }
 

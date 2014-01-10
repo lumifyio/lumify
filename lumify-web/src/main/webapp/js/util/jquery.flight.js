@@ -1,4 +1,4 @@
-define(['flight/lib/registry'],function(registry) {
+define(['flight/lib/registry', 'jquery'],function(registry) {
     'use strict';
 
     $.fn.lookupComponent = function(instanceConstructor) {

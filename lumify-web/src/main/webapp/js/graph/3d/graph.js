@@ -31,6 +31,18 @@ define([
         return imageCache[src];
     }
 
+    function iconImageSource(vertex) {
+        if (vertex.properties._glyphIcon) {
+            return vertex.properties._glyphIcon;
+        }
+
+        switch (vertex.concept.displayType) {
+            case 'image': return '/artifact/' + vertex.id + '/raw';
+            case 'video': return '/artifact/' + vertex.id + '/poster-frame';
+            default: return vertex.concept.glyphIconHref;
+        }
+    }
+
     function Graph3D() {
         this.ontologyService = new OntologyService();
         this.defaultAttrs({ });
@@ -44,23 +56,8 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.icons = {
-                document: '/img/glyphicons/glyphicons_036_file@2x.png',
-                image: '/img/glyphicons/glyphicons_036_file@2x.png',
-                video: '/img/glyphicons/glyphicons_036_file@2x.png'
-            };
             this.graph = new $3djs.Graph();
-            this.ontologyService.concepts(function(err, concepts) {
-                function apply(concept) {
-                    self.icons[concept.id] = concept.glyphIconHref;
-                    if (concept.children) {
-                        concept.children.forEach(apply);
-                    }
-                }
-                concepts.entityConcept.children.forEach(apply);
-
-                self.load3djs();
-            });
+            this.load3djs();
 
             if (this.attr.vertices && this.attr.vertices.length) {
                 this.addVertices(this.attr.vertices);
@@ -91,7 +88,7 @@ define([
                 var node = new $3djs.Graph.Node(vertex.id);
 
                 node.data.vertex = vertex;
-                node.data.icon = vertex.properties._glyphIcon || self.icons[vertex.properties._subType];
+                node.data.icon = iconImageSource(vertex);
 
                 if (node.data.icon) {
                     deferredImages.push(
@@ -100,6 +97,7 @@ define([
                                 var ratio = image.naturalWidth / image.naturalHeight,
                                     height = 150;
 
+                                node.data.icon = image.src;
                                 addToGraph(height * ratio, height, node);
                             })
                     );
