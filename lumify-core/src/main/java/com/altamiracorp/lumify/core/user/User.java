@@ -1,8 +1,10 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.securegraph.Authorizations;
 
 public class User {
+    private static final Authorizations AUTHORIZATIONS = new Authorizations();
     private String username;
     private String rowKey;
     private String currentWorkspace;
@@ -37,5 +39,11 @@ public class User {
         this.currentWorkspace = currentWorkspace;
     }
 
-    public String getUserType () { return userType; }
+    public String getUserType() {
+        return userType;
+    }
+
+    public Authorizations getAuthorizations() {
+        return AUTHORIZATIONS;
+    }
 }
