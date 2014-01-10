@@ -32,7 +32,7 @@ public class TermMentionOffsetItem extends OffsetItem {
 
     @Override
     public String getType() {
-        return OntologyRepository.ENTITY.toString();
+        return OntologyRepository.TYPE_ENTITY.toString();
     }
 
     public String getConceptGraphVertexId() {

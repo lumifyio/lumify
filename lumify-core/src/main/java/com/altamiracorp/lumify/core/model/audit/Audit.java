@@ -58,9 +58,9 @@ public class Audit extends Row<AuditRowKey> {
         try {
             JSONObject json = new JSONObject();
             json.put("data", this.getAuditCommon().toJson());
-            if (this.getAuditCommon().getType().equals(OntologyRepository.PROPERTY_CONCEPT.toString())) {
+            if (this.getAuditCommon().getType().equals(OntologyRepository.TYPE_PROPERTY.toString())) {
                 json.put("propertyAudit", this.getAuditProperty().toJson());
-            } else if (this.getAuditCommon().getType().equals(OntologyRepository.RELATIONSHIP_CONCEPT.toString())) {
+            } else if (this.getAuditCommon().getType().equals(OntologyRepository.TYPE_RELATIONSHIP.toString())) {
                 json.put("relationshipAudit", this.getAuditRelationship().toJson());
             } else {
                 json.put("entityAudit", this.getAuditEntity().toJson());

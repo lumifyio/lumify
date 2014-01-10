@@ -158,7 +158,7 @@ public class BaseOntology {
         graph.commit();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.ENTITY.toString(), "Entity", user);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY.toString(), "Entity", user);
         ontologyRepository.addPropertyTo(entity.getVertex(), conceptType.getName(), "Type", PropertyType.STRING, user);
         ontologyRepository.addPropertyTo(entity.getVertex(), titleProperty.getName(), "Title", PropertyType.STRING, user);
 
@@ -172,7 +172,7 @@ public class BaseOntology {
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptByName(OntologyRepository.ENTITY.toString(), user);
+            Concept concept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY.toString(), user);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(PropertyName.ONTOLOGY_TITLE.toString())) {

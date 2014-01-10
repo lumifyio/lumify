@@ -22,10 +22,10 @@ public class OntologyRepository {
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private final Graph graph;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
-    public static final String RELATIONSHIP_CONCEPT = "relationship";
-    public static final String CONCEPT = "concept";
-    public static final String PROPERTY_CONCEPT = "property";
-    public static final String ENTITY = "entity";
+    public static final String TYPE_RELATIONSHIP = "relationship";
+    public static final String TYPE_CONCEPT = "concept";
+    public static final String TYPE_PROPERTY = "property";
+    public static final String TYPE_ENTITY = "entity";
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
@@ -37,14 +37,14 @@ public class OntologyRepository {
 
     public List<Relationship> getRelationshipLabels(User user) {
         Iterable<Vertex> vertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
                 .vertices();
         return toRelationships(vertices, user);
     }
 
     public String getDisplayNameForLabel(String relationshipLabel, User user) {
         Iterable<Vertex> vertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
                 .vertices();
         for (Vertex vertex : vertices) {
             if (vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0).equals(relationshipLabel)) {
@@ -57,7 +57,7 @@ public class OntologyRepository {
     public List<Property> getProperties(User user) {
         List<Property> properties = new ArrayList<Property>();
         Iterable<Vertex> vertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_PROPERTY)
                 .vertices();
         for (Vertex vertex : vertices) {
             properties.add(new Property(vertex));
@@ -67,12 +67,13 @@ public class OntologyRepository {
 
     public Property getProperty(String propertyName, User user) {
         Iterator<Vertex> properties = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_PROPERTY)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
                 .vertices()
                 .iterator();
         if (properties.hasNext()) {
-            Property property = new Property(properties.next());
+            Vertex vertex = properties.next();
+            Property property = new Property(vertex);
             if (properties.hasNext()) {
                 throw new RuntimeException("Too many \"" + propertyName + "\" properties");
             }
@@ -84,7 +85,7 @@ public class OntologyRepository {
 
     public Relationship getRelationship(String propertyName, User user) {
         Iterator<Vertex> relationshipVertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), PROPERTY_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), propertyName)
                 .vertices()
                 .iterator();
@@ -104,7 +105,7 @@ public class OntologyRepository {
 
     public Concept getRootConcept(User user) {
         Iterator<Vertex> vertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.CONCEPT_TYPE.toString(), CONCEPT)
+                .has(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), OntologyRepository.ROOT_CONCEPT_NAME)
                 .vertices()
                 .iterator();
@@ -202,19 +203,19 @@ public class OntologyRepository {
     private List<Relationship> toRelationships(Iterable<Vertex> relationshipTypes, User user) {
         ArrayList<Relationship> relationships = new ArrayList<Relationship>();
         for (Vertex vertex : relationshipTypes) {
-            Concept[] relatedConcepts = getRelationshipRelatedConcepts("" + vertex.getId(), (String) vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0), user);
+            Concept[] relatedConcepts = getRelationshipRelatedConcepts(vertex.getId(), (String) vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0), user);
             relationships.add(new Relationship(vertex, relatedConcepts[0], relatedConcepts[1]));
         }
         return relationships;
     }
 
-    private Concept[] getRelationshipRelatedConcepts(String vertexId, String ontologyTitle, User user) {
+    private Concept[] getRelationshipRelatedConcepts(Object vertexId, String ontologyTitle, User user) {
         Concept[] sourceAndDestConcept = new Concept[2];
         Iterable<Edge> edges = graph.getVertex(vertexId, AUTHORIZATIONS).getEdges(Direction.BOTH, AUTHORIZATIONS);
         for (Edge edge : edges) {
             Vertex otherVertex = edge.getOtherVertex(vertexId, AUTHORIZATIONS);
             String type = (String) otherVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0);
-            if (type.equals(CONCEPT)) {
+            if (type.equals(TYPE_CONCEPT)) {
                 Object destVertexId = edge.getVertexId(Direction.IN);
                 Object sourceVertexId = edge.getVertexId(Direction.OUT);
                 if (sourceVertexId.equals(vertexId)) {
@@ -317,18 +318,18 @@ public class OntologyRepository {
 
     private Vertex getRelationshipVertexId(String relationshipLabel, User user) {
         Iterator<Vertex> vertices = graph.query(AUTHORIZATIONS)
-                .has(PropertyName.DISPLAY_TYPE.toString(), RELATIONSHIP_CONCEPT)
+                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), relationshipLabel)
                 .vertices()
                 .iterator();
         if (vertices.hasNext()) {
             Vertex vertex = vertices.next();
             if (vertices.hasNext()) {
-                throw new RuntimeException("Too many \"" + RELATIONSHIP_CONCEPT + "\" vertices");
+                throw new RuntimeException("Too many \"" + TYPE_RELATIONSHIP + "\" vertices");
             }
             return vertex;
         } else {
-            throw new RuntimeException("Could not find \"" + RELATIONSHIP_CONCEPT + "\" vertex");
+            throw new RuntimeException("Could not find \"" + TYPE_RELATIONSHIP + "\" vertex");
         }
     }
 
@@ -339,7 +340,7 @@ public class OntologyRepository {
         }
 
         Vertex vertex = graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), CONCEPT, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
         );
@@ -359,15 +360,16 @@ public class OntologyRepository {
                 return vertex.getId().equals(toVertex.getId());
             }
         }.iterator();
-        if (!matchingEdges.hasNext()) {
-            fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY);
-            graph.flush();
+        if (matchingEdges.hasNext()) {
+            return;
         }
+        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY);
     }
 
     public Property addPropertyTo(Vertex vertex, String propertyName, String displayName, PropertyType dataType, User user) {
         checkNotNull(vertex, "vertex was null");
         Property property = getOrCreatePropertyType(propertyName, dataType, user);
+        checkNotNull(property, "Could not find property: " + propertyName);
         property.getVertex().setProperties(
                 property.getVertex().getGraph().createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
         );
@@ -379,14 +381,22 @@ public class OntologyRepository {
     }
 
     public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipName, String displayName, User user) {
-        Relationship relationship = getOrCreateRelationshipType(relationshipName, from, to, user);
-        relationship.getVertex().setProperties(graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY));
+        Relationship relationship = getRelationship(relationshipName, user);
+        if (relationship != null) {
+            return relationship;
+        }
 
-        findOrAddEdge(from.getVertex(), relationship.getVertex(), LabelName.HAS_EDGE.toString(), user);
-        findOrAddEdge(relationship.getVertex(), to.getVertex(), LabelName.HAS_EDGE.toString(), user);
+        Vertex relationshipVertex = graph.addVertex(DEFAULT_VISIBILITY,
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_RELATIONSHIP, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+        );
+
+        findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString(), user);
+        findOrAddEdge(relationshipVertex, to.getVertex(), LabelName.HAS_EDGE.toString(), user);
 
         graph.flush();
-        return relationship;
+        return new Relationship(relationshipVertex, from, to);
     }
 
     public void resolvePropertyIds(JSONArray filterJson, User user) throws JSONException {
@@ -404,38 +414,6 @@ public class OntologyRepository {
         }
     }
 
-    public Map<Object, Concept> getAllConceptsById(User user) {
-        Map<Object, Concept> results = new HashMap<Object, Concept>();
-        Concept rootConcept = getRootConcept(user);
-        results.put(rootConcept.getId(), rootConcept);
-        getAllConceptsById(results, rootConcept, user);
-        return results;
-    }
-
-    private void getAllConceptsById(Map<Object, Concept> concepts, Concept rootConcept, User user) {
-        List<Concept> childConcepts = getChildConcepts(rootConcept, user);
-        for (Concept c : childConcepts) {
-            concepts.put(c.getId(), c);
-            getAllConceptsById(concepts, c, user);
-        }
-    }
-
-    public Map<String, Concept> getAllConceptsByTitle(User user) {
-        Map<String, Concept> results = new HashMap<String, Concept>();
-        Concept rootConcept = getRootConcept(user);
-        results.put(rootConcept.getTitle(), rootConcept);
-        getAllConceptsByTitle(results, rootConcept, user);
-        return results;
-    }
-
-    private void getAllConceptsByTitle(Map<String, Concept> concepts, Concept rootConcept, User user) {
-        List<Concept> childConcepts = getChildConcepts(rootConcept, user);
-        for (Concept c : childConcepts) {
-            concepts.put(c.getTitle(), c);
-            getAllConceptsByTitle(concepts, c, user);
-        }
-    }
-
     public Property getOrCreatePropertyType(String name, PropertyType dataType, User user) {
         Property typeProperty = getProperty(name, user);
         if (typeProperty != null) {
@@ -443,26 +421,12 @@ public class OntologyRepository {
         }
 
         typeProperty = new Property(graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.PROPERTY_CONCEPT, DEFAULT_VISIBILITY),
+                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY),
                 graph.createProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
         ));
         graph.flush();
         return typeProperty;
-    }
-
-    private Relationship getOrCreateRelationshipType(String relationshipName, Concept from, Concept to, User user) {
-        Relationship relationship = getRelationship(relationshipName, user);
-        if (relationship != null) {
-            return relationship;
-        }
-
-        relationship = new Relationship(graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.RELATIONSHIP_CONCEPT, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
-        ), from, to);
-        graph.flush();
-        return relationship;
     }
 
     private List<Relationship> getRelationships(Concept sourceConcept, final Concept destConcept, User user) {
@@ -519,7 +483,7 @@ public class OntologyRepository {
     private Vertex findOntologyConceptByTitle(String title, User user) {
         Iterator<Vertex> r = graph.query(AUTHORIZATIONS)
                 .has(PropertyName.ONTOLOGY_TITLE.toString(), title)
-                .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.CONCEPT.toString())
+                .has(PropertyName.CONCEPT_TYPE.toString(), OntologyRepository.TYPE_CONCEPT.toString())
                 .vertices()
                 .iterator();
         if (r.hasNext()) {
