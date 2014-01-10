@@ -28,6 +28,8 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Date;
+
 @Singleton
 public class ArtifactRepository extends Repository<Artifact> {
     public static final String VIDEO_STORAGE_HDFS_PATH = "/lumify/artifacts/video";
