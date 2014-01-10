@@ -135,20 +135,28 @@
     @import "dropdown";
   }
 
-  .btn-toolbar {
+  .detail-toolbar {
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 1em;
+    background: fadeout(@pane-background, 20%);
     white-space: nowrap;
+    z-index: 1;
 
-    .checked a {
-      background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
-      background-repeat: no-repeat;
-      background-position: 5px center;
-      background-size: 10px;
-    }
+    .btn-toolbar {
 
-    li.checked:hover a {
-      background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
+      .checked a {
+        background-image: url(../../img/glyphicons/glyphicons_206_ok_2@2x.png);
+        background-repeat: no-repeat;
+        background-position: 5px center;
+        background-size: 10px;
+      }
+
+      li.checked:hover a {
+        background-image: url(../../img/glyphicons/white/glyphicons_206_ok_2@2x.png);
+      }
     }
   }
 
@@ -430,9 +438,13 @@
     z-index: 1;
     .box-sizing(border-box);
 
+    .detail-toolbar {
+      z-index: 4;
+      background: transparent;
+    }
+
     .btn {
       position: relative;
-      z-index: 5;
       .opacity(40);
       &:hover {
         .opacity(100);
