@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +17,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TermRegexFinderTest {
     @Mock
-    private GraphVertex concept;
+    private Vertex concept;
 
     @Before
     public void setup() {
         when(concept.getId()).thenReturn("1");
-        when(concept.getProperty(PropertyName.DISPLAY_NAME)).thenReturn("testConcept");
+        when(concept.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0)).thenReturn("testConcept");
     }
 
     @Test

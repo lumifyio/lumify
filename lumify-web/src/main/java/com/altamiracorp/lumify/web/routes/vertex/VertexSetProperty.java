@@ -2,10 +2,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -13,6 +10,10 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -21,20 +22,19 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
 
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public VertexSetProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
-        ontologyRepository = ontologyRepo;
-        graphRepository = graphRepo;
-        auditRepository = auditRepo;
+    public VertexSetProperty(final OntologyRepository ontologyRepo, final Graph graph, final AuditRepository auditRepo) {
+        this.ontologyRepository = ontologyRepo;
+        this.graph = graph;
+        this.auditRepository = auditRepo;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String valueStr = getRequiredParameter(request, "value");
 
         User user = getUser(request);
-        Property property = ontologyRepository.getProperty(propertyName, user);
+        com.altamiracorp.lumify.core.model.ontology.Property property = ontologyRepository.getProperty(propertyName, user);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
@@ -58,19 +58,20 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
-        GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
+        Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
 
         List<String> modifiedProperties = Lists.newArrayList(propertyName);
-        graphVertex.setProperty(propertyName, value);
+        Visibility visibility = new Visibility(""); // TODO set visibility
+        graphVertex.setProperties(graph.createProperty(propertyName, value, visibility));
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            graphVertex.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION, "");
+            graphVertex.setProperties(graph.createProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility));
             modifiedProperties.add(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
-            graphVertex.setProperty(PropertyName.SOURCE, value);
+            graphVertex.setProperties(graph.createProperty(PropertyName.SOURCE.toString(), value, visibility));
             modifiedProperties.add(PropertyName.SOURCE.toString());
         }
-        graphRepository.save(graphVertex, user);
+        graph.flush();
 
         for (String modifiedProperty : modifiedProperties) {
             // TODO: replace second "" when we implement commenting on ui
@@ -79,8 +80,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 
-        Map<String, String> properties = graphRepository.getVertexProperties(graphVertexId, user);
-        JSONObject propertiesJson = VertexProperties.propertiesToJson(properties);
+        JSONObject propertiesJson = VertexProperties.propertiesToJson(graphVertex.getProperties());
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
 
@@ -91,12 +91,12 @@ public class VertexSetProperty extends BaseRequestHandler {
         respondWithJson(response, json);
     }
 
-    private JSONObject toJson(GraphVertex vertex) {
+    private JSONObject toJson(Vertex vertex) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("graphVertexId", vertex.getId());
-            for (String propertyKey : vertex.getPropertyKeys()) {
-                obj.put(propertyKey, vertex.getProperty(propertyKey));
+            for (Property property : vertex.getProperties()) {
+                obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
             }
             return obj;
         } catch (JSONException e) {

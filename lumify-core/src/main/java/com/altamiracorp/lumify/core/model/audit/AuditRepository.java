@@ -109,7 +109,7 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(user, "user cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(entity.getId()));
-        HashMap<String, Object> oldProperties = entity.getOldProperties();
+        HashMap<String, Object> oldProperties = new HashMap<String, Object>(); // TODO add listener pattern to secure graph to notify of property changes... entity.getOldProperties();
 
         audit.getAuditCommon()
                 .setUser(user)

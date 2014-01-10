@@ -1,12 +1,12 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Visibility;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
@@ -42,7 +42,7 @@ public class BaseOntologyTest {
     @Mock
     ResourceRepository resourceRepository;
     @Mock
-    GraphSession graphSession;
+    Graph graph;
     @Mock
     TitanGraph titanGraph;
     @Mock
@@ -54,13 +54,11 @@ public class BaseOntologyTest {
 
     @Before
     public void setUp() {
-        baseOntology = new BaseOntology(ontologyRepository, resourceRepository, graphSession);
+        baseOntology = new BaseOntology(ontologyRepository, resourceRepository, graph);
     }
 
     @Test
     public void testDefineOntology() {
-        when(graphSession.getGraph()).thenReturn(titanGraph);
-
         when(titanGraph.getType("_conceptType")).thenReturn(titanKey);
         when(titanGraph.getType("_dataType")).thenReturn(titanKey);
         when(titanGraph.getType("ontologyTitle")).thenReturn(titanKey);
@@ -129,8 +127,6 @@ public class BaseOntologyTest {
 
     @Test
     public void testInitializeWhenUndefined() {
-        when(graphSession.getGraph()).thenReturn(titanGraph);
-
         when(titanGraph.getType("_conceptType")).thenReturn(titanKey);
         when(titanGraph.getType("_dataType")).thenReturn(titanKey);
         when(titanGraph.getType("ontologyTitle")).thenReturn(titanKey);
