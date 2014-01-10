@@ -6,10 +6,11 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -26,7 +27,6 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -73,7 +73,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private Counter processingCounter;
     private Counter totalErrorCounter;
     private Timer processingTimeTimer;
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
     protected WorkQueueRepository workQueueRepository;
     private User user;
 
@@ -81,12 +81,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
         LOGGER.info("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
-        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-            @Override
-            public Module createModule() {
-                return StormBootstrap.create(stormConf);
-            }
-        });
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new com.altamiracorp.lumify.core.config.Configuration(stormConf)));
 
         String namePrefix = metricsManager.getNamePrefix(this);
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
@@ -311,7 +306,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setMetricsManager(MetricsManager metricsManager) {
+    public void setMetricsManager(JmxMetricsManager metricsManager) {
         this.metricsManager = metricsManager;
     }
 

@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.util;
 
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.PausableTimerContext;
 import com.altamiracorp.lumify.core.metrics.PausableTimerContextAware;
 import com.codahale.metrics.Counter;
@@ -22,7 +22,7 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
     private boolean stopped;
     private final Queue<Work> workItems = new LinkedList<Work>();
     private final Queue<WorkResult<TResult>> workResults = new LinkedList<WorkResult<TResult>>();
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
 
     @Override
     public final void run() {
@@ -155,7 +155,7 @@ public abstract class ThreadedTeeInputStreamWorker<TResult, TData> implements Ru
     }
 
     @Inject
-    public void setMetricsManager(MetricsManager metricsManager) {
+    public void setMetricsManager(JmxMetricsManager metricsManager) {
         this.metricsManager = metricsManager;
     }
 }

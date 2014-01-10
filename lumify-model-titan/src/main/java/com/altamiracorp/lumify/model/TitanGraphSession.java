@@ -174,7 +174,7 @@ public class TitanGraphSession extends GraphSession {
         if (typeProperty != null) {
             v = new VertexProperty(typeProperty);
         } else {
-            Class vertexDataType = String.class;
+            Class vertexDataType;
             switch (dataType) {
                 case DATE:
                     vertexDataType = Long.class;

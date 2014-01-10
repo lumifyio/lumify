@@ -20,15 +20,16 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.InjectHelper;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
-import com.google.inject.Module;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -67,12 +68,7 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
     /**
      * The bolt ID as it is configured in the Storm topology: ${componentId}-${taskId}
      */
-    private transient String boltId;
-    
-    /**
-     * The cached class name for logging.
-     */
-    private transient final String className;
+    private String boltId;
     
     /**
      * The configured OutputCollector.
@@ -82,7 +78,7 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
     /**
      * The metrics manager.
      */
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
     
     /**
      * This counter indicates the total number of Tuples that
@@ -108,24 +104,12 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
      */
     private Timer processingTimeTimer;
     
-    /**
-     * Create a new BaseLumifyBolt.
-     */
-    protected BaseLumifyMetricsBolt() {
-        className = getClass().getName();
-    }
-    
     @Override
     public final void prepare(final Map stormConf, final TopologyContext context, final OutputCollector collector) {
         boltId = String.format("%s-%d", context.getThisComponentId(), context.getThisTaskId());
         LOGGER.info("Initializing bolt: %s", boltId);
         this.outputCollector = collector;
-        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-            @Override
-            public Module createModule() {
-                return StormBootstrap.create(stormConf);
-            }
-        });
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(stormConf)));
         
         String namePrefix = metricsManager.getNamePrefix(this);
         MetricRegistry registry = metricsManager.getRegistry();
@@ -149,24 +133,25 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
     
     @Override
     public final void execute(final Tuple input) {
+        String processId = getProcessId();
         processingCounter.inc();
         Timer.Context procTimeCtx = processingTimeTimer.time();
         try {
-            LOGGER.info("[Bolt: %s::%s] BEGIN Message [%s]", className, boltId, input.getMessageId());
-            LOGGER.debug("[Bolt: %s::%s] Message [%s] Payload: %s", className, boltId, input.getMessageId(), input);
+            LOGGER.info("[Bolt: %s::%s] BEGIN Message [%s]", processId, boltId, input.getMessageId());
+            LOGGER.debug("[Bolt: %s::%s] Message [%s] Payload: %s", processId, boltId, input.getMessageId(), input);
             safeExecute(input);
-            LOGGER.info("[Bolt: %s::%s] ACK Message [%s]", className, boltId, input.getMessageId());
+            LOGGER.info("[Bolt: %s::%s] ACK Message [%s]", processId, boltId, input.getMessageId());
             outputCollector.ack(input);
         } catch (Exception ex) {
             totalErrorCounter.inc();
-            LOGGER.warn("[Bolt: %s::%s] FAIL Message [%s]", className, boltId, input.getMessageId(), ex);
+            LOGGER.warn("[Bolt: %s::%s] FAIL Message [%s]", processId, boltId, input.getMessageId(), ex);
             outputCollector.reportError(ex);
             outputCollector.fail(input);
         } finally {
             processingCounter.dec();
             totalProcessedCounter.inc();
             procTimeCtx.stop();
-            LOGGER.info("[Bolt: %s::%s] END Message [%s]", className, boltId, input.getMessageId());
+            LOGGER.info("[Bolt: %s::%s] END Message [%s]", processId, boltId, input.getMessageId());
         }
     }
     
@@ -202,11 +187,12 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
     }
     
     /**
-     * Convenience method for retrieving the cached results of getClass().getName().
-     * @return the fully qualified class name
+     * Returns the fully qualified class name as the default process ID.  Subclasses
+     * may choose to override this method to change the process ID.
+     * @return the process ID
      */
-    protected final String getCachedClassName() {
-        return className;
+    protected String getProcessId() {
+        return getClass().getName();
     }
     
     /**
@@ -218,7 +204,7 @@ public abstract class BaseLumifyMetricsBolt extends BaseRichBolt {
     }
     
     @Inject
-    public final void setMetricsManager(final MetricsManager manager) {
+    public final void setMetricsManager(final JmxMetricsManager manager) {
         metricsManager = manager;
     }
 }
