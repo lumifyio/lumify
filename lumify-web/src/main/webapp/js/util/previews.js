@@ -40,7 +40,7 @@ function(VertexService, template) {
 
         switch (vertex.concept.displayType) {
             case "image":
-                var url = '/artifact/' + vertex.id + '/raw'
+                var url = '/artifact/' + vertex.id + '/thumbnail'
                 self.callback(url, url);
                 break;
             case "video":
