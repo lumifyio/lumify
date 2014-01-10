@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.core.model.termMention;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
-import com.altamiracorp.lumify.core.model.GeoLocation;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.lumify.core.model.GeoLocation;
 
 public class TermMentionMetadata extends ColumnFamily {
     public static final String NAME = "Metadata";
@@ -45,7 +45,7 @@ public class TermMentionMetadata extends ColumnFamily {
         return Value.toString(get(ONTOLOGY_CLASS_URI));
     }
 
-    public TermMentionMetadata setConceptGraphVertexId(String conceptGraphVertexId) {
+    public TermMentionMetadata setConceptGraphVertexId(Object conceptGraphVertexId) {
         set(CONCEPT_GRAPH_VERTEX_ID, conceptGraphVertexId);
         return this;
     }

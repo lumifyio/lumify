@@ -154,11 +154,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-titan</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>

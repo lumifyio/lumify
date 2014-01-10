@@ -6,23 +6,23 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
-import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
-import com.google.common.collect.Lists;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -37,7 +37,7 @@ public class ArtifactRepository extends Repository<Artifact> {
     public static final int PREVIEW_FRAME_HEIGHT = 240;
     private final ArtifactBuilder artifactBuilder = new ArtifactBuilder();
     private final FileSystemSession fsSession;
-    private final GraphSession graphSession;
+    private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
 
@@ -45,12 +45,12 @@ public class ArtifactRepository extends Repository<Artifact> {
     public ArtifactRepository(
             final ModelSession modelSession,
             final FileSystemSession fsSession,
-            final GraphSession graphSession,
+            final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository) {
         super(modelSession);
         this.fsSession = fsSession;
-        this.graphSession = graphSession;
+        this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
     }
@@ -74,13 +74,13 @@ public class ArtifactRepository extends Repository<Artifact> {
         return fsSession.saveFile(in);
     }
 
-    public InputStream getRaw(Artifact artifact, GraphVertex vertex, User user) {
+    public InputStream getRaw(Artifact artifact, Vertex vertex, User user) {
         byte[] bytes = artifact.getMetadata().getRaw();
         if (bytes != null) {
             return new ByteArrayInputStream(bytes);
         }
 
-        String hdfsPath = vertex.getProperty(PropertyName.RAW_HDFS_PATH).toString();
+        String hdfsPath = vertex.getPropertyValue(PropertyName.RAW_HDFS_PATH.toString(), 0).toString();
         if (hdfsPath != null) {
             return fsSession.loadFile(hdfsPath);
         }
@@ -88,57 +88,54 @@ public class ArtifactRepository extends Repository<Artifact> {
         return null;
     }
 
-    public GraphVertex saveToGraph(Artifact artifact, ArtifactExtractedInfo artifactExtractedInfo, User user) {
-        GraphVertex artifactVertex = null;
-        String oldGraphVertexId = artifact.getMetadata().getGraphVertexId();
+    public Vertex saveToGraph(Artifact artifact, ArtifactExtractedInfo artifactExtractedInfo, User user) {
+        Visibility visibility = new Visibility(""); // TODO set visibility
+
+        Vertex artifactVertex = null;
+        Object oldGraphVertexId = artifact.getMetadata().getGraphVertexId();
         boolean newVertex = false;
         if (oldGraphVertexId != null) {
-            artifactVertex = graphSession.findGraphVertex(oldGraphVertexId, user);
+            artifactVertex = graph.getVertex(oldGraphVertexId, user.getAuthorizations());
         }
         if (artifactVertex == null) {
-            artifactVertex = new InMemoryGraphVertex();
+            artifactVertex = graph.addVertex(visibility);
             newVertex = true;
         }
 
-        artifactVertex.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString());
-        artifactVertex.setProperty(PropertyName.CONCEPT_TYPE, ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId());
-        artifactVertex.setProperty(PropertyName.TITLE, artifactExtractedInfo.getTitle());
-
-        List<String> modifiedProperties = Lists.newArrayList(PropertyName.ROW_KEY.toString(), PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());
+        List<Property> modifiedProperties = new ArrayList<Property>();
+        modifiedProperties.add(graph.createProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString(), visibility));
+        modifiedProperties.add(graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId(), visibility));
+        modifiedProperties.add(graph.createProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility));
 
         if (artifactExtractedInfo.getSource() != null) {
-            artifactVertex.setProperty(PropertyName.SOURCE, artifactExtractedInfo.getSource());
-            modifiedProperties.add(PropertyName.SOURCE.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.SOURCE.toString(), artifactExtractedInfo.getSource(), visibility));
         }
         if (artifactExtractedInfo.getRawHdfsPath() != null) {
-            artifactVertex.setProperty(PropertyName.RAW_HDFS_PATH, artifactExtractedInfo.getRawHdfsPath());
-            modifiedProperties.add(PropertyName.RAW_HDFS_PATH.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.RAW_HDFS_PATH.toString(), artifactExtractedInfo.getRawHdfsPath(), visibility));
         }
         if (artifactExtractedInfo.getTextHdfsPath() != null) {
-            artifactVertex.setProperty(PropertyName.TEXT_HDFS_PATH, artifactExtractedInfo.getTextHdfsPath());
-            artifactVertex.setProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH, artifactExtractedInfo.getTextHdfsPath());
-            Collections.addAll(modifiedProperties, PropertyName.TEXT_HDFS_PATH.toString(), PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility));
+            modifiedProperties.add(graph.createProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility));
         }
         if (artifactExtractedInfo.getDetectedObjects() != null) {
-            artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, artifactExtractedInfo.getDetectedObjects());
-            modifiedProperties.add(PropertyName.DETECTED_OBJECTS.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.DETECTED_OBJECTS.toString(), artifactExtractedInfo.getDetectedObjects(), visibility));
         }
         if (artifactExtractedInfo.getDate() != null) {
-            artifactVertex.setProperty(PropertyName.PUBLISHED_DATE, artifactExtractedInfo.getDate().getTime());
-            modifiedProperties.add(PropertyName.PUBLISHED_DATE.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.PUBLISHED_DATE.toString(), artifactExtractedInfo.getDate().getTime(), visibility));
         }
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
-            artifactVertex.setProperty(PropertyName.AUTHOR, artifactExtractedInfo.getAuthor());
-            modifiedProperties.add(PropertyName.AUTHOR.toString());
+            modifiedProperties.add(graph.createProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility));
         }
-        String artifactVertexId = graphSession.save(artifactVertex, user);
+        Object artifactVertexId = artifactVertex.getId();
 
         if (newVertex) {
             auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
         }
 
-        for (String modifiedProperty : modifiedProperties) {
-            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty, artifactExtractedInfo.getProcess(), "", user);
+        artifactVertex.setProperties(modifiedProperties.toArray(new Property[modifiedProperties.size()]));
+
+        for (Property modifiedProperty : modifiedProperties) {
+            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty.getName(), artifactExtractedInfo.getProcess(), "", user);
         }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {
@@ -148,13 +145,13 @@ public class ArtifactRepository extends Repository<Artifact> {
         return artifactVertex;
     }
 
-    public InputStream getHighlightedText(GraphVertex artifactVertex, User user) throws IOException {
+    public InputStream getHighlightedText(Vertex artifactVertex, User user) throws IOException {
         checkNotNull(artifactVertex);
         checkNotNull(user);
 
-        String hdfsPath = (String) artifactVertex.getProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH);
+        String hdfsPath = (String) artifactVertex.getPropertyValue(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString(), 0);
         if (hdfsPath == null) {
-            String artifactRowKey = (String) artifactVertex.getProperty(PropertyName.ROW_KEY);
+            String artifactRowKey = (String) artifactVertex.getPropertyValue(PropertyName.ROW_KEY.toString(), 0);
             if (artifactRowKey != null) {
                 Artifact artifact = findByRowKey(artifactRowKey, user.getModelUserContext());
                 if (artifact != null) {
@@ -194,10 +191,10 @@ public class ArtifactRepository extends Repository<Artifact> {
     }
 
     public ArtifactRowKey findRowKeyByGraphVertexId(String graphVertexId, User user) {
-        GraphVertex vertex = graphSession.findGraphVertex(graphVertexId, user);
+        Vertex vertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         if (vertex == null) {
             return null;
         }
-        return new ArtifactRowKey(vertex.getProperty(PropertyName.ROW_KEY).toString());
+        return new ArtifactRowKey(vertex.getPropertyValue(PropertyName.ROW_KEY.toString(), 0).toString());
     }
 }

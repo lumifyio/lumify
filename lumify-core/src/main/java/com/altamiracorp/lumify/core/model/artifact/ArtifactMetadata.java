@@ -61,11 +61,11 @@ public class ArtifactMetadata extends ColumnFamily {
         return this;
     }
 
-    public String getGraphVertexId() {
+    public Object getGraphVertexId() {
         return Value.toString(get(GRAPH_VERTEX_ID));
     }
 
-    public ArtifactMetadata setGraphVertexId(String graphVertexId) {
+    public ArtifactMetadata setGraphVertexId(Object graphVertexId) {
         set(GRAPH_VERTEX_ID, graphVertexId);
         return this;
     }

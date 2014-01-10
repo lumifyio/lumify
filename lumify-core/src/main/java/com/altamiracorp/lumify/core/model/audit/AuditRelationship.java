@@ -43,7 +43,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_ID));
     }
 
-    public AuditRelationship setSourceId (String sourceId) {
+    public AuditRelationship setSourceId (Object sourceId) {
         set (SOURCE_ID, sourceId);
         return this;
     }
@@ -70,7 +70,7 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_ID));
     }
 
-    public AuditRelationship setDestId (String destId) {
+    public AuditRelationship setDestId (Object destId) {
         set (DEST_ID, destId);
         return this;
     }

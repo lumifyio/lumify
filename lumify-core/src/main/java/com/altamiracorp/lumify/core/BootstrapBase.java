@@ -5,8 +5,6 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.core.model.GraphSession;
-import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
@@ -41,8 +39,6 @@ public abstract class BootstrapBase extends AbstractModule {
         bind(MetricsManager.class).toInstance(metricManager);
         bind(ModelSession.class).toInstance(createModelSession());
         bind(FileSystemSession.class).toInstance(createFileSystemSession());
-        bind(GraphSession.class).toInstance(createGraphSession());
-        bind(SearchProvider.class).toInstance(createSearchProvider(user, metricManager));
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
         bind(VersionService.class).toInstance(new VersionService());
         bind(ContentTypeExtractor.class).toProvider(new Provider<ContentTypeExtractor>() {
@@ -120,36 +116,6 @@ public abstract class BootstrapBase extends AbstractModule {
             return modelSessionConstructor.newInstance(config);
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("The provided filesystem provider " + fileSystemProviderClass.getName() + " does not have the required constructor");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private GraphSession createGraphSession() {
-        Class graphSessionClass = null;
-        try {
-            graphSessionClass = config.getClass(Configuration.GRAPH_PROVIDER, null);
-            checkNotNull(graphSessionClass, Configuration.GRAPH_PROVIDER + " must be configured");
-            Constructor<GraphSession> graphSessionConstructor = graphSessionClass.getConstructor(Configuration.class);
-            return graphSessionConstructor.newInstance(config);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("The provided graph provider " + graphSessionClass.getName() + " does not have the required constructor");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private SearchProvider createSearchProvider(User user, MetricsManager metricManager) {
-        Class searchProviderClass = null;
-        try {
-            searchProviderClass = config.getClass(Configuration.SEARCH_PROVIDER, null);
-            checkNotNull(searchProviderClass, Configuration.SEARCH_PROVIDER + " must be configured");
-            Constructor<SearchProvider> searchProviderConstructor = searchProviderClass.getConstructor();
-            SearchProvider searchProvider = searchProviderConstructor.newInstance();
-            searchProvider.init(config, user, metricManager);
-            return searchProvider;
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("The provided search provider " + searchProviderClass.getName() + " does not have the required constructor");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
