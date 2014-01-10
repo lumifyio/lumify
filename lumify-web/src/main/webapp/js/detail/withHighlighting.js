@@ -6,7 +6,8 @@ define([
     'util/css-stylesheet',
     'colorjs',
     'service/vertex',
-    'service/ontology'
+    'service/ontology',
+    'util/jquery.withinScrollable'
 ], function(TermForm, StatementForm, stylesheet, colorjs, VertexService, OntologyService) {
     'use strict';
 

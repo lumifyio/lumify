@@ -1,4 +1,3 @@
-
 /**
  * Within Scrollable jQuery Plugin
  *
@@ -7,8 +6,8 @@
  * @version     0.0.1
  * @date        2013-07-10
  */
+define(['jquery'], function() {
 
-;(function( $, window, undefined ) {
     'use strict';
   
     $.fn.withinScrollable = function(scrollable) {
@@ -30,5 +29,4 @@
         return (element.offsetTop + element.offsetHeight) >= top && element.offsetTop <= top + height;
     }
   
-  
-})(jQuery, window);
+});

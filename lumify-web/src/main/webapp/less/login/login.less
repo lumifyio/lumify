@@ -1,3 +1,6 @@
+#login {
+  .fullscreen;
+}
 .logo {
   background: url(/img/lumify-logo.png);
   height: 40%;
@@ -26,6 +29,50 @@ form.login {
     }
 
     button {
-      float: right;
+      &.loading {
+        margin-left: 0;
+      }
+      width: 100%;
     }
+}
+
+.animatelogin {
+  .menubar-pane {
+      left: @menubar-width * -1;
+      .transition(~"left 0.25s ease-out 0.7s");
+  }
+  .graph-pane {
+    .opacity(0);
+    .transition(~"all 0.25s ease-out 1s");
+  }
+  #login {
+    .username, .logo {
+      .transition(~"all 0.25s ease-in-out 0.2s");
+    }
+    .password {
+      .transition(~"all 0.25s ease-in-out 0.1s");
+    }
+    button {
+      .transition(~"all 0.25s ease-in-out 0s");
+    }
+  }
+}
+
+.animateloginstart {
+  .menubar-pane {
+    left: 0;
+  }
+  .graph-pane {
+    .opacity(100);
+  }
+  #login {
+    .username, .password, button {
+      position: relative;
+      left: 25px;
+      .opacity(0);
+    }
+    .logo {
+      .opacity(0);
+    }
+  }
 }
