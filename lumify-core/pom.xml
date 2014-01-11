@@ -71,6 +71,11 @@
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>storm</groupId>
+            <artifactId>storm</artifactId>
+            <scope>${cluster.dependency.scope}</scope>
+        </dependency>
 
         <!-- Runtime Dependencies -->
         <dependency>
@@ -86,6 +91,14 @@
     </dependencies>
 
     <profiles>
+        <!-- Use this profile to build when deploying to a clustered environment. -->
+        <profile>
+            <id>cluster</id>
+            <properties>
+                <cluster.dependency.scope>provided</cluster.dependency.scope>
+            </properties>
+        </profile>
+
         <profile>
             <id>codeQuality</id>
             <build>
