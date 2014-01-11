@@ -8,6 +8,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.storm.StormBootstrap;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Counter;

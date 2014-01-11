@@ -64,8 +64,11 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             String rawString = json.optString("raw");
 
             String vertexId = json.optString("graphVertexId");
-            if (vertexId != null) {
+            if (vertexId != null && vertexId.length() > 0) {
                 GraphVertex vertex = graphRepository.findVertex(vertexId, getUser());
+                if (vertex == null) {
+                    throw new RuntimeException("Could not find vertex with id: " + vertexId);
+                }
                 String rowKey = (String) vertex.getProperty(PropertyName.ROW_KEY.toString());
                 Artifact artifact = artifactRepository.findByRowKey(rowKey, getUser().getModelUserContext());
                 fileName = artifact.getMetadata().getFileName();

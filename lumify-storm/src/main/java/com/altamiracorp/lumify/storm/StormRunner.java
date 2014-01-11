@@ -30,9 +30,9 @@ public class StormRunner extends StormRunnerBase {
     }
 
     private void createArtifactHighlightingTopology(TopologyBuilder builder, int parallelismHint) {
-        builder.setSpout(ARTIFACT_HIGHLIGHT_SPOUT, new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME, getQueueStartOffsetTime()), 1)
+        builder.setSpout(ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setSpout(USER_ARTIFACT_HIGHLIGHT_SPOUT, new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME, getQueueStartOffsetTime()), 1)
+        builder.setSpout(USER_ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
         builder.setBolt(ARTIFACT_HIGHLIGHT_BOLT, new ArtifactHighlightingBolt(), parallelismHint)
                 .shuffleGrouping(ARTIFACT_HIGHLIGHT_SPOUT)

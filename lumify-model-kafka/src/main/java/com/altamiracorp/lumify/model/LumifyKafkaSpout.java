@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.model;
 
 import backtype.storm.spout.Scheme;
 import backtype.storm.spout.SpoutOutputCollector;
@@ -6,7 +6,7 @@ import backtype.storm.task.TopologyContext;
 import com.altamiracorp.lumify.core.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.model.KafkaJsonEncoder;
+import com.altamiracorp.lumify.core.storm.StormBootstrap;
 import com.codahale.metrics.Counter;
 import com.google.inject.Inject;
 import com.google.inject.Module;
