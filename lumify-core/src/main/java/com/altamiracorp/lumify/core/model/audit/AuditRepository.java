@@ -7,11 +7,11 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.tinkerpop.blueprints.Edge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -203,8 +203,9 @@ public class AuditRepository extends Repository<Audit> {
             auditDestSource.getAuditProperty().setNewValue("");
             auditSourceDest.getAuditProperty().setNewValue("");
         } else {
-            auditDestSource.getAuditProperty().setNewValue(edge.getProperty(propertyName));
-            auditSourceDest.getAuditProperty().setNewValue(edge.getProperty(propertyName));
+            // TODO handle multi-valued properties
+            auditDestSource.getAuditProperty().setNewValue(edge.getPropertyValue(propertyName, 0));
+            auditSourceDest.getAuditProperty().setNewValue(edge.getPropertyValue(propertyName, 0));
         }
         auditDestSource.getAuditProperty().setPropertyName(propertyName);
         auditSourceDest.getAuditProperty().setPropertyName(propertyName);

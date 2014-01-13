@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.securegraph.Vertex;
-import com.thinkaurelius.titan.core.attribute.Geoshape;
+import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,13 +100,13 @@ public class Property {
         if (match.find()) {
             double latitude = Double.parseDouble(match.group(1).trim());
             double longitude = Double.parseDouble(match.group(2).trim());
-            return Geoshape.point(latitude, longitude);
+            return new GeoPoint(latitude, longitude);
         }
         match = GEO_LOCATION_ALTERNATE_FORMAT.matcher(valueStr);
         if (match.find()) {
             double latitude = Double.parseDouble(match.group(1).trim());
             double longitude = Double.parseDouble(match.group(2).trim());
-            return Geoshape.point(latitude, longitude);
+            return new GeoPoint(latitude, longitude);
         }
         throw new RuntimeException("Could not parse location: " + valueStr);
     }

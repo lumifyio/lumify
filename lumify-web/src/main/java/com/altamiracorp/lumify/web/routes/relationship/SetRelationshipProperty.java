@@ -2,17 +2,16 @@ package com.altamiracorp.lumify.web.routes.relationship;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Property;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.vertex.VertexProperties;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
-import com.tinkerpop.blueprints.Edge;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,15 +21,15 @@ import java.util.Map;
 public class SetRelationshipProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetRelationshipProperty.class);
 
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public SetRelationshipProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
-        ontologyRepository = ontologyRepo;
-        graphRepository = graphRepo;
-        auditRepository = auditRepo;
+    public SetRelationshipProperty(final OntologyRepository ontologyRepository, final Graph graph, final AuditRepository auditRepository) {
+        this.ontologyRepository = ontologyRepository;
+        this.graph = graph;
+        this.auditRepository = auditRepository;
     }
 
     @Override

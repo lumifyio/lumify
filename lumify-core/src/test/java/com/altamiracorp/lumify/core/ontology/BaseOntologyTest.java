@@ -8,9 +8,6 @@ import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Visibility;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanKey;
-import com.thinkaurelius.titan.core.TitanLabel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,12 +40,6 @@ public class BaseOntologyTest {
     ResourceRepository resourceRepository;
     @Mock
     Graph graph;
-    @Mock
-    TitanGraph titanGraph;
-    @Mock
-    TitanKey titanKey;
-    @Mock
-    TitanLabel titanLabel;
 
     private BaseOntology baseOntology;
 
@@ -59,32 +50,6 @@ public class BaseOntologyTest {
 
     @Test
     public void testDefineOntology() {
-        when(titanGraph.getType("_conceptType")).thenReturn(titanKey);
-        when(titanGraph.getType("_dataType")).thenReturn(titanKey);
-        when(titanGraph.getType("ontologyTitle")).thenReturn(titanKey);
-        when(titanGraph.getType("hasProperty")).thenReturn(titanLabel);
-        when(titanGraph.getType("hasEdge")).thenReturn(titanLabel);
-        when(titanGraph.getType("isA")).thenReturn(titanLabel);
-        when(titanGraph.getType("relationshipType")).thenReturn(titanKey);
-        when(titanGraph.getType("_timeStamp")).thenReturn(titanKey);
-        when(titanGraph.getType("_rawHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("_textHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("highlightedTextHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("_detectedObjects")).thenReturn(titanKey);
-        when(titanGraph.getType("_subType")).thenReturn(titanKey);
-        when(titanGraph.getType("displayName")).thenReturn(titanKey);
-        when(titanGraph.getType("displayType")).thenReturn(titanKey);
-        when(titanGraph.getType("title")).thenReturn(titanKey);
-        when(titanGraph.getType("_glyphIcon")).thenReturn(titanKey);
-        when(titanGraph.getType("_mapGlyphIcon")).thenReturn(titanKey);
-        when(titanGraph.getType("_color")).thenReturn(titanKey);
-        when(titanGraph.getType("geoLocation")).thenReturn(titanKey);
-        when(titanGraph.getType("_geoLocationDescription")).thenReturn(titanKey);
-        when(titanGraph.getType("publishedDate")).thenReturn(titanKey);
-        when(titanGraph.getType("source")).thenReturn(titanKey);
-        when(titanGraph.getType("author")).thenReturn(titanKey);
-        when(titanGraph.getType("_rowKey")).thenReturn(titanKey);
-
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"), eq(user))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"), eq(user))).thenReturn(entityConcept);
 
@@ -127,45 +92,17 @@ public class BaseOntologyTest {
 
     @Test
     public void testInitializeWhenUndefined() {
-        when(titanGraph.getType("_conceptType")).thenReturn(titanKey);
-        when(titanGraph.getType("_dataType")).thenReturn(titanKey);
-        when(titanGraph.getType("ontologyTitle")).thenReturn(titanKey);
-        when(titanGraph.getType("hasProperty")).thenReturn(titanLabel);
-        when(titanGraph.getType("hasEdge")).thenReturn(titanLabel);
-        when(titanGraph.getType("isA")).thenReturn(titanLabel);
-        when(titanGraph.getType("relationshipType")).thenReturn(titanKey);
-        when(titanGraph.getType("_timeStamp")).thenReturn(titanKey);
-        when(titanGraph.getType("_rawHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("_textHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("highlightedTextHdfsPath")).thenReturn(titanKey);
-        when(titanGraph.getType("_detectedObjects")).thenReturn(titanKey);
-        when(titanGraph.getType("_subType")).thenReturn(titanKey);
-        when(titanGraph.getType("displayName")).thenReturn(titanKey);
-        when(titanGraph.getType("displayType")).thenReturn(titanKey);
-        when(titanGraph.getType("title")).thenReturn(titanKey);
-        when(titanGraph.getType("_glyphIcon")).thenReturn(titanKey);
-        when(titanGraph.getType("_mapGlyphIcon")).thenReturn(titanKey);
-        when(titanGraph.getType("_color")).thenReturn(titanKey);
-        when(titanGraph.getType("geoLocation")).thenReturn(titanKey);
-        when(titanGraph.getType("_geoLocationDescription")).thenReturn(titanKey);
-        when(titanGraph.getType("publishedDate")).thenReturn(titanKey);
-        when(titanGraph.getType("source")).thenReturn(titanKey);
-        when(titanGraph.getType("author")).thenReturn(titanKey);
-        when(titanGraph.getType("_rowKey")).thenReturn(titanKey);
-
         when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString(), user)).thenReturn(null);
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"), eq(user))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"), eq(user))).thenReturn(entityConcept);
 
         when(resourceRepository.importFile(any(InputStream.class), anyString(), eq(user))).thenReturn("rowKey");
         baseOntology.initialize(user);
-        verify(titanGraph, times(22)).getType(anyString());
     }
 
     @Test
     public void testInitializeWhenDefined() {
         when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString(), user)).thenReturn(rootConcept);
         baseOntology.initialize(user);
-        verify(titanGraph, times(0)).getType(anyString());
     }
 }
