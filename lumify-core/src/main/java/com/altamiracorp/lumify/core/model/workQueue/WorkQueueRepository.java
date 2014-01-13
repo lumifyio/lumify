@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.model.workQueue;
 
+import backtype.storm.topology.IRichSpout;
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.common.collect.ImmutableMap;
@@ -17,6 +19,7 @@ public abstract class WorkQueueRepository {
 
     public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
     public static final String USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME = "userArtifactHighlight";
+    public static final String USER_IMAGE_QUEUE_NAME = "userImage";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
     public static final String DOCUMENT_QUEUE_NAME = "document";
@@ -41,6 +44,11 @@ public abstract class WorkQueueRepository {
         writeToQueue(USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
+    public void pushUserImageQueue(final String graphVertexId) {
+        checkNotNull(graphVertexId);
+        writeToQueue(USER_IMAGE_QUEUE_NAME, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, graphVertexId));
+    }
+
     private void writeToQueue(final String queueName, final Map<String, String> content) {
         final JSONObject data = new JSONObject();
 
@@ -57,4 +65,6 @@ public abstract class WorkQueueRepository {
     public void init(Map map) {
 
     }
+
+    public abstract IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
 }

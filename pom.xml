@@ -39,6 +39,7 @@
         <module>lumify-core</module>
         <module>lumify-fs-hdfs</module>
         <module>lumify-model-accumulo</module>
+        <module>lumify-model-bigtable-queue</module>
         <module>lumify-model-kafka</module>
         <module>lumify-storm</module>
         <module>lumify-web</module>

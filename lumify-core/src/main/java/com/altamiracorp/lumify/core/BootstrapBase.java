@@ -35,9 +35,10 @@ public abstract class BootstrapBase extends AbstractModule {
         User user = new SystemUser();
 
         MetricsManager metricManager = new MetricsManager();
+        ModelSession modelSession = createModelSession();
 
         bind(MetricsManager.class).toInstance(metricManager);
-        bind(ModelSession.class).toInstance(createModelSession());
+        bind(ModelSession.class).toInstance(modelSession);
         bind(FileSystemSession.class).toInstance(createFileSystemSession());
         bind(WorkQueueRepository.class).toInstance(createWorkQueueRepository());
         bind(VersionService.class).toInstance(new VersionService());

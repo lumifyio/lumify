@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.ontology.DisplayType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -44,13 +45,17 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final GraphRepository graphRepository;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
-    public GraphVertexUploadImage(final ArtifactRepository artifactRepo, final GraphRepository graphRepo, final AuditRepository auditRepo, final OntologyRepository ontologyRepo) {
+    public GraphVertexUploadImage(final ArtifactRepository artifactRepo, final GraphRepository graphRepo,
+                                  final AuditRepository auditRepo, final OntologyRepository ontologyRepo,
+                                  final WorkQueueRepository workQueueRepo) {
         artifactRepository = artifactRepo;
         graphRepository = graphRepo;
         auditRepository = auditRepo;
         ontologyRepository = ontologyRepo;
+        workQueueRepository = workQueueRepo;
     }
 
     @Override
@@ -100,6 +105,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
 
+        workQueueRepository.pushUserImageQueue(artifactVertex.getId());
+
         respondWithJson(response, entityVertex.toJson());
     }
 
@@ -125,6 +132,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         metadata.setFileName(fileName);
         metadata.setFileExtension(FilenameUtils.getExtension(fileName));
         metadata.setMimeType(mimeType);
+        metadata.setHighlightedText("");
 
         return artifact;
     }
