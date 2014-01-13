@@ -5,79 +5,79 @@ import org.slf4j.Logger;
 public class LumifyLogger {
     private final Logger logger;
 
-    public LumifyLogger(Logger logger) {
+    public LumifyLogger(final Logger logger) {
         this.logger = logger;
     }
 
-    public void trace(String format, Object... args) {
+    public void trace(final String format, final Object... args) {
         if (isDebugEnabled()) {
-            this.logger.trace(format(format, args));
+            logger.trace(format(format, args), findLastThrowable(args));
         }
     }
 
-    public void trace(String message, Throwable t) {
+    public void trace(final String message, final Throwable t) {
         if (isDebugEnabled()) {
-            this.logger.trace(message, t);
+            logger.trace(message, t);
         }
     }
 
-    public void debug(String format, Object... args) {
+    public void debug(final String format, final Object... args) {
         if (isDebugEnabled()) {
-            this.logger.debug(format(format, args));
+            logger.debug(format(format, args), findLastThrowable(args));
         }
     }
 
-    public void debug(String message, Throwable t) {
+    public void debug(final String message, final Throwable t) {
         if (isDebugEnabled()) {
-            this.logger.debug(message, t);
+            logger.debug(message, t);
         }
     }
 
-    public void info(String format, Object... args) {
+    public void info(final String format, final Object... args) {
         if (isInfoEnabled()) {
-            this.logger.info(format(format, args));
+            logger.info(format(format, args), findLastThrowable(args));
         }
     }
 
-    public void info(String message, Throwable t) {
+    public void info(final String message, final Throwable t) {
         if (isInfoEnabled()) {
-            this.logger.info(message, t);
+            logger.info(message, t);
         }
     }
 
-    public void warn(String format, Object... args) {
-        if (this.logger.isWarnEnabled()) {
-            this.logger.warn(format(format, args));
+    public void warn(final String format, final Object... args) {
+        if (logger.isWarnEnabled()) {
+            logger.warn(format(format, args), findLastThrowable(args));
         }
     }
 
-    public void warn(String message, Throwable t) {
-        if (this.logger.isWarnEnabled()) {
-            this.logger.warn(message, t);
+    public void warn(final String message, final Throwable t) {
+        if (logger.isWarnEnabled()) {
+            logger.warn(message, t);
         }
     }
 
-    public void error(String format, Object... args) {
-        if (this.logger.isErrorEnabled()) {
-            this.logger.error(format(format, args));
+    public void error(final String format, final Object... args) {
+        if (logger.isErrorEnabled()) {
+            logger.error(format(format, args), findLastThrowable(args));
         }
     }
 
-    public void error(String message, Throwable t) {
-        if (this.logger.isErrorEnabled()) {
-            this.logger.error(message, t);
+    public void error(final String message, final Throwable t) {
+        if (logger.isErrorEnabled()) {
+            logger.error(message, t);
         }
     }
 
     public boolean isDebugEnabled() {
-        return this.logger.isDebugEnabled();
+        return logger.isDebugEnabled();
     }
 
     public boolean isInfoEnabled() {
-        return this.logger.isInfoEnabled();
+        return logger.isInfoEnabled();
     }
 
-    private String format(String format, Object[] args) {
+    private String format(final String format, final Object[] args) {
         try {
             return String.format(format, args);
         } catch (Exception ex) {
@@ -90,5 +90,10 @@ public class LumifyLogger {
             }
             return sb.toString();
         }
+    }
+    
+    private Throwable findLastThrowable(final Object[] args) {
+        int length = args != null ? args.length : 0;
+        return (length > 0 && args[length-1] instanceof Throwable) ? (Throwable) args[length-1] : null;
     }
 }
