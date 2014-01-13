@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.model.accumuloqueue.model;
+package com.altamiracorp.lumify.model.bigtablequeue.model;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.ModelSession;

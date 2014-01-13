@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.model.accumuloqueue;
+package com.altamiracorp.lumify.model.bigtablequeue;
 
 import backtype.storm.topology.IRichSpout;
 import com.altamiracorp.bigtable.model.ModelSession;
@@ -6,7 +6,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.model.accumuloqueue.model.QueueItemRepository;
+import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
