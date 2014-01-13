@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.model;
 
 import backtype.storm.spout.Scheme;
 import backtype.storm.spout.SpoutOutputCollector;
@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
-import com.altamiracorp.lumify.model.KafkaJsonEncoder;
 import com.codahale.metrics.Counter;
 import com.google.inject.Inject;
 import storm.kafka.KafkaConfig;

@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.model;
 
+import backtype.storm.topology.IRichSpout;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -16,10 +17,10 @@ import java.util.Properties;
 
 @Singleton
 public class KafkaWorkQueueRepository extends WorkQueueRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaWorkQueueRepository.class);
     public static final String KAFKA_PATH_PREFIX = "/kafka";
     private static final Object kafkaProducerLock = new Object();
     private static Producer<String, JSONObject> kafkaProducer;
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(KafkaWorkQueueRepository.class);
 
     @Override
     public void init(Map config) {
@@ -40,6 +41,11 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
                 }
             }
         }
+    }
+
+    @Override
+    public IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime) {
+        return new LumifyKafkaSpout(configuration, queueName, queueStartOffsetTime);
     }
 
     @Override
