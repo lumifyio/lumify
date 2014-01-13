@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.model.workQueue;
 
+import backtype.storm.topology.IRichSpout;
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.common.collect.ImmutableMap;
@@ -63,4 +65,6 @@ public abstract class WorkQueueRepository {
     public void init(Map map) {
 
     }
+
+    public abstract IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
 }
