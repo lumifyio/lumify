@@ -74,6 +74,11 @@
             <artifactId>lumify-model-kafka</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-model-accumulo-queue</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

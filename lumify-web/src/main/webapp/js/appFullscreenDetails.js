@@ -14,6 +14,13 @@ define([
 
     return defineComponent(FullscreenDetails);
 
+    function filterEntity(v) {
+        return !filterArtifacts(v);
+    }
+    function filterArtifacts(v) {
+        return (/^(document|image|video)$/).test(v.concept.displayType);
+    }
+
     function FullscreenDetails() {
         this.vertexService = new VertexService();
 
@@ -76,15 +83,18 @@ define([
             this.$node.toggleClass('onlyone', this.vertices.length === 1);
 
             var verts = this.vertices.length,
-                entities = this.vertices.length;
-
+                entities = _.filter(this.vertices, filterEntity).length,
+                artifacts = _.filter(this.vertices, filterArtifacts).length;
+            
             this.$node
                 .removePrefixedClasses('vertices- entities- has- entity-cols-')
                 .addClass([
                     this.vertices.length <= 4 ? 'vertices-' + this.vertices.length : 'vertices-many',
                     'entities-' + entities,
                     'entity-cols-' + _.find([4,3,2,1], function(i) { return entities % i === 0; }),
-                    entities ? 'has-entities' : ''
+                    entities ? 'has-entities' : '',
+                    'artifacts-' + artifacts,
+                    artifacts ? 'has-artifacts' : ''
                 ].join(' '));
         };
 
@@ -119,7 +129,7 @@ define([
             });
             
             this.vertices.forEach(function(v) {
-                var node = this.$node.find('.entities-container');
+                var node = filterEntity(v) ?  this.$node.find('.entities-container') : this.$node.find('.artifacts-container');
 
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
                 // TODO: add classes that determine displayType

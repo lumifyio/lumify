@@ -16,7 +16,7 @@ define([
 
     function hasPreview(vertex) {
         return (/^(image|video)$/).test(vertex.concept.displayType) || 
-            vertex.properties._glyphIcon;
+            !!vertex.properties._glyphIcon;
     }
 
     function List() {
@@ -341,15 +341,20 @@ define([
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
-                    currentHtml = currentAnchor.html();
+                    currentHtml = currentAnchor.html(),
+                    src = vertex.properties._glyphIcon || 
+                        (
+                            vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
+                            vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null
+                        );
 
-                if (vertex.properties._glyphIcon) {
-                    $('<img/>').attr('src', vertex.properties._glyphIcon).appendTo(newAnchor.find('.preview'));
+                if (src) {
+                    $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
                 }
 
                 var newHtml = newAnchor.html();
                 if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', hasPreview(vertex));
+                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', !!src);
                 }
             });
         };
