@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.core.storm;
 
 import com.altamiracorp.lumify.core.BootstrapBase;
 import com.altamiracorp.lumify.core.config.Configuration;

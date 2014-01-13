@@ -1,19 +1,21 @@
 
-<div class="btn-toolbar">
+<div class="detail-toolbar">
+  <div class="btn-toolbar">
 
-  <div class="btn-group">
-    <a class="btn btn-small dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-share"></i>
-      <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a class="" href="/artifact/<%= vertex.id %>/raw" target="_blank">Open <%= vertex.concept.displayType %></a></li>
-      <li><a class="" href="/artifact/<%= vertex.id %>/raw?download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
-    </ul>
+    <div class="btn-group">
+      <a class="btn btn-small dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-share"></i>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a class="" href="/artifact/<%= vertex.id %>/raw" target="_blank">Open <%= vertex.concept.displayType %></a></li>
+        <li><a class="" href="/artifact/<%= vertex.id %>/raw?download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
+      </ul>
+    </div>
+
+    <%- fullscreenButton %>
+
+    <%- auditsButton %>
   </div>
-
-  <%- fullscreenButton %>
-
-  <%- auditsButton %>
 </div>
 
 <h1 class="generic-draggable artifact-title" data-vertex-id='<%= vertex.id %>'><%= vertex.properties.title %></h1>

@@ -7,6 +7,9 @@ import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
 
 public class StormRunner extends StormRunnerBase {
     private static final String TOPOLOGY_NAME = "lumify";
+    private final String ARTIFACT_HIGHLIGHT_SPOUT = "artifactHighlightSpout";
+    private final String USER_ARTIFACT_HIGHLIGHT_SPOUT = "userArtifactHighlightSpout";
+    private final String ARTIFACT_HIGHLIGHT_BOLT = "artifactHighlightBolt";
 
     public static void main(String[] args) throws Exception {
         int res = new StormRunner().run(args);
@@ -27,12 +30,12 @@ public class StormRunner extends StormRunnerBase {
     }
 
     private void createArtifactHighlightingTopology(TopologyBuilder builder, int parallelismHint) {
-        builder.setSpout("artifactHighlightSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME, getQueueStartOffsetTime()), 1)
+        builder.setSpout(ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setSpout("userArtifactHighlightSpout", new LumifyKafkaSpout(getConfiguration(), WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME, getQueueStartOffsetTime()), 1)
+        builder.setSpout(USER_ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setBolt("artifactHighlightBolt", new ArtifactHighlightingBolt(), parallelismHint)
-                .shuffleGrouping("artifactHighlightSpout")
-                .shuffleGrouping("userArtifactHighlightSpout");
+        builder.setBolt(ARTIFACT_HIGHLIGHT_BOLT, new ArtifactHighlightingBolt(), parallelismHint)
+                .shuffleGrouping(ARTIFACT_HIGHLIGHT_SPOUT)
+                .shuffleGrouping(USER_ARTIFACT_HIGHLIGHT_SPOUT);
     }
 }
