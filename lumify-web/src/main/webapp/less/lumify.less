@@ -191,10 +191,8 @@ html.fullscreenDetails {
     padding-left: 300px;
 }
 
-.file-hover {
-  &.uploading:after, &.uploading:hover:after {
-    display: none;
-  }
+.accepts-file {
+
   &:after {
     content: "";
     position: absolute;
@@ -202,7 +200,19 @@ html.fullscreenDetails {
     height: 100%;
     background: rgba(0,0,0,0.5) url(/img/drop-items.png) no-repeat center center;
     background-size: auto 45%;
-    .opacity(80);
+    .transition(~"all 0.2s ease-in-out");
+    .opacity(0);
+  }
+
+  &.file-hover {
+    &.uploading:after, &.uploading:hover:after {
+      display: none;
+    }
+
+    &:after {
+      .transition(~"all 0.2s ease-in-out 0.2s");
+      .opacity(80);
+    }
   }
 }
 

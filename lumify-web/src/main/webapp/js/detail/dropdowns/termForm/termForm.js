@@ -397,7 +397,11 @@ define([
 
             this.graphVertexChanged(graphVertexId, data, true);
 
-            this.runQuery(sign);
+            var input = this.select('objectSignSelector');
+            input.attr('disabled', true);
+            this.runQuery(sign).done(function() {
+                input.removeAttr('disabled');
+            });
 
             this.sign = sign;
             this.startSign = sign;
@@ -513,10 +517,22 @@ define([
 
 
         this.runQuery = function(query) {
-            return this.vertexService.graphVertexSearch(query)
+            if (!this.queryCache) this.queryCache = {};
+            if (this.queryCache[query]) return this.queryCache[query];
+
+            var badge = this.select('objectSignSelector').nextAll('.badge');
+
+            badge.addClass('loading');
+
+            this.queryCache[query] = this.vertexService.graphVertexSearch(query)
                 .then(function(response) {
-                    return _.filter(response.vertices, function(v) { return v.properties._type === 'entity'; });
+                    badge.removeClass('loading');
+                    return _.filter(response.vertices, function(v) { 
+                        return !(/^(document|image|video)$/).test(v.concept.displayType);
+                    });
                 }).done(this.updateQueryCountBadge.bind(this));
+
+            return this.queryCache[query];
         };
 
         this.updateQueryCountBadge = function(vertices) {
@@ -528,10 +544,12 @@ define([
         this.setupObjectTypeAhead = function() {
             var self = this,
                 items = {},
+                input = this.select('objectSignSelector'),
                 createNewText = 'Resolve as new entity';
 
+
             self.ontologyService.properties().done(function(ontologyProperties) {
-                var field = self.select('objectSignSelector').typeahead({
+                var field = input.typeahead({
                     source: function(query, callback) {
 
                         if (self.lastQuery && query !== self.lastQuery) {

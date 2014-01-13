@@ -231,15 +231,14 @@ define([
                 var type = audit[direction + 'Type'];
 
                 info = {
-                    _type: audit[direction + 'Type'],
-                    _subType: audit[direction + 'SubType'],
+                    _conceptType: audit[direction + 'Type'],
                     title: audit[direction + 'Title'],
                     graphVertexId: audit[direction + 'Id']
                 };
             } else {
                 info = {
                     _type: audit.type,
-                    _subType: audit.subType,
+                    _conceptType: audit.subType,
                     title: audit.title,
                     graphVertexId: audit.id
                 };

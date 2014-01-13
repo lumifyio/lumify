@@ -18,6 +18,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.storm.StormBootstrap;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -246,7 +247,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
         if (artifactExtractedInfo.getText() != null) {
             artifact.getMetadata().setText(artifactExtractedInfo.getText());
-            if (artifact.getMetadata().getHighlightedText() == null) {
+            if (artifact.getMetadata().getHighlightedText() == null || artifact.getMetadata().getHighlightedText().equals("")) {
                 artifact.getMetadata().setHighlightedText(artifactExtractedInfo.getText());
             }
         }

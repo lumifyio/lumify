@@ -4,8 +4,12 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.StormTopology;
+import backtype.storm.topology.IRichSpout;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.model.LumifyKafkaSpout;
+import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -18,6 +22,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
     private static final String CMD_OPT_REPROCESS_ALL_QUEUES = "reprocessallqueues";
     private boolean local;
     private boolean reprocessAllQueues;
+    private WorkQueueRepository workQueueRepository;
 
     public StormRunnerBase() {
         initFramework = true;
@@ -141,5 +146,14 @@ public abstract class StormRunnerBase extends CommandLineBase {
             return LumifyKafkaSpout.KAFKA_START_OFFSET_TIME_EARLIEST;
         }
         return null;
+    }
+
+    protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
+        return this.workQueueRepository.createSpout(getConfiguration(), queueName, getQueueStartOffsetTime());
+    }
+
+    @Inject
+    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
+        this.workQueueRepository = workQueueRepository;
     }
 }

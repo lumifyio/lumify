@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.model;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.GraphSession;
 import com.altamiracorp.lumify.core.model.graph.*;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchResult;
@@ -48,7 +48,6 @@ public class TitanGraphSession extends GraphSession {
     private TitanQueryFormatter queryFormatter;
     private final Configuration titanConfig;
     private SearchProvider searchProvider;
-    private OntologyRepository ontologyRepository;
 
     public TitanGraphSession(Configuration config) {
         titanConfig = config.getSubset(TITAN_PROP_KEY_PREFIX);
@@ -67,11 +66,6 @@ public class TitanGraphSession extends GraphSession {
                 graph = TitanFactory.open(conf);
             }
         }
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 
     private String confToString(PropertiesConfiguration conf) {
@@ -339,7 +333,13 @@ public class TitanGraphSession extends GraphSession {
             if (conceptType != null) {
                 Vertex concept = graph.getVertex(conceptType);
                 if (concept != null) {
-                    final Collection<String> concepts = ontologyRepository.getAllSubChildrenConceptsIds(concept.getId(), new ArrayList<String>(), user);
+                    final Collection<String> concepts = new ArrayList<String>();
+                    Iterable<Vertex> children = concept.getVertices(Direction.IN, LabelName.IS_A.toString());
+                    if (children != null) {
+                        for (Vertex child : children) {
+                            concepts.add(child.getId().toString());
+                        }
+                    }
 
                     // TODO when we upgrade to gremlin 2.4.0 replace query below with a has() query using Tokens.T.in
                     vertexPipeline.copySplit(new GremlinPipeline<Vertex, Vertex>().has(PropertyName.CONCEPT_TYPE.toString(), Tokens.T.eq, conceptType),
