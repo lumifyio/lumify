@@ -6,16 +6,16 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
-import com.altamiracorp.lumify.core.InjectHelper;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.core.storm.StormBootstrap;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
-import com.google.inject.Module;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
     private Map<String, String> workingFiles;
     private Counter totalProcessedCounter;
     private Counter totalErrorCounter;
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
@@ -37,19 +37,14 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
     public void open(final Map conf, TopologyContext context, SpoutOutputCollector collector) {
         LOGGER.info("Configuring environment for spout: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
-        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-            @Override
-            public Module createModule() {
-                return StormBootstrap.create(conf);
-            }
-        });
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(conf)));
         workingFiles = Maps.newHashMap();
 
         String namePrefix = metricsManager.getNamePrefix(this, getPath());
         registerMetrics(metricsManager, namePrefix);
     }
 
-    protected void registerMetrics(MetricsManager metricsManager, String namePrefix) {
+    protected void registerMetrics(JmxMetricsManager metricsManager, String namePrefix) {
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
         totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
         metricsManager.getRegistry().register(namePrefix + "in-process",
@@ -111,7 +106,7 @@ public abstract class BaseFileSystemSpout extends BaseRichSpout {
     }
 
     @Inject
-    public void setMetricsManager(MetricsManager metricsManager) {
+    public void setMetricsManager(JmxMetricsManager metricsManager) {
         this.metricsManager = metricsManager;
     }
 }

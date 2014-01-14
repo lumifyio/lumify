@@ -9,10 +9,10 @@ import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.lumify.core.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.core.storm.StormBootstrap;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -54,12 +54,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
 
     @Override
     public void open(final Map conf, TopologyContext topologyContext, SpoutOutputCollector collector) {
-        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-            @Override
-            public Module createModule() {
-                return StormBootstrap.create(conf);
-            }
-        });
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(conf)));
 
         this.collector = collector;
         this.user = new SystemUser();

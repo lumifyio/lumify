@@ -2,13 +2,13 @@ package com.altamiracorp.lumify.core.cmdline;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.FrameworkUtils;
-import com.altamiracorp.lumify.core.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.google.inject.Module;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -56,13 +56,7 @@ public abstract class CommandLineBase {
         }
 
         if (initFramework) {
-            InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-                @Override
-                public Module createModule() {
-                    return CommandLineBootstrap.create(getConfiguration());
-                }
-            });
-
+            InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()));
             final User user = new SystemUser();
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), user);
         }

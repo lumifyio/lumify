@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core;
+package com.altamiracorp.lumify.core.bootstrap;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

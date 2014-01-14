@@ -6,10 +6,11 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -18,7 +19,6 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.core.storm.StormBootstrap;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -27,21 +27,23 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Module;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.codehaus.plexus.util.FileUtils;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.codehaus.plexus.util.FileUtils;
+import org.json.JSONObject;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
@@ -74,7 +76,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private Counter processingCounter;
     private Counter totalErrorCounter;
     private Timer processingTimeTimer;
-    private MetricsManager metricsManager;
+    private JmxMetricsManager metricsManager;
     protected WorkQueueRepository workQueueRepository;
     private User user;
 
@@ -82,12 +84,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
         LOGGER.info("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
-        InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-            @Override
-            public Module createModule() {
-                return StormBootstrap.create(stormConf);
-            }
-        });
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new com.altamiracorp.lumify.core.config.Configuration(stormConf)));
 
         String namePrefix = metricsManager.getNamePrefix(this);
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
@@ -312,7 +309,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setMetricsManager(MetricsManager metricsManager) {
+    public void setMetricsManager(JmxMetricsManager metricsManager) {
         this.metricsManager = metricsManager;
     }
 
