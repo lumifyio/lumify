@@ -28,6 +28,7 @@ define(
         };
 
         UserService.prototype.logout = function() {
+            this.disconnect();
             return this._ajaxPost({ url:'logout' });
         };
 
