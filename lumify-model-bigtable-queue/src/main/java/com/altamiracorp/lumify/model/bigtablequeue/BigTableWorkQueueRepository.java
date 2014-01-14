@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.model.bigtablequeue;
 
 import backtype.storm.topology.IRichSpout;
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -37,7 +38,12 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void pushOnQueue(String queueName, JSONObject json, String... extra) {
+    public void flush() {
+        this.queueItemRepository.flush();
+    }
+
+    @Override
+    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra) {
         String tableName = getTableName(this.tablePrefix, queueName);
 
         if (this.user == null) {
@@ -52,7 +58,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
             this.queues.put(queueName, true);
         }
 
-        this.queueItemRepository.add(json, extra, user);
+        this.queueItemRepository.add(json, extra, flushFlag, user);
     }
 
     static String getTableName(String tablePrefix, String queueName) {
