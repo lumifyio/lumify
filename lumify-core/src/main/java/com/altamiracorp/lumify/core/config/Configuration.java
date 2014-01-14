@@ -59,6 +59,15 @@ public final class Configuration {
         ((PropertiesConfiguration) this.config).setDelimiterParsingDisabled(true);
     }
 
+    public Configuration(final Map<?, ?> config) {
+        this();
+        for (Map.Entry entry : config.entrySet()) {
+            if (entry.getValue() != null) {
+                set(entry.getKey().toString(), entry.getValue());
+            }
+        }
+    }
+    
     private Configuration(org.apache.commons.configuration.Configuration config) {
         this.config = config;
         if (this.config instanceof AbstractConfiguration) {

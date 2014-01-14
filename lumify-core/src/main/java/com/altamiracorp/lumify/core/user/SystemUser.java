@@ -21,7 +21,7 @@ public class SystemUser extends User {
         try {
             return (ModelUserContext) Class.forName(className).newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("Could not create: " + className);
+            throw new RuntimeException("Could not create: " + className, e);
         }
     }
 }
