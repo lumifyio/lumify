@@ -29,14 +29,14 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
             String artifactRowKey = (String) graphVertex.getProperty(PropertyName.ROW_KEY);
             LOGGER.debug("Processing graph vertex [%s] for artifact: %s", graphVertex.getId(), artifactRowKey);
 
-            List<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(graphVertex.getId(), getUser());
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(graphVertex.getId(), getUser());
             performHighlighting(artifactRowKey, graphVertex, termMentions);
         } else {
             LOGGER.warn("Could not find vertex with id: %s", graphVertexId);
         }
     }
 
-    private void performHighlighting(final String rowKey, final GraphVertex vertex, final List<TermMentionModel> termMentions) throws Exception {
+    private void performHighlighting(final String rowKey, final GraphVertex vertex, final Iterable<TermMentionModel> termMentions) throws Exception {
         String text = getText(vertex);
         String highlightedText = entityHighlighter.getHighlightedText(text, termMentions, getUser());
 
@@ -54,6 +54,7 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
     }
 
     @Inject
+    @Override
     public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
         this.termMentionRepository = termMentionRepository;
     }

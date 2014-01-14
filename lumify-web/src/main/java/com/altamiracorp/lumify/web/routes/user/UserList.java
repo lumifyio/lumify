@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.web.routes.user;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class UserList extends BaseRequestHandler {
     private final UserRepository userRepository;
@@ -26,7 +25,7 @@ public class UserList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User authUser = getUser(request);
 
-        List<UserRow> users = userRepository.findAll(authUser.getModelUserContext());
+        Iterable<UserRow> users = userRepository.findAll(authUser.getModelUserContext());
 
         JSONObject resultJson = new JSONObject();
         JSONArray usersJson = getJson(users);
@@ -35,7 +34,7 @@ public class UserList extends BaseRequestHandler {
         respondWithJson(response, resultJson);
     }
 
-    private JSONArray getJson(List<UserRow> users) throws JSONException {
+    private JSONArray getJson(Iterable<UserRow> users) throws JSONException {
         JSONArray usersJson = new JSONArray();
         for (UserRow user : users) {
             usersJson.put(user.toJson());
