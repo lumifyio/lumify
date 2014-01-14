@@ -20,11 +20,11 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
-            <artifactId>bigtable-model</artifactId>
+            <artifactId>bigtable-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
-            <artifactId>accumulo-model</artifactId>
+            <artifactId>bigtable-accumulo</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.accumulo</groupId>

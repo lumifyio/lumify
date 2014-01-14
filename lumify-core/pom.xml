@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
-            <artifactId>bigtable-model</artifactId>
+            <artifactId>bigtable-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
