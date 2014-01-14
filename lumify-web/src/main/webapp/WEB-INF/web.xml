@@ -45,8 +45,16 @@
 		 </init-param>
 		<init-param>
 		    <param-name>org.atmosphere.interceptor.HeartbeatInterceptor.heartbeatFrequencyInSeconds</param-name>
-		    <param-value>120</param-value>
+		    <param-value>30</param-value>
 		 </init-param>
+        <init-param>
+            <param-name>org.atmosphere.cpr.CometSupport.maxInactiveActivity</param-name>
+            <param-value>-1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.atmosphere.cpr.broadcasterCacheClass</param-name>
+            <param-value>org.atmosphere.cache.UUIDBroadcasterCache</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>AtmosphereServlet</servlet-name>
