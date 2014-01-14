@@ -8,7 +8,7 @@ import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
@@ -66,9 +66,9 @@ public class EntityTermUpdate extends BaseRequestHandler {
         }
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
-        TermMention termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), user.getModelUserContext());
+        TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), user.getModelUserContext());
         if (termMention == null) {
-            termMention = new TermMention(termMentionRowKey);
+            termMention = new TermMentionModel(termMentionRowKey);
         }
         entityHelper.updateTermMention(termMention, sign, conceptVertex, resolvedVertex, user);
 

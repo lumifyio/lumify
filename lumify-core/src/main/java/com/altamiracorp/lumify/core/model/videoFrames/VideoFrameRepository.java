@@ -46,7 +46,7 @@ public class VideoFrameRepository extends Repository<VideoFrame> {
         save(videoFrame, user.getModelUserContext());
     }
 
-    public List<VideoFrame> findAllByArtifactRowKey(String rowKey, User user) {
+    public Iterable<VideoFrame> findAllByArtifactRowKey(String rowKey, User user) {
         return findByRowStartsWith(rowKey, user.getModelUserContext());
     }
 

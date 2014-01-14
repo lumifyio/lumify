@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.model;
 
 import backtype.storm.topology.IRichSpout;
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -49,7 +50,12 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void pushOnQueue(String queueName, JSONObject json, String... extra) {
+    public void flush() {
+        // kafka always flushes. we think.
+    }
+
+    @Override
+    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra) {
         if (extra != null && extra.length > 0) {
             JSONArray extraArray = new JSONArray();
             for (String e : extra) {

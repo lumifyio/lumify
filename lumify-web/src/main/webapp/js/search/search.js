@@ -119,6 +119,14 @@ define([
                 .text(formatters.number.pretty(count));
         };
 
+        this.onSearchByEntity = function (evt, data) {
+            this.select('querySelector').val(data.query);
+            if (!this.$node.closest(':data(menubarName)').hasClass('visible')) {
+                this.trigger ('menubarToggleDisplay', { name : 'search' });
+            }
+            this.trigger ('search', { query : data.query});
+        }
+
         this.onSearch = function(evt, data) {
             var query = data.query || this.select('querySelector').val();
 
@@ -312,6 +320,7 @@ define([
             this.on('filterschange', this.onFiltersChange);
             this.on('infiniteScrollRequest', this.onInfiniteScrollRequest);
 
+            this.on(document, 'searchByEntity', this.onSearchByEntity);
             this.on(document, 'search', this.onSearch);
             this.on(document, 'showSearchResults', this.onShowSearchResults);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
