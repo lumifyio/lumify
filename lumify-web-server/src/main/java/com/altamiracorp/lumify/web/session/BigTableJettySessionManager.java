@@ -5,10 +5,11 @@ import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.web.session.model.*;
 import com.google.inject.Inject;
 import org.eclipse.jetty.nosql.NoSqlSession;
+import org.eclipse.jetty.nosql.NoSqlSessionManager;
 
 import java.util.Set;
 
-public class BigTableJettySessionManager extends org.eclipse.jetty.nosql.NoSqlSessionManager {
+public class BigTableJettySessionManager extends NoSqlSessionManager {
     final JettySessionRepository jettySessionRepository;
 
     @Inject
