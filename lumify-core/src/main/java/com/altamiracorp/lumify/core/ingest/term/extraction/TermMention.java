@@ -15,8 +15,10 @@
  */
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,7 +91,8 @@ public class TermMention {
 
     @Override
     public String toString() {
-        return String.format("%s:%d:%d", sign, start, end);
+        return String.format("{sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, relLabel: %s, props: %s, process: %s}",
+                sign, start, end, ontologyClassUri, resolved, useExisting, relationshipLabel, properties, process);
     }
 
     @Override
@@ -152,7 +155,7 @@ public class TermMention {
         private boolean resolved;
         private Map<String, Object> properties = new HashMap<String, Object>();
         private boolean useExisting;
-        private String process;
+        private List<String> process = new ArrayList<String>();
 
         public Builder() {
         }
@@ -166,7 +169,7 @@ public class TermMention {
             resolved = tm.resolved;
             properties = new HashMap<String, Object>(tm.properties);
             useExisting = tm.useExisting;
-            process = tm.process;
+            process.add(tm.process);
         }
 
         public Builder start(final int start) {
@@ -205,7 +208,7 @@ public class TermMention {
         }
 
         public Builder process(final String process) {
-            this.process = process;
+            this.process.add(process);
             return this;
         }
 
@@ -220,8 +223,15 @@ public class TermMention {
         }
 
         public TermMention build() {
+            StringBuilder procBuilder = new StringBuilder();
+            for (String proc : process) {
+                if (procBuilder.length() > 0) {
+                    procBuilder.append("; ");
+                }
+                procBuilder.append(proc);
+            }
             return new TermMention(start, end, sign, ontologyClassUri, resolved, Collections.unmodifiableMap(properties),
-                    relationshipLabel, useExisting, process);
+                    relationshipLabel, useExisting, procBuilder.toString());
         }
     }
 }
