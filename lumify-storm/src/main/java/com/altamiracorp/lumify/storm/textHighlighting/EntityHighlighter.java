@@ -5,7 +5,7 @@ import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffset
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,7 +22,7 @@ public class EntityHighlighter {
         this.graphRepository = graphRepository;
     }
 
-    public String getHighlightedText(String text, List<TermMention> termMentions, User user) {
+    public String getHighlightedText(String text, List<TermMentionModel> termMentions, User user) {
         List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, user);
         return getHighlightedText(text, 0, offsetItems);
     }
@@ -96,9 +96,9 @@ public class EntityHighlighter {
         return result.toString();
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Collection<TermMention> termMentions, User user) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Collection<TermMentionModel> termMentions, User user) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
-        for (TermMention termMention : termMentions) {
+        for (TermMentionModel termMention : termMentions) {
             GraphVertex glyphVertex = null;
             String graphVertexId = termMention.getMetadata().getGraphVertexId();
             if (graphVertexId != null) {
