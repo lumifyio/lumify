@@ -461,7 +461,10 @@ define([
             }
         };
 
-
+        this.onContextMenuSearchFrom = function () {
+            var menu = this.select('vertexContextMenuSelector');
+            this.trigger(document, 'searchByEntity', { query : menu.data('title')});
+        }
 
         this.onContextMenuZoom = function(level) {
             this.cytoscapeReady(function(cy) {
@@ -744,6 +747,7 @@ define([
                 menu.data("currentVertexGraphVertexId", event.cyTarget.id());
                 menu.data("currentVertexPositionX", event.cyTarget.position ('x'));
                 menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
+                menu.data("title", event.cyTarget.data('title'));
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             }
