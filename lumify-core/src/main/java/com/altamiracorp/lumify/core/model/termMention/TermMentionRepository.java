@@ -33,7 +33,7 @@ public class TermMentionRepository extends Repository<TermMention> {
         return termMentionBuilder.getTableName();
     }
 
-    public List<TermMention> findByGraphVertexId(String graphVertexId, User user) {
+    public Iterable<TermMention> findByGraphVertexId(String graphVertexId, User user) {
         return findByRowStartsWith(graphVertexId + ":", user.getModelUserContext());
     }
 }
