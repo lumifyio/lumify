@@ -18,12 +18,11 @@ package com.altamiracorp.lumify.core.ingest;
 
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.search.SearchProvider;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 
 /**
@@ -37,42 +36,37 @@ public abstract class BaseArtifactProcessor {
      * The User this processor is executing as.
      */
     private User user;
-    
+
     /**
      * The Artifact Repository.
      */
     private ArtifactRepository artifactRepository;
-    
+
     /**
      * The Ontology Repository.
      */
     private OntologyRepository ontologyRepository;
-    
+
     /**
      * The Graph Repository.
      */
-    private GraphRepository graphRepository;
-    
+    private Graph graph;
+
     /**
      * The Audit Repository.
      */
     private AuditRepository auditRepository;
-    
+
     /**
      * The Term Mention Repository.
      */
     private TermMentionRepository termMentionRepository;
-    
+
     /**
      * The Work Queue Repository.
      */
     private WorkQueueRepository workQueueRepository;
 
-    /**
-     * The Search Provider.
-     */
-    private SearchProvider searchProvider;
-    
     protected final ArtifactRepository getArtifactRepository() {
         return artifactRepository;
     }
@@ -91,13 +85,13 @@ public abstract class BaseArtifactProcessor {
         this.ontologyRepository = ontologyRepository;
     }
 
-    protected final GraphRepository getGraphRepository() {
-        return graphRepository;
+    protected final Graph getGraphRepository() {
+        return graph;
     }
 
     @Inject
-    public final void setGraphRepository(final GraphRepository graphRepository) {
-        this.graphRepository = graphRepository;
+    public final void setGraphRepository(final Graph graph) {
+        this.graph = graph;
     }
 
     protected final AuditRepository getAuditRepository() {
@@ -134,14 +128,5 @@ public abstract class BaseArtifactProcessor {
     @Inject
     public final void setUser(final User user) {
         this.user = user;
-    }
-    
-    protected final SearchProvider getSearchProvider() {
-        return searchProvider;
-    }
-    
-    @Inject
-    public final void setSearchProvider(final SearchProvider provider) {
-        searchProvider = provider;
     }
 }
