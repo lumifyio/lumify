@@ -126,20 +126,21 @@ define(['jquery', 'jqueryui'], function() {
             // If dragging a selected node, bring along other selected
             // items
             if ( item.hasClass('active') ) {
-                instance.alsoDragging = list.find('.active a')
+                var items = list.find('.active a')
                     .not(anchor)
                     .map(function() {
                         var $this = $(this),
                             cloned = $this.clone().removeAttr('id href').data('original', $this);
 
-                        //cloned.addClass('ui-draggable-dragging');
                         if (instance.options.otherDraggablesClass) {
                             cloned.addClass(instance.options.otherDraggablesClass);
                         }
 
-                        return cloned;
-                    })
-                    .appendTo(helper);
+                        return cloned.get(0);
+                    });
+
+                helper.append(items);
+                instance.alsoDragging = items.map(function() { return $(this); });
 
             } else {
                 instance.alsoDragging = false;
