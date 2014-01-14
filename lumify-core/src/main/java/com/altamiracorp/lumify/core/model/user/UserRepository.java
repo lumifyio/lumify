@@ -55,7 +55,7 @@ public class UserRepository extends Repository<UserRow> {
     }
 
     public UserRow findByUserName(String userName, com.altamiracorp.lumify.core.user.User authUser) {
-        List<UserRow> users = findAll(authUser.getModelUserContext());
+        Iterable<UserRow> users = findAll(authUser.getModelUserContext());
         for (UserRow user : users) {
             if (userName.equals(user.getMetadata().getUserName())) {
                 return user;

@@ -7,10 +7,8 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import java.util.List;
-
 @Singleton
-public class TermMentionRepository extends Repository<TermMention> {
+public class TermMentionRepository extends Repository<TermMentionModel> {
     private TermMentionBuilder termMentionBuilder = new TermMentionBuilder();
 
     @Inject
@@ -19,12 +17,12 @@ public class TermMentionRepository extends Repository<TermMention> {
     }
 
     @Override
-    public TermMention fromRow(Row row) {
+    public TermMentionModel fromRow(Row row) {
         return termMentionBuilder.fromRow(row);
     }
 
     @Override
-    public Row toRow(TermMention obj) {
+    public Row toRow(TermMentionModel obj) {
         return obj;
     }
 
@@ -33,7 +31,7 @@ public class TermMentionRepository extends Repository<TermMention> {
         return termMentionBuilder.getTableName();
     }
 
-    public List<TermMention> findByGraphVertexId(String graphVertexId, User user) {
+    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, User user) {
         return findByRowStartsWith(graphVertexId + ":", user.getModelUserContext());
     }
 }

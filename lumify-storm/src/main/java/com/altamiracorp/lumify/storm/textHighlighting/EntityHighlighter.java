@@ -2,27 +2,29 @@ package com.altamiracorp.lumify.storm.textHighlighting;
 
 import com.altamiracorp.lumify.core.model.artifactHighlighting.OffsetItem;
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.PriorityQueue;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
-
 public class EntityHighlighter {
-    private GraphRepository graphRepository;
+    private final GraphRepository graphRepository;
 
     @Inject
     public EntityHighlighter(GraphRepository graphRepository) {
         this.graphRepository = graphRepository;
     }
 
-    public String getHighlightedText(String text, List<TermMention> termMentions, User user) {
+    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions, User user) {
         List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, user);
         return getHighlightedText(text, 0, offsetItems);
     }
@@ -96,9 +98,9 @@ public class EntityHighlighter {
         return result.toString();
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Collection<TermMention> termMentions, User user) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, User user) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
-        for (TermMention termMention : termMentions) {
+        for (TermMentionModel termMention : termMentions) {
             GraphVertex glyphVertex = null;
             String graphVertexId = termMention.getMetadata().getGraphVertexId();
             if (graphVertexId != null) {

@@ -12,7 +12,8 @@ public class ThreadedInputStreamProcess<TResult, TData> {
     private final ThreadedTeeInputStreamWorker<TResult, TData>[] workers;
     private final String[] workerNames;
 
-    public ThreadedInputStreamProcess(String threadNamePrefix, Collection<ThreadedTeeInputStreamWorker<TResult, TData>> workersCollection) {
+    public ThreadedInputStreamProcess(String threadNamePrefix,
+            Collection<? extends ThreadedTeeInputStreamWorker<TResult, TData>> workersCollection) {
         this.workers = new ThreadedTeeInputStreamWorker[workersCollection.size()];
         this.workerThreads = new Thread[workersCollection.size()];
         this.workerNames = new String[workersCollection.size()];
