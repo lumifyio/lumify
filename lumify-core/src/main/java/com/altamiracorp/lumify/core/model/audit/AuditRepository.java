@@ -71,13 +71,19 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public List<Audit> auditEntity(String action, String entityId, String artifactId,
-                                   String entityTitle, String entitySubtype,
-                                   String process, String comment, User user) {
+    public List<Audit> auditEntity(
+            String action,
+            Object entityId,
+            String artifactId,
+            String entityTitle,
+            String entitySubtype,
+            String process,
+            String comment,
+            User user) {
         checkNotNull(action, "action cannot be null");
         checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(entityId, "entityId cannot be null");
-        checkArgument(entityId.length() > 0, "entityId cannot be empty");
+        checkArgument(entityId.toString().length() > 0, "entityId cannot be empty");
         checkNotNull(artifactId, "artifactId cannot be null");
         checkArgument(artifactId.length() > 0, "artifactId cannot be empty");
         checkNotNull(comment, "comment cannot be null");
@@ -215,7 +221,7 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    private Audit auditEntityHelper(Audit audit, String action, String entityID, String entityTitle, String entitySubtype, String process, String comment, User user) {
+    private Audit auditEntityHelper(Audit audit, String action, Object entityID, String entityTitle, String entitySubtype, String process, String comment, User user) {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
@@ -230,7 +236,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setTitle(entityTitle)
                 .setType(OntologyRepository.TYPE_ENTITY.toString())
                 .setSubtype(entitySubtype)
-                .setID(entityID);
+                .setID(entityID.toString());
         return audit;
     }
 
