@@ -4,7 +4,7 @@ var require = {
     paths: {
         'arbor': '../libs/cytoscape.js/lib/arbor',
         'async' : '../libs/requirejs-plugins/src/async',
-        'atmosphere': '../libs/jquery.atmosphere/jquery.atmosphere',
+        'atmosphere': '../libs/atmosphere-jquery/jquery.atmosphere',
         'bootstrap': '../libs/bootstrap/docs/assets/js/bootstrap',
         'bootstrap-datepicker': '../libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'colorjs': '../libs/color-js/color',
