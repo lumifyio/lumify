@@ -29,14 +29,14 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
             String artifactRowKey = (String) graphVertex.getProperty(PropertyName.ROW_KEY);
             LOGGER.debug("Processing graph vertex [%s] for artifact: %s", graphVertex.getId(), artifactRowKey);
 
-            List<TermMention> termMentions = termMentionRepository.findByGraphVertexId(graphVertex.getId(), getUser());
+            Iterable<TermMention> termMentions = termMentionRepository.findByGraphVertexId(graphVertex.getId(), getUser());
             performHighlighting(artifactRowKey, graphVertex, termMentions);
         } else {
             LOGGER.warn("Could not find vertex with id: %s", graphVertexId);
         }
     }
 
-    private void performHighlighting(final String rowKey, final GraphVertex vertex, final List<TermMention> termMentions) throws Exception {
+    private void performHighlighting(final String rowKey, final GraphVertex vertex, final Iterable<TermMention> termMentions) throws Exception {
         String text = getText(vertex);
         String highlightedText = entityHighlighter.getHighlightedText(text, termMentions, getUser());
 

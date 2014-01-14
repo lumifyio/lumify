@@ -22,7 +22,7 @@ public class EntityHighlighter {
         this.graphRepository = graphRepository;
     }
 
-    public String getHighlightedText(String text, List<TermMention> termMentions, User user) {
+    public String getHighlightedText(String text, Iterable<TermMention> termMentions, User user) {
         List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, user);
         return getHighlightedText(text, 0, offsetItems);
     }
@@ -96,7 +96,7 @@ public class EntityHighlighter {
         return result.toString();
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Collection<TermMention> termMentions, User user) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMention> termMentions, User user) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
         for (TermMention termMention : termMentions) {
             GraphVertex glyphVertex = null;

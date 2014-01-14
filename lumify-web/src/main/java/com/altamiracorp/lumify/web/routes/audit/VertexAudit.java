@@ -24,7 +24,7 @@ public class VertexAudit extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String graphVertexId = getAttributeString(request, "graphVertexId");
-        List<Audit> rows = auditRepository.findByRowStartsWith(graphVertexId, getUser(request).getModelUserContext());
+        Iterable<Audit> rows = auditRepository.findByRowStartsWith(graphVertexId, getUser(request).getModelUserContext());
 
         JSONObject results = new JSONObject();
         JSONArray audits = new JSONArray();
