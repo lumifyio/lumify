@@ -39,8 +39,8 @@ public class DictionaryEntryRepository extends Repository<DictionaryEntry> {
         return DictionaryEntry.TABLE_NAME;
     }
 
-    public List<DictionaryEntry> findByConcept (String concept, User user) {
-        List<Row> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME,".*\\c_" + concept, user.getModelUserContext());
+    public Iterable<DictionaryEntry> findByConcept (String concept, User user) {
+        Iterable<Row> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME,".*\\c_" + concept, user.getModelUserContext());
         return fromRows(rows);
     }
 

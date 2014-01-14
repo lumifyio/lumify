@@ -26,7 +26,7 @@ public class AdminDictionary extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        List<DictionaryEntry> dictionary = dictionaryEntryRepository.findAll(user.getModelUserContext());
+        Iterable<DictionaryEntry> dictionary = dictionaryEntryRepository.findAll(user.getModelUserContext());
         JSONArray entries = new JSONArray();
         JSONObject results = new JSONObject();
         for (DictionaryEntry entry : dictionary) {

@@ -27,7 +27,7 @@ public class AdminDictionaryByConcept extends BaseRequestHandler {
         final String concept = getAttributeString(request,"concept");
         User user = getUser(request);
 
-        List<DictionaryEntry> dictionary = dictionaryEntryRepository.findByConcept(concept,user);
+        Iterable<DictionaryEntry> dictionary = dictionaryEntryRepository.findByConcept(concept,user);
         JSONArray entries = new JSONArray();
         JSONObject results = new JSONObject();
         for (DictionaryEntry entry : dictionary) {
