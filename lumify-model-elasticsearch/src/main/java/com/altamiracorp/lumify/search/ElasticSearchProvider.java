@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.search;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.search.ArtifactSearchPagedResults;
@@ -39,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.altamiracorp.lumify.core.metrics.MetricsManager;
 
 public class ElasticSearchProvider extends SearchProvider {
     public static final String ES_LOCATIONS_PROP_KEY = "search.elasticsearch.locations";

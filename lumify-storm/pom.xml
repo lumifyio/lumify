@@ -145,17 +145,17 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-model-bigtable-queue</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-model-elasticsearch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-model-kafka</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-accumulo-queue</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -222,6 +222,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -14,11 +14,12 @@ import com.google.inject.Singleton;
 import com.tinkerpop.blueprints.Edge;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Map;
 
 @Singleton
 public class AuditRepository extends Repository<Audit> {
@@ -110,7 +111,7 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(user, "user cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(entity.getId()));
-        HashMap<String, Object> oldProperties = entity.getOldProperties();
+        Map<String, Object> oldProperties = entity.getOldProperties();
 
         audit.getAuditCommon()
                 .setUser(user)

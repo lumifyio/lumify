@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.artifact;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
@@ -27,11 +28,14 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Date;
+
 @Singleton
 public class ArtifactRepository extends Repository<Artifact> {
     public static final String VIDEO_STORAGE_HDFS_PATH = "/lumify/artifacts/video";
     public static final String LUMIFY_VIDEO_PREVIEW_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/preview/";
     public static final String LUMIFY_VIDEO_POSTER_FRAME_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/posterFrame/";
+    private static final String LUMIFY_RAW_HDFS_PATH_FMT = "/lumify/artifacts/raw/%s";
     public static final int FRAMES_PER_PREVIEW = 20;
     public static final int PREVIEW_FRAME_WIDTH = 360;
     public static final int PREVIEW_FRAME_HEIGHT = 240;
@@ -148,6 +152,70 @@ public class ArtifactRepository extends Repository<Artifact> {
         return artifactVertex;
     }
 
+    public GraphVertex saveArtifact(final ArtifactExtractedInfo artifactExtractedInfo, final User user) {
+        Artifact artifact = saveArtifactModel(artifactExtractedInfo, user.getModelUserContext());
+        String url = artifactExtractedInfo.getUrl();
+        if (url != null && !url.trim().isEmpty()) {
+            artifactExtractedInfo.setSource(url.trim());
+        }
+        return saveToGraph(artifact, artifactExtractedInfo, user);
+    }
+    
+    private Artifact saveArtifactModel(final ArtifactExtractedInfo artifactExtractedInfo, final ModelUserContext userContext) {
+        Artifact artifact = findByRowKey(artifactExtractedInfo.getRowKey(), userContext);
+        if (artifact == null) {
+            artifact = new Artifact(artifactExtractedInfo.getRowKey());
+            if (artifactExtractedInfo.getDate() != null) {
+                artifact.getMetadata().setCreateDate(artifactExtractedInfo.getDate());
+            } else {
+                artifact.getMetadata().setCreateDate(new Date());
+            }
+        }
+        byte[] rawBytes = artifactExtractedInfo.getRaw();
+        if (rawBytes != null) {
+            if (rawBytes.length > Artifact.MAX_SIZE_OF_INLINE_FILE) {
+                String rawPath = String.format(LUMIFY_RAW_HDFS_PATH_FMT, artifactExtractedInfo.getRowKey());
+                fsSession.saveFile(rawPath, new ByteArrayInputStream(rawBytes));
+                artifactExtractedInfo.setRaw(null);
+                artifact.getMetadata().set(PropertyName.RAW_HDFS_PATH.toString(), rawPath);
+            } else {
+                artifact.getMetadata().setRaw(rawBytes);
+            }
+        }
+        if (artifactExtractedInfo.getVideoTranscript() != null) {
+            artifact.getMetadata().setVideoTranscript(artifactExtractedInfo.getVideoTranscript());
+            artifact.getMetadata().setVideoDuration(Long.toString(artifactExtractedInfo.getVideoDuration()));
+
+            // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
+            if (artifactExtractedInfo.getText() == null) {
+                artifactExtractedInfo.setText(artifactExtractedInfo.getVideoTranscript().toString());
+            } else {
+                artifactExtractedInfo.setText(artifactExtractedInfo.getText() + artifactExtractedInfo.getVideoTranscript().toString());
+            }
+        }
+        if (artifactExtractedInfo.getText() != null) {
+            artifact.getMetadata().setText(artifactExtractedInfo.getText());
+            if (artifact.getMetadata().getHighlightedText() == null) {
+                artifact.getMetadata().setHighlightedText(artifactExtractedInfo.getText());
+            }
+        }
+        if (artifactExtractedInfo.getMappingJson() != null) {
+            artifact.getMetadata().setMappingJson(artifactExtractedInfo.getMappingJson());
+        }
+        if (artifactExtractedInfo.getTitle() != null) {
+            artifact.getMetadata().setFileName(artifactExtractedInfo.getTitle());
+        }
+        if (artifactExtractedInfo.getFileExtension() != null) {
+            artifact.getMetadata().setFileExtension(artifactExtractedInfo.getFileExtension());
+        }
+        if (artifactExtractedInfo.getMimeType() != null) {
+            artifact.getMetadata().setMimeType(artifactExtractedInfo.getMimeType());
+        }
+
+        save(artifact, userContext);
+        return artifact;
+    }
+    
     public InputStream getHighlightedText(GraphVertex artifactVertex, User user) throws IOException {
         checkNotNull(artifactVertex);
         checkNotNull(user);

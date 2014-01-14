@@ -1,15 +1,13 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.FrameworkUtils;
-import com.altamiracorp.lumify.core.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.web.guice.modules.Bootstrap;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import javax.servlet.ServletContext;
@@ -19,6 +17,8 @@ import java.io.File;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 
 public final class ApplicationBootstrap implements ServletContextListener {
     private static LumifyLogger LOGGER;
@@ -37,12 +37,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 final Configuration config = fetchApplicationConfiguration(context);
                 LOGGER.info("Running application with configuration: %s", config);
 
-                InjectHelper.inject(this, new InjectHelper.ModuleMaker() {
-                    @Override
-                    public Module createModule() {
-                        return Bootstrap.create(config);
-                    }
-                });
+                InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config));
 
                 // Store the injector in the context for a servlet to access later
                 context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());

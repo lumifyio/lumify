@@ -4,7 +4,7 @@ import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
-import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.codahale.metrics.Gauge;
@@ -133,7 +133,7 @@ public class HdfsFileSystemSpout extends BaseFileSystemSpout {
     }
 
     @Override
-    protected void registerMetrics(MetricsManager metricsManager, String namePrefix) {
+    protected void registerMetrics(JmxMetricsManager metricsManager, String namePrefix) {
         super.registerMetrics(metricsManager, namePrefix);
 
         metricsManager.getRegistry().register(namePrefix + "pending",
