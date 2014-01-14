@@ -1,9 +1,6 @@
 package com.altamiracorp.lumify.model.bigtablequeue.model;
 
-import com.altamiracorp.bigtable.model.ColumnFamily;
-import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.bigtable.model.Repository;
-import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.*;
 import com.altamiracorp.lumify.core.user.User;
 import org.json.JSONObject;
 
@@ -37,8 +34,9 @@ public class QueueItemRepository extends Repository<QueueItem> {
         return this.tableName;
     }
 
-    public void add(JSONObject json, String[] extra, User user) {
+
+    public void add(JSONObject json, String[] extra, FlushFlag flushFlag, User user) {
         QueueItem queueItem = new QueueItem(this.tableName, json, extra);
-        this.save(queueItem, user.getModelUserContext());
+        this.save(queueItem, flushFlag, user.getModelUserContext());
     }
 }

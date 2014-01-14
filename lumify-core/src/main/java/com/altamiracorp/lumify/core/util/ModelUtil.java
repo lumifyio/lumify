@@ -10,7 +10,7 @@ import com.altamiracorp.lumify.core.model.geoNames.GeoNameAdmin1Code;
 import com.altamiracorp.lumify.core.model.geoNames.GeoNameCountryInfo;
 import com.altamiracorp.lumify.core.model.geoNames.GeoNamePostalCode;
 import com.altamiracorp.lumify.core.model.resources.Resource;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
@@ -25,7 +25,7 @@ public class ModelUtil {
             Artifact.TABLE_NAME,
             ArtifactThumbnail.TABLE_NAME,
             Workspace.TABLE_NAME,
-            TermMention.TABLE_NAME,
+            TermMentionModel.TABLE_NAME,
             VideoFrame.TABLE_NAME,
             Resource.TABLE_NAME,
             UserRow.TABLE_NAME,
