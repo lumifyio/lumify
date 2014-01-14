@@ -7,10 +7,10 @@ import com.altamiracorp.bigtable.model.Row;
 
 import java.util.Collection;
 
-public class TermMentionBuilder extends BaseBuilder<TermMention> {
+public class TermMentionBuilder extends BaseBuilder<TermMentionModel> {
     @Override
-    public TermMention fromRow(Row row) {
-        TermMention termMention = new TermMention(row.getRowKey());
+    public TermMentionModel fromRow(Row row) {
+        TermMentionModel termMention = new TermMentionModel(row.getRowKey());
         Collection<ColumnFamily> families = row.getColumnFamilies();
         for (ColumnFamily columnFamily : families) {
             if (columnFamily.getColumnFamilyName().equals(TermMentionMetadata.NAME)) {
@@ -25,6 +25,6 @@ public class TermMentionBuilder extends BaseBuilder<TermMention> {
 
     @Override
     public String getTableName() {
-        return TermMention.TABLE_NAME;
+        return TermMentionModel.TABLE_NAME;
     }
 }

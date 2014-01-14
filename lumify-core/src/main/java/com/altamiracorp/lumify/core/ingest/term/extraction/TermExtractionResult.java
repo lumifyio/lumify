@@ -1,16 +1,15 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.bigtable.model.Value;
-import com.google.common.collect.Lists;
+import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.collect.Lists;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public class TermExtractionResult {
     private final List<TermMention> termMentions = Lists.newArrayList();
-    private final List<Relationship> relationships = Lists.newArrayList();
+    private final List<TermRelationship> relationships = Lists.newArrayList();
 
     public void add(TermMention termMention) {
         checkNotNull(termMention);
@@ -27,7 +26,7 @@ public class TermExtractionResult {
         }
     }
 
-    public void addAllRelationships(List<Relationship> relationships) {
+    public void addAllRelationships(List<TermRelationship> relationships) {
         checkNotNull(relationships);
         this.relationships.addAll(relationships);
     }
@@ -44,96 +43,42 @@ public class TermExtractionResult {
         return termMentions;
     }
 
-    public List<Relationship> getRelationships() {
+    public List<TermRelationship> getRelationships() {
         return this.relationships;
     }
-
-    // TODO: rename to a better class name
-    public static class TermMention {
-
-        private final int start;
-        private final int end;
-        private final String sign;
-        private final String ontologyClassUri;
-        private final String relationshipLabel;
-        private final boolean resolved;
-        private final Map<String, Object> propertyValue;
-        private final boolean useExisting;
-        private String process = "";
-
-        public TermMention(int start, int end, String sign, String ontologyClassUri, boolean resolved, Map<String, Object> propertyValue, String relationshipLabel, boolean useExisting) {
-            this.start = start;
-            this.end = end;
-            this.sign = sign;
-            this.ontologyClassUri = ontologyClassUri;
-            this.resolved = resolved;
-            this.propertyValue = propertyValue;
-            this.relationshipLabel = relationshipLabel;
-            this.useExisting = useExisting;
-        }
-
-        public int getStart() {
-            return start;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
-        public String getSign() {
-            return sign;
-        }
-
-        public String getOntologyClassUri() {
-            return ontologyClassUri;
-        }
-
-        public boolean isResolved() {
-            return resolved;
-        }
-
-        public Map<String, Object> getPropertyValue() {
-            return propertyValue;
-        }
-
-        public String getRelationshipLabel() {
-            return relationshipLabel;
-        }
-
-        public boolean getUseExisting() {
-            return useExisting;
-        }
-
-        public String getProcess () { return process; }
-
-        public void setProcess (String process) { this.process = process; }
-
-        public String toString () {
-            return getSign() + ": " + getStart() + ": " + getEnd();
-        }
-    }
-
-    public static class Relationship {
-        private final TermMention sourceTermMention;
-        private final TermMention destTermMention;
-        private final String label;
-
-        public Relationship(TermMention sourceTermMention, TermMention destTermMention, String label) {
-            this.sourceTermMention = sourceTermMention;
-            this.destTermMention = destTermMention;
-            this.label = label;
-        }
-
-        public TermMention getSourceTermMention() {
-            return sourceTermMention;
-        }
-
-        public TermMention getDestTermMention() {
-            return destTermMention;
-        }
-
-        public String getLabel() {
-            return label;
+    
+    public void replace(final TermMention orig, final TermMention updated) {
+        checkNotNull(orig);
+        checkNotNull(updated);
+        
+        if (termMentions.remove(orig)) {
+            termMentions.add(updated);
+            Map<Integer, TermRelationship> relUpdates = new HashMap<Integer, TermRelationship>();
+            TermRelationship rel;
+            TermMention src;
+            TermMention dest;
+            boolean replace;
+            for (int idx = 0; idx < relationships.size(); idx++) {
+                rel = relationships.get(idx);
+                replace = false;
+                src = rel.getSourceTermMention();
+                dest = rel.getDestTermMention();
+                if (orig.equals(src)) {
+                    src = updated;
+                    replace = true;
+                }
+                if (orig.equals(dest)) {
+                    dest = updated;
+                    replace =true;
+                }
+                if (replace) {
+                    relUpdates.put(idx, new TermRelationship(src, dest, rel.getLabel()));
+                }
+            }
+            for (Map.Entry<Integer, TermRelationship> update : relUpdates.entrySet()) {
+                relationships.remove(update.getKey().intValue());
+                relationships.add(update.getKey(), update.getValue());
+            }
         }
     }
 }

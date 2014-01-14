@@ -2,7 +2,7 @@ package com.altamiracorp.lumify.core.model.artifactHighlighting;
 
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONException;
@@ -13,10 +13,10 @@ import java.util.List;
 
 public class TermMentionOffsetItem extends OffsetItem {
 
-    private final TermMention termMention;
+    private final TermMentionModel termMention;
     private final Vertex graphVertex;
 
-    public TermMentionOffsetItem(TermMention termMention, Vertex graphVertex) {
+    public TermMentionOffsetItem(TermMentionModel termMention, Vertex graphVertex) {
         this.termMention = termMention;
         this.graphVertex = graphVertex;
     }
