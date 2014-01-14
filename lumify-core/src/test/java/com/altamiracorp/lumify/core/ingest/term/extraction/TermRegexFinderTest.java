@@ -2,7 +2,7 @@ package com.altamiracorp.lumify.core.ingest.term.extraction;
 
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,15 +30,15 @@ public class TermRegexFinderTest {
         String artifactId = "1234";
         String text = "@item1 is a @item2";
         String regex = "(@(\\w+))";
-        List<TermMention> terms = TermRegexFinder.find(artifactId, concept, text, regex);
+        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex);
         assertEquals(2, terms.size());
 
-        TermMention termMention1 = terms.get(0);
+        TermMentionModel termMention1 = terms.get(0);
         assertEquals(0, termMention1.getRowKey().getStartOffset());
         assertEquals(6, termMention1.getRowKey().getEndOffset());
         assertEquals("item1", termMention1.getMetadata().getSign());
 
-        TermMention termMention2 = terms.get(1);
+        TermMentionModel termMention2 = terms.get(1);
         assertEquals(12, termMention2.getRowKey().getStartOffset());
         assertEquals(18, termMention2.getRowKey().getEndOffset());
         assertEquals("item2", termMention2.getMetadata().getSign());
@@ -49,15 +49,15 @@ public class TermRegexFinderTest {
         String artifactId = "1234";
         String text = "@item1 is a @item2";
         String regex = "((@\\w+))";
-        List<TermMention> terms = TermRegexFinder.find(artifactId, concept, text, regex);
+        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex);
         assertEquals(2, terms.size());
 
-        TermMention termMention1 = terms.get(0);
+        TermMentionModel termMention1 = terms.get(0);
         assertEquals(0, termMention1.getRowKey().getStartOffset());
         assertEquals(6, termMention1.getRowKey().getEndOffset());
         assertEquals("@item1", termMention1.getMetadata().getSign());
 
-        TermMention termMention2 = terms.get(1);
+        TermMentionModel termMention2 = terms.get(1);
         assertEquals(12, termMention2.getRowKey().getStartOffset());
         assertEquals(18, termMention2.getRowKey().getEndOffset());
         assertEquals("@item2", termMention2.getMetadata().getSign());

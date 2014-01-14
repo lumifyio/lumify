@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.core.model.artifactHighlighting;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,10 +12,10 @@ import java.util.List;
 
 public class TermMentionOffsetItem extends OffsetItem {
 
-    private final TermMention termMention;
+    private final TermMentionModel termMention;
     private final GraphVertex graphVertex;
 
-    public TermMentionOffsetItem(TermMention termMention, GraphVertex graphVertex) {
+    public TermMentionOffsetItem(TermMentionModel termMention, GraphVertex graphVertex) {
         this.termMention = termMention;
         this.graphVertex = graphVertex;
     }

@@ -3,18 +3,18 @@ package com.altamiracorp.lumify.core.model.termMention;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
 
-public class TermMention extends Row<TermMentionRowKey> {
+public class TermMentionModel extends Row<TermMentionRowKey> {
     public static final String TABLE_NAME = "atc_termMention";
 
-    public TermMention(TermMentionRowKey rowKey) {
+    public TermMentionModel(TermMentionRowKey rowKey) {
         super(TABLE_NAME, rowKey);
     }
 
-    public TermMention() {
+    public TermMentionModel() {
         super(TABLE_NAME);
     }
 
-    public TermMention(RowKey rowKey) {
+    public TermMentionModel(RowKey rowKey) {
         this(new TermMentionRowKey(rowKey.toString()));
     }
 

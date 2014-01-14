@@ -9,7 +9,7 @@ import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.termMention.TermMention;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -39,7 +39,7 @@ public class EntityHelper {
         this.ontologyRepository = ontologyRepository;
     }
 
-    public void updateTermMention(TermMention termMention, String sign, GraphVertex conceptVertex, GraphVertex resolvedVertex, User user) {
+    public void updateTermMention(TermMentionModel termMention, String sign, GraphVertex conceptVertex, GraphVertex resolvedVertex, User user) {
         termMention.getMetadata()
                 .setSign(sign)
                 .setOntologyClassUri((String) conceptVertex.getProperty(PropertyName.DISPLAY_NAME))
