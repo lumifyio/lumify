@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CollectionUtil {
@@ -10,5 +11,20 @@ public class CollectionUtil {
             list.add(t);
         }
         return list;
+    }
+
+    public static <T> T single(Iterable<T> it) {
+        Iterator<T> i = it.iterator();
+        if (!i.hasNext()) {
+            throw new RuntimeException("Iterable has no items");
+        }
+
+        T result = i.next();
+
+        if (i.hasNext()) {
+            throw new RuntimeException("Iterable has more than one item");
+        }
+
+        return result;
     }
 }

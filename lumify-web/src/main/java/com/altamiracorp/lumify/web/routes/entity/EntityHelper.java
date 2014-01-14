@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
+
 public class EntityHelper {
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private final Graph graph;
@@ -50,10 +52,10 @@ public class EntityHelper {
     }
 
     public void updateGraphVertex(Vertex vertex, String subType, String title, String process, String comment, User user) {
-        vertex.setProperties(
-                graph.createProperty("", PropertyName.CONCEPT_TYPE.toString(), subType, DEFAULT_VISIBILITY),
-                graph.createProperty("", PropertyName.TITLE.toString(), title, DEFAULT_VISIBILITY)
-        );
+        vertex.prepareMutation()
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), subType, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.TITLE.toString(), title, DEFAULT_VISIBILITY)
+                .save();
 
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.CONCEPT_TYPE.toString(), process, comment, user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
@@ -87,17 +89,20 @@ public class EntityHelper {
         Vertex resolvedVertex;
         // If the user chose to use an existing resolved entity
         if (existing != null && !existing.isEmpty()) {
-            resolvedVertex = graph.findVertexByExactTitle(sign, user);
+            // TODO what happens if we have multiple vertices with the same title
+            resolvedVertex = single(graph.query(user.getAuthorizations())
+                    .has(PropertyName.TITLE.toString(), sign)
+                    .vertices());
         } else {
             newVertex = true;
             resolvedVertex = graph.addVertex(DEFAULT_VISIBILITY);
         }
 
         String conceptId = conceptVertex.getId().toString();
-        resolvedVertex.setProperties(
-                graph.createProperty("", PropertyName.CONCEPT_TYPE.toString(), conceptId, DEFAULT_VISIBILITY),
-                graph.createProperty("", PropertyName.TITLE.toString(), sign, DEFAULT_VISIBILITY)
-        );
+        resolvedVertex.prepareMutation()
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.TITLE.toString(), sign, DEFAULT_VISIBILITY)
+                .save();
 
         if (newVertex) {
             auditRepository.auditEntity(AuditAction.CREATE.toString(), resolvedVertex.getId(), artifactId, sign, conceptId, process, comment, user);
@@ -107,7 +112,7 @@ public class EntityHelper {
             auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), resolvedVertex, modifiedProperty, process, comment, user);
         }
 
-        graph.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.CONTAINS_IMAGE_OF, user);
+        graph.addEdge(artifactVertex, resolvedVertex, LabelName.CONTAINS_IMAGE_OF.toString(), DEFAULT_VISIBILITY);
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString(), user);
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
