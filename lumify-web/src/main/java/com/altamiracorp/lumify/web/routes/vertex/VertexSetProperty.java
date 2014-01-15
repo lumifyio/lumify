@@ -62,13 +62,13 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         List<String> modifiedProperties = Lists.newArrayList(propertyName);
         Visibility visibility = new Visibility(""); // TODO set visibility
-        graphVertex.setProperties(graph.createProperty(propertyName, value, visibility));
+        graphVertex.setProperty(propertyName, value, visibility);
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            graphVertex.setProperties(graph.createProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility));
+            graphVertex.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
             modifiedProperties.add(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
-            graphVertex.setProperties(graph.createProperty(PropertyName.SOURCE.toString(), value, visibility));
+            graphVertex.setProperty(PropertyName.SOURCE.toString(), value, visibility);
             modifiedProperties.add(PropertyName.SOURCE.toString());
         }
         graph.flush();
