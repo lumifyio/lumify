@@ -5,10 +5,6 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
-import com.altamiracorp.lumify.core.model.geoNames.GeoName;
-import com.altamiracorp.lumify.core.model.geoNames.GeoNameAdmin1Code;
-import com.altamiracorp.lumify.core.model.geoNames.GeoNameCountryInfo;
-import com.altamiracorp.lumify.core.model.geoNames.GeoNamePostalCode;
 import com.altamiracorp.lumify.core.model.resources.Resource;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.user.UserRow;
@@ -29,10 +25,6 @@ public class ModelUtil {
             VideoFrame.TABLE_NAME,
             Resource.TABLE_NAME,
             UserRow.TABLE_NAME,
-            GeoName.TABLE_NAME,
-            GeoNameAdmin1Code.TABLE_NAME,
-            GeoNameCountryInfo.TABLE_NAME,
-            GeoNamePostalCode.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
             "atc_titan");// TODO refactor see com.altamiracorp.lumify.model.TitanGraphSession
