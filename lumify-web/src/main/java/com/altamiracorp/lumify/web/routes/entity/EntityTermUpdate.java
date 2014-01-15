@@ -3,25 +3,24 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 
 public class EntityTermUpdate extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final EntityHelper entityHelper;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
@@ -29,12 +28,12 @@ public class EntityTermUpdate extends BaseRequestHandler {
     @Inject
     public EntityTermUpdate(
             final TermMentionRepository termMentionRepository,
-            final GraphRepository graphRepository,
+            final Graph graph,
             final EntityHelper entityHelper,
             final OntologyRepository ontologyRepository,
             final AuditRepository auditRepository) {
         this.termMentionRepository = termMentionRepository;
-        this.graphRepository = graphRepository;
+        this.graph = graph;
         this.entityHelper = entityHelper;
         this.ontologyRepository = ontologyRepository;
         this.auditRepository = auditRepository;
@@ -51,16 +50,18 @@ public class EntityTermUpdate extends BaseRequestHandler {
         final String resolvedGraphVertexId = getRequiredParameter(request, "graphVertexId");
 
         User user = getUser(request);
-        GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
-        GraphVertex resolvedVertex = graphRepository.findVertex(resolvedGraphVertexId, user);
+        Vertex conceptVertex = graph.getVertex(conceptId, user.getAuthorizations());
+        Vertex resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
 
         // TODO: replace second "" when we implement commenting on ui
         entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
-        if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.HAS_ENTITY.toString(), user) == null) {
-            graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.HAS_ENTITY, user);
+        Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
+        Vertex resolvedGraphVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
+        Iterator<Edge> edges = artifactVertex.getEdges(resolvedGraphVertex, Direction.BOTH, LabelName.HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
+        if (!edges.hasNext()) {
+            graph.addEdge(artifactVertex, resolvedVertex, LabelName.HAS_ENTITY.toString(), new Visibility(""));
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
-            GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
         }
