@@ -40,7 +40,7 @@ define(['atmosphere'],
         ServiceBase.prototype.subscribe = function (config) {
             var self = this,
                 req = {
-                    url: location.href.replace(/\/$/, '') + "/messaging/",
+                    url: location.href.replace(/\/#?$/, '') + "/messaging/",
                     transport: 'websocket',
                     fallbackTransport: 'long-polling',
                     contentType: "application/json",
