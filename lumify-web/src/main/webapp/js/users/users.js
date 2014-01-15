@@ -24,7 +24,6 @@ define([
 
             this.$node.addClass('popover');
 
-            Chat.attachTo(this.select('chatSelector'));
 
             this.on(document, 'newUserOnline', this.onNewUserOnline);
             this.on(document, 'userOnlineStatusChanged', this.onUserOnlineStatusChanged);
@@ -32,6 +31,7 @@ define([
             this.on(document, 'socketMessage', this.onSocketMessage);
             this.on(document, 'chatCreated', this.onChatCreated);
             this.on(document, 'startChat', this.onStartChat);
+            this.on(document, 'userSelected', this.onUserSelected);
             this.on('click', {
                 userListItemSelector: this.onUserListItemClicked
             });
@@ -54,7 +54,7 @@ define([
         this.onUserListItemClicked = function (evt) {
             evt.preventDefault();
 
-            var $target = $(evt.target).parents('li');
+            var $target = $(evt.target).closest('li');
             var userData = $target.data('userdata');
 
             $target.find('.badge').text('');
@@ -63,7 +63,15 @@ define([
                 return;
             }
 
+            this.$node.find('.active').removeClass('active');
+            $target.addClass('active');
+
             this.trigger(document, 'userSelected', userData);
+        };
+
+        this.onUserSelected = function(event, data) {
+            this.$node.find('.active').removeClass('active');
+            this.$node.find('.conversation-' + data.rowKey).addClass('active')
         };
 
         this.onNewUserOnline = function (evt, userData) {
@@ -78,21 +86,24 @@ define([
 
         this.createOrActivateConversation = function (chat) {
             var $usersList = this.select('usersListSelector');
-            var activeChat = $usersList.find('li.conversation-' + chat.rowKey);
+            var to = chat.rowKey === currentUser.rowKey ? chat.users[0].rowKey : chat.rowKey;
+            var activeChat = $usersList.find('li.conversation-' + to);
 
             if (!activeChat.length && chat.users) {
                 activeChat = $usersList.find('li.online.user-' + chat.users[0].rowKey);
+
                 if (!activeChat.length) {
                     return;
                 }
                 activeChat = activeChat.clone();
-                activeChat.removeClass('user-' + chat.users[0].rowKey);
-                activeChat.addClass('conversation-' + chat.rowKey);
+                activeChat.removePrefixedClasses('user-');
+                activeChat.addClass('conversation-' + to);
                 $usersList.find('li.conversations').after(activeChat);
             }
 
             $usersList.find('.active').removeClass('active');
             activeChat.addClass('active');
+            this.trigger(document, 'userSelected', {rowKey:to});
         };
 
         this.onChatMessage = function (evt, message) {
@@ -102,7 +113,7 @@ define([
             };
             this.createOrActivateConversation(chat);
 
-            var badge = this.select('usersListSelector').find('li.conversation-' + message.chatRowKey + ':not(.active) .badge');
+            var badge = this.select('usersListSelector').find('li.conversation-' + message.from.rowKey + ':not(.active) .badge');
             badge.text(+badge.text() + 1);
         };
 
@@ -135,17 +146,17 @@ define([
         };
 
         this.updateUser = function (user) {
-            var self = this;
-            if (user.rowKey == self.currentUserRowKey) {
+            if (!this.currentUserRowKey || user.rowKey == this.currentUserRowKey) {
                 return;
             }
 
-            var $usersList = self.select('usersListSelector');
-            var $user = $('.user-' + user.rowKey, $usersList);
+            var $usersList = this.select('usersListSelector'),
+                $user = $('.user-' + user.rowKey, $usersList);
+
             if ($user.length === 0) {
-                self.trigger(document, 'newUserOnline', user);
+                this.trigger(document, 'newUserOnline', user);
             } else if (!$user.hasClass(user.status)) {
-                self.trigger(document, 'userOnlineStatusChanged', user);
+                this.trigger(document, 'userOnlineStatusChanged', user);
             }
         };
 
@@ -158,18 +169,16 @@ define([
                     $usersList.html('Could not get online: ' + err);
                 })
                 .done(function(data) {
-                
+
+                    window.currentUser = data.user;
+                    self.currentUserRowKey = data.user.rowKey;
+
                     if (data.messages && data.messages.length > 0) {
                         data.messages.forEach(function (message) {
                             self.trigger(document, 'chatMessage', message);
                         });
                     }
-
-                    if (self.currentUserRowKey != data.user.rowKey) {
-                        window.currentUser = data.user;
-                        self.currentUserRowKey = data.user.rowKey;
-                        self.trigger(document, 'onlineStatusChanged', data);
-                    }
+                    Chat.attachTo(self.select('chatSelector'));
 
                     self.updateUsers(data.users);
                 });
