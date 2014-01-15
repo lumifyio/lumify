@@ -10,13 +10,14 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.vertex.VertexProperties;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SetRelationshipProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetRelationshipProperty.class);
@@ -41,6 +42,8 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String destId = getRequiredParameter(request, "dest");
 
         User user = getUser(request);
+        Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
+        Vertex destVertex = graph.getVertex(destId, user.getAuthorizations());
 
         Property property = ontologyRepository.getProperty(propertyName, user);
         if (property == null) {
@@ -55,19 +58,20 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
             return;
         }
-        Edge edge = graphRepository.findEdge(sourceId, destId, relationshipLabel, user);
-        Object oldValue = edge.getProperty(propertyName);
+        for (Edge edge : sourceVertex.getEdges(destVertex, Direction.BOTH, relationshipLabel, user.getAuthorizations())) {
+            Object oldValue = edge.getPropertyValue(propertyName, 0);
+            edge.setProperty(propertyName, value, new Visibility(""));
 
-        graphRepository.setPropertyEdge(sourceId, destId, relationshipLabel, propertyName, value, user);
+            // TODO: replace "" when we implement commenting on ui
+            auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
+        }
 
-        // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
-
-        Map<String, String> properties = graphRepository.getEdgeProperties(sourceId, destId, relationshipLabel, user);
-        for (Map.Entry<String, String> p : properties.entrySet()) {
-            String displayName = ontologyRepository.getDisplayNameForLabel(p.getValue(), user);
-            if (displayName != null) {
-                p.setValue(displayName);
+        // TODO get all properties from all edges?
+        List<com.altamiracorp.securegraph.Property> properties = new ArrayList<com.altamiracorp.securegraph.Property>();
+        Iterable<Edge> possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, relationshipLabel, user.getAuthorizations());
+        for (Edge edge : possibleEdges) {
+            for (com.altamiracorp.securegraph.Property p : edge.getProperties()) {
+                properties.add(p);
             }
         }
         JSONObject resultsJson = VertexProperties.propertiesToJson(properties);

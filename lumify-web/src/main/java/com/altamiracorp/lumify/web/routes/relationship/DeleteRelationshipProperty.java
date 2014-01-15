@@ -56,6 +56,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         }
         graph.flush();
 
+        // TODO get all properties from all edges?
         List<Property> properties = new ArrayList<Property>();
         possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, relationshipLabel, user.getAuthorizations());
         for (Edge edge : possibleEdges) {
