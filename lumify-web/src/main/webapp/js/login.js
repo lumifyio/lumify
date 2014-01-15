@@ -29,6 +29,9 @@ define([
             this.$node.html(template({}));
             this.select('loginButtonSelector').attr('disabled', true);
             this.select('errorSelector').addClass('no-error');
+            _.defer(function() {
+                this.select('usernameSelector').focus();
+            }.bind(this));
 
             this.on('click', {
                 loginButtonSelector: this.onLogin
