@@ -113,6 +113,12 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
                         App.teardownAll();
                         App.attachTo('#app');
                     }
+
+                    _.defer(function() {
+                        // Cache login in case server goes down
+                        require(['login'], function(Login) {
+                        });
+                    });
                 });
             }
         }
