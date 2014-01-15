@@ -10,13 +10,13 @@ import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
@@ -77,7 +77,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         super.cleanup();
     }
 
-    protected GraphVertex processFile(Tuple input) throws Exception {
+    protected Vertex processFile(Tuple input) throws Exception {
         FileMetadata fileMetadata = getFileMetadata(input);
         File archiveTempDir = null;
         InputStream in;
@@ -144,7 +144,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             artifactExtractedInfo.setProcess("");
         }
 
-        GraphVertex graphVertex = saveArtifact(artifactExtractedInfo);
+        Vertex graphVertex = saveArtifact(artifactExtractedInfo);
 
         if (archiveTempDir != null) {
             FileUtils.deleteDirectory(archiveTempDir);
@@ -281,12 +281,12 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     @Override
     public void safeExecute(Tuple input) throws Exception {
-        GraphVertex graphVertex = processFile(input);
+        Vertex graphVertex = processFile(input);
         onAfterGraphVertexCreated(graphVertex);
     }
 
-    protected void onAfterGraphVertexCreated(GraphVertex graphVertex) {
-        workQueueRepository.pushText(graphVertex.getId());
+    protected void onAfterGraphVertexCreated(Vertex graphVertex) {
+        workQueueRepository.pushText(graphVertex.getId().toString());
     }
 
     @Inject
