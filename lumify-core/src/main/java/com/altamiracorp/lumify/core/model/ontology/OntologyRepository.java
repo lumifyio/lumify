@@ -326,11 +326,11 @@ public class OntologyRepository {
             return concept;
         }
 
-        Vertex vertex = graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
-        );
+        Vertex vertex = graph.prepareVertex(DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+                .save();
         concept = new Concept(vertex);
         if (parent != null) {
             findOrAddEdge(concept.getVertex(), parent.getVertex(), LabelName.IS_A.toString(), user);
@@ -357,9 +357,7 @@ public class OntologyRepository {
         checkNotNull(vertex, "vertex was null");
         Property property = getOrCreatePropertyType(propertyName, dataType, user);
         checkNotNull(property, "Could not find property: " + propertyName);
-        property.getVertex().setProperties(
-                property.getVertex().getGraph().createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
-        );
+        property.getVertex().setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY);
 
         findOrAddEdge(vertex, property.getVertex(), LabelName.HAS_PROPERTY.toString(), user);
 
@@ -373,11 +371,11 @@ public class OntologyRepository {
             return relationship;
         }
 
-        Vertex relationshipVertex = graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_RELATIONSHIP, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
-        );
+        Vertex relationshipVertex = graph.prepareVertex(DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+                .save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString(), user);
         findOrAddEdge(relationshipVertex, to.getVertex(), LabelName.HAS_EDGE.toString(), user);
@@ -407,11 +405,12 @@ public class OntologyRepository {
             return typeProperty;
         }
 
-        typeProperty = new Property(graph.addVertex(DEFAULT_VISIBILITY,
-                graph.createProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY),
-                graph.createProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
-        ));
+        typeProperty = new Property(graph.prepareVertex(DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
+                .save());
+
         graph.flush();
         return typeProperty;
     }
