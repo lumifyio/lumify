@@ -14,8 +14,6 @@ import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -23,6 +21,8 @@ import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
@@ -68,7 +68,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     protected ArtifactRepository artifactRepository;
     protected OntologyRepository ontologyRepository;
     private FileSystem hdfsFileSystem;
-    protected GraphRepository graphRepository;
+    protected Graph graph;
     protected AuditRepository auditRepository;
     protected TermMentionRepository termMentionRepository;
     private Injector injector;
@@ -204,17 +204,17 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         return collector;
     }
 
-    protected GraphVertex saveArtifact(ArtifactExtractedInfo artifactExtractedInfo) {
+    protected Vertex saveArtifact(ArtifactExtractedInfo artifactExtractedInfo) {
         Artifact artifact = saveArtifactModel(artifactExtractedInfo);
-        GraphVertex artifactVertex = saveArtifactGraphVertex(artifactExtractedInfo, artifact);
+        Vertex artifactVertex = saveArtifactGraphVertex(artifactExtractedInfo, artifact);
         return artifactVertex;
     }
 
-    private GraphVertex saveArtifactGraphVertex(ArtifactExtractedInfo artifactExtractedInfo, Artifact artifact) {
+    private Vertex saveArtifactGraphVertex(ArtifactExtractedInfo artifactExtractedInfo, Artifact artifact) {
         if (artifactExtractedInfo.getUrl() != null && !artifactExtractedInfo.getUrl().isEmpty()) {
             artifactExtractedInfo.setSource(artifactExtractedInfo.getUrl());
         }
-        GraphVertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, user);
+        Vertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, user);
         return vertex;
     }
 
@@ -275,8 +275,8 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     @Inject
-    public void setGraphRepository(GraphRepository graphRepository) {
-        this.graphRepository = graphRepository;
+    public void setGraph(Graph graph) {
+        this.graph = graph;
     }
 
     @Inject

@@ -12,8 +12,6 @@ import com.altamiracorp.lumify.storm.BaseTextProcessingBolt;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
-import java.util.List;
-
 public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightingBolt.class);
     private TermMentionRepository termMentionRepository;
@@ -24,7 +22,7 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
         final JSONObject json = getJsonFromTuple(input);
         final String graphVertexId = json.getString("graphVertexId");
 
-        GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, getUser());
+        GraphVertex graphVertex = graph.findVertex(graphVertexId, getUser());
         if (graphVertex != null) {
             String artifactRowKey = (String) graphVertex.getProperty(PropertyName.ROW_KEY);
             LOGGER.debug("Processing graph vertex [%s] for artifact: %s", graphVertex.getId(), artifactRowKey);
@@ -45,7 +43,7 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
         artifactRepository.save(artifact, getUser().getModelUserContext());
 
         vertex.removeProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString());
-        graphRepository.save(vertex, getUser());
+        graph.save(vertex, getUser());
     }
 
     @Inject
