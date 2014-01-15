@@ -12,7 +12,6 @@ define([
     function Chat() {
         this.chatService = new ChatService();
         this.openChats = {};
-        this.currentUser = null;
 
         this.defaultAttrs({
             newMessageFormSelector: 'form.new-message',
@@ -20,7 +19,7 @@ define([
         });
 
         this.after('initialize', function () {
-            this.on(document, 'onlineStatusChanged', this.onOnlineStatusChanged);
+            this.focusMessage = _.debounce(this.focusMessage.bind(this), 100);
             this.on(document, 'userSelected', this.onUserSelected);
             this.on(document, 'chatMessage', this.onChatMessage);
             this.on(document, 'socketMessage', this.onSocketMessage);
@@ -29,10 +28,6 @@ define([
                 newMessageFormSelector: this.onNewMessageFormSubmit
             });
         });
-
-        this.onOnlineStatusChanged = function (evt, data) {
-            this.currentUser = data.user;
-        };
 
         this.findChatByUserRowKey = function (userRowKey) {
             var self = this;
@@ -48,11 +43,14 @@ define([
             return null;
         };
 
+        this.focusMessage = function(rowKey) {
+            $('#chat-window-' + rowKey).show().find('.message').focus();
+        };
+
         this.onUserSelected = function (evt, userData) {
             var chat = this.findChatByUserRowKey(userData.rowKey);
             if (chat) {
-                this.select('chatWindowSelector').hide();
-                return $('#chat-window-' + chat.rowKey).show().find('.message').focus();
+                return this.createChatWindowAndFocus(chat);
             }
 
             chat = {
@@ -75,12 +73,15 @@ define([
             }
 
             this.select('chatWindowSelector').hide();
-            $('#chat-window-' + chat.rowKey).show().find('.message').focus();
+            this.focusMessage(chat.rowKey);
         };
 
         this.addMessage = function (messageData) {
             if (messageData.tempId) {
                 $('#' + messageData.tempId).remove();
+            }
+            if (messageData.chatRowKey === currentUser.rowKey) {
+                messageData.chatRowKey = messageData.from.rowKey;
             }
             this.checkChatWindow(messageData);
             var $chatWindow = $('#chat-window-' + messageData.chatRowKey);
@@ -155,7 +156,7 @@ define([
             // add a temporary message to create the feel of responsiveness
             var messageData = {
                 chatRowKey: chatRowKey,
-                from: this.currentUser,
+                from: currentUser,
                 message: $messageInput.val(),
                 postDate: null,
                 tempId: tempId
@@ -165,6 +166,7 @@ define([
             var userRowKeys = chat.users.map(function (u) {
                 return u.rowKey;
             });
+            userRowKeys.push(currentUser.rowKey);
 
             this.chatService.sendChatMessage(userRowKeys, messageData);
 
