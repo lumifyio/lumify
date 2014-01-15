@@ -40,18 +40,18 @@ define(['atmosphere'],
         ServiceBase.prototype.subscribe = function (config) {
             var self = this,
                 req = {
-                    url: "/messaging/",
+                    url: location.href.replace(/\/$/, '') + "/messaging/",
                     transport: 'websocket',
                     fallbackTransport: 'long-polling',
                     contentType: "application/json",
                     trackMessageLength : true,
+                    suspend: false,
                     shared: false,
-                    reconnectInterval: 10000,
                     uuid: this.getSocket().guid(),
                     connectTimeout: -1,
-                    maxStreamingLength: 1000,
+                    maxStreamingLength: 100,
                     enableProtocol: true,
-                    maxReconnectOnClose: 100000,
+                    maxReconnectOnClose: -1,
                     logLevel: 'debug',
                     onOpen: function(response) {
                         if (config.onOpen) config.onOpen.apply(null, arguments);
@@ -61,6 +61,7 @@ define(['atmosphere'],
                     },
                     onClose: function() {
                         console.error('closed', arguments);
+                        $(document).trigger('logout');
                     },
                     onMessage: function (response) {
                         var body = response.responseBody,
@@ -80,7 +81,8 @@ define(['atmosphere'],
             document.$subSocket = this.getSocket().subscribe(req);
             document.subSocketId = req.uuid;
 
-            $(window).unload(this.disconnect.bind(this));
+            $(window).off('unload.serviceBaseSubscribe');
+            $(window).on('unload.serviceBaseSubscribe', this.disconnect.bind(this));
         };
 
         ServiceBase.prototype.disconnect = function() {
