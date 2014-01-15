@@ -4,14 +4,14 @@ import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 
 import javax.servlet.ServletOutputStream;
@@ -24,18 +24,18 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
     private final ArtifactRepository artifactRepository;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
-    private final GraphRepository graphRepository;
+    private final Graph graph;
 
     @Inject
     public ArtifactThumbnail(final ArtifactRepository artifactRepo,
                              final ArtifactThumbnailRepository thumbnailRepo,
-                             final GraphRepository graphRepository) {
+                             final Graph graph) {
         artifactRepository = artifactRepo;
         artifactThumbnailRepository = thumbnailRepo;
-        this.graphRepository = graphRepository;
+        this.graph = graph;
     }
 
-    public static String getUrl(String graphVertexId) {
+    public static String getUrl(Object graphVertexId) {
         return "/artifact/" + graphVertexId + "/thumbnail";
     }
 
@@ -82,7 +82,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             return;
         }
 
-        GraphVertex vertex = graphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), user);
+        Vertex vertex = graph.getVertex(artifact.getMetadata().getGraphVertexId(), user.getAuthorizations());
 
         LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
         InputStream in = artifactRepository.getRaw(artifact, vertex, user);
