@@ -28,7 +28,11 @@ define([
         this.after('initialize', function() {
             this.$node.html(template({}));
             this.select('loginButtonSelector').attr('disabled', true);
-            this.select('errorSelector').addClass('no-error');
+
+            this.select('errorSelector')
+                .text(this.attr.errorMessage)
+                .toggleClass('no-error', !this.attr.errorMessage);
+
             _.defer(function() {
                 this.select('usernameSelector').focus();
             }.bind(this));
@@ -77,10 +81,24 @@ define([
                     }
                 })
 
-                .fail(function() {
-                    error.removeClass('no-error');
+                .fail(function(err) {
                     button.removeClass('loading').attr('disabled', false);
-                    password.focus().get(0).select();
+
+                    switch (err.status) {
+                        case 403: 
+                            error.text('Invalid Username or Password');
+                            password.focus().get(0).select();
+                            break;
+                        case 404:
+                            error.text('Server is unavailable');
+                            break;
+                        default:
+                            error.text(err.statusText || 'Unknown Server Error');
+                            break;
+                    }
+
+                    error.removeClass('no-error');
+                    console.error(err);
                 });
         }
     }
