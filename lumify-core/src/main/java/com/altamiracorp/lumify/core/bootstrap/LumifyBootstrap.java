@@ -31,9 +31,6 @@ import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.lumify.core.version.VersionServiceMXBean;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.*;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +38,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.ServiceLoader;
 
 /**
  * The LumifyBootstrap is a Guice Module that configures itself by
@@ -180,37 +177,13 @@ public class LumifyBootstrap extends AbstractModule {
     }
 
     private void injectProviders() {
-        LOGGER.info("Searching for BootstrapBindingProviders.");
-        Reflections reflections = new Reflections(ClasspathHelper.forJavaClassPath(), new SubTypesScanner());
-        Set<Class<? extends BootstrapBindingProvider>> bindingProviders = reflections.getSubTypesOf(BootstrapBindingProvider.class);
-        LOGGER.info("Found %d BootstrapBindingProviders", bindingProviders.size());
-        if (LOGGER.isDebugEnabled()) {
-            for (Class<? extends BootstrapBindingProvider> pc : bindingProviders) {
-                LOGGER.debug("Found BootstrapBindingProvider: %s", pc.getName());
-            }
-        }
-
+        LOGGER.info("Running BootstrapBindingProviders");
+        ServiceLoader<BootstrapBindingProvider> bindingProviders = ServiceLoader.load(BootstrapBindingProvider.class);
         Binder binder = binder();
-        BootstrapBindingProvider provider;
-        for (Class<? extends BootstrapBindingProvider> providerClass : bindingProviders) {
-            LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", providerClass.getName());
-            provider = initBindingProvider(providerClass);
+        for (BootstrapBindingProvider provider : bindingProviders) {
+            LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
             provider.addBindings(binder, configuration);
         }
-    }
-
-    private <T extends BootstrapBindingProvider> T initBindingProvider(final Class<T> providerClass) {
-        Throwable error;
-        try {
-            return providerClass.newInstance();
-        } catch (InstantiationException ie) {
-            LOGGER.error("Error while instantiating BootstrapBindingProvider [%s]", providerClass.getName(), ie);
-            error = ie;
-        } catch (IllegalAccessException iae) {
-            LOGGER.error("Unable to access default constructor for BootstrapBindingProvider [%s]", providerClass.getName(), iae);
-            error = iae;
-        }
-        throw new BootstrapException(error, "Unable to create BootstrapBindingProvider: %s", providerClass);
     }
 
     private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
