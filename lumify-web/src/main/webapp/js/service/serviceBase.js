@@ -38,34 +38,60 @@ define(['atmosphere'],
         };
 
         ServiceBase.prototype.subscribe = function (config) {
-            var req = {
-                url: "/messaging/",
-                transport: 'websocket',
-                fallbackTransport: 'long-polling',
-                contentType: "application/json",
-                trackMessageSize: true,
-                shared: false,
-                logLevel: 'debug',
-                onOpen: function(response) {
-                    if (config.onOpen) config.onOpen.apply(null, arguments);
-                },
-                onMessage: function (response) {
-                    var body = response.responseBody.replace(/^\d+\|/, ''); // TODO: determine why Atmosphere prepends message size when run in AWS
-                    var data = JSON.parse(body);
-                    if(data && data.sourceId == document.subSocketId) {
-                        return;
-                    }
+            var self = this,
+                req = {
+                    url: "/messaging/",
+                    transport: 'websocket',
+                    fallbackTransport: 'long-polling',
+                    contentType: "application/json",
+                    trackMessageLength : true,
+                    shared: false,
+                    reconnectInterval: 10000,
+                    uuid: this.getSocket().guid(),
+                    connectTimeout: -1,
+                    maxStreamingLength: 1000,
+                    enableProtocol: true,
+                    maxReconnectOnClose: 100000,
+                    logLevel: 'debug',
+                    onOpen: function(response) {
+                        if (config.onOpen) config.onOpen.apply(null, arguments);
+                    },
+                    onClientTimeout: function() {
+                        console.error('timeout', arguments);
+                    },
+                    onClose: function() {
+                        console.error('closed', arguments);
+                    },
+                    onMessage: function (response) {
+                        var body = response.responseBody,
+                            data = JSON.parse(body);
 
-                    if (config.onMessage) config.onMessage(null, data);
-                },
-                onError: function (response) {
-                    console.error('subscribe error:', response);
-                    if (config.onMessage) config.onMessage(response.error, null);
-                }
-            };
+                        if(data && data.sourceId == document.subSocketId) {
+                            return;
+                        }
+
+                        if (config.onMessage) config.onMessage(null, data);
+                    },
+                    onError: function (response) {
+                        console.error('subscribe error:', response);
+                        if (config.onMessage) config.onMessage(response.error, null);
+                    }
+                };
             document.$subSocket = this.getSocket().subscribe(req);
-            document.subSocketId = Date.now();
+            document.subSocketId = req.uuid;
+
+            $(window).unload(this.disconnect.bind(this));
         };
+
+        ServiceBase.prototype.disconnect = function() {
+            var req = document.$subSocket.request,
+                url = req.url + '?X-Atmosphere-Transport=close&X-Atmosphere-tracking-id=' + req.uuid;
+
+            return $.ajax(url, {
+                async: false,
+                type: 'POST'
+            });
+        }
 
         ServiceBase.prototype._ajaxPost = function(options) {
             options.type = options.type || "POST";

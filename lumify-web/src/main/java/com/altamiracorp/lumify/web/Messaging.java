@@ -11,10 +11,12 @@ import org.apache.commons.lang.StringUtils;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.client.TrackMessageSizeInterceptor;
 import org.atmosphere.config.service.AtmosphereHandlerService;
+import org.atmosphere.config.service.Disconnect;
 import org.atmosphere.cpr.*;
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
+import org.atmosphere.interceptor.OnDisconnectInterceptor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,14 +87,15 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             for (String t : messages) {
                 onMessage(event, response, t);
             }
+
+        } else if (event.isClosedByApplication() || event.isClosedByClient() || event.isCancelled()) {
+            onDisconnect(event, response);
         } else if (event.isSuspended()) {
             onMessage(event, response, (String) event.getMessage());
         } else if (event.isResuming()) {
             onResume(event, response);
         } else if (event.isResumedOnTimeout()) {
             onTimeout(event, response);
-        } else if (event.isCancelled()) {
-            onDisconnect(event, response);
         }
     }
 
@@ -109,6 +112,10 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     }
 
     public void onDisconnect(AtmosphereResourceEvent event, AtmosphereResponse response) throws IOException {
+        setStatus(event.getResource(), UserStatus.OFFLINE);
+    }
+
+    public void onClose(AtmosphereResourceEvent event, AtmosphereResponse response) {
         setStatus(event.getResource(), UserStatus.OFFLINE);
     }
 
