@@ -23,9 +23,9 @@ import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRowKey;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.google.inject.Inject;
-import com.google.inject.Module;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class BigtableWorkQueueSpout extends BaseRichSpout {
@@ -41,6 +41,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     private MetricsManager metricsManager;
     private Counter totalProcessedCounter;
     private Counter totalErrorCounter;
+    private Iterator<Row> rows;
 
     public BigtableWorkQueueSpout(Configuration configuration, String queueName) {
         this.queueName = queueName;
@@ -66,6 +67,25 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
         registerMetrics(metricsManager, namePrefix);
     }
 
+    private Row getNextRows() {
+        try {
+            if (rows != null && !rows.hasNext()) {
+                rows = null;
+            }
+            if (rows == null) {
+                rows = this.modelSession.findAll(this.tableName, this.user.getModelUserContext()).iterator();
+            }
+            if (rows.hasNext()) {
+                return rows.next();
+            }
+            return null;
+        } catch (Exception ex) {
+            LOGGER.error("Could not get next", ex);
+            rows = null;
+            return null;
+        }
+    }
+
     private void registerMetrics(MetricsManager metricsManager, String namePrefix) {
         totalProcessedCounter = metricsManager.getRegistry().counter(namePrefix + "total-processed");
         totalErrorCounter = metricsManager.getRegistry().counter(namePrefix + "total-errors");
@@ -81,8 +101,8 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     @Override
     public void nextTuple() {
         try {
-            Iterable<Row> rows = this.modelSession.findAll(this.tableName, this.user.getModelUserContext());
-            for (Row row : rows) {
+            Row row;
+            while ((row = getNextRows()) != null) {
                 String rowKeyString = row.getRowKey().toString();
                 if (this.workingSet.containsKey(rowKeyString)) {
                     continue;
