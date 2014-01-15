@@ -20,11 +20,11 @@ import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -34,7 +34,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import javax.annotation.Nullable;
 import java.io.*;
 
 /**
@@ -65,16 +64,16 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
 
             String vertexId = json.optString("graphVertexId");
             if (vertexId != null && vertexId.length() > 0) {
-                GraphVertex vertex = graph.findVertex(vertexId, getUser());
+                Vertex vertex = graph.getVertex(vertexId, getUser().getAuthorizations());
                 if (vertex == null) {
                     throw new RuntimeException("Could not find vertex with id: " + vertexId);
                 }
-                String rowKey = (String) vertex.getProperty(PropertyName.ROW_KEY.toString());
+                String rowKey = (String) vertex.getPropertyValue(PropertyName.ROW_KEY.toString(), 0);
                 Artifact artifact = artifactRepository.findByRowKey(rowKey, getUser().getModelUserContext());
                 fileName = artifact.getMetadata().getFileName();
                 mimeType = artifact.getMetadata().getMimeType();
-                source = (String) vertex.getProperty(PropertyName.SOURCE.toString());
-                title = (String) vertex.getProperty(PropertyName.TITLE.toString());
+                source = (String) vertex.getPropertyValue(PropertyName.SOURCE.toString(), 0);
+                title = (String) vertex.getPropertyValue(PropertyName.TITLE.toString(), 0);
                 raw = artifactRepository.getRaw(artifact, vertex, getUser());
             } else if (rawString != null) {
                 raw = new ByteArrayInputStream(rawString.getBytes());
@@ -164,7 +163,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     }
 
     @Inject(optional = true)
-    public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
+    public void setContentTypeExtractor(ContentTypeExtractor contentTypeExtractor) {
         this.contentTypeExtractor = contentTypeExtractor;
     }
 }
