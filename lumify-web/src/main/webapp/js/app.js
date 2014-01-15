@@ -221,7 +221,24 @@ define([
         };
 
         this.logout = function() {
-            new UserService().logout().done(function() { window.location.reload(); });
+            var self = this;
+
+            new UserService().logout()
+                .fail(function() {
+                    require(['login'], function(Login) {
+                        $(document.body)
+                            .removeClass('animatelogin animateloginstart')
+                            .append('<div id="login"/>');
+                        Login.teardownAll();
+                        Login.attachTo('#login', {
+                            errorMessage: 'Server is unavailable'
+                        });
+                        _.defer(function() {
+                            self.teardown();
+                        });
+                    });
+                })
+                .done(function() { window.location.reload()});
         };
 
         this.toggleDisplay = function(e, data) {
