@@ -3,12 +3,13 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,22 +18,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class EntityObjectDetectionCreate extends BaseRequestHandler {
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
 
     @Inject
     public EntityObjectDetectionCreate(
             final EntityHelper entityHelper,
-            final GraphRepository graphRepository,
+            final Graph graphRepository,
             final AuditRepository auditRepository) {
         this.entityHelper = entityHelper;
-        this.graphRepository = graphRepository;
+        this.graph = graphRepository;
         this.auditRepository = auditRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        // TODO set visibility
+        Visibility visibility = new Visibility("");
 
         // required parameters
         final String artifactId = getRequiredParameter(request, "artifactId");
@@ -45,19 +48,19 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
         User user = getUser(request);
 
-        GraphVertex conceptVertex = graphRepository.findVertex(conceptId, user);
-        GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
+        Vertex conceptVertex = graph.getVertex(conceptId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
 
         // create new graph vertex
         // TODO: replace second "" when we implement commenting on ui
-        GraphVertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
+        Vertex resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
 
         ArtifactDetectedObject newDetectedObject = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, conceptVertex);
 
         // adding to detected object property if one exists, if not add detected object property to the artifact vertex
         JSONArray detectedObjectList = new JSONArray();
-        if (artifactVertex.getPropertyKeys().contains(PropertyName.DETECTED_OBJECTS.toString())) {
-            detectedObjectList = new JSONArray(artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS).toString());
+        if (artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0) != null) {
+            detectedObjectList = new JSONArray(artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
         }
 
         JSONObject result = new JSONObject();
@@ -65,8 +68,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         JSONObject entityVertex = newDetectedObject.getJson();
         entityVertex.put("artifactId", artifactId);
         detectedObjectList.put(entityVertex);
-        artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS, detectedObjectList.toString());
-        graphRepository.saveVertex(resolvedVertex, user);
+        artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjectList.toString(), visibility);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
@@ -74,7 +76,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         result.put("entityVertex", entityVertex);
 
         JSONObject updatedArtifactVertex =
-                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getProperty(PropertyName.DETECTED_OBJECTS));
+                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
 
         result.put("updatedArtifactVertex", updatedArtifactVertex);
 
