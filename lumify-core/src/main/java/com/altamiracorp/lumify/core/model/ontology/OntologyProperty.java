@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
 
-public class Property {
+public class OntologyProperty {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     public static Pattern GEO_LOCATION_FORMAT = Pattern.compile("POINT\\((.*?),(.*?)\\)", Pattern.CASE_INSENSITIVE);
     public static Pattern GEO_LOCATION_ALTERNATE_FORMAT = Pattern.compile("(.*?),(.*)", Pattern.CASE_INSENSITIVE);
@@ -26,7 +26,7 @@ public class Property {
 
     private final Vertex vertex;
 
-    public Property(Vertex vertex) {
+    public OntologyProperty(Vertex vertex) {
         this.vertex = vertex;
     }
 
@@ -54,9 +54,9 @@ public class Property {
         return vertex;
     }
 
-    public static JSONArray toJsonProperties(List<Property> properties) {
+    public static JSONArray toJsonProperties(List<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
-        for (Property property : properties) {
+        for (OntologyProperty property : properties) {
             json.put(property.toJson());
         }
         return json;
