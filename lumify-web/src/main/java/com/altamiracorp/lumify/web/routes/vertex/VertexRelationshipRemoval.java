@@ -38,12 +38,10 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
         Vertex destVertex = graph.getVertex(targetId, user.getAuthorizations());
 
-        // TODO move finding edges into secure graph
-        Iterable<Edge> possibleEdges = sourceVertex.getEdges(Direction.BOTH, label, user.getAuthorizations());
+        // TODO should we really remove all edges not just one
+        Iterable<Edge> possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, label, user.getAuthorizations());
         for (Edge edge : possibleEdges) {
-            if (edge.getOtherVertexId(sourceVertex.getId()).equals(targetId)) {
-                graph.removeEdge(edge, user.getAuthorizations());
-            }
+            graph.removeEdge(edge, user.getAuthorizations());
         }
 
         String displayName = ontologyRepository.getDisplayNameForLabel(label, user);
