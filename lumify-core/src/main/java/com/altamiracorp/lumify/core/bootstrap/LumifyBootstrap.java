@@ -31,22 +31,15 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.lumify.core.version.VersionServiceMXBean;
-import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Scope;
-import com.google.inject.Scopes;
+import com.google.inject.*;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
+import java.util.ServiceLoader;
 
 /**
  * The LumifyBootstrap is a Guice Module that configures itself by
@@ -60,16 +53,17 @@ public class LumifyBootstrap extends AbstractModule {
      * The class logger.
      */
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyBootstrap.class);
-    
+
     /**
      * The configured LumifyBootstrap.
      */
     private static LumifyBootstrap lumifyBootstrap;
-    
+
     /**
      * Bootstrap the Lumify system with the provided Configuration, binding requests for User objects
      * to singleton SystemUser Provider.  Once initialized, this method will always return
      * the same LumifyBootstrap.  Subsequent calls with new Configurations will not re-initialize the system.
+     *
      * @param configuration the configuration
      * @return the configured LumifyBootstrap
      */
@@ -81,13 +75,14 @@ public class LumifyBootstrap extends AbstractModule {
      * Bootstrap the Lumify system with the provided Configuration, binding requests for User objects
      * to the given Provider with the specified Scope.  Once initialized, this method will always return
      * the same LumifyBootstrap.  Subsequent calls with new Configurations will not re-initialize the system.
-     * @param configuration the configuration
-     * @param userProvider the user provider
+     *
+     * @param configuration     the configuration
+     * @param userProvider      the user provider
      * @param userProviderScope the Scope of the user provider
      * @return the configured LumifyBootstrap
      */
     public synchronized static LumifyBootstrap bootstrap(final Configuration configuration, final Provider<User> userProvider,
-            final Scope userProviderScope) {
+                                                         final Scope userProviderScope) {
         if (lumifyBootstrap == null) {
             LOGGER.debug("Initializing LumifyBootstrap with Configuration: %s", configuration);
             lumifyBootstrap = new LumifyBootstrap(configuration, userProvider, userProviderScope);
@@ -98,6 +93,7 @@ public class LumifyBootstrap extends AbstractModule {
     /**
      * Get a ModuleMaker that will return the LumifyBootstrap, initializing it with
      * the provided Configuration if it has not already been created.
+     *
      * @param configuration the Lumify configuration
      * @return a ModuleMaker for use with the InjectHelper
      */
@@ -108,13 +104,14 @@ public class LumifyBootstrap extends AbstractModule {
     /**
      * Get a ModuleMaker that will return the LumifyBootstrap, initializing it with
      * the provided Configuration if it has not already been created.
-     * @param configuration the Lumify configuration
-     * @param userProvider the User provider
+     *
+     * @param configuration     the Lumify configuration
+     * @param userProvider      the User provider
      * @param userProviderScope the User provider Scope
      * @return a ModuleMaker for use with the InjectHelper
      */
     public static InjectHelper.ModuleMaker bootstrapModuleMaker(final Configuration configuration, final Provider<User> userProvider,
-            final Scope userProviderScope) {
+                                                                final Scope userProviderScope) {
         return new InjectHelper.ModuleMaker() {
             @Override
             public Module createModule() {
@@ -122,24 +119,25 @@ public class LumifyBootstrap extends AbstractModule {
             }
         };
     }
-    
+
     /**
      * The Lumify Configuration.
      */
     private final Configuration configuration;
-    
+
     /**
      * The User provider.
      */
     private final Provider<User> userProvider;
-    
+
     /**
      * The User provider scope.
      */
     private final Scope userProviderScope;
-    
+
     /**
      * Create a LumifyBootstrap with the provided Configuration.
+     *
      * @param config the configuration for this bootstrap
      */
     private LumifyBootstrap(final Configuration config, final Provider<User> userProvider, final Scope userProviderScope) {
@@ -147,19 +145,19 @@ public class LumifyBootstrap extends AbstractModule {
         this.userProvider = userProvider;
         this.userProviderScope = userProviderScope;
     }
-    
+
     @Override
     protected void configure() {
         LOGGER.info("Configuring LumifyBootstrap.");
-        
+
         User user = new SystemUser();
         MetricsManager metricsManager = new JmxMetricsManager();
-        
+
         bind(User.class).toProvider(userProvider).in(userProviderScope);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
-        
+
         bind(ModelSession.class)
                 .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))
                 .in(Scopes.SINGLETON);
@@ -180,88 +178,65 @@ public class LumifyBootstrap extends AbstractModule {
         bind(ContentTypeExtractor.class)
                 .toProvider(getConfigurableProvider(ContentTypeExtractor.class, configuration, Configuration.CONTENT_TYPE_EXTRACTOR, false))
                 .in(Scopes.SINGLETON);
-        
+
         injectProviders();
     }
-    
+
     private void injectProviders() {
-        LOGGER.info("Searching for BootstrapBindingProviders.");
-        Reflections reflections = new Reflections(ClasspathHelper.forJavaClassPath(), new SubTypesScanner());
-        Set<Class<? extends BootstrapBindingProvider>> bindingProviders = reflections.getSubTypesOf(BootstrapBindingProvider.class);
-        LOGGER.info("Found %d BootstrapBindingProviders", bindingProviders.size());
-        if (LOGGER.isDebugEnabled()) {
-            for (Class<? extends BootstrapBindingProvider> pc : bindingProviders) {
-                LOGGER.debug("Found BootstrapBindingProvider: %s", pc.getName());
-            }
-        }
-        
+        LOGGER.info("Running BootstrapBindingProviders");
+        ServiceLoader<BootstrapBindingProvider> bindingProviders = ServiceLoader.load(BootstrapBindingProvider.class);
+
         Binder binder = binder();
-        BootstrapBindingProvider provider;
-        for (Class<? extends BootstrapBindingProvider> providerClass : bindingProviders) {
-            LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", providerClass.getName());
-            provider = initBindingProvider(providerClass);
+        for (BootstrapBindingProvider provider : bindingProviders) {
+            LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
             provider.addBindings(binder, configuration);
         }
     }
-    
-    private <T extends BootstrapBindingProvider> T initBindingProvider(final Class<T> providerClass) {
-        Throwable error;
-        try {
-            return providerClass.newInstance();
-        } catch (InstantiationException ie) {
-            LOGGER.error("Error while instantiating BootstrapBindingProvider [%s]", providerClass.getName(), ie);
-            error = ie;
-        } catch (IllegalAccessException iae) {
-            LOGGER.error("Unable to access default constructor for BootstrapBindingProvider [%s]", providerClass.getName(), iae);
-            error = iae;
-        }
-        throw new BootstrapException(error, "Unable to create BootstrapBindingProvider: %s", providerClass);
-    }
-    
+
     private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
-            final boolean required) {
+                                                    final boolean required) {
         return getConfigurableProvider(clazz, config, key, null, required);
     }
-    
+
     private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
-            final User user, final boolean required) {
+                                                    final User user, final boolean required) {
         Class<? extends T> configuredClass = BootstrapUtils.getConfiguredClass(config, key, required);
         return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, user) : new NullProvider<T>();
     }
-    
+
     private static class NullProvider<T> implements Provider<T> {
         @Override
         public T get() {
             return (T) null;
         }
     }
-    
+
     private static class ConfigurableProvider<T> implements Provider<T> {
         /**
          * The class to instantiate.
          */
         private final Class<? extends T> clazz;
-        
+
         /**
          * The Constructor to invoke.
          */
         private final Constructor<? extends T> constructor;
-        
+
         /**
          * The constructor arguments.
          */
         private final Object[] constructorArgs;
-        
+
         /**
          * The init method.
          */
         private final Method initMethod;
-        
+
         /**
          * The init args.
          */
         private final Object[] initMethodArgs;
-        
+
         public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config) {
             this(clazz, config, null);
         }
@@ -272,7 +247,7 @@ public class LumifyBootstrap extends AbstractModule {
             boolean checkInit;
             try {
                 con = clazz.getConstructor(Configuration.class);
-                conArgs = new Object[] { config };
+                conArgs = new Object[]{config};
                 checkInit = false;
             } catch (NoSuchMethodException nsme) {
                 try {
@@ -292,19 +267,19 @@ public class LumifyBootstrap extends AbstractModule {
             if (checkInit) {
                 init = findInit(clazz, Configuration.class, User.class);
                 if (init != null) {
-                    initArgs = new Object[] { config, user };
+                    initArgs = new Object[]{config, user};
                 } else {
                     init = findInit(clazz, Map.class, User.class);
                     if (init != null) {
-                        initArgs = new Object[] { config.toMap(), user };
+                        initArgs = new Object[]{config.toMap(), user};
                     } else {
                         init = findInit(clazz, Configuration.class);
                         if (init != null) {
-                            initArgs = new Object[] { config };
+                            initArgs = new Object[]{config};
                         } else {
                             init = findInit(clazz, Map.class);
                             if (init != null) {
-                                initArgs = new Object[] { config.toMap() };
+                                initArgs = new Object[]{config.toMap()};
                             } else {
                                 throw new BootstrapException("Unable to locate init(Configuration, User), init(Map, User), " +
                                         "init(Configuration) or init(Map) in %s.", clazz.getName());
@@ -319,7 +294,7 @@ public class LumifyBootstrap extends AbstractModule {
             this.initMethod = init;
             this.initMethodArgs = initArgs;
         }
-        
+
         private Method findInit(Class<? extends T> target, Class<?>... paramTypes) {
             try {
                 return target.getMethod("init", paramTypes);
@@ -333,7 +308,7 @@ public class LumifyBootstrap extends AbstractModule {
                 throw new BootstrapException(se, "Error accessing init(%s) method in %s.", paramNames, clazz.getName());
             }
         }
-        
+
         @Override
         public T get() {
             Throwable error;
@@ -360,23 +335,23 @@ public class LumifyBootstrap extends AbstractModule {
             throw new BootstrapException(error, "Unable to initialize instance of %s", clazz.getName());
         }
     }
-    
+
     private static class SearchProviderProvider implements Provider<SearchProvider> {
         /**
          * The SearchProvider class to instantiate.
          */
         private final Class<? extends SearchProvider> clazz;
-        
+
         /**
          * The Lumify Configuration.
          */
         private final Configuration config;
-        
+
         /**
          * The Lumify User for the SearchProvider.
          */
         private final User user;
-        
+
         /**
          * The Lumify MetricsManager.
          */
