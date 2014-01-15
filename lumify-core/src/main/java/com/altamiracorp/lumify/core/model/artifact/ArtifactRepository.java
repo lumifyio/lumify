@@ -8,13 +8,12 @@ import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.SaveFileResults;
-import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
@@ -23,12 +22,9 @@ import com.google.inject.Singleton;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Date;
 
 @Singleton
 public class ArtifactRepository extends Repository<Artifact> {
@@ -159,7 +155,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         }
         return saveToGraph(artifact, artifactExtractedInfo, user);
     }
-    
+
     private Artifact saveArtifactModel(final ArtifactExtractedInfo artifactExtractedInfo, final ModelUserContext userContext) {
         Artifact artifact = findByRowKey(artifactExtractedInfo.getRowKey(), userContext);
         if (artifact == null) {
