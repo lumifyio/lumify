@@ -64,7 +64,7 @@ public class Concept {
     }
 
     public Concept setProperty(String propertyName, String propertyValue, Visibility visibility) {
-        this.vertex.setProperties(this.vertex.getGraph().createProperty(propertyName, propertyValue, visibility));
+        this.vertex.setProperty(propertyName, propertyValue, visibility);
         return this;
     }
 }

@@ -106,29 +106,30 @@ public class ArtifactRepository extends Repository<Artifact> {
             newVertex = true;
         }
 
-        List<Property> modifiedProperties = new ArrayList<Property>();
-        modifiedProperties.add(graph.createProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString(), visibility));
-        modifiedProperties.add(graph.createProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId(), visibility));
-        modifiedProperties.add(graph.createProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility));
+        ElementMutation mutation = artifactVertex.prepareMutation();
+
+        mutation.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString(), visibility);
+        mutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId(), visibility);
+        mutation.setProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility);
 
         if (artifactExtractedInfo.getSource() != null) {
-            modifiedProperties.add(graph.createProperty(PropertyName.SOURCE.toString(), artifactExtractedInfo.getSource(), visibility));
+            mutation.setProperty(PropertyName.SOURCE.toString(), artifactExtractedInfo.getSource(), visibility);
         }
         if (artifactExtractedInfo.getRawHdfsPath() != null) {
-            modifiedProperties.add(graph.createProperty(PropertyName.RAW_HDFS_PATH.toString(), artifactExtractedInfo.getRawHdfsPath(), visibility));
+            mutation.setProperty(PropertyName.RAW_HDFS_PATH.toString(), artifactExtractedInfo.getRawHdfsPath(), visibility);
         }
         if (artifactExtractedInfo.getTextHdfsPath() != null) {
-            modifiedProperties.add(graph.createProperty(PropertyName.TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility));
-            modifiedProperties.add(graph.createProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility));
+            mutation.setProperty(PropertyName.TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility);
+            mutation.setProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString(), artifactExtractedInfo.getTextHdfsPath(), visibility);
         }
         if (artifactExtractedInfo.getDetectedObjects() != null) {
-            modifiedProperties.add(graph.createProperty(PropertyName.DETECTED_OBJECTS.toString(), artifactExtractedInfo.getDetectedObjects(), visibility));
+            mutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), artifactExtractedInfo.getDetectedObjects(), visibility);
         }
         if (artifactExtractedInfo.getDate() != null) {
-            modifiedProperties.add(graph.createProperty(PropertyName.PUBLISHED_DATE.toString(), artifactExtractedInfo.getDate().getTime(), visibility));
+            mutation.setProperty(PropertyName.PUBLISHED_DATE.toString(), artifactExtractedInfo.getDate().getTime(), visibility);
         }
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
-            modifiedProperties.add(graph.createProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility));
+            mutation.setProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility);
         }
         Object artifactVertexId = artifactVertex.getId();
 
@@ -136,11 +137,12 @@ public class ArtifactRepository extends Repository<Artifact> {
             auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
         }
 
-        artifactVertex.setProperties(modifiedProperties.toArray(new Property[modifiedProperties.size()]));
+        mutation.save();
 
-        for (Property modifiedProperty : modifiedProperties) {
-            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty.getName(), artifactExtractedInfo.getProcess(), "", user);
-        }
+        // TODO replace this with a secure graph property listener that can audit
+//        for (Property modifiedProperty : modifiedProperties) {
+//            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty.getName(), artifactExtractedInfo.getProcess(), "", user);
+//        }
 
         if (!artifactVertexId.equals(oldGraphVertexId)) {
             artifact.getMetadata().setGraphVertexId(artifactVertexId);
