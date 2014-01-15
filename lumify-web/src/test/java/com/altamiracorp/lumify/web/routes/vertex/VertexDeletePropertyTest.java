@@ -5,8 +5,8 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.graph.InMemoryGraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.json.JSONObject;
@@ -38,7 +38,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     @Mock
     private AuditRepository mockAuditRepository;
     @Mock
-    private Property mockProperty;
+    private OntologyProperty mockProperty;
 
     @Before
     @Override

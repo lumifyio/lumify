@@ -2,30 +2,30 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.Iterator;
 
 public class VertexDeleteProperty extends BaseRequestHandler {
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public VertexDeleteProperty(final OntologyRepository ontologyRepo, final GraphRepository graphRepo, final AuditRepository auditRepo) {
+    public VertexDeleteProperty(final OntologyRepository ontologyRepo, final Graph graphRepo, final AuditRepository auditRepo) {
         ontologyRepository = ontologyRepo;
-        graphRepository = graphRepo;
+        graph = graphRepo;
         auditRepository = auditRepo;
     }
 
@@ -35,23 +35,20 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         final String propertyName = getRequiredParameter(request, "propertyName");
 
         User user = getUser(request);
-        Property property = ontologyRepository.getProperty(propertyName, user);
+        OntologyProperty property = ontologyRepository.getProperty(propertyName, user);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
 
-        GraphVertex graphVertex = graphRepository.findVertex(graphVertexId, user);
-        graphVertex.removeProperty(propertyName);
-
-        graphRepository.save(graphVertex, user);
-        graphRepository.commit();
+        Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        graphVertex.removeProperty(property.getId().toString(), propertyName);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
-        
+
         // TODO: broadcast property delete
 
-        Map<String, String> properties = graphRepository.getVertexProperties(graphVertexId, user);
+        Iterable<com.altamiracorp.securegraph.Property> properties = graphVertex.getProperties();
         JSONObject propertiesJson = VertexProperties.propertiesToJson(properties);
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
@@ -64,12 +61,14 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         respondWithJson(response, json);
     }
 
-    private JSONObject toJson(GraphVertex vertex) {
+    private JSONObject toJson(Vertex vertex) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("graphVertexId", vertex.getId());
-            for (String propertyKey : vertex.getPropertyKeys()) {
-                obj.put(propertyKey, vertex.getProperty(propertyKey));
+            Iterator<com.altamiracorp.securegraph.Property> propertyIterator = vertex.getProperties().iterator();
+            while (propertyIterator.hasNext()) {
+                com.altamiracorp.securegraph.Property property = propertyIterator.next();
+                obj.put(property.getName(), property.getValue());
             }
             return obj;
         } catch (JSONException e) {

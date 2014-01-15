@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.web.routes.ontology;
 
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -24,10 +24,10 @@ public class PropertyList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        List<Property> properties = ontologyRepository.getProperties(user);
+        List<OntologyProperty> properties = ontologyRepository.getProperties(user);
 
         JSONObject json = new JSONObject();
-        json.put("properties", Property.toJsonProperties(properties));
+        json.put("properties", OntologyProperty.toJsonProperties(properties));
 
         respondWithJson(response, json);
     }

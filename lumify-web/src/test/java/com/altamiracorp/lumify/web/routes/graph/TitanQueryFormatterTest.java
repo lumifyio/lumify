@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.altamiracorp.lumify.core.model.graph.GraphVertex;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.model.TitanGraphVertex;
 import com.altamiracorp.lumify.model.TitanQueryFormatter;
@@ -36,13 +36,13 @@ public class TitanQueryFormatterTest extends RouteTestBase {
         graph = new TinkerGraph();
         Vertex person1 = graph.addVertex("1");
         person1.setProperty(PropertyName.TITLE.toString(), "person1");
-        person1.setProperty("birthDate", Property.DATE_FORMAT.parse("1978-10-30").getTime());
+        person1.setProperty("birthDate", OntologyProperty.DATE_FORMAT.parse("1978-10-30").getTime());
         person1.setProperty("alias", "Joe");
         person1.setProperty("income", 500.12);
 
         Vertex person2 = graph.addVertex("2");
         person2.setProperty(PropertyName.TITLE.toString(), "person2");
-        person2.setProperty("birthDate", Property.DATE_FORMAT.parse("1977-01-30").getTime());
+        person2.setProperty("birthDate", OntologyProperty.DATE_FORMAT.parse("1977-01-30").getTime());
         person2.setProperty("alias", "Bob Smith");
         person2.setProperty("income", 300.5);
     }

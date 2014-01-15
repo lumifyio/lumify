@@ -1,9 +1,9 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -11,14 +11,14 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.Iterator;
 
 public class VertexProperties extends BaseRequestHandler {
-    private final GraphRepository graphRepository;
+    private final Graph graph;
 
     @Inject
-    public VertexProperties(final GraphRepository repo) {
-        graphRepository = repo;
+    public VertexProperties(final Graph graph) {
+        this.graph = graph;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class VertexProperties extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
 
-        Map<String, String> properties = graphRepository.getVertexProperties(graphVertexId, user);
+        Iterable<Property> properties = graph.getVertex(graphVertexId, user.getAuthorizations()).getProperties();
         JSONObject propertiesJson = propertiesToJson(properties);
 
         JSONObject json = new JSONObject();
@@ -38,8 +38,10 @@ public class VertexProperties extends BaseRequestHandler {
 
     public static JSONObject propertiesToJson(Iterable<Property> properties) throws JSONException {
         JSONObject resultsJson = new JSONObject();
-        for (Map.Entry<String, String> property : properties.entrySet()) {
-            resultsJson.put(property.getKey(), property.getValue());
+        Iterator<Property> propertyIterator = properties.iterator();
+        while (propertyIterator.hasNext()) {
+            Property property = propertyIterator.next();
+            resultsJson.put(property.getName(), property.getValue());
         }
         return resultsJson;
     }

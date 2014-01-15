@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.web.routes.ontology;
 
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -25,10 +25,10 @@ public class PropertyListByRelationshipLabel extends BaseRequestHandler {
         final String relationshipLabel = getAttributeString(request, "relationshipLabel");
         User user = getUser(request);
 
-        List<Property> properties = ontologyRepository.getPropertiesByRelationship(relationshipLabel, user);
+        List<OntologyProperty> properties = ontologyRepository.getPropertiesByRelationship(relationshipLabel, user);
 
         JSONObject json = new JSONObject();
-        json.put("properties", Property.toJsonProperties(properties));
+        json.put("properties", OntologyProperty.toJsonProperties(properties));
 
         respondWithJson(response, json);
     }

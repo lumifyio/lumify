@@ -12,6 +12,6 @@ import static org.junit.Assert.assertEquals;
 public class PropertyTest {
     @Test
     public void testDateFormatTimeZoneInUTC() {
-        assertEquals(TimeZone.getTimeZone("UTC"), Property.DATE_FORMAT.getTimeZone());
+        assertEquals(TimeZone.getTimeZone("UTC"), OntologyProperty.DATE_FORMAT.getTimeZone());
     }
 }

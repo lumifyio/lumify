@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
@@ -44,7 +45,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String valueStr = getRequiredParameter(request, "value");
 
         User user = getUser(request);
-        com.altamiracorp.lumify.core.model.ontology.Property property = ontologyRepository.getProperty(propertyName, user);
+        OntologyProperty property = ontologyRepository.getProperty(propertyName, user);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
