@@ -4,12 +4,12 @@ import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -26,11 +26,11 @@ public class ArtifactRaw extends BaseRequestHandler {
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
 
     private final ArtifactRepository artifactRepository;
-    private final GraphRepository graphRepository;
+    private final Graph graph;
 
     @Inject
-    public ArtifactRaw(final ArtifactRepository repo, final GraphRepository graphRepository) {
-        this.graphRepository = graphRepository;
+    public ArtifactRaw(final ArtifactRepository repo, final Graph graph) {
+        this.graph = graph;
         artifactRepository = repo;
     }
 
@@ -56,7 +56,7 @@ public class ArtifactRaw extends BaseRequestHandler {
             return;
         }
 
-        GraphVertex vertex = graphRepository.findVertex(graphVertexId, user);
+        Vertex vertex = graph.getVertex(graphVertexId, user.getAuthorizations());
 
         String fileName = getFileName(artifact);
         if (videoPlayback) {
