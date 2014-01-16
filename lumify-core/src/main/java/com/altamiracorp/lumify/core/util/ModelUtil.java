@@ -27,6 +27,7 @@ public class ModelUtil {
             UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
+            "jetty_session",
             "atc_titan");// TODO refactor see com.altamiracorp.lumify.model.TitanGraphSession
 
     public static void initializeTables(ModelSession modelSession, User user) {

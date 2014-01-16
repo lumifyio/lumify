@@ -21,10 +21,14 @@ public class JettySessionRow extends Row<JettySessionRowKey> {
     public JettySessionMetadata getMetadata() {
         JettySessionMetadata metadata = get(JettySessionMetadata.COLUMN_FAMILY_NAME);
         if (metadata == null) {
-            addColumnFamily(new JettySessionMetadata());
+            metadata = new JettySessionMetadata();
+            metadata.setCreated(System.currentTimeMillis());
+            metadata.setAccessed(System.currentTimeMillis());
+            metadata.setVersion(0);
+            addColumnFamily(metadata);
             metadata = get(JettySessionMetadata.COLUMN_FAMILY_NAME);
         }
-        return  metadata;
+        return metadata;
     }
 
     public JettySessionData getData() {

@@ -1,13 +1,20 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
+import com.altamiracorp.lumify.web.session.BigTableJettySessionIdManager;
+import com.altamiracorp.lumify.web.session.BigTableJettySessionManager;
+import com.altamiracorp.lumify.web.session.model.JettySessionRepository;
+import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.SessionIdManager;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -23,6 +30,7 @@ public class Server extends CommandLineBase {
     private int httpsPort;
     private String keyStorePath;
     private String keyStorePassword;
+    private BigTableJettySessionManager sessionManager;
 
     public static void main(String[] args) throws Exception {
         int res = new Server().run(args);
@@ -32,7 +40,7 @@ public class Server extends CommandLineBase {
     }
 
     public Server() {
-        initFramework = false;
+        initFramework = true;
     }
 
     @Override
@@ -106,6 +114,7 @@ public class Server extends CommandLineBase {
         httpConnector.setPort(httpPort);
         httpConnector.setConfidentialPort(httpsPort);
 
+
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(keyStorePath);
         sslContextFactory.setKeyStorePassword(keyStorePassword);
@@ -124,9 +133,19 @@ public class Server extends CommandLineBase {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
         server.setConnectors(new Connector[]{httpConnector, httpsConnector});
         server.setHandler(contexts);
+
+        SessionIdManager idManager = new BigTableJettySessionIdManager(server, sessionManager);
+        server.setSessionIdManager(idManager);
+        webAppContext.setSessionHandler(new SessionHandler(sessionManager));
+
         server.start();
         server.join();
 
         return 0;
+    }
+
+    @Inject
+    public void setSessionManager(BigTableJettySessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 }
