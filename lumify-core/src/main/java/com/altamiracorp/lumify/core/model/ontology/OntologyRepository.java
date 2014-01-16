@@ -378,6 +378,7 @@ public class OntologyRepository {
                 .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP, DEFAULT_VISIBILITY)
                 .save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString(), user);
