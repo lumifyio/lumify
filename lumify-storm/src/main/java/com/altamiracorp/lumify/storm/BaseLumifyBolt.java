@@ -215,6 +215,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             artifactExtractedInfo.setSource(artifactExtractedInfo.getUrl());
         }
         Vertex vertex = artifactRepository.saveToGraph(artifact, artifactExtractedInfo, user);
+        graph.flush();
         return vertex;
     }
 
