@@ -38,7 +38,6 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
     private void performHighlighting(final String rowKey, final Vertex vertex, final Iterable<TermMentionModel> termMentions) throws Exception {
         String text = getText(vertex);
         String highlightedText = entityHighlighter.getHighlightedText(text, termMentions, getUser());
-        OntologyProperty highlightedTextHdfsPath = ontologyRepository.getProperty(PropertyName.HIGHLIGHTED_TEXT_HDFS_PATH.toString(), getUser());
 
         Artifact artifact = new Artifact(rowKey);
         artifact.getMetadata().setHighlightedText(highlightedText);
