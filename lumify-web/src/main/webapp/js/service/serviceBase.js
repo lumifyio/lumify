@@ -40,7 +40,7 @@ define(['atmosphere'],
         ServiceBase.prototype.subscribe = function (config) {
             var self = this,
                 req = {
-                    url: location.href.replace(/\/$/, '') + "/messaging/",
+                    url: location.href.replace(/\/#?$/, '') + "/messaging/",
                     transport: 'websocket',
                     fallbackTransport: 'long-polling',
                     contentType: "application/json",
@@ -61,7 +61,12 @@ define(['atmosphere'],
                     },
                     onClose: function() {
                         console.error('closed', arguments);
-                        $(document).trigger('logout');
+
+                        // Might be closing because of browser refresh, delay
+                        // logout so it only happens if server went down
+                        _.delay(function() {
+                            $(document).trigger('logout');
+                        }, 1000);
                     },
                     onMessage: function (response) {
                         var body = response.responseBody,
