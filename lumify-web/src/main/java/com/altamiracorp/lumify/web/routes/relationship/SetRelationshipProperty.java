@@ -2,8 +2,8 @@ package com.altamiracorp.lumify.web.routes.relationship;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.Property;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -45,7 +45,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
         Vertex destVertex = graph.getVertex(destId, user.getAuthorizations());
 
-        Property property = ontologyRepository.getProperty(propertyName, user);
+        OntologyProperty property = ontologyRepository.getProperty(propertyName, user);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
