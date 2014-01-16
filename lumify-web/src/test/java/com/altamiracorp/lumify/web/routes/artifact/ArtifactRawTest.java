@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +23,6 @@ import org.mockito.stubbing.Answer;
 import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
 import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 
@@ -31,20 +31,20 @@ public class ArtifactRawTest extends RouteTestBase {
     private ArtifactRaw artifactRaw;
 
     @Mock
-    private GraphVertex vertex;
+    private Vertex mockVertex;
 
     @Mock
     private VideoPlaybackDetails mockVideoDetails;
 
     @Mock
-    private GraphRepository mockGraphRepository;
+    private Graph mockGraph;
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
-        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraphRepository);
+        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraph);
     }
 
     @Test
@@ -63,10 +63,10 @@ public class ArtifactRawTest extends RouteTestBase {
                 .setMimeType("text/plain");
         when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
-        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
+        when(mockGraph.getVertex(artifact.getMetadata().getGraphVertexId(), mockUser.getAuthorizations())).thenReturn(mockVertex);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
-        when(mockArtifactRepository.getRaw(artifact, vertex, mockUser)).thenReturn(testInputStream);
+        when(mockArtifactRepository.getRaw(artifact, mockVertex, mockUser)).thenReturn(testInputStream);
 
         doAnswer(new Answer<Void>() {
             @Override
@@ -106,7 +106,7 @@ public class ArtifactRawTest extends RouteTestBase {
                 .setMimeType("video/mp4");
         when(mockArtifactRepository.findRowKeyByGraphVertexId("123", mockUser)).thenReturn(artifactRowKey);
         when(mockArtifactRepository.findByRowKey(artifactRowKey.toString(), mockUser.getModelUserContext())).thenReturn(artifact);
-        when(mockGraphRepository.findVertex(artifact.getMetadata().getGraphVertexId(), mockUser)).thenReturn(vertex);
+        when(mockGraph.getVertex(artifact.getMetadata().getGraphVertexId(), mockUser.getAuthorizations())).thenReturn(mockVertex);
 
         InputStream testInputStream = new ByteArrayInputStream("test data".getBytes());
         when(mockVideoDetails.getVideoStream()).thenReturn(testInputStream);
