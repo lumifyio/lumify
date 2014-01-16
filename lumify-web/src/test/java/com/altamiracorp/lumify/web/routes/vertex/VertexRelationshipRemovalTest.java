@@ -2,10 +2,10 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,21 +21,21 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     private VertexRelationshipRemoval vertexRelationshipRemoval;
 
     @Mock
-    private GraphRepository mockGraphRepository;
+    private Graph mockGraph;
     @Mock
     private AuditRepository mockAuditRepository;
     @Mock
     private OntologyRepository mockOntologyRepositiory;
     @Mock
-    private GraphVertex mockSourceVertex;
+    private Vertex mockSourceVertex;
     @Mock
-    private GraphVertex mockDestVertex;
+    private Vertex mockDestVertex;
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraphRepository, mockAuditRepository, mockOntologyRepositiory);
+        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraph, mockAuditRepository, mockOntologyRepositiory);
     }
 
     @Test
@@ -44,9 +44,9 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
         when(mockRequest.getParameter("targetId")).thenReturn("targetId");
         when(mockRequest.getParameter("label")).thenReturn("label");
 
-        when(mockGraphRepository.findVertex("sourceId", mockUser)).thenReturn(mockSourceVertex);
-        when(mockGraphRepository.findVertex("targetId", mockUser)).thenReturn(mockDestVertex);
-        when (mockOntologyRepositiory.getDisplayNameForLabel("label", mockUser)).thenReturn("label");
+        when(mockGraph.getVertex("sourceId", mockUser.getAuthorizations())).thenReturn(mockSourceVertex);
+        when(mockGraph.getVertex("targetId", mockUser.getAuthorizations())).thenReturn(mockDestVertex);
+        when(mockOntologyRepositiory.getDisplayNameForLabel("label", mockUser)).thenReturn("label");
 
         vertexRelationshipRemoval.handle(mockRequest, mockResponse, mockHandlerChain);
         JSONObject response = new JSONObject(responseStringWriter.getBuffer().toString());
