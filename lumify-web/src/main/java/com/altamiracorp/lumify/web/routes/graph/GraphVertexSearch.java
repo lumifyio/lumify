@@ -14,8 +14,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
 
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
@@ -45,19 +43,18 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         graph.flush();
 
-        GraphPagedResults pagedResults = graph.search(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, conceptType);
+        // TODO user the filterJson   OLD CODE: .search(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, conceptType);
+        // TODO page results
+        Iterable<Vertex> searchResults = graph.query(query, user.getAuthorizations())
+                .vertices();
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
         int verticesCount = 0;
-        for (Map.Entry<String, List<Vertex>> entry : pagedResults.getResults().entrySet()) {
-            JSONArray temp = toJson(entry.getValue());
-            for (int i = 0; i < temp.length(); i++) {
-                vertices.put(temp.getJSONObject(i));
-            }
-            Integer count = pagedResults.getCount().get(entry.getKey());
-            verticesCount += count.intValue();
-            counts.put(entry.getKey(), count);
+        for (Vertex vertex : searchResults) {
+            vertices.put(toJson(vertex));
+            verticesCount++;
+            // TODO this used create hierarchical results
         }
         LOGGER.info("Number of vertices returned for query: %d", verticesCount);
 
