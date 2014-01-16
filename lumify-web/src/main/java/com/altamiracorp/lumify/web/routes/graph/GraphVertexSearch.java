@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -14,6 +15,9 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
@@ -53,7 +57,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
         int verticesCount = 0;
         for (Vertex vertex : searchResults) {
             vertices.put(toJson(vertex));
-            verticesCount++;
+            String type = vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0).toString();
+            if (counts.keySet().contains(type)){
+                counts.put(type, (counts.getInt(type) + 1));
+            } else {
+                counts.put(type, 1);
+            }
+             verticesCount++;
             // TODO this used create hierarchical results
         }
         LOGGER.info("Number of vertices returned for query: %d", verticesCount);
