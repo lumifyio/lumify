@@ -8,7 +8,7 @@ public class TermMentionMetadata extends ColumnFamily {
     public static final String NAME = "Metadata";
     public static final String SIGN = "sign";
     public static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
-    public static final String GRAPH_VERTEX_ID = "graphVertexId";
+    public static final String VERTEX_ID = "graphVertexId";
     public static final String CONCEPT_GRAPH_VERTEX_ID = "conceptGraphVertexId";
     public static final String GEO_LOCATION = "geoLocation";
     public static final String GEO_LOCATION_TITLE = "geoLocationTitle";
@@ -27,13 +27,13 @@ public class TermMentionMetadata extends ColumnFamily {
         return Value.toString(get(SIGN));
     }
 
-    public TermMentionMetadata setGraphVertexId(String graphVertexId) {
-        set(GRAPH_VERTEX_ID, graphVertexId);
+    public TermMentionMetadata setVertexId(String vertexId) {
+        set(VERTEX_ID, vertexId);
         return this;
     }
 
     public String getGraphVertexId() {
-        return Value.toString(get(GRAPH_VERTEX_ID));
+        return Value.toString(get(VERTEX_ID));
     }
 
     public TermMentionMetadata setOntologyClassUri(String ontologyClassUri) {

@@ -85,12 +85,12 @@ public abstract class BaseArtifactProcessor {
         this.ontologyRepository = ontologyRepository;
     }
 
-    protected final Graph getGraphRepository() {
+    protected final Graph getGraph() {
         return graph;
     }
 
     @Inject
-    public final void setGraphRepository(final Graph graph) {
+    public final void setGraph(final Graph graph) {
         this.graph = graph;
     }
 
