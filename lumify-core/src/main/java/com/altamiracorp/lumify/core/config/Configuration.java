@@ -32,7 +32,7 @@ public final class Configuration {
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String MODEL_USER = "model.username";
     public static final String MODEL_PASSWORD = "model.password";
-    public static final String GRAPH_PROVIDER = "graph.provider";
+    public static final String GRAPH_PROVIDER = "graph";
     public static final String AUTHENTICATION_PROVIDER = "authentication.provider";
     public static final String MAP_PROVIDER = "map.provider";
     public static final String MAP_ACCESS_KEY = "map.apiKey";
