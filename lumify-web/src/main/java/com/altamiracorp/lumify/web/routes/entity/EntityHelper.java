@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class EntityHelper {
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
@@ -42,11 +44,12 @@ public class EntityHelper {
         this.ontologyRepository = ontologyRepository;
     }
 
-    public void updateTermMention(TermMentionModel termMention, String sign, Vertex conceptVertex, Vertex resolvedVertex, User user) {
+    public void updateTermMention(TermMentionModel termMention, String sign, Concept concept, Vertex resolvedVertex, User user) {
+        checkNotNull(concept, "conceptVertex cannot be null");
         termMention.getMetadata()
                 .setSign(sign)
-                .setOntologyClassUri((String) conceptVertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0))
-                .setConceptGraphVertexId(conceptVertex.getId())
+                .setOntologyClassUri(concept.getDisplayName())
+                .setConceptGraphVertexId(concept.getId())
                 .setVertexId(resolvedVertex.getId().toString());
         termMentionRepository.save(termMention, user.getModelUserContext());
     }

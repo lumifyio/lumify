@@ -3,12 +3,15 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
 
 public class EntityTermUpdate extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EntityTermUpdate.class);
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final EntityHelper entityHelper;
@@ -47,17 +51,26 @@ public class EntityTermUpdate extends BaseRequestHandler {
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
-        final String resolvedGraphVertexId = getRequiredParameter(request, "graphVertexId");
+        final String graphVertexId = getRequiredParameter(request, "graphVertexId");
+
+        LOGGER.debug(
+                "EntityTermUpdate (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
+                artifactId,
+                mentionStart,
+                mentionEnd,
+                sign,
+                conceptId,
+                graphVertexId);
 
         User user = getUser(request);
-        Vertex conceptVertex = graph.getVertex(conceptId, user.getAuthorizations());
-        Vertex resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
+        Concept concept = ontologyRepository.getConceptById(conceptId, user);
+        Vertex resolvedVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
 
         // TODO: replace second "" when we implement commenting on ui
         entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
         Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
-        Vertex resolvedGraphVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
+        Vertex resolvedGraphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         Iterator<Edge> edges = artifactVertex.getEdges(resolvedGraphVertex, Direction.BOTH, LabelName.HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
         if (!edges.hasNext()) {
             graph.addEdge(artifactVertex, resolvedVertex, LabelName.HAS_ENTITY.toString(), new Visibility(""));
@@ -71,7 +84,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
         if (termMention == null) {
             termMention = new TermMentionModel(termMentionRowKey);
         }
-        entityHelper.updateTermMention(termMention, sign, conceptVertex, resolvedVertex, user);
+        entityHelper.updateTermMention(termMention, sign, concept, resolvedVertex, user);
 
         entityHelper.scheduleHighlight(artifactId, user);
 

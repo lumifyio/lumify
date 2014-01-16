@@ -53,7 +53,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         User user = getUser(request);
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
 
-        Vertex conceptVertex = ontologyRepository.getConceptById(conceptId, user).getVertex();
+        Concept concept = ontologyRepository.getConceptById(conceptId, user);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         final Vertex createdVertex = graph.addVertex(visibility);
@@ -76,7 +76,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-        entityHelper.updateTermMention(termMention, sign, conceptVertex, createdVertex, user);
+        entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);
 
         // Modify the highlighted artifact text in a background thread
         entityHelper.scheduleHighlight(artifactId, user);
