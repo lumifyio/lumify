@@ -2,12 +2,12 @@
 <% if (vertices.length === 1) { %>
 
 <h1>Vertex Not Found</h1>
-<p>The vertex with <code>id = <%= vertices[0] %></code> does not exist.</p>
+<p>The vertex with <code>identifier = <%= vertices[0] %></code> does not exist.</p>
 
 <% } else { %>
 
-  <h1>No Vertices Found</h1>
-  <p>The vertices with the following ids do not exist:</p>
+  <h1>Vertices Not Found</h1>
+  <p>The vertices with the following identifiers do not exist:</p>
   <p>
     <% vertices.forEach(function(vertex, i) { %>
       <code><%= vertex %></code>
