@@ -47,7 +47,7 @@ public class EntityHelper {
                 .setSign(sign)
                 .setOntologyClassUri((String) conceptVertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0))
                 .setConceptGraphVertexId(conceptVertex.getId())
-                .setGraphVertexId(resolvedVertex.getId().toString());
+                .setVertexId(resolvedVertex.getId().toString());
         termMentionRepository.save(termMention, user.getModelUserContext());
     }
 
