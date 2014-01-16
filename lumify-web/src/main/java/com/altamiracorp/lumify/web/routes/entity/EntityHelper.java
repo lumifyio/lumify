@@ -120,7 +120,7 @@ public class EntityHelper {
         return resolvedVertex;
     }
 
-    public JSONObject formatUpdatedArtifactVertexProperty(String id, String propertyKey, Object propertyValue) {
+    public JSONObject formatUpdatedArtifactVertexProperty(Object id, String propertyKey, Object propertyValue) {
         // puts the updated artifact vertex property in the correct JSON format
 
         JSONObject artifactVertexProperty = new JSONObject();
