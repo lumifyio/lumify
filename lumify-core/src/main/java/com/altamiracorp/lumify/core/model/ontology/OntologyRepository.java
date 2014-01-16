@@ -374,6 +374,7 @@ public class OntologyRepository {
         }
 
         Vertex relationshipVertex = graph.prepareVertex(DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
