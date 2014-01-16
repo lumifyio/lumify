@@ -15,10 +15,10 @@ define([
     return defineComponent(FullscreenDetails);
 
     function filterEntity(v) {
-        return !filterArtifacts(v);
+        return v.concept && !filterArtifacts(v);
     }
     function filterArtifacts(v) {
-        return (/^(document|image|video)$/).test(v.concept.displayType);
+        return v.concept && (/^(document|image|video)$/).test(v.concept.displayType);
     }
 
     function FullscreenDetails() {
@@ -31,25 +31,32 @@ define([
         });
 
         this.after('initialize', function() {
+            var self = this;
+
             this.$node.html(template({}));
             this.updateTitle();
 
             this._windowIsHidden = false;
             this.on(document, 'window-visibility-change', this.onVisibilityChange);
             this.on('click', { closeSelector: this.onClose });
+            this.on('click', this.clearFlashing.bind(this));
+            $(window).focus(this.clearFlashing.bind(this));
+
             this.vertices = [];
-
             this.fullscreenIdentifier = Math.floor((1 + Math.random()) * 0xFFFFFF).toString(16).substring(1);
-
             this.$node.addClass('fullscreen-details');
 
-            var self = this;
             appData.cachedConceptsDeferred.done(function() {
                 self.vertexService
                     .getMultiple(self.attr.graphVertexIds)
                     .done(self.handleVerticesLoaded.bind(self));
             });
         });
+
+        this.clearFlashing = function() {
+            clearTimeout(this.timer);
+            this._windowIsHidden = false;
+        };
 
         this.onClose = function(event) {
             event.preventDefault();
@@ -80,16 +87,15 @@ define([
 
         this.updateLayout = function() {
 
-            this.$node.toggleClass('onlyone', this.vertices.length === 1);
+            var entities = _.filter(this.vertices, filterEntity).length,
+                artifacts = _.filter(this.vertices, filterArtifacts).length,
+                verts = entities + artifacts;
 
-            var verts = this.vertices.length,
-                entities = _.filter(this.vertices, filterEntity).length,
-                artifacts = _.filter(this.vertices, filterArtifacts).length;
-            
             this.$node
-                .removePrefixedClasses('vertices- entities- has- entity-cols-')
+                .removePrefixedClasses('vertices- entities- has- entity-cols- onlyone')
+                .toggleClass('onlyone', verts === 1)
                 .addClass([
-                    this.vertices.length <= 4 ? 'vertices-' + this.vertices.length : 'vertices-many',
+                    verts <= 4 ? 'vertices-' + verts : 'vertices-many',
                     'entities-' + entities,
                     'entity-cols-' + _.find([4,3,2,1], function(i) { return entities % i === 0; }),
                     entities ? 'has-entities' : '',
@@ -127,13 +133,38 @@ define([
                 descriptors.push(v.properties.title);
                 return descriptors.join(''); 
             });
-            
+
+            // Find vertices not found and insert at beginning
+            var notFoundIds = _.difference(this.attr.graphVertexIds, _.pluck(this.vertices, 'id')),
+                notFound = _.map(notFoundIds, function(nId) {
+                    return { 
+                        id:nId,
+                        notFound:true,
+                        properties: {
+                            title: '?'
+                        } 
+                    };
+                });
+
+            this.vertices.splice.apply(this.vertices, [0,0].concat(notFound));
+            if (notFound.length) {
+                this.select('noResultsSelector')
+                    .html(errorTemplate({ vertices: notFoundIds }))
+                    .addClass('visible someVerticesFound');
+            }
+
             this.vertices.forEach(function(v) {
-                var node = filterEntity(v) ?  this.$node.find('.entities-container') : this.$node.find('.artifacts-container');
+                if (v.notFound) return;
+
+                var node = filterEntity(v) ?  this.$node.find('.entities-container') : this.$node.find('.artifacts-container'),
+                    type = _.contains('document image video'.split(' '), v.concept.displayType) ? 'artifact' : 'entity',
+                    subType = v.concept.displayType;
 
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
-                // TODO: add classes that determine displayType
-                Detail.attachTo(this.$node.find('.detail-pane').last().find('.content'), {
+
+                Detail.attachTo(this.$node.find('.detail-pane').last()
+                                .addClass('type-' + type + ' subType-' + subType)
+                                .find('.content'), {
                     loadGraphVertexData: v,
                     highlightStyle: 2
                 });
@@ -166,10 +197,10 @@ define([
                 return;
             }
 
-            var existingVertexIds = _.pluck(this.vertices, 'id');
-            var newVertices = _.reject(vertices, function(v) {
-                return existingVertexIds.indexOf(v) >= 0;
-            });
+            var existingVertexIds = _.pluck(this.vertices, 'id'),
+                newVertices = _.reject(vertices, function(v) {
+                    return existingVertexIds.indexOf(v) >= 0;
+                });
 
             if (newVertices.length === 0) {
                 return;
@@ -189,16 +220,20 @@ define([
             var self = this,
                 i = 0;
 
+            clearTimeout(this.timer);
+
             if (!newVertices || newVertices.length === 0) return;
 
-            clearTimeout(this.timer);
+            var newVerticesById = _.indexBy(newVertices, 'id');
 
             if (this._windowIsHidden) {
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
-                        document.title = newVertices.length === 1 ? 
-                            ('"' + newVertices[0].properties.title + '" added') :
-                            newVertices.length + ' items added';
+                        if (newVertexIds.length === 1) {
+                            document.title = '"' + newVerticesById[newVertexIds[0]].properties.title + '" added';
+                        } else {
+                            document.title = newVertexIds.length + ' items added';
+                        }
                     } else {
                         self.updateTitle();
                     }
@@ -213,11 +248,17 @@ define([
         this.titleForVertices = function() {
             if (!this.vertices || this.vertices.length === 0) {
                 return 'Loading...';
-            } else if (this.vertices.length === 1) {
-                return this.vertices[0].properties.title;
+            }
+            
+            var sorted = _.sortBy(this.vertices, function(v) {
+                return v.notFound ? 1 : -1;
+            });
+            
+            if (sorted.length === 1) {
+                return sorted.properties.title;
             } else {
-                var first = '"' + this.vertices[0].properties.title + '"',
-                    l = this.vertices.length - 1;
+                var first = '"' + sorted[0].properties.title + '"',
+                    l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');
             }
