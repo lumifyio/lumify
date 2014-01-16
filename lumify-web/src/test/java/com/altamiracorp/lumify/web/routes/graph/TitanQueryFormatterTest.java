@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
+import com.altamiracorp.securegraph.Graph;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,11 +21,11 @@ import com.google.common.collect.Lists;
 @RunWith(JUnit4.class)
 public class TitanQueryFormatterTest extends RouteTestBase {
     // TODO rewrite this test for secure graph!!!
-//    private Graph graph;
-//
-//    @Override
-//    @Before
-//    public void setUp() throws Exception {
+    private Graph graph;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
 //        super.setUp();
 //
 //        graph = new TinkerGraph();
@@ -39,10 +40,10 @@ public class TitanQueryFormatterTest extends RouteTestBase {
 //        person2.setProperty("birthDate", OntologyProperty.DATE_FORMAT.parse("1977-01-30").getTime());
 //        person2.setProperty("alias", "Bob Smith");
 //        person2.setProperty("income", 300.5);
-//    }
-//
-//    @Test
-//    public void testFilter_date_isBefore() throws Exception {
+    }
+
+    @Test
+    public void testFilter_date_isBefore() throws Exception {
 //        JSONArray filterJson =
 //                createFilterArray(
 //                        "propertyName", "birthDate",
@@ -51,7 +52,7 @@ public class TitanQueryFormatterTest extends RouteTestBase {
 //                        "values", new JSONArray("['1977-10-30']"));
 //        List<GraphVertex> filteredVertices = runFilter(filterJson);
 //        assertFilteredCorrectly(filteredVertices, "person2");
-//    }
+   }
 //
 //    @Test
 //    public void testFilter_date_isBeforeEquals() throws Exception {

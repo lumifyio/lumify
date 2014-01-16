@@ -32,7 +32,7 @@ public class VertexPropertiesTest extends RouteTestBase {
     @Before
     @Override
     public void setUp() throws Exception {
-        super.setUp();
+//        super.setUp();
         vertexProperties = new VertexProperties(mockGraph);
     }
 

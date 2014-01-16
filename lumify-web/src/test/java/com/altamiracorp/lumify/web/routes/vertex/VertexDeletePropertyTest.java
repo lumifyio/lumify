@@ -32,7 +32,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     @Before
     @Override
     public void setUp() throws Exception {
-        super.setUp();
+//        super.setUp();
         vertexDeleteProperty = new VertexDeleteProperty(mockOntologyRepository, mockGraph, mockAuditRepository);
     }
 
