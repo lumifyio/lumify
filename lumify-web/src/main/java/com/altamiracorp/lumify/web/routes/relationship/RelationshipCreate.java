@@ -17,6 +17,8 @@ import com.google.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
+
 public class RelationshipCreate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RelationshipCreate.class);
 
@@ -45,15 +47,15 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, user.getAuthorizations());
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, user.getAuthorizations());
 
-        Edge relationship = graph.addEdge(sourceVertex, destVertex, predicateLabel, new Visibility(""));
+        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, new Visibility(""));
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), sourceVertex, destVertex, relationshipDisplayName, "", "", user);
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Statement created:\n" + relationship.toJson().toString(2));
+            LOGGER.info("Statement created:\n" + toJson(edge).toString(2));
         }
 
-        respondWithJson(response, relationship.toJson());
+        respondWithJson(response, toJson(edge));
     }
 }

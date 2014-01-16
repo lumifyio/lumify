@@ -18,9 +18,7 @@ import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
@@ -32,7 +30,10 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
@@ -104,14 +105,17 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         // TODO: replace second"" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
 
-        graph.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
+        Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.HAS_IMAGE.toString(), user.getAuthorizations()).iterator();
+        if (!existingEdges.hasNext()) {
+            graph.addEdge(entityVertex, artifactVertex, LabelName.HAS_IMAGE.toString(), new Visibility(""));
+        }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
 
-        workQueueRepository.pushUserImageQueue(artifactVertex.getId());
+        workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 
-        respondWithJson(response, entityVertex.toJson());
+        respondWithJson(response, toJson(entityVertex));
     }
 
     private Artifact convertToArtifact(final Part file) throws IOException {
