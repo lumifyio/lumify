@@ -75,11 +75,12 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
         artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+        graph.flush();
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
-        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId().toString(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
+        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);
 
         //TODO: Overwrite old ElasticSearch index with new info
