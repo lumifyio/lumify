@@ -17,10 +17,9 @@ import java.util.Map;
 public class BigTableWorkQueueRepository extends WorkQueueRepository {
     public static final String DEFAULT_TABLE_PREFIX = "atc_accumuloqueue_";
     private ModelSession modelSession;
-    private Map<String, Boolean> queues = new HashMap<String, Boolean>();
+    private Map<String, QueueItemRepository> queues = new HashMap<String, QueueItemRepository>();
     private String tablePrefix;
     private User user;
-    private QueueItemRepository queueItemRepository;
 
     @Override
     public void init(Map config) {
@@ -39,7 +38,9 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void flush() {
-        this.queueItemRepository.flush();
+        for (QueueItemRepository queue : queues.values()) {
+            queue.flush();
+        }
     }
 
     @Override
@@ -49,16 +50,19 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
         if (this.user == null) {
             this.user = new SystemUser();
         }
-        if (this.queueItemRepository == null) {
-            this.queueItemRepository = new QueueItemRepository(this.modelSession, tableName);
-        }
 
-        if (!this.queues.containsKey(queueName)) {
+        QueueItemRepository queue = this.queues.get(queueName);
+        if (queue == null) {
             this.modelSession.initializeTable(tableName, this.user.getModelUserContext());
-            this.queues.put(queueName, true);
+            queue = new QueueItemRepository(this.modelSession, tableName);
+            this.queues.put(queueName, queue);
         }
 
-        this.queueItemRepository.add(json, extra, flushFlag, user);
+        LOGGER.debug("push on queue %s", tableName);
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("push on queue %s: %s", tableName, json.toString(2));
+        }
+        queue.add(json, extra, flushFlag, user);
     }
 
     static String getTableName(String tablePrefix, String queueName) {
