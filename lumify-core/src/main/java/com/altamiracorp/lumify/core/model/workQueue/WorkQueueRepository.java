@@ -70,4 +70,6 @@ public abstract class WorkQueueRepository {
     public abstract IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
 
     public abstract void flush();
+
+    public abstract void format();
 }

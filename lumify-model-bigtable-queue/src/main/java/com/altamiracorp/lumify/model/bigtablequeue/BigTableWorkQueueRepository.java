@@ -3,18 +3,23 @@ package com.altamiracorp.lumify.model.bigtablequeue;
 import backtype.storm.topology.IRichSpout;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BigTableWorkQueueRepository extends WorkQueueRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableWorkQueueRepository.class);
     public static final String DEFAULT_TABLE_PREFIX = "atc_accumuloqueue_";
     private ModelSession modelSession;
     private Map<String, Boolean> queues = new HashMap<String, Boolean>();
@@ -40,6 +45,18 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     @Override
     public void flush() {
         this.queueItemRepository.flush();
+    }
+
+    @Override
+    public void format() {
+        ModelUserContext ctx = new SystemUser().getModelUserContext();
+        List<String> tableList = this.modelSession.getTableList(ctx);
+        for (String tableName : tableList) {
+            if (tableName.startsWith(this.tablePrefix)) {
+                LOGGER.info("Deleting queue table: " + tableName);
+                this.modelSession.deleteTable(tableName, ctx);
+            }
+        }
     }
 
     @Override
