@@ -91,9 +91,13 @@ public class LumifyLogger {
             return sb.toString();
         }
     }
-    
+
     private Throwable findLastThrowable(final Object[] args) {
         int length = args != null ? args.length : 0;
-        return (length > 0 && args[length-1] instanceof Throwable) ? (Throwable) args[length-1] : null;
+        return (length > 0 && args[length - 1] instanceof Throwable) ? (Throwable) args[length - 1] : null;
+    }
+
+    public boolean isTraceEnabled() {
+        return logger.isTraceEnabled();
     }
 }

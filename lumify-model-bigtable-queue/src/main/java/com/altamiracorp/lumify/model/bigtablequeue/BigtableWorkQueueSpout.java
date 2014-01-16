@@ -73,6 +73,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
                 rows = null;
             }
             if (rows == null) {
+                this.modelSession.flush();
                 rows = this.modelSession.findAll(this.tableName, this.user.getModelUserContext()).iterator();
             }
             if (rows.hasNext()) {
@@ -100,23 +101,27 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
 
     @Override
     public void nextTuple() {
-        try {
-            Row row;
-            while ((row = getNextRows()) != null) {
-                String rowKeyString = row.getRowKey().toString();
-                if (this.workingSet.containsKey(rowKeyString)) {
-                    continue;
+        while (true) {
+            try {
+                Row row = getNextRows();
+                if (row != null) {
+                    String rowKeyString = row.getRowKey().toString();
+                    if (this.workingSet.containsKey(rowKeyString)) {
+                        break;
+                    }
+                    QueueItem queueItem = this.queueItemRepository.fromRow(row);
+                    this.workingSet.put(rowKeyString, true);
+                    String jsonString = queueItem.getJson().toString();
+                    LOGGER.debug("emit (%s): %s", this.tableName, rowKeyString);
+                    this.collector.emit(new Values(jsonString), rowKeyString);
+                    return;
                 }
-                QueueItem queueItem = this.queueItemRepository.fromRow(row);
-                this.workingSet.put(rowKeyString, true);
-                this.collector.emit(new Values(queueItem.getJson().toString()), rowKeyString);
-                return;
+            } catch (Exception ex) {
+                LOGGER.error("Could not get next tuple (" + this.tableName + ")", ex);
+                this.collector.reportError(ex);
+                Utils.sleep(10000);
             }
             Utils.sleep(1000);
-        } catch (Exception ex) {
-            LOGGER.error("Could not get next tuple (" + this.tableName + ")", ex);
-            this.collector.reportError(ex);
-            Utils.sleep(10000);
         }
     }
 
@@ -124,11 +129,10 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     public void ack(Object msgId) {
         try {
             LOGGER.debug("ack (%s): %s", this.tableName, msgId.toString());
-            totalProcessedCounter.inc();
+            this.totalProcessedCounter.inc();
             QueueItemRowKey rowKey = new QueueItemRowKey(msgId);
             this.queueItemRepository.delete(rowKey, this.user.getModelUserContext());
             this.workingSet.remove(rowKey.toString());
-            super.ack(msgId);
         } catch (Exception ex) {
             LOGGER.error("Could not ack (" + this.tableName + "): " + msgId, ex);
             this.collector.reportError(ex);
@@ -139,8 +143,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     public void fail(Object msgId) {
         try {
             LOGGER.debug("fail (%s): %s", this.tableName, msgId.toString());
-            totalErrorCounter.inc();
-            super.fail(msgId);
+            this.totalErrorCounter.inc();
         } catch (Exception ex) {
             LOGGER.error("Could not fail (" + this.tableName + "): " + msgId, ex);
             this.collector.reportError(ex);
