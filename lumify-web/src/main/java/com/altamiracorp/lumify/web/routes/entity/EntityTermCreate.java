@@ -78,6 +78,8 @@ public class EntityTermCreate extends BaseRequestHandler {
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);
 
+        this.graph.flush();
+
         // Modify the highlighted artifact text in a background thread
         entityHelper.scheduleHighlight(artifactId, user);
 

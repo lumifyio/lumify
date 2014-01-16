@@ -86,6 +86,8 @@ public class EntityTermUpdate extends BaseRequestHandler {
         }
         entityHelper.updateTermMention(termMention, sign, concept, resolvedVertex, user);
 
+        this.graph.flush();
+
         entityHelper.scheduleHighlight(artifactId, user);
 
         TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, resolvedVertex);
