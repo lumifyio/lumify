@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
@@ -52,7 +53,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         User user = getUser(request);
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
 
-        Vertex conceptVertex = graph.getVertex(conceptId, user.getAuthorizations());
+        Vertex conceptVertex = ontologyRepository.getConceptById(conceptId, user).getVertex();
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         final Vertex createdVertex = graph.addVertex(visibility);
@@ -68,6 +69,9 @@ public class EntityTermCreate extends BaseRequestHandler {
         graph.addEdge(createdVertex, artifactVertex, LabelName.HAS_ENTITY.toString(), visibility);
 
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+        if (labelDisplayName == null) {
+            labelDisplayName = LabelName.HAS_ENTITY.toString();
+        }
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
 
