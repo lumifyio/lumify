@@ -66,6 +66,8 @@ define([
 
         this.onAuditToggle = function(event) {
             event.stopPropagation();
+            event.preventDefault();
+
             this.auditDisplayed = !this.auditDisplayed;
             this.trigger('toggleAuditDisplay', {
                 displayed: this.auditDisplayed
