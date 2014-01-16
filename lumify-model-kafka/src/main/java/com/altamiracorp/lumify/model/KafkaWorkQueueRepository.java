@@ -55,6 +55,11 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
+    public void format() {
+        LOGGER.warn("Kafka cannot be formatted");
+    }
+
+    @Override
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra) {
         if (extra != null && extra.length > 0) {
             JSONArray extraArray = new JSONArray();
