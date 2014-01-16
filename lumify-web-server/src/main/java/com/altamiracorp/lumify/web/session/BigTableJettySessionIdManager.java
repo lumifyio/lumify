@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.session;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.web.session.model.JettySessionRow;
 import com.google.inject.Inject;
+import org.eclipse.jetty.nosql.NoSqlSession;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.SessionManager;

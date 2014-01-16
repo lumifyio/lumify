@@ -58,7 +58,7 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
             metadata.setVersion(((Number) version).longValue());
             metadata.setAccessed(session.getAccessed());
 
-            JettySessionData data = row.get(JettySessionData.COLUMN_FAMILY_NAME);
+            JettySessionData data = row.getData();
             Set<String> attributesToSave = session.takeDirty();
             if (isNew || isSaveAllAttributes()) {
                 attributesToSave.addAll(session.getNames());
