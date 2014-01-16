@@ -1,29 +1,33 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import com.altamiracorp.lumify.core.model.graph.GraphVertex;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.model.graph.GraphRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Direction;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 import java.util.List;
 
 public class GraphRelatedVertices extends BaseRequestHandler {
-    private final GraphRepository graphRepository;
+    private final Graph graph;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphRelatedVertices(final OntologyRepository ontologyRepo, final GraphRepository graphRepo) {
+    public GraphRelatedVertices(final OntologyRepository ontologyRepo, final Graph graph) {
         ontologyRepository = ontologyRepo;
-        graphRepository = graphRepo;
+        this.graph = graph;
     }
 
     @Override
@@ -41,16 +45,17 @@ public class GraphRelatedVertices extends BaseRequestHandler {
             }
         }
 
-        List<GraphVertex> graphVertices = graphRepository.getRelatedVertices(graphVertexId, user);
+        Iterator<Vertex> verticesIterator = graph.getVertex(graphVertexId, user.getAuthorizations())
+                .getVertices(Direction.BOTH, user.getAuthorizations()).iterator();
 
         JSONObject json = new JSONObject();
         JSONArray verticesJson = new JSONArray();
-        for (GraphVertex graphVertex : graphVertices) {
-            if (limitConcepts != null && isLimited(limitConcepts, graphVertex)) {
+        while (verticesIterator.hasNext()) {
+            Vertex vertex = verticesIterator.next();
+            if (limitConcepts != null && isLimited(limitConcepts, vertex)) {
                 continue;
             }
-            JSONObject graphVertexJson = graphVertex.toJson();
-            verticesJson.put(graphVertexJson);
+            verticesJson.put(GraphUtil.toJson(vertex));
         }
         json.put("vertices", verticesJson);
 
@@ -59,8 +64,8 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         chain.next(request, response);
     }
 
-    private boolean isLimited(List<Concept> limitConcepts, GraphVertex graphVertex) {
-        String conceptId = (String) graphVertex.getProperty(PropertyName.CONCEPT_TYPE);
+    private boolean isLimited(List<Concept> limitConcepts, Vertex vertex) {
+        String conceptId = (String) vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0);
         for (Concept concept : limitConcepts) {
             if (concept.getId().equals(conceptId)) {
                 return false;
