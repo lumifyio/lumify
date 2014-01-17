@@ -15,12 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class BigTableJettySessionIdManager extends AbstractSessionIdManager {
-    final Server server;
+
     final BigTableJettySessionManager sessionManager;
 
-    @Inject
-    public BigTableJettySessionIdManager(Server server, BigTableJettySessionManager sessionManager) {
+    private Server server;
+
+    public void setServer(Server server) {
         this.server = server;
+    }
+
+    @Inject
+    public BigTableJettySessionIdManager(BigTableJettySessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
