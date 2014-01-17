@@ -13,7 +13,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class WorkQueueRepository {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
+    protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
 
     private static final String KEY_ARTIFACT_ROWKEY = "artifactRowKey";
     private static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
