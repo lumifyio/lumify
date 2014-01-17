@@ -30,8 +30,6 @@ public class Server extends CommandLineBase {
     private int httpsPort;
     private String keyStorePath;
     private String keyStorePassword;
-    private BigTableJettySessionManager sessionManager;
-    private BigTableJettySessionIdManager sessionIdManager;
 
     public static void main(String[] args) throws Exception {
         int res = new Server().run(args);
@@ -41,7 +39,7 @@ public class Server extends CommandLineBase {
     }
 
     public Server() {
-        initFramework = true;
+        initFramework = false;
     }
 
     @Override
@@ -135,26 +133,9 @@ public class Server extends CommandLineBase {
         server.setConnectors(new Connector[]{httpConnector, httpsConnector});
         server.setHandler(contexts);
 
-        sessionIdManager.setServer(server);
-        server.setSessionIdManager(sessionIdManager);
-
-        SessionHandler sessions = new SessionHandler(sessionManager);
-        sessions.setServer(server);
-        webAppContext.setSessionHandler(sessions);
-
         server.start();
         server.join();
 
         return 0;
-    }
-
-    @Inject
-    public void setSessionManager(BigTableJettySessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
-    @Inject
-    public void setSessionIdManager(BigTableJettySessionIdManager sessionIdManager) {
-        this.sessionIdManager = sessionIdManager;
     }
 }

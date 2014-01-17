@@ -17,6 +17,10 @@ public abstract class AuthenticationProvider implements Handler {
     }
 
     public static User getUser(HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+
         Object user = session.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME);
         return user != null ? (User) user : null;
     }
