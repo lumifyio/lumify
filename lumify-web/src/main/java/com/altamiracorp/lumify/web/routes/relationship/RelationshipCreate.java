@@ -52,6 +52,8 @@ public class RelationshipCreate extends BaseRequestHandler {
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), sourceVertex, destVertex, relationshipDisplayName, "", "", user);
 
+        graph.flush();
+
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Statement created:\n" + toJson(edge).toString(2));
         }

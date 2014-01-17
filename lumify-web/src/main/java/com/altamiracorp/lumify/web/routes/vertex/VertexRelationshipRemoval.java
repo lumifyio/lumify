@@ -48,6 +48,8 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.DELETE.toString(), sourceVertex, destVertex, displayName, "", "", user);
 
+        graph.flush();
+
         JSONObject resultJson = new JSONObject();
         resultJson.put("success", true);
 
