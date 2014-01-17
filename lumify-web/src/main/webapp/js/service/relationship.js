@@ -12,7 +12,7 @@ define(
 
         RelationshipService.prototype = Object.create(ServiceBase.prototype);
 
-        RelationshipService.prototype.setProperty = function (propertyName, value, sourceId, destId, label) {
+        RelationshipService.prototype.setProperty = function (propertyName, value, sourceId, destId, edgeId) {
             return this._ajaxPost({
                 url: 'relationship/property/set',
                 data: {
@@ -20,7 +20,7 @@ define(
                     value: value,
                     source: sourceId,
                     dest: destId,
-                    relationshipLabel: label
+                    edgeId: edgeId
                 }
             });
         };
