@@ -33,32 +33,14 @@ public class BigTableJettySessionIdManager extends AbstractSessionIdManager {
 
     @Override
     public void addSession(HttpSession session) {
-        if (session != null) {
-            // TODO: will someone else have called BigTableJettySessionManager.save()?
-        }
     }
 
     @Override
     public void removeSession(HttpSession session) {
-        if (session != null) {
-            // TODO: will someone else have called BigTableJettySessionManager.remove()?
-        }
     }
 
     @Override
     public void invalidateAll(String id) {
-        // TODO: our job? sessionManager.jettySessionRepository.delete(new JettySessionRowKey(id), SystemUser.getSystemUserContext());
-
-        Handler[] contexts = server.getChildHandlersByClass(ContextHandler.class);
-        for (int i=0; contexts!=null && i<contexts.length; i++) {
-            SessionHandler sessionHandler = ((ContextHandler)contexts[i]).getChildHandlerByClass(SessionHandler.class);
-            if (sessionHandler != null) {
-                SessionManager manager = sessionHandler.getSessionManager();
-                if (manager != null && manager instanceof BigTableJettySessionManager) {
-                    // TODO: ((BigTableJettySessionManager)manager).remove(id);
-                }
-            }
-        }
     }
 
     @Override
