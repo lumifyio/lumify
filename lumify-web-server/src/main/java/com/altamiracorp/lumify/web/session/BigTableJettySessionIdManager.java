@@ -16,22 +16,19 @@ import javax.servlet.http.HttpSession;
 
 public class BigTableJettySessionIdManager extends AbstractSessionIdManager {
 
-    final BigTableJettySessionManager sessionManager;
-
+    private BigTableJettySessionManager sessionManager;
     private Server server;
 
-    public void setServer(Server server) {
-        this.server = server;
-    }
+    BigTableJettySessionIdManager() { }
 
-    @Inject
-    public BigTableJettySessionIdManager(BigTableJettySessionManager sessionManager) {
+    public BigTableJettySessionIdManager(Server server, BigTableJettySessionManager sessionManager) {
+        this.server = server;
         this.sessionManager = sessionManager;
     }
 
     @Override
     public boolean idInUse(String id) {
-        JettySessionRow row = sessionManager.jettySessionRepository.findByRowKey(id, SystemUser.getSystemUserContext());
+        JettySessionRow row = sessionManager.getJettySessionRepository().findByRowKey(id, SystemUser.getSystemUserContext());
         return row != null;
     }
 
