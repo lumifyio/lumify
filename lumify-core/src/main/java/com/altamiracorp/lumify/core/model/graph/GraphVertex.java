@@ -143,10 +143,6 @@ public abstract class GraphVertex {
         setProperty(propertyName.toString(), value);
     }
 
-//    public void setType(Concept conceptType) {
-//        setType(conceptType.toString());
-//    }
-
     public void setType(String vertexType) {
         setProperty(PropertyName.CONCEPT_TYPE, vertexType);
     }
