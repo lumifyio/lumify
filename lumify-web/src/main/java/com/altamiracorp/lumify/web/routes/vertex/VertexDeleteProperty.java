@@ -43,6 +43,8 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         graphVertex.removeProperty(property.getId().toString(), propertyName);
 
+        graph.flush();
+
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
 
