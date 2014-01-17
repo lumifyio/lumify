@@ -28,8 +28,7 @@ public class BigTableJettySessionIdManager extends AbstractSessionIdManager {
 
     @Override
     public boolean idInUse(String id) {
-        JettySessionRow row = sessionManager.getJettySessionRepository().findByRowKey(id, SystemUser.getSystemUserContext());
-        return row != null;
+        return sessionManager.loadSession(id) != null;
     }
 
     @Override

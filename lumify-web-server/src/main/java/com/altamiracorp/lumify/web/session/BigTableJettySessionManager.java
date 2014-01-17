@@ -46,10 +46,6 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
         this.jettySessionRepository = jettySessionRepository;
     }
 
-    public JettySessionRepository getJettySessionRepository() {
-        return jettySessionRepository;
-    }
-
     @Override
     protected NoSqlSession loadSession(String clusterId) {
         Optional<JettySessionRow> row = cache.getUnchecked(clusterId);
