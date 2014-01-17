@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.session;
 
 import com.altamiracorp.bigtable.model.Column;
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.web.session.model.*;
 import com.google.inject.Inject;
@@ -19,6 +20,7 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
 
     @Override
     protected NoSqlSession loadSession(String clusterId) {
+        System.out.println("Loading session < " + clusterId);
         JettySessionRow row = jettySessionRepository.findByRowKey(clusterId, SystemUser.getSystemUserContext());
         if (row == null) {
             return null;
@@ -57,6 +59,8 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
             }
             metadata.setVersion(((Number) version).longValue());
             metadata.setAccessed(session.getAccessed());
+            metadata.setClusterId(session.getClusterId());
+            metadata.setCreated(session.getCreationTime());
 
             JettySessionData data = row.getData();
             Set<String> attributesToSave = session.takeDirty();
@@ -67,7 +71,10 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
                 data.setObject(name, session.getAttribute(name));
             }
 
-            jettySessionRepository.save(row, SystemUser.getSystemUserContext());
+
+            System.out.println("Saving session > " + metadata.getClusterId());
+            jettySessionRepository.save(row, FlushFlag.FLUSH, SystemUser.getSystemUserContext());
+            //jettySessionRepository.save(row, SystemUser.getSystemUserContext());
         } else {
             // invalid session
             jettySessionRepository.delete(new JettySessionRowKey(session.getClusterId()), SystemUser.getSystemUserContext());
@@ -86,8 +93,8 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
 
         if (version != null) {
             if (row != null) {
-                long savedVersion = row.getMetadata().getVersion();
-                if (savedVersion == ((Number) version).longValue()) {
+                Long savedVersion = row.getMetadata().getVersion();
+                if (savedVersion != null && savedVersion == ((Number) version).longValue()) {
                     // refresh not required
                     return version;
                 }

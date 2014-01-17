@@ -14,7 +14,7 @@ public class JettySessionMetadata extends ColumnFamily {
         super(COLUMN_FAMILY_NAME);
     }
 
-    public long getCreated() {
+    public Long getCreated() {
         return Value.toLong(get(CREATED));
     }
 
@@ -23,7 +23,7 @@ public class JettySessionMetadata extends ColumnFamily {
         return this;
     }
 
-    public long getAccessed() {
+    public Long getAccessed() {
         return Value.toLong(get(ACCESSED));
     }
 
@@ -41,7 +41,7 @@ public class JettySessionMetadata extends ColumnFamily {
         return this;
     }
 
-    public long getVersion() {
+    public Long getVersion() {
         return Value.toLong(get(VERSION));
     }
 
