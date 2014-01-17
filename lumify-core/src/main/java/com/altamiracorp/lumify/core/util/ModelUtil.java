@@ -27,7 +27,6 @@ public class ModelUtil {
             UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
-            "atc_titan", // TODO refactor see com.altamiracorp.lumify.model.TitanGraphSession
             "atc_securegraph"); // TODO refactor add delete to securegraph?
 
     public static void initializeTables(ModelSession modelSession, User user) {
