@@ -43,6 +43,7 @@ public class EntityRelationships extends BaseRequestHandler {
             rel.put("from", edge.getVertexId(Direction.OUT));
             rel.put("to", edge.getVertexId(Direction.IN));
             rel.put("relationshipType", edge.getLabel());
+            rel.put("id", edge.getId());
             resultsJson.put(rel);
         }
 

@@ -49,13 +49,14 @@ define(
             });
         };
 
-        VertexService.prototype.deleteEdge = function (sourceId, targetId, label) {
+        VertexService.prototype.deleteEdge = function (sourceId, targetId, label, edgeId) {
             return this._ajaxPost({
                 url: '/vertex/removeRelationship',
                 data: {
                     sourceId: sourceId,
                     targetId: targetId,
-                    label: label
+                    label: label,
+                    edgeId: edgeId
                 }
             });
         };
