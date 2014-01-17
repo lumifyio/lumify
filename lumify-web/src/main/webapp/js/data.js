@@ -212,11 +212,11 @@ define([
 
             var self = this,
                 edge = data.edges[0];
-
             this.vertexService.deleteEdge(
                 edge.properties.source,
                 edge.properties.target,
-                edge.properties.relationshipType).done(function() {
+                edge.properties.relationshipType,
+                edge.properties.id).done(function() {
                     if (_.findWhere(self.selectedEdges, { id:edge.id })) {
                         self.trigger('selectObjects');
                     }

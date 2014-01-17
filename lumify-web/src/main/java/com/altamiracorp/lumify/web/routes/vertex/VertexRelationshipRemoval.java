@@ -33,16 +33,13 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         final String sourceId = getRequiredParameter(request, "sourceId");
         final String targetId = getRequiredParameter(request, "targetId");
         final String label = getRequiredParameter(request, "label");
+        final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
         Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
         Vertex destVertex = graph.getVertex(targetId, user.getAuthorizations());
 
-        // TODO should we really remove all edges not just one
-        Iterable<Edge> possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, label, user.getAuthorizations());
-        for (Edge edge : possibleEdges) {
-            graph.removeEdge(edge, user.getAuthorizations());
-        }
+        graph.removeEdge(edgeId, user.getAuthorizations());
 
         String displayName = ontologyRepository.getDisplayNameForLabel(label);
         // TODO: replace "" when we implement commenting on ui

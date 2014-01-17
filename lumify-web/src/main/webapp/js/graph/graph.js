@@ -928,16 +928,14 @@ define([
                         relationshipEdges.push ({
                             group: "edges",
                             data: {
-                                _rowKey: relationship.from + "->" + relationship.to,
                                 relationshipType: relationship.relationshipType,
                                 source: relationship.from,
                                 target: relationship.to,
                                 _type: 'relationship',
-                                id: (relationship.from + '-' + relationship.to + '-' + relationship.relationshipType)
+                                id: relationship.id
                             },
                         });
                     });
-
                     // Hide edges when zooming if more than threshold
                     cy.add(relationshipEdges);
                     this.updateEdgeOptions(cy);
