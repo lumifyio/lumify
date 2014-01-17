@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BigTableJettySessionManager extends NoSqlSessionManager {
     private static int CACHE_MAX_SIZE= 50;
-    private static int CACHE_EXPIRE_MINUTES = 1;
+    private static int CACHE_EXPIRE_MINUTES = 10;
     private static String CONFIGURATION_LOCATION = "/opt/lumify/config/";
 
     private JettySessionRepository jettySessionRepository;
