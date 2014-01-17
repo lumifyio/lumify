@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,33 +26,21 @@ public class RelationshipLabelList extends BaseRequestHandler {
         final String sourceConceptTypeId = getOptionalParameter(request, "sourceConceptTypeId");
         final String destConceptTypeId = getOptionalParameter(request, "destConceptTypeId");
 
-        User user = getUser(request);
-
         if (destConceptTypeId == null) {
-            List<Relationship> relationships = ontologyRepository.getRelationshipLabels(user);
+            Iterable<Relationship> relationships = ontologyRepository.getRelationshipLabels();
 
             JSONObject json = new JSONObject();
             json.put("relationships", Relationship.toJsonRelationships(relationships));
 
             respondWithJson(response, json);
         } else {
-            List<Relationship> relationships = ontologyRepository.getRelationships(sourceConceptTypeId, destConceptTypeId, user);
+            Iterable<Relationship> relationships = ontologyRepository.getRelationships(sourceConceptTypeId, destConceptTypeId);
 
             JSONObject result = new JSONObject();
-            JSONArray relationshipsJson = new JSONArray();
-            for (Relationship relationship : relationships) {
-                relationshipsJson.put(toJson(relationship));
-            }
+            JSONArray relationshipsJson = Relationship.toJsonRelationships(relationships);
             result.put("relationships", relationshipsJson);
 
             respondWithJson(response, result);
         }
-    }
-
-    private JSONObject toJson(Relationship relationship) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("id", relationship.getId());
-        json.put("title", relationship.getTitle());
-        return json;
     }
 }

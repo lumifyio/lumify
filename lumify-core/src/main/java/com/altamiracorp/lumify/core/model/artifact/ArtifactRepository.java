@@ -105,7 +105,7 @@ public class ArtifactRepository extends Repository<Artifact> {
         ElementMutation mutation = artifactVertex.prepareMutation();
 
         mutation.setProperty(PropertyName.ROW_KEY.toString(), artifact.getRowKey().toString(), visibility);
-        mutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType(), user).getId(), visibility);
+        mutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType()).getId(), visibility);
         mutation.setProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility);
 
         if (artifactExtractedInfo.getSource() != null) {

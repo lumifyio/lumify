@@ -25,7 +25,7 @@ public class PropertyListByConceptId extends BaseRequestHandler {
         final String conceptId = getAttributeString(request, "conceptId");
         User user = getUser(request);
 
-        List<OntologyProperty> properties = ontologyRepository.getPropertiesByConceptId(conceptId, user);
+        List<OntologyProperty> properties = ontologyRepository.getPropertiesByConceptId(conceptId);
 
         JSONObject json = new JSONObject();
         json.put("properties", OntologyProperty.toJsonProperties(properties));

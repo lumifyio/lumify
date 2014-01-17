@@ -45,7 +45,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
         Vertex destVertex = graph.getVertex(destId, user.getAuthorizations());
 
-        OntologyProperty property = ontologyRepository.getProperty(propertyName, user);
+        OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }

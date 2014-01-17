@@ -25,7 +25,7 @@ public class PropertyListByRelationshipLabel extends BaseRequestHandler {
         final String relationshipLabel = getAttributeString(request, "relationshipLabel");
         User user = getUser(request);
 
-        List<OntologyProperty> properties = ontologyRepository.getPropertiesByRelationship(relationshipLabel, user);
+        List<OntologyProperty> properties = ontologyRepository.getPropertiesByRelationship(relationshipLabel);
 
         JSONObject json = new JSONObject();
         json.put("properties", OntologyProperty.toJsonProperties(properties));

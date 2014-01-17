@@ -24,7 +24,7 @@ public class PropertyList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        List<OntologyProperty> properties = ontologyRepository.getProperties(user);
+        List<OntologyProperty> properties = ontologyRepository.getProperties();
 
         JSONObject json = new JSONObject();
         json.put("properties", OntologyProperty.toJsonProperties(properties));

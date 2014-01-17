@@ -110,11 +110,11 @@ public class OwlImport extends CommandLineBase {
         String parentName = getName(subClassOfResource);
 
         LOGGER.info("importClassElement: about: " + about + ", labelText: " + labelText + ", parentName: " + parentName);
-        Concept parent = ontologyRepository.getConceptByName(parentName, user);
+        Concept parent = ontologyRepository.getConceptByName(parentName);
         if (parent == null) {
             throw new RuntimeException("Could not find parent " + parentName + " for " + about);
         }
-        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, labelText, user);
+        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, labelText);
 
         for (Element propertyElem : propertyElems) {
             String propertyName = propertyElem.getAttributeNS("http://altamiracorp.com/ontology#", "name");
@@ -165,14 +165,14 @@ public class OwlImport extends CommandLineBase {
         String rangeResourceName = getName(rangeResource);
 
         LOGGER.info("importDatatypePropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName, user);
+        Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName);
         if (domain == null) {
             throw new RuntimeException("Could not find domain: " + domainResourceName);
         }
         PropertyType propertyType = PropertyType.convert(rangeResourceName);
         graph.flush();
 
-        ontologyRepository.addPropertyTo(domain, about, labelText, propertyType, user);
+        ontologyRepository.addPropertyTo(domain, about, labelText, propertyType);
     }
 
     private void importObjectPropertyElement(Element objectPropertyElem, User user) {
@@ -188,10 +188,10 @@ public class OwlImport extends CommandLineBase {
         String rangeResourceName = getName(rangeResource);
 
         LOGGER.info("importObjectPropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        Concept domain = ontologyRepository.getConceptByName(domainResourceName, user);
-        Concept range = ontologyRepository.getConceptByName(rangeResourceName, user);
+        Concept domain = ontologyRepository.getConceptByName(domainResourceName);
+        Concept range = ontologyRepository.getConceptByName(rangeResourceName);
 
-        ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText, user);
+        ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText);
     }
 
     private Element getSingleChildElement(Element elem, String ns, String localName) {

@@ -116,7 +116,7 @@ public class EntityHelper {
         }
 
         graph.addEdge(artifactVertex, resolvedVertex, LabelName.CONTAINS_IMAGE_OF.toString(), DEFAULT_VISIBILITY);
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString(), user);
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.CONTAINS_IMAGE_OF.toString());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
 
