@@ -109,7 +109,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         if (!existingEdges.hasNext()) {
             graph.addEdge(entityVertex, artifactVertex, LabelName.HAS_IMAGE.toString(), new Visibility(""));
         }
-        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
+        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
 

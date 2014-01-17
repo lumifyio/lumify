@@ -40,7 +40,7 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     public void testHandleWithNullProperty() throws Exception {
         when(mockRequest.getAttribute("graphVertexId")).thenReturn("");
         when(mockRequest.getParameter("propertyName")).thenReturn("");
-        when(mockOntologyRepository.getProperty(PropertyName.TITLE.toString(), mockUser)).thenReturn(null);
+        when(mockOntologyRepository.getProperty(PropertyName.TITLE.toString())).thenReturn(null);
         vertexDeleteProperty.handle(mockRequest, mockResponse, mockHandlerChain);
     }
 

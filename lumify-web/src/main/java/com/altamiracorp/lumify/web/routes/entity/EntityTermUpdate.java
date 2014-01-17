@@ -63,7 +63,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
                 graphVertexId);
 
         User user = getUser(request);
-        Concept concept = ontologyRepository.getConceptById(conceptId, user);
+        Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex resolvedVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
 
         // TODO: replace second "" when we implement commenting on ui
@@ -74,7 +74,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
         Iterator<Edge> edges = artifactVertex.getEdges(resolvedGraphVertex, Direction.BOTH, LabelName.HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
         if (!edges.hasNext()) {
             graph.addEdge(artifactVertex, resolvedVertex, LabelName.HAS_ENTITY.toString(), new Visibility(""));
-            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString());
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
         }

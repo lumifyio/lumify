@@ -8,7 +8,6 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -39,7 +38,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         List<Concept> limitConcepts = null;
 
         if (limitParentConceptId != null) {
-            limitConcepts = ontologyRepository.getConceptByIdAndChildren(limitParentConceptId, user);
+            limitConcepts = ontologyRepository.getConceptByIdAndChildren(limitParentConceptId);
             if (limitConcepts == null) {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }

@@ -50,13 +50,15 @@ public class Relationship {
             json.put("id", getId());
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
+            json.put("source", getSourceConcept().getId());
+            json.put("dest", getDestConcept().getId());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static JSONArray toJsonRelationships(List<Relationship> relationships) {
+    public static JSONArray toJsonRelationships(Iterable<Relationship> relationships) {
         JSONArray results = new JSONArray();
         for (Relationship vertex : relationships) {
             results.put(vertex.toJson());

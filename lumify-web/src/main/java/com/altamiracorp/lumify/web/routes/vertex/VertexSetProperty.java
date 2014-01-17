@@ -45,7 +45,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String valueStr = getRequiredParameter(request, "value");
 
         User user = getUser(request);
-        OntologyProperty property = ontologyRepository.getProperty(propertyName, user);
+        OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
         }

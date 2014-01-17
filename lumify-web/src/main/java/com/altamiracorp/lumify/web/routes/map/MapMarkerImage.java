@@ -54,9 +54,9 @@ public class MapMarkerImage extends BaseRequestHandler {
         if (imageData == null) {
             LOGGER.info("map marker cache miss %s (scale: %d, heading: %d)", typeStr, scale, heading);
 
-            Concept concept = ontologyRepository.getConceptById(typeStr, user);
+            Concept concept = ontologyRepository.getConceptById(typeStr);
             if (concept == null) {
-                concept = ontologyRepository.getConceptByName(typeStr, user);
+                concept = ontologyRepository.getConceptByName(typeStr);
             }
 
             boolean isMapGlyphIcon = false;
@@ -166,7 +166,7 @@ public class MapMarkerImage extends BaseRequestHandler {
                 return mapGlyphIcon;
             }
 
-            concept = ontologyRepository.getParentConcept(concept.getId().toString(), user);
+            concept = ontologyRepository.getParentConcept(concept.getId().toString());
         }
 
         return null;
@@ -179,7 +179,7 @@ public class MapMarkerImage extends BaseRequestHandler {
                 return glyphIcon;
             }
 
-            concept = ontologyRepository.getParentConcept(concept.getId().toString(), user);
+            concept = ontologyRepository.getParentConcept(concept.getId().toString());
         }
 
         return null;

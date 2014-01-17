@@ -44,7 +44,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
             graph.removeEdge(edge, user.getAuthorizations());
         }
 
-        String displayName = ontologyRepository.getDisplayNameForLabel(label, user);
+        String displayName = ontologyRepository.getDisplayNameForLabel(label);
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.DELETE.toString(), sourceVertex, destVertex, displayName, "", "", user);
 

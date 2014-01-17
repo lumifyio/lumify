@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
-import java.util.Map;
 
 public class VertexToVertexRelationship extends BaseRequestHandler {
     private final Graph graph;
@@ -48,7 +47,7 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
             while (propertyIterator.hasNext()) {
                 Property edgeProperty = propertyIterator.next();
                 property.put("key", edgeProperty.getName());
-                String displayName = ontologyRepository.getDisplayNameForLabel(edgeProperty.getValue().toString(), user);
+                String displayName = ontologyRepository.getDisplayNameForLabel(edgeProperty.getValue().toString());
                 if (displayName == null) {
                     property.put("value", edgeProperty.getValue());
                 } else {

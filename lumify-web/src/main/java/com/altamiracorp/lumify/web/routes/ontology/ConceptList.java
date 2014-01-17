@@ -28,7 +28,7 @@ public class ConceptList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        Concept rootConcept = ontologyRepository.getRootConcept(user);
+        Concept rootConcept = ontologyRepository.getRootConcept();
 
         JSONObject result = buildJsonTree(request, rootConcept, user);
 
@@ -44,7 +44,7 @@ public class ConceptList extends BaseRequestHandler {
             result.put("pluralDisplayName", English.plural(displayName));
         }
 
-        List<Concept> childConcepts = ontologyRepository.getChildConcepts(concept, user);
+        List<Concept> childConcepts = ontologyRepository.getChildConcepts(concept);
         if (childConcepts.size() > 0) {
             JSONArray childrenJson = new JSONArray();
             for (Concept childConcept : childConcepts) {

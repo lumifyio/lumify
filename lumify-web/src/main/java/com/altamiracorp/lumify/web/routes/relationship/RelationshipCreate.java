@@ -43,7 +43,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
 
         User user = getUser(request);
-        String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel, user);
+        String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel);
         Vertex destVertex = graph.getVertex(destGraphVertexId, user.getAuthorizations());
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, user.getAuthorizations());
 

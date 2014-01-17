@@ -31,21 +31,21 @@ public class BaseOntology {
 
     public void defineOntology(User user) {
         // concept properties
-        ontologyRepository.getOrCreatePropertyType(PropertyName.TITLE.toString(), PropertyType.STRING, user);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, user);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING, user);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING, user);
+        ontologyRepository.getOrCreatePropertyType(PropertyName.TITLE.toString(), PropertyType.STRING);
+        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION);
+        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING);
+        ontologyRepository.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING);
         graph.flush();
 
-        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME, user);
-        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE, user);
-        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE, user);
+        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE);
         graph.flush();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY.toString(), "Entity", user);
-        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.CONCEPT_TYPE.toString(), "Type", PropertyType.STRING, user);
-        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.TITLE.toString(), "Title", PropertyType.STRING, user);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY.toString(), "Entity");
+        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.CONCEPT_TYPE.toString(), "Type", PropertyType.STRING);
+        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.TITLE.toString(), "Title", PropertyType.STRING);
 
         graph.flush();
 
@@ -57,7 +57,7 @@ public class BaseOntology {
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY, user);
+            Concept concept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(PropertyName.ONTOLOGY_TITLE.toString())) {

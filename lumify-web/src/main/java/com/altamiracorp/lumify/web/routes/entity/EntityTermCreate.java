@@ -53,7 +53,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         User user = getUser(request);
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
 
-        Concept concept = ontologyRepository.getConceptById(conceptId, user);
+        Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         final Vertex createdVertex = graph.addVertex(visibility);
@@ -68,7 +68,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         graph.addEdge(createdVertex, artifactVertex, LabelName.HAS_ENTITY.toString(), visibility);
 
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString());
         if (labelDisplayName == null) {
             labelDisplayName = LabelName.HAS_ENTITY.toString();
         }

@@ -16,9 +16,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexSearch extends BaseRequestHandler {
@@ -43,7 +40,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         User user = getUser(request);
         JSONArray filterJson = new JSONArray(filter);
 
-        ontologyRepository.resolvePropertyIds(filterJson, user);
+        ontologyRepository.resolvePropertyIds(filterJson);
 
         graph.flush();
 
