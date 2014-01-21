@@ -56,7 +56,7 @@ Understanding how your data relates to the physical world is important for inves
 
 ### Multimedia Analysis
 
-Data comes in all shapes and sizes. Out-of-the-box Lumify comes with specific ingest processing and interface elements for textual content, images, and videos. For example, Lumify will run an OCR process on images in an effort to obtain searchable text and extract closed captioning from videos for indexing. On the interface side, Lumify allows users to tag entities within images, watch videos with synchronized transcripts, and create new entities and relationships from any extracted text. Below is a screenshot of entities extracted from a Wikipedia article.
+Data comes in all shapes and sizes. Out of the box, Lumify comes with specific ingest processing and interface elements for textual content, images, and videos. For example, Lumify will run an OCR process on images in an effort to obtain searchable text and extract closed captioning from videos for indexing. On the interface side, Lumify allows users to tag entities within images, watch videos with synchronized transcripts, and create new entities and relationships from any extracted text. Below is a screenshot of entities extracted from a Wikipedia article.
 
 ![text analysis]({{site.url}}/assets/2014-01-21-what-is-lumify/text.png)
 
