@@ -164,7 +164,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     }
 
     @Inject(optional = true)
-    public void setContentTypeExtractor(ContentTypeExtractor contentTypeExtractor) {
+    public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
         this.contentTypeExtractor = contentTypeExtractor;
     }
 }
