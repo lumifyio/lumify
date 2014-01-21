@@ -157,6 +157,7 @@ footer .social {
 .post .title {
   margin-top: 0;
   margin: 0 0 1em 0;
+  font-weight: bold;
 }
 
 .post .title a {
