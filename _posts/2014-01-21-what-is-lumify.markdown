@@ -2,6 +2,7 @@
 layout: post
 title:  "What is Lumify?"
 author: Jeff Kunkle
+excerpt: It seems fitting that the first post to the Lumify blog spend some time explaining what Lumify is. What problem does Lumify address? What are the key concepts? What can you do with Lumify? Read the full post for answers to these questions and more.
 ---
 It seems fitting that the first post to the Lumify blog spend some additional time explaining what Lumify is. Summarized in one sentence,
 
@@ -21,7 +22,7 @@ Understanding a couple key concepts will greatly help in making sense of what Lu
 
 * **Ontology** - An ontology is the structure for organizing information you care to analyze in Lumify. Basically, it's your data model. The entities, relationships, and properties that make up Lumify's graph are entirely specified by you using [OWL](http://www.w3.org/TR/owl-features/).
 * **Graph** - The data model within Lumify is stored as a graph of entities, or things, and the relationships between those entities. For the technologists out there, these are usually referred to as vertices (entities) and edges (relationships). Entities and relationships can have one or more associated properties.
-* **Entity** - An entity is any “thing” you want to represent in Lumify. It could be a person, place, event, etc. Entities have properties and relationships to other entities.
+* **Entity** - An entity is any "thing" you want to represent in Lumify. It could be a person, place, event, etc. Entities have properties and relationships to other entities.
 * **Relationship** - A relationship is a link between two entities. For example, Joe (entity) works with (relationship) Susan (entity). Lumify can be configured to understand and enforce valid relationships between entities.
 * **Properties** - Properties are data about an entity. For example, a person entity may have properties for first name, last name, date of birth, height, weight, etc. Lumify will track whatever properties you define in your ontology.
 
@@ -33,31 +34,31 @@ Lumify is specifically designed for investigative workflows, where you don't alw
 
 Lumify provides a full-text search over everything in your graph. You can also use custom filters built from properties defined in your ontology.
 
-![searching](/assets/2014-01-21-what-is-lumify/search.png)
+![searching]({{site.url}}/assets/2014-01-21-what-is-lumify/search.png)
 
 ### Graph Visualization
 
 The primary feature of Lumify is the graph visualization. Lumify provides both 2D and 3D graph visualizations with a variety of automatic layouts to help you tame a crowded graph.
 
-![graph visualization](/assets/2014-01-21-what-is-lumify/graph.png)
+![graph visualization]({{site.url}}/assets/2014-01-21-what-is-lumify/graph.png)
 
 ### Link Analysis
 
 Lumify provides a variety of options for analyzing the links between entities on the graph. A right click menu on any entity allows you to display all related entities, find paths to another entity, and establish a new relationship (i.e. connect) to another entity.
 
-![link analysis](/assets/2014-01-21-what-is-lumify/link.png)
+![link analysis]({{site.url}}/assets/2014-01-21-what-is-lumify/link.png)
 
 ### Geospatial Analysis
 
 Understanding how your data relates to the physical world is important for investigative workflows. Lumify provides the ability to integrate any [Open Layers](http://openlayers.org/)-compatible mapping system, such as Google Maps or ESRI, for geospatial analysis. Any data tagged with location information can be aggregated and viewed on a map. You can also search from the map by drawing a shape within which you want to find information.
 
-![map integration](/assets/2014-01-21-what-is-lumify/map.png)
+![map integration]({{site.url}}/assets/2014-01-21-what-is-lumify/map.png)
 
 ### Multimedia Analysis
 
 Data comes in all shapes and sizes. Out of the box Lumify comes with specific ingest processing and interface elements for textual content, images, and videos. For example, Lumify will run an OCR process on images in an effort to obtain searchable text and extract closed captioning from videos for indexing. On the interface side, Lumify allows users to tag entities within images, watch videos with synchronized transcripts, and create new entities and relationships from any extracted text. Below is a screenshot of entities extracted from a Wikipedia article.
 
-![text analysis](/assets/2014-01-21-what-is-lumify/text.png)
+![text analysis]({{site.url}}/assets/2014-01-21-what-is-lumify/text.png)
 
 ### Histogram Analysis
 
@@ -67,13 +68,13 @@ Sometimes it's difficult to understand your data when looking at it one item at 
 
 While graph visualization is Lumify's bread and butter, knowledge creation is a close second. Lumify provides many different ways to resolve new entities, establish relationships, and assign properties from the details view, graph, or map.
 
-![knowledge building](/assets/2014-01-21-what-is-lumify/build.png)
+![knowledge building]({{site.url}}/assets/2014-01-21-what-is-lumify/build.png)
 
 ### Live, Collaborative Spaces
 
 Few of us work alone anymore, especially on difficult investigative-type tasks. Lumify's spaces feature allows you to organize work into a set of projects, or workspaces. Each space can be individually shared in read-only or edit mode with other Lumify users. Changes to the space are immediately propagated to everyone sharing the workspace without needing to refresh browser windows.
 
-![sharing](/assets/2014-01-21-what-is-lumify/sharing.png)
+![sharing]({{site.url}}/assets/2014-01-21-what-is-lumify/sharing.png)
 
 ### Analytics Platform
 
@@ -96,7 +97,7 @@ At it's core, Lumify is an integration of popular open source, big data technolo
 
 ## Why choose Lumify?
 
-The challenge of making sense of the ever-increasing volumes of data isn't going away any time soon. The ability to effectively deal with this data-deluge will be a key differentiator for businesses moving forward. Eric Schmidt, executive chairman of Google, was recently quoted as saying that “the biggest disrupter (of 2014) that we're sure about is the arrival of big data and machine intelligence everywhere”. Lumify can serve as that platform. It is
+The challenge of making sense of the ever-increasing volumes of data isn't going away any time soon. The ability to effectively deal with this data-deluge will be a key differentiator for businesses moving forward. Eric Schmidt, executive chairman of Google, was recently quoted as saying that "the biggest disrupter (of 2014) that we're sure about is the arrival of big data and machine intelligence everywhere". Lumify can serve as that platform. It is
 
 * **Free** - Lumify is completely free. There are no licensing or usage fees whatsoever for the software.
 * **Permissively Licensed** - All Lumify code is licensed under the [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0.html), giving you the freedom to use it commercially, modify, and redistribute.
