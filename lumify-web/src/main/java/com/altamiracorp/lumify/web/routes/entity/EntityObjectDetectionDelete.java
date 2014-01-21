@@ -45,9 +45,9 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         Map<GraphRelationship, GraphVertex> relationships = graphRepository.getRelationships(graphVertexId, user);
         GraphVertex artifactVertex = graphRepository.findVertex(jsonObject.getString("artifactId"), user);
         if (relationships.size() > 1) {
-            String edgeId = artifactVertex.getId() + ">" + graphVertexId + "|" + LabelName.CONTAINS_IMAGE_OF.toString();
+            String edgeId = artifactVertex.getId() + ">" + graphVertexId + "|" + LabelName.ENTITY_HAS_IMAGE_RAW.toString();
             obj.put("edgeId", edgeId);
-            graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.CONTAINS_IMAGE_OF.toString(), user);
+            graphRepository.removeRelationship(artifactVertex.getId(), graphVertexId, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user);
         } else {
             // TODO: replace "" when we implement commenting on ui
             auditRepository.auditEntity(AuditAction.DELETE.toString(), graphVertexId, artifactVertex.getId(), jsonObject.getString("title"),
