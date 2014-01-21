@@ -8,27 +8,27 @@ It seems fitting that the first post to the Lumify blog spend some additional ti
 
 > Lumify is an open source big data analysis and visualization platform.
 
-While every product needs a short one-liner description, that high-level nebulous sentence doesn't do the project justice or provide great clarity on just what you can do with Lumify. So let's start from the top.
+That high-level nebulous sentence doesn't do the project justice or provide great clarity on just what you can do with Lumify. So let's start from the top.
 
 ## What problem does Lumify address?
 
 It's no secret the world is producing a lot of information. [According to IBM](http://www.ibm.com/smarterplanet/us/en/business_analytics/article/it_business_intelligence.html), 90% of the data in the world today has been created in the last two years alone. The ability to deal with the volume and variety of data in organizations today is a serious challenge that's only going to get harder as the rate of data creation accelerates. Lumify was created to help organizations tackle this problem in an open, non-proprietary way.
 
-There are countless vendors in today's marketplace offering a variety of solutions to solve your big data woes. Each takes a slightly different angle on the problem in an effort to differentiate their product. But at the end of the day they all have the same goal, to help you get value and insight form the growing mounds of available data. We built Lumify to do just that, while freeing customers from proprietary license agreements, vendor lock-in, and data hostage-taking.
+There are countless vendors in today's marketplace offering a variety of solutions to solve your big data woes. Each takes a slightly different angle on the problem in an effort to differentiate their product. But at the end of the day they all have the same goal, to help you get value and insight form the growing mounds of available data. We built Lumify to do just that.
 
 ## What are the key Lumify concepts?
 
 Understanding a couple key concepts will greatly help in making sense of what Lumify does and how it does it.
 
 * **Ontology** - An ontology is the structure for organizing information you care to analyze in Lumify. Basically, it's your data model. The entities, relationships, and properties that make up Lumify's graph are entirely specified by you using [OWL](http://www.w3.org/TR/owl-features/).
-* **Graph** - The data model within Lumify is stored as a graph of entities, or things, and the relationships between those entities. For the technologists out there, these are usually referred to as vertices (entities) and edges (relationships). Entities and relationships can have one or more associated properties.
 * **Entity** - An entity is any "thing" you want to represent in Lumify. It could be a person, place, event, etc. Entities have properties and relationships to other entities.
 * **Relationship** - A relationship is a link between two entities. For example, Joe (entity) works with (relationship) Susan (entity). Lumify can be configured to understand and enforce valid relationships between entities.
 * **Properties** - Properties are data about an entity. For example, a person entity may have properties for first name, last name, date of birth, height, weight, etc. Lumify will track whatever properties you define in your ontology.
+* **Graph** - The data model within Lumify is stored as a graph of entities, or things, and the relationships between those entities. For the technologists out there, these are usually referred to as vertices (entities) and edges (relationships). Entities and relationships can have one or more associated properties.
 
 ## What can you do with Lumify?
 
-Lumify is specifically designed for investigative workflows, where you don't always know exactly what you're looking for and need to explore the data, searching for relationships and patterns within to draw new insights. All of this is done though a clean, modern, purpose-built web interface. Some of the specific features of Lumify include:
+Lumify is specifically designed for investigative work, where you don't always know exactly what you're looking for and need to explore the data, searching for relationships and patterns within to draw new insights. All of this is done though a clean, modern, purpose-built web interface. Some of the specific features of Lumify include:
 
 ### Search
 
@@ -56,7 +56,7 @@ Understanding how your data relates to the physical world is important for inves
 
 ### Multimedia Analysis
 
-Data comes in all shapes and sizes. Out of the box Lumify comes with specific ingest processing and interface elements for textual content, images, and videos. For example, Lumify will run an OCR process on images in an effort to obtain searchable text and extract closed captioning from videos for indexing. On the interface side, Lumify allows users to tag entities within images, watch videos with synchronized transcripts, and create new entities and relationships from any extracted text. Below is a screenshot of entities extracted from a Wikipedia article.
+Data comes in all shapes and sizes. Out-of-the-box Lumify comes with specific ingest processing and interface elements for textual content, images, and videos. For example, Lumify will run an OCR process on images in an effort to obtain searchable text and extract closed captioning from videos for indexing. On the interface side, Lumify allows users to tag entities within images, watch videos with synchronized transcripts, and create new entities and relationships from any extracted text. Below is a screenshot of entities extracted from a Wikipedia article.
 
 ![text analysis]({{site.url}}/assets/2014-01-21-what-is-lumify/text.png)
 
@@ -82,7 +82,7 @@ There's a lot more to Lumify than what you see on the interface. Behind the scen
 
 ## Who would use Lumify?
 
-Lumify was built to be a general purpose data analysis platform, so it can be used in a lot of situations. However, it really shines in investigative-type workflows, where you may not know exactly what you're looking for and need to explore the data and analyze relationships to gain insight into your problem. Lumify is perfectly suited for
+Lumify was built to be a general purpose data analysis platform, so it can be used in a lot of situations. However, it really shines in investigative-type workflows, where you may not know exactly what you're looking for and need to explore the data and analyze relationships to gain insight into your problem. Lumify is perfectly suited for:
 
 * Intelligence Analysts
 * Detectives
