@@ -123,6 +123,10 @@
             <artifactId>ant</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
