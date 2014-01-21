@@ -100,8 +100,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         // TODO: replace second"" when we implement commenting on ui
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
 
-        graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.HAS_IMAGE, user);
-        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_IMAGE.toString(), user);
+        graphRepository.findOrAddRelationship(entityVertex.getId(), artifactVertex.getId(), LabelName.ENTITY_HAS_IMAGE_RAW, user);
+        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user);
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
 

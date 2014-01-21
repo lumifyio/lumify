@@ -57,9 +57,9 @@ public class EntityTermUpdate extends BaseRequestHandler {
         // TODO: replace second "" when we implement commenting on ui
         entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
 
-        if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.HAS_ENTITY.toString(), user) == null) {
-            graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.HAS_ENTITY, user);
-            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString(), user);
+        if (graphRepository.findEdge(artifactId, resolvedGraphVertexId, LabelName.RAW_HAS_ENTITY.toString(), user) == null) {
+            graphRepository.saveRelationship(artifactId, resolvedVertex.getId(), LabelName.RAW_HAS_ENTITY, user);
+            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString(), user);
             GraphVertex artifactVertex = graphRepository.findVertex(artifactId, user);
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
