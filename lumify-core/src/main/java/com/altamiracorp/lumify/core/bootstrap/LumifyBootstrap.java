@@ -177,6 +177,7 @@ public class LumifyBootstrap extends AbstractModule {
     }
 
     private Provider<? extends Graph> getGraphProvider(Configuration configuration, String configurationPrefix) {
+        // TODO change to use com.altamiracorp.securegraph.GraphFactory
         String graphClassName = configuration.get(configurationPrefix);
         final Map configurationSubset = configuration.getSubset(configurationPrefix).toMap();
 

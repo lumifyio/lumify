@@ -1,9 +1,5 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactMetadata;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.DisplayType;
@@ -19,6 +15,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -43,7 +41,6 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final String SOURCE_UPLOAD = "User Upload";
     private static final String PROCESS = GraphVertexUploadImage.class.getName();
 
-    private final ArtifactRepository artifactRepository;
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
@@ -51,12 +48,10 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
     @Inject
     public GraphVertexUploadImage(
-            final ArtifactRepository artifactRepository,
             final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final WorkQueueRepository workQueueRepository) {
-        this.artifactRepository = artifactRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
@@ -82,24 +77,16 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             return;
         }
 
-        Artifact artifact = convertToArtifact(file);
-        artifactRepository.save(artifact, user.getModelUserContext());
+        Visibility visibility = new Visibility("");
+        ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file);
+        artifactBuilder
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), DisplayType.IMAGE.toString(), visibility)
+                .setProperty(PropertyName.TITLE.toString(), "Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString(), 0), visibility)
+                .setProperty(PropertyName.SOURCE.toString(), SOURCE_UPLOAD, visibility)
+                .setProperty(PropertyName.PROCESS.toString(), PROCESS, visibility);
+        Vertex artifactVertex = artifactBuilder.save();
 
-        ArtifactExtractedInfo artifactDetails = new ArtifactExtractedInfo();
-        artifactDetails.setConceptType(DisplayType.IMAGE.toString());
-        artifactDetails.setTitle("Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString(), 0));
-        artifactDetails.setSource(SOURCE_UPLOAD);
-        artifactDetails.setProcess(PROCESS);
-
-        Vertex artifactVertex = null;
-        if (artifact.getMetadata().getGraphVertexId() != null) {
-            artifactVertex = graph.getVertex(artifact.getMetadata().getGraphVertexId(), user.getAuthorizations());
-        }
-        if (artifactVertex == null) {
-            artifactVertex = artifactRepository.saveToGraph(artifact, artifactDetails, user);
-        }
-
-        entityVertex.setProperty(PropertyName.GLYPH_ICON.toString(), ArtifactThumbnail.getUrl(artifactVertex.getId()), new Visibility(""));
+        entityVertex.setProperty(PropertyName.GLYPH_ICON.toString(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
         graph.flush();
 
         // TODO: replace second"" when we implement commenting on ui
@@ -107,7 +94,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations()).iterator();
         if (!existingEdges.hasNext()) {
-            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), new Visibility(""));
+            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility);
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
@@ -118,7 +105,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         respondWithJson(response, toJson(entityVertex));
     }
 
-    private Artifact convertToArtifact(final Part file) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);
@@ -133,15 +120,17 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final String fileRowKey = RowKeyHelper.buildSHA256KeyString(rawContent);
         LOGGER.debug("Generated row key: %s", fileRowKey);
 
-        Artifact artifact = new Artifact(fileRowKey);
-        ArtifactMetadata metadata = artifact.getMetadata();
-        metadata.setCreateDate(new Date());
-        metadata.setRaw(rawContent);
-        metadata.setFileName(fileName);
-        metadata.setFileExtension(FilenameUtils.getExtension(fileName));
-        metadata.setMimeType(mimeType);
-        metadata.setHighlightedText("");
+        StreamingPropertyValue rawValue = new StreamingPropertyValue(new ByteArrayInputStream(rawContent), byte[].class);
+        rawValue.searchIndex(false);
+        rawValue.store(true);
 
-        return artifact;
+        Visibility visibility = new Visibility("");
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility)
+                .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
+                .setProperty(PropertyName.FILE_NAME.toString(), fileName, visibility)
+                .setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), FilenameUtils.getExtension(fileName), visibility)
+                .setProperty(PropertyName.MIME_TYPE.toString(), mimeType, visibility)
+                .setProperty(PropertyName.RAW.toString(), rawValue, visibility);
+        return vertexBuilder;
     }
 }

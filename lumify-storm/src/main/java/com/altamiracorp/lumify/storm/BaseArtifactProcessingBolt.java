@@ -8,8 +8,6 @@ import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -91,11 +89,11 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         } else if (isArchive(fileName)) {
             archiveTempDir = extractArchive(fileMetadata);
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
-            in = getInputStream(primaryFile.getAbsolutePath(), artifactExtractedInfo);
+            in = openFile(primaryFile.getAbsolutePath());
             fileMetadata.setPrimaryFileFromArchive(primaryFile);
             fileMetadata.setMimeType(getContentTypeExtractor().extract(new FileInputStream(primaryFile), FilenameUtils.getExtension(primaryFile.getAbsoluteFile().toString())));
         } else {
-            in = getInputStream(fileMetadata.getFileName(), artifactExtractedInfo);
+            in = openFile(fileMetadata.getFileName());
         }
         if (fileMetadata.getTitle() != null) {
             artifactExtractedInfo.setTitle(fileMetadata.getTitle());
@@ -106,10 +104,13 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         artifactExtractedInfo.setFileExtension(FilenameUtils.getExtension(fileMetadata.getFileName()));
         artifactExtractedInfo.setMimeType(fileMetadata.getMimeType());
         rawSize = in.available();
+        if(rawSize <= ArtifactExtractedInfo.MAX_SIZE_OF_INLINE_FILE) {
+            in = new ByteArrayInputStream(IOUtils.toByteArray(in));
+        }
 
         runWorkers(in, fileMetadata, artifactExtractedInfo, archiveTempDir);
 
-        if (rawSize > Artifact.MAX_SIZE_OF_INLINE_FILE) {
+        if (rawSize > ArtifactExtractedInfo.MAX_SIZE_OF_INLINE_FILE) {
             String newRawArtifactHdfsPath = moveRawFile(fileMetadata.getFileName(), artifactExtractedInfo.getRowKey(), fileMetadata.getRaw());
             artifactExtractedInfo.setRawHdfsPath(newRawArtifactHdfsPath);
         } else {
@@ -117,10 +118,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             artifactExtractedInfo.setRaw(IOUtils.toByteArray(in));
         }
 
-        if (artifactExtractedInfo.getTextRowKey() != null && artifactExtractedInfo.getTextHdfsPath() != null) {
-            String newTextPath = moveTempTextFile(artifactExtractedInfo.getTextHdfsPath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setTextHdfsPath(newTextPath);
-        }
         if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
             String newTextPath = moveTempMp4File(artifactExtractedInfo.getMp4HdfsFilePath(), artifactExtractedInfo.getRowKey());
             artifactExtractedInfo.setMp4HdfsFilePath(newTextPath);
@@ -137,19 +134,23 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             String newTextPath = moveTempPosterFrameFile(artifactExtractedInfo.getPosterFrameHdfsPath(), artifactExtractedInfo.getRowKey());
             artifactExtractedInfo.setPosterFrameHdfsPath(newTextPath);
         }
-        if (artifactExtractedInfo.getVideoFrames() != null) {
-            saveVideoFrames(new ArtifactRowKey(artifactExtractedInfo.getRowKey()), artifactExtractedInfo.getVideoFrames());
-        }
         if (artifactExtractedInfo.getProcess() == null) {
             artifactExtractedInfo.setProcess("");
         }
 
         Vertex graphVertex = saveArtifact(artifactExtractedInfo);
 
+        if (artifactExtractedInfo.getVideoFrames() != null) {
+            saveVideoFrames(graphVertex.getId(), artifactExtractedInfo.getVideoFrames());
+        }
+
         if (archiveTempDir != null) {
             FileUtils.deleteDirectory(archiveTempDir);
             LOGGER.debug("Deleted temporary directory holding archive content");
         }
+
+        graph.flush();
+
         LOGGER.debug("Created graph vertex [%s] for %s", graphVertex.getId(), artifactExtractedInfo.getTitle());
         return graphVertex;
     }
@@ -158,16 +159,16 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         throw new RuntimeException("Not implemented for class " + getClass());
     }
 
-    private void saveVideoFrames(ArtifactRowKey artifactRowKey, List<ArtifactExtractedInfo.VideoFrame> videoFrames) throws IOException {
+    private void saveVideoFrames(Object artifactVertexId, List<ArtifactExtractedInfo.VideoFrame> videoFrames) throws IOException {
         for (ArtifactExtractedInfo.VideoFrame videoFrame : videoFrames) {
-            saveVideoFrame(artifactRowKey, videoFrame);
+            saveVideoFrame(artifactVertexId, videoFrame);
         }
     }
 
-    private void saveVideoFrame(ArtifactRowKey artifactRowKey, ArtifactExtractedInfo.VideoFrame videoFrame) throws IOException {
+    private void saveVideoFrame(Object artifactVertexId, ArtifactExtractedInfo.VideoFrame videoFrame) throws IOException {
         InputStream in = getHdfsFileSystem().open(new Path(videoFrame.getHdfsPath()));
         try {
-            videoFrameRepository.saveVideoFrame(artifactRowKey, in, videoFrame.getFrameStartTime(), getUser());
+            videoFrameRepository.saveVideoFrame(artifactVertexId, in, videoFrame.getFrameStartTime(), getUser());
         } finally {
             in.close();
         }

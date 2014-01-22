@@ -20,10 +20,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
-import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -33,8 +29,8 @@ public class ArtifactRawTest extends RouteTestBase {
     @Mock
     private Vertex mockVertex;
 
-    @Mock
-    private VideoPlaybackDetails mockVideoDetails;
+//    @Mock
+//    private VideoPlaybackDetails mockVideoDetails;
 
     @Mock
     private Graph mockGraph;
@@ -44,7 +40,7 @@ public class ArtifactRawTest extends RouteTestBase {
     public void setUp() throws Exception {
 //        super.setUp();
 
-        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraph);
+//        artifactRaw = new ArtifactRaw(mockArtifactRepository, mockGraph);
     }
 
     @Test

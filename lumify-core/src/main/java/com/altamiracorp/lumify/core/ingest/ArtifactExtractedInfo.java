@@ -1,21 +1,13 @@
 package com.altamiracorp.lumify.core.ingest;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
-import com.google.common.collect.Lists;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
 
 public class ArtifactExtractedInfo {
     private static final String ROW_KEY = "rowKey";
@@ -24,9 +16,7 @@ public class ArtifactExtractedInfo {
     private static final String DATE = "date";
     private static final String TEXT_HDFS_PATH = "textHdfsPath";
     private static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
-    private static final String RAW_HDFS_PATH = "rawHdfsPath";
     private static final String RAW = "raw";
-    private static final String TEXT_ROW_KEY = "textRowKey";
     private static final String MP4_HDFS_PATH = "mp4HdfsPath";
     private static final String WEBM_HDFS_PATH = "webmHdfsPath";
     private static final String DETECTED_OBJECTS = "detectedObjects";
@@ -43,6 +33,8 @@ public class ArtifactExtractedInfo {
     private static final String SOURCE = "source";
     private static final String AUTHOR = "author";
     private static final String PROCESS = "process";
+    private static final String RAW_HDFS_PATH = "rawHdfsPath";
+    public static final int MAX_SIZE_OF_INLINE_FILE = 1 * 1024 * 1024;
 
     private final HashMap<String, Object> properties = new HashMap<String, Object>();
 
@@ -84,6 +76,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for rowKey property.
+     *
      * @param rowKey the rowKey
      * @return this
      */
@@ -91,7 +84,7 @@ public class ArtifactExtractedInfo {
         setRowKey(rowKey);
         return this;
     }
-    
+
     public String getRowKey() {
         return (String) properties.get(ROW_KEY);
     }
@@ -104,8 +97,28 @@ public class ArtifactExtractedInfo {
         properties.put(TEXT, text);
     }
 
+    public void setRawHdfsPath(String rawHdfsPath) {
+        set(RAW_HDFS_PATH, rawHdfsPath);
+    }
+
+    /**
+     * Builder pattern for rawHdfsPath property.
+     *
+     * @param rawHdfsPath the rawHdfsPath
+     * @return this
+     */
+    public ArtifactExtractedInfo rawHdfsPath(final String rawHdfsPath) {
+        setRawHdfsPath(rawHdfsPath);
+        return this;
+    }
+
+    public String getRawHdfsPath() {
+        return (String) properties.get(RAW_HDFS_PATH);
+    }
+
     /**
      * Builder pattern for text property.
+     *
      * @param text the text
      * @return this
      */
@@ -113,13 +126,14 @@ public class ArtifactExtractedInfo {
         setText(text);
         return this;
     }
-    
+
     public void setTitle(String title) {
         properties.put(TITLE, title);
     }
 
     /**
      * Builder pattern for title property.
+     *
      * @param title the title
      * @return this
      */
@@ -127,7 +141,7 @@ public class ArtifactExtractedInfo {
         setTitle(title);
         return this;
     }
-    
+
     public String getTitle() {
         return (String) properties.get(TITLE);
     }
@@ -137,9 +151,10 @@ public class ArtifactExtractedInfo {
         Date safeClone = new Date(date.getTime());
         properties.put(DATE, safeClone);
     }
-    
+
     /**
      * Builder pattern for date property.
+     *
      * @param date the date
      * @return this
      */
@@ -147,7 +162,7 @@ public class ArtifactExtractedInfo {
         setDate(date);
         return this;
     }
-    
+
     public Date getDate() {
         Date internalDate = (Date) properties.get(DATE);
         // ensure internal date object is not externally mutable
@@ -175,6 +190,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for textHdfsPath property.
+     *
      * @param textHdfsPath the textHdfsPath
      * @return this
      */
@@ -182,7 +198,7 @@ public class ArtifactExtractedInfo {
         setTextHdfsPath(textHdfsPath);
         return this;
     }
-    
+
     public String getTextHdfsPath() {
         return (String) properties.get(TEXT_HDFS_PATH);
     }
@@ -193,6 +209,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for ontologyClassUri property.
+     *
      * @param ontologyClassUri the ontologyClassUri
      * @return this
      */
@@ -200,27 +217,9 @@ public class ArtifactExtractedInfo {
         setOntologyClassUri(ontologyClassUri);
         return this;
     }
-    
+
     public String getOntologyClassUri() {
         return (String) properties.get(ONTOLOGY_CLASS_URI);
-    }
-
-    public void setRawHdfsPath(String rawHdfsPath) {
-        set(RAW_HDFS_PATH, rawHdfsPath);
-    }
-
-    /**
-     * Builder pattern for rawHdfsPath property.
-     * @param rawHdfsPath the rawHdfsPath
-     * @return this
-     */
-    public ArtifactExtractedInfo rawHdfsPath(final String rawHdfsPath) {
-        setRawHdfsPath(rawHdfsPath);
-        return this;
-    }
-    
-    public String getRawHdfsPath() {
-        return (String) properties.get(RAW_HDFS_PATH);
     }
 
     public void setRaw(byte[] raw) {
@@ -229,6 +228,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for raw property.
+     *
      * @param raw the raw value
      * @return this
      */
@@ -236,27 +236,9 @@ public class ArtifactExtractedInfo {
         setRaw(raw);
         return this;
     }
-    
+
     public byte[] getRaw() {
         return (byte[]) properties.get(RAW);
-    }
-
-    public void setTextRowKey(String textRowKey) {
-        properties.put(TEXT_ROW_KEY, textRowKey);
-    }
-
-    /**
-     * Builder pattern for textRowKey property.
-     * @param textRowKey the textRowKey
-     * @return this
-     */
-    public ArtifactExtractedInfo textRowKey(final String textRowKey) {
-        setTextRowKey(textRowKey);
-        return this;
-    }
-    
-    public String getTextRowKey() {
-        return (String) properties.get(TEXT_ROW_KEY);
     }
 
     public void setMp4HdfsFilePath(String mp4HdfsFilePath) {
@@ -265,6 +247,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for mp4HdfsFilePath property.
+     *
      * @param mp4HdfsFilePath the mp4HdfsFilePath
      * @return this
      */
@@ -272,7 +255,7 @@ public class ArtifactExtractedInfo {
         setMp4HdfsFilePath(mp4HdfsFilePath);
         return this;
     }
-    
+
     public String getMp4HdfsFilePath() {
         return (String) properties.get(MP4_HDFS_PATH);
     }
@@ -283,6 +266,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for webMHdfsFilePath property.
+     *
      * @param webMHdfsFilePath the webMHdfsFilePath
      * @return this
      */
@@ -290,7 +274,7 @@ public class ArtifactExtractedInfo {
         setWebMHdfsFilePath(webMHdfsFilePath);
         return this;
     }
-    
+
     public String getWebMHdfsFilePath() {
         return (String) properties.get(WEBM_HDFS_PATH);
     }
@@ -301,6 +285,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for audioHdfsPath.
+     *
      * @param audioHdfsPath the audioHdfsPath
      * @return this
      */
@@ -308,7 +293,7 @@ public class ArtifactExtractedInfo {
         setAudioHdfsPath(audioHdfsPath);
         return this;
     }
-    
+
     public String getAudioHdfsPath() {
         return (String) properties.get(AUDIO_HDFS_PATH);
     }
@@ -319,6 +304,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for detectedObjects property
+     *
      * @param detectedObjectsJson the JSON-serialized detected objects
      * @return this
      */
@@ -326,7 +312,7 @@ public class ArtifactExtractedInfo {
         setDetectedObjects(detectedObjectsJson);
         return this;
     }
-    
+
     public String getDetectedObjects() {
         return (String) properties.get(DETECTED_OBJECTS);
     }
@@ -337,6 +323,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for videoTranscript property.
+     *
      * @param videoTranscript the videoTranscript
      * @return this
      */
@@ -344,7 +331,7 @@ public class ArtifactExtractedInfo {
         setVideoTranscript(videoTranscript);
         return this;
     }
-    
+
     public VideoTranscript getVideoTranscript() {
         return (VideoTranscript) properties.get(VIDEO_TRANSCRIPT);
     }
@@ -355,6 +342,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for posterFrameHdfsPath property.
+     *
      * @param posterFrameHdfsPath the posterFrameHdfsPath
      * @return this
      */
@@ -362,7 +350,7 @@ public class ArtifactExtractedInfo {
         setPosterFrameHdfsPath(posterFrameHdfsPath);
         return this;
     }
-    
+
     public String getPosterFrameHdfsPath() {
         return (String) properties.get(POSTER_FRAME_HDFS_PATH);
     }
@@ -373,6 +361,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for videoDuration property.
+     *
      * @param videoDuration the videoDuration
      * @return this
      */
@@ -380,7 +369,7 @@ public class ArtifactExtractedInfo {
         setVideoDuration(videoDuration);
         return this;
     }
-    
+
     public long getVideoDuration() {
         return (Long) properties.get(VIDEO_DURATION);
     }
@@ -393,6 +382,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for videoFrames property.
+     *
      * @param videoFrames the videoFrames
      * @return this
      */
@@ -400,7 +390,7 @@ public class ArtifactExtractedInfo {
         setVideoFrames(videoFrames);
         return this;
     }
-    
+
     public List<VideoFrame> getVideoFrames() {
         // ensure internal video frames are not externally mutable
         List<VideoFrame> frames = (List<VideoFrame>) properties.get(VIDEO_FRAMES);
@@ -413,6 +403,7 @@ public class ArtifactExtractedInfo {
 
     /**
      * Builder pattern for the mappingJson property.
+     *
      * @param mappingJson the mappingJson
      * @return this
      */
@@ -420,7 +411,7 @@ public class ArtifactExtractedInfo {
         setMappingJson(mappingJson);
         return this;
     }
-    
+
     public String getMappingJson() {
         if (properties.get(MAPPING_JSON) != null) {
             return properties.get(MAPPING_JSON).toString();
@@ -433,11 +424,12 @@ public class ArtifactExtractedInfo {
     }
 
     public void setConceptType(String conceptType) {
-        set (CONCEPT_TYPE, conceptType);
+        set(CONCEPT_TYPE, conceptType);
     }
 
     /**
      * Builder pattern for the conceptType property.
+     *
      * @param conceptType the concept type
      * @return this
      */
@@ -445,17 +437,18 @@ public class ArtifactExtractedInfo {
         setConceptType(conceptType);
         return this;
     }
-    
+
     public String getMimeType() {
         return (String) properties.get(MIME_TYPE);
     }
 
     public void setMimeType(String mimeType) {
-        set (MIME_TYPE, mimeType);
+        set(MIME_TYPE, mimeType);
     }
 
     /**
      * Builder pattern for the mimeType property.
+     *
      * @param mimeType the mimeType
      * @return this
      */
@@ -463,17 +456,18 @@ public class ArtifactExtractedInfo {
         setMimeType(mimeType);
         return this;
     }
-    
+
     public String getFileExtension() {
         return (String) properties.get(FILE_EXTENSION);
     }
 
     public void setFileExtension(String extension) {
-        set (FILE_EXTENSION, extension);
+        set(FILE_EXTENSION, extension);
     }
 
     /**
      * Builder pattern for the fileExtension property.
+     *
      * @param extension the extension
      * @return this
      */
@@ -481,17 +475,18 @@ public class ArtifactExtractedInfo {
         setFileExtension(extension);
         return this;
     }
-    
+
     public String getUrl() {
         return (String) properties.get(URL);
     }
 
     public void setUrl(String url) {
-        set (URL, url);
+        set(URL, url);
     }
 
     /**
      * Builder pattern for the url property.
+     *
      * @param url the url
      * @return this
      */
@@ -499,17 +494,18 @@ public class ArtifactExtractedInfo {
         setUrl(url);
         return this;
     }
-    
+
     public String getSource() {
         return (String) properties.get(SOURCE);
     }
 
     public void setSource(String source) {
-        set (SOURCE, source);
+        set(SOURCE, source);
     }
 
     /**
      * Builder pattern for the source property.
+     *
      * @param source the source
      * @return this
      */
@@ -517,17 +513,18 @@ public class ArtifactExtractedInfo {
         setSource(source);
         return this;
     }
-    
-    public String getAuthor () {
+
+    public String getAuthor() {
         return (String) properties.get(AUTHOR);
     }
 
-    public void setAuthor (String author) {
-        set (AUTHOR, author);
+    public void setAuthor(String author) {
+        set(AUTHOR, author);
     }
 
     /**
      * Builder pattern for the author property.
+     *
      * @param author the author
      * @return this
      */
@@ -535,17 +532,18 @@ public class ArtifactExtractedInfo {
         setAuthor(author);
         return this;
     }
-    
-    public String getProcess () {
+
+    public String getProcess() {
         return (String) properties.get(PROCESS);
     }
 
-    public void setProcess (String process) {
-        set (PROCESS, process);
+    public void setProcess(String process) {
+        set(PROCESS, process);
     }
 
     /**
      * Builder pattern for the process property.
+     *
      * @param process the process
      * @return this
      */
@@ -576,7 +574,7 @@ public class ArtifactExtractedInfo {
         if (!mapEquals(this.properties, other.properties)) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -584,6 +582,7 @@ public class ArtifactExtractedInfo {
      * Rewriting map equality to account for array-valued properties.  Arrays,
      * such as byte[], do not have a .equals() method and fail the equality
      * check even if Arrays.equals(a, b) returns true.
+     *
      * @param map1 the first map
      * @param map2 the second map
      * @return true if the maps are equal
@@ -595,13 +594,13 @@ public class ArtifactExtractedInfo {
         if (map2.size() != map1.size()) {
             return false;
         }
-        
+
         try {
             for (Map.Entry<K, V> entry : map1.entrySet()) {
                 K key = entry.getKey();
                 V value = entry.getValue();
                 if (value == null) {
-                    if (!(map2.get(key)==null && map2.containsKey(key)))
+                    if (!(map2.get(key) == null && map2.containsKey(key)))
                         return false;
                 } else if (value.getClass().isArray()) {
                     // need to use reflection since we don't know what type the Array is

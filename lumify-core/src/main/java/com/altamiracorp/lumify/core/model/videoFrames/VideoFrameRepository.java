@@ -1,10 +1,9 @@
 package com.altamiracorp.lumify.core.model.videoFrames;
 
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
+import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
@@ -13,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 public class VideoFrameRepository extends Repository<VideoFrame> {
     private VideoFrameBuilder videoFrameBuilder = new VideoFrameBuilder();
@@ -38,9 +36,9 @@ public class VideoFrameRepository extends Repository<VideoFrame> {
         return videoFrameBuilder.getTableName();
     }
 
-    public void saveVideoFrame(ArtifactRowKey artifactRowKey, InputStream in, long frameStartTime, User user) throws IOException {
+    public void saveVideoFrame(Object artifactVertexId, InputStream in, long frameStartTime, User user) throws IOException {
         byte[] data = IOUtils.toByteArray(in);
-        VideoFrameRowKey videoFrameRowKey = new VideoFrameRowKey(artifactRowKey.toString(), frameStartTime);
+        VideoFrameRowKey videoFrameRowKey = new VideoFrameRowKey(artifactVertexId.toString(), frameStartTime);
         VideoFrame videoFrame = new VideoFrame(videoFrameRowKey);
         videoFrame.getMetadata().setData(data);
         save(videoFrame, user.getModelUserContext());
