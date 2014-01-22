@@ -66,12 +66,13 @@ public class EntityTermCreate extends BaseRequestHandler {
         auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, sign, conceptId, "", "", user);
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
 
-        graph.addEdge(createdVertex, artifactVertex, LabelName.HAS_ENTITY.toString(), visibility);
+        graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility);
 
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.HAS_ENTITY.toString());
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
         if (labelDisplayName == null) {
-            labelDisplayName = LabelName.HAS_ENTITY.toString();
+            labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
         }
+
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
 

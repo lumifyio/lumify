@@ -45,9 +45,9 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         obj.put("entityVertex", GraphUtil.toJson(vertex));
 
         Vertex artifactVertex = graph.getVertex(jsonObject.getString("artifactId"), user.getAuthorizations());
-        Iterable<Edge> edges = artifactVertex.getEdges(vertex, Direction.BOTH, LabelName.CONTAINS_IMAGE_OF.toString(), user.getAuthorizations());
+        Iterable<Edge> edges = artifactVertex.getEdges(vertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations());
         if (edges.iterator().hasNext()) {
-            String edgeId = artifactVertex.getId() + ">" + graphVertexId + "|" + LabelName.CONTAINS_IMAGE_OF.toString();
+            String edgeId = artifactVertex.getId() + ">" + graphVertexId + "|" + LabelName.ENTITY_HAS_IMAGE_RAW.toString();
             obj.put("edgeId", edgeId);
             while (edges.iterator().hasNext()) {
                 graph.removeEdge(edges.iterator().next(), user.getAuthorizations());
