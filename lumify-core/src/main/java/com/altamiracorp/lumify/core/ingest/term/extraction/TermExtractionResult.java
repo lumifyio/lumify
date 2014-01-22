@@ -46,11 +46,11 @@ public class TermExtractionResult {
     public List<TermRelationship> getRelationships() {
         return this.relationships;
     }
-    
+
     public void replace(final TermMention orig, final TermMention updated) {
         checkNotNull(orig);
         checkNotNull(updated);
-        
+
         if (termMentions.remove(orig)) {
             termMentions.add(updated);
             Map<Integer, TermRelationship> relUpdates = new HashMap<Integer, TermRelationship>();
@@ -80,5 +80,31 @@ public class TermExtractionResult {
                 relationships.add(update.getKey(), update.getValue());
             }
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 43 * hash + (this.termMentions != null ? this.termMentions.hashCode() : 0);
+        hash = 43 * hash + (this.relationships != null ? this.relationships.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TermExtractionResult other = (TermExtractionResult) obj;
+        if (this.termMentions != other.termMentions && (this.termMentions == null || !this.termMentions.equals(other.termMentions))) {
+            return false;
+        }
+        if (this.relationships != other.relationships && (this.relationships == null || !this.relationships.equals(other.relationships))) {
+            return false;
+        }
+        return true;
     }
 }
