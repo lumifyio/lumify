@@ -5,6 +5,7 @@ import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.altamiracorp.securegraph.util.FilterIterable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONArray;
@@ -291,6 +292,20 @@ public class OntologyRepository {
         List<Concept> children = getChildConcepts(concept);
         concepts.addAll(children);
         return concepts;
+    }
+
+    public List<Concept> getAllLeafNodesByConcept(Concept concept) {
+        List<Concept> childConcepts = getChildConcepts(concept);
+        List<Concept> parent = Lists.newArrayList(concept);
+        if (childConcepts.size() > 0) {
+            List<Concept> childrenList = new ArrayList<Concept>();
+            for (Concept childConcept : childConcepts) {
+                List<Concept> child = getAllLeafNodesByConcept(childConcept);
+                childrenList.addAll(child);
+            }
+            parent.addAll(childrenList);
+        }
+        return parent;
     }
 
     public List<OntologyProperty> getPropertiesByRelationship(String relationshipLabel) {
