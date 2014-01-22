@@ -1,32 +1,61 @@
 package com.altamiracorp.lumify.web.session;
 
 import com.altamiracorp.bigtable.model.Column;
+import com.altamiracorp.bigtable.model.FlushFlag;
+import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
+import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.web.session.model.*;
+import com.google.common.base.Optional;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import org.eclipse.jetty.nosql.NoSqlSession;
 import org.eclipse.jetty.nosql.NoSqlSessionManager;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class BigTableJettySessionManager extends NoSqlSessionManager {
-    final JettySessionRepository jettySessionRepository;
+    private static int CACHE_MAX_SIZE= 50;
+    private static int CACHE_EXPIRE_MINUTES = 10;
+    private static String CONFIGURATION_LOCATION = "/opt/lumify/config/";
+
+    private JettySessionRepository jettySessionRepository;
+    private LoadingCache<String, Optional<JettySessionRow>> cache;
+
+    public BigTableJettySessionManager() {
+
+        cache = CacheBuilder.newBuilder()
+                .maximumSize(CACHE_MAX_SIZE)
+                .expireAfterWrite(CACHE_EXPIRE_MINUTES, TimeUnit.MINUTES)
+                .build(new CacheLoader<String, Optional<JettySessionRow>>() {
+                    @Override
+                    public Optional<JettySessionRow> load(String clusterId) throws Exception {
+                        return Optional.fromNullable(jettySessionRepository.findByRowKey(clusterId, SystemUser.getSystemUserContext()));
+                    }
+                });
+
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(Configuration.loadConfigurationFile(CONFIGURATION_LOCATION)));
+    }
 
     @Inject
-    public BigTableJettySessionManager(final JettySessionRepository jettySessionRepository) {
+    public void setJettySessionRepository(JettySessionRepository jettySessionRepository) {
         this.jettySessionRepository = jettySessionRepository;
     }
 
     @Override
     protected NoSqlSession loadSession(String clusterId) {
-        JettySessionRow row = jettySessionRepository.findByRowKey(clusterId, SystemUser.getSystemUserContext());
-        if (row == null) {
+        Optional<JettySessionRow> row = cache.getUnchecked(clusterId);
+        if (!row.isPresent()) {
             return null;
         }
 
-        JettySessionMetadata metadata = row.getMetadata();
+        JettySessionMetadata metadata = row.get().getMetadata();
         NoSqlSession session = new NoSqlSession(this, metadata.getCreated(), metadata.getAccessed(), metadata.getClusterId(), metadata.getVersion());
-        setData(session, row.getData());
+        setData(session, row.get().getData());
         session.didActivate();
 
         return session;
@@ -41,24 +70,27 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
             JettySessionRow row;
             JettySessionMetadata metadata;
 
-            if (version == null) {
+            Optional<JettySessionRow> optionalRow = cache.getUnchecked(session.getClusterId());
+
+            if (!optionalRow.isPresent()) {
                 // new session
                 isNew = true;
                 row = new JettySessionRow(new JettySessionRowKey(session.getClusterId()));
+                cache.put(session.getClusterId(), Optional.of(row));
                 metadata = row.getMetadata();
                 metadata.setCreated(session.getCreationTime());
                 metadata.setClusterId(session.getClusterId());
                 version = 0;
             } else {
                 // existing session
-                row = jettySessionRepository.findByRowKey(session.getClusterId(), SystemUser.getSystemUserContext());
+                row = optionalRow.get();
                 metadata = row.getMetadata();
                 version = ((Number) version).longValue() + 1;
             }
             metadata.setVersion(((Number) version).longValue());
             metadata.setAccessed(session.getAccessed());
 
-            JettySessionData data = row.get(JettySessionData.COLUMN_FAMILY_NAME);
+            JettySessionData data = row.getData();
             Set<String> attributesToSave = session.takeDirty();
             if (isNew || isSaveAllAttributes()) {
                 attributesToSave.addAll(session.getNames());
@@ -67,10 +99,11 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
                 data.setObject(name, session.getAttribute(name));
             }
 
-            jettySessionRepository.save(row, SystemUser.getSystemUserContext());
+            jettySessionRepository.save(row, FlushFlag.FLUSH, SystemUser.getSystemUserContext());
         } else {
             // invalid session
             jettySessionRepository.delete(new JettySessionRowKey(session.getClusterId()), SystemUser.getSystemUserContext());
+            cache.invalidate(session.getClusterId());
         }
 
         if (activateAfterSave) {
@@ -82,23 +115,25 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
 
     @Override
     protected Object refresh(NoSqlSession session, Object version) {
-        JettySessionRow row = jettySessionRepository.findByRowKey(session.getClusterId(), SystemUser.getSystemUserContext());
+        Optional<JettySessionRow> optRow = cache.getUnchecked(session.getClusterId());
 
         if (version != null) {
-            if (row != null) {
-                long savedVersion = row.getMetadata().getVersion();
-                if (savedVersion == ((Number) version).longValue()) {
+            if (optRow.isPresent()) {
+                Long savedVersion = optRow.get().getMetadata().getVersion();
+                if (savedVersion != null && savedVersion == ((Number) version).longValue()) {
                     // refresh not required
                     return version;
                 }
             }
         }
 
-        if (row == null) {
+
+        if (!optRow.isPresent()) {
             session.invalidate();
             return null;
         }
 
+        JettySessionRow row = optRow.get();
         session.willPassivate();
         session.clearAttributes();
         setData(session, row.getData());
@@ -113,10 +148,11 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
 
     @Override
     protected boolean remove(NoSqlSession session) {
-        JettySessionRow row = jettySessionRepository.findByRowKey(session.getClusterId(), SystemUser.getSystemUserContext());
+        Optional<JettySessionRow> optRow = cache.getUnchecked(session.getClusterId());
 
-        if (row != null) {
-            jettySessionRepository.delete(row.getRowKey(), SystemUser.getSystemUserContext());
+        if (optRow.isPresent()) {
+            jettySessionRepository.delete(optRow.get().getRowKey(), SystemUser.getSystemUserContext());
+            cache.invalidate(session.getClusterId());
             return true;
         } else {
             return false;

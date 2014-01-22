@@ -24,7 +24,7 @@ public class JettySessionRow extends Row<JettySessionRowKey> {
             addColumnFamily(new JettySessionMetadata());
             metadata = get(JettySessionMetadata.COLUMN_FAMILY_NAME);
         }
-        return  metadata;
+        return metadata;
     }
 
     public JettySessionData getData() {
