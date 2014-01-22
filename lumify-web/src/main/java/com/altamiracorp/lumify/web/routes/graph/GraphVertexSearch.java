@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
@@ -9,6 +10,8 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.query.Compare;
+import com.altamiracorp.securegraph.query.GraphQuery;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,9 +19,14 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexSearch extends BaseRequestHandler {
+    //TODO should we limit to 10000??
+    private final int MAX_RESULT_COUNT = 10000;
+
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
@@ -36,6 +44,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         final long offset = getOptionalParameterLong(request, "offset", 0);
         final long size = getOptionalParameterLong(request, "size", 100);
         final String conceptType = getOptionalParameter(request, "conceptType");
+        final String getLeafNodes = getOptionalParameter(request, "leafNodes");
 
         User user = getUser(request);
         JSONArray filterJson = new JSONArray(filter);
@@ -44,23 +53,54 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         graph.flush();
 
-        // TODO user the filterJson   OLD CODE: .search(query, filterJson, user, offset, size != 0 && size != offset ? size - 1 : size, conceptType);
-        // TODO page results
-        Iterable<Vertex> searchResults = graph.query(query, user.getAuthorizations())
-                .vertices();
+        GraphQuery graphQuery = graph.query(query, user.getAuthorizations());
+        for (int i = 0; i < filterJson.length(); i++) {
+            JSONObject obj = filterJson.getJSONObject(i);
+            if (obj.length() > 0) {
+                if (obj.getJSONArray("values").length() > 0) {
+                    JSONArray values = obj.getJSONArray("values");
+                    for (int j = 0; j < values.length(); j++) {
+                        graphQuery.has(obj.getString("propertyName"), values.get(j));
+                    }
+                }
+            }
+        }
+
+        if (conceptType != null) {
+            Concept concept = ontologyRepository.getConceptById(conceptType);
+            if (getLeafNodes == null || !getLeafNodes.equals("false")) {
+                List<Concept> leafNodeList = ontologyRepository.getAllLeafNodesByConcept(concept);
+                if (leafNodeList.size() > 0) {
+                    String[] conceptIds = new String[leafNodeList.size()];
+                    int count = 0;
+                    for (Concept c : leafNodeList) {
+                        conceptIds[count] = (String) c.getId();
+                        count++;
+                    }
+                    graphQuery.has(PropertyName.CONCEPT_TYPE.toString(), Compare.IN, conceptIds);
+                }
+            } else {
+                graphQuery.has(PropertyName.CONCEPT_TYPE.toString(), conceptType);
+            }
+        }
+
+        graphQuery.limit(MAX_RESULT_COUNT);
+        Iterable<Vertex> searchResults = graphQuery.vertices();
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
         int verticesCount = 0;
         for (Vertex vertex : searchResults) {
-            vertices.put(toJson(vertex));
+            if (verticesCount >= offset && verticesCount <= offset + size) {
+                vertices.put(toJson(vertex));
+            }
             String type = vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0).toString();
-            if (counts.keySet().contains(type)){
+            if (counts.keySet().contains(type)) {
                 counts.put(type, (counts.getInt(type) + 1));
             } else {
                 counts.put(type, 1);
             }
-             verticesCount++;
+            verticesCount++;
             // TODO this used create hierarchical results
         }
         LOGGER.info("Number of vertices returned for query: %d", verticesCount);
