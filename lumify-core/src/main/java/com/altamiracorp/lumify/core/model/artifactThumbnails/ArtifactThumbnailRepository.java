@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.model.artifactThumbnails;
 
 import com.altamiracorp.bigtable.model.*;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -17,6 +16,12 @@ import java.util.Collection;
 
 public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnailRepository.class);
+    public static final int FRAMES_PER_PREVIEW = 20;
+    public static final int PREVIEW_FRAME_WIDTH = 360;
+    public static final int PREVIEW_FRAME_HEIGHT = 240;
+    public static final String VIDEO_STORAGE_HDFS_PATH = "/lumify/artifacts/video";
+    public static final String LUMIFY_VIDEO_PREVIEW_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/preview/";
+    public static final String LUMIFY_VIDEO_POSTER_FRAME_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/posterFrame/";
 
     @Inject
     public ArtifactThumbnailRepository(final ModelSession modelSession) {
@@ -49,20 +54,20 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         return ArtifactThumbnail.TABLE_NAME;
     }
 
-    public ArtifactThumbnail getThumbnail(ArtifactRowKey artifactRowKey, String thumbnailType, int width, int height, User user) {
-        ArtifactThumbnailRowKey rowKey = new ArtifactThumbnailRowKey(artifactRowKey.toString(), thumbnailType, width, height);
+    public ArtifactThumbnail getThumbnail(Object artifactVertexId, String thumbnailType, int width, int height, User user) {
+        ArtifactThumbnailRowKey rowKey = new ArtifactThumbnailRowKey(artifactVertexId.toString(), thumbnailType, width, height);
         return findByRowKey(rowKey.toString(), user.getModelUserContext());
     }
 
-    public byte[] getThumbnailData(ArtifactRowKey artifactRowKey, String thumbnailType, int width, int height, User user) {
-        ArtifactThumbnail artifactThumbnail = getThumbnail(artifactRowKey, thumbnailType, width, height, user);
+    public byte[] getThumbnailData(Object artifactVertexId, String thumbnailType, int width, int height, User user) {
+        ArtifactThumbnail artifactThumbnail = getThumbnail(artifactVertexId, thumbnailType, width, height, user);
         if (artifactThumbnail == null) {
             return null;
         }
         return artifactThumbnail.getMetadata().getData();
     }
 
-    public ArtifactThumbnail createThumbnail(ArtifactRowKey artifactRowKey, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
+    public ArtifactThumbnail createThumbnail(Object artifactVertexId, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
         BufferedImage originalImage = ImageIO.read(in);
         int[] originalImageDims = new int[]{originalImage.getWidth(), originalImage.getHeight()};
         int[] newImageDims = getScaledDimension(originalImageDims, boundaryDims);
@@ -88,7 +93,7 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(resizedImage, format, out);
 
-        return saveThumbnail(artifactRowKey, thumbnailType, boundaryDims, out.toByteArray(), type, format, user);
+        return saveThumbnail(artifactVertexId, thumbnailType, boundaryDims, out.toByteArray(), type, format, user);
     }
 
     public int thumnbailType(BufferedImage image) {
@@ -105,8 +110,8 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         return "jpg";
     }
 
-    private ArtifactThumbnail saveThumbnail(ArtifactRowKey artifactRowKey, String thumbnailType, int[] boundaryDims, byte[] bytes, int type, String format, User user) {
-        ArtifactThumbnailRowKey artifactThumbnailRowKey = new ArtifactThumbnailRowKey(artifactRowKey.toString(), thumbnailType, boundaryDims[0], boundaryDims[1]);
+    private ArtifactThumbnail saveThumbnail(Object artifactVertexId, String thumbnailType, int[] boundaryDims, byte[] bytes, int type, String format, User user) {
+        ArtifactThumbnailRowKey artifactThumbnailRowKey = new ArtifactThumbnailRowKey(artifactVertexId.toString(), thumbnailType, boundaryDims[0], boundaryDims[1]);
         ArtifactThumbnail artifactThumbnail = new ArtifactThumbnail(artifactThumbnailRowKey);
         artifactThumbnail.getMetadata().setData(bytes);
         artifactThumbnail.getMetadata().setType(type);
@@ -134,5 +139,9 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         }
 
         return new int[]{newWidth, newHeight};
+    }
+
+    public static String getVideoPreviewPath(String artifactRowKey) {
+        return LUMIFY_VIDEO_PREVIEW_HDFS_PATH + artifactRowKey;
     }
 }

@@ -16,14 +16,22 @@
 
 package com.altamiracorp.lumify.core.ingest;
 
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
+
+import java.util.Date;
+import java.util.Iterator;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Base class for processes that identify and create Artifacts,
@@ -36,11 +44,6 @@ public abstract class BaseArtifactProcessor {
      * The User this processor is executing as.
      */
     private User user;
-
-    /**
-     * The Artifact Repository.
-     */
-    private ArtifactRepository artifactRepository;
 
     /**
      * The Ontology Repository.
@@ -66,15 +69,6 @@ public abstract class BaseArtifactProcessor {
      * The Work Queue Repository.
      */
     private WorkQueueRepository workQueueRepository;
-
-    protected final ArtifactRepository getArtifactRepository() {
-        return artifactRepository;
-    }
-
-    @Inject
-    public final void setArtifactRepository(final ArtifactRepository artifactRepository) {
-        this.artifactRepository = artifactRepository;
-    }
 
     protected final OntologyRepository getOntologyRepository() {
         return ontologyRepository;
@@ -128,5 +122,30 @@ public abstract class BaseArtifactProcessor {
     @Inject
     public final void setUser(final User user) {
         this.user = user;
+    }
+
+    public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey) {
+        return findOrPrepareArtifactVertex(getGraph(), getUser(), rowKey);
+    }
+
+    public static ElementMutation<Vertex> findOrPrepareArtifactVertex(Graph graph, User user, String rowKey) {
+        ElementMutation<Vertex> vertex;
+        checkNotNull(rowKey, "rowKey is required to save artifact");
+        Iterator<Vertex> existingVertices = graph.query(user.getAuthorizations())
+                .has(PropertyName.ROW_KEY.toString(), rowKey)
+                .vertices()
+                .iterator();
+        if (existingVertices.hasNext()) {
+            vertex = existingVertices.next().prepareMutation();
+            if (existingVertices.hasNext()) {
+                throw new RuntimeException("Found multiple vertex matches for " + rowKey);
+            }
+        } else {
+            Visibility visibility = new Visibility("");
+            vertex = graph.prepareVertex(visibility)
+                    .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
+                    .setProperty(PropertyName.ROW_KEY.toString(), rowKey, visibility);
+        }
+        return vertex;
     }
 }
