@@ -1,14 +1,16 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
@@ -19,14 +21,13 @@ import java.io.InputStream;
 
 public class ArtifactPosterFrame extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactPosterFrame.class);
-
-    private final ArtifactRepository artifactRepository;
+    private final Graph graph;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
 
     @Inject
-    public ArtifactPosterFrame(final ArtifactRepository artifactRepo, final ArtifactThumbnailRepository thumbnailRepo) {
-        artifactRepository = artifactRepo;
-        artifactThumbnailRepository = thumbnailRepo;
+    public ArtifactPosterFrame(final Graph graph, final ArtifactThumbnailRepository artifactThumbnailRepository) {
+        this.graph = graph;
+        this.artifactThumbnailRepository = artifactThumbnailRepository;
     }
 
     @Override
@@ -37,8 +38,8 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
         String widthStr = getOptionalParameter(request, "width");
         int[] boundaryDims = new int[]{200, 200};
 
-        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
-        if (artifactRowKey == null) {
+        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
             return;
@@ -50,7 +51,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             response.setContentType("image/jpeg");
             response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
 
-            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactRowKey, "poster-frame", boundaryDims[0], boundaryDims[1], user);
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "poster-frame", boundaryDims[0], boundaryDims[1], user);
             if (thumbnailData != null) {
                 LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
@@ -60,11 +61,18 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             }
         }
 
-        InputStream in = artifactRepository.getRawPosterFrame(artifactRowKey.toString());
+        StreamingPropertyValue rawPosterFrameValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW_POSTER_FRAME.toString(), 0);
+        if (rawPosterFrameValue == null) {
+            LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId().toString());
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+        InputStream in = rawPosterFrameValue.getInputStream();
         try {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactRowKey, "poster-frame", in, boundaryDims, user).getMetadata().getData();
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "poster-frame", in, boundaryDims, user).getMetadata().getData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();

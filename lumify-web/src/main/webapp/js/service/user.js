@@ -28,7 +28,11 @@ define(
         };
 
         UserService.prototype.logout = function() {
-            this.disconnect();
+            try {
+                this.disconnect();
+            } catch(e) {
+                console.log('Unable to disconnect socket', e);
+            }
             return this._ajaxPost({ url:'logout' });
         };
 

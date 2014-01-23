@@ -18,13 +18,12 @@ package com.altamiracorp.lumify.storm;
 
 import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
-import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -65,17 +64,17 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
 
             String vertexId = json.optString("graphVertexId");
             if (vertexId != null && vertexId.length() > 0) {
-                Vertex vertex = graph.getVertex(vertexId, getUser().getAuthorizations());
-                if (vertex == null) {
+                Vertex artifactVertex = graph.getVertex(vertexId, getUser().getAuthorizations());
+                if (artifactVertex == null) {
                     throw new RuntimeException("Could not find vertex with id: " + vertexId);
                 }
-                String rowKey = (String) vertex.getPropertyValue(PropertyName.ROW_KEY.toString(), 0);
-                Artifact artifact = artifactRepository.findByRowKey(rowKey, getUser().getModelUserContext());
-                fileName = artifact.getMetadata().getFileName();
-                mimeType = artifact.getMetadata().getMimeType();
-                source = (String) vertex.getPropertyValue(PropertyName.SOURCE.toString(), 0);
-                title = (String) vertex.getPropertyValue(PropertyName.TITLE.toString(), 0);
-                raw = artifactRepository.getRaw(artifact, vertex, getUser());
+                fileName = (String) artifactVertex.getPropertyValue(PropertyName.FILE_NAME.toString(), 0);
+                mimeType = (String) artifactVertex.getPropertyValue(PropertyName.MIME_TYPE.toString(), 0);
+                source = (String) artifactVertex.getPropertyValue(PropertyName.SOURCE.toString(), 0);
+                title = (String) artifactVertex.getPropertyValue(PropertyName.TITLE.toString(), 0);
+
+                StreamingPropertyValue rowPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW.toString(), 0);
+                raw = rowPropertyValue.getInputStream();
             } else if (rawString != null) {
                 raw = new ByteArrayInputStream(rawString.getBytes());
             }
@@ -100,30 +99,10 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     protected String getMimeType(String fileName) throws Exception {
         String mimeType = null;
         if (contentTypeExtractor != null) {
-            InputStream in = getInputStream(fileName, null);
+            InputStream in = openFile(fileName);
             mimeType = contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
         }
         return mimeType;
-    }
-
-    protected InputStream getInputStream(final String fileName, final ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
-        InputStream in;
-        if (getFileSize(fileName) < Artifact.MAX_SIZE_OF_INLINE_FILE) {
-            InputStream rawIn = openFile(fileName);
-            byte[] data;
-            try {
-                data = IOUtils.toByteArray(rawIn);
-                if (artifactExtractedInfo != null) {
-                    artifactExtractedInfo.setRaw(data);
-                }
-            } finally {
-                rawIn.close();
-            }
-            in = new ByteArrayInputStream(data);
-        } else {
-            in = openFile(fileName);
-        }
-        return in;
     }
 
     /**
@@ -135,7 +114,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     protected File extractArchive(final FileMetadata fileMetadata) throws Exception {
         File tempDir = Files.createTempDir();
         LOGGER.debug("Extracting %s to %s", fileMetadata.getFileName(), tempDir);
-        InputStream in = getInputStream(fileMetadata.getFileName(), null);
+        InputStream in = openFile(fileMetadata.getFileName());
         try {
             ArchiveInputStream input = new ArchiveStreamFactory().createArchiveInputStream(new BufferedInputStream(in));
             try {

@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
@@ -29,7 +28,7 @@ public class ArtifactPosterFrameTest extends RouteTestBase {
 //        super.setUp();
 
         final ArtifactThumbnailRepository mockThumbnailRepository = Mockito.mock(ArtifactThumbnailRepository.class);
-        artifactPosterFrame = new ArtifactPosterFrame(mockArtifactRepository, mockThumbnailRepository);
+//        artifactPosterFrame = new ArtifactPosterFrame(mockArtifactRepository, mockThumbnailRepository);
     }
 
     @Test

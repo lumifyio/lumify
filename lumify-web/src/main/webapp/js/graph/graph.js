@@ -461,7 +461,7 @@ define([
             }
         };
 
-        this.onContextMenuSearchFrom = function () {
+        this.onContextMenuSearchFor = function () {
             var menu = this.select('vertexContextMenuSelector');
             this.trigger(document, 'searchByEntity', { query : menu.data('title')});
         }
@@ -742,6 +742,12 @@ define([
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
             } else {
+                var title = event.cyTarget.data('title');
+                if (title.length > MAX_TITLE_LENGTH) {
+                    title = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
+                }
+                this.$node.find('.searchFor').text('Search for "' + title + '"');
+
                 menu = this.select ('vertexContextMenuSelector');
                 menu.data("currentVertexRowKey",event.cyTarget.data('_rowKey'));
                 menu.data("currentVertexGraphVertexId", event.cyTarget.id());
