@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
@@ -18,7 +17,6 @@ import java.util.List;
 public class ModelUtil {
 
     private static final List<String> tables = Arrays.asList(
-            Artifact.TABLE_NAME,
             ArtifactThumbnail.TABLE_NAME,
             Workspace.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
@@ -27,7 +25,9 @@ public class ModelUtil {
             UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
-            "atc_securegraph"); // TODO refactor to config file info. But since this is only for development this is low priority
+            "atc_securegraph", // TODO refactor to config file info. But since this is only for development this is low priority
+            "jetty_session",
+            "atc_titan");// TODO refactor see com.altamiracorp.lumify.model.TitanGraphSession
 
     public static void initializeTables(ModelSession modelSession, User user) {
         for (String table : tables) {
@@ -38,6 +38,11 @@ public class ModelUtil {
     public static void deleteTables(ModelSession modelSession, User user) {
         for (String table : tables) {
             modelSession.deleteTable(table, user.getModelUserContext());
+        }
+        for (String table : modelSession.getTableList(user.getModelUserContext())) {
+            if (table.startsWith("atc_")) {
+                modelSession.deleteTable(table, user.getModelUserContext());
+            }
         }
     }
 }

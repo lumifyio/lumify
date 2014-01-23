@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
+import com.altamiracorp.securegraph.accumulo.AccumuloAuthorizations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,10 @@ public abstract class AuthenticationProvider implements Handler {
     }
 
     public static User getUser(HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+
         Object user = session.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME);
         return user != null ? (User) user : null;
     }
@@ -34,7 +39,8 @@ public abstract class AuthenticationProvider implements Handler {
                 user.getMetadata().getUserName(),
                 user.getMetadata().getCurrentWorkspace(),
                 modelUserContext,
-                user.getMetadata().getUserType());
+                user.getMetadata().getUserType(),
+                new AccumuloAuthorizations());
     }
 
     public abstract boolean login(HttpServletRequest request);

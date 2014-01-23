@@ -1,9 +1,7 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -12,6 +10,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 
 import javax.servlet.ServletOutputStream;
@@ -22,15 +21,13 @@ import java.io.InputStream;
 public class ArtifactThumbnail extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
 
-    private final ArtifactRepository artifactRepository;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
     private final Graph graph;
 
     @Inject
-    public ArtifactThumbnail(final ArtifactRepository artifactRepo,
-                             final ArtifactThumbnailRepository thumbnailRepo,
-                             final Graph graph) {
-        artifactRepository = artifactRepo;
+    public ArtifactThumbnail(
+            final ArtifactThumbnailRepository thumbnailRepo,
+            final Graph graph) {
         artifactThumbnailRepository = thumbnailRepo;
         this.graph = graph;
     }
@@ -44,8 +41,8 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         User user = getUser(request);
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        ArtifactRowKey artifactRowKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
-        if (artifactRowKey == null) {
+        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
             return;
@@ -58,7 +55,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         }
 
         byte[] thumbnailData;
-        com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactRowKey, "raw", boundaryDims[0], boundaryDims[1], user);
+        com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail = artifactThumbnailRepository.getThumbnail(artifactVertex.getId(), "raw", boundaryDims[0], boundaryDims[1], user);
         if (thumbnail != null) {
             String format = thumbnail.getMetadata().getFormat();
             response.setContentType("image/" + format);
@@ -66,7 +63,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
             thumbnailData = thumbnail.getMetadata().getData();
             if (thumbnailData != null) {
-                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
+                LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();
@@ -74,20 +71,17 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             }
         }
 
-        Artifact artifact = artifactRepository.findByRowKey(artifactRowKey.toString(), user.getModelUserContext());
-        if (artifact == null) {
-            LOGGER.warn("Cannot find artifact with row key: %s", artifactRowKey.toString());
+        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
+        StreamingPropertyValue rawPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW.toString(), 0);
+        if (rawPropertyValue == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
             return;
         }
 
-        Vertex vertex = graph.getVertex(artifact.getMetadata().getGraphVertexId(), user.getAuthorizations());
-
-        LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactRowKey.toString(), boundaryDims[0], boundaryDims[1]);
-        InputStream in = artifactRepository.getRaw(artifact, vertex, user);
+        InputStream in = rawPropertyValue.getInputStream();
         try {
-            thumbnail = artifactThumbnailRepository.createThumbnail(artifact.getRowKey(), "raw", in, boundaryDims, user);
+            thumbnail = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "raw", in, boundaryDims, user);
 
             String format = thumbnail.getMetadata().getFormat();
             response.setContentType("image/" + format);

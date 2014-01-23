@@ -1,17 +1,16 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.ingest.video.VideoPlaybackDetails;
-import com.altamiracorp.lumify.core.model.artifact.Artifact;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRepository;
-import com.altamiracorp.lumify.core.model.artifact.ArtifactRowKey;
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,15 +22,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ArtifactRaw extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
 
-    private final ArtifactRepository artifactRepository;
     private final Graph graph;
 
     @Inject
-    public ArtifactRaw(final ArtifactRepository repo, final Graph graph) {
+    public ArtifactRaw(final Graph graph) {
         this.graph = graph;
-        artifactRepository = repo;
     }
 
     @Override
@@ -42,34 +40,33 @@ public class ArtifactRaw extends BaseRequestHandler {
         User user = getUser(request);
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        ArtifactRowKey artifactKey = artifactRepository.findRowKeyByGraphVertexId(graphVertexId, user);
-        if (artifactKey == null) {
+        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
             return;
         }
 
-        Artifact artifact = artifactRepository.findByRowKey(artifactKey.toString(), user.getModelUserContext());
-        if (artifact == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
-            return;
-        }
-
-        Vertex vertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-
-        String fileName = getFileName(artifact);
+        String fileName = (String) artifactVertex.getPropertyValue(PropertyName.FILE_NAME.toString(), 0);
         if (videoPlayback) {
-            handlePartialPlayback(request, response, artifact, fileName);
+            handlePartialPlayback(request, response, artifactVertex, fileName, user);
         } else {
-            String mimeType = getMimeType(artifact);
+            String mimeType = getMimeType(artifactVertex);
             response.setContentType(mimeType);
             if (download) {
                 response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
             } else {
                 response.addHeader("Content-Disposition", "inline; filename=" + fileName);
             }
-            InputStream in = artifactRepository.getRaw(artifact, vertex, user);
+
+            StreamingPropertyValue rawValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW.toString(), 0);
+            if (rawValue == null) {
+                LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId().toString());
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                chain.next(request, response);
+                return;
+            }
+            InputStream in = rawValue.getInputStream();
             try {
                 IOUtils.copy(in, response.getOutputStream());
             } finally {
@@ -80,7 +77,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         chain.next(request, response);
     }
 
-    private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Artifact artifact, String fileName) throws IOException {
+    private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Vertex artifactVertex, String fileName, User user) throws IOException {
         String videoType = getRequiredParameter(request, "type");
 
         InputStream in = null;
@@ -104,13 +101,19 @@ public class ArtifactRaw extends BaseRequestHandler {
         }
 
         if (videoType.equals("video/mp4") || videoType.equals("video/webm")) {
-            final String videoFormat = FilenameUtils.getBaseName(videoType);
             response.setContentType(videoType);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-            VideoPlaybackDetails videoDetails = artifactRepository.getVideoPlaybackDetails(artifact.getRowKey().toString(), videoFormat);
-            in = videoDetails.getVideoStream();
-            totalLength = videoDetails.getVideoFileSize();
+            String videoPropertyName = PropertyName.VIDEO.toString() + "-" + videoType;
+            String videoSizePropertyName = PropertyName.VIDEO_SIZE.toString() + "-" + videoType;
+
+            StreamingPropertyValue videoPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(videoPropertyName, 0);
+            if (videoPropertyValue == null) {
+                throw new RuntimeException("Could not find video property " + videoPropertyName + " on artifact " + artifactVertex.getId());
+            }
+
+            in = videoPropertyValue.getInputStream();
+            totalLength = (Long) artifactVertex.getPropertyValue(videoSizePropertyName, 0);
         } else {
             throw new RuntimeException("Invalid video type: " + videoType);
         }
@@ -144,12 +147,8 @@ public class ArtifactRaw extends BaseRequestHandler {
         }
     }
 
-    private String getFileName(Artifact artifact) {
-        return artifact.getMetadata().getFileName();
-    }
-
-    private String getMimeType(Artifact artifact) {
-        String mimeType = artifact.getMetadata().getMimeType();
+    private String getMimeType(Vertex artifactVertex) {
+        String mimeType = (String) artifactVertex.getPropertyValue(PropertyName.MIME_TYPE.toString(), 0);
         if (mimeType == null || mimeType.isEmpty()) {
             mimeType = "application/octet-stream";
         }
