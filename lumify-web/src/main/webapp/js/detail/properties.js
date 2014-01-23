@@ -265,7 +265,7 @@ define([
                         data.property.name,
                         this.attr.data.properties.source,
                         this.attr.data.properties.target,
-                        this.attr.data.properties.relationshipLabel)
+                        this.attr.data.id)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
