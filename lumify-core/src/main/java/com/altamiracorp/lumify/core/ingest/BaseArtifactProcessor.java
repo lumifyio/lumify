@@ -142,7 +142,7 @@ public abstract class BaseArtifactProcessor {
             }
         } else {
             Visibility visibility = new Visibility("");
-            vertex = graph.prepareVertex(visibility)
+            vertex = graph.prepareVertex(visibility, user.getAuthorizations())
                     .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
                     .setProperty(PropertyName.ROW_KEY.toString(), rowKey, visibility);
         }
