@@ -31,10 +31,10 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String relationshipLabel = getRequiredParameter(request, "relationshipLabel");
         final String propertyName = getRequiredParameter(request, "propertyName");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
+        final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
 
@@ -43,27 +43,18 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
             throw new RuntimeException("Could not find property: " + propertyName);
         }
 
-        Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
-        Vertex destVertex = graph.getVertex(destId, user.getAuthorizations());
-
         // TODO remove all properties from all edges? I don't think so
-        Iterable<Edge> possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, relationshipLabel, user.getAuthorizations());
-        for (Edge edge : possibleEdges) {
-            Object oldValue = edge.getPropertyValue(propertyName, 0);
-            // TODO: replace "" when we implement commenting on ui
-            auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, property.getDisplayName(), oldValue, edge, "", "", user);
-
-            edge.removeProperty(propertyName);
-        }
+        Edge edge = graph.getEdge(edgeId, user.getAuthorizations());
+        Object oldValue = edge.getPropertyValue(propertyName, 0);
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, property.getDisplayName(), oldValue, edge, "", "", user);
+        edge.removeProperty(propertyName);
         graph.flush();
 
         // TODO get all properties from all edges?
         List<Property> properties = new ArrayList<Property>();
-        possibleEdges = sourceVertex.getEdges(destVertex, Direction.BOTH, relationshipLabel, user.getAuthorizations());
-        for (Edge edge : possibleEdges) {
-            for (Property p : edge.getProperties()) {
-                properties.add(p);
-            }
+        for (Property p : edge.getProperties()) {
+            properties.add(p);
         }
         JSONObject resultsJson = VertexProperties.propertiesToJson(properties);
 
