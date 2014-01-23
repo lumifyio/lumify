@@ -98,7 +98,7 @@ public class EntityHelper {
                     .vertices());
         } else {
             newVertex = true;
-            resolvedVertex = graph.addVertex(DEFAULT_VISIBILITY);
+            resolvedVertex = graph.addVertex(DEFAULT_VISIBILITY, user.getAuthorizations());
         }
 
         String conceptId = conceptVertex.getId().toString();
@@ -115,7 +115,7 @@ public class EntityHelper {
             auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), resolvedVertex, modifiedProperty, process, comment, user);
         }
 
-        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), DEFAULT_VISIBILITY);
+        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), DEFAULT_VISIBILITY, user.getAuthorizations());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);

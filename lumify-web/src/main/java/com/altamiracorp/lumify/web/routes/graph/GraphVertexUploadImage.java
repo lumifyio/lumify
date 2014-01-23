@@ -78,7 +78,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file);
+        ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
         artifactBuilder
                 .setProperty(PropertyName.CONCEPT_TYPE.toString(), DisplayType.IMAGE.toString(), visibility)
                 .setProperty(PropertyName.TITLE.toString(), "Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString(), 0), visibility)
@@ -94,7 +94,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations()).iterator();
         if (!existingEdges.hasNext()) {
-            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility);
+            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility, user.getAuthorizations());
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
@@ -105,7 +105,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         respondWithJson(response, toJson(entityVertex));
     }
 
-    private ElementBuilder<Vertex> convertToArtifact(final Part file) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file, User user) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);
@@ -125,7 +125,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility)
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, user.getAuthorizations())
                 .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
                 .setProperty(PropertyName.FILE_NAME.toString(), fileName, visibility)
                 .setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), FilenameUtils.getExtension(fileName), visibility)

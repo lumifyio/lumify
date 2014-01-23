@@ -73,7 +73,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
         Vertex resolvedGraphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         Iterator<Edge> edges = artifactVertex.getEdges(resolvedGraphVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
         if (!edges.hasNext()) {
-            graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), new Visibility(""));
+            graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), new Visibility(""), user.getAuthorizations());
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
