@@ -64,15 +64,15 @@ public class EntityHelper {
         auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), vertex, PropertyName.TITLE.toString(), process, comment, user);
     }
 
-    public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, Vertex resolvedVertex, Vertex conceptVertex) {
-        String concept;
-        if (conceptVertex.getPropertyValue("ontologyTitle", 0).toString().equals("person")) {
-            concept = "face";
+    public ArtifactDetectedObject createObjectTag(String x1, String x2, String y1, String y2, Vertex resolvedVertex, Concept concept) {
+        String conceptName;
+        if (concept.getVertex().getPropertyValue("ontologyTitle", 0).toString().equals("person")) {
+            conceptName = "face";
         } else {
-            concept = conceptVertex.getPropertyValue("ontologyTitle", 0).toString();
+            conceptName = concept.getVertex().getPropertyValue("ontologyTitle", 0).toString();
         }
 
-        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, concept);
+        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, conceptName);
         detectedObject.setGraphVertexId(resolvedVertex.getId().toString());
 
         detectedObject.setResolvedVertex(resolvedVertex);
@@ -84,24 +84,21 @@ public class EntityHelper {
         workQueueRepository.pushUserArtifactHighlight(artifactGraphVertexId);
     }
 
-    public Vertex createGraphVertex(Vertex conceptVertex, String sign, String existing, String process, String comment,
+    public Vertex createGraphVertex(Concept concept, String sign, String existing, Object graphVertexId, String process, String comment,
                                     String artifactId, User user) {
         boolean newVertex = false;
         List<String> modifiedProperties = Lists.newArrayList(PropertyName.CONCEPT_TYPE.toString(), PropertyName.TITLE.toString());
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         Vertex resolvedVertex;
         // If the user chose to use an existing resolved entity
-        if (existing != null && !existing.isEmpty()) {
-            // TODO what happens if we have multiple vertices with the same title
-            resolvedVertex = single(graph.query(user.getAuthorizations())
-                    .has(PropertyName.TITLE.toString(), sign)
-                    .vertices());
+        if (existing != null && Boolean.valueOf(existing)) {
+            resolvedVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         } else {
             newVertex = true;
             resolvedVertex = graph.addVertex(DEFAULT_VISIBILITY, user.getAuthorizations());
         }
 
-        String conceptId = conceptVertex.getId().toString();
+        String conceptId = concept.getId().toString();
         resolvedVertex.prepareMutation()
                 .setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.TITLE.toString(), sign, DEFAULT_VISIBILITY)
