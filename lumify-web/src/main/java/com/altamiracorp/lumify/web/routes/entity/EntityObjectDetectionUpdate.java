@@ -3,6 +3,8 @@ package com.altamiracorp.lumify.web.routes.entity;
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -21,15 +23,18 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public EntityObjectDetectionUpdate(
             final Graph graph,
             final EntityHelper entityHelper,
-            final AuditRepository auditRepository) {
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository) {
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -46,13 +51,13 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
         final String boundingBox = "x1: " + x1 + ", y1: " + y1 + ", x2: " + x2 + ", y2: " + y2;
 
-        Vertex conceptVertex = graph.getVertex(conceptId, user.getAuthorizations());
+        Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex resolvedVertex;
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
         } else {
             // TODO: replace second "" when we implement commenting on ui
-            resolvedVertex = entityHelper.createGraphVertex(conceptVertex, sign, existing,"", "", artifactId, user);
+            resolvedVertex = entityHelper.createGraphVertex(concept, sign, existing, resolvedGraphVertexId, "", "", artifactId, user);
             resolvedGraphVertexId = resolvedVertex.getId();
         }
         Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
@@ -69,7 +74,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                     ", x2: " + detectedObject.get("x2") + ", y2: " + detectedObject.get("y2");
             if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(resolvedGraphVertexId) ||
                     (oldCoordinates.equals(boundingBox))) {
-                ArtifactDetectedObject tag = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, conceptVertex);
+                ArtifactDetectedObject tag = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, concept);
                 JSONObject result = new JSONObject();
 
                 JSONObject entityTag = tag.getJson();
