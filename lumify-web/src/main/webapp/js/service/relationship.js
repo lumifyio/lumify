@@ -25,14 +25,14 @@ define(
             });
         };
 
-        RelationshipService.prototype.deleteProperty = function (propertyName, sourceId, destId, label) {
+        RelationshipService.prototype.deleteProperty = function (propertyName, sourceId, destId, edgeId) {
             return this._ajaxPost({
                 url: 'relationship/property/delete',
                 data: {
                     propertyName: propertyName,
                     source: sourceId,
                     dest: destId,
-                    relationshipLabel: label
+                    edgeId: edgeId
                 }
             });
         };

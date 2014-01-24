@@ -42,8 +42,12 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
 
     function configureApplication() {
         // Flight Logging
-        debug.enable(true);
-        DEBUG.events.logNone();
+        try {
+            debug.enable(true);
+            DEBUG.events.logNone();
+        } catch(e) {
+            console.warn('Error enabling DEBUG mode for flight, probably because Safari Private Browsing enabled', e);
+        }
 
         // Default datepicker options
         $.fn.datepicker.defaults.format = "yyyy-mm-dd";
