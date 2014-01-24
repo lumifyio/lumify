@@ -208,6 +208,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         ElementMutation<Vertex> vertexMutation = BaseArtifactProcessor.findOrPrepareArtifactVertex(graph, user, artifactExtractedInfo.getRowKey());
         updateMutationWithArtifactExtractedInfo(vertexMutation, artifactExtractedInfo);
         Vertex vertex = vertexMutation.save();
+        auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
         graph.flush();
         // TODO remove temp files artifactExtractedInfo.getTextHdfsPath() and artifactExtractedInfo.getRawHdfsPath()
         return vertex;
@@ -287,15 +288,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
             artifact.setProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility);
         }
-
-        // TODO replace this with a secure graph property listener that can audit
-//        if (newVertex) {
-//            auditRepository.auditVertexCreate(artifactVertexId, artifactExtractedInfo.getProcess(), "", user);
-//        }
-
-//        for (Property modifiedProperty : modifiedProperties) {
-//            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, modifiedProperty.getName(), artifactExtractedInfo.getProcess(), "", user);
-//        }
     }
 
     protected User getUser() {
