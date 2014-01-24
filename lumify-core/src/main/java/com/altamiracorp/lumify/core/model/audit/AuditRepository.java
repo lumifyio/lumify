@@ -7,8 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -260,5 +259,22 @@ public class AuditRepository extends Repository<Audit> {
                 .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0))
                 .setLabel(label);
         return audit;
+    }
+
+    public void auditVertexElementMutation(ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process, User user) {
+        if (vertexElementMutation instanceof ExistingElementMutation) {
+            Vertex oldVertex = (Vertex) ((ExistingElementMutation) vertexElementMutation).getElement();
+            for (Property property : vertexElementMutation.getProperties()) {
+                // TODO handle multi-valued properties
+                Object oldPropertyValue = oldVertex.getPropertyValue(property.getName());
+                Object newPropertyValue = property.getValue();
+                checkNotNull(newPropertyValue, "new property value cannot be null");
+                if (!newPropertyValue.equals(oldPropertyValue)) {
+                    auditEntityProperties(AuditAction.UPDATE.toString(), vertex, property.getName(), process, "", user);
+                }
+            }
+        } else {
+            auditVertexCreate(vertex.getId(), process, "", user);
+        }
     }
 }
