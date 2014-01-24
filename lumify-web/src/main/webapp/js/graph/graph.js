@@ -359,7 +359,7 @@ define([
         };
 
         this.updateCyNodeData = function (data, vertex) {
-            var truncatedTitle = vertex.properties.title;
+            var truncatedTitle = vertex.properties.title || "No title available";
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
