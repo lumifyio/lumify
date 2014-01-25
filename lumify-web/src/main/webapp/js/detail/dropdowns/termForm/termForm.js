@@ -209,13 +209,13 @@ define([
                 parameters = {
                     sign: newSign,
                     conceptId: this.select('conceptSelector').val(),
-                    graphVertexId: this.attr.graphVertexId,
+                    graphVertexId: this.attr.graphVertexId || this.currentGraphVertexId,
                     artifactId: this.attr.artifactData.id,
                     x1: parseFloat(this.attr.x1),
                     y1: parseFloat(this.attr.y1),
                     x2: parseFloat(this.attr.x2),
                     y2: parseFloat(this.attr.y2),
-                    existing: this.currentGraphVertexId
+                    existing: this.currentGraphVertexId != ''
                 };
 
             _.defer(this.buttonLoading.bind(this));
@@ -397,11 +397,13 @@ define([
 
             this.graphVertexChanged(graphVertexId, data, true);
 
-            var input = this.select('objectSignSelector');
-            input.attr('disabled', true);
-            this.runQuery(sign).done(function() {
-                input.removeAttr('disabled');
-            });
+            if (sign != '') {
+                var input = this.select('objectSignSelector');
+                input.attr('disabled', true);
+                this.runQuery(sign).done(function() {
+                    input.removeAttr('disabled');
+                });
+            }
 
             this.sign = sign;
             this.startSign = sign;
@@ -410,7 +412,6 @@ define([
         this.updateResolveImageIcon = function(vertex, conceptId) {
             var self = this,
                 info = $(self.attr.mentionNode).data('info');
-
             if (vertex) {
                 $.extend(vertex, {}, vertex.properties);
             }
@@ -426,7 +427,7 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = conceptId || (vertex && vertex.properties._conceptType);
+                    var conceptType = (vertex && vertex.properties._conceptType) || conceptId;
                     if (conceptType) {
                         var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {

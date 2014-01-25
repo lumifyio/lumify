@@ -2,12 +2,16 @@ package com.altamiracorp.lumify.core.ingest;
 
 import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 public class ArtifactExtractedInfo {
     private static final String ROW_KEY = "rowKey";
@@ -397,7 +401,7 @@ public class ArtifactExtractedInfo {
         return frames != null ? Collections.unmodifiableList(frames) : null;
     }
 
-    public void setMappingJson(JSONObject mappingJson) {
+    public void setMappingJson(final String mappingJson) {
         set(MAPPING_JSON, mappingJson);
     }
 
@@ -407,16 +411,13 @@ public class ArtifactExtractedInfo {
      * @param mappingJson the mappingJson
      * @return this
      */
-    public ArtifactExtractedInfo mappingJson(final JSONObject mappingJson) {
+    public ArtifactExtractedInfo mappingJson(final String mappingJson) {
         setMappingJson(mappingJson);
         return this;
     }
 
     public String getMappingJson() {
-        if (properties.get(MAPPING_JSON) != null) {
-            return properties.get(MAPPING_JSON).toString();
-        }
-        return null;
+        return (String) properties.get(MAPPING_JSON);
     }
 
     public String getConceptType() {
