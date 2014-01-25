@@ -1,6 +1,8 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 public class EntityRelationships extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EntityRelationships.class);
     private final Graph graph;
 
     @Inject
@@ -24,13 +27,14 @@ public class EntityRelationships extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
+        long startTime = System.nanoTime();
+
         String[] ids = request.getParameterValues("ids[]");
         if (ids == null) {
             ids = new String[0];
         }
 
         List<String> allIds = new ArrayList<String>();
-
         for (int i = 0; i < ids.length; i++) {
             allIds.add(ids[i]);
         }
@@ -46,6 +50,9 @@ public class EntityRelationships extends BaseRequestHandler {
             rel.put("id", edge.getId());
             resultsJson.put(rel);
         }
+
+        long endTime = System.nanoTime();
+        LOGGER.debug("Retrieved %d in %dms", edges.size(), (endTime - startTime) / 1000 / 1000);
 
         respondWithJson(response, resultsJson);
     }
