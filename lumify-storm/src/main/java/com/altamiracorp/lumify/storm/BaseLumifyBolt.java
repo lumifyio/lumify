@@ -133,11 +133,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         processingCounter.inc();
         Timer.Context processingTimeContext = processingTimeTimer.time();
         try {
-            LOGGER.info("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
+            LOGGER.debug("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
             LOGGER.trace("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
             try {
                 safeExecute(input);
-                LOGGER.info("ACK'ing: [MessageID: %s]", input.getMessageId());
+                LOGGER.debug("ACK'ing: [MessageID: %s]", input.getMessageId());
                 LOGGER.trace("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input);
                 getCollector().ack(input);
             } catch (Exception e) {
@@ -147,7 +147,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
                 getCollector().fail(input);
             }
 
-            LOGGER.info("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
+            LOGGER.debug("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
             LOGGER.trace("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
         } finally {
             processingCounter.dec();
