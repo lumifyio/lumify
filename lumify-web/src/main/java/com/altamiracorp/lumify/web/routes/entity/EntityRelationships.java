@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
+
 public class EntityRelationships extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EntityRelationships.class);
     private final Graph graph;
@@ -34,7 +36,7 @@ public class EntityRelationships extends BaseRequestHandler {
             ids = new String[0];
         }
 
-        List<String> allIds = new ArrayList<String>();
+        List<Object> allIds = new ArrayList<Object>();
         for (int i = 0; i < ids.length; i++) {
             allIds.add(ids[i]);
         }
@@ -57,12 +59,12 @@ public class EntityRelationships extends BaseRequestHandler {
         respondWithJson(response, resultsJson);
     }
 
-    private Collection<Edge> getAllEdges(List<String> allVertexIds, Authorizations authorizations) {
+    private Collection<Edge> getAllEdges(List<Object> allVertexIds, Authorizations authorizations) {
         Set<Edge> results = new HashSet<Edge>();
-        Map<String, Vertex> vertices = toVertices(allVertexIds, authorizations);
+        List<Vertex> vertices = toList(graph.getVertices(allVertexIds, authorizations));
 
-        for (Vertex sourceVertex : vertices.values()) {
-            for (Vertex destVertex : vertices.values()) {
+        for (Vertex sourceVertex : vertices) {
+            for (Vertex destVertex : vertices) {
                 Iterable<Edge> edges = sourceVertex.getEdges(destVertex, Direction.BOTH, authorizations);
                 for (Edge edge : edges) {
                     results.add(edge);
@@ -70,13 +72,5 @@ public class EntityRelationships extends BaseRequestHandler {
             }
         }
         return results;
-    }
-
-    private Map<String, Vertex> toVertices(List<String> allVertexIds, Authorizations authorizations) {
-        Map<String, Vertex> vertices = new HashMap<String, Vertex>();
-        for (String vertexId : allVertexIds) {
-            vertices.put(vertexId, graph.getVertex(vertexId, authorizations));
-        }
-        return vertices;
     }
 }
