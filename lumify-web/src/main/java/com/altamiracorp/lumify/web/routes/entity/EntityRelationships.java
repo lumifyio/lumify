@@ -63,12 +63,20 @@ public class EntityRelationships extends BaseRequestHandler {
         Set<Edge> results = new HashSet<Edge>();
         List<Vertex> vertices = toList(graph.getVertices(allVertexIds, authorizations));
 
+        // since we are checking bi-directional edges we should only have to check v1->v2 and not v2->v1
+        Map<String, String> checkedCombinations = new HashMap<String, String>();
+
         for (Vertex sourceVertex : vertices) {
             for (Vertex destVertex : vertices) {
+                if (checkedCombinations.containsKey(sourceVertex.getId().toString() + destVertex.getId().toString())) {
+                    continue;
+                }
                 Iterable<Edge> edges = sourceVertex.getEdges(destVertex, Direction.BOTH, authorizations);
                 for (Edge edge : edges) {
                     results.add(edge);
                 }
+                checkedCombinations.put(sourceVertex.getId().toString() + destVertex.getId().toString(), "");
+                checkedCombinations.put(destVertex.getId().toString() + sourceVertex.getId().toString(), "");
             }
         }
         return results;
