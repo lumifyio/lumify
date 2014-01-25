@@ -218,7 +218,11 @@ public class TermMention {
         }
 
         public Builder setProperty(final String key, final Object value) {
-            this.properties.put(key, value);
+            if (value == null) {
+                this.properties.remove(key);
+            } else {
+                this.properties.put(key, value);
+            }
             return this;
         }
 
