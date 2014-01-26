@@ -65,6 +65,9 @@ define([
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'verticesDeleted', this.onVerticesDeleted);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
+            this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
+
+            this.padding = {l:0,r:0,b:0,t:0};
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Map',
@@ -133,6 +136,10 @@ define([
             this.mapReady(function(map) {
                 map.setCenter(latLon(data.latitude, data.longitude), 7);
             });
+        };
+
+        this.onGraphPaddingUpdated = function(event, data) {
+            return this.padding = $.extend({}, data.padding);
         };
 
         this.onWorkspaceLoaded = function(evt, workspaceData) {
@@ -302,10 +309,38 @@ define([
         };
 
         this.fit = function(map) {
-            var dataExtent = map.featuresLayer.getDataExtent();
+            var self = this,
+                dataExtent = map.featuresLayer.getDataExtent();
+
             if (dataExtent) {
-                map.zoomToExtent(dataExtent.scale(2)); 
-                map.featuresLayer.redraw();
+                var screenPadding = 20,
+                    padding = {
+                        l: this.padding.l + screenPadding,
+                        r: this.padding.r + this.select('controlsSelector').width() + screenPadding,
+                        t: this.padding.t + screenPadding * 2,
+                        b: this.padding.b + screenPadding * 2
+                    },
+                    viewportWidth = this.$node.width() - padding.l - padding.r,
+                    viewportHeight = this.$node.height() - padding.t - padding.b,
+
+                    // Figure out ideal resolution based on available realestate
+                    idealResolution = Math.max( 
+                        dataExtent.getWidth()  / viewportWidth,
+                        dataExtent.getHeight() / viewportHeight
+                    ),
+                    zoom = map.getZoomForResolution(idealResolution, false),
+                    actualResolution = map.getResolutionForZoom(zoom),
+
+                    // Center of markers...
+                    centerLonLat = dataExtent.getCenterLonLat(),
+
+                    // Adjust center based on pane paddings
+                    offsetX = padding.l - padding.r,
+                    offsetY = padding.t - padding.b,
+                    lon = offsetX * actualResolution / 2,
+                    lat = offsetY * actualResolution / 2;
+                  
+                map.setCenter( new ol.LonLat(centerLonLat.lon-lon, centerLonLat.lat-lat), zoom);
             } else {
                 map.zoomToMaxExtent();
             }
@@ -512,7 +547,8 @@ define([
                     controls: [ controls ]
                 }),
                 base = new ol.Layer.Google("Google Streets", {
-                    numZoomLevels: 20
+                    numZoomLevels: 20,
+                    wrapDateLine: false
                 }),
                 cluster = new ClusterStrategy({ 
                     distance: 45,

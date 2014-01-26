@@ -9,6 +9,12 @@
   width: auto !important;
   height: auto !important;
 
+  svg {
+    // Fixes some feature marker ghosting issues 
+    // by enabling hardware acceleration on svg element
+    .translate3d(0,0,0);
+  }
+
   &.invalid {
     .shake;
   }
