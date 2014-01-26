@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
@@ -45,6 +44,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
         final long size = getOptionalParameterLong(request, "size", 100);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
+
+        long startTime = System.nanoTime();
 
         User user = getUser(request);
         JSONArray filterJson = new JSONArray(filter);
@@ -103,11 +104,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
             verticesCount++;
             // TODO this used create hierarchical results
         }
-        LOGGER.info("Number of vertices returned for query: %d", verticesCount);
 
         JSONObject results = new JSONObject();
         results.put("vertices", vertices);
         results.put("verticesCount", counts);
+
+        long endTime = System.nanoTime();
+        LOGGER.info("Search found %d vertices in %dms", verticesCount, (endTime - startTime) / 1000 / 1000);
 
         respondWithJson(response, results);
     }
