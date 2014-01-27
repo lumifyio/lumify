@@ -255,7 +255,7 @@ define([
             });
             
             if (sorted.length === 1) {
-                return sorted.properties.title;
+                return sorted[0].properties.title;
             } else {
                 var first = '"' + sorted[0].properties.title + '"',
                     l = sorted.length - 1;
