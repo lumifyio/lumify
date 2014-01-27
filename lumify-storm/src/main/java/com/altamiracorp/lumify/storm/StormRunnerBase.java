@@ -105,7 +105,9 @@ public abstract class StormRunnerBase extends CommandLineBase {
             cluster.killTopology(getTopologyName());
             cluster.shutdown();
         } else {
+            LOGGER.info("submitting topology: " + getTopologyName());
             StormSubmitter.submitTopology(getTopologyName(), conf, topology);
+            LOGGER.info("topology submitted: " + getTopologyName());
         }
 
         return 0;
