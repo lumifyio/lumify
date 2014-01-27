@@ -90,6 +90,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
         beforeCreateTopology(cmd, conf);
 
+        LOGGER.info("Creating topology: " + getTopologyName());
         StormTopology topology = createTopology(parallelismHint);
         LOGGER.info("Created topology layout: " + topology);
         LOGGER.info(String.format("Submitting topology '%s'", getTopologyName()));
