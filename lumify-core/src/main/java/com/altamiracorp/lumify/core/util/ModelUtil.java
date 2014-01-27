@@ -26,8 +26,7 @@ public class ModelUtil {
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
             "atc_securegraph", // TODO refactor to config file info. But since this is only for development this is low priority
-            "jetty_session",
-            "atc_titan");// TODO refactor see com.altamiracorp.lumify.model.TitanGraphSession
+            "jetty_session");
 
     public static void initializeTables(ModelSession modelSession, User user) {
         for (String table : tables) {
