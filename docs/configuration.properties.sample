@@ -23,23 +23,17 @@ bigtable.accumulo.zookeeperServerNames= # e.g. 192.168.33.10 (comma separated)
 bigtable.accumulo.username= # e.g. root
 bigtable.accumulo.password= # e.g. password
 
-# Titan specific
-graph.titan.storage.backend=com.altamiracorp.titan.accumulo.AccumuloStorageManager
-graph.titan.storage.tablename=atc_titan
-graph.titan.storage.accumuloInstanceName= # e.g. lumify
-graph.titan.storage.zookeeperServerName= # e.g. 192.168.33.10
-graph.titan.storage.username= # e.g. root
-graph.titan.storage.password= # e.g. password
-graph.titan.storage.index.search.backend=elasticsearch
-graph.titan.storage.index.search.hostname= # e.g. 192.168.33.10
-graph.titan.storage.index.search.port=9300
-graph.titan.storage.index.search.indexName=titan
-graph.titan.storage.index.search.client-only=true
-graph.titan.autotype=none
-
-# Titan-ES specific
-graph.titan.storage.index.search.providerUtilClass=com.altamiracorp.lumify.model.index.utils.TitanGraphElasticSearchUtil
-
-
-# Elastic search specific
-search.elasticsearch.locations= # e.g. 192.168.33.10:9300
+# graph
+graph=com.altamiracorp.securegraph.accumulo.AccumuloGraph
+# TODO when server side element visibility is fix remove this line
+graph.useServerSideElementVisibilityRowFilter=false
+graph.accumuloInstanceName=lumify
+graph.username=root
+graph.password=password
+graph.tableName=atc_securegraph
+graph.zookeeperServers=192.168.33.10,192.168.33.10
+graph.serializer=com.altamiracorp.securegraph.accumulo.serializer.JavaValueSerializer
+graph.idgenerator=com.altamiracorp.securegraph.id.UUIDIdGenerator
+graph.search=com.altamiracorp.securegraph.elasticsearch.ElasticSearchSearchIndex
+graph.search.locations=192.168.33.10
+graph.search.indexName=securegraph
