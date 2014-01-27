@@ -55,6 +55,14 @@
             <param-name>org.atmosphere.cpr.broadcasterCacheClass</param-name>
             <param-value>org.atmosphere.cache.UUIDBroadcasterCache</param-value>
         </init-param>
+        <init-param>
+            <param-name>org.atmosphere.websocket.maxTextMessageSize</param-name>
+            <param-value>1048576</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.atmosphere.websocket.maxBinaryMessageSize</param-name>
+            <param-value>1048576</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>AtmosphereServlet</servlet-name>
