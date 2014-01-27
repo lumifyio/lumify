@@ -37,16 +37,21 @@ width: 175px;
   position: relative;
 }
 .search-results-summary.nav-list > li > a {
-  padding-right: 3em;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding-right: 0.5em;
+
+  .title {
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    padding-right: 0.25em;
+  }
 }
 
 .search-results-summary a .badge {
-  position: absolute;
-  right: 0;
-  left: auto;
+  position: relative;
+  float: right;
+  display: block;
 }
 
 .filter-info {
