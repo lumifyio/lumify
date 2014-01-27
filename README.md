@@ -8,7 +8,7 @@ The lumify.io website is built using Jekyll and deployed as a Github site. Follo
 2. Install bundler with `gem install bundler`.
 3. Checkout the gh-pages branch `git checkout -b gh-pages`.
 4. Install the required Ruby gems using bundler (from the root of the project) `bundle install`.
-5. Use Jekyll to compile and serve the website locally. `bundle exec jekyll serve`.
+5. Use Jekyll to compile and serve the website locally. `bundle exec jekyll serve --watch`. The `--watch` flag tells Jekyll to watch for changes and regenerate the site automatically.
 
 Note: It's import to use `bundle exec` when running any of the jekyll commands to ensure the correct versions of all Ruby gems are used.
 
