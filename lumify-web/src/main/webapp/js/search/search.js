@@ -134,6 +134,10 @@ define([
                 this.searchResults = {};
             }
 
+            if (this.previousSearch && this.previousSearch.abort) {
+                this.previousSearch.abort();
+            }
+
             if (query != data.query) {
                 this.select('querySelector').val(data.query);
             }
@@ -146,8 +150,10 @@ define([
                 var paging = { offset:0, size:100 },
                     subTypeFilter = null;
 
-                this.vertexService.graphVertexSearch(query, this.filters, subTypeFilter, paging)
+                this.previousSearch = this.vertexService.graphVertexSearch(query, this.filters, subTypeFilter, paging)
                     .done(function(vertexResults) {
+                        self.previousSearch = null;
+
                         var results = {},
                             sortVerticesIntoResults = function(v) {
                                 var props = v.properties,
@@ -194,7 +200,8 @@ define([
                             });
                         }
 
-                    }).fail(function() {
+                    }).fail(function(request, reason) {
+                        if (reason === 'abort') return;
                         var $searchQueryValidation = self.select('queryValidationSelector');
                         self.select('resultsSummarySelector').empty();
                         return $searchQueryValidation.html(alertTemplate({ error: 'Invalid query' }));
