@@ -9,14 +9,12 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 
 import java.io.InputStream;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
-    private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
 
     private final OntologyRepository ontologyRepository;
     private final ResourceRepository resourceRepository;
@@ -51,7 +49,7 @@ public class BaseOntology {
 
         InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
         String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
-        entity.setProperty(PropertyName.GLYPH_ICON.toString(), entityGlyphIconRowKey, DEFAULT_VISIBILITY);
+        entity.setProperty(PropertyName.GLYPH_ICON.toString(), entityGlyphIconRowKey, OntologyRepository.DEFAULT_VISIBILITY);
         graph.flush();
     }
 

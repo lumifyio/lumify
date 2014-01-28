@@ -8,7 +8,6 @@ import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OwlImport extends CommandLineBase {
-    private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
     private OntologyRepository ontologyRepository;
     private ResourceRepository resourceRepository;
     private Graph graph;
@@ -127,7 +125,7 @@ public class OwlImport extends CommandLineBase {
                 propertyName = PropertyName.MAP_GLYPH_ICON.toString();
                 propertyValue = importGlyphIconFile(propertyValue, user);
             }
-            concept.setProperty(propertyName, propertyValue, DEFAULT_VISIBILITY);
+            concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY);
         }
         graph.flush();
     }
