@@ -6,6 +6,7 @@ define([
     'tpl!./relationship',
     'service/relationship',
     'service/vertex',
+    'service/ontology',
     'detail/properties',
     'sf'
 ], function(
@@ -16,12 +17,14 @@ define([
     template,
     RelationshipService,
     VertexService,
+    OntologyService,
     Properties,
     sf) {
     'use strict';
 
     var relationshipService = new RelationshipService();
     var vertexService = new VertexService();
+    var ontologyService = new OntologyService();
 
     return defineComponent(Relationship, withTypeContent, withHighlighting);
 
@@ -49,20 +52,22 @@ define([
         this.loadRelationship = function() {
             var self = this,
                 data = this.attr.data;
-
-            this.vertexService.getVertexToVertexRelationshipDetails(
+            $.when(
+                self.handleCancelling(self.ontologyService.relationships()),
+                self.handleCancelling(self.vertexService.getVertexToVertexRelationshipDetails(
                     data.properties.source,
                     data.properties.target,
-                    data.properties.relationshipType
-            ).done(function(relationshipData) {
+                    data.id
+                ))
+            ).done(function(ontologyRelationships, relationshipData) {
                 self.$node.html(template({
                     auditsButton: self.auditsButton(),
-                    relationshipData: relationshipData
+                    relationshipData: relationshipData[0]
                 }));
 
                 var properties = $.extend({}, data.properties);
-                properties.relationshipLabel = data.properties.relationshipType;
-                relationshipData.properties.forEach(function(prop) {
+                properties.relationshipType = ontologyRelationships.byTitle[data.properties.relationshipType].displayName;
+                relationshipData[0].properties.forEach(function(prop) {
                     properties[prop.key] = prop.value;
                 });
 

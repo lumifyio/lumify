@@ -127,15 +127,12 @@ define([
                     }
                 };
 
-                var id = r.relationship.sourceVertexId + '>' +
-                        r.relationship.destVertexId + '|' + 
-                        r.relationship.label;
                 r.relationshipInfo = {
-                    id: id,
+                    id: r.relationship.id,
                     properties: $.extend({}, r.relationship.properties, {
                         _type: 'relationship',
                         _rowKey: r.relationship.sourceVertexId + '->' + r.relationship.destVertexId,
-                        id: id,
+                        id: r.relationship.id,
                         relationshipType: r.relationship.label,
                         source: r.relationship.sourceVertexId,
                         target: r.relationship.destVertexId

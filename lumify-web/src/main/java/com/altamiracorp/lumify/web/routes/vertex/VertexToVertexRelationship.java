@@ -28,7 +28,7 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String source = getRequiredParameter(request, "source");
         final String target = getRequiredParameter(request, "target");
-        final String label = getRequiredParameter(request, "label");
+        final String id = getRequiredParameter(request, "id");
 
         User user = getUser(request);
         Vertex sourceVertex = graph.getVertex(source, user.getAuthorizations());
@@ -38,23 +38,21 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
         results.put("source", resultsToJson(source, sourceVertex));
         results.put("target", resultsToJson(target, targetVertex));
 
-        Iterator<Edge> edges = sourceVertex.getEdges(targetVertex, Direction.IN, label, user.getAuthorizations()).iterator();
+        Edge edge = graph.getEdge(id, user.getAuthorizations());
+
         JSONArray propertyJson = new JSONArray();
-        while (edges.hasNext()) {
-            Edge edge = edges.next();
-            JSONObject property = new JSONObject();
-            Iterator<Property> propertyIterator = edge.getProperties().iterator();
-            while (propertyIterator.hasNext()) {
-                Property edgeProperty = propertyIterator.next();
-                property.put("key", edgeProperty.getName());
-                String displayName = ontologyRepository.getDisplayNameForLabel(edgeProperty.getValue().toString());
-                if (displayName == null) {
-                    property.put("value", edgeProperty.getValue());
-                } else {
-                    property.put("value", displayName);
-                }
-                propertyJson.put(property);
+        JSONObject property = new JSONObject();
+        Iterator<Property> propertyIterator = edge.getProperties().iterator();
+        while (propertyIterator.hasNext()) {
+            Property edgeProperty = propertyIterator.next();
+            property.put("key", edgeProperty.getName());
+            String displayName = ontologyRepository.getDisplayNameForLabel(edgeProperty.getValue().toString());
+            if (displayName == null) {
+                property.put("value", edgeProperty.getValue());
+            } else {
+                property.put("value", displayName);
             }
+            propertyJson.put(property);
         }
         results.put("properties", propertyJson);
 

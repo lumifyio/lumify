@@ -61,13 +61,13 @@ define(
             });
         };
 
-        VertexService.prototype.getVertexToVertexRelationshipDetails = function (source, target, label) {
+        VertexService.prototype.getVertexToVertexRelationshipDetails = function (source, target, id) {
             return this._ajaxGet({
                 url: 'vertex/relationship',
                 data: {
                     source: source,
                     target: target,
-                    label: label
+                    id: id
                 }
             });
         };
