@@ -10,9 +10,49 @@
     </parent>
 
     <artifactId>lumify-web-server</artifactId>
-    <packaging>jar</packaging>
+    <packaging>${packaging.type}</packaging>
 
     <name>Lumify: Web Interface Server</name>
+
+    <properties>
+        <packaging.type>jar</packaging.type>
+        <plugin.maven.war.version>2.4</plugin.maven.war.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>web-war</id>
+            <properties>
+                <packaging.type>war</packaging.type>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.altamiracorp.lumify</groupId>
+                    <artifactId>lumify-web</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${plugin.maven.war.version}</version>
+                        <configuration>
+                            <overlays>
+                                <overlay>
+                                    <groupId>com.altamiracorp.lumify</groupId>
+                                    <artifactId>lumify-web</artifactId>
+                                </overlay>
+                            </overlays>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -46,7 +86,7 @@
             <version>${jetty.version}</version>
         </dependency>
     </dependencies>
-	
+
 	<build>
 		<plugins>
             <plugin>
