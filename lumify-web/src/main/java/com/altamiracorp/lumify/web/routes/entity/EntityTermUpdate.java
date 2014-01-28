@@ -65,13 +65,15 @@ public class EntityTermUpdate extends BaseRequestHandler {
         User user = getUser(request);
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex resolvedVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        ElementMutation<Vertex> resolvedVertexMutation = resolvedVertex.prepareMutation();
 
         // TODO: replace second "" when we implement commenting on ui
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
+        resolvedVertexMutation = entityHelper.updateMutation(resolvedVertexMutation, conceptId, sign, "", "", user);
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
+        resolvedVertex = resolvedVertexMutation.save();
 
         Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
-        Vertex resolvedGraphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        Iterator<Edge> edges = artifactVertex.getEdges(resolvedGraphVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
+        Iterator<Edge> edges = artifactVertex.getEdges(resolvedVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), user.getAuthorizations()).iterator();
         if (!edges.hasNext()) {
             graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), new Visibility(""), user.getAuthorizations());
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());

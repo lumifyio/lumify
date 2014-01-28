@@ -45,10 +45,9 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         obj.put("entityVertex", GraphUtil.toJson(vertex));
 
         Vertex artifactVertex = graph.getVertex(jsonObject.getString("artifactId"), user.getAuthorizations());
+        ElementMutation<Vertex> artifactVertexMutation = artifactVertex.prepareMutation();
         Iterable<Edge> edges = artifactVertex.getEdges(vertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations());
         if (edges.iterator().hasNext()) {
-            String edgeId = artifactVertex.getId() + ">" + graphVertexId + "|" + LabelName.ENTITY_HAS_IMAGE_RAW.toString();
-            obj.put("edgeId", edgeId);
             while (edges.iterator().hasNext()) {
                 graph.removeEdge(edges.iterator().next(), user.getAuthorizations());
             }
@@ -74,11 +73,10 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         if (!deleted) {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
-        artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+        artifactVertexMutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
+        artifactVertex = artifactVertexMutation.save();
         graph.flush();
-
-        // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
 
         JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);
