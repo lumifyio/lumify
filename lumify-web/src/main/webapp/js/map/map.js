@@ -139,7 +139,7 @@ define([
         };
 
         this.onGraphPaddingUpdated = function(event, data) {
-            return this.padding = $.extend({}, data.padding);
+            return (this.padding = $.extend({}, data.padding));
         };
 
         this.onWorkspaceLoaded = function(evt, workspaceData) {
