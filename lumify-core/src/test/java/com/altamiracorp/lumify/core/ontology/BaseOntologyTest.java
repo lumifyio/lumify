@@ -14,7 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.InputStream;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
