@@ -21,10 +21,7 @@ import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
@@ -207,8 +204,14 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         ElementMutation<Vertex> vertexMutation = BaseArtifactProcessor.findOrPrepareArtifactVertex(graph, user, artifactExtractedInfo.getRowKey());
         updateMutationWithArtifactExtractedInfo(vertexMutation, artifactExtractedInfo);
-        Vertex vertex = vertexMutation.save();
-        auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
+        Vertex vertex = null;
+        if (!(vertexMutation instanceof ExistingElementMutation)) {
+            vertex = vertexMutation.save();
+            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
+        } else {
+            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
+            vertex = vertexMutation.save();
+        }
         graph.flush();
         // TODO remove temp files artifactExtractedInfo.getTextHdfsPath() and artifactExtractedInfo.getRawHdfsPath()
         return vertex;

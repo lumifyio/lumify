@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
@@ -56,15 +57,15 @@ public class EntityTermCreate extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
-        final Vertex createdVertex = graph.addVertex(visibility, user.getAuthorizations());
-        createdVertex.setProperty(PropertyName.ROW_KEY.toString(), termMentionRowKey.toString(), visibility);
+        ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, user.getAuthorizations());
+        createdVertexMutation.setProperty(PropertyName.ROW_KEY.toString(), termMentionRowKey.toString(), visibility);
 
         // TODO: replace second "" when we implement commenting on ui
-        entityHelper.updateGraphVertex(createdVertex, conceptId, sign, "", "", user);
+        createdVertexMutation = entityHelper.updateMutation(createdVertexMutation, conceptId, sign, "", "", user);
 
-        // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditEntity(AuditAction.CREATE.toString(), createdVertex.getId(), artifactId, sign, conceptId, "", "", user);
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), createdVertex, PropertyName.ROW_KEY.toString(), "", "", user);
+        Vertex createdVertex = createdVertexMutation.save();
+
+        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user);
 
         graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, user.getAuthorizations());
 

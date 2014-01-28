@@ -70,7 +70,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final User user = getUser(request);
         final Part file = files.get(0);
 
-        final Vertex entityVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex entityVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
         if (entityVertex == null) {
             LOGGER.warn("Could not find associated entity vertex for id: %s", graphVertexId);
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -86,11 +87,12 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
                 .setProperty(PropertyName.PROCESS.toString(), PROCESS, visibility);
         Vertex artifactVertex = artifactBuilder.save();
 
-        entityVertex.setProperty(PropertyName.GLYPH_ICON.toString(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
-        graph.flush();
+        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user);
 
-        // TODO: replace second"" when we implement commenting on ui
-        auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), entityVertex, PropertyName.GLYPH_ICON.toString(), "", "", user);
+        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
+        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user);
+        entityVertex = entityVertexMutation.save();
+        graph.flush();
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations()).iterator();
         if (!existingEdges.hasNext()) {

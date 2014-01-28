@@ -103,18 +103,18 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public Audit auditEntityProperties(String action, Vertex entity, String propertyName, String process, String comment, User user) {
+    public Audit auditEntityProperties(String action, Object id, String propertyName, Object oldValue, Object newValue,
+                                       String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
         checkArgument(action.length() > 0, "action cannot be empty");
-        checkNotNull(entity, "entity cannot be null");
+        checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
         checkArgument(propertyName.length() > 0, "property name cannot be empty");
         checkNotNull(process, "process cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
 
-        Audit audit = new Audit(AuditRowKey.build(entity.getId()));
-        HashMap<String, Object> oldProperties = new HashMap<String, Object>(); // TODO add listener pattern to secure graph to notify of property changes... entity.getOldProperties();
+        Audit audit = new Audit(AuditRowKey.build(id));
 
         audit.getAuditCommon()
                 .setUser(user)
@@ -126,13 +126,13 @@ public class AuditRepository extends Repository<Audit> {
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
 
-        if (oldProperties.containsKey(propertyName)) {
-            audit.getAuditProperty().setPreviousValue(oldProperties.get(propertyName).toString());
+        if (oldValue != null) {
+            audit.getAuditProperty().setPreviousValue(oldValue.toString());
         }
         if (action.equals(AuditAction.DELETE.toString())) {
             audit.getAuditProperty().setNewValue("");
         } else {
-            audit.getAuditProperty().setNewValue(entity.getPropertyValue(propertyName, 0).toString());
+            audit.getAuditProperty().setNewValue(newValue.toString());
         }
         audit.getAuditProperty().setPropertyName(propertyName);
 
@@ -270,11 +270,17 @@ public class AuditRepository extends Repository<Audit> {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditEntityProperties(AuditAction.UPDATE.toString(), vertex, property.getName(), process, "", user);
+                    auditEntityProperties(AuditAction.UPDATE.toString(), oldVertex.getId(), property.getName(), oldPropertyValue, newPropertyValue, process, "", user);
                 }
             }
         } else {
             auditVertexCreate(vertex.getId(), process, "", user);
+            for (Property property : vertexElementMutation.getProperties()) {
+                // TODO handle multi-valued properties
+                Object newPropertyValue = property.getValue();
+                checkNotNull(newPropertyValue, "new property value cannot be null");
+                auditEntityProperties(AuditAction.UPDATE.toString(), vertex.getId(), property.getName(), null, newPropertyValue, process, "", user);
+            }
         }
     }
 }

@@ -11,10 +11,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -60,24 +57,20 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        ElementMutation<Vertex> graphVertexMutation = graphVertex.prepareMutation();
 
-        List<String> modifiedProperties = Lists.newArrayList(propertyName);
         Visibility visibility = new Visibility(""); // TODO set visibility
-        graphVertex.setProperty(propertyName, value, visibility);
+        graphVertexMutation.setProperty(propertyName, value, visibility);
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            graphVertex.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
-            modifiedProperties.add(PropertyName.GEO_LOCATION_DESCRIPTION.toString());
+            graphVertexMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
-            graphVertex.setProperty(PropertyName.SOURCE.toString(), value, visibility);
-            modifiedProperties.add(PropertyName.SOURCE.toString());
+            graphVertexMutation.setProperty(PropertyName.SOURCE.toString(), value, visibility);
         }
-        graph.flush();
 
-        for (String modifiedProperty : modifiedProperties) {
-            // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), graphVertex, modifiedProperty, "", "", user);
-        }
+        auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
+        graphVertex = graphVertexMutation.save();
+        graph.flush();
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 

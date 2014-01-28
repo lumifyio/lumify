@@ -4,14 +4,13 @@ import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,19 +51,33 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         final String boundingBox = "x1: " + x1 + ", y1: " + y1 + ", x2: " + x2 + ", y2: " + y2;
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
-        Vertex resolvedVertex;
+        ElementMutation<Vertex> resolvedVertexMutation;
+        Vertex resolvedVertex = null;
         if (resolvedGraphVertexId != null) {
             resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
+            resolvedVertexMutation = resolvedVertex.prepareMutation();
         } else {
             // TODO: replace second "" when we implement commenting on ui
-            resolvedVertex = entityHelper.createGraphVertex(concept, sign, existing, resolvedGraphVertexId, "", "", artifactId, user);
-            resolvedGraphVertexId = resolvedVertex.getId();
+            resolvedVertexMutation = entityHelper.createGraphMutation(concept, sign, existing, resolvedGraphVertexId, "", "", user);
         }
         Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
+        ElementMutation<Vertex> artifactVertexMutation = artifactVertex.prepareMutation();
 
         // update graph vertex
         // TODO: replace second "" when we implement commenting on ui
-        entityHelper.updateGraphVertex(resolvedVertex, conceptId, sign, "", "", user);
+        entityHelper.updateMutation(resolvedVertexMutation, conceptId, sign, "", "", user);
+
+        if (!(resolvedVertexMutation instanceof ExistingElementMutation)) {
+            resolvedVertex = resolvedVertexMutation.save();
+        }
+
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
+        resolvedVertex = resolvedVertexMutation.save();
+
+        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, user.getAuthorizations());
+        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
 
         // update the detected object property on the artifact
         JSONArray detectedObjects = new JSONArray(artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0).toString());
@@ -81,11 +94,11 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 entityTag.put("artifactId", artifactId);
                 detectedObjects.put(i, entityTag);
 
-                artifactVertex.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+                artifactVertexMutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
                 result.put("entityVertex", entityTag);
 
-                // TODO: replace "" when we implement commenting on ui
-                auditRepository.auditEntityProperties(AuditAction.UPDATE.toString(), artifactVertex, PropertyName.DETECTED_OBJECTS.toString(), "", "", user);
+                auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
+                artifactVertex = artifactVertexMutation.save();
 
                 JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);

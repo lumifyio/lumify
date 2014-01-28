@@ -21,8 +21,6 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     private VertexDeleteProperty vertexDeleteProperty;
 
     @Mock
-    private OntologyRepository mockOntologyRepository;
-    @Mock
     private Graph mockGraph;
     @Mock
     private AuditRepository mockAuditRepository;
@@ -33,14 +31,13 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     @Override
     public void setUp() throws Exception {
 //        super.setUp();
-        vertexDeleteProperty = new VertexDeleteProperty(mockOntologyRepository, mockGraph, mockAuditRepository);
+        vertexDeleteProperty = new VertexDeleteProperty(mockGraph, mockAuditRepository);
     }
 
     @Test(expected = RuntimeException.class)
     public void testHandleWithNullProperty() throws Exception {
         when(mockRequest.getAttribute("graphVertexId")).thenReturn("");
         when(mockRequest.getParameter("propertyName")).thenReturn("");
-        when(mockOntologyRepository.getProperty(PropertyName.TITLE.toString())).thenReturn(null);
         vertexDeleteProperty.handle(mockRequest, mockResponse, mockHandlerChain);
     }
 

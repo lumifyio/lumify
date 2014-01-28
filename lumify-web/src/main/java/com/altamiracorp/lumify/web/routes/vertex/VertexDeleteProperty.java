@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -19,12 +20,10 @@ import java.util.Iterator;
 
 public class VertexDeleteProperty extends BaseRequestHandler {
     private final Graph graph;
-    private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
 
     @Inject
-    public VertexDeleteProperty(final OntologyRepository ontologyRepo, final Graph graphRepo, final AuditRepository auditRepo) {
-        ontologyRepository = ontologyRepo;
+    public VertexDeleteProperty(final Graph graphRepo, final AuditRepository auditRepo) {
         graph = graphRepo;
         auditRepository = auditRepo;
     }
@@ -35,18 +34,13 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         final String propertyName = getRequiredParameter(request, "propertyName");
 
         User user = getUser(request);
-        OntologyProperty property = ontologyRepository.getProperty(propertyName);
-        if (property == null) {
-            throw new RuntimeException("Could not find property: " + propertyName);
-        }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        graphVertex.removeProperty(property.getId().toString(), propertyName);
-
+        Object oldValue = graphVertex.getPropertyValue(propertyName, 0);
+        graphVertex.removeProperty(propertyName);
         graph.flush();
 
-        // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, oldValue, null,  "", "", user);
 
         // TODO: broadcast property delete
 
