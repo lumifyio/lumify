@@ -110,7 +110,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         results.put("verticesCount", counts);
 
         long endTime = System.nanoTime();
-        LOGGER.info("Search found %d vertices in %dms", verticesCount, (endTime - startTime) / 1000 / 1000);
+        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);
 
         respondWithJson(response, results);
     }
