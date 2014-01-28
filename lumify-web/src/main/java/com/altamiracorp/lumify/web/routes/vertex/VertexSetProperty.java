@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -63,6 +64,11 @@ public class VertexSetProperty extends BaseRequestHandler {
         graphVertexMutation.setProperty(propertyName, value, visibility);
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
+            String [] point = valueStr.split(",");
+            String latitude = point[0].substring(point[0].indexOf("(") + 1, point[0].length());
+            String longitude = point[1].substring(point[1].indexOf(",") + 1, point[1].length()-1);
+            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
+            graphVertexMutation.setProperty(PropertyName.GEO_LOCATION.toString(), geoPoint, visibility);
             graphVertexMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
             graphVertexMutation.setProperty(PropertyName.SOURCE.toString(), value, visibility);
@@ -90,7 +96,15 @@ public class VertexSetProperty extends BaseRequestHandler {
         try {
             obj.put("graphVertexId", vertex.getId());
             for (Property property : vertex.getProperties()) {
-                obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
+                if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
+                    JSONObject geo = new JSONObject();
+                    GeoPoint geoPoint = (GeoPoint)property.getValue();
+                    geo.put("latitude", geoPoint.getLatitude());
+                    geo.put("longitude", geoPoint.getLongitude());
+                    obj.put(property.getName(), geo);
+                } else {
+                    obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
+                }
             }
             return obj;
         } catch (JSONException e) {
