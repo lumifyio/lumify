@@ -25,7 +25,7 @@ public class ModelUtil {
             UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
-            "atc_securegraph", // TODO refactor to config file info. But since this is only for development this is low priority
+            // TODO refactor to config file info. But since this is only for development this is low priority
             "atc_securegraph_d",
             "atc_securegraph_v",
             "atc_securegraph_e",
