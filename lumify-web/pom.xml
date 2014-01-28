@@ -214,6 +214,7 @@
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>index.html</include>
+                                        <include>ping.html</include>
                                     </includes>
                                 </resource>
                             </webResources>
