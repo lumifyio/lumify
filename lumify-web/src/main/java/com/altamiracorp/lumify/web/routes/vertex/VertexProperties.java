@@ -1,10 +1,12 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +43,15 @@ public class VertexProperties extends BaseRequestHandler {
         Iterator<Property> propertyIterator = properties.iterator();
         while (propertyIterator.hasNext()) {
             Property property = propertyIterator.next();
-            resultsJson.put(property.getName(), property.getValue());
+            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
+                JSONObject geo = new JSONObject();
+                GeoPoint geoPoint = (GeoPoint)property.getValue();
+                geo.put("latitude", geoPoint.getLatitude());
+                geo.put("longitude", geoPoint.getLongitude());
+                resultsJson.put(property.getName(), geo);
+            } else {
+                resultsJson.put(property.getName(), property.getValue());
+            }
         }
         return resultsJson;
     }
