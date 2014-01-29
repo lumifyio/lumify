@@ -81,7 +81,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         Visibility visibility = new Visibility("");
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
         artifactBuilder
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), DisplayType.IMAGE.toString(), visibility)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), DisplayType.IMAGE.toString(), visibility)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId(), visibility)
                 .setProperty(PropertyName.TITLE.toString(), "Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString(), 0), visibility)
                 .setProperty(PropertyName.SOURCE.toString(), SOURCE_UPLOAD, visibility)
                 .setProperty(PropertyName.PROCESS.toString(), PROCESS, visibility);
