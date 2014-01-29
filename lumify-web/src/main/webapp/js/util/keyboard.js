@@ -25,6 +25,7 @@ define([
 
             this.on('keydown', this.onKeyDown);
             this.on('keyup', this.onKeyUp);
+            this.on('click', this.onClick);
             this.on('didToggleDisplay', this.onToggleDisplay);
             this.on('focusLostByClipboard', this.onFocusLostByClipboard);
             this.on('focusComponent', this.onFocus);
@@ -69,6 +70,10 @@ define([
         };
 
         this.onFocus = function(e) {
+            this.pushToStackIfNotLast(e.target);
+        };
+
+        this.onClick = function(e) {
             this.pushToStackIfNotLast(e.target);
         };
 
