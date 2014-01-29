@@ -5,7 +5,7 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.user.SystemUser;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.web.session.model.*;
 import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
@@ -19,14 +19,16 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BigTableJettySessionManager extends NoSqlSessionManager {
-    private static int CACHE_MAX_SIZE= 50;
-    private static int CACHE_EXPIRE_MINUTES = 10;
-    private static String CONFIGURATION_LOCATION = "/opt/lumify/config/";
+    private static final int CACHE_MAX_SIZE = 50;
+    private static final int CACHE_EXPIRE_MINUTES = 10;
+    private static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
 
     private JettySessionRepository jettySessionRepository;
+    private UserProvider userProvider;
     private LoadingCache<String, Optional<JettySessionRow>> cache;
 
     public BigTableJettySessionManager() {
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(Configuration.loadConfigurationFile(CONFIGURATION_LOCATION)));
 
         cache = CacheBuilder.newBuilder()
                 .maximumSize(CACHE_MAX_SIZE)
@@ -34,16 +36,19 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
                 .build(new CacheLoader<String, Optional<JettySessionRow>>() {
                     @Override
                     public Optional<JettySessionRow> load(String clusterId) throws Exception {
-                        return Optional.fromNullable(jettySessionRepository.findByRowKey(clusterId, SystemUser.getSystemUserContext()));
+                        return Optional.fromNullable(jettySessionRepository.findByRowKey(clusterId, userProvider.getSystemUser().getModelUserContext()));
                     }
                 });
-
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(Configuration.loadConfigurationFile(CONFIGURATION_LOCATION)));
     }
 
     @Inject
     public void setJettySessionRepository(JettySessionRepository jettySessionRepository) {
         this.jettySessionRepository = jettySessionRepository;
+    }
+
+    @Inject
+    public void setUserProvider(UserProvider userProvider) {
+        this.userProvider = userProvider;
     }
 
     @Override
@@ -99,10 +104,10 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
                 data.setObject(name, session.getAttribute(name));
             }
 
-            jettySessionRepository.save(row, FlushFlag.FLUSH, SystemUser.getSystemUserContext());
+            jettySessionRepository.save(row, FlushFlag.FLUSH, userProvider.getSystemUser().getModelUserContext());
         } else {
             // invalid session
-            jettySessionRepository.delete(new JettySessionRowKey(session.getClusterId()), SystemUser.getSystemUserContext());
+            jettySessionRepository.delete(new JettySessionRowKey(session.getClusterId()), userProvider.getSystemUser().getModelUserContext());
             cache.invalidate(session.getClusterId());
         }
 
@@ -139,7 +144,7 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
         setData(session, row.getData());
 
         row.getMetadata().setAccessed(System.currentTimeMillis());
-        jettySessionRepository.save(row, SystemUser.getSystemUserContext());
+        jettySessionRepository.save(row, userProvider.getSystemUser().getModelUserContext());
 
         session.didActivate();
 
@@ -151,7 +156,7 @@ public class BigTableJettySessionManager extends NoSqlSessionManager {
         Optional<JettySessionRow> optRow = cache.getUnchecked(session.getClusterId());
 
         if (optRow.isPresent()) {
-            jettySessionRepository.delete(optRow.get().getRowKey(), SystemUser.getSystemUserContext());
+            jettySessionRepository.delete(optRow.get().getRowKey(), userProvider.getSystemUser().getModelUserContext());
             cache.invalidate(session.getClusterId());
             return true;
         } else {

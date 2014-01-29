@@ -5,10 +5,11 @@ import com.altamiracorp.lumify.core.FrameworkUtils;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.inject.Inject;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -20,9 +21,9 @@ public abstract class CommandLineBase {
     protected LumifyLogger LOGGER;
     private String configLocation = "/opt/lumify/config/";
     private Configuration configuration;
-    private User user = new SystemUser();
     private boolean willExit = false;
     protected boolean initFramework = true;
+    private UserProvider userProvider;
 
     public int run(String[] args) throws Exception {
         ensureLoggerInitialized();
@@ -57,8 +58,7 @@ public abstract class CommandLineBase {
 
         if (initFramework) {
             InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()));
-            final User user = new SystemUser();
-            FrameworkUtils.initializeFramework(InjectHelper.getInjector(), user);
+            FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userProvider.getSystemUser());
         }
 
         return run(cmd);
@@ -141,10 +141,19 @@ public abstract class CommandLineBase {
     }
 
     protected User getUser() {
-        return user;
+        return this.userProvider.getSystemUser();
     }
 
     protected boolean willExit() {
         return willExit;
+    }
+
+    @Inject
+    public void setUserProvider(UserProvider userProvider) {
+        this.userProvider = userProvider;
+    }
+
+    public UserProvider getUserProvider() {
+        return userProvider;
     }
 }

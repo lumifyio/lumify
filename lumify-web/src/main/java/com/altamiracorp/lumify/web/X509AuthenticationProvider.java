@@ -2,8 +2,8 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -17,13 +17,14 @@ import java.security.cert.X509Certificate;
 
 public abstract class X509AuthenticationProvider extends AuthenticationProvider {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
+    private final UserProvider userProvider;
+    private final UserRepository userRepository;
 
     protected abstract String getUsername(X509Certificate cert);
 
-    private final UserRepository userRepository;
-
-    public X509AuthenticationProvider(UserRepository userRepository) {
+    protected X509AuthenticationProvider(UserRepository userRepository, UserProvider userProvider) {
         this.userRepository = userRepository;
+        this.userProvider = userProvider;
     }
 
     @Override
@@ -40,8 +41,8 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        UserRow user = userRepository.findOrAddUser(username, new SystemUser());
-        User authUser = createFromModelUser(user);
+        UserRow userRow = userRepository.findOrAddUser(username, this.userProvider.getSystemUser());
+        User authUser = this.userProvider.createFromModelUser(userRow);
         setUser(request, authUser);
         chain.next(request, response);
     }
