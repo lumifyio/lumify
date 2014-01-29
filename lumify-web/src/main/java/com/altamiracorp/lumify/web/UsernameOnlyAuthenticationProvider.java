@@ -2,8 +2,8 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
     private final UserRepository userRepository;
+    private UserProvider userProvider;
 
     @Inject
-    public UsernameOnlyAuthenticationProvider(final UserRepository userRepository) {
+    public UsernameOnlyAuthenticationProvider(final UserRepository userRepository, final UserProvider userProvider) {
         this.userRepository = userRepository;
+        this.userProvider = userProvider;
     }
 
     @Override
@@ -33,8 +35,8 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
     public boolean login(HttpServletRequest request) {
         final String username = UrlUtils.urlDecode(request.getParameter("username"));
 
-        UserRow user = userRepository.findOrAddUser(username, new SystemUser());
-        setUser(request, createFromModelUser(user));
+        UserRow user = userRepository.findOrAddUser(username, this.userProvider.getSystemUser());
+        setUser(request, this.userProvider.createFromModelUser(user));
         return true;
     }
 }

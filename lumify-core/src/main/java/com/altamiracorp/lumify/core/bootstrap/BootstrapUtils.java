@@ -17,34 +17,19 @@
 package com.altamiracorp.lumify.core.bootstrap;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.user.SystemUser;
-import com.altamiracorp.lumify.core.user.User;
-import com.google.inject.Provider;
 
 /**
  * Utility methods for bootstrapping Lumify.
  */
 public final class BootstrapUtils {
     /**
-     * This Provider&lt;User&gt; can be used to inject the SystemUser when
-     * a User is required.
-     */
-    public static final Provider<User> SYSTEM_USER_PROVIDER = new Provider<User>() {
-        private final User systemUser = new SystemUser();
-
-        @Override
-        public User get() {
-            return systemUser;
-        }
-    };
-    
-    /**
      * Gets the Class indicated in the provided Configuration property.  If the Class is required,
      * this method will throw a BootstrapException if it was not configured or was configured to
      * an unknown Class name; otherwise it will return <code>null</code>.
-     * @param <T> the type of Class being retrieved
-     * @param config the Configuration to search
-     * @param key the Configuration key containing the class name
+     *
+     * @param <T>      the type of Class being retrieved
+     * @param config   the Configuration to search
+     * @param key      the Configuration key containing the class name
      * @param required <code>true</code> if this Class must be configured
      * @return the configured Class or <code>null</code> if not required and the Class could not be identified
      * @throws BootstrapException if the Class is required and could not be identified
@@ -61,7 +46,7 @@ public final class BootstrapUtils {
         }
         return configuredClass;
     }
-    
+
     /**
      * Utility class constructor.
      */
