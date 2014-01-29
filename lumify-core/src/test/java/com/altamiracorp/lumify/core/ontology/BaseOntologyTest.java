@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.core.ontology;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.user.SystemUser;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import org.junit.Before;
 import org.junit.Test;
