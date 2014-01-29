@@ -4,14 +4,15 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,14 +22,12 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OwlImport extends CommandLineBase {
     private OntologyRepository ontologyRepository;
-    private ResourceRepository resourceRepository;
     private Graph graph;
     private String inFileName;
     private File inDir;
@@ -116,14 +115,14 @@ public class OwlImport extends CommandLineBase {
 
         for (Element propertyElem : propertyElems) {
             String propertyName = propertyElem.getAttributeNS("http://altamiracorp.com/ontology#", "name");
-            String propertyValue = propertyElem.getTextContent().trim();
+            Object propertyValue = propertyElem.getTextContent().trim();
             LOGGER.info("  " + propertyName + " = " + propertyValue);
             if (propertyName.equals("glyphIconFileName")) {
                 propertyName = PropertyName.GLYPH_ICON.toString();
-                propertyValue = importGlyphIconFile(propertyValue, user);
+                propertyValue = importGlyphIconFile(propertyValue.toString(), user);
             } else if (propertyName.equals("mapGlyphIconFileName")) {
                 propertyName = PropertyName.MAP_GLYPH_ICON.toString();
-                propertyValue = importGlyphIconFile(propertyValue, user);
+                propertyValue = importGlyphIconFile(propertyValue.toString(), user);
             }
             concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY);
         }
@@ -141,13 +140,36 @@ public class OwlImport extends CommandLineBase {
         throw new RuntimeException("Could not find english label on element " + elem.getTagName());
     }
 
-    private String importGlyphIconFile(String fileName, User user) {
+    private StreamingPropertyValue importGlyphIconFile(String fileName, User user) {
         File f = new File(inDir, fileName);
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(f.getAbsoluteFile());
+            if (!fileName.endsWith(".png")) {
+                throw new RuntimeException("Unhandled content type: " + fileName);
+            }
 
-        LOGGER.info("  importing file: " + fileName);
-        String id = resourceRepository.importFile(f.getAbsolutePath(), user);
-        LOGGER.info("  resource key: " + id);
-        return id;
+            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
+            IOUtils.copy(in, imgOut);
+
+            byte[] rawImg = imgOut.toByteArray();
+
+            StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
+            raw.searchIndex(false);
+            return raw;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Could not import file: " + fileName, e);
+        } catch (IOException e) {
+            throw new RuntimeException("invalid stream for glyph icon");
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not import file: " + fileName, e);
+                }
+            }
+        }
     }
 
     private void importDatatypePropertyElement(Element datatypePropertyElem, User user) {
@@ -233,11 +255,6 @@ public class OwlImport extends CommandLineBase {
     @Inject
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
-    }
-
-    @Inject
-    public void setResourceRepository(ResourceRepository resourceRepository) {
-        this.resourceRepository = resourceRepository;
     }
 
     @Inject

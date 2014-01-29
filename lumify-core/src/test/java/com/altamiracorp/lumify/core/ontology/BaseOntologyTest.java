@@ -3,16 +3,13 @@ package com.altamiracorp.lumify.core.ontology;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
-import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.securegraph.Graph;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.*;
@@ -35,23 +32,19 @@ public class BaseOntologyTest {
     @Mock
     OntologyRepository ontologyRepository;
     @Mock
-    ResourceRepository resourceRepository;
-    @Mock
     Graph graph;
 
     private BaseOntology baseOntology;
 
     @Before
     public void setUp() {
-        baseOntology = new BaseOntology(ontologyRepository, resourceRepository, graph);
+        baseOntology = new BaseOntology(ontologyRepository, graph);
     }
 
     @Test
     public void testDefineOntology() {
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"))).thenReturn(entityConcept);
-
-        when(resourceRepository.importFile(any(InputStream.class), anyString(), eq(user))).thenReturn("rowKey");
 
         baseOntology.defineOntology(user);
 
@@ -95,7 +88,6 @@ public class BaseOntologyTest {
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"))).thenReturn(entityConcept);
 
-        when(resourceRepository.importFile(any(InputStream.class), anyString(), eq(user))).thenReturn("rowKey");
         baseOntology.initialize(user);
     }
 
