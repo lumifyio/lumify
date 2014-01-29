@@ -426,6 +426,7 @@ public class OntologyRepository {
         }
 
         typeProperty = new OntologyProperty(graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_PROPERTY, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
