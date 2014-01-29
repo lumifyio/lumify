@@ -9,6 +9,7 @@ define([
     'detail/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
+    'tpl!util/alert',
     'service/ontology',
     'service/vertex',
     'data'
@@ -21,6 +22,7 @@ define([
     Properties,
     template,
     transcriptEntryTemplate,
+    alertTemplate,
     OntologyService,
     VertexService,
     appData) {
@@ -105,13 +107,17 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.vertexService.getArtifactHighlightedTextById(vertex.id).done(function(artifactText) {
-                self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
-                self.updateEntityAndArtifactDraggables();
-
-                if (self[vertex.concept.displayType + 'Setup']) {
-                    self[vertex.concept.displayType + 'Setup'](vertex);
-                }
+            this.vertexService.getArtifactHighlightedTextById(vertex.id)
+                .done(function(artifactText, status, xhr) {
+                    if (xhr.status === 204) {
+                        self.select('textSelector').html(alertTemplate({ error: 'No Text Available' }));
+                    } else {
+                        self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
+                        self.updateEntityAndArtifactDraggables();
+                        if (self[vertex.concept.displayType + 'Setup']) {
+                            self[vertex.concept.displayType + 'Setup'](vertex);
+                        }
+                    }
             });
         };
 

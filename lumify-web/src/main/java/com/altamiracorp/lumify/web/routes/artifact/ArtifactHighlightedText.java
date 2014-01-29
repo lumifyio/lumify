@@ -27,7 +27,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         String graphVertexId = getAttributeString(request, "graphVertexId");
-        Vertex artifactVertex = this.graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -38,7 +38,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         if (textValue == null) {
             textValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.TEXT.toString(), 0);
             if (textValue == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                response.sendError(HttpServletResponse.SC_NO_CONTENT);
                 return;
             }
         }
