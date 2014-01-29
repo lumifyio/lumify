@@ -13,6 +13,32 @@ public class CollectionUtil {
         return list;
     }
 
+    public static <T> Iterable<T> toIterable(final T[] arr) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new Iterator<T>() {
+                    int index = 0;
+
+                    @Override
+                    public boolean hasNext() {
+                        return index < arr.length;
+                    }
+
+                    @Override
+                    public T next() {
+                        return arr[index++];
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new RuntimeException("Not supported");
+                    }
+                };
+            }
+        };
+    }
+
     public static <T> T single(final Iterable<T> it) {
         Iterator<T> i = it.iterator();
         if (!i.hasNext()) {
