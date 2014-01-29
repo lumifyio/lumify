@@ -19,6 +19,16 @@
             <artifactId>bigtable-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.altamiracorp.bigtable</groupId>
+            <artifactId>bigtable-accumulo</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
