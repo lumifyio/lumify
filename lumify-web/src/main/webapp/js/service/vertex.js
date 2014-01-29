@@ -14,7 +14,7 @@ define(
 
         VertexService.prototype.setProperty = function (vertexId, propertyName, value) {
             return this._ajaxPost({
-                url: 'vertex/' + vertexId + '/property/set',
+                url: 'vertex/' + encodeURIComponent(vertexId) + '/property/set',
                 data: {
                     propertyName: propertyName,
                     value: value
@@ -24,7 +24,7 @@ define(
 
         VertexService.prototype.deleteProperty = function (vertexId, propertyName) {
             return this._ajaxPost({
-                url: 'vertex/' + vertexId + '/property/delete',
+                url: 'vertex/' + encodeURIComponent(vertexId) + '/property/delete',
                 data: {
                     propertyName: propertyName
                 }
@@ -120,7 +120,7 @@ define(
         VertexService.prototype.getArtifactHighlightedTextById = function (graphVertexId) {
             return this._ajaxGet({
                 dataType: 'html',
-                url: "artifact/" + graphVertexId + "/highlightedText"
+                url: "artifact/" + encodeURIComponent(graphVertexId) + "/highlightedText"
             });
         };
 
@@ -136,13 +136,13 @@ define(
 
         VertexService.prototype.getVertexRelationships = function (graphVertexId, paging) {
             return this._ajaxGet({
-                url: 'vertex/' + graphVertexId + '/relationships',
+                url: 'vertex/' + encodeURIComponent(graphVertexId) + '/relationships',
                 data: paging || {}
             });
         };
 
         VertexService.prototype.getVertexProperties = function (graphVertexId) {
-            return this._ajaxGet({ url: 'vertex/' + graphVertexId + '/properties'});
+            return this._ajaxGet({ url: 'vertex/' + encodeURIComponent(graphVertexId) + '/properties'});
         };
 
         VertexService.prototype._search = function (resource, query) {
