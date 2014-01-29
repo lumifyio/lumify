@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.tools;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -73,7 +72,7 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        UserRow user = this.userRepository.findByUserName(this.username, new SystemUser());
+        UserRow user = this.userRepository.findByUserName(this.username, getUserProvider().getSystemUser());
 
         if (cmd.hasOption("reset")) {
             if (user == null) {
@@ -81,15 +80,14 @@ public class UserAdd extends CommandLineBase {
                 return 4;
             }
             user.setPassword(this.password);
-            this.userRepository.save(user, SystemUser.getSystemUserContext());
+            this.userRepository.save(user, getUserProvider().getSystemUser().getModelUserContext());
             System.out.println("User password reset: " + user.getRowKey());
-        }
-        else {
+        } else {
             if (user != null) {
                 System.err.println("username already exists");
                 return 3;
             }
-            user = this.userRepository.addUser(this.username, this.password, new SystemUser());
+            user = this.userRepository.addUser(this.username, this.password, getUserProvider().getSystemUser());
             System.out.println("User added: " + user.getRowKey());
         }
 

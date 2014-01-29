@@ -6,8 +6,8 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
@@ -22,6 +22,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableWorkQueueRepository.class);
     public static final String DEFAULT_TABLE_PREFIX = "atc_accumuloqueue_";
     private ModelSession modelSession;
+    private UserProvider userProvider;
     private Map<String, QueueItemRepository> queues = new HashMap<String, QueueItemRepository>();
     private String tablePrefix;
     private User user;
@@ -50,7 +51,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void format() {
-        ModelUserContext ctx = new SystemUser().getModelUserContext();
+        ModelUserContext ctx = this.userProvider.getSystemUser().getModelUserContext();
         List<String> tableList = this.modelSession.getTableList(ctx);
         for (String tableName : tableList) {
             if (tableName.startsWith(this.tablePrefix)) {
@@ -65,7 +66,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
         String tableName = getTableName(this.tablePrefix, queueName);
 
         if (this.user == null) {
-            this.user = new SystemUser();
+            this.user = this.userProvider.getSystemUser();
         }
 
         QueueItemRepository queue = this.queues.get(queueName);
@@ -89,5 +90,10 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     @Inject
     public void setModelSession(ModelSession modelSession) {
         this.modelSession = modelSession;
+    }
+
+    @Inject
+    public void setUserProvider(UserProvider userProvider) {
+        this.userProvider = userProvider;
     }
 }

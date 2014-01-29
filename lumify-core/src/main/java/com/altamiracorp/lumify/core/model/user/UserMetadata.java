@@ -11,6 +11,7 @@ public class UserMetadata extends ColumnFamily {
     public static final String STATUS = "status";
     public static final String CURRENT_WORKSPACE = "current_workspace";
     public static final String USER_TYPE = "userType";
+    public static final String AUTHORIZATIONS = "authorizations";
 
     public UserMetadata() {
         super(NAME);
@@ -62,6 +63,27 @@ public class UserMetadata extends ColumnFamily {
 
     public UserMetadata setCurrentWorkspace(String currentWorkspace) {
         set(CURRENT_WORKSPACE, currentWorkspace);
+        return this;
+    }
+
+    public String getAuthorizations() {
+        return Value.toString(get(AUTHORIZATIONS));
+    }
+
+    public String[] getAuthorizationsAsArray() {
+        String authorizations = getAuthorizations();
+        if (authorizations == null) {
+            return new String[0];
+        }
+        String[] authorizationsArray = authorizations.split(",");
+        if (authorizationsArray.length == 1 && authorizationsArray[0].length() == 0) {
+            authorizationsArray = new String[0];
+        }
+        return authorizationsArray;
+    }
+
+    public UserMetadata setAuthorizations(String authorizations) {
+        set(AUTHORIZATIONS, authorizations);
         return this;
     }
 

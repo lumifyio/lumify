@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.user.OntologyUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.Direction;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -35,14 +35,15 @@ public class OntologyRepository {
     public static final String TYPE_CONCEPT = "concept";
     public static final String TYPE_PROPERTY = "property";
     public static final String TYPE_ENTITY = "entity";
-    private User user = new OntologyUser();
+    private User user;
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
     @Inject
-    public OntologyRepository(Graph graph) {
+    public OntologyRepository(Graph graph, UserProvider userProvider) {
         this.graph = graph;
+        this.user = userProvider.getOntologyUser();
     }
 
     public Iterable<Relationship> getRelationshipLabels() {
@@ -425,6 +426,7 @@ public class OntologyRepository {
         }
 
         typeProperty = new OntologyProperty(graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_PROPERTY, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)

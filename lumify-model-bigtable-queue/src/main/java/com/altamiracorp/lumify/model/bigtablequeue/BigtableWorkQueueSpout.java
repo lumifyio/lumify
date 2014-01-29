@@ -13,8 +13,8 @@ import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
-import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItem;
@@ -35,6 +35,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     private ModelSession modelSession;
     private String tableName;
     private User user;
+    private UserProvider userProvider;
     private QueueItemRepository queueItemRepository;
     private SpoutOutputCollector collector;
     private Map<String, Boolean> workingSet = new HashMap<String, Boolean>();
@@ -58,7 +59,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(conf)));
 
         this.collector = collector;
-        this.user = new SystemUser();
+        this.user = this.userProvider.getSystemUser();
         this.tableName = BigTableWorkQueueRepository.getTableName(this.tablePrefix, this.queueName);
         this.modelSession.initializeTable(this.tableName, user.getModelUserContext());
         this.queueItemRepository = new QueueItemRepository(this.modelSession, this.tableName);
@@ -158,5 +159,10 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
     @Inject
     public void setMetricsManager(MetricsManager metricsManager) {
         this.metricsManager = metricsManager;
+    }
+
+    @Inject
+    public void setUserProvider(UserProvider userProvider) {
+        this.userProvider = userProvider;
     }
 }

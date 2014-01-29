@@ -4,13 +4,12 @@ import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRe
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.model.resources.Resource;
-import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
@@ -30,15 +29,13 @@ public class MapMarkerImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
 
     private final OntologyRepository ontologyRepository;
-    private final ResourceRepository resourceRepository;
     private Cache<String, byte[]> imageCache = CacheBuilder.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build();
 
     @Inject
-    public MapMarkerImage(final OntologyRepository ontologyRepository, ResourceRepository resourceRepository) {
+    public MapMarkerImage(final OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
-        this.resourceRepository = resourceRepository;
     }
 
     @Override
@@ -60,24 +57,18 @@ public class MapMarkerImage extends BaseRequestHandler {
             }
 
             boolean isMapGlyphIcon = false;
-            String glyphIconRowKey = getMapGlyphIcon(concept, user);
-            if (glyphIconRowKey != null) {
+            StreamingPropertyValue glyphIcon = getMapGlyphIcon(concept, user);
+            if (glyphIcon != null) {
                 isMapGlyphIcon = true;
             } else {
-                glyphIconRowKey = getGlyphIcon(concept, user);
-                if (glyphIconRowKey == null) {
+                glyphIcon = getGlyphIcon(concept, user);
+                if (glyphIcon == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
             }
 
-            Resource resource = resourceRepository.findByRowKey(glyphIconRowKey, user.getModelUserContext());
-            if (resource == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-
-            imageData = getMarkerImage(resource, scale, selected, heading, isMapGlyphIcon);
+            imageData = getMarkerImage(glyphIcon, scale, selected, heading, isMapGlyphIcon);
             imageCache.put(cacheKey, imageData);
         }
 
@@ -96,8 +87,8 @@ public class MapMarkerImage extends BaseRequestHandler {
         return (int) (Math.round(heading / 10.0) * 10.0);
     }
 
-    private byte[] getMarkerImage(Resource resource, long scale, boolean selected, int heading, boolean isMapGlyphIcon) throws IOException {
-        BufferedImage resourceImage = resource.getContent().getDataImage();
+    private byte[] getMarkerImage(StreamingPropertyValue resource, long scale, boolean selected, int heading, boolean isMapGlyphIcon) throws IOException {
+        BufferedImage resourceImage = ImageIO.read(resource.getInputStream());
         if (resourceImage == null) {
             return null;
         }
@@ -159,9 +150,9 @@ public class MapMarkerImage extends BaseRequestHandler {
         return imageData.toByteArray();
     }
 
-    private String getMapGlyphIcon(Concept concept, User user) {
+    private StreamingPropertyValue getMapGlyphIcon(Concept concept, User user) {
         while (concept != null) {
-            String mapGlyphIcon = (String) concept.getVertex().getPropertyValue(PropertyName.MAP_GLYPH_ICON.toString(), 0);
+            StreamingPropertyValue mapGlyphIcon = (StreamingPropertyValue) concept.getVertex().getPropertyValue(PropertyName.MAP_GLYPH_ICON.toString(), 0);
             if (mapGlyphIcon != null) {
                 return mapGlyphIcon;
             }
@@ -172,11 +163,10 @@ public class MapMarkerImage extends BaseRequestHandler {
         return null;
     }
 
-    private String getGlyphIcon(Concept concept, User user) {
+    private StreamingPropertyValue getGlyphIcon(Concept concept, User user) {
         while (concept != null) {
-            String glyphIcon = (String) concept.getVertex().getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
-            if (glyphIcon != null) {
-                return glyphIcon;
+            if (concept.hasGlyphIconResource()) {
+                return (StreamingPropertyValue) concept.getVertex().getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
             }
 
             concept = ontologyRepository.getParentConcept(concept.getId().toString());
