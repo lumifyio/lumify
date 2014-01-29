@@ -1,25 +1,21 @@
 package com.altamiracorp.lumify.web;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BaseRequestHandlerTest {
 
     private static final String REPLY = "Reply";
@@ -29,6 +25,7 @@ public class BaseRequestHandlerTest {
     private static final String TEST_PARAM = "foo";
     private static final String TEST_PARAM_VALUE = "1";
 
+    @Mock(answer=Answers.CALLS_REAL_METHODS)
     private BaseRequestHandler mock;
 
     @Mock
@@ -39,13 +36,6 @@ public class BaseRequestHandlerTest {
 
     @Mock
     private PrintWriter writer;
-
-    @Before
-    public void setupTests() {
-        mock = Mockito.mock(BaseRequestHandler.class, Mockito.CALLS_REAL_METHODS);
-
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test(expected = NullPointerException.class)
     public void testRequiredParameterInvalidRequest() {
