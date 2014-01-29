@@ -1,36 +1,38 @@
 package com.altamiracorp.lumify.web;
 
+import static org.mockito.Mockito.*;
+
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserMetadata;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserRowKey;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.miniweb.HandlerChain;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.powermock.reflect.Whitebox;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.*;
-
+@RunWith(MockitoJUnitRunner.class)
 public class X509AuthenticationProviderTest {
     public static final String X509_REQ_ATTR_NAME = "javax.servlet.request.X509Certificate";
     public static final String TEST_USERNAME = "testuser";
-
-    private X509AuthenticationProvider mock;
 
     @Mock
     private HttpServletRequest request;
     @Mock
     private HttpServletResponse response;
+    @Mock
+    private HttpSession httpSession;
     @Mock
     private HandlerChain chain;
     @Mock
@@ -40,31 +42,38 @@ public class X509AuthenticationProviderTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserRow user;
+    private UserProvider userProvider;
+    @Mock
+    private UserRow userRow;
     @Mock
     private UserMetadata userMetadata;
+    @Mock
+    private User user;
+
+    @Mock
+    private Delegate delegate;
+
+    private X509AuthenticationProvider instance;
 
     @Before
     public void setupTests() {
-        mock = Mockito.mock(X509AuthenticationProvider.class);
-        MockitoAnnotations.initMocks(this);
-        Whitebox.setInternalState(mock, "userRepository", userRepository);
+        instance = new TestX509AuthenticationProvider(userRepository, userProvider);
+
+        when(request.getSession()).thenReturn(httpSession);
     }
 
     @Test
     public void testNoCertificateAvailable() throws Exception {
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(null);
-        doCallRealMethod().when(mock).handle(request, response, chain);
-        mock.handle(request, response, chain);
+        instance.handle(request, response, chain);
         verify(response).sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 
     @Test
     public void testEmptyCertificateArrayAvailable() throws Exception {
-        X509Certificate[] certs = new X509Certificate[]{};
+        X509Certificate[] certs = new X509Certificate[0];
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
-        doCallRealMethod().when(mock).handle(request, response, chain);
-        mock.handle(request, response, chain);
+        instance.handle(request, response, chain);
         verify(response).sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 
@@ -73,9 +82,8 @@ public class X509AuthenticationProviderTest {
         X509Certificate cert = getCertificate("expired");
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
-        when(mock.getUsername(cert)).thenReturn(TEST_USERNAME);
-        doCallRealMethod().when(mock).handle(request, response, chain);
-        mock.handle(request, response, chain);
+        instance.handle(request, response, chain);
+        verify(delegate, never()).getUsername(any(X509Certificate.class));
         verify(response).sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 
@@ -84,14 +92,16 @@ public class X509AuthenticationProviderTest {
         X509Certificate cert = getCertificate("valid");
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
-        when(mock.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findOrAddUser(eq(TEST_USERNAME), any(com.altamiracorp.lumify.core.user.User.class))).thenReturn(user);
-        when(user.getRowKey()).thenReturn(new UserRowKey("rowkey"));
-        when(user.getMetadata()).thenReturn(userMetadata);
+        when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
+        when(userRepository.findOrAddUser(eq(TEST_USERNAME), any(User.class))).thenReturn(userRow);
+        when(userRow.getRowKey()).thenReturn(new UserRowKey("rowkey"));
+        when(userRow.getMetadata()).thenReturn(userMetadata);
         when(userMetadata.getUserName()).thenReturn(TEST_USERNAME);
         when(userMetadata.getCurrentWorkspace()).thenReturn("workspaceName");
-        doCallRealMethod().when(mock).handle(request, response, chain);
-        mock.handle(request, response, chain);
+        when(userProvider.createFromModelUser(userRow)).thenReturn(user);
+        instance.handle(request, response, chain);
+        verify(delegate).getUsername(cert);
+        verify(httpSession).setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);
         verify(chain).next(request, response);
     }
 
@@ -103,6 +113,28 @@ public class X509AuthenticationProviderTest {
             return (X509Certificate) ks.getCertificate(name);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static interface Delegate {
+        String getUsername(X509Certificate cert);
+        boolean login(HttpServletRequest request);
+    }
+
+    private class TestX509AuthenticationProvider extends X509AuthenticationProvider {
+
+        public TestX509AuthenticationProvider(UserRepository userRepository, UserProvider userProvider) {
+            super(userRepository, userProvider);
+        }
+
+        @Override
+        protected String getUsername(X509Certificate cert) {
+            return delegate.getUsername(cert);
+        }
+
+        @Override
+        public boolean login(HttpServletRequest request) {
+            return delegate.login(request);
         }
     }
 }
