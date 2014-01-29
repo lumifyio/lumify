@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.Iterator;
 
 public class VertexProperties extends BaseRequestHandler {
@@ -45,12 +47,19 @@ public class VertexProperties extends BaseRequestHandler {
             Property property = propertyIterator.next();
             if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
                 JSONObject geo = new JSONObject();
-                GeoPoint geoPoint = (GeoPoint)property.getValue();
+                GeoPoint geoPoint = (GeoPoint) property.getValue();
                 geo.put("latitude", geoPoint.getLatitude());
                 geo.put("longitude", geoPoint.getLongitude());
                 resultsJson.put(property.getName(), geo);
             } else {
-                resultsJson.put(property.getName(), property.getValue());
+                Object value = property.getValue();
+                if (value instanceof StreamingPropertyValue) {
+                    continue;
+                }
+                if (value instanceof Date) {
+                    value = ((Date) value).getTime();
+                }
+                resultsJson.put(property.getName(), value);
             }
         }
         return resultsJson;
