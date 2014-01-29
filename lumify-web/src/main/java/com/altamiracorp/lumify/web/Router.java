@@ -70,7 +70,7 @@ public class Router extends HttpServlet {
 
             app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
 
-            app.get("/resource/{_rowKey}", authenticator, ResourceGet.class);
+            app.get("/resource/{id}", authenticator, ResourceGet.class);
 
             app.get("/artifact/{graphVertexId}/highlightedText", authenticator, ArtifactHighlightedText.class);
             app.get("/artifact/{graphVertexId}/raw", authenticator, ArtifactRaw.class);

@@ -23,8 +23,8 @@ public class Concept {
         return toStringOrNull(this.vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0));
     }
 
-    public String getGlyphIconResourceRowKey() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0));
+    public Boolean hasGlyphIconResource() {
+        return (this.vertex.getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0) != null);
     }
 
     public String getColor() {
@@ -50,9 +50,8 @@ public class Concept {
             result.put("title", getTitle());
             result.put("displayName", getDisplayName());
             result.put("displayType", getDisplayType());
-            if (getGlyphIconResourceRowKey() != null) {
-                result.put("glyphIconResourceRowKey", getGlyphIconResourceRowKey());
-                result.put("glyphIconHref", "/resource/" + getGlyphIconResourceRowKey());
+            if (hasGlyphIconResource()) {
+                result.put("glyphIconHref", "/resource/" + getId());
             }
             if (getColor() != null) {
                 result.put("color", getColor());
@@ -63,7 +62,7 @@ public class Concept {
         }
     }
 
-    public Concept setProperty(String propertyName, String propertyValue, Visibility visibility) {
+    public Concept setProperty(String propertyName, Object propertyValue, Visibility visibility) {
         this.vertex.setProperty(propertyName, propertyValue, visibility);
         return this;
     }

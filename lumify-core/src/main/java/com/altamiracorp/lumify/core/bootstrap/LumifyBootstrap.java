@@ -23,8 +23,9 @@ import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.core.user.SystemUser;
+import com.altamiracorp.lumify.core.user.DefaultUserProvider;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
@@ -48,43 +49,14 @@ import java.util.ServiceLoader;
  * fail and halt application initialization by throwing a BootstrapException.
  */
 public class LumifyBootstrap extends AbstractModule {
-    /**
-     * The class logger.
-     */
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LumifyBootstrap.class);
 
-    /**
-     * The configured LumifyBootstrap.
-     */
     private static LumifyBootstrap lumifyBootstrap;
 
-    /**
-     * Bootstrap the Lumify system with the provided Configuration, binding requests for User objects
-     * to singleton SystemUser Provider.  Once initialized, this method will always return
-     * the same LumifyBootstrap.  Subsequent calls with new Configurations will not re-initialize the system.
-     *
-     * @param configuration the configuration
-     * @return the configured LumifyBootstrap
-     */
     public synchronized static LumifyBootstrap bootstrap(final Configuration configuration) {
-        return LumifyBootstrap.bootstrap(configuration, BootstrapUtils.SYSTEM_USER_PROVIDER, Scopes.SINGLETON);
-    }
-
-    /**
-     * Bootstrap the Lumify system with the provided Configuration, binding requests for User objects
-     * to the given Provider with the specified Scope.  Once initialized, this method will always return
-     * the same LumifyBootstrap.  Subsequent calls with new Configurations will not re-initialize the system.
-     *
-     * @param configuration     the configuration
-     * @param userProvider      the user provider
-     * @param userProviderScope the Scope of the user provider
-     * @return the configured LumifyBootstrap
-     */
-    public synchronized static LumifyBootstrap bootstrap(final Configuration configuration, final Provider<User> userProvider,
-                                                         final Scope userProviderScope) {
         if (lumifyBootstrap == null) {
             LOGGER.debug("Initializing LumifyBootstrap with Configuration: %s", configuration);
-            lumifyBootstrap = new LumifyBootstrap(configuration, userProvider, userProviderScope);
+            lumifyBootstrap = new LumifyBootstrap(configuration);
         }
         return lumifyBootstrap;
     }
@@ -97,24 +69,10 @@ public class LumifyBootstrap extends AbstractModule {
      * @return a ModuleMaker for use with the InjectHelper
      */
     public static InjectHelper.ModuleMaker bootstrapModuleMaker(final Configuration configuration) {
-        return LumifyBootstrap.bootstrapModuleMaker(configuration, BootstrapUtils.SYSTEM_USER_PROVIDER, Scopes.SINGLETON);
-    }
-
-    /**
-     * Get a ModuleMaker that will return the LumifyBootstrap, initializing it with
-     * the provided Configuration if it has not already been created.
-     *
-     * @param configuration     the Lumify configuration
-     * @param userProvider      the User provider
-     * @param userProviderScope the User provider Scope
-     * @return a ModuleMaker for use with the InjectHelper
-     */
-    public static InjectHelper.ModuleMaker bootstrapModuleMaker(final Configuration configuration, final Provider<User> userProvider,
-                                                                final Scope userProviderScope) {
         return new InjectHelper.ModuleMaker() {
             @Override
             public Module createModule() {
-                return LumifyBootstrap.bootstrap(configuration, userProvider, userProviderScope);
+                return LumifyBootstrap.bootstrap(configuration);
             }
         };
     }
@@ -125,37 +83,24 @@ public class LumifyBootstrap extends AbstractModule {
     private final Configuration configuration;
 
     /**
-     * The User provider.
-     */
-    private final Provider<User> userProvider;
-
-    /**
-     * The User provider scope.
-     */
-    private final Scope userProviderScope;
-
-    /**
      * Create a LumifyBootstrap with the provided Configuration.
      *
      * @param config the configuration for this bootstrap
      */
-    private LumifyBootstrap(final Configuration config, final Provider<User> userProvider, final Scope userProviderScope) {
+    private LumifyBootstrap(final Configuration config) {
         this.configuration = config;
-        this.userProvider = userProvider;
-        this.userProviderScope = userProviderScope;
     }
 
     @Override
     protected void configure() {
         LOGGER.info("Configuring LumifyBootstrap.");
 
-        User user = new SystemUser();
         MetricsManager metricsManager = new JmxMetricsManager();
 
-        bind(User.class).toProvider(userProvider).in(userProviderScope);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
+        bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
 
         bind(ModelSession.class)
                 .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))

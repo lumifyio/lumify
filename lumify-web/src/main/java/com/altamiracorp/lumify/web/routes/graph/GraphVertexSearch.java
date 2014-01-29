@@ -95,7 +95,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
             if (verticesCount >= offset && verticesCount <= offset + size) {
                 vertices.put(toJson(vertex));
             }
-            String type = vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0).toString();
+            Object conceptyType = vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0);
+            String type;
+            if (conceptyType == null) {
+                type = "Unknown";
+            } else {
+                type = conceptyType.toString();
+            }
             if (counts.keySet().contains(type)) {
                 counts.put(type, (counts.getInt(type) + 1));
             } else {

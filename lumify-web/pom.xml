@@ -19,12 +19,12 @@
         <jetty.port>8080</jetty.port>
         <jetty.ssl.port>8443</jetty.ssl.port>
         <jetty.maxIdleTime>60000</jetty.maxIdleTime>
-        
+
         <!-- Default packaging is jar.  Use web-war profile to package as war. -->
         <packaging.type>jar</packaging.type>
         <!-- Grunt Execution Target.  Valid values are [ development | production ] -->
         <grunt.target>development</grunt.target>
-        
+
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.4</plugin.maven.war.version>
@@ -80,18 +80,12 @@
             <artifactId>guice</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-annotations</artifactId>
-            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-runtime</artifactId>
-            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.atteo</groupId>
@@ -105,6 +99,10 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.orbit</groupId>
+            <artifactId>javax.servlet</artifactId>
         </dependency>
     </dependencies>
 
@@ -171,7 +169,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>web-war</id>
