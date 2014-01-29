@@ -89,7 +89,7 @@ define([
             if(query) {
                 query = $.trim(query);
             }
-            if(!query) {
+            if(!query && !this.relatedToVertexId) {
                 this.select('resultsSummarySelector').empty();
                 return $searchQueryValidation.html(alertTemplate({ error: 'Query cannot be empty' }));
             }
@@ -119,20 +119,39 @@ define([
                 .text(formatters.number.pretty(count));
         };
 
-        this.onSearchByEntity = function (evt, data) {
-            this.select('querySelector').val(data.query);
+        this.popoutIfNeeded = function() {
             if (!this.$node.closest(':data(menubarName)').hasClass('visible')) {
                 this.trigger ('menubarToggleDisplay', { name : 'search' });
             }
+        }
+
+        this.onSearchByEntity = function (evt, data) {
+            this.popoutIfNeeded();
+            this.select('querySelector').val(data.query);
+            this.clearFilters();
             this.trigger ('search', { query : data.query});
+        };
+
+        this.onSearchByRelatedEntity = function (evt, data) {
+            this.popoutIfNeeded();
+            this.select('querySelector').val('');
+        };
+
+        this.onClearSearch = function() {
+            this.select('resultsSummarySelector').empty();
+            this.clearFilters();
+            this.select('querySelector').val('').focus();
         }
 
         this.onSearch = function(evt, data) {
+            data = data || {};
             var query = data.query || this.select('querySelector').val();
 
             if (!this.searchResults) {
                 this.searchResults = {};
             }
+
+            this.select('queryValidationSelector').empty();
 
             if (this.previousSearch && this.previousSearch.abort) {
                 this.previousSearch.abort();
@@ -140,6 +159,14 @@ define([
 
             if (query != data.query) {
                 this.select('querySelector').val(data.query);
+            }
+
+            var relatedToVertexId = this.entityFilters && this.entityFilters.relatedToVertexId;
+            if (relatedToVertexId) {
+                query = {
+                    query: _.isUndefined(query.query) ? query : query.query,
+                    relatedToVertexId: relatedToVertexId
+                };
             }
 
             var self = this;
@@ -291,11 +318,7 @@ define([
         };
 
         this.onQueryFocus = function (evt, data) {
-            var filters = this.select('filtersSelector');
-            Filters.attachTo(filters.find('.content'));
-
-            this.makeResizable(filters);
-            filters.show();
+            var filters = this.select('filtersSelector').show();
             this.hideSearchResults();
             this.$node.find('.search-results-summary .active').removeClass('active');
         };
@@ -321,14 +344,19 @@ define([
             this.searchResults = {};
             this.$node.html(template({}));
 
-            this.select('filtersSelector').hide();
             this.hideSearchResults();
+
+            var filters = this.select('filtersSelector').hide();
+            Filters.attachTo(filters.find('.content'));
+            this.makeResizable(filters);
 
             this.on('filterschange', this.onFiltersChange);
             this.on('infiniteScrollRequest', this.onInfiniteScrollRequest);
 
             this.on(document, 'searchByEntity', this.onSearchByEntity);
+            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
             this.on(document, 'search', this.onSearch);
+            this.on(document, 'clearSearch', this.onClearSearch);
             this.on(document, 'showSearchResults', this.onShowSearchResults);
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
             this.on(document, 'searchPaneVisible', this.onPaneVisible);
@@ -337,7 +365,7 @@ define([
             });
             this.on('click', {
                 summaryResultItemSelector: this.onSummaryResultItemClick,
-                filtersInfoSelector: this.onFiltersInfoRemoveClick
+                filtersInfoSelector: this.onFiltersInfoRemoveClick,
             });
             this.on('keyup', {
                 querySelector: this.onKeyUp
@@ -389,20 +417,29 @@ define([
         };
 
         this.onFiltersChange = function(evt, data) {
-            this.filters = data.filters;
-
-            var query = this.select('querySelector').val() || '*';
-
+            this.filters = data.propertyFilters;
+            this.entityFilters = data.entityFilters;
+        
             var filterInfo = this.select('filtersInfoSelector'),
-                numberOfFilters = this.filters.length;
+                numberOfFilters = this.filters.length + _.keys(this.entityFilters).length,
+                query = this.select('querySelector').val();
 
             filterInfo.find('.message').text(formatters.string.plural(numberOfFilters, 'filter') + ' applied');
             filterInfo.toggle(numberOfFilters > 0);
 
-            this.trigger('search', { query:query });
+            if (!query && !this.entityFilters.relatedToVertexId) {
+                this.select('resultsSummarySelector').empty();
+                return;
+            }
+
+            this.trigger('search', { query:query || '' });
         };
 
         this.onFiltersInfoRemoveClick = function() {
+            this.clearFilters();
+        };
+
+        this.clearFilters = function() {
             this.trigger(this.select('filtersSelector').find('.content'), 'clearfilters');
         };
     }

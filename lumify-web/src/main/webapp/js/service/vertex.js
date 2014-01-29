@@ -95,11 +95,6 @@ define(
         };
 
         VertexService.prototype.graphVertexSearch = function (query, filters, conceptType, paging) {
-            if (typeof filters === 'function') {
-                callback = filters;
-                filters = [];
-            }
-
             var data = {};
 
             if (conceptType) data.conceptType = conceptType;
@@ -108,7 +103,13 @@ define(
                 if (paging.size) data.size = paging.size;
             }
 
-            data.q = query.query || query;
+            var q = _.isUndefined(query.query) ? query : query.query;
+            if (q) {
+                data.q = q;
+            }
+            if (query && query.relatedToVertexId) {
+                data.relatedToVertexId = query.relatedToVertexId;
+            }
             data.filter = JSON.stringify(filters || []);
 
             return this._ajaxGet({

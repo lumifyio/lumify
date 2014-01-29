@@ -80,11 +80,17 @@
   <li><a class="has-shortcut has-subtitle" data-func="findShortestPath" data-args="[1]" tabindex="-1" href="#">Find Path...<span title="Hold ctrl and drag from source vertex to target vertex" class="shortcut">CTRL+drag</span></a></li>
 
   <li class="divider"></li>
-  <li><a class="searchFor" tabindex="-1" data-func="searchFor" href="#">Search for</a></li>
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#">Search...</a>
+    <ul class="dropdown-menu">
+        <li><a class="has-shortcut searchFor" tabindex="-1" data-func="searchFor" data-template="&quot;{title}&quot;" href="#"><span class="shortcut">alt+t</span></a></li>
+        <li><a class="has-shortcut" data-func="searchRelated" tabindex="-1" href="#">Related Items<span class="shortcut">alt+s</span></a></li>
+    </ul>
+  </li>
   <li class="dropdown-submenu">
     <a tabindex="-1" href="#">Add Related...</a>
     <ul class="dropdown-menu">
-        <li><a class="has-shortcut has-subtitle" data-func="loadRelatedItems" tabindex="-1" href="#">Items<span class="shortcut">alt+r</span></a></li>
+      <li><a class="has-shortcut has-subtitle" data-func="loadRelatedItems" tabindex="-1" href="#">Items<span class="shortcut">alt+r</span></a></li>
         <li class="divider"></li>
         <% firstLevelConcepts.forEach(function(concept) { %>
             <li><a data-func="loadRelatedItemsOfConcept" data-args="[<%= concept.id %>]" tabindex="-1" href="#"><%= concept.pluralDisplayName %></a></li>

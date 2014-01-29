@@ -5,6 +5,8 @@ define([
     'flight/lib/registry',
     'tpl!./filters',
     'tpl!./item',
+    'tpl!./entityItem',
+    'data',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -12,6 +14,8 @@ define([
     registry,
     template,
     itemTemplate,
+    entityItemTemplate,
+    appData,
     FieldSelection,
     OntologyService) {
     'use strict';
@@ -21,14 +25,16 @@ define([
     return defineComponent(Filters);
 
     function Filters() {
-        this.currentFilters = {};
+        this.propertyFilters = {};
+        this.entityFilters = {};
         this.filterId = 0;
 
         this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',
-            removeRowSelector: 'button.remove'
+            removeEntityRowSelector: '.entity-filters button.remove',
+            removeRowSelector: '.prop-filters button.remove'
         });
 
         this.after('initialize', function() {
@@ -40,11 +46,23 @@ define([
             this.on('propertyselected', this.onPropertySelected);
             this.on('clearfilters', this.onClearFilters);
             this.on('click', {
+                removeEntityRowSelector: this.onRemoveEntityRow,
                 removeRowSelector: this.onRemoveRow
             });
+            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
         });
+
+        this.onSearchByRelatedEntity = function(event, data) {
+            this.onClearFilters();
+
+            this.entityFilters.relatedToVertexId = data.vertexId;
+            var vertex = appData.vertex(data.vertexId),
+                title = vertex && vertex.properties.title || data.vertexId;
+            this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title}));
+            this.notifyOfFilters();
+        }
 
         this.onClearFilters = function() {
             var self = this,
@@ -55,11 +73,16 @@ define([
             }).closest('li:not(.newrow)').remove();
 
             this.createNewRowIfNeeded();
+
+            this.entityFilters = {};
+            this.$node.find('.entity-filter-header').nextAll().remove().closest('ul').hide();
+            this.notifyOfFilters();
         };
 
         this.notifyOfFilters = function() {
             this.trigger('filterschange', {
-                filters: _.map(this.currentFilters, function(filter) {
+                entityFilters: this.entityFilters,
+                propertyFilters: _.map(this.propertyFilters, function(filter) {
                     return {
                         propertyId: filter.propertyId,
                         predicate: filter.predicate,
@@ -67,6 +90,14 @@ define([
                     };
                 })
             });
+        };
+
+        this.onRemoveEntityRow = function(event, data) {
+            var target = $(event.target),
+                key = target.closest('.entity-filter-row').remove().data('filterKey');
+
+            delete this.entityFilters[key];
+            this.notifyOfFilters();
         };
 
         this.onRemoveRow = function(event, data) {
@@ -101,7 +132,7 @@ define([
 
         this.createNewRowIfNeeded = function() {
             if (this.$node.find('.newrow').length === 0) {
-                this.$node.find('ul.nav').append(itemTemplate({properties:this.properties}));
+                this.$node.find('.prop-filters').append(itemTemplate({properties:this.properties}));
                 FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                     properties: this.properties,
                     placeholder: 'Add Filter'
@@ -110,7 +141,7 @@ define([
         };
 
         this.onPropertyFieldItemChanged = function(event, data) {
-            this.currentFilters[data.id] = data;
+            this.propertyFilters[data.id] = data;
             this.notifyOfFilters();
             event.stopPropagation();
         };
@@ -120,7 +151,7 @@ define([
                 instanceInfo = registry.findInstanceInfoByNode(node[0]);
             if (instanceInfo && instanceInfo.length) {
                 instanceInfo.forEach(function(info) {
-                    delete self.currentFilters[info.instance.attr.id];
+                    delete self.propertyFilters[info.instance.attr.id];
                     if (!info.instance.isValid || info.instance.isValid()) {
                         self.notifyOfFilters();
                     }
@@ -145,7 +176,7 @@ define([
                     if (/^_/.test(p.title)) return false;
                     return true; 
                 });
-                self.$node.find('.nav-header').after(itemTemplate({}));
+                self.$node.find('.prop-filter-header').after(itemTemplate({}));
                 FieldSelection.attachTo(self.select('fieldSelectionSelector'), {
                     properties: self.properties,
                     placeholder: 'Add Filter'

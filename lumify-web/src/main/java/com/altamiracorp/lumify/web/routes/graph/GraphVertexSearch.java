@@ -11,8 +11,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
-import com.altamiracorp.securegraph.query.GraphQuery;
+import com.altamiracorp.securegraph.query.Query;
 import com.google.inject.Inject;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,12 +39,18 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String query = getRequiredParameter(request, "q");
+        final String query;
         final String filter = getRequiredParameter(request, "filter");
         final long offset = getOptionalParameterLong(request, "offset", 0);
         final long size = getOptionalParameterLong(request, "size", 100);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
+        final String relatedToVertexId = getOptionalParameter(request, "relatedToVertexId");
+        if (relatedToVertexId == null) {
+            query = getRequiredParameter(request, "q");
+        } else {
+            query = getOptionalParameter(request, "q");
+        }
 
         long startTime = System.nanoTime();
 
@@ -54,7 +61,15 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         graph.flush();
 
-        GraphQuery graphQuery = graph.query(query, user.getAuthorizations());
+        Query graphQuery = null;
+        if (relatedToVertexId == null) {
+            graphQuery = graph.query(query, user.getAuthorizations());
+        } else if (query == null || StringUtils.isBlank(query)) {
+            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(user.getAuthorizations());
+        } else {
+            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(query, user.getAuthorizations());
+        }
+
         for (int i = 0; i < filterJson.length(); i++) {
             JSONObject obj = filterJson.getJSONObject(i);
             if (obj.length() > 0) {

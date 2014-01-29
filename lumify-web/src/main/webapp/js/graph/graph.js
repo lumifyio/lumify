@@ -464,7 +464,12 @@ define([
         this.onContextMenuSearchFor = function () {
             var menu = this.select('vertexContextMenuSelector');
             this.trigger(document, 'searchByEntity', { query : menu.data('title')});
-        }
+        };
+
+        this.onContextMenuSearchRelated = function () {
+            var menu = this.select('vertexContextMenuSelector');
+            this.trigger(document, 'searchByRelatedEntity', { vertexId : menu.data('currentVertexGraphVertexId')});
+        };
 
         this.onContextMenuZoom = function(level) {
             this.cytoscapeReady(function(cy) {
@@ -746,7 +751,19 @@ define([
                 if (title.length > MAX_TITLE_LENGTH) {
                     title = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
                 }
-                this.$node.find('.searchFor').text('Search for "' + title + '"');
+
+                _.templateSettings.interpolate = /\{([\s\S]+?)\}/g;
+                this.$node.find('a').each(function() {
+                    var $this = $(this),
+                        template = $this.data('template');
+
+                    if (template) {
+                        var children = $this.find('*').remove();
+                        $this.text(
+                            _.template(template)({title:title})
+                        ).append(children);
+                    }
+                });
 
                 menu = this.select ('vertexContextMenuSelector');
                 menu.data("currentVertexRowKey",event.cyTarget.data('_rowKey'));
@@ -984,6 +1001,24 @@ define([
             }
         };
 
+        this.onSearchTitle = function() {
+            this.cytoscapeReady(function(cy) {
+                var selected = cy.nodes().filter(':selected');
+                if (selected.length) {
+                    this.trigger(document, 'searchByEntity', { query : selected.data('title')});
+                }
+            });
+        }
+
+        this.onSearchRelated = function() {
+            this.cytoscapeReady(function(cy) {
+                var selected = cy.nodes().filter(':selected');
+                if (selected.length) {
+                    this.trigger(document, 'searchByRelatedEntity', { vertexId : selected.id() });
+                }
+            });
+        }
+
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
@@ -1025,6 +1060,8 @@ define([
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
 
             this.on('loadRelatedItems', this.onLoadRelatedItems);
+            this.on('searchTitle', this.onSearchTitle);
+            this.on('searchRelated', this.onSearchRelated)
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Graph',
@@ -1033,6 +1070,8 @@ define([
                     '=': { fire:'zoomIn', desc:'Zoom in' },
                     'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
                     'alt-r': { fire:'loadRelatedItems', desc:'Add related items to workspace' },
+                    'alt-t': { fire:'searchTitle', desc:'Search for selected title' },
+                    'alt-s': { fire:'searchRelated', desc:'Search vertices related to selected' },
                 }
             });
 
