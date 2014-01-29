@@ -215,7 +215,7 @@ define([
                     y1: parseFloat(this.attr.y1),
                     x2: parseFloat(this.attr.x2),
                     y2: parseFloat(this.attr.y2),
-                    existing: this.currentGraphVertexId != ''
+                    existing: !!this.currentGraphVertexId
                 };
 
             _.defer(this.buttonLoading.bind(this));
@@ -397,7 +397,7 @@ define([
 
             this.graphVertexChanged(graphVertexId, data, true);
 
-            if (sign != '') {
+            if (sign) {
                 var input = this.select('objectSignSelector');
                 input.attr('disabled', true);
                 this.runQuery(sign).done(function() {
