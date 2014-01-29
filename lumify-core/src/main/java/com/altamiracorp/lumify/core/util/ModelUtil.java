@@ -4,7 +4,6 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
-import com.altamiracorp.lumify.core.model.resources.Resource;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
@@ -21,7 +20,6 @@ public class ModelUtil {
             Workspace.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
             VideoFrame.TABLE_NAME,
-            Resource.TABLE_NAME,
             UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,

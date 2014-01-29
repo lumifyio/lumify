@@ -4,26 +4,28 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
-import com.altamiracorp.lumify.core.model.resources.ResourceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
 
     private final OntologyRepository ontologyRepository;
-    private final ResourceRepository resourceRepository;
     private final Graph graph;
 
     @Inject
-    public BaseOntology(OntologyRepository ontologyRepository, ResourceRepository resourceRepository, Graph graph) {
+    public BaseOntology(OntologyRepository ontologyRepository, Graph graph) {
         this.ontologyRepository = ontologyRepository;
-        this.resourceRepository = resourceRepository;
         this.graph = graph;
     }
 
@@ -48,9 +50,21 @@ public class BaseOntology {
         graph.flush();
 
         InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
-        String entityGlyphIconRowKey = resourceRepository.importFile(entityGlyphIconInputStream, "png", user);
-        entity.setProperty(PropertyName.GLYPH_ICON.toString(), entityGlyphIconRowKey, OntologyRepository.DEFAULT_VISIBILITY);
-        graph.flush();
+
+        try {
+            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
+            IOUtils.copy(entityGlyphIconInputStream, imgOut);
+
+            byte[] rawImg = imgOut.toByteArray();
+
+            StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
+            raw.searchIndex(false);
+            entity.setProperty(PropertyName.GLYPH_ICON.toString(), raw, OntologyRepository.DEFAULT_VISIBILITY);
+            graph.flush();
+        } catch (IOException e) {
+            throw new RuntimeException("invalid stream for glyph icon");
+        }
+
     }
 
     public boolean isOntologyDefined(User user) {
