@@ -60,7 +60,8 @@ define([
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
                 title = vertex && vertex.properties.title || data.vertexId;
-            this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title}));
+
+            this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title})).closest('.entity-filters').show();
             this.notifyOfFilters();
         }
 
@@ -75,7 +76,8 @@ define([
             this.createNewRowIfNeeded();
 
             this.entityFilters = {};
-            this.$node.find('.entity-filter-header').nextAll().remove().closest('ul').hide();
+            this.$node.find('.entity-filter-header').nextAll().remove();
+            this.$node.find('.entity-filter-header').closest('.entity-filters').hide();
             this.notifyOfFilters();
         };
 
