@@ -43,17 +43,6 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-accumulo</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-model-bigtable-queue</artifactId>
             <version>${project.version}</version>
         </dependency>
