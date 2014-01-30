@@ -9,3 +9,4 @@ paginate: 10
 paginate_path: "blog/page:num"
 permalink: /blog/:year/:month/:day/:title
 full_url: http://lumify.io
+exclude: [Gemfile, Gemfile.lock, README.md]
