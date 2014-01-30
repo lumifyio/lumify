@@ -15,6 +15,7 @@ define([
     'util/formatters',
     'service/vertex',
     'service/ontology',
+    'service/config',
     'util/retina',
     'util/withContextMenu',
     'util/withAsyncQueue',
@@ -34,6 +35,7 @@ define([
     formatters,
     VertexService,
     OntologyService,
+    ConfigService,
     retina,
     withContextMenu,
     withAsyncQueue,
@@ -54,6 +56,7 @@ define([
     function Graph() {
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
+        this.configService = new ConfigService();
 
         var LAYOUT_OPTIONS = {
             // Customize layout options
@@ -970,28 +973,56 @@ define([
         this.onLoadRelatedSelected = function(data) {
             var self = this;
 
-            if ($.isArray(data) && data.length == 1){
+            if ($.isArray(data) && data.length){
                 data = data[0];
             }
 
+            var vertexId = data.graphVertexId;
+
             this.vertexService.getRelatedVertices(data)
                 .done(function(data) {
-                    var added = data.vertices;
-                    
+                    var vertices = data.vertices,
+                        count = vertices.length;
                     self.cytoscapeReady(function(cy) {
-                        cy.filter(':selected').unselect();
-                        cy.container().focus();
-                        added.forEach(function(vertex, index) {
-                            vertex.workspace = {
-                                selected: true
-                            };
-                        });
+                        self.configService.getProperties().done(function(config) {
+                            var forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
+                                promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
 
-                        self.addingRelatedVertices = true;
-                        self.trigger('addVertices', { vertices:added });
-                        self.trigger('selectObjects', { vertices:added })
-                    });
+                            if (forceSearch || promptBeforeAdding) {
+                                require(['graph/popovers/loadRelatedPopover'], function(LoadRelatedPopover) {
+                                    LoadRelatedPopover.teardownAll();
+                                    LoadRelatedPopover.attachTo(self.$node, {
+                                        addToWorkspaceEvent: 'addRelatedToWorkspace',
+                                        forceSearch: forceSearch,
+                                        count: count,
+                                        cy: cy,
+                                        cyNode: cy.getElementById(vertexId),
+                                        vertices: vertices
+                                    });
+                                });
+                            } else {
+                                self.trigger('addRelatedToWorkspace', { vertices:vertices });
+                            }
+                        });
+                    })
                 });
+        };
+
+        this.onAddRelatedToWorkspace = function(event, data) {
+            var vertices = data.vertices;
+            this.cytoscapeReady(function(cy) {
+                cy.filter(':selected').unselect();
+                cy.container().focus();
+                vertices.forEach(function(vertex, index) {
+                    vertex.workspace = {
+                        selected: true
+                    };
+                });
+
+                this.addingRelatedVertices = true;
+                this.trigger('addVertices', { vertices:vertices });
+                this.trigger('selectObjects', { vertices:vertices })
+            });
         };
 
         this.onLoadRelatedItems = function() {
@@ -1062,6 +1093,7 @@ define([
             this.on('loadRelatedItems', this.onLoadRelatedItems);
             this.on('searchTitle', this.onSearchTitle);
             this.on('searchRelated', this.onSearchRelated)
+            this.on('addRelatedToWorkspace', this.onAddRelatedToWorkspace);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Graph',

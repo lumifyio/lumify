@@ -7,7 +7,8 @@ define(
 
         // Override in configuration.properties with `web.ui` prefix
         var DEFAULTS = {
-            'vertex.loadRelatedMaxBeforePrompt': 50
+            'vertex.loadRelatedMaxBeforePrompt': 50,
+            'vertex.loadRelatedMaxForceSearch': 250,
         };
         
         // Coerce all values to strings since that's what they will be from
