@@ -80,7 +80,8 @@ define([
                 this.mouseDown = true;
             }
 
-            if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript'))) {
+            if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0
+                && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
                 if (event.type === 'mouseup' || event.type === 'dblclick') {
                     this.handleSelectionChange();
                 } else if (event.type == 'click') {
@@ -257,7 +258,7 @@ define([
             var sel = window.getSelection(),
                 text = sel && sel.type === 'Range' ? $.trim(sel.toString()) : '';
 
-            if (text && text.length) {
+            if (text && text.length > 0) {
                 var anchor = $(sel.anchorNode),
                     focus = $(sel.focusNode),
                     is = '.detail-pane .text';
