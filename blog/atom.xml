@@ -1,0 +1,33 @@
+---
+layout: nil
+---
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+  <title>{{ site.name }} Blog</title>
+  <link href="{{ site.full_url }}/blog/"/>
+  <link type="application/atom+xml" rel="self" href="{{ site.full_url }}/blog/atom.xml"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ site.full_url }}/blog/</id>
+  <author>
+    <name>Lumify Dev Team</name>
+  </author>
+
+  {% assign post_count = '' %}
+  {% for post in site.posts %}
+    {% if post_count.size < site.paginate %}
+    {% capture post_count %}{{ post_count }}*{% endcapture %}
+    <entry>
+      <id>{{ site.full_url }}{{ post.id }}</id>
+      <link type="text/html" rel="alternate" href="{{ site.full_url }}{{ post.url }}/index.html"/>
+      <title>{{ post.title | xml_escape }}</title>
+      <updated>{{ post.date | date_to_xmlschema }}</updated>
+      <author>
+        <name>{{ post.author | xml_escape }}</name>
+      </author>
+      <summary>{{ post.excerpt | xml_escape }}</summary>
+    </entry>
+    {% endif %}
+  {% endfor %}
+ 
+</feed>
