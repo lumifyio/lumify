@@ -3,6 +3,7 @@
 define([
     'util/retina'
 ], function(retina) {
+    'use strict';
 
     return withVertexPopover;
 
@@ -38,6 +39,7 @@ define([
             this.onViewportChanges();
 
             this.positionDialog();
+            this.trigger('popoverInitialize');
         };
 
         this.onTap = function() {

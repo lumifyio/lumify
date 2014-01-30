@@ -1,9 +1,4 @@
-define([
-    'data',
-    'util/retina',
-    'util/formatters',
-    'service/vertex'
-], function(appData, retina, formatters, VertexService) {
+define([], function() {
     'with strict';
 
     var STATE_NONE = 0,
@@ -18,38 +13,17 @@ define([
             tempTargetNode,
             currentEdgeId,
             state = STATE_NONE,
-            hops,
+            connectionData,
             connectionType;
-
-        if (!this.vertexService) {
-            this.vertexService = new VertexService();
-        }
-
-        this.defaultAttrs({
-            dialogSelector: '.connect-dialog',
-            findPathSelector: '.connect-dialog .find-path',
-            findPathButtonSelector: '.connect-dialog .find-path-form button',
-            findPathHopsButtonSelector: '.connect-dialog .popover-title .dropdown-menu a',
-            createConnectionSelector: '.connect-dialog .create-connection',
-            createConnectionButtonSelector: '.connect-dialog .create-connection-form button'
-        });
 
         this.after('initialize', function() {
             var self = this,
                 lockedCyTarget;
 
             this.mouseDragHandler = self.onControlDragMouseMove.bind(this);
-            this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 100);
 
             this.on(document, 'controlKey', function() { controlKeyPressed = true; });
             this.on(document, 'controlKeyUp', function() { controlKeyPressed = false; });
-
-            this.on('click', {
-                findPathSelector: this.onFindPath,
-                findPathButtonSelector: this.onFindPathButton,
-                createConnectionSelector: this.onCreateConnection,
-                createConnectionButtonSelector: this.onCreateConnectionButton
-            });
 
             this.on('startVertexConnection', this.onStartVertexConnection);
             this.on('endVertexConnection', this.onEndVertexConnection);
@@ -104,187 +78,6 @@ define([
             }
         };
 
-        this.showForm = function(formName) {
-            var form = this.$node.find('.popover-content .' + formName),
-                dialog = form.closest('.connect-dialog');
-
-            dialog.find('.form-button').hide();
-            dialog.find('.popover-title > div').hide();
-            dialog.find('.popover-title .' + formName).show();
-            return form;
-        };
-
-        this.onCreateConnection = function() {
-            this.cytoscapeReady(function(cy) {
-                var self = this,
-                    form = this.showForm('create-connection-form'),
-                    select = form.find('select'),
-                    title = form.closest('.popover').find('.popover-title .title'),
-                    button = form.find('button');
-                
-                select.html('<option>Loading...</option>');
-                title.text(cy.getElementById(currentSourceId).data('title')).closest('.popover-title').show();
-                button.text('Connect').attr('disabled', true);
-                form.show();
-
-                this.positionDialog();
-
-                button.focus();
-
-                this.getRelationshipLabels(
-                    cy.getElementById(currentSourceId),
-                    cy.getElementById(currentTargetId)
-                ).done(function(relationships) {
-
-                    if (relationships.length) {
-                        select.html(
-                            relationships.map(function(d){
-                                return '<option value="' + d.title + '">' + d.displayName + '</option>';
-                            }).join('')
-                        ).siblings('button').removeAttr('disabled');
-                    } else {
-                        select.html('<option>No valid relationships</option>');
-                    }
-
-                    self.positionDialog();
-                });
-            });
-        };
-
-        this.onCreateConnectionButton = function(e) {
-            if (!currentEdgeId) return;
-
-            var $target = $(e.target);
-
-            $target.text('Connecting...').attr('disabled', true);
-
-            this.cytoscapeReady(function(cy) {
-                var self = this,
-                    parameters = {
-                        sourceGraphVertexId: currentSourceId,
-                        destGraphVertexId: currentTargetId,
-                        predicateLabel: $target.siblings('select').val()
-                    };
-
-                this.relationshipService.createRelationship(parameters)
-                    .done(function(data) {
-                        self.on(document, 'relationshipsLoaded', function loaded() {
-                            self.trigger('finishedVertexConnection');
-                            self.off(document, 'relationshipsLoaded', loaded);
-                        });
-                        // TODO: should we send an expected relationship so
-                        // data.js will continue checking until it's eventually
-                        // consistent?
-                        self.trigger('refreshRelationships');
-                    });
-            });
-        };
-
-        this.onFindPath = function() {
-            this.cytoscapeReady(function(cy) {
-                var self = this,
-                    src = currentSourceId,
-                    dest = currentTargetId,
-                    form = this.showForm('find-path-form'),
-                    popoverTitle = form.closest('.popover'),
-                    title = popoverTitle.find('.popover-title .title'),
-                    text = form.find('span'),
-                    button = form.find('button');
-
-                this.trigger('defocusPaths');
-                
-                text.text('Loading...');
-                button.hide().text('Add Vertices').attr('disabled', true);
-                form.show();
-
-                this.select('findPathHopsButtonSelector').off('click').on('click', this.onFindPathHopsButton.bind(this));
-
-                this.positionDialog();
-
-                button.focus();
-
-                this.findPath(src, dest).done(function(result){
-
-                    var paths = result.paths,
-                        vertices = result.uniqueVertices,
-                        verticesNotSourceDest = vertices.filter(function(v) {
-                            return v.id !== src && v.id !== dest;
-                        }),
-                        notInWorkspace = vertices.filter(function(v) { 
-                            return !appData.workspaceVertices[v.id]; 
-                        }),
-                        pathsFoundText = formatters.string.plural(paths.length, 'path') + ' found';
-
-                    if (paths.length) {
-                        if (notInWorkspace.length) {
-                            var vertexText = formatters.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
-                                suffix = notInWorkspace.length === 1 ? ' isn\'t' : ' aren\'t';
-                            text.text(vertexText + suffix + ' already in workspace');
-                            button.text('Add ' + vertexText).removeAttr('disabled').show();
-
-                            var index, map = {};
-                            for (var i = 0; i < notInWorkspace.length; i++) {
-                                path_loop: for (var j = 0; j < paths.length; j++) {
-                                    for (var x = 0; x < paths[j].length; x++) {
-                                        if (paths[j][x].id === notInWorkspace[i].id) {
-                                            map[notInWorkspace[i].id] = {
-                                                sourceId: paths[j][x-1].id,
-                                                targetId: paths[j][x+1].id
-                                            };
-                                            break path_loop;
-                                        }
-                                    }
-                                }
-                            }
-
-                            self.verticesToAdd = notInWorkspace;
-                            self.verticesToAddLayoutMap = map;
-                        } else {
-                            text.text('all vertices are already added to workspace');
-                        }
-
-                        cy.$('.temp').remove();
-                        self.trigger('focusPaths', { paths:paths, sourceId:src, targetId:dest });
-                    } else text.text('Path search using ' + formatters.string.plural(hops, 'hop'));
-
-
-                    title.text(pathsFoundText).closest('.popover-title').show();
-                    self.positionDialog();
-                });
-            });
-        };
-
-        this.onFindPathButton = function(e) {
-            var vertices = this.verticesToAdd;
-
-            this.trigger('finishedVertexConnection');
-            this.trigger('addVertices', { 
-                vertices: vertices,
-                options: {
-                    layout: {
-                        type: 'path',
-                        map: this.verticesToAddLayoutMap
-                    }
-                }
-            });
-            this.trigger('selectObjects', { vertices:vertices });
-        };
-
-        this.onFindPathHopsButton = function(e) {
-            var $target = $(e.target),
-                newHops = $target.data('hops');
-
-            if ($target.closest('.disabled').length) return;
-
-            var list = $target.closest('ul')
-            
-            list.siblings('.dropdown-toggle').html($target.data('displayText') + ' <span class="caret"/>');
-            list.find('.disabled').removeClass('disabled');
-            $target.closest('li').addClass('disabled');
-
-            hops = newHops;
-            this.onFindPath();
-        };
 
         this.onFinishedVertexConnection = function(event) {
             state = STATE_NONE;
@@ -292,71 +85,24 @@ define([
             this.cytoscapeReady(function(cy) {
                 cy.$('.temp').remove();
                 cy.$('.controlDragSelection').removeClass('controlDragSelection');
-                cy.off('pan zoom position', this.onViewportChanges);
                 currentEdgeId = null;
                 currentSourceId = null;
                 currentTargetId = null;
-                this.select('dialogSelector').hide();
+
+                var self = this;
+                require(['graph/popovers/withVertexPopover'], function(withVertexPopover) {
+                    self.$node.teardownAllComponentsWithMixin(withVertexPopover);
+                })
+
                 this.ignoreCySelectionEvents = false;
                 this.trigger('defocusPaths');
             });
         };
 
-        this.showDialog = function(edge) {
-            this.cytoscapeReady(function(cy) {
-                var self = this,
-                    targetId = edge.data('target');
-
-                this.currentTargetNode = cy.getElementById(targetId);
-                this.onViewportChanges();
-                
-                var dialog = this.$node.find('.connect-dialog');
-                dialog.parent('div').css({ position: 'absolute' });
-                var popoverTitle = dialog.find('.popover-title').hide();
-
-                popoverTitle.find('.dropdown-toggle').html('Shortest <span class="caret"/>');
-                popoverTitle.find('.disabled').removeClass('disabled');
-                popoverTitle.find('.dropdown-menu li:first-child').addClass('disabled');
-
-                if (connectionType) {
-                    dialog.find('.form').hide();
-                    dialog.find('.form-button').hide();
-                    this.positionDialog();
-
-                    self['on' + connectionType]();
-                } else {
-                    dialog.find('.form-button').show();
-                    dialog.find('.form').hide();
-                    this.positionDialog();
-                }
-
-                cy.on('pan zoom position', this.onViewportChanges);
-            });
-        };
-
-        this.onViewportChanges = function() {
-            this.dialogPosition = retina.pixelsToPoints(this.currentTargetNode.renderedPosition());
-            this.dialogPosition.y -= this.currentTargetNode.height() / 2 * this.currentTargetNode.cy().zoom();
-            this.positionDialog();
-        };
-
-        this.positionDialog = function() {
-            var dialog = this.select('dialogSelector'),
-                width = dialog.outerWidth(true),
-                height = dialog.outerHeight(true),
-                proposed = {
-                    left: Math.max(0, Math.min(this.$node.width() - width, this.dialogPosition.x - (width / 2))),
-                    top: Math.max(0, Math.min(this.$node.height() - height, this.dialogPosition.y - height))
-                };
-
-            dialog.parent('div').css(proposed);
-            dialog.show();
-        }
-
         this.onStartVertexConnection = function(event, data) {
             state = STATE_STARTED;
             connectionType = data.connectionType;
-            hops = data.hops || 1;
+            connectionData = _.omit(data, 'connectionType');
 
             this.ignoreCySelectionEvents = true;
 
@@ -368,6 +114,8 @@ define([
         };
 
         this.onEndVertexConnection = function(event, data) {
+            var self = this;
+
             state = STATE_CONNECTED;
 
             this.cytoscapeReady(function(cy) {
@@ -375,12 +123,27 @@ define([
                 cy.nodes().unlock();
                 startControlDragTarget = null;
 
-                var edge = currentEdgeId && cy.getElementById(currentEdgeId);
-                if (edge && !cy.getElementById(edge.data('target')).hasClass('temp')) {
-                    this.showDialog(edge);
-                } else {
-                    this.trigger('finishedVertexConnection');
+                var edge = currentEdgeId && cy.getElementById(currentEdgeId),
+                    target = edge && cy.getElementById(edge.data('target'));
+                    
+                if (!target || target.hasClass('temp')) {
+                    return this.trigger('finishedVertexConnection');
                 }
+
+                var componentName = { 
+                    CreateConnection : 'createConnectionPopover',
+                    FindPath         : 'findPathPopover'
+                }[connectionType] ||   'controlDragPopover';
+
+                require(['graph/popovers/' + componentName], function(Popover) {
+                    Popover.teardownAll();
+                    Popover.attachTo(self.$node, {
+                        cy: cy,
+                        cyNode: target,
+                        edge: edge,
+                        connectionData: connectionData
+                    });
+                });
             });
         };
 
@@ -451,69 +214,6 @@ define([
                     });
                 }
             }
-        };
-
-
-        this.findPath = function(source, dest) {
-            var parameters = {
-                sourceGraphVertexId: source,
-                destGraphVertexId: dest,
-                depth: 5,
-                hops: hops
-            };
-
-            return this.vertexService.findPath(parameters)
-                        .then(function (data) {
-                            var vertices = [], added = {};
-                            data.paths.forEach(function (path) {
-                                path.forEach(function (vertex) {
-                                    if (!added[vertex.id]) {
-                                        vertices.push(vertex);
-                                        added[vertex.id] = true;
-                                    }
-                                });
-                            });
-
-                            return {
-                                paths: data.paths,
-                                uniqueVertices: vertices
-                            };
-                        });
-        };
-        
-        this.getRelationshipLabels = function (source, dest) {
-            var self = this,
-                sourceConceptTypeId = source.data('_conceptType');
-                destConceptTypeId = dest.data('_conceptType');
-
-            return $.when(
-                this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
-                this.ontologyService.relationships()
-            ).then(function(conceptToConceptResponse, ontologyRelationships) {
-                var results = conceptToConceptResponse[0],
-                    relationships = results.relationships,
-                    relationshipsTpl = [];
-
-                relationships.forEach(function (relationship) {
-                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
-                    var displayName;
-                    if (ontologyRelationship) {
-                        displayName = ontologyRelationship.displayName;
-                    } else {
-                        displayName = relationship.title;
-                    }
-
-                    var data = {
-                        title: relationship.title,
-                        displayName: displayName
-                    };
-
-                    relationshipsTpl.push(data);
-                });
-
-                return relationshipsTpl;
-
-            });
         };
     }
 });

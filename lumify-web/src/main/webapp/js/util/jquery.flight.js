@@ -13,6 +13,22 @@ define(['flight/lib/registry', 'jquery'],function(registry) {
         return this;
     };
 
+    $.fn.teardownAllComponentsWithMixin = function(Mixin) {
+        var results = registry.findInstanceInfoByNode(this[0]);
+        for (var i = 0; i < results.length; ++i) {
+            var instance = results[i].instance;
+            if (instance.mixedIn) {
+                for (var j = 0; j < instance.mixedIn.length; j++) {
+                    if (instance.mixedIn[j] === Mixin) {
+                        instance.teardown();
+                        break;
+                    }
+                }
+            }
+        }
+        return this;
+    };
+
     $.fn.teardownAllComponents = function() {
         var results = registry.findInstanceInfoByNode(this[0]);
         for (var i = 0; i < results.length; ++i) {

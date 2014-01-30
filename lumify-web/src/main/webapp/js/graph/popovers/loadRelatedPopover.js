@@ -5,6 +5,7 @@ define([
 ], function(
     defineComponent,
     withVertexPopover) {
+    'use strict';
 
     return defineComponent(LoadRelatedPopover, withVertexPopover);
 
