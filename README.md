@@ -15,7 +15,7 @@ Note: It's import to use `bundle exec` when running any of the jekyll commands t
 
 Creating Blog Posts
 -------------------
-It's easiest to create a blog post by copying an existing one in the `_posts` directory and changing the file name appropriately. Please follow the existing format that prefixes the publication data. That date will dictate the directory structure for the generated blog post. Also, please be sure to change the YAML front matter at the top of your new post. It should look something like this:
+It's easiest to create a blog post by copying an existing one in the `_posts` directory and changing the file name appropriately. Please follow the existing format that prefixes the publication date. That date will dictate the directory structure for the generated blog post. Also, please be sure to change the YAML front matter at the top of your new post. It should look something like this:
 
 ```yaml
 ---
