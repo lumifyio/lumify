@@ -32,7 +32,7 @@ define(
         };
 
         VertexService.prototype.getMultiple = function (vertexIds) {
-            return this._ajaxGet({
+            return this._ajaxPost({
                 url: 'vertex/multiple',
                 data: {
                     vertexIds: vertexIds

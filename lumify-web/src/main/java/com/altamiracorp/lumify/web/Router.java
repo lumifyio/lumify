@@ -92,7 +92,7 @@ public class Router extends HttpServlet {
             app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
             app.get("/vertex/relationship", authenticator, VertexToVertexRelationship.class);
             app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
-            app.get("/vertex/multiple", authenticator, VertexMultiple.class);
+            app.post("/vertex/multiple", authenticator, VertexMultiple.class);
 
             app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
             app.post("/relationship/property/delete", authenticator, DeleteRelationshipProperty.class);
