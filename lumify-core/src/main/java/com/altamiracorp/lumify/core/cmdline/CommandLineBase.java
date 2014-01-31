@@ -19,7 +19,7 @@ import java.net.URI;
 
 public abstract class CommandLineBase {
     protected LumifyLogger LOGGER;
-    private String configLocation = "/opt/lumify/config/";
+    private String configLocation = Configuration.CONFIGURATION_LOCATION;
     private Configuration configuration;
     private boolean willExit = false;
     protected boolean initFramework = true;
@@ -71,7 +71,7 @@ public abstract class CommandLineBase {
     }
 
     private void initLog4j() {
-        String log4jFile = "/opt/lumify/config/log4j.xml";
+        String log4jFile = Configuration.CONFIGURATION_LOCATION + "log4j.xml";
         if (!new File(log4jFile).exists()) {
             throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
         }
