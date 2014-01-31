@@ -48,11 +48,6 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-elasticsearch</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-model-kafka</artifactId>
             <version>${project.version}</version>
         </dependency>

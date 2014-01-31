@@ -34,7 +34,11 @@ define(['atmosphere'],
 
         ServiceBase.prototype.socketPush = function(data) {
             data.sourceId = document.subSocketId;
-            return document.$subSocket.push(JSON.stringify(data));
+            var string = JSON.stringify(data);
+            if (string.length > 1024*1024) {
+                return console.warn('Unable to push data, too large: ', string.length, data)
+            }
+            return document.$subSocket.push(string);
         };
 
         ServiceBase.prototype.subscribe = function (config) {
@@ -49,9 +53,9 @@ define(['atmosphere'],
                     shared: false,
                     uuid: this.getSocket().guid(),
                     connectTimeout: -1,
-                    maxStreamingLength: 100,
                     enableProtocol: true,
-                    maxReconnectOnClose: -1,
+                    maxReconnectOnClose: 2,
+                    maxStreamingLength: 2000,
                     logLevel: 'debug',
                     onOpen: function(response) {
                         if (config.onOpen) config.onOpen.apply(null, arguments);
@@ -61,12 +65,6 @@ define(['atmosphere'],
                     },
                     onClose: function() {
                         console.error('closed', arguments);
-
-                        // Might be closing because of browser refresh, delay
-                        // logout so it only happens if server went down
-                        _.delay(function() {
-                            $(document).trigger('logout');
-                        }, 1000);
                     },
                     onMessage: function (response) {
                         var body = response.responseBody,
@@ -81,6 +79,12 @@ define(['atmosphere'],
                     onError: function (response) {
                         console.error('subscribe error:', response);
                         if (config.onMessage) config.onMessage(response.error, null);
+
+                        // Might be closing because of browser refresh, delay
+                        // logout so it only happens if server went down
+                        _.delay(function() {
+                            $(document).trigger('logout');
+                        }, 1000);
                     }
                 };
             document.$subSocket = this.getSocket().subscribe(req);
