@@ -26,8 +26,12 @@ public abstract class WorkQueueRepository {
     public static final String DOCUMENT_QUEUE_NAME = "document";
 
     public void pushArtifactHighlight(final String artifactGraphVertexId) {
+        pushArtifactHighlight(artifactGraphVertexId, FlushFlag.DEFAULT);
+    }
+
+    public void pushArtifactHighlight(final String artifactGraphVertexId, FlushFlag flushFlag) {
         checkNotNull(artifactGraphVertexId);
-        writeToQueue(ARTIFACT_HIGHLIGHT_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
+        writeToQueue(ARTIFACT_HIGHLIGHT_QUEUE_NAME, flushFlag, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
     public void pushText(final String artifactGraphVertexId) {
