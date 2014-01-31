@@ -25,6 +25,13 @@ public class InjectHelper {
         return injector;
     }
 
+    public static <T> T getInstance(Class<T> clazz, ModuleMaker moduleMaker) {
+        if (injector == null) {
+            injector = Guice.createInjector(moduleMaker.createModule());
+        }
+        return injector.getInstance(clazz);
+    }
+
     public static interface ModuleMaker {
         Module createModule();
     }
