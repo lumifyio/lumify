@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.web.routes.admin.*;
 import com.altamiracorp.lumify.web.routes.artifact.*;
 import com.altamiracorp.lumify.web.routes.audit.VertexAudit;
 import com.altamiracorp.lumify.web.routes.config.Configuration;
+import com.altamiracorp.lumify.web.routes.config.Plugin;
 import com.altamiracorp.lumify.web.routes.entity.*;
 import com.altamiracorp.lumify.web.routes.graph.*;
 import com.altamiracorp.lumify.web.routes.map.MapInitHandler;
@@ -60,7 +61,9 @@ public class Router extends HttpServlet {
             app.post("/login", Login.class);
             app.post("/logout", Logout.class);
 
-            app.get("/configuration", Configuration.class);
+            app.get("/configuration", authenticator, Configuration.class);
+            app.get("/js/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
+            app.get("/jsc/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
 
             app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
             app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
