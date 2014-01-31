@@ -2,22 +2,27 @@
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
-    <New id="sessionManager" class="com.altamiracorp.lumify.web.session.BigTableJettySessionManager"/>
-    <Get id="server" name="server" />
+    <New id="sessionManager"
+         class="com.altamiracorp.lumify.web.session.LumifyBigTableJettySessionManager.LumifyBigTableJettySessionManager"/>
+    <Get id="server" name="server"/>
 
     <Set name="sessionHandler">
         <New class="org.eclipse.jetty.server.session.SessionHandler">
             <Arg>
-                <Ref id="sessionManager"></Ref>
+                <Ref id="sessionManager"/>
             </Arg>
         </New>
     </Set>
 
     <Ref id="server">
         <Set name="sessionIdManager">
-            <New class="com.altamiracorp.lumify.web.session.BigTableJettySessionIdManager">
-                <Arg><Ref id="server" /></Arg>
-                <Arg><Ref id="sessionManager"/></Arg>
+            <New class="com.altamiracorp.bigtable.jetty.BigTableJettySessionIdManager">
+                <Arg>
+                    <Ref id="server"/>
+                </Arg>
+                <Arg>
+                    <Ref id="sessionManager"/>
+                </Arg>
             </New>
         </Set>
     </Ref>
