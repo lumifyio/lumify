@@ -1,20 +1,13 @@
 package com.altamiracorp.lumify.web;
 
-import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
-import com.altamiracorp.lumify.web.session.BigTableJettySessionIdManager;
-import com.altamiracorp.lumify.web.session.BigTableJettySessionManager;
-import com.altamiracorp.lumify.web.session.model.JettySessionRepository;
-import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.SessionIdManager;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -124,7 +117,7 @@ public class Server extends CommandLineBase {
 
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/");
-        webAppContext.setWar("./lumify-web/src/main/webapp/");
+        webAppContext.setWar("./lumify-web-war/src/main/webapp/");
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[]{webAppContext});

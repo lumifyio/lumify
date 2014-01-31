@@ -64,10 +64,8 @@ public class VertexSetProperty extends BaseRequestHandler {
         graphVertexMutation.setProperty(propertyName, value, visibility);
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            String [] point = valueStr.split(",");
-            String latitude = point[0].substring(point[0].indexOf("(") + 1, point[0].length());
-            String longitude = point[1].substring(point[1].indexOf(",") + 1, point[1].length()-1);
-            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
+            String [] latlong = valueStr.substring(valueStr.indexOf('(') + 1, valueStr.indexOf(')')).split(",");
+            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latlong[0]), Double.parseDouble(latlong[1]));
             graphVertexMutation.setProperty(PropertyName.GEO_LOCATION.toString(), geoPoint, visibility);
             graphVertexMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {

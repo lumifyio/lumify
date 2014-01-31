@@ -1,0 +1,61 @@
+@import (reference) "../util/constants.less";
+
+background: white;
+
+.empty-graph {
+  .fullscreen;
+  background: url(../img/drop-items.png) no-repeat center;
+}
+
+.cytoscape-container {
+  position: relative;
+
+  // Cytoscape hardcodes 1000 here, breaks resizing
+  div { z-index: @graph-zIndex !important; }
+}
+
+canvas {
+  left: 0;
+}
+
+.popover {
+  min-width: 13em;
+  .opacity(90);
+  .disable-text-selection;
+
+  .dropdown-menu {
+    min-width: 160px;
+  }
+
+  .popover-title .find-path-form {
+    display: block;
+    float: right;
+    position: relative;
+    top: -0.3ex;
+  }
+  .popover-title .title {
+    padding-right: 4px;
+  }
+
+  .create-connection-form {
+    span {
+      display: block;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    select {
+      margin: 0.5em 0;
+      width: 100%;
+    }
+    button {
+      margin-top: 1em;
+    }
+  }
+}
+.popover button {
+    width: 100%;
+    margin: 0.25em 0;
+    white-space: nowrap;
+}
+

@@ -1,0 +1,187 @@
+@import (reference) "../util/positioning.less";
+@import (reference) "../util/selection.less";
+@import (reference) "../util/css3.less";
+
+width: 175px;
+
+.navbar-search { 
+  text-align: center;
+  width: 100%; 
+  float: none;
+  .box-sizing(border-box);
+}
+
+.search-query {
+  width: 75%;
+  margin-bottom: 0.5em;
+}
+
+.badge {
+  float:right;
+}
+
+.search-results, .search-filters {
+  .pin-left-split;
+
+  width: 265px;
+  background: @pane-background;
+  z-index: 89;  // so it floats above graph, but below splitbar handles
+}
+
+.search-results-summary a {
+  cursor: pointer;
+  .disable-text-selection;
+}
+
+.search-results-summary.nav-list > li {
+  position: relative;
+}
+.search-results-summary.nav-list > li > a {
+  white-space: nowrap;
+  padding-right: 0.5em;
+
+  .title {
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    padding-right: 0.25em;
+  }
+}
+
+.search-results-summary a .badge {
+  position: relative;
+  float: right;
+  display: block;
+}
+
+.filter-info {
+  color: #999;
+  font-style: italic;
+  cursor: pointer;
+  padding: 0 1em;
+
+  div {
+      font-size: 85%;
+  }
+  i {
+      opacity: 0.5;
+  }
+
+  &:hover .message, .action {
+      display: none;
+  }
+  &:hover .action {
+      display: block;
+      color: #0088cc;
+  }
+}
+
+.search-filters {
+  width: 220px;
+
+  .typeahead {
+    width: 100%;
+    min-height: 200px;
+    li { margin-bottom: 0; }
+  }
+
+  .add-property {
+    input {
+      @color: #0088cc;
+
+      .appearance(none);
+      .box-shadow(none);
+      outline: none;
+      border: 0;
+      background: inherit;
+      color: @color;
+      font-size: 11px;
+      font-weight: bold;
+      line-height: 20px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      padding-left: 0;
+      margin: 0;
+      cursor: pointer;
+      &::-webkit-input-placeholder { color: @color; }
+      &::-moz-placeholder { color: @color; }
+      &:-moz-placeholder { color: @color; }
+    }
+  }
+
+  .newrow .remove { display:none; }
+  button.remove {
+    outline: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    color: red;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    text-shadow: none;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    background: #F9F9F9;
+    padding-left: 0.5em;
+  }
+ 
+  li { margin-bottom: 0.5em; position:relative; }
+  li.nav-header { margin-bottom: 1em; }
+
+  table td { vertical-align:top; }
+  table, tr { width: 100%; }
+  .predicate-row { 
+    //width: auto; 
+  }
+  .input-row { width: 100%; }
+
+  .range-only {
+    display: block;
+    margin-top: 0.5em;
+  }
+
+  .property-filters {
+    .appearance(none);
+    outline: none;
+    border: 0;
+    background: inherit;
+    color: #0088cc;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+
+    &:focus { outline:none; }
+  }
+
+  input {
+    //width: auto;
+    width: 100%;
+    min-width: 110px;
+    box-sizing: border-box;
+    padding: 1em 0.5em;
+  }
+
+  .add-on select {
+    .appearance(none);
+    outline: none;
+    &:focus { outline:none; }
+    background: inherit;
+    border: none;
+    width: auto;
+    margin: 0;
+    padding: 0px 0;
+    height: auto;
+    line-height: inherit;
+    text-shadow: 0 1px 0 #ffffff;
+    color: #333333;
+    position: relative;
+    top: -1px;
+  }
+}
+

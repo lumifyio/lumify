@@ -76,7 +76,6 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
             this.queues.put(queueName, queue);
         }
 
-        LOGGER.debug("push on queue %s", tableName);
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("push on queue %s: %s", tableName, json.toString(2));
         }

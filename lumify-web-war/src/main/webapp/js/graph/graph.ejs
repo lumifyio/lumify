@@ -1,0 +1,93 @@
+<div class="empty-graph" style="display:none"></div>
+<div class="cytoscape-container" tabindex="1"></div>
+
+<div>
+<ul class="graph-context-menu dropdown-menu" role="menu">
+  <!-- TODO
+  <li><a tabindex="-1" href="#">Undo</a></li>
+  <li><a tabindex="-1" href="#">Redo</a></li>
+  <li class="divider"></li>
+  -->
+  <li><a class="has-shortcut" data-func="fitToWindow" tabindex="-1" href="#">Fit to Window<span class="shortcut">alt+f</span></a></li>
+
+  <li class="divider"></li>
+
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#">Layout</a>
+    <ul class="dropdown-menu">
+      <li><a data-func="layout" data-args='["circle"]' tabindex="-1" href="#">Circle</a></li>
+      <li><a data-func="layout" data-args='["grid"]' tabindex="-1" href="#">Grid</a></li>
+      <li><a data-func="layout" data-args='["random"]' tabindex="-1" href="#">Random</a></li>
+      <li><a data-func="layout" data-args='["breadthfirst"]' tabindex="-1" href="#">Hierarchical</a></li>
+      <li><a data-func="layout" data-args='["arbor"]' tabindex="-1" href="#">Force Directed</a></li>
+    </ul>
+  </li>
+
+  <li class="dropdown-submenu layout-multi">
+    <a tabindex="-1" href="#">Layout Selection</a>
+    <ul class="dropdown-menu">
+      <li><a data-func="layout" data-args='["circle",{"onlySelected":true}]' tabindex="-1" href="#">Circle</a></li>
+      <li><a data-func="layout" data-args='["grid", {"onlySelected":true}]' tabindex="-1" href="#">Grid</a></li>
+      <li><a data-func="layout" data-args='["random", {"onlySelected":true}]' tabindex="-1" href="#">Random</a></li>
+      <li><a data-func="layout" data-args='["breadthfirst", {"onlySelected":true}]' tabindex="-1" href="#">Hierarchical</a></li>
+      <li><a data-func="layout" data-args='["arbor", {"onlySelected":true}]' tabindex="-1" href="#">Force Directed</a></li>
+    </ul>
+  </li>
+
+  <li class="divider"></li>
+
+  <li><a data-func="zoom" data-args="[2]" tabindex="-1" href="#">Zoom 2x</a></li>
+  <li><a data-func="zoom" data-args="[1]" tabindex="-1" href="#">Zoom 1x</a></li>
+  <li><a data-func="zoom" data-args="[0.5]" tabindex="-1" href="#">Zoom &#189;x</a></li>
+</ul>
+</div>
+
+<div>
+<ul class="vertex-context-menu dropdown-menu" role="menu">
+  <li><a class="has-shortcut" data-func="connect" tabindex="-1" href="#">Connect...
+    <span title="Hold ctrl and drag from source vertex to target vertex" class="shortcut">CTRL+drag</span>
+  </a></li>
+  <li><a class="has-shortcut has-subtitle" data-func="findShortestPath" data-args="[1]" tabindex="-1" href="#">Find Path...<span title="Hold ctrl and drag from source vertex to target vertex" class="shortcut">CTRL+drag</span></a></li>
+
+  <li class="divider"></li>
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#">Search...</a>
+    <ul class="dropdown-menu">
+        <li><a class="has-shortcut searchFor" tabindex="-1" data-func="searchFor" data-template="&quot;{title}&quot;" href="#"><span class="shortcut">alt+t</span></a></li>
+        <li><a class="has-shortcut" data-func="searchRelated" tabindex="-1" href="#">Related Items<span class="shortcut">alt+s</span></a></li>
+    </ul>
+  </li>
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#">Add Related...</a>
+    <ul class="dropdown-menu">
+      <li><a class="has-shortcut has-subtitle" data-func="loadRelatedItems" tabindex="-1" href="#">Items<span class="shortcut">alt+r</span></a></li>
+        <li class="divider"></li>
+        <% firstLevelConcepts.forEach(function(concept) { %>
+            <li><a data-func="loadRelatedItemsOfConcept" data-args="[<%= concept.id %>]" tabindex="-1" href="#"><%= concept.pluralDisplayName %></a></li>
+        <% }) %>
+    </ul>
+  </li>
+  <!--li class="dropdown-submenu">
+    <a tabindex="-1" href="#">Find Paths With Up To...</a>
+    <ul class="dropdown-menu">
+        <% pathHopOptions.forEach(function(pathHops) { %>
+            <li><a data-func="findShortestPath" data-args="[<%= pathHops %>]" tabindex="-1" href="#"><%= pathHops %> hops...</a></li>
+        <% }) %>
+    </ul>
+  </li-->
+
+  <li class="divider"></li>
+  <li><a class="has-shortcut has-subtitle" data-func="removeItem" tabindex="-1" href="#">Remove
+    <span class="shortcut">delete</span>
+    <span class="subtitle">Remove from workspace</span>
+  </a></li>
+</ul>
+</div>
+
+<div>
+<ul class="edge-context-menu dropdown-menu" role="menu">
+  <li><a data-func="deleteEdge" tabindex="-1" href="#">Remove Relationship</a></li>
+</ul>
+</div>
+
+<div class="controls"></div>
