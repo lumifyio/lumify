@@ -1,5 +1,8 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.Direction;
@@ -13,17 +16,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Singleton
 public class OntologyRepository {
@@ -185,6 +184,10 @@ public class OntologyRepository {
     public List<Concept> getChildConcepts(Concept concept) {
         Vertex conceptVertex = graph.getVertex(concept.getId(), user.getAuthorizations());
         return toConcepts(conceptVertex.getVertices(Direction.IN, LabelName.IS_A.toString(), user.getAuthorizations()));
+    }
+
+    public Concept getParentConcept(final Concept concept) {
+        return getParentConcept(concept.getId().toString());
     }
 
     public Concept getParentConcept(String conceptId) {
