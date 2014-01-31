@@ -103,7 +103,6 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-nosql</artifactId>
             <version>${jetty.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
