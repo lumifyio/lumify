@@ -7,13 +7,11 @@ import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 
 public class LumifyBigTableJettySessionManager extends BigTableJettySessionManager {
-    private static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
-
     protected LumifyBigTableJettySessionManager() {
         super(createModelSession());
     }
 
     private static ModelSession createModelSession() {
-        return InjectHelper.getInstance(ModelSession.class, LumifyBootstrap.bootstrapModuleMaker(Configuration.loadConfigurationFile(CONFIGURATION_LOCATION)));
+        return InjectHelper.getInstance(ModelSession.class, LumifyBootstrap.bootstrapModuleMaker(Configuration.loadConfigurationFile()));
     }
 }
