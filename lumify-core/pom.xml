@@ -86,6 +86,10 @@
             <artifactId>securegraph-accumulo</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-guice</artifactId>
+        </dependency>
+        <dependency>
             <groupId>storm</groupId>
             <artifactId>storm</artifactId>
             <scope>${cluster.dependency.scope}</scope>
