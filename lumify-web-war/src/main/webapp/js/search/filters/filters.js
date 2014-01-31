@@ -96,8 +96,12 @@ define([
 
         this.onRemoveEntityRow = function(event, data) {
             var target = $(event.target),
-                key = target.closest('.entity-filter-row').remove().data('filterKey');
+                row = target.closest('.entity-filter-row'),
+                section = row.closest('.entity-filters'),
+                key = row.data('filterKey');
 
+            row.remove();
+            section.hide();
             delete this.entityFilters[key];
             this.notifyOfFilters();
         };
