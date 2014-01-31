@@ -62,7 +62,7 @@ public class GraphUtil {
                 propertiesJson.put("latitude", latlong[0]);
                 propertiesJson.put("longitude", latlong[1]);
             } else {
-                propertiesJson.put(property.getName(), property.getValue().toString());
+                propertiesJson.put(property.getName(), property.getValue());
             }
         }
         return propertiesJson;

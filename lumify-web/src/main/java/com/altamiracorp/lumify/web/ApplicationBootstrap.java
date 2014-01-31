@@ -35,7 +35,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
         try {
             if (context != null) {
                 final Configuration config = fetchApplicationConfiguration(context);
-                LOGGER.info("Running application with configuration: %s", config);
+                LOGGER.info("Running application with configuration:\n%s", config);
 
                 InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(config));
 

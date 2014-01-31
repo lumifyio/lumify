@@ -22,6 +22,7 @@ import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -120,9 +121,7 @@ public abstract class BaseArtifactProcessor {
     }
 
     @Inject
-    public final void setUser(final User user) {
-        this.user = user;
-    }
+    public final void setUser(final UserProvider user) { this.user = user.getSystemUser(); }
 
     public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey) {
         return findOrPrepareArtifactVertex(getGraph(), getUser(), rowKey);

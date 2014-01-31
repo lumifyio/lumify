@@ -6,12 +6,14 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+
+import static com.altamiracorp.lumify.core.util.CollectionUtil.toIterable;
 
 public class VertexMultiple extends BaseRequestHandler {
     private final Graph graph;
@@ -23,30 +25,22 @@ public class VertexMultiple extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String[] vertexIds = request.getParameterValues("vertexIds[]");
+        String[] vertexStringIds = request.getParameterValues("vertexIds[]");
         User user = getUser(request);
 
-        List<Vertex> graphVertices = findAllVertices(vertexIds, user);
-
-        Iterator<Vertex> i = graphVertices.iterator();
-        JSONArray results = new JSONArray();
-        while (i.hasNext()) {
-            Vertex vertex = i.next();
-            if (vertex == null) {
-                i.remove();
-            } else {
-                results.put(GraphUtil.toJson(vertex));
+        Iterable<Object> vertexIds = new ConvertingIterable<String, Object>(toIterable(vertexStringIds)) {
+            @Override
+            protected Object convert(String s) {
+                return s;
             }
+        };
+
+        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, user.getAuthorizations());
+        JSONArray results = new JSONArray();
+        for (Vertex v : graphVertices) {
+            results.put(GraphUtil.toJson(v));
         }
 
-        respondWithJson(response,results);
-    }
-
-    private List<Vertex> findAllVertices (String[] vertexIds, User user) {
-        List<Vertex> vertices = new ArrayList<Vertex>();
-        for (String id : vertexIds) {
-            vertices.add(graph.getVertex(id, user.getAuthorizations()));
-        }
-        return vertices;
+        respondWithJson(response, results);
     }
 }

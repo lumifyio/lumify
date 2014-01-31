@@ -58,7 +58,7 @@ public class LumifyBootstrap extends AbstractModule {
 
     public synchronized static LumifyBootstrap bootstrap(final Configuration configuration) {
         if (lumifyBootstrap == null) {
-            LOGGER.debug("Initializing LumifyBootstrap with Configuration: %s", configuration);
+            LOGGER.debug("Initializing LumifyBootstrap with Configuration:\n%s", configuration);
             lumifyBootstrap = new LumifyBootstrap(configuration);
         }
         return lumifyBootstrap;
@@ -285,6 +285,7 @@ public class LumifyBootstrap extends AbstractModule {
         public T get() {
             Throwable error;
             try {
+                LOGGER.debug("creating %s", this.clazz.getName());
                 T impl = constructor.newInstance(constructorArgs);
                 InjectHelper.inject(impl);
                 if (initMethod != null) {
