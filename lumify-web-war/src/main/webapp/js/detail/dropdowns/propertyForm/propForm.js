@@ -23,6 +23,7 @@ define([
             saveButtonSelector: '.btn-primary',
             deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
+            visibilitySelector: '.visibility',
             propertyInputSelector: '.input-row input'
         });
 
@@ -42,6 +43,7 @@ define([
             this.on('propertychange', this.onPropertyChange);
             this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('propertyselected', this.onPropertySelected);
+            this.on('visibilitychange', this.onVisibilityChange);
 
             this.$node.html(template({}));
 
@@ -83,11 +85,13 @@ define([
             var self = this,
                 property = data.property,
                 propertyName = property.title,
-                config = self.select('configurationSelector');
+                config = self.select('configurationSelector'),
+                visibility = self.select('visibilitySelector');
 
             this.currentProperty = property;
 
             config.teardownAllComponents();
+            visibility.teardownAllComponents();
 
             var previousValue = this.attr.data.properties[propertyName],
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
@@ -113,8 +117,18 @@ define([
                             predicates: false
                         });
                     });
+                    require(['configuration/plugins/visibility/visibility'], function(Visibility) {
+                        Visibility.attachTo(visibility, {
+                            // TODO
+                            value: ''
+                        });
+                    });
                 } else console.warn('Property ' + propertyName + ' not found in ontology');
             });
+        };
+
+        this.onVisibilityChange = function(event, data) {
+            console.log(data);
         };
 
         this.onPropertyInvalid = function (event, data) {
