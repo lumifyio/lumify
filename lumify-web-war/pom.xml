@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lumify-all</artifactId>
+        <groupId>lumify-all</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>lumify-web-war</artifactId>
+    <packaging>${packaging.type}</packaging>
+
+    <name>Lumify: Web Interface War</name>
+
+    <properties>
+        <!-- Default Jetty Configuration Properties -->
+        <jetty.port>8080</jetty.port>
+        <jetty.ssl.port>8443</jetty.ssl.port>
+        <jetty.maxIdleTime>60000</jetty.maxIdleTime>
+
+        <!-- Default packaging is jar.  Use web-war profile to package as war. -->
+        <packaging.type>jar</packaging.type>
+        <!-- Grunt Execution Target.  Valid values are [ development | production ] -->
+        <grunt.target>development</grunt.target>
+
+        <!-- Maven Plugin Versions -->
+        <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
+        <plugin.maven.war.version>2.4</plugin.maven.war.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/lumify-build.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/lumify-build.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${plugin.maven.exec.version}</version>
+                <executions>
+                    <!-- Install all webapp dependencies -->
+                    <execution>
+                        <id>WebApp Dependencies and Minification</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${basedir}/src/main/scripts/grunt.sh</executable>
+                            <commandlineArgs>${grunt.target}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>web-war</id>
+            <properties>
+                <packaging.type>war</packaging.type>
+                <grunt.target>production</grunt.target>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${plugin.maven.war.version}</version>
+                        <configuration>
+                            <warSourceExcludes>
+                                index.html,
+                                test/**,
+                                Gruntfile.js,
+                                karma.conf.js,
+                                bower.json,
+                                node_modules/**,
+                                libs/sinon/**,
+                                libs/sinon-chai/**,
+                                libs/flight-mocha/**,
+                                libs/chai/**
+                            </warSourceExcludes>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                                <manifestEntries>
+                                    <Built-On>${build.timestamp.formatted}</Built-On>
+                                    <Built-On-Unix>${timestamp}</Built-On-Unix>
+                                    <Git-Revision>${buildNumber}</Git-Revision>
+                                </manifestEntries>
+                            </archive>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>index.html</include>
+                                        <include>ping.html</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -43,6 +43,7 @@
         <module>lumify-storm</module>
         <module>lumify-web</module>
         <module>lumify-web-server</module>
+        <module>lumify-web-war</module>
         <module>lumify-tools</module>
     </modules>
     
