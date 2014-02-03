@@ -3,7 +3,7 @@
 
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
     <New id="sessionManager"
-         class="com.altamiracorp.lumify.web.session.LumifyBigTableJettySessionManager.LumifyBigTableJettySessionManager"/>
+         class="com.altamiracorp.lumify.web.session.LumifyBigTableJettySessionManager"/>
     <Get id="server" name="server"/>
 
     <Set name="sessionHandler">

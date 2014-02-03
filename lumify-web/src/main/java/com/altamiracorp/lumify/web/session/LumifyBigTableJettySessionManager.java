@@ -7,7 +7,7 @@ import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 
 public class LumifyBigTableJettySessionManager extends BigTableJettySessionManager {
-    protected LumifyBigTableJettySessionManager() {
+    public LumifyBigTableJettySessionManager() {
         super(createModelSession());
     }
 
