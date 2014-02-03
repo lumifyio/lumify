@@ -116,7 +116,8 @@ define([
             return this.$node.find('.' + conceptId + ' .badge')
                 .removeClass('loading')
                 .data('count', count)
-                .text(formatters.number.pretty(count));
+                .attr('title', formatters.number.pretty(count))
+                .text(formatters.number.prettyApproximate(count));
         };
 
         this.popoutIfNeeded = function() {
