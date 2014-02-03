@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
@@ -10,6 +11,8 @@ import org.json.JSONObject;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GraphUtil {
     public static JSONArray toJson(Collection<Element> elements) {
@@ -103,5 +106,28 @@ public class GraphUtil {
         }
 
         return result;
+    }
+
+    public static ElementMutation setProperty(Element element, String propertyName, Object value, String visibilitySource, VisibilityTranslator visibilityTranslator) {
+        Property oldProperty = element.getProperty(propertyName);
+        Map<String, Object> propertyMetadata;
+        if (oldProperty != null) {
+            propertyMetadata = oldProperty.getMetadata();
+        } else {
+            propertyMetadata = new HashMap<String, Object>();
+        }
+        ElementMutation elementMutation = element.prepareMutation();
+
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
+        propertyMetadata.put(PropertyName.VISIBILITY_SOURCE.toString(), visibilitySource);
+
+        if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
+            GeoPoint geoPoint = (GeoPoint) value;
+            elementMutation.setProperty(PropertyName.GEO_LOCATION.toString(), geoPoint, propertyMetadata, visibility);
+            elementMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", propertyMetadata, visibility);
+        } else {
+            elementMutation.setProperty(propertyName, value, propertyMetadata, visibility);
+        }
+        return elementMutation;
     }
 }

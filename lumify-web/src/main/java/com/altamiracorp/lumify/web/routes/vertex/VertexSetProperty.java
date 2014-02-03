@@ -12,7 +12,10 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -20,8 +23,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -66,27 +67,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        Property oldProperty = graphVertex.getProperty(propertyName);
-        Map<String, Object> propertyMetadata;
-        if (oldProperty != null) {
-            propertyMetadata = oldProperty.getMetadata();
-        } else {
-            propertyMetadata = new HashMap<String, Object>();
-        }
-        ElementMutation<Vertex> graphVertexMutation = graphVertex.prepareMutation();
-
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
-        propertyMetadata.put(PropertyName.VISIBILITY_SOURCE.toString(), visibilitySource);
-
-        if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            String[] latlong = valueStr.substring(valueStr.indexOf('(') + 1, valueStr.indexOf(')')).split(",");
-            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latlong[0]), Double.parseDouble(latlong[1]));
-            graphVertexMutation.setProperty(PropertyName.GEO_LOCATION.toString(), geoPoint, propertyMetadata, visibility);
-            graphVertexMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", propertyMetadata, visibility);
-        } else {
-            graphVertexMutation.setProperty(propertyName, value, propertyMetadata, visibility);
-        }
-
+        ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator);
         auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
         graphVertex = graphVertexMutation.save();
         graph.flush();
