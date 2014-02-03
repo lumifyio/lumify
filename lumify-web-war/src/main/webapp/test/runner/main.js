@@ -7,6 +7,7 @@ requirejs.config({
         '/base/js/require.config.js': { exports: 'require' }
     }
 });
+
 requirejs(['/base/js/require.config.js'], function(cfg) {
 
     var requireConfig = $.extend(true, {}, cfg, {

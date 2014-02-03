@@ -7,7 +7,7 @@ describeComponent('search/search', function(Search) {
     });
 
 
-    describe.only('search', function() {
+    describe('search', function() {
 
         it("should initialize", function() {
             var c = this.component;
