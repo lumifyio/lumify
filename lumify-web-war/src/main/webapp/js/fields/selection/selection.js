@@ -22,7 +22,7 @@ define([
 
             this.$node.html(template({placeholder:this.attr.placeholder}));
 
-            if (this.attr.properties.length === 0) {
+            if (this.attr.properties.length.value === 0) {
                 this.select('findPropertySelection')
                     .attr('placeholder', 'No valid properties')
                     .attr('disabled', true);

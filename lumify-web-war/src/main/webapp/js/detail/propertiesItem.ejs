@@ -11,6 +11,6 @@
   <% } %>
 </span>
 <% } else { %>
-<span class="value"><%= property.value !== undefined && property.value !== null ? property.value : '' %></span>
+<span class="value"><%= property.value !== undefined && property.value !== null ? property.value.value : '' %></span>
 <% } %>
 </li>

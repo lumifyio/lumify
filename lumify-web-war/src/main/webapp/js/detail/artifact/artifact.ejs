@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<h1 class="generic-draggable artifact-title" data-vertex-id='<%= vertex.id %>'><%= vertex.properties.title %></h1>
+<h1 class="generic-draggable artifact-title" data-vertex-id='<%= vertex.id %>'><%= vertex.properties.title.value %></h1>
 
 <% if(vertex.concept.displayType == 'video') { %>
   <div class="preview"/>
@@ -31,7 +31,7 @@
 <% } %>
 
 <div class='detected-object-labels'>
-  <% (vertex.properties._detectedObjects || []).forEach(function(object) {
+  <% ((vertex.properties._detectedObjects && vertex.properties._detectedObjects.value) || []).forEach(function(object) {
     if (object.graphVertexId) {
         var classes = 'label-info detected-object resolved entity conceptType-' + object._conceptType;%>
         <span class="label detected-object-tag">

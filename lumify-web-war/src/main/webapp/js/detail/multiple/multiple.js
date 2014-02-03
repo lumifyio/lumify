@@ -39,7 +39,7 @@ define([
         this.after('initialize', function () {
             var self = this,
                 vertices = this.attr.data.filter(function (v) {
-                    return v.properties._type != 'relationship';
+                    return v.properties._type.value != 'relationship';
                 }),
                 ids = _.pluck(vertices, 'id');
 
@@ -97,8 +97,8 @@ define([
 
             var self = this,
                 moduleName = (
-                    (first.properties._type != 'artifact' && first.properties._type != 'relationship') ? 'entity' : 
-                    (first.properties._type || 'entity')
+                    (first.properties._type.value != 'artifact' && first.properties._type.value != 'relationship') ? 'entity' :
+                    (first.properties._type.value || 'entity')
                 ).toLowerCase();
 
             this._selectedGraphId = first.id;

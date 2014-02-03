@@ -112,8 +112,8 @@ define([
                         if (cyA.length && !cyB.length) return 1;
                         if (cyB.length && !cyA.length) return -1;
 
-                        var titleA = a.properties.title.toLowerCase(),
-                            titleB = b.properties.title.toLowerCase();
+                        var titleA = a.properties.title.value.toLowerCase(),
+                            titleB = b.properties.title.value.toLowerCase();
 
                         return titleA < titleB ? -1 : titleB < titleA ? 1 : 0;
                     });
@@ -355,14 +355,14 @@ define([
         this.classesForVertex = function(vertex) {
             var cls = [];
 
-            if (vertex.properties._conceptType) cls.push('concept-' + vertex.properties._conceptType);
-            if (vertex.properties._glyphIcon) cls.push('hasCustomGlyph');
+            if (vertex.properties._conceptType.value) cls.push('concept-' + vertex.properties._conceptType.value);
+            if (vertex.properties._glyphIcon.value) cls.push('hasCustomGlyph');
             
             return cls.join(' ');
         };
 
         this.updateCyNodeData = function (data, vertex) {
-            var truncatedTitle = vertex.properties.title || "No title available";
+            var truncatedTitle = vertex.properties.title.value || "No title available";
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";

@@ -56,7 +56,7 @@ define([], function() {
                 if (_.isArray(json) && json.length && json[0].id && json[0].properties) {
                     json.forEach(function(vertex) {
                         var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer = true;
+                        cache.properties._refreshedFromServer.value = true;
                         $.extend(true, vertex, cache);
                         updated.push(cache);
                     });
@@ -126,7 +126,7 @@ define([], function() {
                             });
                         }
                     } catch(e) {
-                        console.error('Request failed in prefilter cache phase', e && e.message || e);
+                        console.error('Request failed in prefilter cache phase', e.stack || e.message);
                     }
                     return json;
                 };

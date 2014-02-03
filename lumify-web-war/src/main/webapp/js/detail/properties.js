@@ -260,11 +260,11 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties._type === 'relationship') {
+            if (self.attr.data.properties._type.value === 'relationship') {
                 self.relationshipService.deleteProperty(
                         data.property.name,
-                        this.attr.data.properties.source,
-                        this.attr.data.properties.target,
+                        this.attr.data.properties.source.value,
+                        this.attr.data.properties.target.value,
                         this.attr.data.id)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
@@ -291,13 +291,13 @@ define([
         this.onAddProperty = function (event, data) {
             var self = this;
 
-            if (self.attr.data.properties._type === 'relationship') {
+            if (self.attr.data.properties._type && self.attr.data.properties._type === 'relationship') {
                 self.relationshipService.setProperty(
                         data.property.name,
                         data.property.value,
-                        this.attr.data.properties.source,
-                        this.attr.data.properties.target,
-                        this.attr.data.properties.id)
+                        this.attr.data.properties.source.value,
+                        this.attr.data.properties.target.value,
+                        this.attr.data.properties.id.value)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
