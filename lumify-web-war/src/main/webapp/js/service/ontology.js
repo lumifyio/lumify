@@ -114,7 +114,8 @@ define(
             }).then(function(response) {
                 return {
                     list: response.relationships,
-                    byTitle: buildRelationshipsByTitle(response.relationships)
+                    byTitle: buildRelationshipsByTitle(response.relationships),
+                    byId: buildRelationshipsById(response.relationships)
                 };
             }).always(function(data) {callback(null, data); });
 
@@ -124,6 +125,14 @@ define(
                 var result = {};
                 relationships.forEach(function (relationship) {
                     result[relationship.title] = relationship;
+                });
+                return result;
+            }
+
+            function buildRelationshipsById(relationships) {
+                var result = {};
+                relationships.forEach(function (relationship) {
+                    result[relationship.id] = relationship;
                 });
                 return result;
             }

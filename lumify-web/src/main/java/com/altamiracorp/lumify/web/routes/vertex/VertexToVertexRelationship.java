@@ -1,10 +1,13 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,10 +44,8 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
         Edge edge = graph.getEdge(id, user.getAuthorizations());
 
         JSONArray propertyJson = new JSONArray();
-        JSONObject property = new JSONObject();
-        Iterator<Property> propertyIterator = edge.getProperties().iterator();
-        while (propertyIterator.hasNext()) {
-            Property edgeProperty = propertyIterator.next();
+        for (Property edgeProperty : edge.getProperties()) {
+            JSONObject property = new JSONObject();
             property.put("key", edgeProperty.getName());
             String displayName = ontologyRepository.getDisplayNameForLabel(edgeProperty.getValue().toString());
             if (displayName == null) {
@@ -54,6 +55,7 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
             }
             propertyJson.put(property);
         }
+
         results.put("properties", propertyJson);
 
         respondWithJson(response, results);
