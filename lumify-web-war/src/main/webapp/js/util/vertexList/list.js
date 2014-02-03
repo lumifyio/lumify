@@ -31,7 +31,7 @@ define([
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && !!(
-                        vertex.properties.geoLocation || 
+                        vertex.properties.geoLocation ||
                         (vertex.location || (vertex.locations && vertex.locations.length)) ||
                         (vertex.properties.latitude && vertex.properties.longitude)
                 )
@@ -258,10 +258,10 @@ define([
 
                         li.data('previewloaded', true).addClass('preview-loading');
 
-                        if (vertex.properties._glyphIcon) {
+                        if (vertex.properties._glyphIcon.value) {
                             li.removeClass('preview-loading')
                                 .data('preview-loaded', true)
-                                .find('.preview').html("<img src='" + vertex.properties._glyphIcon + "' />");
+                                .find('.preview').html("<img src='" + vertex.properties._glyphIcon.value + "' />");
                         } else {
                             previews.generatePreview(vertex, { width: 200 }, function(poster, frames) {
                                 li.removeClass('preview-loading')
@@ -348,7 +348,7 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.properties._glyphIcon || 
+                    src = (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) ||
                         (
                             vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
                             vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null

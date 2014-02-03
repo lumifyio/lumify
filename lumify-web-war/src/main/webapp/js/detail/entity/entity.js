@@ -61,7 +61,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(vertex.properties.title);
+                    self.select('titleSelector').html(vertex.properties.title.value);
                 }
             });
         };
@@ -73,7 +73,7 @@ define([
                 this.handleCancelling(appData.refresh(this.attr.data)),
                 this.handleCancelling(ontologyService.concepts())
             ).done(function(vertex, concepts) {
-                var concept = concepts.byId[self.attr.data.properties._conceptType];
+                var concept = concepts.byId[self.attr.data.properties._conceptType.value];
 
                 self.$node.html(template({
                     vertex: self.attr.data,
@@ -167,7 +167,7 @@ define([
 
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
-                    return defaultSort(a.vertex.properties.title, b.vertex.properties.title);
+                    return defaultSort(a.vertex.properties.title.value, b.vertex.properties.title.value);
                 }
 
                 // Specifies the special group sort order

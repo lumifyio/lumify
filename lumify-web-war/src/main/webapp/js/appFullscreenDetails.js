@@ -130,7 +130,7 @@ define([
                 // TODO: Image/Video before documents
 
                 // Sort by title
-                descriptors.push(v.properties.title);
+                descriptors.push(v.properties.title.value);
                 return descriptors.join(''); 
             });
 
@@ -230,7 +230,7 @@ define([
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
-                            document.title = '"' + newVerticesById[newVertexIds[0]].properties.title + '" added';
+                            document.title = '"' + newVerticesById[newVertexIds[0]].properties.title.value + '" added';
                         } else {
                             document.title = newVertexIds.length + ' items added';
                         }
@@ -255,9 +255,9 @@ define([
             });
             
             if (sorted.length === 1) {
-                return sorted[0].properties.title;
+                return sorted[0].properties.title.value;
             } else {
-                var first = '"' + sorted[0].properties.title + '"',
+                var first = '"' + sorted[0].properties.title.value + '"',
                     l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');

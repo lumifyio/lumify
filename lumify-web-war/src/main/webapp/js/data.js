@@ -213,10 +213,10 @@ define([
             var self = this,
                 edge = data.edges[0];
             this.vertexService.deleteEdge(
-                edge.properties.source,
-                edge.properties.target,
-                edge.properties.relationshipType,
-                edge.properties.id).done(function() {
+                edge.properties.source.value,
+                edge.properties.target.value,
+                edge.properties.relationshipType.value,
+                edge.properties.id.value).done(function() {
                     if (_.findWhere(self.selectedEdges, { id:edge.id })) {
                         self.trigger('selectObjects');
                     }
@@ -238,9 +238,9 @@ define([
                 var needsRefreshing = data.vertices.filter(function(v) { 
                         var cached = self.vertex(v.id);
                         if (!cached) {
-                            return !v.properties || !v.properties._refreshedFromServer;
+                            return !v.properties || !v.properties._refreshedFromServer.value;
                         }
-                        return !cached.properties._refreshedFromServer;
+                        return !cached.properties._refreshedFromServer.value;
                     }),
                     passedWorkspace = {};
 
@@ -262,7 +262,7 @@ define([
                     vertices = self.vertices(vertices);
 
                     vertices.forEach(function(vertex) {
-                        vertex.properties._refreshedFromServer = true;
+                        vertex.properties._refreshedFromServer.value = true;
                         if (passedWorkspace[vertex.id]) {
                             vertex.workspace = $.extend(vertex.workspace, passedWorkspace[vertex.id]);
                         }
@@ -317,6 +317,8 @@ define([
 
         this.onUpdateVertices = function(evt, data) {
             var self = this;
+
+            console.log(data);
 
             this.workspaceReady(function(ws) {
                 var undoData = { noUndo: true, vertices: [] };
@@ -416,7 +418,7 @@ define([
             var self = this,
                 vertices = data && data.vertices || [],
                 selectedIds = _.pluck(vertices, 'id'),
-                selected = _.groupBy(vertices, function(v) { return v.properties._type === 'relationship' ? 'edges' : 'vertices'; });
+                selected = _.groupBy(vertices, function(v) { return v.properties._type ? 'edges' : 'vertices'; });
 
             selected.vertices = selected.vertices || [];
             selected.edges = selected.edges || [];
@@ -623,7 +625,7 @@ define([
                         delete workspaceData.dropPosition;
 
                         var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer = true;
+                        cache.properties._refreshedFromServer.value = true;
                         cache.workspace = workspaceData || {};
                         cache.workspace.selected = false;
                         self.workspaceVertices[vertex.id] = cache.workspace;
