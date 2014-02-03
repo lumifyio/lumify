@@ -28,9 +28,12 @@ width: 175px;
   z-index: 89;  // so it floats above graph, but below splitbar handles
 }
 
-.search-results-summary a {
-  cursor: pointer;
+.search-results-summary {
+  cursor: default;
   .disable-text-selection;
+  a {
+    cursor: pointer;
+  }
 }
 
 .search-results-summary.nav-list > li {

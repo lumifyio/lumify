@@ -51,3 +51,9 @@ var require = {
     }
 };
 
+
+if ('define' in window) {
+    define([], function() {
+        return require;
+    });
+}

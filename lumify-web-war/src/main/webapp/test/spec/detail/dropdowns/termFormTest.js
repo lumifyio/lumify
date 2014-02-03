@@ -202,7 +202,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
                 .to.equal('Amazon <span class="entity subType-2 focused">Web</span>');
 
             // Don't preselect value based on inner span
-            expect(this.$node.find('select').val()).to.equal("");
+            expect(this.$node.find('select').val()).to.match(/^(Loading\.\.\.)?$/)
 
             expect(this.$node.find('.object-sign').val()).to.equal('Amazon Web');
         });
