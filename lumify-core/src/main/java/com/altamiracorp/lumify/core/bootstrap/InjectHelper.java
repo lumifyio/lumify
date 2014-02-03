@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.bootstrap;
 
+import com.fasterxml.jackson.module.guice.ObjectMapperModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -9,7 +10,7 @@ public class InjectHelper {
 
     public static void inject(Object o, ModuleMaker moduleMaker) {
         if (injector == null) {
-            injector = Guice.createInjector(moduleMaker.createModule());
+            injector = Guice.createInjector(moduleMaker.createModule(), new ObjectMapperModule());
         }
         inject(o);
     }
