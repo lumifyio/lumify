@@ -1,5 +1,4 @@
 
-
 define(['util/undoManager'], function(undoManager) {
 
     var _ = function() { };

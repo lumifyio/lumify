@@ -51,14 +51,40 @@ define(['sf'], function() {
         return special[character.toLowerCase()] || character.toUpperCase().charCodeAt(0);
     }
 
+    function decimalAdjust(type, value, exp) {
+		// If the exp is undefined or zero...
+		if (typeof exp === 'undefined' || +exp === 0) {
+			return Math[type](value);
+		}
+		value = +value;
+		exp = +exp;
+		// If the value is not a number or the exp is not an integer...
+		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+			return NaN;
+		}
+		// Shift
+		value = value.toString().split('e');
+		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+		// Shift back
+		value = value.toString().split('e');
+		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+	}
+
 
 
     var FORMATTERS = {
         number: {
             pretty: function(number) {
-                if (number >= 10000) {
-                    return (number / 10000).toFixed(1).replace(/.0$/,'') + 'K';
-                } else return sf('{0:#,###}', number);
+                return sf('{0:#,###,###,###}', number);
+            },
+            prettyApproximate: function(number) {
+                if (number >= 1000000000) {
+                    return (decimalAdjust('round', number/1000000000, -1) + 'B');
+                } else if (number >= 1000000) {
+                    return (decimalAdjust('round', number/1000000, -1) + 'M');
+                } else if (number >= 1000) {
+                    return (decimalAdjust('round', number/1000, -1) + 'K');
+                } else return FORMATTERS.number.pretty(number);
             }
         },
         geoLocation: {
