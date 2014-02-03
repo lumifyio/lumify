@@ -6,8 +6,6 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -43,7 +41,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
 
         String displayName = ontologyRepository.getDisplayNameForLabel(label);
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationships(AuditAction.DELETE.toString(), sourceVertex, destVertex, displayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user);
 
         graph.flush();
 

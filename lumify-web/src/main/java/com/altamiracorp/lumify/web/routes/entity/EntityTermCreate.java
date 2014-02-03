@@ -75,7 +75,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         }
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, createdVertex, labelDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user);
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);

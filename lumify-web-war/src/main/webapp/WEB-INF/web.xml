@@ -12,16 +12,6 @@
         <listener-class>com.altamiracorp.lumify.web.ApplicationBootstrap</listener-class>
     </listener>
 
-    <filter>
-      <filter-name>jetty-gzip</filter-name>
-      <filter-class>org.mortbay.servlet.GzipFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-      <filter-name>jetty-gzip</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <servlet>
         <description>AtmosphereServlet</description>
         <servlet-name>AtmosphereServlet</servlet-name>

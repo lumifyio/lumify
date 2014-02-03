@@ -54,6 +54,6 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
 //        JSONObject response = new JSONObject(responseStringWriter.getBuffer().toString());
 //        assertTrue(response.getBoolean("success"));
 //
-//        verify(mockAuditRepository, times(1)).auditRelationships(AuditAction.DELETE.toString(), mockSourceVertex, mockDestVertex, "label", "", "", mockUser);
+//        verify(mockAuditRepository, times(1)).auditRelationship(AuditAction.DELETE.toString(), mockSourceVertex, mockDestVertex, "label", "", "", mockUser);
     }
 }

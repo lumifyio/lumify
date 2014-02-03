@@ -54,8 +54,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(ACTION));
     }
 
-    public AuditCommon setAction(String action) {
-        set(ACTION, action);
+    public AuditCommon setAction(AuditAction action) {
+        set(ACTION, action.toString());
         return this;
     }
 

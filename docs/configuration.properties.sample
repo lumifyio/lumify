@@ -6,8 +6,6 @@ map.tileServer.port= # e.g. 9999
 
 # Providers 
 model.provider=com.altamiracorp.bigtable.model.accumulo.AccumuloSession
-graph.provider=com.altamiracorp.lumify.model.TitanGraphSession
-search.provider=com.altamiracorp.lumify.search.ElasticSearchProvider
 authentication.provider=com.altamiracorp.lumify.web.SessionAuthenticationProvider
 fs.provider= com.altamiracorp.lumify.fs.hdfs.HdfsSession
 work-queue-repository=com.altamiracorp.lumify.model.KafkaWorkQueueRepository
@@ -37,3 +35,5 @@ graph.idgenerator=com.altamiracorp.securegraph.id.UUIDIdGenerator
 graph.search=com.altamiracorp.securegraph.elasticsearch.ElasticSearchSearchIndex
 graph.search.locations=192.168.33.10
 graph.search.indexName=securegraph
+graph.hdfs.rootDir=hdfs://192.168.33.10/
+graph.hdfs.dataDir=secureGraph
