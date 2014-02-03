@@ -107,6 +107,10 @@ define([
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
                 helpDialog = content.filter('.help-dialog');
 
+            // Configure splitpane resizing
+            resizable(searchPane, 'e', 150, 250, this.onPaneResize.bind(this));
+            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
+            resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
             WorkspaceOverlay.attachTo(content.filter('.workspace-overlay'));
             MouseOverlay.attachTo(document);
@@ -119,13 +123,7 @@ define([
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
             Detail.attachTo(detailPane.find('.content'));
-
             Help.attachTo(helpDialog);
-
-            // Configure splitpane resizing
-            resizable(searchPane, 'e', 160, 200, this.onPaneResize.bind(this));
-            resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
-            resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
             this.$node.html(content);
 
