@@ -62,7 +62,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         edge.setProperty(propertyName, value, new Visibility(""));
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperties(AuditAction.DELETE.toString(), sourceId, destId, propertyName, oldValue, edge, "", "", user);
+        auditRepository.auditRelationshipProperties(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user);
 
         // TODO get all properties from all edges?
         List<com.altamiracorp.securegraph.Property> properties = new ArrayList<com.altamiracorp.securegraph.Property>();

@@ -101,7 +101,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationships(AuditAction.CREATE.toString(), entityVertex, artifactVertex, labelDisplay, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user);
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 

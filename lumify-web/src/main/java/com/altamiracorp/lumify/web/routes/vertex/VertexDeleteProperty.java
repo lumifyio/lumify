@@ -40,7 +40,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graphVertex.removeProperty(propertyName);
         graph.flush();
 
-        auditRepository.auditEntityProperties(AuditAction.DELETE.toString(), graphVertex, propertyName, oldValue, null,  "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.DELETE, graphVertex, propertyName, oldValue, null,  "", "", user);
 
         // TODO: broadcast property delete
 
