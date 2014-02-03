@@ -128,6 +128,7 @@ define([
         };
 
         this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data;
             console.log(data);
         };
 
@@ -171,7 +172,7 @@ define([
         };
 
         this.onSave = function (evt) {
-            if (this.invalid) return;
+            if (this.invalid || !this.visibilitySource || !this.visibilitySource.valid) return;
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
@@ -184,7 +185,8 @@ define([
                 this.trigger('addProperty', {
                     property: {
                         name: propertyName,
-                        value: value
+                        value: value,
+                        visibilitySource: this.visibilitySource.value
                     }
                 });
             }
