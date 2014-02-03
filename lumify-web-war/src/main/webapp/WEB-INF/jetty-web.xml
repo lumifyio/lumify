@@ -7,7 +7,7 @@
     <Get id="server" name="server"/>
 
     <Set name="sessionHandler">
-        <New class="org.eclipse.jetty.server.session.SessionHandler">
+        <New class="com.altamiracorp.bigtable.jetty.BigTableSessionHandler">
             <Arg>
                 <Ref id="sessionManager"/>
             </Arg>
