@@ -311,7 +311,8 @@ define([
                 self.vertexService.setProperty(
                     this.attr.data.id,
                     data.property.name,
-                    data.property.value)
+                    data.property.value,
+                    data.property.visibilitySource)
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);

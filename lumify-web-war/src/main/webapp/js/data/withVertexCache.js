@@ -103,6 +103,9 @@ define([
             } 
 
             cache.concept = this.cachedConcepts.byId[cache.properties._conceptType]
+            if (!cache.concept) {
+                console.error('Unable to attach concept to vertex', cache);
+            }
 
             if (cache.properties.latitude || cache.properties.longitude) {
                 $.extend(cache.properties.geoLocation || (cache.properties.geoLocation = {}), {
