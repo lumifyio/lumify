@@ -66,7 +66,7 @@ define([
                 }));
 
                 var properties = $.extend({}, data.properties);
-                properties.relationshipType = ontologyRelationships.byTitle[data.properties.relationshipType].displayName;
+                properties.relationshipType = (ontologyRelationships.byTitle[data.properties.relationshipType] || ontologyRelationships.byId[data.properties.relationshipType] || {}).displayName;
                 relationshipData[0].properties.forEach(function(prop) {
                     properties[prop.key] = prop.value;
                 });

@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
+    public static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
@@ -66,7 +67,7 @@ public final class Configuration {
             }
         }
     }
-    
+
     private Configuration(org.apache.commons.configuration.Configuration config) {
         this.config = config;
         if (this.config instanceof AbstractConfiguration) {
@@ -115,6 +116,10 @@ public final class Configuration {
 
     public void set(String propertyKey, Object value) {
         config.setProperty(propertyKey, value);
+    }
+
+    public static Configuration loadConfigurationFile() {
+        return loadConfigurationFile(CONFIGURATION_LOCATION);
     }
 
     public static Configuration loadConfigurationFile(String configDirectory) {
