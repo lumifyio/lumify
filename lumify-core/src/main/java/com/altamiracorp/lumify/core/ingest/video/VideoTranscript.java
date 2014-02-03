@@ -4,12 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class VideoTranscript {
+public class VideoTranscript implements Serializable {
     private SortedSet<TimedText> entries = new TreeSet<TimedText>();
 
     public VideoTranscript() {
@@ -80,7 +81,7 @@ public class VideoTranscript {
         return result.toString();
     }
 
-    public static class TimedText implements Comparable<TimedText> {
+    public static class TimedText implements Comparable<TimedText>, Serializable {
         private Time time;
         private String text;
 
@@ -152,7 +153,7 @@ public class VideoTranscript {
         }
     }
 
-    public static class Time {
+    public static class Time implements Serializable {
         private Long start;
         private Long end;
 

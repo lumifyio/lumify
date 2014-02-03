@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.model.audit;
 
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
@@ -13,7 +14,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -47,6 +47,10 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     public Audit auditVertexCreate(Object vertexId, String process, String comment, User user) {
+        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT);
+    }
+
+    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
@@ -55,7 +59,7 @@ public class AuditRepository extends Repository<Audit> {
         Audit audit = new Audit(AuditRowKey.build(vertexId));
         audit.getAuditCommon()
                 .setUser(user)
-                .setAction(AuditAction.CREATE.toString())
+                .setAction(auditAction)
                 .setType(OntologyRepository.TYPE_ENTITY.toString())
                 .setComment(comment)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -66,12 +70,12 @@ public class AuditRepository extends Repository<Audit> {
             audit.getAuditCommon().setProcess(process);
         }
 
-        save(audit, user.getModelUserContext());
+        save(audit, flushFlag, user.getModelUserContext());
         return audit;
     }
 
     public List<Audit> auditEntity(
-            String action,
+            AuditAction action,
             Object entityId,
             String artifactId,
             String entityTitle,
@@ -80,7 +84,6 @@ public class AuditRepository extends Repository<Audit> {
             String comment,
             User user) {
         checkNotNull(action, "action cannot be null");
-        checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(entityId, "entityId cannot be null");
         checkArgument(entityId.toString().length() > 0, "entityId cannot be empty");
         checkNotNull(artifactId, "artifactId cannot be null");
@@ -103,10 +106,9 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public Audit auditEntityProperties(String action, Object id, String propertyName, Object oldValue, Object newValue,
+    public Audit auditEntityProperties(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
                                        String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
-        checkArgument(action.length() > 0, "action cannot be empty");
         checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
         checkArgument(propertyName.length() > 0, "property name cannot be empty");
@@ -140,9 +142,8 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public List<Audit> auditRelationships(String action, Vertex sourceVertex, Vertex destVertex, String label, String process, String comment, User user) {
+    public List<Audit> auditRelationship(AuditAction action, Vertex sourceVertex, Vertex destVertex, String label, String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
-        checkNotNull(action.length() > 0, "action cannot be empty");
         checkNotNull(sourceVertex, "sourceVertex cannot be null");
         checkNotNull(destVertex, "destVertex cannot be null");
         checkNotNull(label, "label cannot be null");
@@ -161,10 +162,9 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public List<Audit> auditRelationshipProperties(String action, String sourceId, String destId, String propertyName,
+    public List<Audit> auditRelationshipProperties(AuditAction action, String sourceId, String destId, String propertyName,
                                                    Object oldValue, Edge edge, String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
-        checkNotNull(action.length() > 0, "action cannot be empty");
         checkNotNull(sourceId, "sourceId cannot be null");
         checkNotNull(sourceId.length() > 0, "sourceId cannot be empty");
         checkNotNull(destId, "destId cannot be null");
@@ -220,7 +220,7 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    private Audit auditEntityHelper(Audit audit, String action, Object entityID, String entityTitle, String entitySubtype, String process, String comment, User user) {
+    private Audit auditEntityHelper(Audit audit, AuditAction action, Object entityID, String entityTitle, String entitySubtype, String process, String comment, User user) {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
@@ -239,7 +239,7 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    private Audit auditRelationshipHelper(Audit audit, String action, Vertex sourceVertex, Vertex destVertex, String label, String process, String comment, User user) {
+    private Audit auditRelationshipHelper(Audit audit, AuditAction action, Vertex sourceVertex, Vertex destVertex, String label, String process, String comment, User user) {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
@@ -270,7 +270,7 @@ public class AuditRepository extends Repository<Audit> {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditEntityProperties(AuditAction.UPDATE.toString(), oldVertex.getId(), property.getName(), oldPropertyValue, newPropertyValue, process, "", user);
+                    auditEntityProperties(AuditAction.UPDATE, oldVertex.getId(), property.getName(), oldPropertyValue, newPropertyValue, process, "", user);
                 }
             }
         } else {
@@ -279,7 +279,7 @@ public class AuditRepository extends Repository<Audit> {
                 // TODO handle multi-valued properties
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditEntityProperties(AuditAction.UPDATE.toString(), vertex.getId(), property.getName(), null, newPropertyValue, process, "", user);
+                auditEntityProperties(AuditAction.UPDATE, vertex.getId(), property.getName(), null, newPropertyValue, process, "", user);
             }
         }
     }
