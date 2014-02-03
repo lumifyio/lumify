@@ -2,12 +2,14 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collection;
+import java.util.Date;
 
 public class GraphUtil {
     public static JSONArray toJson(Collection<Element> elements) {
@@ -53,21 +55,6 @@ public class GraphUtil {
         }
     }
 
-    private static JSONObject toJson(Iterable<Property> properties) {
-        // TODO handle multi-valued properties
-        JSONObject propertiesJson = new JSONObject();
-        for (Property property : properties) {
-            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
-                Double[] latlong = parseLatLong(property.getValue());
-                propertiesJson.put("latitude", latlong[0]);
-                propertiesJson.put("longitude", latlong[1]);
-            } else {
-                propertiesJson.put(property.getName(), property.getValue());
-            }
-        }
-        return propertiesJson;
-    }
-
     public static Double[] parseLatLong(Object val) {
         Double[] result = new Double[2];
         if (val instanceof String) {
@@ -80,6 +67,41 @@ public class GraphUtil {
             result[0] = valGeoPoint.getLatitude();
             result[1] = valGeoPoint.getLongitude();
         }
+        return result;
+    }
+
+    public static JSONObject toJson(Iterable<Property> properties) {
+        JSONObject resultsJson = new JSONObject();
+        for (Property property : properties) {
+            if (property.getValue() instanceof StreamingPropertyValue) {
+                continue;
+            }
+            resultsJson.put(property.getName(), GraphUtil.toJson(property));
+        }
+        return resultsJson;
+    }
+
+    public static JSONObject toJson(Property property) {
+        JSONObject result = new JSONObject();
+
+        Object value = property.getValue();
+        if (value instanceof Date) {
+            result.put("value", ((Date) value).getTime());
+        } else if (value instanceof GeoPoint) {
+            GeoPoint geoPoint = (GeoPoint) property.getValue();
+            result.put("latitude", geoPoint.getLatitude());
+            result.put("longitude", geoPoint.getLongitude());
+        } else {
+            result.put("value", value);
+        }
+
+        if (property.getVisibility() != null) {
+            result.put(PropertyName.VISIBILITY.toString(), property.getVisibility().toString());
+        }
+        if (property.getMetadata() != null) {
+            result.put(PropertyName.VISIBILITY_SOURCE.toString(), property.getMetadata().get(PropertyName.VISIBILITY_SOURCE.toString()));
+        }
+
         return result;
     }
 }

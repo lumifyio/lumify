@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.ElementMutation;
@@ -45,7 +46,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         // TODO: broadcast property delete
 
         Iterable<com.altamiracorp.securegraph.Property> properties = graphVertex.getProperties();
-        JSONObject propertiesJson = VertexProperties.propertiesToJson(properties);
+        JSONObject propertiesJson = GraphUtil.toJson(properties);
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
         json.put("deletedProperty", propertyName);
