@@ -1,19 +1,18 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
+
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class OntologyProperty {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,6 +90,10 @@ public class OntologyProperty {
                 break;
             case DOUBLE:
                 value = Double.parseDouble(valueStr);
+                break;
+            case BOOLEAN:
+                value = Boolean.parseBoolean(valueStr);
+                break;
         }
         return value;
     }

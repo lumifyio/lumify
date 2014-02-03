@@ -43,7 +43,6 @@ public class Router extends HttpServlet {
     private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
-    final File rootDir = new File("./lumify-web/src/main/webapp");
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -67,9 +66,9 @@ public class Router extends HttpServlet {
 
             app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
             app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
-            app.get("/ontology/concept/", authenticator, ConceptList.class);
-            app.get("/ontology/property/", authenticator, PropertyList.class);
-            app.get("/ontology/relationship/", authenticator, RelationshipLabelList.class);
+            app.get("/ontology/concept", authenticator, ConceptList.class);
+            app.get("/ontology/property", authenticator, PropertyList.class);
+            app.get("/ontology/relationship", authenticator, RelationshipLabelList.class);
 
             app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
 
@@ -116,7 +115,7 @@ public class Router extends HttpServlet {
 
             //app.get("/user/messages", authenticator, MessagesGet.class);
             app.get("/user/me", authenticator, MeGet.class);
-            app.get("/user/", authenticator, UserList.class);
+            app.get("/user", authenticator, UserList.class);
 
             app.get("/map/map-init.js", MapInitHandler.class);
             app.get("/map/marker/{type}/image", MapMarkerImage.class);
