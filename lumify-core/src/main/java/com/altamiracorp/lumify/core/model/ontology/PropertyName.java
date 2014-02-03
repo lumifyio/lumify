@@ -35,7 +35,10 @@ public enum PropertyName {
     TEXT("_text"),
     HIGHLIGHTED_TEXT("_highlightedText"),
     AUTHOR("author"),
-    MAPPING_JSON("_mappingJson");
+    MAPPING_JSON("_mappingJson"),
+
+    VISIBILITY("_visibility"),
+    VISIBILITY_SOURCE("_visibility");
 
     private final String text;
 

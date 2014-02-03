@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -69,7 +70,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         for (com.altamiracorp.securegraph.Property p : edge.getProperties()) {
             properties.add(p);
         }
-        JSONObject resultsJson = VertexProperties.propertiesToJson(properties);
+        JSONObject resultsJson = GraphUtil.toJson(properties);
 
         respondWithJson(response, resultsJson);
     }

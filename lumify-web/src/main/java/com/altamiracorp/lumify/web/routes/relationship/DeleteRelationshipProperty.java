@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.vertex.VertexProperties;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -56,7 +57,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         for (Property p : edge.getProperties()) {
             properties.add(p);
         }
-        JSONObject resultsJson = VertexProperties.propertiesToJson(properties);
+        JSONObject resultsJson = GraphUtil.toJson(properties);
 
         respondWithJson(response, resultsJson);
     }
