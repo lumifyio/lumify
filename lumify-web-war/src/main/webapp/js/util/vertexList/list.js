@@ -45,7 +45,10 @@ define([
             vertices.forEach(function(v) {
 
                 // Check if this vertex is in the graph/map
-                var classes = ['gId' + encodeURIComponent(v.id)];
+                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + ++self.classNameIndex));
+
+                var classes = [self.classNameLookup[v.id]];
+
                 var vertexState = self.stateForVertex(v);
                 if ( vertexState.inGraph ) classes.push('graph-displayed');
                 if ( vertexState.inMap ) classes.push('map-displayed');
@@ -62,6 +65,9 @@ define([
 
         this.after('initialize', function() {
             var self = this;
+
+            this.classNameIndex = 0;
+            this.classNameLookup = {};
 
             this.$node
                 .addClass('vertex-list')
@@ -321,7 +327,7 @@ define([
         // in search results
         this.toggleItemIcons = function(id, data) {
             this.$node
-                .find('li.gId' + encodeURIComponent(id))
+                .find('li.' + this.classNameLookup[id])
                 .toggleClass('graph-displayed', data.inGraph)
                 .toggleClass('map-displayed', data.inMap);
         };
@@ -336,7 +342,7 @@ define([
             var self = this;
             (data.vertices || []).forEach(function(vertex) {
                 self.toggleItemIcons(vertex.id, self.stateForVertex(vertex));
-                var currentAnchor = self.$node.find('li.gId' + encodeURIComponent(vertex.id)).children('a'),
+                var currentAnchor = self.$node.find('li.' + self.classNameLookup[vertex.id]).children('a'),
                     newAnchor = $(vertexTemplate({
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
@@ -369,9 +375,10 @@ define([
         this.onObjectsSelected = function(event, data) {
             this.$node.find('.active').removeClass('active');
 
-            var ids = _.chain(data.vertices)
-                .map(function(v) { return '.gId' + v.id; })
-                .value().join(',');
+            var self = this,
+                ids = _.chain(data.vertices)
+                    .map(function(v) { return '.' + self.classNameLookup[v.id]; })
+                    .value().join(',');
 
             $(ids).addClass('active');
         };
