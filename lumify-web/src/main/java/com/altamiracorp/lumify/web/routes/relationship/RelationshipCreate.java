@@ -50,7 +50,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, new Visibility(""), user.getAuthorizations());
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationships(AuditAction.CREATE.toString(), sourceVertex, destVertex, relationshipDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user);
 
         graph.flush();
 

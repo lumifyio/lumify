@@ -17,7 +17,6 @@ import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sun.net.www.content.text.plain;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,7 +86,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, user.getAuthorizations());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationships(AuditAction.CREATE.toString(), artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
 
         result.put("entityVertex", entityVertex);
 
