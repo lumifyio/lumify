@@ -35,3 +35,5 @@ graph.idgenerator=com.altamiracorp.securegraph.id.UUIDIdGenerator
 graph.search=com.altamiracorp.securegraph.elasticsearch.ElasticSearchSearchIndex
 graph.search.locations=192.168.33.10
 graph.search.indexName=securegraph
+graph.hdfs.rootDir=hdfs://192.168.33.10/
+graph.hdfs.dataDir=secureGraph
