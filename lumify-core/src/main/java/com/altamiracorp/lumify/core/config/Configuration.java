@@ -31,6 +31,7 @@ public final class Configuration {
     public static final String WORK_QUEUE_REPOSITORY = "work-queue-repository";
     public static final String CONTENT_TYPE_EXTRACTOR = "content-type-extractor";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
+    public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String MODEL_USER = "model.username";
     public static final String MODEL_PASSWORD = "model.password";
     public static final String GRAPH_PROVIDER = "graph";
