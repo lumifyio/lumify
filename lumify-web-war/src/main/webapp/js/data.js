@@ -764,9 +764,16 @@ define([
                         var info = a.data('info') || a.closest('li').data('info');
                         if (info && info.graphVertexId) {
 
+                            var properties = {};
+                            _.keys(info).forEach(function(key) {
+                                if ((/^(start|end|graphVertexId)$/).test(key)) return;
+                                properties[key] = {
+                                    value: info[key]
+                                };
+                            });
                             self.updateCacheWithVertex({
                                 id: info.graphVertexId,
-                                properties: _.omit(info, 'start', 'end', 'graphVertexId')
+                                properties: properties
                             });
                             id = info.graphVertexId;
                         } 
