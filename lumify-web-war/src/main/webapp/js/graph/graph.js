@@ -356,7 +356,7 @@ define([
             var cls = [];
 
             if (vertex.properties._conceptType.value) cls.push('concept-' + vertex.properties._conceptType.value);
-            if (vertex.properties._glyphIcon.value) cls.push('hasCustomGlyph');
+            if (vertex.properties._glyphIcon) cls.push('hasCustomGlyph');
             
             return cls.join(' ');
         };

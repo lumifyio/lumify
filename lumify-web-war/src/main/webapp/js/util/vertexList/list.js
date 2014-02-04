@@ -45,7 +45,7 @@ define([
             vertices.forEach(function(v) {
 
                 // Check if this vertex is in the graph/map
-                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + ++self.classNameIndex));
+                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + (++self.classNameIndex)));
 
                 var classes = [self.classNameLookup[v.id]];
 

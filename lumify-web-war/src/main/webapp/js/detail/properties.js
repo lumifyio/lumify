@@ -283,7 +283,12 @@ define([
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                        self.trigger (document, "updateVertices", { 
+                            vertices: [{
+                                id: vertexData.graphVertexId,
+                                properties: vertexData.properties
+                            }]
+                        });
                     });
             }
         };
@@ -316,7 +321,12 @@ define([
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                        self.trigger (document, "updateVertices", { 
+                            vertices: [{
+                                id: vertexData.graphVertexId,
+                                properties: vertexData.properties
+                            }]
+                        });
                     });
             }
 
