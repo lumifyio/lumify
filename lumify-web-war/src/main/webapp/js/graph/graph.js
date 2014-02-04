@@ -466,7 +466,7 @@ define([
 
         this.onContextMenuSearchFor = function () {
             var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByEntity', { query : menu.data('title').value});
+            this.trigger(document, 'searchByEntity', { query : menu.data('title')});
         };
 
         this.onContextMenuSearchRelated = function () {
