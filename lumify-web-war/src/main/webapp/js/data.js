@@ -319,8 +319,6 @@ define([
         this.onUpdateVertices = function(evt, data) {
             var self = this;
 
-            console.log(data);
-
             this.workspaceReady(function(ws) {
                 var undoData = { noUndo: true, vertices: [] };
                 var redoData = { noUndo: true, vertices: [] };
