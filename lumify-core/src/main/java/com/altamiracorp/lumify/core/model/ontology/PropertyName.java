@@ -24,6 +24,7 @@ public enum PropertyName {
     FILE_NAME_EXTENSION("_fileNameExtension"),
     TIME_STAMP("_timeStamp"),
     RAW("_raw"),
+    AUDIO("_audio"),
     VIDEO("_video"),
     VIDEO_SIZE("_videoSize"),
     VIDEO_DURATION("_videoDuration"),
@@ -46,5 +47,13 @@ public enum PropertyName {
     @Override
     public String toString() {
         return this.text;
+    }
+
+    public static String videoPropertyName(String videoType) {
+        return PropertyName.VIDEO.toString() + "-" + videoType;
+    }
+
+    public static String videoSizePropertyName(String videoType) {
+        return PropertyName.VIDEO_SIZE.toString() + "-" + videoType;
     }
 }

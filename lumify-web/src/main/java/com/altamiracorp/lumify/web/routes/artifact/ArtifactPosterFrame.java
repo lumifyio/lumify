@@ -61,7 +61,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             }
         }
 
-        StreamingPropertyValue rawPosterFrameValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW_POSTER_FRAME.toString(), 0);
+        StreamingPropertyValue rawPosterFrameValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW_POSTER_FRAME.toString());
         if (rawPosterFrameValue == null) {
             LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId().toString());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

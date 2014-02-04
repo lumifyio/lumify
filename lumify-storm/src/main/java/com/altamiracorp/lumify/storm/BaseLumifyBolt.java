@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.BaseArtifactProcessor;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
@@ -38,6 +39,8 @@ import java.io.*;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
@@ -221,7 +224,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private void updateMutationWithArtifactExtractedInfo(ElementMutation<Vertex> artifact, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
         Visibility visibility = new Visibility("");
 
-        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType()).getId(), visibility);
+        Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
+        checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
+        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), concept.getId(), visibility);
 
         if (artifactExtractedInfo.getDate() != null) {
             artifact.setProperty(PropertyName.CREATE_DATE.toString(), artifactExtractedInfo.getDate(), visibility);
@@ -291,6 +296,29 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
             artifact.setProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility);
+        }
+
+        if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getMp4HdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.videoPropertyName("video/mp4"), spv, visibility);
+            artifact.setProperty(PropertyName.videoSizePropertyName("video/mp4"), getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), visibility);
+        }
+        if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getWebMHdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.videoPropertyName("video/webm"), spv, visibility);
+            artifact.setProperty(PropertyName.videoSizePropertyName("video/webm"), getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()), visibility);
+        }
+        if (artifactExtractedInfo.getAudioHdfsPath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioHdfsPath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.AUDIO.toString(), spv, visibility);
+        }
+        if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getPosterFrameHdfsPath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.RAW_POSTER_FRAME.toString(), spv, visibility);
         }
     }
 

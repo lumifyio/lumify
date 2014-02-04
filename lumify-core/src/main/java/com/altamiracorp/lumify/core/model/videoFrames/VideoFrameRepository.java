@@ -38,14 +38,14 @@ public class VideoFrameRepository extends Repository<VideoFrame> {
 
     public void saveVideoFrame(Object artifactVertexId, InputStream in, long frameStartTime, User user) throws IOException {
         byte[] data = IOUtils.toByteArray(in);
-        VideoFrameRowKey videoFrameRowKey = new VideoFrameRowKey(artifactVertexId.toString(), frameStartTime);
+        VideoFrameRowKey videoFrameRowKey = new VideoFrameRowKey(artifactVertexId, frameStartTime);
         VideoFrame videoFrame = new VideoFrame(videoFrameRowKey);
         videoFrame.getMetadata().setData(data);
         save(videoFrame, user.getModelUserContext());
     }
 
-    public Iterable<VideoFrame> findAllByArtifactRowKey(String rowKey, User user) {
-        return findByRowStartsWith(rowKey, user.getModelUserContext());
+    public Iterable<VideoFrame> findAllByArtifactGraphVertexId(String artifactGraphVertexId, User user) {
+        return findByRowStartsWith(artifactGraphVertexId, user.getModelUserContext());
     }
 
     public BufferedImage loadImage(VideoFrame videoFrame, User user) {
