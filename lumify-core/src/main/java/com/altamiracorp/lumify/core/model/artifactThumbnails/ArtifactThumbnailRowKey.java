@@ -8,12 +8,12 @@ public class ArtifactThumbnailRowKey extends RowKey {
         super(rowKey);
     }
 
-    public ArtifactThumbnailRowKey(String artifactRowKey, String thumbnailType, int width, int height) {
-        super(buildKey(artifactRowKey, thumbnailType, width, height));
+    public ArtifactThumbnailRowKey(Object artifactVertexId, String thumbnailType, int width, int height) {
+        super(buildKey(artifactVertexId, thumbnailType, width, height));
     }
 
-    private static String buildKey(String artifactRowKey, String thumbnailType, int width, int height) {
-        return artifactRowKey
+    private static String buildKey(Object artifactVertexId, String thumbnailType, int width, int height) {
+        return artifactVertexId.toString()
                 + ":" + thumbnailType
                 + ":" + StringUtils.leftPad(Integer.toString(width), 8, '0')
                 + ":" + StringUtils.leftPad(Integer.toString(height), 8, '0');

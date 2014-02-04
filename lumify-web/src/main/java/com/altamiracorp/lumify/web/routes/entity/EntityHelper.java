@@ -1,27 +1,18 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
-import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
-import com.google.common.collect.Lists;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
-import java.util.List;
-
-import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class EntityHelper {
@@ -55,9 +46,12 @@ public class EntityHelper {
         termMentionRepository.save(termMention, user.getModelUserContext());
     }
 
-    public ElementMutation<Vertex> updateMutation(ElementMutation<Vertex> vertexMutation, String subType, String title, String process, String comment, User user) {
+    public ElementMutation<Vertex> updateMutation(ElementMutation<Vertex> vertexMutation, Object subType, String title, String process, String comment, User user) {
+        if (subType instanceof String) {
+            subType = new Text((String) subType, TextIndex.EXACT_MATCH);
+        }
         vertexMutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), subType, DEFAULT_VISIBILITY)
-            .setProperty(PropertyName.TITLE.toString(), title, DEFAULT_VISIBILITY);
+                .setProperty(PropertyName.TITLE.toString(), new Text(title), DEFAULT_VISIBILITY);
         return vertexMutation;
     }
 
@@ -82,7 +76,7 @@ public class EntityHelper {
     }
 
     public ElementMutation<Vertex> createGraphMutation(Concept concept, String sign, String existing, Object graphVertexId, String process, String comment,
-                                      User user) {
+                                                       User user) {
         ElementMutation<Vertex> resolvedVertexMutation;
         // If the user chose to use an existing resolved entity
         if (existing != null && Boolean.valueOf(existing)) {
@@ -91,9 +85,12 @@ public class EntityHelper {
             resolvedVertexMutation = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations());
         }
 
-        String conceptId = concept.getId().toString();
+        Object conceptId = concept.getId();
+        if (conceptId instanceof String) {
+            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+        }
         resolvedVertexMutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.TITLE.toString(), sign, DEFAULT_VISIBILITY);
+                .setProperty(PropertyName.TITLE.toString(), new Text(sign), DEFAULT_VISIBILITY);
 
         return resolvedVertexMutation;
     }

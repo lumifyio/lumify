@@ -1,14 +1,8 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.altamiracorp.securegraph.util.FilterIterable;
 import com.google.common.cache.Cache;
@@ -16,13 +10,17 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class OntologyRepository {
@@ -108,7 +106,7 @@ public class OntologyRepository {
                 .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
                 .vertices();
         for (Vertex vertex : vertices) {
-            if (vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0).equals(relationshipLabel)) {
+            if (vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString()).equals(relationshipLabel)) {
                 return "" + vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0);
             }
         }
@@ -349,9 +347,9 @@ public class OntologyRepository {
         }
 
         Vertex vertex = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), conceptName, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(conceptName, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_NAME.toString(), new Text(displayName), DEFAULT_VISIBILITY)
                 .save();
         concept = new Concept(vertex);
         if (parent != null) {
@@ -394,10 +392,10 @@ public class OntologyRepository {
         }
 
         Vertex relationshipVertex = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_CONCEPT, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), relationshipName, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_NAME.toString(), displayName, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP, DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(relationshipName, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_NAME.toString(), new Text(displayName), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(TYPE_RELATIONSHIP, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
@@ -429,10 +427,10 @@ public class OntologyRepository {
         }
 
         typeProperty = new OntologyProperty(graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), TYPE_PROPERTY, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), OntologyRepository.TYPE_PROPERTY, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), name, DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DATA_TYPE.toString(), dataType.toString(), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_PROPERTY, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(OntologyRepository.TYPE_PROPERTY, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(name, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DATA_TYPE.toString(), new Text(dataType.toString(), TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .save());
 
         graph.flush();
@@ -456,7 +454,7 @@ public class OntologyRepository {
         }
         Vertex v = parents.next();
         if (parents.hasNext()) {
-            throw new RuntimeException("Unexpected number of parents for concept: " + conceptVertex.getPropertyValue(PropertyName.TITLE.toString(), 0));
+            throw new RuntimeException("Unexpected number of parents for concept: " + conceptVertex.getPropertyValue(PropertyName.TITLE.toString()));
         }
         return v;
     }

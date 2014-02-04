@@ -15,8 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class WorkQueueRepository {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkQueueRepository.class);
 
-    private static final String KEY_ARTIFACT_ROWKEY = "artifactRowKey";
-    private static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
+    public static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
 
     public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
     public static final String USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME = "userArtifactHighlight";
@@ -39,9 +38,9 @@ public abstract class WorkQueueRepository {
         writeToQueue(TEXT_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
-    public void pushProcessedVideo(final String artifactRowKey) {
-        checkNotNull(artifactRowKey);
-        writeToQueue(PROCESSED_VIDEO_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_ARTIFACT_ROWKEY, artifactRowKey));
+    public void pushProcessedVideo(final Object artifactGraphVertexId) {
+        checkNotNull(artifactGraphVertexId);
+        writeToQueue(PROCESSED_VIDEO_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId.toString()));
     }
 
     public void pushUserArtifactHighlight(final String artifactGraphVertexId) {
