@@ -423,7 +423,7 @@ define([
                         updateCss(concept.glyphIconHref);
                     }
                 });
-            } else if (vertex && vertex.properties._glyphIcon.value) {
+            } else if (vertex && vertex.properties._glyphIcon) {
                 updateCss(vertex && vertex.properties._glyphIcon.value);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
@@ -652,7 +652,7 @@ define([
                             });
 
                         if (item.properties) {
-                            icon = item._glyphIcon || item.properties._glyphIcon.value || concept.glyphIconHref;
+                            icon = item._glyphIcon || (item.properties._glyphIcon && item.properties._glyphIcon.value) || concept.glyphIconHref;
                         }
                         return entityTemplate({
                             html: html,
