@@ -127,14 +127,12 @@ define([
         }
 
         this.onSearchByEntity = function (evt, data) {
-            this.popoutIfNeeded();
             this.select('querySelector').val(data.query);
-            this.clearFilters();
+            this.clearFilters({triggerUpdates:false});
             this.trigger ('search', { query : data.query});
         };
 
         this.onSearchByRelatedEntity = function (evt, data) {
-            this.popoutIfNeeded();
             this.select('querySelector').val('');
         };
 
@@ -153,9 +151,16 @@ define([
             }
 
             this.select('queryValidationSelector').empty();
+            this.hideSearchResults();
+            this.popoutIfNeeded();
+            this.select('querySelector').focus();
 
-            if (this.previousSearch && this.previousSearch.abort) {
+            if (this.previousSearch) {
                 this.previousSearch.abort();
+            }
+
+            if (this.infiniteSearchRequest) {
+                this.infiniteSearchRequest.abort();
             }
 
             if (query != data.query) {
@@ -185,7 +190,7 @@ define([
                         var results = {},
                             sortVerticesIntoResults = function(v) {
                                 var props = v.properties,
-                                    conceptType = props._conceptType,
+                                    conceptType = props._conceptType.value,
                                     addToSearchResults = function(conceptType) {
                                         if (!results[conceptType]) results[conceptType] = [];
 
@@ -397,23 +402,31 @@ define([
         };
 
         this.onInfiniteScrollRequest = function(evt, data) {
-            var self = this,
-                query = this.select('querySelector').val();
+            var query = this.select('querySelector').val(),
+                trigger = this.trigger.bind(this, 
+                   this.select('resultsSelector').find('.content'),
+                   'addInfiniteVertices'
+                );
 
-            this.vertexService.graphVertexSearch(
+            if (this.infiniteSearchRequest) {
+                this.infiniteSearchRequest.abort();
+            }
+
+            if (this.entityFilters && this.entityFilters.relatedToVertexId) {
+                query = { query:query, relatedToVertexId:this.entityFilters.relatedToVertexId };
+            }
+
+            this.infiniteSearchRequest = this.vertexService.graphVertexSearch(
                     query,
                     this.filters,
                     data.conceptType,
                     data.paging
-            ).done(function(results) {
-
-                self.trigger(
-                    self.select('resultsSelector').find('.content'),
-                    'addInfiniteVertices', 
-                    { 
-                        vertices: results.vertices
-                    }
-                );
+            )
+            .fail(function() {
+                trigger({ success: false });
+            })
+            .done(function(results) {
+                trigger({ success: true, vertices: results.vertices });
             });
         };
 
@@ -440,8 +453,8 @@ define([
             this.clearFilters();
         };
 
-        this.clearFilters = function() {
-            this.trigger(this.select('filtersSelector').find('.content'), 'clearfilters');
+        this.clearFilters = function(options) {
+            this.trigger(this.select('filtersSelector').find('.content'), 'clearfilters', options);
         };
     }
 });
