@@ -466,7 +466,7 @@ define([
 
         this.onContextMenuSearchFor = function () {
             var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByEntity', { query : menu.data('title')});
+            this.trigger(document, 'searchByEntity', { query : menu.data('title').value});
         };
 
         this.onContextMenuSearchRelated = function () {
@@ -750,7 +750,7 @@ define([
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
             } else {
-                var title = event.cyTarget.data('title');
+                var title = event.cyTarget.data('title').value;
                 if (title.length > MAX_TITLE_LENGTH) {
                     title = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
                 }
@@ -773,7 +773,7 @@ define([
                 menu.data("currentVertexGraphVertexId", event.cyTarget.id());
                 menu.data("currentVertexPositionX", event.cyTarget.position ('x'));
                 menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
-                menu.data("title", event.cyTarget.data('title'));
+                menu.data("title", event.cyTarget.data('title').value);
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             }
@@ -1036,7 +1036,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 var selected = cy.nodes().filter(':selected');
                 if (selected.length) {
-                    this.trigger(document, 'searchByEntity', { query : selected.data('title')});
+                    this.trigger(document, 'searchByEntity', { query : selected.data('title').value});
                 }
             });
         }
