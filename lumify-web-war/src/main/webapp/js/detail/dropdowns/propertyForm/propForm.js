@@ -24,7 +24,8 @@ define([
             deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
             visibilitySelector: '.visibility',
-            propertyInputSelector: '.input-row input'
+            propertyInputSelector: '.input-row input',
+            visibilityInputSelector: '.visibility input'
         });
 
         this.after('initialize', function () {
@@ -36,7 +37,8 @@ define([
                 deleteButtonSelector: this.onDelete
             });
             this.on('keyup', {
-                propertyInputSelector: this.onKeyup
+                propertyInputSelector: this.onKeyup,
+                visibilityInputSelector: this.onKeyup
             });
 
             this.on('addPropertyError', this.onAddPropertyError);
@@ -116,6 +118,7 @@ define([
                             value: previousValue,
                             predicates: false
                         });
+                        self.checkValid();
                     });
                     require(['configuration/plugins/visibility/visibility'], function(Visibility) {
                         Visibility.attachTo(visibility, {
@@ -129,19 +132,30 @@ define([
 
         this.onVisibilityChange = function(event, data) {
             this.visibilitySource = data;
-            console.log(data);
+            this.checkValid();
         };
 
         this.onPropertyInvalid = function (event, data) {
             event.stopPropagation();
 
-            this.invalid = true;
-            this.select('saveButtonSelector').attr('disabled', true);
+            this.propertyInvalid = true;
+            this.checkValid();
         };
 
+        this.checkValid = function() {
+            this.valid = !this.propertyInvalid && 
+                (this.visibilitySource && this.visibilitySource.valid);
+
+            if (this.valid) {
+                this.select('saveButtonSelector').removeAttr('disabled');
+            } else {
+                this.select('saveButtonSelector').attr('disabled', true);
+            }
+        }
+
         this.onPropertyChange = function (event, data) {
-            this.invalid = false;
-            this.select('saveButtonSelector').removeAttr('disabled');
+            this.propertyInvalid = false;
+            this.checkValid();
 
             event.stopPropagation();
 
@@ -172,7 +186,7 @@ define([
         };
 
         this.onSave = function (evt) {
-            if (this.invalid || !this.visibilitySource || !this.visibilitySource.valid) return;
+            if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
