@@ -23,10 +23,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import java.util.Date;
@@ -121,7 +118,9 @@ public abstract class BaseArtifactProcessor {
     }
 
     @Inject
-    public final void setUser(final UserProvider user) { this.user = user.getSystemUser(); }
+    public final void setUser(final UserProvider user) {
+        this.user = user.getSystemUser();
+    }
 
     public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey) {
         return findOrPrepareArtifactVertex(getGraph(), getUser(), rowKey);
@@ -143,7 +142,7 @@ public abstract class BaseArtifactProcessor {
             Visibility visibility = new Visibility("");
             vertex = graph.prepareVertex(visibility, user.getAuthorizations())
                     .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
-                    .setProperty(PropertyName.ROW_KEY.toString(), rowKey, visibility);
+                    .setProperty(PropertyName.ROW_KEY.toString(), new Text(rowKey, TextIndex.EXACT_MATCH), visibility);
         }
         return vertex;
     }

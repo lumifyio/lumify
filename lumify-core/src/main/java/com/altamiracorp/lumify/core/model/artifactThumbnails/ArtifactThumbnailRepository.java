@@ -19,9 +19,6 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
     public static final int FRAMES_PER_PREVIEW = 20;
     public static final int PREVIEW_FRAME_WIDTH = 360;
     public static final int PREVIEW_FRAME_HEIGHT = 240;
-    public static final String VIDEO_STORAGE_HDFS_PATH = "/lumify/artifacts/video";
-    public static final String LUMIFY_VIDEO_PREVIEW_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/preview/";
-    public static final String LUMIFY_VIDEO_POSTER_FRAME_HDFS_PATH = VIDEO_STORAGE_HDFS_PATH + "/posterFrame/";
 
     @Inject
     public ArtifactThumbnailRepository(final ModelSession modelSession) {
@@ -55,7 +52,7 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
     }
 
     public ArtifactThumbnail getThumbnail(Object artifactVertexId, String thumbnailType, int width, int height, User user) {
-        ArtifactThumbnailRowKey rowKey = new ArtifactThumbnailRowKey(artifactVertexId.toString(), thumbnailType, width, height);
+        ArtifactThumbnailRowKey rowKey = new ArtifactThumbnailRowKey(artifactVertexId, thumbnailType, width, height);
         return findByRowKey(rowKey.toString(), user.getModelUserContext());
     }
 
@@ -111,7 +108,7 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
     }
 
     private ArtifactThumbnail saveThumbnail(Object artifactVertexId, String thumbnailType, int[] boundaryDims, byte[] bytes, int type, String format, User user) {
-        ArtifactThumbnailRowKey artifactThumbnailRowKey = new ArtifactThumbnailRowKey(artifactVertexId.toString(), thumbnailType, boundaryDims[0], boundaryDims[1]);
+        ArtifactThumbnailRowKey artifactThumbnailRowKey = new ArtifactThumbnailRowKey(artifactVertexId, thumbnailType, boundaryDims[0], boundaryDims[1]);
         ArtifactThumbnail artifactThumbnail = new ArtifactThumbnail(artifactThumbnailRowKey);
         artifactThumbnail.getMetadata().setData(bytes);
         artifactThumbnail.getMetadata().setType(type);
@@ -139,9 +136,5 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         }
 
         return new int[]{newWidth, newHeight};
-    }
-
-    public static String getVideoPreviewPath(String artifactRowKey) {
-        return LUMIFY_VIDEO_PREVIEW_HDFS_PATH + artifactRowKey;
     }
 }

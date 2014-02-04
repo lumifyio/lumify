@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.BaseArtifactProcessor;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
@@ -38,6 +39,8 @@ import java.io.*;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
@@ -221,7 +224,13 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private void updateMutationWithArtifactExtractedInfo(ElementMutation<Vertex> artifact, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
         Visibility visibility = new Visibility("");
 
-        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType()).getId(), visibility);
+        Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
+        checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
+        Object conceptId = concept.getId();
+        if (conceptId instanceof String) {
+            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+        }
+        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility);
 
         if (artifactExtractedInfo.getDate() != null) {
             artifact.setProperty(PropertyName.CREATE_DATE.toString(), artifactExtractedInfo.getDate(), visibility);
@@ -240,7 +249,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         if (artifactExtractedInfo.getVideoTranscript() != null) {
             // TODO should video transcript be converted to a StreamingPropertyValue?
-            artifact.setProperty(PropertyName.VIDEO_TRANSCRIPT.toString(), artifactExtractedInfo.getVideoTranscript(), visibility);
+            artifact.setProperty(PropertyName.VIDEO_TRANSCRIPT.toString(), artifactExtractedInfo.getVideoTranscript().toString(), visibility);
             artifact.setProperty(PropertyName.VIDEO_DURATION.toString(), artifactExtractedInfo.getVideoDuration(), visibility);
 
             // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
@@ -266,19 +275,19 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
 
         if (artifactExtractedInfo.getTitle() != null) {
-            artifact.setProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility);
+            artifact.setProperty(PropertyName.TITLE.toString(), new Text(artifactExtractedInfo.getTitle()), visibility);
         }
 
         if (artifactExtractedInfo.getFileExtension() != null) {
-            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), artifactExtractedInfo.getFileExtension(), visibility);
+            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(artifactExtractedInfo.getFileExtension(), TextIndex.EXACT_MATCH), visibility);
         }
 
         if (artifactExtractedInfo.getMimeType() != null) {
-            artifact.setProperty(PropertyName.MIME_TYPE.toString(), artifactExtractedInfo.getMimeType(), visibility);
+            artifact.setProperty(PropertyName.MIME_TYPE.toString(), new Text(artifactExtractedInfo.getMimeType()), visibility);
         }
 
         if (artifactExtractedInfo.getSource() != null) {
-            artifact.setProperty(PropertyName.SOURCE.toString(), artifactExtractedInfo.getSource(), visibility);
+            artifact.setProperty(PropertyName.SOURCE.toString(), new Text(artifactExtractedInfo.getSource()), visibility);
         }
 
         if (artifactExtractedInfo.getDetectedObjects() != null) {
@@ -290,7 +299,30 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
 
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
-            artifact.setProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility);
+            artifact.setProperty(PropertyName.AUTHOR.toString(), new Text(artifactExtractedInfo.getAuthor()), visibility);
+        }
+
+        if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getMp4HdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.videoPropertyName("video/mp4"), spv, visibility);
+            artifact.setProperty(PropertyName.videoSizePropertyName("video/mp4"), getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), visibility);
+        }
+        if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getWebMHdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.videoPropertyName("video/webm"), spv, visibility);
+            artifact.setProperty(PropertyName.videoSizePropertyName("video/webm"), getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()), visibility);
+        }
+        if (artifactExtractedInfo.getAudioHdfsPath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioHdfsPath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.AUDIO.toString(), spv, visibility);
+        }
+        if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getPosterFrameHdfsPath()), byte[].class);
+            spv.searchIndex(false);
+            artifact.setProperty(PropertyName.RAW_POSTER_FRAME.toString(), spv, visibility);
         }
     }
 

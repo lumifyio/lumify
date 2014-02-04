@@ -11,7 +11,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
+import com.altamiracorp.securegraph.query.Predicate;
 import com.altamiracorp.securegraph.query.Query;
+import com.altamiracorp.securegraph.query.TextPredicate;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -76,7 +78,10 @@ public class GraphVertexSearch extends BaseRequestHandler {
                 if (obj.getJSONArray("values").length() > 0) {
                     JSONArray values = obj.getJSONArray("values");
                     for (int j = 0; j < values.length(); j++) {
-                        graphQuery.has(obj.getString("propertyName"), values.get(j));
+                        Object val = values.get(j);
+                        Predicate predicate = Compare.EQUAL;
+                        // TODO how can we specify a contains query?
+                        graphQuery.has(obj.getString("propertyName"), predicate, val);
                     }
                 }
             }

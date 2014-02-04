@@ -88,6 +88,10 @@ public class GraphUtil {
         JSONObject result = new JSONObject();
 
         Object value = property.getValue();
+        if (value instanceof Text) {
+            value = ((Text) value).getText();
+        }
+
         if (value instanceof Date) {
             result.put("value", ((Date) value).getTime());
         } else if (value instanceof GeoPoint) {
