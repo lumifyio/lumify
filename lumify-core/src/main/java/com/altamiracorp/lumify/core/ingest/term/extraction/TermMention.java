@@ -35,9 +35,10 @@ public class TermMention {
     private final Map<String, Object> properties;
     private final boolean useExisting;
     private String process = "";
+    private Object id;
 
     private TermMention(int start, int end, String sign, String ontologyClassUri, boolean resolved, Map<String, Object> propertyValue,
-            String relationshipLabel, boolean useExisting, String process) {
+            String relationshipLabel, boolean useExisting, String process, Object id) {
         this.start = start;
         this.end = end;
         this.sign = sign;
@@ -47,6 +48,7 @@ public class TermMention {
         this.relationshipLabel = relationshipLabel;
         this.useExisting = useExisting;
         this.process = process;
+        this.id = id;
     }
 
     public int getStart() {
@@ -64,6 +66,8 @@ public class TermMention {
     public String getOntologyClassUri() {
         return ontologyClassUri;
     }
+
+    public Object getId () { return id; }
 
     public boolean isResolved() {
         return resolved;
@@ -91,8 +95,8 @@ public class TermMention {
 
     @Override
     public String toString() {
-        return String.format("{sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, relLabel: %s, props: %s, process: %s}",
-                sign, start, end, ontologyClassUri, resolved, useExisting, relationshipLabel, properties, process);
+        return String.format("{sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, relLabel: %s, props: %s, process: %s, id: %s}",
+                sign, start, end, ontologyClassUri, resolved, useExisting, relationshipLabel, properties, process, id);
     }
 
     @Override
@@ -142,6 +146,9 @@ public class TermMention {
         if (this.useExisting != other.useExisting) {
             return false;
         }
+        if (this.id != other.id) {
+            return false;
+        }
         return true;
     }
 
@@ -156,6 +163,7 @@ public class TermMention {
         private Map<String, Object> properties = new HashMap<String, Object>();
         private boolean useExisting;
         private List<String> process = new ArrayList<String>();
+        private Object id;
 
         public Builder() {
         }
@@ -170,6 +178,7 @@ public class TermMention {
             properties = new HashMap<String, Object>(tm.properties);
             useExisting = tm.useExisting;
             process.add(tm.process);
+            id = tm.id;
         }
 
         public Builder start(final int start) {
@@ -217,6 +226,11 @@ public class TermMention {
             return this;
         }
 
+        public Builder id (final Object id) {
+            this.id = id;
+            return this;
+        }
+
         public Builder setProperty(final String key, final Object value) {
             if (value == null) {
                 this.properties.remove(key);
@@ -235,7 +249,7 @@ public class TermMention {
                 procBuilder.append(proc);
             }
             return new TermMention(start, end, sign, ontologyClassUri, resolved, Collections.unmodifiableMap(properties),
-                    relationshipLabel, useExisting, procBuilder.toString());
+                    relationshipLabel, useExisting, procBuilder.toString(), id);
         }
     }
 }
