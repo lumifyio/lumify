@@ -21,6 +21,8 @@ import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class ArtifactRaw extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
@@ -80,8 +82,8 @@ public class ArtifactRaw extends BaseRequestHandler {
     private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Vertex artifactVertex, String fileName, User user) throws IOException {
         String videoType = getRequiredParameter(request, "type");
 
-        InputStream in = null;
-        long totalLength = 0;
+        InputStream in;
+        long totalLength;
         long partialStart = 0;
         Long partialEnd = null;
         String range = request.getHeader("Range");
@@ -104,8 +106,8 @@ public class ArtifactRaw extends BaseRequestHandler {
             response.setContentType(videoType);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-            String videoPropertyName = PropertyName.VIDEO.toString() + "-" + videoType;
-            String videoSizePropertyName = PropertyName.VIDEO_SIZE.toString() + "-" + videoType;
+            String videoPropertyName = PropertyName.videoPropertyName(videoType);
+            String videoSizePropertyName = PropertyName.videoSizePropertyName(videoType);
 
             StreamingPropertyValue videoPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(videoPropertyName, 0);
             if (videoPropertyValue == null) {
@@ -113,7 +115,9 @@ public class ArtifactRaw extends BaseRequestHandler {
             }
 
             in = videoPropertyValue.getInputStream();
-            totalLength = (Long) artifactVertex.getPropertyValue(videoSizePropertyName, 0);
+            Object totalLengthObj = artifactVertex.getPropertyValue(videoSizePropertyName);
+            checkNotNull(totalLengthObj, "Could not find total video size " + videoSizePropertyName + " on vertex " + artifactVertex.getId());
+            totalLength = (Long) totalLengthObj;
         } else {
             throw new RuntimeException("Invalid video type: " + videoType);
         }
