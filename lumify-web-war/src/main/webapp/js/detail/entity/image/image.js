@@ -62,7 +62,7 @@ define([
             this.$node.css({
                 backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(_glyphIconProperty && _glyphIconProperty.value) || this.attr.defaultIconSrc) + '")'
             });
-            this.$node.toggleClass('custom-image', !!(src || this.attr.data.properties._glyphIcon.value));
+            this.$node.toggleClass('custom-image', !!(src || this.attr.data.properties._glyphIcon));
         };
 
         this.onFileChange = function(e) {
