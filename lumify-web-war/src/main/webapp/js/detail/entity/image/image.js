@@ -57,8 +57,10 @@ define([
         };
 
         this.updateImageBackground = function(src) {
+            var _glyphIconProperty = this.attr.data.properties._glyphIcon;
+
             this.$node.css({
-                backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(this.attr.data.properties._glyphIcon.value) || this.attr.defaultIconSrc) + '")'
+                backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(_glyphIconProperty && _glyphIconProperty.value) || this.attr.defaultIconSrc) + '")'
             });
             this.$node.toggleClass('custom-image', !!(src || this.attr.data.properties._glyphIcon.value));
         };
