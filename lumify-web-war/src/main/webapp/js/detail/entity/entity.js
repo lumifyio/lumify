@@ -8,6 +8,7 @@ define([
     '../withHighlighting',
     'tpl!./entity',
     'tpl!./relationships',
+    'tpl!util/alert',
     'util/vertexList/list',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
@@ -21,6 +22,7 @@ define([
     withHighlighting,
     template,
     relationshipsTemplate,
+    alertTemplate,
     VertexList,
     PropertyForm,
     OntologyService,
@@ -94,9 +96,15 @@ define([
                 self.updateEntityAndArtifactDraggables();
 
                 $.when(
-                    self.handleCancelling(self.ontologyService.relationships()),
-                    self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
-                ).done(self.loadRelationships.bind(self, vertex));
+                        self.handleCancelling(self.ontologyService.relationships()),
+                        self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
+                    )
+                    .fail(function() {
+                        self.select('relationshipsSelector').html(alertTemplate({
+                            error: 'Unable to load relationships'
+                        }));
+                    })
+                    .done(self.loadRelationships.bind(self, vertex));
             });
         };
 
