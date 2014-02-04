@@ -95,12 +95,18 @@ define([
             config.teardownAllComponents();
             visibility.teardownAllComponents();
 
-            var previousValue = this.attr.data.properties[propertyName] && this.attr.data.properties[propertyName].value,
+            var vertexProperty = this.attr.data.properties[propertyName],
+                previousValue = vertexProperty && vertexProperty.value,
+                visibilityValue = vertexProperty && vertexProperty._visibility,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
+            }
+
+            if (visibilityValue) {
+                this.visibilitySource = { value:visibilityValue, valid:true };
             }
 
             this.select('deleteButtonSelector').toggle(!!isExistingProperty);
@@ -122,8 +128,7 @@ define([
                     });
                     require(['configuration/plugins/visibility/visibility'], function(Visibility) {
                         Visibility.attachTo(visibility, {
-                            // TODO
-                            value: ''
+                            value: visibilityValue || ''
                         });
                     });
                 } else console.warn('Property ' + propertyName + ' not found in ontology');
