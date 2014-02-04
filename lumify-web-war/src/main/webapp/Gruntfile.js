@@ -107,14 +107,14 @@ module.exports = function(grunt) {
     watch: {
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
-            tasks: ['less:development'],
+            tasks: ['less:development', 'notify:css'],
             options: {
                 spawn: true
             }
         },
         scripts: {
             files: ['Gruntfile.js', 'js/**/*.js', 'js/**/*.ejs'],
-            tasks: ['requirejs:development'],
+            tasks: ['requirejs:development', 'notify:js'],
             options: {
                 spawn: true
             }
@@ -126,6 +126,21 @@ module.exports = function(grunt) {
                 spawn: true
             }
         }
+    },
+
+    notify: {
+        js: {
+            options: {
+                title: 'Lumify',
+                message: 'RequireJS finished',
+            }
+        },
+        css: {
+            options: {
+                title: 'Lumify',
+                message: 'Less finished',
+            }
+        }
     }
   });
 
@@ -135,6 +150,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-notify');
 
   grunt.registerTask('deps', ['bower:install', 'bower:prune', 'exec']);
 
