@@ -95,7 +95,7 @@ define([
             config.teardownAllComponents();
             visibility.teardownAllComponents();
 
-            var previousValue = this.attr.data.properties[propertyName],
+            var previousValue = this.attr.data.properties[propertyName] && this.attr.data.properties[propertyName].value,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;

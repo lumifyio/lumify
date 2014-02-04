@@ -416,9 +416,9 @@ define([
                 displayName = ontologyProperty.displayName;
 
                 if (ontologyProperty.dataType == 'date') {
-                    value = formatters.date.dateString(parseInt(properties[name], 10));
+                    value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else {
-                    value = properties[name];
+                    value = properties[name].value;
                 }
 
                 var isRelationshipSourceProperty = name === 'source' && properties._type === 'relationship';
@@ -429,7 +429,7 @@ define([
                     addProperty(name, displayName, value);
                 }
             } else if (isRelationshipType) {
-                addProperty(name, 'relationship type', properties[name]);
+                addProperty(name, 'relationship type', properties[name].value);
             }
         });
         return displayProperties;
