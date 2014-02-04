@@ -240,7 +240,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         if (artifactExtractedInfo.getVideoTranscript() != null) {
             // TODO should video transcript be converted to a StreamingPropertyValue?
-            artifact.setProperty(PropertyName.VIDEO_TRANSCRIPT.toString(), artifactExtractedInfo.getVideoTranscript(), visibility);
+            artifact.setProperty(PropertyName.VIDEO_TRANSCRIPT.toString(), artifactExtractedInfo.getVideoTranscript().toString(), visibility);
             artifact.setProperty(PropertyName.VIDEO_DURATION.toString(), artifactExtractedInfo.getVideoDuration(), visibility);
 
             // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
