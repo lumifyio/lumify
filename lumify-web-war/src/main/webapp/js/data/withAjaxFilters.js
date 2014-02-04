@@ -56,7 +56,7 @@ define([], function() {
                 if (_.isArray(json) && json.length && json[0].id && json[0].properties) {
                     json.forEach(function(vertex) {
                         var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer.value = true;
+                        cache.properties._refreshedFromServer = true;
                         $.extend(true, vertex, cache);
                         updated.push(cache);
                     });

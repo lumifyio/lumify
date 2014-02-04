@@ -150,7 +150,8 @@ define([
             var self = this;
             switch (message.type) {
                 case 'propertiesChange':
-                    self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    //FIXME: need this?
+                    //self.trigger('updateVertices', { vertices:[message.data.vertex]});
                     break;
             }
         };
@@ -238,9 +239,9 @@ define([
                 var needsRefreshing = data.vertices.filter(function(v) { 
                         var cached = self.vertex(v.id);
                         if (!cached) {
-                            return !v.properties || !v.properties._refreshedFromServer.value;
+                            return !v.properties || !v.properties._refreshedFromServer;
                         }
-                        return !cached.properties._refreshedFromServer.value;
+                        return !cached.properties._refreshedFromServer;
                     }),
                     passedWorkspace = {};
 
@@ -262,7 +263,7 @@ define([
                     vertices = self.vertices(vertices);
 
                     vertices.forEach(function(vertex) {
-                        vertex.properties._refreshedFromServer.value = true;
+                        vertex.properties._refreshedFromServer = true;
                         if (passedWorkspace[vertex.id]) {
                             vertex.workspace = $.extend(vertex.workspace, passedWorkspace[vertex.id]);
                         }
@@ -625,7 +626,7 @@ define([
                         delete workspaceData.dropPosition;
 
                         var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer.value = true;
+                        cache.properties._refreshedFromServer = true;
                         cache.workspace = workspaceData || {};
                         cache.workspace.selected = false;
                         self.workspaceVertices[vertex.id] = cache.workspace;
