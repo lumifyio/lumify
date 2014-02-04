@@ -64,7 +64,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             }
         }
 
-        StreamingPropertyValue videoPreviewImageValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.VIDEO_PREVIEW_IMAGE.toString(), 0);
+        StreamingPropertyValue videoPreviewImageValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.VIDEO_PREVIEW_IMAGE.toString());
         if (videoPreviewImageValue == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
