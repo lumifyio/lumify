@@ -252,11 +252,11 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0))
-                .setSourceTitle(sourceVertex.getPropertyValue(PropertyName.TITLE.toString(), 0))
+                .setSourceType(sourceVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
+                .setSourceTitle(sourceVertex.getPropertyValue(PropertyName.TITLE.toString()))
                 .setDestId(destVertex.getId())
-                .setDestTitle(destVertex.getPropertyValue(PropertyName.TITLE.toString(), 0))
-                .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0))
+                .setDestTitle(destVertex.getPropertyValue(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
                 .setLabel(label);
         return audit;
     }

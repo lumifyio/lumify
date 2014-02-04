@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Text;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
@@ -58,6 +59,9 @@ public class VertexProperties extends BaseRequestHandler {
                 }
                 if (value instanceof Date) {
                     value = ((Date) value).getTime();
+                }
+                if (value instanceof Text) {
+                    value = ((Text) value).getText();
                 }
                 resultsJson.put(property.getName(), value);
             }
