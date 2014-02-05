@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -129,12 +130,22 @@ public class AuditRepository extends Repository<Audit> {
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "");
 
         if (oldValue != null) {
-            audit.getAuditProperty().setPreviousValue(oldValue.toString());
+            if (oldValue instanceof GeoPoint) {
+                String val = "POINT(" + ((GeoPoint) oldValue).getLatitude() + "," + ((GeoPoint) oldValue).getLongitude() + ")";
+                audit.getAuditProperty().setPreviousValue(val);
+            } else {
+                audit.getAuditProperty().setPreviousValue(oldValue.toString());
+            }
         }
         if (action.equals(AuditAction.DELETE.toString())) {
             audit.getAuditProperty().setNewValue("");
         } else {
-            audit.getAuditProperty().setNewValue(newValue.toString());
+            if (newValue instanceof GeoPoint) {
+                String val = "POINT(" + ((GeoPoint) newValue).getLatitude() + "," + ((GeoPoint) newValue).getLongitude() + ")";
+                audit.getAuditProperty().setNewValue(val);
+            } else {
+                audit.getAuditProperty().setNewValue(newValue.toString());
+            }
         }
         audit.getAuditProperty().setPropertyName(propertyName);
 
@@ -252,11 +263,11 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0))
-                .setSourceTitle(sourceVertex.getPropertyValue(PropertyName.TITLE.toString(), 0))
+                .setSourceType(sourceVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
+                .setSourceTitle(sourceVertex.getPropertyValue(PropertyName.TITLE.toString()))
                 .setDestId(destVertex.getId())
-                .setDestTitle(destVertex.getPropertyValue(PropertyName.TITLE.toString(), 0))
-                .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0))
+                .setDestTitle(destVertex.getPropertyValue(PropertyName.TITLE.toString()))
+                .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
                 .setLabel(label);
         return audit;
     }
