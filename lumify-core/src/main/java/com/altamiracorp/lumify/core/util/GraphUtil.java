@@ -30,7 +30,7 @@ public class GraphUtil {
         try {
             JSONObject json = new JSONObject();
             json.put("id", vertex.getId());
-            json.put("properties", toJson(vertex.getProperties()));
+            json.put("properties", toJsonProperties(vertex.getProperties()));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -44,14 +44,14 @@ public class GraphUtil {
             json.put("label", edge.getLabel());
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
-            json.put("properties", toJson(edge.getProperties()));
+            json.put("properties", toJsonProperties(edge.getProperties()));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static JSONObject toJson(Iterable<Property> properties) {
+    private static JSONObject toJsonProperties(Iterable<Property> properties) {
         // TODO handle multi-valued properties
         JSONObject propertiesJson = new JSONObject();
         for (Property property : properties) {
