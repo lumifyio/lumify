@@ -1,9 +1,10 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.user.User;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -11,13 +12,13 @@ import com.altamiracorp.securegraph.Direction;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;
@@ -35,26 +36,27 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         String limitParentConceptId = getOptionalParameter(request, "limitParentConceptId");
 
         User user = getUser(request);
-        List<Concept> limitConcepts = null;
+        Set<String> limitConceptIds = new HashSet<String>();
 
         if (limitParentConceptId != null) {
-            limitConcepts = ontologyRepository.getConceptByIdAndChildren(limitParentConceptId);
+            List<Concept> limitConcepts = ontologyRepository.getConceptByIdAndChildren(limitParentConceptId);
             if (limitConcepts == null) {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }
+            for (Concept con : limitConcepts) {
+                limitConceptIds.add(con.getId());
+            }
         }
 
-        Iterator<Vertex> verticesIterator = graph.getVertex(graphVertexId, user.getAuthorizations())
-                .getVertices(Direction.BOTH, user.getAuthorizations()).iterator();
+        Iterable<Vertex> vertices = graph.getVertex(graphVertexId, user.getAuthorizations())
+                .getVertices(Direction.BOTH, user.getAuthorizations());
 
         JSONObject json = new JSONObject();
         JSONArray verticesJson = new JSONArray();
-        while (verticesIterator.hasNext()) {
-            Vertex vertex = verticesIterator.next();
-            if (limitConcepts != null && isLimited(limitConcepts, vertex)) {
-                continue;
+        for (Vertex vertex : vertices) {
+            if (!isLimited(limitConceptIds, vertex)) {
+                verticesJson.put(GraphUtil.toJson(vertex));
             }
-            verticesJson.put(GraphUtil.toJson(vertex));
         }
         json.put("vertices", verticesJson);
 
@@ -63,14 +65,9 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         chain.next(request, response);
     }
 
-    private boolean isLimited(List<Concept> limitConcepts, Vertex vertex) {
-        String conceptId = (String) vertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString(), 0);
-        for (Concept concept : limitConcepts) {
-            if (concept.getId().equals(conceptId)) {
-                return false;
-            }
-        }
-        return true;
+    private boolean isLimited(Set<String> limitConceptIds, Vertex vertex) {
+        String conceptId = CONCEPT_TYPE.getPropertyValue(vertex);
+        return !limitConceptIds.contains(conceptId);
     }
 }
 

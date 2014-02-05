@@ -1,22 +1,11 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
+import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import com.altamiracorp.securegraph.Graph;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.web.routes.RouteTestBase;
-import com.google.common.collect.Lists;
 
 @RunWith(JUnit4.class)
 public class TitanQueryFormatterTest extends RouteTestBase {

@@ -1,6 +1,11 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -11,21 +16,26 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
 
 public class ArtifactRaw extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
+    private static final Set<String> VALID_VIDEO_TYPES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
+            VIDEO_TYPE_MP4,
+            VIDEO_TYPE_WEBM
+    )));
 
     private final Graph graph;
 
@@ -49,7 +59,7 @@ public class ArtifactRaw extends BaseRequestHandler {
             return;
         }
 
-        String fileName = (String) artifactVertex.getPropertyValue(PropertyName.FILE_NAME.toString(), 0);
+        String fileName = FILE_NAME.getPropertyValue(artifactVertex);
         if (videoPlayback) {
             handlePartialPlayback(request, response, artifactVertex, fileName, user);
         } else {
@@ -61,7 +71,7 @@ public class ArtifactRaw extends BaseRequestHandler {
                 response.addHeader("Content-Disposition", "inline; filename=" + fileName);
             }
 
-            StreamingPropertyValue rawValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW.toString(), 0);
+            StreamingPropertyValue rawValue = RAW.getPropertyValue(artifactVertex);
             if (rawValue == null) {
                 LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId().toString());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -83,7 +93,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         String videoType = getRequiredParameter(request, "type");
 
         InputStream in;
-        long totalLength;
+        Long totalLength;
         long partialStart = 0;
         Long partialEnd = null;
         String range = request.getHeader("Range");
@@ -102,22 +112,21 @@ public class ArtifactRaw extends BaseRequestHandler {
             }
         }
 
-        if (videoType.equals("video/mp4") || videoType.equals("video/webm")) {
+        if (VALID_VIDEO_TYPES.contains(videoType)) {
             response.setContentType(videoType);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-            String videoPropertyName = PropertyName.videoPropertyName(videoType);
-            String videoSizePropertyName = PropertyName.videoSizePropertyName(videoType);
+            StreamingLumifyProperty videoProperty = getVideoProperty(videoType);
+            IdentityLumifyProperty<Long> videoSizeProperty = getVideoSizeProperty(videoType);
 
-            StreamingPropertyValue videoPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(videoPropertyName, 0);
-            if (videoPropertyValue == null) {
-                throw new RuntimeException("Could not find video property " + videoPropertyName + " on artifact " + artifactVertex.getId());
-            }
-
+            StreamingPropertyValue videoPropertyValue = videoProperty.getPropertyValue(artifactVertex);
+            checkNotNull(videoPropertyValue, String.format("Could not find video property %s on artifact %s", videoProperty.getKey(),
+                        artifactVertex.getId()));
             in = videoPropertyValue.getInputStream();
-            Object totalLengthObj = artifactVertex.getPropertyValue(videoSizePropertyName);
-            checkNotNull(totalLengthObj, "Could not find total video size " + videoSizePropertyName + " on vertex " + artifactVertex.getId());
-            totalLength = (Long) totalLengthObj;
+
+            totalLength = videoSizeProperty.getPropertyValue(artifactVertex);
+            checkNotNull(totalLength, String.format("Could not find total video size %s on vertex %s", videoSizeProperty.getKey(),
+                    artifactVertex.getId()));
         } else {
             throw new RuntimeException("Invalid video type: " + videoType);
         }
@@ -152,7 +161,7 @@ public class ArtifactRaw extends BaseRequestHandler {
     }
 
     private String getMimeType(Vertex artifactVertex) {
-        String mimeType = (String) artifactVertex.getPropertyValue(PropertyName.MIME_TYPE.toString(), 0);
+        String mimeType = MIME_TYPE.getPropertyValue(artifactVertex);
         if (mimeType == null || mimeType.isEmpty()) {
             mimeType = "application/octet-stream";
         }

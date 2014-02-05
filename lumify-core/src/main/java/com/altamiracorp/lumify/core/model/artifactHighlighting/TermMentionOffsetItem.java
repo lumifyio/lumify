@@ -1,15 +1,16 @@
 package com.altamiracorp.lumify.core.model.artifactHighlighting;
 
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TermMentionOffsetItem extends OffsetItem {
 
@@ -33,7 +34,7 @@ public class TermMentionOffsetItem extends OffsetItem {
 
     @Override
     public String getType() {
-        return OntologyRepository.TYPE_ENTITY.toString();
+        return OntologyRepository.TYPE_ENTITY;
     }
 
     public String getConceptGraphVertexId() {
@@ -50,7 +51,7 @@ public class TermMentionOffsetItem extends OffsetItem {
         if (graphVertex == null) {
             return null;
         }
-        return (String) graphVertex.getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
+        return (String) graphVertex.getPropertyValue(GLYPH_ICON.getKey());
     }
 
     @Override
@@ -64,17 +65,13 @@ public class TermMentionOffsetItem extends OffsetItem {
 
 
     private Double getLatitude() {
-        if (graphVertex == null || graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0) == null) {
-            return null;
-        }
-        return ((GeoPoint) graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0)).getLatitude();
+        GeoPoint point = GEO_LOCATION.getPropertyValue(graphVertex);
+        return point != null ? point.getLatitude() : null;
     }
 
     private Double getLongitude() {
-        if (graphVertex == null || graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0) == null) {
-            return null;
-        }
-        return ((GeoPoint) graphVertex.getPropertyValue(PropertyName.GEO_LOCATION.toString(), 0)).getLongitude();
+        GeoPoint point = GEO_LOCATION.getPropertyValue(graphVertex);
+        return point != null ? point.getLongitude() : null;
     }
 
     @Override

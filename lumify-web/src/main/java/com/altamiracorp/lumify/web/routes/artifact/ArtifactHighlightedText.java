@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -8,12 +9,11 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
     private final Graph graph;
@@ -34,9 +34,9 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         }
         OutputStream out = response.getOutputStream();
 
-        StreamingPropertyValue textValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.HIGHLIGHTED_TEXT.toString(), 0);
+        StreamingPropertyValue textValue = HIGHLIGHTED_TEXT.getPropertyValue(artifactVertex);
         if (textValue == null) {
-            textValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.TEXT.toString(), 0);
+            textValue = TEXT.getPropertyValue(artifactVertex);
             if (textValue == null) {
                 response.sendError(HttpServletResponse.SC_NO_CONTENT);
                 return;

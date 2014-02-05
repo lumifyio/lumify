@@ -1,11 +1,17 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
+
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.DisplayType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -14,24 +20,27 @@ import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Direction;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.ElementBuilder;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
@@ -80,21 +89,18 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         Visibility visibility = new Visibility("");
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
-        Object conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
-        if (conceptId instanceof String) {
-            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
-        }
-        artifactBuilder
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(DisplayType.IMAGE.toString(), TextIndex.EXACT_MATCH), visibility)
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility)
-                .setProperty(PropertyName.TITLE.toString(), new Text("Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString())), visibility)
-                .setProperty(PropertyName.SOURCE.toString(), new Text(SOURCE_UPLOAD), visibility)
-                .setProperty(PropertyName.PROCESS.toString(), new Text(PROCESS), visibility);
+        String conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
+        DISPLAY_TYPE.setProperty(artifactBuilder, DisplayType.IMAGE.toString(), visibility);
+        CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, visibility);
+        TITLE.setProperty(artifactBuilder, String.format("Image of %s", TITLE.getPropertyValue(entityVertex)), visibility);
+        SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, visibility);
+        LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, visibility);
         Vertex artifactVertex = artifactBuilder.save();
 
         auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user);
 
-        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), new Text(ArtifactThumbnail.getUrl(artifactVertex.getId()), TextIndex.EXACT_MATCH), visibility);
+        // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
+        entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
         auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user);
         entityVertex = entityVertexMutation.save();
         graph.flush();
@@ -132,12 +138,12 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, user.getAuthorizations())
-                .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
-                .setProperty(PropertyName.FILE_NAME.toString(), new Text(fileName), visibility)
-                .setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(FilenameUtils.getExtension(fileName)), visibility)
-                .setProperty(PropertyName.MIME_TYPE.toString(), new Text(mimeType), visibility)
-                .setProperty(PropertyName.RAW.toString(), rawValue, visibility);
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, user.getAuthorizations());
+        CREATE_DATE.setProperty(vertexBuilder, new Date(), visibility);
+        FILE_NAME.setProperty(vertexBuilder, fileName, visibility);
+        FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), visibility);
+        MIME_TYPE.setProperty(vertexBuilder, mimeType, visibility);
+        RAW.setProperty(vertexBuilder, rawValue, visibility);
         return vertexBuilder;
     }
 }

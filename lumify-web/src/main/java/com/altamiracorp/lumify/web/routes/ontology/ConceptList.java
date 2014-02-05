@@ -1,20 +1,20 @@
 package com.altamiracorp.lumify.web.routes.ontology;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.lumify.core.user.User;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.atteo.evo.inflector.English;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class ConceptList extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
@@ -39,7 +39,7 @@ public class ConceptList extends BaseRequestHandler {
     private JSONObject buildJsonTree(HttpServletRequest request, Concept concept, User user) throws JSONException {
         JSONObject result = concept.toJson();
 
-        String displayName = result.optString(PropertyName.DISPLAY_NAME.toString());
+        String displayName = result.optString(DISPLAY_NAME.getKey());
         if (displayName != null) {
             result.put("pluralDisplayName", English.plural(displayName));
         }

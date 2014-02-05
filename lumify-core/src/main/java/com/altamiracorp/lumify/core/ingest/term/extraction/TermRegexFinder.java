@@ -1,10 +1,10 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.securegraph.Vertex;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,7 +30,7 @@ public class TermRegexFinder {
             TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
             termMention.getMetadata()
                     .setSign(m.group(2))
-                    .setOntologyClassUri((String) concept.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0))
+                    .setOntologyClassUri(DISPLAY_NAME.getPropertyValue(concept))
                     .setConceptGraphVertexId(concept.getId());
             termMentions.add(termMention);
         }

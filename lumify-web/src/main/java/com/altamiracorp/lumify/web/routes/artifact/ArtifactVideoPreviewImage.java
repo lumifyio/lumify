@@ -1,7 +1,8 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.VIDEO_PREVIEW_IMAGE;
+
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -12,12 +13,11 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
-
+import java.io.InputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
 public class ArtifactVideoPreviewImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
@@ -54,7 +54,8 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             response.setContentType("image/jpeg");
             response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
 
-            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0], boundaryDims[1], user);
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0],
+                    boundaryDims[1], user);
             if (thumbnailData != null) {
                 LOGGER.debug("Cache hit for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
@@ -64,7 +65,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             }
         }
 
-        StreamingPropertyValue videoPreviewImageValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.VIDEO_PREVIEW_IMAGE.toString());
+        StreamingPropertyValue videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
         if (videoPreviewImageValue == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
@@ -74,7 +75,8 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
         try {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "video-preview", in, boundaryDims, user).getMetadata().getData();
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "video-preview", in,
+                        boundaryDims, user).getMetadata().getData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();

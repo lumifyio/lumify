@@ -1,13 +1,11 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+
 import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
-
-import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
 
 public class Relationship {
     private final Vertex vertex;
@@ -25,11 +23,11 @@ public class Relationship {
     }
 
     public String getTitle() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0));
+        return TITLE.getPropertyValue(vertex);
     }
 
     public String getDisplayName() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0));
+        return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
     public Concept getSourceConcept() {

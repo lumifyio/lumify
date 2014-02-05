@@ -1,14 +1,27 @@
 package com.altamiracorp.lumify.core.cmdline;
 
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.MAP_GLYPH_ICON;
+
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -19,19 +32,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class OwlImport extends CommandLineBase {
+    public static final String NS_XML_URI = "http://www.w3.org/XML/1998/namespace";
+
     private OntologyRepository ontologyRepository;
     private Graph graph;
     private String inFileName;
     private File inDir;
-    public static String NS_XML_URI = "http://www.w3.org/XML/1998/namespace";
 
     public static void main(String[] args) throws Exception {
         int res = new OwlImport().run(args);
@@ -118,10 +125,10 @@ public class OwlImport extends CommandLineBase {
             Object propertyValue = propertyElem.getTextContent().trim();
             LOGGER.info("  " + propertyName + " = " + propertyValue);
             if (propertyName.equals("glyphIconFileName")) {
-                propertyName = PropertyName.GLYPH_ICON.toString();
+                propertyName = GLYPH_ICON.getKey();
                 propertyValue = importGlyphIconFile(propertyValue.toString(), user);
             } else if (propertyName.equals("mapGlyphIconFileName")) {
-                propertyName = PropertyName.MAP_GLYPH_ICON.toString();
+                propertyName = MAP_GLYPH_ICON.getKey();
                 propertyValue = importGlyphIconFile(propertyValue.toString(), user);
             }
             concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY);

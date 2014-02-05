@@ -1,20 +1,25 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
+
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Direction;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class EntityObjectDetectionDelete extends BaseRequestHandler {
     private final Graph graph;
@@ -60,7 +65,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         }
 
         // Delete the appropriate detected object json object from the array and reset the property
-        JSONArray detectedObjects = new JSONArray(artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0).toString());
+        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
         boolean deleted = false;
         for (int i = 0; i < detectedObjects.length(); i++) {
             JSONObject detectedObject = detectedObjects.getJSONObject(i);
@@ -73,12 +78,13 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         if (!deleted) {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
-        artifactVertexMutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
         auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
         artifactVertex = artifactVertexMutation.save();
         graph.flush();
 
-        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(), PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
+        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(),
+                DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
         obj.put("updatedArtifactVertex", updatedArtifactVertex);
 
         //TODO: Overwrite old ElasticSearch index with new info

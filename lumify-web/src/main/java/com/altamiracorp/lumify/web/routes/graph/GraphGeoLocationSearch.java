@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -10,12 +11,11 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.GeoCompare;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GraphGeoLocationSearch extends BaseRequestHandler {
     private final Graph graph;
@@ -32,7 +32,10 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
         final double radius = getRequiredParameterAsDouble(request, "radius");
 
         User user = getUser(request);
-        Iterator<Vertex> vertexIterator = graph.query(user.getAuthorizations()).has(PropertyName.GEO_LOCATION.toString(), GeoCompare.WITHIN, new GeoPoint(latitude, longitude, radius)).vertices().iterator();
+        Iterator<Vertex> vertexIterator = graph.query(user.getAuthorizations()).
+                has(GEO_LOCATION.getKey(), GeoCompare.WITHIN, new GeoPoint(latitude, longitude, radius)).
+                vertices().
+                iterator();
 
         JSONObject results = new JSONObject();
         JSONArray vertices = new JSONArray();

@@ -16,9 +16,12 @@
 
 package com.altamiracorp.lumify.storm;
 
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+
 import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
@@ -26,15 +29,19 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.annotation.Nullable;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
-
-import javax.annotation.Nullable;
-import java.io.*;
 
 /**
  * Base class for bolts that process files from HDFS.
@@ -68,13 +75,13 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
                 if (artifactVertex == null) {
                     throw new RuntimeException("Could not find vertex with id: " + vertexId);
                 }
-                fileName = (String) artifactVertex.getPropertyValue(PropertyName.FILE_NAME.toString(), 0);
-                mimeType = (String) artifactVertex.getPropertyValue(PropertyName.MIME_TYPE.toString(), 0);
-                source = (String) artifactVertex.getPropertyValue(PropertyName.SOURCE.toString(), 0);
-                title = (String) artifactVertex.getPropertyValue(PropertyName.TITLE.toString(), 0);
+                fileName = FILE_NAME.getPropertyValue(artifactVertex);
+                mimeType = MIME_TYPE.getPropertyValue(artifactVertex);
+                source = SOURCE.getPropertyValue(artifactVertex);
+                title = TITLE.getPropertyValue(artifactVertex);
 
-                StreamingPropertyValue rowPropertyValue = (StreamingPropertyValue) artifactVertex.getPropertyValue(PropertyName.RAW.toString(), 0);
-                raw = rowPropertyValue.getInputStream();
+                StreamingPropertyValue rawPropertyValue = RAW.getPropertyValue(artifactVertex);
+                raw = rawPropertyValue.getInputStream();
             } else if (rawString != null) {
                 raw = new ByteArrayInputStream(rawString.getBytes());
             }

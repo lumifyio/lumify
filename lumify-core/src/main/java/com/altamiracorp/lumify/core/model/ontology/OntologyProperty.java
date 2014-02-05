@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
 
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
@@ -15,9 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OntologyProperty {
-    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    public static Pattern GEO_LOCATION_FORMAT = Pattern.compile("POINT\\((.*?),(.*?)\\)", Pattern.CASE_INSENSITIVE);
-    public static Pattern GEO_LOCATION_ALTERNATE_FORMAT = Pattern.compile("(.*?),(.*)", Pattern.CASE_INSENSITIVE);
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    public static final Pattern GEO_LOCATION_FORMAT = Pattern.compile("POINT\\((.*?),(.*?)\\)", Pattern.CASE_INSENSITIVE);
+    public static final Pattern GEO_LOCATION_ALTERNATE_FORMAT = Pattern.compile("(.*?),(.*)", Pattern.CASE_INSENSITIVE);
 
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -34,19 +35,19 @@ public class OntologyProperty {
     }
 
     public String getTitle() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0));
+        return ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
     public String getDisplayName() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0));
+        return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
     public String getDisplayType() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_TYPE.toString(), 0));
+        return DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
     public PropertyType getDataType() {
-        return PropertyType.convert((toStringOrNull(this.vertex.getPropertyValue(PropertyName.DATA_TYPE.toString(), 0))));
+        return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }
 
     public Vertex getVertex() {
@@ -76,9 +77,9 @@ public class OntologyProperty {
     }
 
     public Object convertString(String valueStr) throws ParseException {
-        PropertyType dateType = getDataType();
+        PropertyType dataType = getDataType();
         Object value = valueStr;
-        switch (dateType) {
+        switch (dataType) {
             case DATE:
                 value = DATE_FORMAT.parse(valueStr).getTime();
                 break;
