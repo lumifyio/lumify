@@ -1,13 +1,18 @@
 package com.altamiracorp.lumify.core.util;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
-import com.altamiracorp.securegraph.*;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+
+import com.altamiracorp.securegraph.Direction;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Element;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Text;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
+import java.util.Collection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collection;
 
 public class GraphUtil {
     public static JSONArray toJson(Collection<Element> elements) {
@@ -58,7 +63,7 @@ public class GraphUtil {
         JSONObject propertiesJson = new JSONObject();
         for (Property property : properties) {
             Object propertyValue = property.getValue();
-            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
+            if (GEO_LOCATION.getKey().equals(property.getName())) {
                 Double[] latlong = parseLatLong(propertyValue);
                 propertiesJson.put("latitude", latlong[0]);
                 propertiesJson.put("longitude", latlong[1]);

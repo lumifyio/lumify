@@ -1,12 +1,13 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
+
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -15,11 +16,10 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class EntityObjectDetectionCreate extends BaseRequestHandler {
     private final Graph graph;
@@ -61,7 +61,8 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
         // create new graph vertex
         // TODO: replace second "" when we implement commenting on ui
-        ElementMutation<Vertex> resolvedVertexMutation = entityHelper.createGraphMutation(concept, sign, existing, graphVertexId, "", "", user);
+        ElementMutation<Vertex> resolvedVertexMutation =
+                entityHelper.createGraphMutation(concept, sign, existing, graphVertexId, "", "", user);
         Vertex resolvedVertex = resolvedVertexMutation.save();
         auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
 
@@ -69,8 +70,9 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
         // adding to detected object property if one exists, if not add detected object property to the artifact vertex
         JSONArray detectedObjectList = new JSONArray();
-        if (artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0) != null) {
-            detectedObjectList = new JSONArray(artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0).toString());
+        String detectedObjects = DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex);
+        if (detectedObjects != null && !detectedObjects.trim().isEmpty()) {
+            detectedObjectList = new JSONArray(detectedObjects);
         }
 
         JSONObject result = new JSONObject();
@@ -79,7 +81,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         entityVertex.put("artifactId", artifactId);
         detectedObjectList.put(entityVertex);
 
-        artifactVertexMutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjectList.toString(), visibility);
+        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjectList.toString(), visibility);
         auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
         artifactVertex = artifactVertexMutation.save();
 
@@ -91,7 +93,8 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         result.put("entityVertex", entityVertex);
 
         JSONObject updatedArtifactVertex =
-                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
+                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, DETECTED_OBJECTS_JSON.getKey(),
+                        DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
 
         result.put("updatedArtifactVertex", updatedArtifactVertex);
 

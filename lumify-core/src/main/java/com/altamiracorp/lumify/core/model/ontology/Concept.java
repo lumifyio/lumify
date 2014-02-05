@@ -1,11 +1,12 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static com.altamiracorp.lumify.core.util.ObjectHelper.toStringOrNull;
 
 public class Concept {
 
@@ -15,28 +16,29 @@ public class Concept {
         this.vertex = vertex;
     }
 
-    public Object getId() {
-        return this.vertex.getId();
+    public String getId() {
+        return vertex.getId().toString();
     }
 
     public String getTitle() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString(), 0));
+        return ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
-    public Boolean hasGlyphIconResource() {
-        return (this.vertex.getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0) != null);
+    public boolean hasGlyphIconResource() {
+        // TO-DO: This can be changed to GLYPH_ICON.getPropertyValue(vertex) once ENTITY_IMAGE_URL is added
+        return vertex.getPropertyValue(GLYPH_ICON.getKey()) != null;
     }
 
     public String getColor() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.COLOR.toString(), 0));
+        return COLOR.getPropertyValue(vertex);
     }
 
     public String getDisplayName() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0));
+        return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
     public String getDisplayType() {
-        return toStringOrNull(this.vertex.getPropertyValue(PropertyName.DISPLAY_TYPE.toString(), 0));
+        return DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
     public Vertex getVertex() {
@@ -63,7 +65,7 @@ public class Concept {
     }
 
     public Concept setProperty(String propertyName, Object propertyValue, Visibility visibility) {
-        this.vertex.setProperty(propertyName, propertyValue, visibility);
+        vertex.setProperty(propertyName, propertyValue, visibility);
         return this;
     }
 }

@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -10,13 +11,12 @@ import com.altamiracorp.securegraph.Text;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class VertexProperties extends BaseRequestHandler {
     private final Graph graph;
@@ -46,7 +46,7 @@ public class VertexProperties extends BaseRequestHandler {
         Iterator<Property> propertyIterator = properties.iterator();
         while (propertyIterator.hasNext()) {
             Property property = propertyIterator.next();
-            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
+            if (GEO_LOCATION.getKey().equals(property.getName())) {
                 JSONObject geo = new JSONObject();
                 GeoPoint geoPoint = (GeoPoint) property.getValue();
                 geo.put("latitude", geoPoint.getLatitude());

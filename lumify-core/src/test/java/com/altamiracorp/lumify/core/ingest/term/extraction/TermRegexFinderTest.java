@@ -1,18 +1,18 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
+import com.altamiracorp.securegraph.Text;
 import com.altamiracorp.securegraph.Vertex;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TermRegexFinderTest {
@@ -22,7 +22,7 @@ public class TermRegexFinderTest {
     @Before
     public void setup() {
         when(concept.getId()).thenReturn("1");
-        when(concept.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0)).thenReturn("testConcept");
+        when(concept.getPropertyValue(DISPLAY_NAME.getKey())).thenReturn(new Text("testConcept"));
     }
 
     @Test

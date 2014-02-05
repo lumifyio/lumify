@@ -1,8 +1,13 @@
 package com.altamiracorp.lumify.core.ontology;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -10,12 +15,11 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
 public class BaseOntology {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseOntology.class);
@@ -31,21 +35,24 @@ public class BaseOntology {
 
     public void defineOntology(User user) {
         // concept properties
-        ontologyRepository.getOrCreatePropertyType(PropertyName.TITLE.toString(), PropertyType.STRING);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), PropertyType.STRING);
-        ontologyRepository.getOrCreatePropertyType(PropertyName.AUTHOR.toString(), PropertyType.STRING);
+        ontologyRepository.getOrCreatePropertyType(TITLE.getKey(), PropertyType.STRING, "Title");
+        ontologyRepository.getOrCreatePropertyType(GEO_LOCATION.getKey(), PropertyType.GEO_LOCATION, "Geo Location");
+        ontologyRepository.getOrCreatePropertyType(GEO_LOCATION_DESCRIPTION.getKey(), PropertyType.STRING, "Geo Location Description");
+        ontologyRepository.getOrCreatePropertyType(AUTHOR.getKey(), PropertyType.STRING, "Author");
         graph.flush();
 
-        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME, OntologyRepository.ROOT_CONCEPT_NAME);
-        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.GLYPH_ICON.toString(), "glyph icon", PropertyType.IMAGE);
-        ontologyRepository.addPropertyTo(rootConcept.getVertex(), PropertyName.MAP_GLYPH_ICON.toString(), "map glyph icon", PropertyType.IMAGE);
+        Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_NAME,
+                OntologyRepository.ROOT_CONCEPT_NAME);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), GLYPH_ICON.getKey(), "glyph icon",
+                PropertyType.IMAGE);
+        ontologyRepository.addPropertyTo(rootConcept.getVertex(), MAP_GLYPH_ICON.getKey(), "map glyph icon",
+                PropertyType.IMAGE);
         graph.flush();
 
         // Entity concept
-        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY.toString(), "Entity");
-        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.CONCEPT_TYPE.toString(), "Type", PropertyType.STRING);
-        ontologyRepository.addPropertyTo(entity.getVertex(), PropertyName.TITLE.toString(), "Title", PropertyType.STRING);
+        Concept entity = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.TYPE_ENTITY, "Entity");
+        ontologyRepository.addPropertyTo(entity.getVertex(), CONCEPT_TYPE.getKey(), "Type", PropertyType.STRING);
+        ontologyRepository.addPropertyTo(entity.getVertex(), TITLE.getKey(), "Title", PropertyType.STRING);
 
         graph.flush();
 
@@ -59,7 +66,7 @@ public class BaseOntology {
 
             StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
             raw.searchIndex(false);
-            entity.setProperty(PropertyName.GLYPH_ICON.toString(), raw, OntologyRepository.DEFAULT_VISIBILITY);
+            GLYPH_ICON.setProperty(entity.getVertex(), raw, OntologyRepository.DEFAULT_VISIBILITY);
             graph.flush();
         } catch (IOException e) {
             throw new RuntimeException("invalid stream for glyph icon");
@@ -72,7 +79,7 @@ public class BaseOntology {
             Concept concept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY);
             return concept != null; // todo should check for more
         } catch (Exception e) {
-            if (e.getMessage() != null && e.getMessage().contains(PropertyName.ONTOLOGY_TITLE.toString())) {
+            if (e.getMessage() != null && e.getMessage().contains(ONTOLOGY_TITLE.getKey())) {
                 return false;
             }
             throw new RuntimeException(e);

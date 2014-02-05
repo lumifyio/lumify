@@ -1,21 +1,23 @@
 package com.altamiracorp.lumify.core.ontology;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BaseOntologyTest {
@@ -30,6 +32,8 @@ public class BaseOntologyTest {
     @Mock
     Concept entityConcept;
     @Mock
+    Vertex entityVertex;
+    @Mock
     OntologyRepository ontologyRepository;
     @Mock
     Graph graph;
@@ -39,6 +43,7 @@ public class BaseOntologyTest {
     @Before
     public void setUp() {
         baseOntology = new BaseOntology(ontologyRepository, graph);
+        when(entityConcept.getVertex()).thenReturn(entityVertex);
     }
 
     @Test
@@ -48,8 +53,8 @@ public class BaseOntologyTest {
 
         baseOntology.defineOntology(user);
 
-        verify(ontologyRepository, times(4)).addPropertyTo(eq(rootConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
-        verify(ontologyRepository, times(4)).addPropertyTo(eq(entityConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
+        verify(ontologyRepository, times(2)).addPropertyTo(eq(rootConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
+        verify(ontologyRepository, times(2)).addPropertyTo(eq(entityConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
 
         // TODO rewrite this test for secure graph!!!
 //        verify(entityConcept).setProperty(PropertyName.GLYPH_ICON.toString(), "rowKey", (Visibility) any());
@@ -77,14 +82,13 @@ public class BaseOntologyTest {
 
     @Test
     public void testIsOntologyDefinedExceptionWithFalse() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenThrow(new RuntimeException("ontologyTitle", new Throwable("testing exception")));
-        boolean result = baseOntology.isOntologyDefined(user);
-        assertEquals(false, result);
+        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenThrow(new RuntimeException("ontologyTitle", new Throwable("testing exception")));
+        assertFalse(baseOntology.isOntologyDefined(user));
     }
 
     @Test
     public void testInitializeWhenUndefined() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenReturn(null);
+        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenReturn(null);
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"))).thenReturn(entityConcept);
 
@@ -93,7 +97,7 @@ public class BaseOntologyTest {
 
     @Test
     public void testInitializeWhenDefined() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenReturn(rootConcept);
+        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenReturn(rootConcept);
         baseOntology.initialize(user);
     }
 }

@@ -16,10 +16,13 @@
 
 package com.altamiracorp.lumify.core.model.properties;
 
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Element;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * A LumifyProperty provides convenience methods for converting standard
@@ -64,23 +67,100 @@ public abstract class LumifyProperty<TRaw, TGraph> {
     public abstract TRaw unwrap(final TGraph value);
 
     /**
-     * Get the value of this property from the provided Vertex.
-     * @param vertex the vertex
-     * @return the value of this property on the given Vertex or null if it is not configured
+     * Get the property key for this property.
+     * @return the property key
      */
-    public final TRaw getValue(final Vertex vertex) {
-        Object value = vertex.getPropertyValue(key);
+    public final String getKey() {
+        return key;
+    }
+
+    /**
+     * Add a mutation to set this property to the provided value.
+     * @param mutation the element mutation
+     * @param value the new property value
+     * @param visibility the property visibility
+     */
+    public final void setProperty(final ElementMutation<?> mutation, final TRaw value, final Visibility visibility) {
+        mutation.setProperty(key, wrap(value), visibility);
+    }
+
+    /**
+     * Add a mutation to set this property to the provided value.
+     * @param mutation the element mutation
+     * @param value the new property value
+     * @param metadata the property metadata
+     * @param visibility the property visibility
+     */
+    public final void setProperty(final ElementMutation<?> mutation, final TRaw value, final Map<String, Object> metadata,
+            final Visibility visibility) {
+        mutation.setProperty(key, wrap(value), metadata, visibility);
+    }
+
+    /**
+     * Set this property on the provided element.
+     * @param element the element
+     * @param value the new property value
+     * @param visibility the property visibility
+     */
+    public final void setProperty(final Element element, final TRaw value, final Visibility visibility) {
+        element.setProperty(key, wrap(value), visibility);
+    }
+
+    /**
+     * Set this property on the provided element.
+     * @param element the element
+     * @param value the new property value
+     * @param metadata the property metadata
+     * @param visibility the property visibility
+     */
+    public final void setProperty(final Element element, final TRaw value, final Map<String, Object> metadata,
+            final Visibility visibility) {
+        element.setProperty(key, wrap(value), metadata, visibility);
+    }
+
+    /**
+     * Add a mutation to add a new value to this property.
+     * @param mutation the element mutation
+     * @param multiKey the multi-valued property key
+     * @param value the new property value
+     * @param visibility the property visibility
+     */
+    public final void addPropertyValue(final ElementMutation<?> mutation, final String multiKey, final TRaw value,
+            final Visibility visibility) {
+        mutation.addPropertyValue(multiKey, key, wrap(value), visibility);
+    }
+
+    /**
+     * Add a mutation to add a new value to this property
+     * @param mutation the element mutation
+     * @param multiKey the multi-valued property key
+     * @param value the new property value
+     * @param metadata the property metadata
+     * @param visibility the property visibility
+     */
+    public final void addPropertyValue(final ElementMutation<?> mutation, final String multiKey, final TRaw value,
+            final Map<String, Object> metadata, final Visibility visibility) {
+        mutation.addPropertyValue(multiKey, key, wrap(value), metadata, visibility);
+    }
+
+    /**
+     * Get the value of this property from the provided Element.
+     * @param element the element
+     * @return the value of this property on the given Element or null if it is not configured
+     */
+    public final TRaw getPropertyValue(final Element element) {
+        Object value = element != null ? element.getPropertyValue(key) : null;
         return value != null ? rawConverter.apply(value) : null;
     }
 
     /**
-     * Get all values of this property from the provided Vertex.
-     * @param vertex the vertex
-     * @return an Iterable over the values of this property on the given Vertex
+     * Get all values of this property from the provided Element.
+     * @param element the element
+     * @return an Iterable over the values of this property on the given Element
      */
     @SuppressWarnings("unchecked")
-    public final Iterable<TRaw> getValues(final Vertex vertex) {
-        Iterable<Object> values = vertex.getPropertyValues(key);
+    public final Iterable<TRaw> getPropertyValues(final Element element) {
+        Iterable<Object> values = element != null ? element.getPropertyValues(key) : null;
         return values != null ? Iterables.transform(values, rawConverter) : Collections.EMPTY_LIST;
     }
 

@@ -1,7 +1,8 @@
 package com.altamiracorp.lumify.storm.textHighlighting;
 
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.HIGHLIGHTED_TEXT;
+
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -11,9 +12,8 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
+import org.json.JSONObject;
 
 public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightingBolt.class);
@@ -44,7 +44,7 @@ public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
         StreamingPropertyValue highlightedTextPropertyValue = new StreamingPropertyValue(new ByteArrayInputStream(highlightedText.getBytes()), String.class);
         highlightedTextPropertyValue.store(true);
         highlightedTextPropertyValue.searchIndex(true);
-        vertex.setProperty(PropertyName.HIGHLIGHTED_TEXT.toString(), highlightedTextPropertyValue, new Visibility(""));
+        HIGHLIGHTED_TEXT.setProperty(vertex, highlightedTextPropertyValue, new Visibility(""));
     }
 
     @Inject

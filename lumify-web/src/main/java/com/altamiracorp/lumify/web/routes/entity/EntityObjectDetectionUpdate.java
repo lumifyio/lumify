@@ -1,22 +1,26 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
+
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.ExistingElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final Graph graph;
@@ -80,7 +84,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
 
         // update the detected object property on the artifact
-        JSONArray detectedObjects = new JSONArray(artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0).toString());
+        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
         for (int i = 0; i < detectedObjects.length(); i++) {
             JSONObject detectedObject = detectedObjects.getJSONObject(i);
             String oldCoordinates = "x1: " + detectedObject.get("x1") + ", y1: " + detectedObject.get("y1") +
@@ -94,13 +98,14 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 entityTag.put("artifactId", artifactId);
                 detectedObjects.put(i, entityTag);
 
-                artifactVertexMutation.setProperty(PropertyName.DETECTED_OBJECTS.toString(), detectedObjects.toString(), visibility);
+                DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
                 result.put("entityVertex", entityTag);
 
                 auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
                 artifactVertex = artifactVertexMutation.save();
 
-                JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId, PropertyName.DETECTED_OBJECTS.toString(), artifactVertex.getPropertyValue(PropertyName.DETECTED_OBJECTS.toString(), 0));
+                JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId,
+                        DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);
 
                 respondWithJson(response, result);

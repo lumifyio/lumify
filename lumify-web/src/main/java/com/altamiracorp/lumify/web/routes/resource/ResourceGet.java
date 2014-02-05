@@ -1,17 +1,18 @@
 package com.altamiracorp.lumify.web.routes.resource;
 
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
-
+import java.io.ByteArrayOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
+import org.apache.commons.io.IOUtils;
 
 public class ResourceGet extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
@@ -25,15 +26,16 @@ public class ResourceGet extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String id = getAttributeString(request, "id");
 
-        StreamingPropertyValue streamingPropertyValue = (StreamingPropertyValue) ontologyRepository.getConceptById(id).getVertex().getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
+        Concept concept = ontologyRepository.getConceptById(id);
+        StreamingPropertyValue spv = GLYPH_ICON.getPropertyValue(concept.getVertex());
 
-        if (streamingPropertyValue == null) {
+        if (spv == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-        IOUtils.copy(streamingPropertyValue.getInputStream(), imgOut);
+        IOUtils.copy(spv.getInputStream(), imgOut);
 
         byte[] rawImg = imgOut.toByteArray();
 

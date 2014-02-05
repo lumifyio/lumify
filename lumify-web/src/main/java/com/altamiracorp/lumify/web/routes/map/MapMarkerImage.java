@@ -1,9 +1,10 @@
 package com.altamiracorp.lumify.web.routes.map;
 
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -13,23 +14,22 @@ import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class MapMarkerImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
 
     private final OntologyRepository ontologyRepository;
-    private Cache<String, byte[]> imageCache = CacheBuilder.newBuilder()
+    private final Cache<String, byte[]> imageCache = CacheBuilder.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build();
 
@@ -151,27 +151,18 @@ public class MapMarkerImage extends BaseRequestHandler {
     }
 
     private StreamingPropertyValue getMapGlyphIcon(Concept concept, User user) {
-        while (concept != null) {
-            StreamingPropertyValue mapGlyphIcon = (StreamingPropertyValue) concept.getVertex().getPropertyValue(PropertyName.MAP_GLYPH_ICON.toString(), 0);
-            if (mapGlyphIcon != null) {
-                return mapGlyphIcon;
-            }
-
-            concept = ontologyRepository.getParentConcept(concept.getId().toString());
+        StreamingPropertyValue mapGlyphIcon = null;
+        for (Concept con = concept; mapGlyphIcon == null && con != null; con = ontologyRepository.getParentConcept(con)) {
+            mapGlyphIcon = MAP_GLYPH_ICON.getPropertyValue(con.getVertex());
         }
-
-        return null;
+        return mapGlyphIcon;
     }
 
     private StreamingPropertyValue getGlyphIcon(Concept concept, User user) {
-        while (concept != null) {
-            if (concept.hasGlyphIconResource()) {
-                return (StreamingPropertyValue) concept.getVertex().getPropertyValue(PropertyName.GLYPH_ICON.toString(), 0);
-            }
-
-            concept = ontologyRepository.getParentConcept(concept.getId().toString());
+        StreamingPropertyValue glyphIcon = null;
+        for (Concept con = concept; glyphIcon == null && con != null; con = ontologyRepository.getParentConcept(con)) {
+            glyphIcon = con.hasGlyphIconResource() ? GLYPH_ICON.getPropertyValue(con.getVertex()) : null;
         }
-
-        return null;
+        return glyphIcon;
     }
 }

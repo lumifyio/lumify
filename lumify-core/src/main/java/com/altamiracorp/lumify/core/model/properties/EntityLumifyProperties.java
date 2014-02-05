@@ -16,30 +16,31 @@
 
 package com.altamiracorp.lumify.core.model.properties;
 
-import com.altamiracorp.securegraph.type.GeoShape;
+import com.altamiracorp.securegraph.type.GeoPoint;
 
 /**
- * LumifyProperties that apply to entities stored in the Lumify system.
+ * LumifyProperties that apply to both raw and resolved entities stored in the Lumify system.
  */
 public class EntityLumifyProperties {
     /**
-     * The entity title.
-     */
-    public static final LumifyProperty<String, String> TITLE = new IdentityLumifyProperty<String>("title");
-
-    /**
      * The geo location of the entity.
      */
-    public static final LumifyProperty<GeoShape, GeoShape> GEO_LOCATION = new IdentityLumifyProperty<GeoShape>("geoLocation");
+    public static final IdentityLumifyProperty<GeoPoint> GEO_LOCATION = new IdentityLumifyProperty<GeoPoint>("geoLocation");
 
     /**
      * The geo location description.
      */
-    public static final LumifyProperty<String, String> GEO_LOCATION_DESCRIPTION =
-            new IdentityLumifyProperty<String>("_geoLocationDescription");
+    public static final TextLumifyProperty GEO_LOCATION_DESCRIPTION = TextLumifyProperty.all("_geoLocationDescription");
 
     /**
      * The source of the entity.
      */
-    public static final LumifyProperty<String, String> SOURCE = new IdentityLumifyProperty<String>("_source");
+    public static final TextLumifyProperty SOURCE = TextLumifyProperty.all("_source");
+
+    /**
+     * Utility class consructor.
+     */
+    private EntityLumifyProperties() {
+        throw new UnsupportedOperationException("do not construct utility class");
+    }
 }

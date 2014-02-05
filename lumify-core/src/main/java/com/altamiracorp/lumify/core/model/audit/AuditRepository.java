@@ -1,24 +1,28 @@
 package com.altamiracorp.lumify.core.model.audit;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.ExistingElementMutation;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class AuditRepository extends Repository<Audit> {
@@ -61,7 +65,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(auditAction)
-                .setType(OntologyRepository.TYPE_ENTITY.toString())
+                .setType(OntologyRepository.TYPE_ENTITY)
                 .setComment(comment)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "")
@@ -122,7 +126,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(OntologyRepository.TYPE_PROPERTY.toString())
+                .setType(OntologyRepository.TYPE_PROPERTY)
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -131,17 +135,17 @@ public class AuditRepository extends Repository<Audit> {
 
         if (oldValue != null) {
             if (oldValue instanceof GeoPoint) {
-                String val = "POINT(" + ((GeoPoint) oldValue).getLatitude() + "," + ((GeoPoint) oldValue).getLongitude() + ")";
+                String val = String.format("POINT(%f,%f)", ((GeoPoint)oldValue).getLatitude(), ((GeoPoint)oldValue).getLongitude());
                 audit.getAuditProperty().setPreviousValue(val);
             } else {
                 audit.getAuditProperty().setPreviousValue(oldValue.toString());
             }
         }
-        if (action.equals(AuditAction.DELETE.toString())) {
+        if (action == AuditAction.DELETE) {
             audit.getAuditProperty().setNewValue("");
         } else {
             if (newValue instanceof GeoPoint) {
-                String val = "POINT(" + ((GeoPoint) newValue).getLatitude() + "," + ((GeoPoint) newValue).getLongitude() + ")";
+                String val = String.format("POINT(%f,%f)", ((GeoPoint)newValue).getLatitude(), ((GeoPoint)newValue).getLongitude());
                 audit.getAuditProperty().setNewValue(val);
             } else {
                 audit.getAuditProperty().setNewValue(newValue.toString());
@@ -194,7 +198,7 @@ public class AuditRepository extends Repository<Audit> {
         auditSourceDest.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(OntologyRepository.TYPE_PROPERTY.toString())
+                .setType(OntologyRepository.TYPE_PROPERTY)
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -204,7 +208,7 @@ public class AuditRepository extends Repository<Audit> {
         auditDestSource.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(OntologyRepository.TYPE_PROPERTY.toString())
+                .setType(OntologyRepository.TYPE_PROPERTY)
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -215,7 +219,7 @@ public class AuditRepository extends Repository<Audit> {
             auditDestSource.getAuditProperty().setPreviousValue(oldValue);
             auditSourceDest.getAuditProperty().setPreviousValue(oldValue);
         }
-        if (action.equals(AuditAction.DELETE.toString())) {
+        if (action == AuditAction.DELETE) {
             auditDestSource.getAuditProperty().setNewValue("");
             auditSourceDest.getAuditProperty().setNewValue("");
         } else {
@@ -235,7 +239,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(OntologyRepository.TYPE_ENTITY.toString())
+                .setType(OntologyRepository.TYPE_ENTITY)
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -244,7 +248,7 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditEntity()
                 .setTitle(entityTitle)
-                .setType(OntologyRepository.TYPE_ENTITY.toString())
+                .setType(OntologyRepository.TYPE_ENTITY)
                 .setSubtype(entitySubtype)
                 .setID(entityID.toString());
         return audit;
@@ -254,7 +258,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user)
                 .setAction(action)
-                .setType(OntologyRepository.TYPE_RELATIONSHIP.toString())
+                .setType(OntologyRepository.TYPE_RELATIONSHIP)
                 .setComment(comment)
                 .setProcess(process)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L)
@@ -263,11 +267,11 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId())
-                .setSourceType(sourceVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
-                .setSourceTitle(sourceVertex.getPropertyValue(PropertyName.TITLE.toString()))
+                .setSourceType(CONCEPT_TYPE.getPropertyValue(sourceVertex))
+                .setSourceTitle(TITLE.getPropertyValue(sourceVertex))
                 .setDestId(destVertex.getId())
-                .setDestTitle(destVertex.getPropertyValue(PropertyName.TITLE.toString()))
-                .setDestType(destVertex.getPropertyValue(PropertyName.CONCEPT_TYPE.toString()))
+                .setDestTitle(TITLE.getPropertyValue(destVertex))
+                .setDestType(CONCEPT_TYPE.getPropertyValue(destVertex))
                 .setLabel(label);
         return audit;
     }

@@ -1,5 +1,12 @@
 package com.altamiracorp.lumify.storm;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -15,32 +22,40 @@ import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.ExistingElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.codehaus.plexus.util.FileUtils;
 import org.json.JSONObject;
-
-import java.io.*;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
@@ -226,14 +241,10 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
-        Object conceptId = concept.getId();
-        if (conceptId instanceof String) {
-            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
-        }
-        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility);
+        CONCEPT_TYPE.setProperty(artifact, concept.getId(), visibility);
 
         if (artifactExtractedInfo.getDate() != null) {
-            artifact.setProperty(PropertyName.CREATE_DATE.toString(), artifactExtractedInfo.getDate(), visibility);
+            CREATE_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), visibility);
         }
 
         if (artifactExtractedInfo.getRaw() != null || artifactExtractedInfo.getRawHdfsPath() != null) {
@@ -244,13 +255,13 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
                 rawStreamingPropertyValue = new StreamingPropertyValue(openFile(artifactExtractedInfo.getRawHdfsPath()), byte[].class);
             }
             rawStreamingPropertyValue.searchIndex(false);
-            artifact.setProperty(PropertyName.RAW.toString(), rawStreamingPropertyValue, visibility);
+            RAW.setProperty(artifact, rawStreamingPropertyValue, visibility);
         }
 
         if (artifactExtractedInfo.getVideoTranscript() != null) {
             // TODO should video transcript be converted to a StreamingPropertyValue?
-            artifact.setProperty(PropertyName.VIDEO_TRANSCRIPT.toString(), artifactExtractedInfo.getVideoTranscript().toString(), visibility);
-            artifact.setProperty(PropertyName.VIDEO_DURATION.toString(), artifactExtractedInfo.getVideoDuration(), visibility);
+            VIDEO_TRANSCRIPT.setProperty(artifact, artifactExtractedInfo.getVideoTranscript().toString(), visibility);
+            VIDEO_DURATION.setProperty(artifact, artifactExtractedInfo.getVideoDuration(), visibility);
 
             // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
             if (artifactExtractedInfo.getText() == null) {
@@ -267,62 +278,64 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             } else {
                 textStreamingPropertyValue = new StreamingPropertyValue(openFile(artifactExtractedInfo.getTextHdfsPath()), String.class);
             }
-            artifact.setProperty(PropertyName.TEXT.toString(), textStreamingPropertyValue, visibility);
+            TEXT.setProperty(artifact, textStreamingPropertyValue, visibility);
         }
 
         if (artifactExtractedInfo.getMappingJson() != null) {
-            artifact.setProperty(PropertyName.MAPPING_JSON.toString(), artifactExtractedInfo.getMappingJson(), visibility);
+            MAPPING_JSON.setProperty(artifact, artifactExtractedInfo.getMappingJson(), visibility);
         }
 
         if (artifactExtractedInfo.getTitle() != null) {
-            artifact.setProperty(PropertyName.TITLE.toString(), new Text(artifactExtractedInfo.getTitle()), visibility);
+            TITLE.setProperty(artifact, artifactExtractedInfo.getTitle(), visibility);
         }
 
         if (artifactExtractedInfo.getFileExtension() != null) {
-            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(artifactExtractedInfo.getFileExtension(), TextIndex.EXACT_MATCH), visibility);
+            FILE_NAME_EXTENSION.setProperty(artifact, artifactExtractedInfo.getFileExtension(), visibility);
         }
 
         if (artifactExtractedInfo.getMimeType() != null) {
-            artifact.setProperty(PropertyName.MIME_TYPE.toString(), new Text(artifactExtractedInfo.getMimeType()), visibility);
+            MIME_TYPE.setProperty(artifact, artifactExtractedInfo.getMimeType(), visibility);
         }
 
         if (artifactExtractedInfo.getSource() != null) {
-            artifact.setProperty(PropertyName.SOURCE.toString(), new Text(artifactExtractedInfo.getSource()), visibility);
+            SOURCE.setProperty(artifact, artifactExtractedInfo.getSource(), visibility);
         }
 
         if (artifactExtractedInfo.getDetectedObjects() != null) {
-            artifact.setProperty(PropertyName.DETECTED_OBJECTS.toString(), artifactExtractedInfo.getDetectedObjects(), visibility);
+            DETECTED_OBJECTS_JSON.setProperty(artifact, artifactExtractedInfo.getDetectedObjects(), visibility);
         }
 
         if (artifactExtractedInfo.getDate() != null) {
-            artifact.setProperty(PropertyName.PUBLISHED_DATE.toString(), artifactExtractedInfo.getDate(), visibility);
+            PUBLISHED_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), visibility);
         }
 
-        if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
-            artifact.setProperty(PropertyName.AUTHOR.toString(), new Text(artifactExtractedInfo.getAuthor()), visibility);
+        String author = artifactExtractedInfo.getAuthor();
+        if (author != null && !author.trim().isEmpty()) {
+            AUTHOR.setProperty(artifact, author.trim(), visibility);
         }
 
         if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getMp4HdfsFilePath()), byte[].class);
             spv.searchIndex(false);
-            artifact.setProperty(PropertyName.videoPropertyName("video/mp4"), spv, visibility);
-            artifact.setProperty(PropertyName.videoSizePropertyName("video/mp4"), getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), visibility);
+            getVideoProperty(VIDEO_TYPE_MP4).setProperty(artifact, spv, visibility);
+            getVideoSizeProperty(VIDEO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), visibility);
         }
         if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getWebMHdfsFilePath()), byte[].class);
             spv.searchIndex(false);
-            artifact.setProperty(PropertyName.videoPropertyName("video/webm"), spv, visibility);
-            artifact.setProperty(PropertyName.videoSizePropertyName("video/webm"), getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()), visibility);
+            getVideoProperty(VIDEO_TYPE_WEBM).setProperty(artifact, spv, visibility);
+            getVideoSizeProperty(VIDEO_TYPE_WEBM).setProperty(artifact, getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()),
+                    visibility);
         }
         if (artifactExtractedInfo.getAudioHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioHdfsPath()), byte[].class);
             spv.searchIndex(false);
-            artifact.setProperty(PropertyName.AUDIO.toString(), spv, visibility);
+            AUDIO.setProperty(artifact, spv, visibility);
         }
         if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getPosterFrameHdfsPath()), byte[].class);
             spv.searchIndex(false);
-            artifact.setProperty(PropertyName.RAW_POSTER_FRAME.toString(), spv, visibility);
+            RAW_POSTER_FRAME.setProperty(artifact, spv, visibility);
         }
     }
 

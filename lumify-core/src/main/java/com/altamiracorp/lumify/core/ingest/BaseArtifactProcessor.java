@@ -16,20 +16,23 @@
 
 package com.altamiracorp.lumify.core.ingest;
 
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
-
 import java.util.Date;
 import java.util.Iterator;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Base class for processes that identify and create Artifacts,
@@ -130,7 +133,7 @@ public abstract class BaseArtifactProcessor {
         ElementMutation<Vertex> vertex;
         checkNotNull(rowKey, "rowKey is required to save artifact");
         Iterator<Vertex> existingVertices = graph.query(user.getAuthorizations())
-                .has(PropertyName.ROW_KEY.toString(), rowKey)
+                .has(ROW_KEY.getKey(), rowKey)
                 .vertices()
                 .iterator();
         if (existingVertices.hasNext()) {
@@ -140,9 +143,9 @@ public abstract class BaseArtifactProcessor {
             }
         } else {
             Visibility visibility = new Visibility("");
-            vertex = graph.prepareVertex(visibility, user.getAuthorizations())
-                    .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
-                    .setProperty(PropertyName.ROW_KEY.toString(), new Text(rowKey, TextIndex.EXACT_MATCH), visibility);
+            vertex = graph.prepareVertex(visibility, user.getAuthorizations());
+            CREATE_DATE.setProperty(vertex, new Date(), visibility);
+            ROW_KEY.setProperty(vertex, rowKey, visibility);
         }
         return vertex;
     }
