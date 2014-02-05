@@ -410,7 +410,7 @@ define([
         keys.forEach(function (name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isRelationshipType = name === 'relationshipType' && properties._type === 'relationship';
+                isRelationshipType = name === 'relationshipType' && properties._type.value === 'relationship';
 
             if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
@@ -421,7 +421,7 @@ define([
                     value = properties[name].value;
                 }
 
-                var isRelationshipSourceProperty = name === 'source' && properties._type === 'relationship';
+                var isRelationshipSourceProperty = name === 'source' && properties._type.value === 'relationship';
                 if (/^[^_]/.test(name) && 
                     name !== 'boundingBox' &&
                     name !== 'title' &&
