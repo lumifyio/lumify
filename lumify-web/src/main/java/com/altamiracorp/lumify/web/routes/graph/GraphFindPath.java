@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 import java.util.List;
 
 public class GraphFindPath extends BaseRequestHandler {
@@ -27,17 +26,9 @@ public class GraphFindPath extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        int depth;
-        String depthStr = getOptionalParameter(request, "depth");
-        if (depthStr == null) {
-            depth = 5;
-        } else {
-            depth = Integer.parseInt(depthStr);
-        }
-
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
-        final Integer hops = Integer.parseInt(getRequiredParameter(request, "hops"));
+        final int hops = Integer.parseInt(getRequiredParameter(request, "hops"));
 
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, user.getAuthorizations());
         if (sourceVertex == null) {
@@ -51,18 +42,13 @@ public class GraphFindPath extends BaseRequestHandler {
             return;
         }
 
-        Iterator<List<Object>> verticesIds = graph.findPaths(sourceVertex, destVertex, hops, user.getAuthorizations()).iterator();
-
         JSONObject resultsJson = new JSONObject();
         JSONArray pathResults = new JSONArray();
 
-        while (verticesIds.hasNext()) {
-            List<Object> ids = verticesIds.next();
-            JSONArray vertices = new JSONArray();
-            for (Object id : ids) {
-                vertices.put(GraphUtil.toJson(graph.getVertex(id, user.getAuthorizations())));
-            }
-            pathResults.put(vertices);
+        Iterable<List<Object>> paths = graph.findPaths(sourceVertex, destVertex, hops, user.getAuthorizations());
+        for (List<Object> path : paths) {
+            JSONArray verticesJson = GraphUtil.toJson(graph.getVertices(path, user.getAuthorizations()));
+            pathResults.put(verticesJson);
         }
 
         resultsJson.put("paths", pathResults);

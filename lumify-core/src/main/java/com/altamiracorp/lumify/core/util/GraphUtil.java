@@ -7,10 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
-
 public class GraphUtil {
-    public static JSONArray toJson(Collection<Element> elements) {
+    public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
             result.put(toJson(element));
