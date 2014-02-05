@@ -971,41 +971,71 @@ define([
 
 
         this.onLoadRelatedSelected = function(data) {
-            var self = this;
 
             if ($.isArray(data) && data.length){
                 data = data[0];
             }
 
-            var vertexId = data.graphVertexId;
-
-            this.vertexService.getRelatedVertices(data)
-                .done(function(data) {
-                    var vertices = data.vertices,
-                        count = vertices.length;
-                    self.cytoscapeReady(function(cy) {
-                        self.configService.getProperties().done(function(config) {
-                            var forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
-                                promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
-
-                            if (forceSearch || promptBeforeAdding) {
-                                require(['graph/popovers/loadRelatedPopover'], function(LoadRelatedPopover) {
-                                    LoadRelatedPopover.teardownAll();
-                                    LoadRelatedPopover.attachTo(self.$node, {
-                                        addToWorkspaceEvent: 'addRelatedToWorkspace',
-                                        forceSearch: forceSearch,
-                                        count: count,
-                                        cy: cy,
-                                        cyNode: cy.getElementById(vertexId),
-                                        vertices: vertices
-                                    });
-                                });
-                            } else {
-                                self.trigger('addRelatedToWorkspace', { vertices:vertices });
-                            }
+            var self = this,
+                vertexId = data.graphVertexId,
+                LoadingPopover,
+                req,
+                cancelHandler = function() {
+                    if (req) {
+                        req.abort();
+                    }
+                    self.off('popovercancel');
+                },
+                timeout = _.delay(function() {
+                    self.trigger('hideInformation');
+                    require(['graph/popovers/loadingPopover'], function(LP) {
+                        LoadingPopover = LP;
+                        LoadingPopover.teardownAll();
+                        self.cytoscapeReady().done(function(cy) {
+                            LoadingPopover.attachTo(self.$node, {
+                                cy: cy,
+                                cyNode: cy.getElementById(vertexId),
+                                message: 'Loading Related...'
+                            });
                         });
-                    })
-                });
+                    });
+                }, 1000);
+
+            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration:1000 });
+
+            this.on('popovercancel', cancelHandler);
+
+            $.when(
+                this.configService.getProperties(),
+                (req = this.vertexService.getRelatedVertices(data)),
+                this.cytoscapeReady()
+            ).done(function(config, verticesResponse, cy) {
+                clearTimeout(timeout);
+                if (LoadingPopover) {
+                    LoadingPopover.teardownAll();
+                }
+                self.trigger('hideInformation');
+                self.off('popovercancel');
+
+                var vertices = verticesResponse[0].vertices,
+                    count = vertices.length,
+                    forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
+                    promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
+                
+                if (forceSearch || promptBeforeAdding) {
+                    require(['graph/popovers/loadRelatedPopover'], function(LoadRelatedPopover) {
+                        LoadRelatedPopover.teardownAll();
+                        LoadRelatedPopover.attachTo(self.$node, {
+                            addToWorkspaceEvent: 'addRelatedToWorkspace',
+                            forceSearch: forceSearch,
+                            count: count,
+                            cy: cy,
+                            cyNode: cy.getElementById(vertexId),
+                            vertices: vertices
+                        });
+                    });
+                } else self.trigger('addRelatedToWorkspace', { vertices:vertices });
+            });
         };
 
         this.onAddRelatedToWorkspace = function(event, data) {

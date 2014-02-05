@@ -35,7 +35,9 @@ define([
             this.popover = this.dialog.find('.popover');
 
             this.attr.cy.on('pan zoom position', this.onViewportChanges);
-            this.attr.cy.on('tap', this.onTap);
+            if (this.attr.teardownOnTap !== false) {
+                this.attr.cy.on('tap', this.onTap);
+            }
             this.onViewportChanges();
 
             this.positionDialog();
