@@ -101,6 +101,7 @@ public class UserAdd extends CommandLineBase {
             user = this.userRepository.addUser(this.username, this.password, getUserProvider().getSystemUser());
             if (this.authorizations != null) {
                 user.getMetadata().setAuthorizations(this.authorizations);
+                this.userRepository.save(user, getUserProvider().getSystemUser().getModelUserContext());
             }
             System.out.println("User added: " + user.getRowKey());
         }
