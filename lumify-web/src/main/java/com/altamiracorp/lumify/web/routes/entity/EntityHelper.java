@@ -48,7 +48,7 @@ public class EntityHelper {
 
     public ElementMutation<Vertex> updateMutation(ElementMutation<Vertex> vertexMutation, Object subType, String title, String process, String comment, User user) {
         if (subType instanceof String) {
-            subType = new Text((String) subType, TextIndex.EXACT_MATCH);
+            subType = new Text((String) subType, TextIndexHint.EXACT_MATCH);
         }
         vertexMutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), subType, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.TITLE.toString(), new Text(title), DEFAULT_VISIBILITY);
@@ -87,7 +87,7 @@ public class EntityHelper {
 
         Object conceptId = concept.getId();
         if (conceptId instanceof String) {
-            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+            conceptId = new Text((String) conceptId, TextIndexHint.EXACT_MATCH);
         }
         resolvedVertexMutation.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.TITLE.toString(), new Text(sign), DEFAULT_VISIBILITY);

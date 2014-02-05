@@ -228,7 +228,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
         Object conceptId = concept.getId();
         if (conceptId instanceof String) {
-            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+            conceptId = new Text((String) conceptId, TextIndexHint.EXACT_MATCH);
         }
         artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility);
 
@@ -279,7 +279,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
 
         if (artifactExtractedInfo.getFileExtension() != null) {
-            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(artifactExtractedInfo.getFileExtension(), TextIndex.EXACT_MATCH), visibility);
+            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(artifactExtractedInfo.getFileExtension(), TextIndexHint.EXACT_MATCH), visibility);
         }
 
         if (artifactExtractedInfo.getMimeType() != null) {

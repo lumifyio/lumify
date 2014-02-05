@@ -55,7 +55,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, user.getAuthorizations());
-        createdVertexMutation.setProperty(PropertyName.ROW_KEY.toString(), new Text(termMentionRowKey.toString(), TextIndex.EXACT_MATCH), visibility);
+        createdVertexMutation.setProperty(PropertyName.ROW_KEY.toString(), new Text(termMentionRowKey.toString(), TextIndexHint.EXACT_MATCH), visibility);
 
         // TODO: replace second "" when we implement commenting on ui
         createdVertexMutation = entityHelper.updateMutation(createdVertexMutation, conceptId, sign, "", "", user);
