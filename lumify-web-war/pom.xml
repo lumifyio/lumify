@@ -135,6 +135,7 @@
                                 <manifestEntries>
                                     <Built-On>${build.timestamp.formatted}</Built-On>
                                     <Built-On-Unix>${timestamp}</Built-On-Unix>
+                                    <SCM-URL>${project.scm.url}</SCM-URL>
                                     <Git-Revision>${buildNumber}</Git-Revision>
                                 </manifestEntries>
                             </archive>
