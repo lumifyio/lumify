@@ -226,7 +226,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
-        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), concept.getId(), visibility);
+        Object conceptId = concept.getId();
+        if (conceptId instanceof String) {
+            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+        }
+        artifact.setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility);
 
         if (artifactExtractedInfo.getDate() != null) {
             artifact.setProperty(PropertyName.CREATE_DATE.toString(), artifactExtractedInfo.getDate(), visibility);
@@ -271,19 +275,19 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
 
         if (artifactExtractedInfo.getTitle() != null) {
-            artifact.setProperty(PropertyName.TITLE.toString(), artifactExtractedInfo.getTitle(), visibility);
+            artifact.setProperty(PropertyName.TITLE.toString(), new Text(artifactExtractedInfo.getTitle()), visibility);
         }
 
         if (artifactExtractedInfo.getFileExtension() != null) {
-            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), artifactExtractedInfo.getFileExtension(), visibility);
+            artifact.setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(artifactExtractedInfo.getFileExtension(), TextIndex.EXACT_MATCH), visibility);
         }
 
         if (artifactExtractedInfo.getMimeType() != null) {
-            artifact.setProperty(PropertyName.MIME_TYPE.toString(), artifactExtractedInfo.getMimeType(), visibility);
+            artifact.setProperty(PropertyName.MIME_TYPE.toString(), new Text(artifactExtractedInfo.getMimeType()), visibility);
         }
 
         if (artifactExtractedInfo.getSource() != null) {
-            artifact.setProperty(PropertyName.SOURCE.toString(), artifactExtractedInfo.getSource(), visibility);
+            artifact.setProperty(PropertyName.SOURCE.toString(), new Text(artifactExtractedInfo.getSource()), visibility);
         }
 
         if (artifactExtractedInfo.getDetectedObjects() != null) {
@@ -295,7 +299,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         }
 
         if (artifactExtractedInfo.getAuthor() != null && !artifactExtractedInfo.getAuthor().equals("")) {
-            artifact.setProperty(PropertyName.AUTHOR.toString(), artifactExtractedInfo.getAuthor(), visibility);
+            artifact.setProperty(PropertyName.AUTHOR.toString(), new Text(artifactExtractedInfo.getAuthor()), visibility);
         }
 
         if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {

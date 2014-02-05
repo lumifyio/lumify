@@ -80,17 +80,21 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         Visibility visibility = new Visibility("");
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
+        Object conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
+        if (conceptId instanceof String) {
+            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+        }
         artifactBuilder
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), DisplayType.IMAGE.toString(), visibility)
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId(), visibility)
-                .setProperty(PropertyName.TITLE.toString(), "Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString(), 0), visibility)
-                .setProperty(PropertyName.SOURCE.toString(), SOURCE_UPLOAD, visibility)
-                .setProperty(PropertyName.PROCESS.toString(), PROCESS, visibility);
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(DisplayType.IMAGE.toString(), TextIndex.EXACT_MATCH), visibility)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility)
+                .setProperty(PropertyName.TITLE.toString(), new Text("Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString())), visibility)
+                .setProperty(PropertyName.SOURCE.toString(), new Text(SOURCE_UPLOAD), visibility)
+                .setProperty(PropertyName.PROCESS.toString(), new Text(PROCESS), visibility);
         Vertex artifactVertex = artifactBuilder.save();
 
         auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user);
 
-        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
+        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), new Text(ArtifactThumbnail.getUrl(artifactVertex.getId()), TextIndex.EXACT_MATCH), visibility);
         auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user);
         entityVertex = entityVertexMutation.save();
         graph.flush();
@@ -130,9 +134,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         Visibility visibility = new Visibility("");
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, user.getAuthorizations())
                 .setProperty(PropertyName.CREATE_DATE.toString(), new Date(), visibility)
-                .setProperty(PropertyName.FILE_NAME.toString(), fileName, visibility)
-                .setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), FilenameUtils.getExtension(fileName), visibility)
-                .setProperty(PropertyName.MIME_TYPE.toString(), mimeType, visibility)
+                .setProperty(PropertyName.FILE_NAME.toString(), new Text(fileName), visibility)
+                .setProperty(PropertyName.FILE_NAME_EXTENSION.toString(), new Text(FilenameUtils.getExtension(fileName)), visibility)
+                .setProperty(PropertyName.MIME_TYPE.toString(), new Text(mimeType), visibility)
                 .setProperty(PropertyName.RAW.toString(), rawValue, visibility);
         return vertexBuilder;
     }

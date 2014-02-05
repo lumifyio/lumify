@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -13,14 +12,12 @@ import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -61,15 +58,15 @@ public class VertexSetProperty extends BaseRequestHandler {
         ElementMutation<Vertex> graphVertexMutation = graphVertex.prepareMutation();
 
         Visibility visibility = new Visibility(""); // TODO set visibility
-        graphVertexMutation.setProperty(propertyName, value, visibility);
+        graphVertexMutation.setProperty(propertyName, value, visibility); // TODO should we wrap with Text
 
         if (propertyName.equals(PropertyName.GEO_LOCATION.toString())) {
-            String [] latlong = valueStr.substring(valueStr.indexOf('(') + 1, valueStr.indexOf(')')).split(",");
+            String[] latlong = valueStr.substring(valueStr.indexOf('(') + 1, valueStr.indexOf(')')).split(",");
             GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latlong[0]), Double.parseDouble(latlong[1]));
             graphVertexMutation.setProperty(PropertyName.GEO_LOCATION.toString(), geoPoint, visibility);
             graphVertexMutation.setProperty(PropertyName.GEO_LOCATION_DESCRIPTION.toString(), "", visibility);
         } else if (propertyName.equals(PropertyName.SOURCE.toString())) {
-            graphVertexMutation.setProperty(PropertyName.SOURCE.toString(), value, visibility);
+            graphVertexMutation.setProperty(PropertyName.SOURCE.toString(), new Text(value.toString()), visibility);
         }
 
         auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
@@ -96,7 +93,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             for (Property property : vertex.getProperties()) {
                 if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
                     JSONObject geo = new JSONObject();
-                    GeoPoint geoPoint = (GeoPoint)property.getValue();
+                    GeoPoint geoPoint = (GeoPoint) property.getValue();
                     geo.put("latitude", geoPoint.getLatitude());
                     geo.put("longitude", geoPoint.getLongitude());
                     obj.put(property.getName(), geo);

@@ -57,12 +57,16 @@ public class GraphUtil {
         // TODO handle multi-valued properties
         JSONObject propertiesJson = new JSONObject();
         for (Property property : properties) {
+            Object propertyValue = property.getValue();
             if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
-                Double[] latlong = parseLatLong(property.getValue());
+                Double[] latlong = parseLatLong(propertyValue);
                 propertiesJson.put("latitude", latlong[0]);
                 propertiesJson.put("longitude", latlong[1]);
             } else {
-                propertiesJson.put(property.getName(), property.getValue());
+                if (propertyValue instanceof Text) {
+                    propertyValue = ((Text) propertyValue).getText();
+                }
+                propertiesJson.put(property.getName(), propertyValue);
             }
         }
         return propertiesJson;

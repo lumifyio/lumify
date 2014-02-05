@@ -12,10 +12,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +55,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
         ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, user.getAuthorizations());
-        createdVertexMutation.setProperty(PropertyName.ROW_KEY.toString(), termMentionRowKey.toString(), visibility);
+        createdVertexMutation.setProperty(PropertyName.ROW_KEY.toString(), new Text(termMentionRowKey.toString(), TextIndex.EXACT_MATCH), visibility);
 
         // TODO: replace second "" when we implement commenting on ui
         createdVertexMutation = entityHelper.updateMutation(createdVertexMutation, conceptId, sign, "", "", user);
