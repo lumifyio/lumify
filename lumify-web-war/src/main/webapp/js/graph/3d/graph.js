@@ -32,7 +32,7 @@ define([
     }
 
     function iconImageSource(vertex) {
-        if (vertex.properties._glyphIcon.value) {
+        if (vertex.properties._glyphIcon) {
             return vertex.properties._glyphIcon.value;
         }
 
