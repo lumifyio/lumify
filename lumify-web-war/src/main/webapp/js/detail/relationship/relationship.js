@@ -55,8 +55,8 @@ define([
             $.when(
                 self.handleCancelling(self.ontologyService.relationships()),
                 self.handleCancelling(self.vertexService.getVertexToVertexRelationshipDetails(
-                    data.properties.source.value,
-                    data.properties.target.value,
+                    data.properties.source,
+                    data.properties.target,
                     data.id
                 ))
             ).done(function(ontologyRelationships, relationshipData) {
@@ -66,9 +66,18 @@ define([
                 }));
 
                 var properties = $.extend({}, data.properties);
-                properties.relationshipType = (ontologyRelationships.byTitle[data.properties.relationshipType.value] || ontologyRelationships.byId[data.properties.relationshipType.value] || {}).displayName;
-                relationshipData[0].properties.forEach.value(function(prop) {
-                    properties[prop.key] = prop.value;
+                properties.relationshipType = (ontologyRelationships.byTitle[data.properties.relationshipType] || ontologyRelationships.byId[data.properties.relationshipType] || {}).displayName;
+
+                properties = _.omit(properties, 'source', 'target', 'id');
+                _.keys(properties).forEach(function(key) {
+                    properties[key] = {
+                        value: properties[key]
+                    };
+                });
+                relationshipData[0].properties.forEach(function(prop) {
+                    properties[prop.key] =  {
+                        value:prop
+                    };
                 });
 
                 Properties.attachTo(self.select('propertiesSelector'), {

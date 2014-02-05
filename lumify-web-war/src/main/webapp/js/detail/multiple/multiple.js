@@ -39,7 +39,7 @@ define([
         this.after('initialize', function () {
             var self = this,
                 vertices = this.attr.data.filter(function (v) {
-                    return v.properties._type.value != 'relationship';
+                    return !v.properties._type || v.properties._type != 'relationship';
                 }),
                 ids = _.pluck(vertices, 'id');
 
@@ -249,7 +249,7 @@ define([
                         if (!byProperty[propertyName]) {
                             byProperty[propertyName] = {};
                         }
-                        appendBin(byProperty[propertyName], v.properties[propertyName], v);
+                        appendBin(byProperty[propertyName], v.properties[propertyName].value, v);
                     });
                 });
                 return byProperty;
