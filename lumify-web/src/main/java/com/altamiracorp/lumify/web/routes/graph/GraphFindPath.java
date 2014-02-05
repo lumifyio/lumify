@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Path;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
@@ -12,7 +13,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class GraphFindPath extends BaseRequestHandler {
     private final Graph graph;
@@ -45,8 +45,8 @@ public class GraphFindPath extends BaseRequestHandler {
         JSONObject resultsJson = new JSONObject();
         JSONArray pathResults = new JSONArray();
 
-        Iterable<List<Object>> paths = graph.findPaths(sourceVertex, destVertex, hops, user.getAuthorizations());
-        for (List<Object> path : paths) {
+        Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, user.getAuthorizations());
+        for (Path path : paths) {
             JSONArray verticesJson = GraphUtil.toJson(graph.getVertices(path, user.getAuthorizations()));
             pathResults.put(verticesJson);
         }
