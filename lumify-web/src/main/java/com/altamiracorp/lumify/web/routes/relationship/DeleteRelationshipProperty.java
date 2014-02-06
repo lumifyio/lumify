@@ -57,7 +57,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         for (Property p : edge.getProperties()) {
             properties.add(p);
         }
-        JSONObject resultsJson = GraphUtil.toJson(properties);
+        JSONObject resultsJson = GraphUtil.toJsonProperties(properties);
 
         respondWithJson(response, resultsJson);
     }

@@ -57,25 +57,6 @@ public class GraphUtil {
         }
     }
 
-    private static JSONObject toJsonProperties(Iterable<Property> properties) {
-        // TODO handle multi-valued properties
-        JSONObject propertiesJson = new JSONObject();
-        for (Property property : properties) {
-            Object propertyValue = property.getValue();
-            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
-                Double[] latlong = parseLatLong(propertyValue);
-                propertiesJson.put("latitude", latlong[0]);
-                propertiesJson.put("longitude", latlong[1]);
-            } else {
-                if (propertyValue instanceof Text) {
-                    propertyValue = ((Text) propertyValue).getText();
-                }
-                propertiesJson.put(property.getName(), propertyValue);
-            }
-        }
-        return propertiesJson;
-    }
-
     public static Double[] parseLatLong(Object val) {
         Double[] result = new Double[2];
         if (val instanceof String) {
@@ -91,18 +72,18 @@ public class GraphUtil {
         return result;
     }
 
-    public static JSONObject toJson(Iterable<Property> properties) {
+    public static JSONObject toJsonProperties(Iterable<Property> properties) {
         JSONObject resultsJson = new JSONObject();
         for (Property property : properties) {
             if (property.getValue() instanceof StreamingPropertyValue) {
                 continue;
             }
-            resultsJson.put(property.getName(), GraphUtil.toJson(property));
+            resultsJson.put(property.getName(), GraphUtil.toJsonProperty(property));
         }
         return resultsJson;
     }
 
-    public static JSONObject toJson(Property property) {
+    public static JSONObject toJsonProperty(Property property) {
         JSONObject result = new JSONObject();
 
         Object value = property.getValue();
