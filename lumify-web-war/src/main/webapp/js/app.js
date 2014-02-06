@@ -143,6 +143,7 @@ define([
                 self.triggerPaneResized();
                 if (self.attr.animateFromLogin) {
                     $(document.body).addClass('animateloginstart');
+                    graphPane.focus();
                 }
             });
         });

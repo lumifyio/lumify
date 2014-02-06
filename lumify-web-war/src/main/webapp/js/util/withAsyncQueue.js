@@ -8,6 +8,7 @@ define([], function() {
 
         this.before('initialize', function() {
             var self = this,
+                deferreds = {},
                 stacks = {};
 
             this.setupAsyncQueue = function(name) {
@@ -16,19 +17,35 @@ define([], function() {
                     objectData;
 
                 self[name + 'Ready'] = function(callback) {
-                    if (objectData) {
-                        callback.call(self, objectData);
+                    if (callback) {
+                        // Legacy non-promise
+                        if (objectData) {
+                            callback.call(self, objectData);
+                        } else {
+                            stack.push(callback);
+                        }
                     } else {
-                        stack.push(callback);
+                        return deferreds[name] || (deferreds[name] = $.Deferred());
                     }
                 };
 
                 self[name + 'IsReady'] = function() {
+                    if (deferreds[name]) {
+                        return deferreds[name].isResolved();
+                    }
+
                     return objectData !== undefined;
                 };
 
                 self[name + 'MarkReady'] = function(data) {
                     if (!data) throw "No object passed to " + name + "MarkReady";
+
+                    if (deferreds[name]) {
+                        deferreds[name].resolve(data);
+                    } else {
+                        deferreds[name] = $.Deferred();
+                        deferreds[name].resolve(data);
+                    }
 
                     objectData = data;
 
@@ -39,6 +56,7 @@ define([], function() {
                 };
 
                 self[name + 'Unload'] = function() {
+                    deferreds[name] = null;
                     objectData = null;
                 };
             };

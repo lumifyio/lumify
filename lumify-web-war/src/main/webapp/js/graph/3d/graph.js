@@ -33,7 +33,7 @@ define([
 
     function iconImageSource(vertex) {
         if (vertex.properties._glyphIcon) {
-            return vertex.properties._glyphIcon;
+            return vertex.properties._glyphIcon.value;
         }
 
         switch (vertex.concept.displayType) {
@@ -115,7 +115,7 @@ define([
             function addToGraph(width, height, node) {
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
-                node.data.label = node.data.vertex.properties.title;
+                node.data.label = node.data.vertex.properties.title.value;
                 node.needsUpdate = true;
                 graph.addNode(node);
             }

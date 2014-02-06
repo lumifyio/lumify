@@ -59,13 +59,13 @@ define([
 
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
-                title = vertex && vertex.properties.title || data.vertexId;
+                title = vertex && vertex.properties.title.value || data.vertexId;
 
             this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title})).closest('.entity-filters').show();
             this.notifyOfFilters();
         }
 
-        this.onClearFilters = function() {
+        this.onClearFilters = function(event, data) {
             var self = this,
                 nodes = this.$node.find('.configuration');
 
@@ -78,7 +78,9 @@ define([
             this.entityFilters = {};
             this.$node.find('.entity-filter-header').nextAll().remove();
             this.$node.find('.entity-filter-header').closest('.entity-filters').hide();
-            this.notifyOfFilters();
+            if (!data || data.triggerUpdates !== false) {
+                this.notifyOfFilters();
+            }
         };
 
         this.notifyOfFilters = function() {

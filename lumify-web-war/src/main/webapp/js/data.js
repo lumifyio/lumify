@@ -150,7 +150,8 @@ define([
             var self = this;
             switch (message.type) {
                 case 'propertiesChange':
-                    self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    //FIXME: need this?
+                    //self.trigger('updateVertices', { vertices:[message.data.vertex]});
                     break;
             }
         };
@@ -213,10 +214,10 @@ define([
             var self = this,
                 edge = data.edges[0];
             this.vertexService.deleteEdge(
-                edge.properties.source,
-                edge.properties.target,
-                edge.properties.relationshipType,
-                edge.properties.id).done(function() {
+                edge.properties.source.value,
+                edge.properties.target.value,
+                edge.properties.relationshipType.value,
+                edge.properties.id.value).done(function() {
                     if (_.findWhere(self.selectedEdges, { id:edge.id })) {
                         self.trigger('selectObjects');
                     }
@@ -416,7 +417,7 @@ define([
             var self = this,
                 vertices = data && data.vertices || [],
                 selectedIds = _.pluck(vertices, 'id'),
-                selected = _.groupBy(vertices, function(v) { return v.properties._type === 'relationship' ? 'edges' : 'vertices'; });
+                selected = _.groupBy(vertices, function(v) { return v.properties._type ? 'edges' : 'vertices'; });
 
             selected.vertices = selected.vertices || [];
             selected.edges = selected.edges || [];
@@ -763,9 +764,16 @@ define([
                         var info = a.data('info') || a.closest('li').data('info');
                         if (info && info.graphVertexId) {
 
+                            var properties = {};
+                            _.keys(info).forEach(function(key) {
+                                if ((/^(start|end|graphVertexId)$/).test(key)) return;
+                                properties[key] = {
+                                    value: info[key]
+                                };
+                            });
                             self.updateCacheWithVertex({
                                 id: info.graphVertexId,
-                                properties: _.omit(info, 'start', 'end', 'graphVertexId')
+                                properties: properties
                             });
                             id = info.graphVertexId;
                         } 

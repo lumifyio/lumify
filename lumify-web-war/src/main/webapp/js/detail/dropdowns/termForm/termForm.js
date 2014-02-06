@@ -424,10 +424,10 @@ define([
                     }
                 });
             } else if (vertex && vertex.properties._glyphIcon) {
-                updateCss(vertex && vertex.properties._glyphIcon);
+                updateCss(vertex && vertex.properties._glyphIcon.value);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = (vertex && vertex.properties._conceptType) || conceptId;
+                    var conceptType = (vertex && vertex.properties._conceptType.value) || conceptId;
                     if (conceptType) {
                         var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {
@@ -569,9 +569,9 @@ define([
                         self.runQuery(query).done(function(entities) {
                             var all = _.map(entities, function(e) {
                                     return $.extend({
-                                        toLowerCase: function() { return e.properties.title.toLowerCase(); },
+                                        toLowerCase: function() { return e.properties.title.value.toLowerCase(); },
                                         toString: function() { return e.id; },
-                                        indexOf: function(s) { return e.properties.title.indexOf(s); }
+                                        indexOf: function(s) { return e.properties.title.value.indexOf(s); }
                                     }, e);
                                 });
 
@@ -600,7 +600,7 @@ define([
                     },
                     matcher: function(item) {
                         if (item === createNewText) return true;
-                        return Object.getPrototypeOf(this).matcher.apply(this, [item.properties.title]);
+                        return Object.getPrototypeOf(this).matcher.apply(this, [item.properties.title.value]);
                     },
                     sorter: function(items) {
                         var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
@@ -626,7 +626,7 @@ define([
 
                         if (matchingItem && matchingItem.length) {
                             graphVertexId = item;
-                            label = matchingItem[0].properties ? matchingItem[0].properties.title : matchingItem[0];
+                            label = matchingItem[0].properties ? matchingItem[0].properties.title.value : matchingItem[0];
 
                             if (graphVertexId == createNewText) {
                                 graphVertexId = '';
@@ -645,14 +645,14 @@ define([
                     highlighter: function(item) {
 
                         var html = (item === createNewText) ? 
-                                item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title]),
+                                item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title.value]),
                             icon = '',
                             concept = _.find(self.allConcepts, function(c) { 
-                                    return item.properties && c.id === item.properties._conceptType;
+                                    return item.properties && c.id === item.properties._conceptType.value;
                             });
 
                         if (item.properties) {
-                            icon = item._glyphIcon || item.properties._glyphIcon || concept.glyphIconHref;
+                            icon = item._glyphIcon || (item.properties._glyphIcon && item.properties._glyphIcon.value) || concept.glyphIconHref;
                         }
                         return entityTemplate({
                             html: html,

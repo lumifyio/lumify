@@ -12,6 +12,7 @@ public class UserAdd extends CommandLineBase {
     private UserRepository userRepository;
     private String username;
     private String password;
+    private String authorizations;
 
     public static void main(String[] args) throws Exception {
         int res = new UserAdd().run(args);
@@ -44,6 +45,15 @@ public class UserAdd extends CommandLineBase {
 
         options.addOption(
                 OptionBuilder
+                        .withLongOpt("auths")
+                        .withDescription("Comma separated list of authorizations")
+                        .hasArg(true)
+                        .withArgName("auths")
+                        .create("a")
+        );
+
+        options.addOption(
+                OptionBuilder
                         .withLongOpt("reset")
                         .withDescription("If the password should be reset")
                         .create("r")
@@ -57,6 +67,7 @@ public class UserAdd extends CommandLineBase {
         super.processOptions(cmd);
         this.username = cmd.getOptionValue("username");
         this.password = cmd.getOptionValue("password");
+        this.authorizations = cmd.getOptionValue("auths");
     }
 
     @Override
@@ -88,6 +99,10 @@ public class UserAdd extends CommandLineBase {
                 return 3;
             }
             user = this.userRepository.addUser(this.username, this.password, getUserProvider().getSystemUser());
+            if (this.authorizations != null) {
+                user.getMetadata().setAuthorizations(this.authorizations);
+                this.userRepository.save(user, getUserProvider().getSystemUser().getModelUserContext());
+            }
             System.out.println("User added: " + user.getRowKey());
         }
 

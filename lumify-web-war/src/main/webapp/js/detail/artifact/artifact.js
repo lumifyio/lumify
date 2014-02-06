@@ -75,7 +75,7 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                this.select('titleSelector').html( matching.properties.title );
+                this.select('titleSelector').html( matching.properties.title.value );
             }
         };
 
@@ -93,7 +93,7 @@ define([
             this.videoDuration = vertex.videoDuration;
 
             if (vertex.properties._detectedObjects) {
-                vertex.properties._detectedObjects = JSON.parse(vertex.properties._detectedObjects).sort(function(a, b){
+                vertex.properties._detectedObjects.value = JSON.parse(vertex.properties._detectedObjects.value).sort(function(a, b){
                     var aX = a.x1, bX = b.x1;
                     return aX - bX;
                 });
@@ -177,8 +177,8 @@ define([
         this.onCoordsChanged = function(event, data) {
             var self = this,
                 vertex = appData.vertex(this.attr.data.id);
-            var detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects == 'string' ? JSON.parse(vertex.properties._detectedObjects)
-                : vertex.properties._detectedObjects, function(obj) {
+            var detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects.value == 'string' ? JSON.parse(vertex.properties._detectedObjects.value)
+                : vertex.properties._detectedObjects.value, function(obj) {
                     return (obj && obj.graphVertexId) === data.id;
                 })),
                 width = parseFloat(data.x2)-parseFloat(data.x1),
@@ -215,7 +215,7 @@ define([
                 .done(function(data) {
                     var resolvedVertex = {
                         id: data.entityVertex.id,
-                        _conceptType: data.entityVertex.properties._conceptType
+                        _conceptType: data.entityVertex.properties._conceptType.value
                     };
                     $detectedObjectTag.parent().remove();
                     self.trigger('DetectedObjectLeave', $detectedObjectTag.data('info'));
