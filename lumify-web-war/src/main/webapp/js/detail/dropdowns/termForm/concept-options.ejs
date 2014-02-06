@@ -1,6 +1,10 @@
 <option value=''>Choose a concept...</option>
-<% concepts.forEach(function(concept) { %>
-<option 
-  <% if (concept.id == selectedConceptId) { %>selected<% } %>
-  value="<%= concept.id %>"><%= concept.flattenedDisplayName %></option>
+
+
+<% concepts.forEach(function(concept) { 
+  var slashes = concept.flattenedDisplayName.replace(/[^\/]/g, ''),
+      indent = slashes.replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'); %>
+  <option 
+    <% if (concept.id == selectedConceptId) { %>selected<% } %>
+    value="<%= concept.id %>"><%= indent %><%= concept.displayName %></option>
 <% }); %>
