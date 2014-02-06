@@ -34,7 +34,8 @@ public class IdentityLumifyProperty<T> extends LumifyProperty<T, T> {
     }
 
     @Override
-    public T unwrap(final T value) {
-        return value;
+    @SuppressWarnings("unchecked")
+    public T unwrap(final Object value) {
+        return (T) value;
     }
 }
