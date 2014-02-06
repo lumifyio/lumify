@@ -7,9 +7,9 @@ define([
     formTemplate) {
     'use strict';
 
-    return defineComponent(Visibility);
+    return defineComponent(VisibilityEditor);
 
-    function Visibility() {
+    function VisibilityEditor() {
 
         this.defaultAttrs({
             fieldSelector: 'input'

@@ -1,16 +1,24 @@
 <li class="property property-<%= property.key %>">
 <strong><%= property.displayName %></strong>
 <% if (property.key === 'geoLocation' && property.value) { %>
-<span class="value">
-  <% if (!popout) { %>
-  <a href="#" class="map-coordinates" data-latitude="<%= property.latitude %>" data-longitude="<%= property.longitude %>">
-    <%= property.title || (property.latitude + ', ' + property.longitude) %>
-  </a>
-  <% } else { %>
-  <span class="value"><%= property.title || (property.latitude + ', ' + property.longitude) %></span>
-  <% } %>
-</span>
+
+  <span class="value">
+    <% if (!popout) { %>
+    <a href="#" class="map-coordinates" data-latitude="<%= property.latitude %>" data-longitude="<%= property.longitude %>">
+      <%= property.title || (property.latitude + ', ' + property.longitude) %>
+    </a>
+    <% } else { %>
+    <span><%= property.title || (property.latitude + ', ' + property.longitude) %></span>
+    <% } %>
+    <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
+  </span>
+
 <% } else { %>
-<span class="value"><%= property !== undefined && property !== null ? property.value : '' %></span>
+
+  <span class="value"><%= property !== undefined && property !== null ? property.value : '' %>
+    <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
+  </span>
+
 <% } %>
+
 </li>
