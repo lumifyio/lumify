@@ -1044,6 +1044,7 @@ define([
                             count: count,
                             cy: cy,
                             cyNode: cy.getElementById(vertexId(vId)),
+                            relatedToVertexId: vId,
                             vertices: vertices
                         });
                     });
