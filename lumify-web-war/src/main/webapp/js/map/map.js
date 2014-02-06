@@ -342,7 +342,7 @@ define([
                   
                 map.setCenter( new ol.LonLat(centerLonLat.lon-lon, centerLonLat.lat-lat), zoom);
             } else {
-                map.zoomToMaxExtent();
+                map.zoomTo(2);
             }
         };
 
@@ -628,7 +628,7 @@ define([
             latLon = latLon.bind(null, map.displayProjection, map.getProjectionObject());
             point = point.bind(null, map.displayProjection, map.getProjectionObject());
 
-            map.zoomToMaxExtent();
+            map.zoomTo(2);
 
             this.mapMarkReady(map);
         };
