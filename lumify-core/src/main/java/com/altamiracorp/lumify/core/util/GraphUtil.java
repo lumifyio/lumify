@@ -9,6 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class GraphUtil {
     public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
