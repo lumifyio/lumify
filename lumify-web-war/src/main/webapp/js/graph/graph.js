@@ -819,7 +819,6 @@ define([
         });
 
         this.updateVertexSelections = function(cy) {
-            window.cy = cy;
             var nodes = cy.nodes().filter(':selected').not('.temp'),
                 edges = cy.edges().filter(':selected').not('.temp'),
                 vertices = [];
