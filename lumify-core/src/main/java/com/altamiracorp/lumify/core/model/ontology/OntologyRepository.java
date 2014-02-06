@@ -102,13 +102,10 @@ public class OntologyRepository {
     }
 
     public String getDisplayNameForLabel(String relationshipLabel) {
-        Iterable<Vertex> vertices = graph.query(user.getAuthorizations())
-                .has(PropertyName.DISPLAY_TYPE.toString(), TYPE_RELATIONSHIP)
-                .vertices();
-        for (Vertex vertex : vertices) {
-            if (vertex.getPropertyValue(PropertyName.ONTOLOGY_TITLE.toString()).equals(relationshipLabel)) {
-                return "" + vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0);
-            }
+        Concept relationship = getConceptByName(relationshipLabel);
+        Vertex vertex = relationship.getVertex();
+        if (vertex != null) {
+            return "" + vertex.getPropertyValue(PropertyName.DISPLAY_NAME.toString(), 0);
         }
         return null;
     }
