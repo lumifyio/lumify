@@ -26,7 +26,7 @@ public class VertexProperties extends BaseRequestHandler {
         User user = getUser(request);
 
         Iterable<Property> properties = graph.getVertex(graphVertexId, user.getAuthorizations()).getProperties();
-        JSONObject propertiesJson = GraphUtil.toJson(properties);
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
 
         JSONObject json = new JSONObject();
         json.put("id", graphVertexId);

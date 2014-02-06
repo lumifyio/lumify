@@ -46,7 +46,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         // TODO: broadcast property delete
 
         Iterable<com.altamiracorp.securegraph.Property> properties = graphVertex.getProperties();
-        JSONObject propertiesJson = GraphUtil.toJson(properties);
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
         json.put("deletedProperty", propertyName);

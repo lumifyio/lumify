@@ -72,7 +72,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperties(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user);
 
-        JSONObject resultsJson = GraphUtil.toJson(edge.getProperties());
+        JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties());
         respondWithJson(response, resultsJson);
     }
 }
