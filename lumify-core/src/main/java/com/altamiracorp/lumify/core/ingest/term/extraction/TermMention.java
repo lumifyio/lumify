@@ -163,7 +163,7 @@ public class TermMention {
         private boolean resolved;
         private Map<String, Object> properties = new HashMap<String, Object>();
         private boolean useExisting;
-        private List<String> process = new ArrayList<String>();
+        private final List<String> process = new ArrayList<String>();
         private Object id;
 
         public Builder() {
