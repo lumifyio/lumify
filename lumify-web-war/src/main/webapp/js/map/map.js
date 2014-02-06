@@ -340,6 +340,11 @@ define([
                     lon = offsetX * actualResolution / 2,
                     lat = offsetY * actualResolution / 2;
                   
+                // If there is only one feature don't zoom in so close
+                if (map.featuresLayer.features.length === 1) {
+                    zoom = Math.min(5, zoom);
+                }
+
                 map.setCenter( new ol.LonLat(centerLonLat.lon-lon, centerLonLat.lat-lat), zoom);
             } else {
                 map.zoomTo(2);
