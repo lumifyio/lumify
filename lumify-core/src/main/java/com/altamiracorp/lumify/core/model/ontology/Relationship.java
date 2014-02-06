@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
 
 import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ public class Relationship {
     }
 
     public String getTitle() {
-        return TITLE.getPropertyValue(vertex);
+        return ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
     public String getDisplayName() {
