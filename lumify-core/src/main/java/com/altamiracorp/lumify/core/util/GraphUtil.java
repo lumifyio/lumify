@@ -9,13 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 public class GraphUtil {
-    public static JSONArray toJson(Collection<Element> elements) {
+    public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
             result.put(toJson(element));
@@ -37,7 +32,7 @@ public class GraphUtil {
         try {
             JSONObject json = new JSONObject();
             json.put("id", vertex.getId());
-            json.put("properties", toJson(vertex.getProperties()));
+            json.put("properties", toJsonProperties(vertex.getProperties()));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -51,11 +46,30 @@ public class GraphUtil {
             json.put("label", edge.getLabel());
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
-            json.put("properties", toJson(edge.getProperties()));
+            json.put("properties", toJsonProperties(edge.getProperties()));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static JSONObject toJsonProperties(Iterable<Property> properties) {
+        // TODO handle multi-valued properties
+        JSONObject propertiesJson = new JSONObject();
+        for (Property property : properties) {
+            Object propertyValue = property.getValue();
+            if (property.getName().equals(PropertyName.GEO_LOCATION.toString())) {
+                Double[] latlong = parseLatLong(propertyValue);
+                propertiesJson.put("latitude", latlong[0]);
+                propertiesJson.put("longitude", latlong[1]);
+            } else {
+                if (propertyValue instanceof Text) {
+                    propertyValue = ((Text) propertyValue).getText();
+                }
+                propertiesJson.put(property.getName(), propertyValue);
+            }
+        }
+        return propertiesJson;
     }
 
     public static Double[] parseLatLong(Object val) {

@@ -347,8 +347,8 @@ public class OntologyRepository {
         }
 
         Vertex vertex = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(conceptName, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(conceptName, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_NAME.toString(), new Text(displayName), DEFAULT_VISIBILITY)
                 .save();
         concept = new Concept(vertex);
@@ -392,10 +392,10 @@ public class OntologyRepository {
         }
 
         Vertex relationshipVertex = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(relationshipName, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_CONCEPT, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(relationshipName, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .setProperty(PropertyName.DISPLAY_NAME.toString(), new Text(displayName), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(TYPE_RELATIONSHIP, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(TYPE_RELATIONSHIP, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
@@ -427,10 +427,10 @@ public class OntologyRepository {
         }
 
         typeProperty = new OntologyProperty(graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations())
-                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_PROPERTY, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(OntologyRepository.TYPE_PROPERTY, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(name, TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
-                .setProperty(PropertyName.DATA_TYPE.toString(), new Text(dataType.toString(), TextIndex.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.CONCEPT_TYPE.toString(), new Text(TYPE_PROPERTY, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(OntologyRepository.TYPE_PROPERTY, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.ONTOLOGY_TITLE.toString(), new Text(name, TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
+                .setProperty(PropertyName.DATA_TYPE.toString(), new Text(dataType.toString(), TextIndexHint.EXACT_MATCH), DEFAULT_VISIBILITY)
                 .save());
 
         graph.flush();

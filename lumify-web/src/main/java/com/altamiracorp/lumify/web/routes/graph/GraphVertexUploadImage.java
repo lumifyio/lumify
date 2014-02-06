@@ -82,10 +82,10 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
         Object conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
         if (conceptId instanceof String) {
-            conceptId = new Text((String) conceptId, TextIndex.EXACT_MATCH);
+            conceptId = new Text((String) conceptId, TextIndexHint.EXACT_MATCH);
         }
         artifactBuilder
-                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(DisplayType.IMAGE.toString(), TextIndex.EXACT_MATCH), visibility)
+                .setProperty(PropertyName.DISPLAY_TYPE.toString(), new Text(DisplayType.IMAGE.toString(), TextIndexHint.EXACT_MATCH), visibility)
                 .setProperty(PropertyName.CONCEPT_TYPE.toString(), conceptId, visibility)
                 .setProperty(PropertyName.TITLE.toString(), new Text("Image of " + entityVertex.getPropertyValue(PropertyName.TITLE.toString())), visibility)
                 .setProperty(PropertyName.SOURCE.toString(), new Text(SOURCE_UPLOAD), visibility)
@@ -94,7 +94,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user);
 
-        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), new Text(ArtifactThumbnail.getUrl(artifactVertex.getId()), TextIndex.EXACT_MATCH), visibility);
+        entityVertexMutation.setProperty(PropertyName.GLYPH_ICON.toString(), new Text(ArtifactThumbnail.getUrl(artifactVertex.getId()), TextIndexHint.EXACT_MATCH), visibility);
         auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user);
         entityVertex = entityVertexMutation.save();
         graph.flush();
