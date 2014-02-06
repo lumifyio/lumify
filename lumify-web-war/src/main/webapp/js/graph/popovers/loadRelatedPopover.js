@@ -30,7 +30,7 @@ define([
         });
 
         this.onSearch = function(event) {
-            this.trigger(document, 'searchByRelatedEntity', { vertexId : this.attr.cyNode.id() });
+            this.trigger(document, 'searchByRelatedEntity', { vertexId : this.attr.relatedToVertexId });
             this.teardown();
         };
 
