@@ -1,16 +1,16 @@
 
 <li class="<%= classNamesForVertex[vertex.id] || '' %> vertex-item" 
     data-vertex-id="<%= vertex.id %>"
-    ><a><%= vertex.properties.title || "No title available" %>
+    ><a><%= (vertex.properties.title && vertex.properties.title.value) || "No title available" %>
       <ul>
         <li class="graph"><button title="Displayed in Graph" href="#">Graph</button></li>
         <li class="map"><button title="Displayed in Map" href="#">Map</button></li>
       </ul>
       <div>
         <span class="preview"/>
-        <span class="date"><%= vertex.properties.publishedDate ? new Date(vertex.properties.publishedDate).toDateString() : '' %></span>
+        <span class="date"><%= vertex.properties.publishedDate ? new Date(vertex.properties.publishedDate.value).toDateString() : '' %></span>
         <span class="source"><% 
-          var source = vertex.properties._source, author = vertex.properties.author;
+          var source = vertex.properties._source && vertex.properties._source.value, author = (vertex.properties.author && vertex.properties.author.value);
         %><%= source ? 
           author ? ([source,author].join(' / ')) : source : 
           author ? author : '' %></span>

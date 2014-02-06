@@ -260,11 +260,11 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties._type === 'relationship') {
+            if (self.attr.data.properties._type.value === 'relationship') {
                 self.relationshipService.deleteProperty(
                         data.property.name,
-                        this.attr.data.properties.source,
-                        this.attr.data.properties.target,
+                        this.attr.data.properties.source.value,
+                        this.attr.data.properties.target.value,
                         this.attr.data.id)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
@@ -283,7 +283,12 @@ define([
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                        self.trigger (document, "updateVertices", { 
+                            vertices: [{
+                                id: vertexData.graphVertexId,
+                                properties: vertexData.properties
+                            }]
+                        });
                     });
             }
         };
@@ -291,13 +296,13 @@ define([
         this.onAddProperty = function (event, data) {
             var self = this;
 
-            if (self.attr.data.properties._type === 'relationship') {
+            if (self.attr.data.properties._type && self.attr.data.properties._type === 'relationship') {
                 self.relationshipService.setProperty(
                         data.property.name,
                         data.property.value,
-                        this.attr.data.properties.source,
-                        this.attr.data.properties.target,
-                        this.attr.data.properties.id)
+                        this.attr.data.properties.source.value,
+                        this.attr.data.properties.target.value,
+                        this.attr.data.properties.id.value)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
@@ -311,11 +316,17 @@ define([
                 self.vertexService.setProperty(
                     this.attr.data.id,
                     data.property.name,
-                    data.property.value)
+                    data.property.value,
+                    data.property.visibilitySource)
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { vertices: [vertexData.vertex] });
+                        self.trigger (document, "updateVertices", { 
+                            vertices: [{
+                                id: vertexData.graphVertexId,
+                                properties: vertexData.properties
+                            }]
+                        });
                     });
             }
 
@@ -373,6 +384,14 @@ define([
 
                     var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
                     self.$node.html(props);
+
+                    require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
+                        self.$node.find('.visibility').each(function() {
+                            VisibilityDisplay.attachTo(this, {
+                                value: $(this).data('visibility')
+                            })
+                        });
+                    });
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
         };
@@ -399,15 +418,15 @@ define([
         keys.forEach(function (name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isRelationshipType = name === 'relationshipType' && properties._type === 'relationship';
+                isRelationshipType = name === 'relationshipType' && properties._type.value === 'relationship';
 
             if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
 
                 if (ontologyProperty.dataType == 'date') {
-                    value = formatters.date.dateString(parseInt(properties[name], 10));
+                    value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else {
-                    value = properties[name];
+                    value = properties[name].value;
                 }
 
                 var isRelationshipSourceProperty = name === 'source' && properties._type === 'relationship';
@@ -415,19 +434,20 @@ define([
                     name !== 'boundingBox' &&
                     name !== 'title' &&
                     !isRelationshipSourceProperty) {
-                    addProperty(name, displayName, value);
+                    addProperty(name, displayName, value, properties[name]._visibility);
                 }
             } else if (isRelationshipType) {
-                addProperty(name, 'relationship type', properties[name]);
+                addProperty(name, 'relationship type', properties[name].value);
             }
         });
         return displayProperties;
 
-        function addProperty(name, displayName, value) {
+        function addProperty(name, displayName, value, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
-                displayName: displayName || name
+                displayName: displayName || name,
+                visibility: visibility
             });
         }
     }

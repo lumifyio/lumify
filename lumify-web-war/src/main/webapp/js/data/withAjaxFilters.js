@@ -41,12 +41,10 @@ define([], function() {
                 if (json.vertex && json.vertex.graphVertexId && json.properties) {
                     var cache = this.updateCacheWithVertex({
                         id: json.vertex.graphVertexId,
-                        properties: json.vertex
+                        properties: json.properties
                     }, {
                         deletedProperty: json.deletedProperty
                     });
-                    $.extend(true, json.vertex, cache.properties);
-                    $.extend(true, json.properties, cache.properties);
                     updated.push(cache);
                     return true;
                 }
@@ -128,7 +126,7 @@ define([], function() {
                             });
                         }
                     } catch(e) {
-                        console.error('Request failed in prefilter cache phase', e && e.message || e);
+                        console.error('Request failed in prefilter cache phase', e.stack || e.message);
                     }
                     return json;
                 };

@@ -57,8 +57,10 @@ define([
         };
 
         this.updateImageBackground = function(src) {
+            var _glyphIconProperty = this.attr.data.properties._glyphIcon;
+
             this.$node.css({
-                backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(this.attr.data.properties._glyphIcon) || this.attr.defaultIconSrc) + '")'
+                backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(_glyphIconProperty && _glyphIconProperty.value) || this.attr.defaultIconSrc) + '")'
             });
             this.$node.toggleClass('custom-image', !!(src || this.attr.data.properties._glyphIcon));
         };
@@ -89,7 +91,7 @@ define([
         this.onUpdateIcon = function(e, data) {
             var src = this.srcForGlyphIconUrl(data.src);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.properties._glyphIcon)) {
+            if (src !== this.srcForGlyphIconUrl(this.attr.data.properties._glyphIcon.value)) {
                 this.updateImageBackground(src);
             }
         };
@@ -198,7 +200,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.properties._glyphIcon));
+            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.properties._glyphIcon.value));
             
             this.trigger(document, 'updateVertices', { vertices:[data.vertex] });
         };

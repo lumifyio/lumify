@@ -8,6 +8,7 @@ define([
     '../withHighlighting',
     'tpl!./entity',
     'tpl!./relationships',
+    'tpl!util/alert',
     'util/vertexList/list',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
@@ -21,6 +22,7 @@ define([
     withHighlighting,
     template,
     relationshipsTemplate,
+    alertTemplate,
     VertexList,
     PropertyForm,
     OntologyService,
@@ -61,7 +63,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(vertex.properties.title);
+                    self.select('titleSelector').html(vertex.properties.title.value);
                 }
             });
         };
@@ -73,7 +75,7 @@ define([
                 this.handleCancelling(appData.refresh(this.attr.data)),
                 this.handleCancelling(ontologyService.concepts())
             ).done(function(vertex, concepts) {
-                var concept = concepts.byId[self.attr.data.properties._conceptType];
+                var concept = concepts.byId[self.attr.data.properties._conceptType.value];
 
                 self.$node.html(template({
                     vertex: self.attr.data,
@@ -94,9 +96,15 @@ define([
                 self.updateEntityAndArtifactDraggables();
 
                 $.when(
-                    self.handleCancelling(self.ontologyService.relationships()),
-                    self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
-                ).done(self.loadRelationships.bind(self, vertex));
+                        self.handleCancelling(self.ontologyService.relationships()),
+                        self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
+                    )
+                    .fail(function() {
+                        self.select('relationshipsSelector').html(alertTemplate({
+                            error: 'Unable to load relationships'
+                        }));
+                    })
+                    .done(self.loadRelationships.bind(self, vertex));
             });
         };
 
@@ -167,7 +175,7 @@ define([
 
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
-                    return defaultSort(a.vertex.properties.title, b.vertex.properties.title);
+                    return defaultSort(a.vertex.properties.title.value, b.vertex.properties.title.value);
                 }
 
                 // Specifies the special group sort order

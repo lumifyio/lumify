@@ -1,20 +1,29 @@
 package com.altamiracorp.lumify.core.util;
 
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
 
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.Direction;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Element;
+import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Text;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GraphUtil {
+    private static final String VISIBILITY_PROPERTY = "_visibility";
+    private static final String VISIBILITY_SOURCE_PROPERTY = "_visibilitySource";
+
     public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
@@ -58,25 +67,6 @@ public class GraphUtil {
         }
     }
 
-    private static JSONObject toJsonProperties(Iterable<Property> properties) {
-        // TODO handle multi-valued properties
-        JSONObject propertiesJson = new JSONObject();
-        for (Property property : properties) {
-            Object propertyValue = property.getValue();
-            if (GEO_LOCATION.getKey().equals(property.getName())) {
-                Double[] latlong = parseLatLong(propertyValue);
-                propertiesJson.put("latitude", latlong[0]);
-                propertiesJson.put("longitude", latlong[1]);
-            } else {
-                if (propertyValue instanceof Text) {
-                    propertyValue = ((Text) propertyValue).getText();
-                }
-                propertiesJson.put(property.getName(), propertyValue);
-            }
-        }
-        return propertiesJson;
-    }
-
     public static Double[] parseLatLong(Object val) {
         Double[] result = new Double[2];
         if (val instanceof String) {
@@ -90,5 +80,69 @@ public class GraphUtil {
             result[1] = valGeoPoint.getLongitude();
         }
         return result;
+    }
+
+    public static JSONObject toJsonProperties(Iterable<Property> properties) {
+        JSONObject resultsJson = new JSONObject();
+        for (Property property : properties) {
+            if (property.getValue() instanceof StreamingPropertyValue) {
+                continue;
+            }
+            resultsJson.put(property.getName(), GraphUtil.toJsonProperty(property));
+        }
+        return resultsJson;
+    }
+
+    public static JSONObject toJsonProperty(Property property) {
+        JSONObject result = new JSONObject();
+
+        Object value = property.getValue();
+        if (value instanceof Text) {
+            result.put("value", ((Text) value).getText());
+        } else if (value instanceof Date) {
+            result.put("value", ((Date) value).getTime());
+        } else if (value instanceof GeoPoint) {
+            GeoPoint geoPoint = (GeoPoint) property.getValue();
+            result.put("latitude", geoPoint.getLatitude());
+            result.put("longitude", geoPoint.getLongitude());
+            if (geoPoint.getAltitude() != null) {
+                result.put("altitude", geoPoint.getAltitude());
+            }
+        } else {
+            result.put("value", value);
+        }
+
+        if (property.getVisibility() != null) {
+            result.put(VISIBILITY_PROPERTY, property.getVisibility().toString());
+        }
+        if (property.getMetadata() != null && property.getMetadata().get(VISIBILITY_SOURCE_PROPERTY) != null) {
+            result.put(VISIBILITY_SOURCE_PROPERTY, property.getMetadata().get(VISIBILITY_SOURCE_PROPERTY));
+        }
+
+        return result;
+    }
+
+    public static <T extends Element> ElementMutation<T> setProperty(T element, String propertyName, Object value, String visibilitySource,
+            VisibilityTranslator visibilityTranslator) {
+        Property oldProperty = element.getProperty(propertyName);
+        Map<String, Object> propertyMetadata;
+        if (oldProperty != null) {
+            propertyMetadata = oldProperty.getMetadata();
+        } else {
+            propertyMetadata = new HashMap<String, Object>();
+        }
+        ElementMutation<T> elementMutation = element.prepareMutation();
+
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
+        propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
+
+        if (GEO_LOCATION.getKey().equals(propertyName)) {
+            GeoPoint geoPoint = (GeoPoint) value;
+            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, visibility);
+            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, visibility);
+        } else {
+            elementMutation.setProperty(propertyName, value, propertyMetadata, visibility);
+        }
+        return elementMutation;
     }
 }

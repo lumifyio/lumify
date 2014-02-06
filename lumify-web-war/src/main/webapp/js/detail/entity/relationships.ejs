@@ -12,14 +12,14 @@
         <li class="relationship">
         <% if (type === 'inverse') { %>
             <span class="<%= r.vertices.classes.src %>" 
-                  data-vertex-id="<%= r.vertices.src.id %>" data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.src.properties.title %></span>
+                  data-vertex-id="<%= r.vertices.src.id %>" data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.src.properties.title.value %></span>
             <span data-info='<%= JSON.stringify(r.relationshipInfo) %>' class="relationship"><%= r.displayLabel %></span>
             <span class="<%= r.vertices.classes.dest %>"
-                  data-vertex-id='<%= r.vertices.dest.id %>' data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.dest.properties.title %></span>
+                  data-vertex-id='<%= r.vertices.dest.id %>' data-info="<%= JSON.stringify(r.vertices.src.properties) %>"><%- r.vertices.dest.properties.title.value %></span>
         <% } else if (type !== 'references') { %>
           <span 
             class="<%= r.vertices.classes.other %>"
-            data-vertex-id="<%= r.vertices.other.id %>" data-info="<%= JSON.stringify(r.vertices.other.properties) %>"><%- r.vertices.other.properties.title %></span>
+            data-vertex-id="<%= r.vertices.other.id %>" data-info="<%= JSON.stringify(r.vertices.other.properties) %>"><%- r.vertices.other.properties.title.value %></span>
         <% } %>
         </li>
     <% }); %>

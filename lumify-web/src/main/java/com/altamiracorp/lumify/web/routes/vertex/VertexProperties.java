@@ -1,21 +1,14 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
-
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Text;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
-import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
-import java.util.Date;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VertexProperties extends BaseRequestHandler {
@@ -32,40 +25,12 @@ public class VertexProperties extends BaseRequestHandler {
         User user = getUser(request);
 
         Iterable<Property> properties = graph.getVertex(graphVertexId, user.getAuthorizations()).getProperties();
-        JSONObject propertiesJson = propertiesToJson(properties);
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
 
         JSONObject json = new JSONObject();
         json.put("id", graphVertexId);
         json.put("properties", propertiesJson);
 
         respondWithJson(response, json);
-    }
-
-    public static JSONObject propertiesToJson(Iterable<Property> properties) throws JSONException {
-        JSONObject resultsJson = new JSONObject();
-        Iterator<Property> propertyIterator = properties.iterator();
-        while (propertyIterator.hasNext()) {
-            Property property = propertyIterator.next();
-            if (GEO_LOCATION.getKey().equals(property.getName())) {
-                JSONObject geo = new JSONObject();
-                GeoPoint geoPoint = (GeoPoint) property.getValue();
-                geo.put("latitude", geoPoint.getLatitude());
-                geo.put("longitude", geoPoint.getLongitude());
-                resultsJson.put(property.getName(), geo);
-            } else {
-                Object value = property.getValue();
-                if (value instanceof StreamingPropertyValue) {
-                    continue;
-                }
-                if (value instanceof Date) {
-                    value = ((Date) value).getTime();
-                }
-                if (value instanceof Text) {
-                    value = ((Text) value).getText();
-                }
-                resultsJson.put(property.getName(), value);
-            }
-        }
-        return resultsJson;
     }
 }

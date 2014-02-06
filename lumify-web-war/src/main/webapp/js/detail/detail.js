@@ -72,7 +72,7 @@ define([
                 }
                 moduleData = vertex;
             } else {
-                moduleName = edges[0].properties._type;
+                moduleName = 'relationship';
                 moduleData = edges[0];
             }
 

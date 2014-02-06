@@ -12,12 +12,13 @@ define(
 
         VertexService.prototype = Object.create(ServiceBase.prototype);
 
-        VertexService.prototype.setProperty = function (vertexId, propertyName, value) {
+        VertexService.prototype.setProperty = function (vertexId, propertyName, value, visibilitySource) {
             return this._ajaxPost({
                 url: 'vertex/' + encodeURIComponent(vertexId) + '/property/set',
                 data: {
                     propertyName: propertyName,
-                    value: value
+                    value: value,
+                    visibilitySource: visibilitySource
                 }
             });
         };

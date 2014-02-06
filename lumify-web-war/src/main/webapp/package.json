@@ -1,9 +1,9 @@
 {
   "name": "lumify",
-  "version": "0.0.0",
-  "description": "ERROR: No README.md file found!",
+  "version": "0.1.0",
+  "description": "open source big data integration, analytics, and visualization",
   "main": "karma.conf.js",
-  "repository": "git://github.com/nearinfinity/lumify",
+  "repository": "git://github.com/altamiracorp/lumify",
   "directories": {
     "test": "test"
   },
@@ -27,11 +27,12 @@
     "grunt-contrib-less": "~0.8.3",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-contrib-jshint": "~0.8.0"
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-notify": "~0.2.17"
   },
   "scripts": {
     "test": "karma start --single-run"
   },
   "author": "",
-  "license": "BSD-2-Clause"
+  "license": "Apache 2.0"
 }

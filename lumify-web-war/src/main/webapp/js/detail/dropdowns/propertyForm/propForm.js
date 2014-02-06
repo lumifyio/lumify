@@ -23,7 +23,9 @@ define([
             saveButtonSelector: '.btn-primary',
             deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
-            propertyInputSelector: '.input-row input'
+            visibilitySelector: '.visibility',
+            propertyInputSelector: '.input-row input',
+            visibilityInputSelector: '.visibility input'
         });
 
         this.after('initialize', function () {
@@ -35,22 +37,24 @@ define([
                 deleteButtonSelector: this.onDelete
             });
             this.on('keyup', {
-                propertyInputSelector: this.onKeyup
+                propertyInputSelector: this.onKeyup,
+                visibilityInputSelector: this.onKeyup
             });
 
             this.on('addPropertyError', this.onAddPropertyError);
             this.on('propertychange', this.onPropertyChange);
             this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('propertyselected', this.onPropertySelected);
+            this.on('visibilitychange', this.onVisibilityChange);
 
             this.$node.html(template({}));
 
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
 
-            (vertex.properties._conceptType ?
-                self.attr.service.propertiesByConceptId(vertex.properties._conceptType) :
-                self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipLabel)
+            (vertex.properties._conceptType.value ?
+                self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
+                self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipLabel.value)
             ).done(function (properties) {
                 var propertiesList = [];
 
@@ -83,18 +87,27 @@ define([
             var self = this,
                 property = data.property,
                 propertyName = property.title,
-                config = self.select('configurationSelector');
+                config = self.select('configurationSelector'),
+                visibility = self.select('visibilitySelector');
 
             this.currentProperty = property;
+            this.$node.find('input').removeClass('validation-error');
 
             config.teardownAllComponents();
+            visibility.teardownAllComponents();
 
-            var previousValue = this.attr.data.properties[propertyName],
+            var vertexProperty = this.attr.data.properties[propertyName],
+                previousValue = vertexProperty && vertexProperty.value,
+                visibilityValue = vertexProperty && vertexProperty._visibility,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
                 this.currentValue = 'point(' + this.currentValue.latitude + ',' + this.currentValue.longitude + ')';
+            }
+
+            if (visibilityValue) {
+                this.visibilitySource = { value:visibilityValue, valid:true };
             }
 
             this.select('deleteButtonSelector').toggle(!!isExistingProperty);
@@ -112,21 +125,43 @@ define([
                             value: previousValue,
                             predicates: false
                         });
+                        self.checkValid();
+                    });
+                    require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                        Visibility.attachTo(visibility, {
+                            value: visibilityValue || ''
+                        });
                     });
                 } else console.warn('Property ' + propertyName + ' not found in ontology');
             });
         };
 
+        this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data;
+            this.checkValid();
+        };
+
         this.onPropertyInvalid = function (event, data) {
             event.stopPropagation();
 
-            this.invalid = true;
-            this.select('saveButtonSelector').attr('disabled', true);
+            this.propertyInvalid = true;
+            this.checkValid();
         };
 
+        this.checkValid = function() {
+            this.valid = !this.propertyInvalid && 
+                (this.visibilitySource && this.visibilitySource.valid);
+
+            if (this.valid) {
+                this.select('saveButtonSelector').removeAttr('disabled');
+            } else {
+                this.select('saveButtonSelector').attr('disabled', true);
+            }
+        }
+
         this.onPropertyChange = function (event, data) {
-            this.invalid = false;
-            this.select('saveButtonSelector').removeAttr('disabled');
+            this.propertyInvalid = false;
+            this.checkValid();
 
             event.stopPropagation();
 
@@ -157,7 +192,7 @@ define([
         };
 
         this.onSave = function (evt) {
-            if (this.invalid) return;
+            if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
@@ -170,7 +205,8 @@ define([
                 this.trigger('addProperty', {
                     property: {
                         name: propertyName,
-                        value: value
+                        value: value,
+                        visibilitySource: this.visibilitySource.value
                     }
                 });
             }

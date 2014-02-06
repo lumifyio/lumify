@@ -23,6 +23,7 @@ import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.DefaultUserProvider;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -31,11 +32,8 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.lumify.core.version.VersionServiceMXBean;
 import com.altamiracorp.securegraph.Graph;
-import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Scopes;
+import com.google.inject.*;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -116,6 +114,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(WorkQueueRepository.class)
                 .toProvider(getConfigurableProvider(WorkQueueRepository.class, configuration, Configuration.WORK_QUEUE_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(VisibilityTranslator.class)
+                .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
                 .in(Scopes.SINGLETON);
         bind(ContentTypeExtractor.class)
                 .toProvider(getConfigurableProvider(ContentTypeExtractor.class, configuration, Configuration.CONTENT_TYPE_EXTRACTOR, false))

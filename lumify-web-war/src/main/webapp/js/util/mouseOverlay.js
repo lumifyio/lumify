@@ -21,14 +21,23 @@ function(defineComponent) {
             this.textNode = this.overlayNode.find('.tooltip-inner');
 
             this.on('displayInformation', this.onDisplayInformation);
+            this.on('hideInformation', this.onHideInformation);
             this.on('mousemove.displayInformation', this.onMouseMove);
             this.on(document, 'click', this.onClick);
         });
 
-        this.onClick = function() {
+        this.hide = function() {
             clearTimeout(this.timeout);
             this.overlayNode.hide();
             this.tracking = false;
+        };
+
+        this.onClick = function() {
+            this.hide();
+        };
+
+        this.onHideInformation = function(event, data) {
+            this.hide();
         };
 
         /**

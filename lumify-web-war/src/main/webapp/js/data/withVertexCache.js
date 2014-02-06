@@ -89,31 +89,39 @@ define([
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            if (_.isString(cache.properties.geoLocation)) {
-                var m = cache.properties.geoLocation.match(/point\[(.*?),(.*?)\]/);
+            /*
+            if (_.isString(cache.properties.geoLocation && cache.properties.geoLocation.value)) {
+                var m = cache.properties.geoLocation.value.match(/point\[(.*?),(.*?)\]/);
                 if (m) {
                     var latitude = m[1];
                     var longitude = m[2];
-                    cache.properties.geoLocation = {
+                    cache.properties.geoLocation.value = {
                         latitude: latitude,
                         longitude: longitude,
-                        title: cache.properties._geoLocationDescription
+                        title: cache.properties._geoLocationDescription.value
                     };
                 }
             } 
+            */
 
-            cache.concept = this.cachedConcepts.byId[cache.properties._conceptType]
-
-            if (cache.properties.latitude || cache.properties.longitude) {
-                $.extend(cache.properties.geoLocation || (cache.properties.geoLocation = {}), {
-                    latitude: cache.properties.latitude,
-                    longitude: cache.properties.longitude,
-                    title: cache.properties._geoLocationDescription
-                });
-                delete cache.properties.latitude;
-                delete cache.properties.longitude;
-                delete cache.properties._geoLocationDescription;
+            cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value]
+            if (!cache.concept) {
+                console.error('Unable to attach concept to vertex', cache.concept, cache.properties._conceptType);
             }
+
+            /*
+            if ((cache.properties.latitude && cache.properties.latitude.value) || 
+                (cache.properties.longitude && cache.properties.longitude.value)) {
+                $.extend(cache.properties.geoLocation.value || (cache.properties.geoLocation.value = {}), {
+                    latitude: cache.properties.latitude.value,
+                    longitude: cache.properties.longitude.value,
+                    title: cache.properties._geoLocationDescription.value
+                });
+                delete cache.properties.latitude.value;
+                delete cache.properties.longitude.value;
+                delete cache.properties._geoLocationDescription.value;
+            }
+            */
 
             return cache;
         };

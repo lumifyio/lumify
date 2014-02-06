@@ -5,11 +5,12 @@ define([
     'data',
     'tpl!./list',
     'tpl!./item',
+    'tpl!util/alert',
     'util/previews',
     'util/video/scrubber',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
-], function(defineComponent, registry, appData, template, vertexTemplate, previews, VideoScrubber) {
+], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, previews, VideoScrubber) {
     'use strict';
 
     return defineComponent(List);
@@ -31,7 +32,7 @@ define([
             return {
                 inGraph: inWorkspace,
                 inMap: inWorkspace && !!(
-                        vertex.properties.geoLocation || 
+                        vertex.properties.geoLocation ||
                         (vertex.location || (vertex.locations && vertex.locations.length)) ||
                         (vertex.properties.latitude && vertex.properties.longitude)
                 )
@@ -45,7 +46,7 @@ define([
             vertices.forEach(function(v) {
 
                 // Check if this vertex is in the graph/map
-                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + ++self.classNameIndex));
+                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + (++self.classNameIndex)));
 
                 var classes = [self.classNameLookup[v.id]];
 
@@ -93,6 +94,11 @@ define([
             this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
             this.on('up', this.move);
+
+            _.defer(function() {
+                this.$node.scrollTop(0);
+            }.bind(this))
+
         });
 
         this.move = function(e, data) {
@@ -202,7 +208,10 @@ define([
         this.onAddInfiniteVertices = function(evt, data) {
             var loading = this.$node.find('.infinite-loading');
 
-            if (data.vertices.length === 0) {
+            if (!data.success) {
+                loading.html(alertTemplate({ error: 'Error loading search results' }));
+                this.attr.infiniteScrolling = false;
+            } else if (data.vertices.length === 0) {
                 loading.remove();
                 this.attr.infiniteScrolling = false;
             } else {
@@ -258,10 +267,10 @@ define([
 
                         li.data('previewloaded', true).addClass('preview-loading');
 
-                        if (vertex.properties._glyphIcon) {
+                        if (vertex.properties._glyphIcon.value) {
                             li.removeClass('preview-loading')
                                 .data('preview-loaded', true)
-                                .find('.preview').html("<img src='" + vertex.properties._glyphIcon + "' />");
+                                .find('.preview').html("<img src='" + vertex.properties._glyphIcon.value + "' />");
                         } else {
                             previews.generatePreview(vertex, { width: 200 }, function(poster, frames) {
                                 li.removeClass('preview-loading')
@@ -348,7 +357,7 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.properties._glyphIcon || 
+                    src = (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) ||
                         (
                             vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
                             vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null

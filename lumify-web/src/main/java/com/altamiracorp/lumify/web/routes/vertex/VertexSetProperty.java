@@ -5,7 +5,9 @@ import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperti
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -15,7 +17,6 @@ import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -29,12 +30,18 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
+    private VisibilityTranslator visibilityTranslator;
 
     @Inject
-    public VertexSetProperty(final OntologyRepository ontologyRepo, final Graph graph, final AuditRepository auditRepo) {
-        this.ontologyRepository = ontologyRepo;
+    public VertexSetProperty(
+            final OntologyRepository ontologyRepository,
+            final Graph graph,
+            final AuditRepository auditRepository,
+            final VisibilityTranslator visibilityTranslator) {
+        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.auditRepository = auditRepo;
+        this.auditRepository = auditRepository;
+        this.visibilityTranslator = visibilityTranslator;
     }
 
     @Override
@@ -42,6 +49,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
         final String valueStr = getRequiredParameter(request, "value");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
 
         User user = getUser(request);
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
@@ -59,27 +67,14 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        ElementMutation<Vertex> graphVertexMutation = graphVertex.prepareMutation();
-
-        Visibility visibility = new Visibility(""); // TODO set visibility
-        graphVertexMutation.setProperty(propertyName, value, visibility); // TODO should we wrap with Text
-
-        if (GEO_LOCATION.getKey().equals(propertyName)) {
-            String[] latlong = valueStr.substring(valueStr.indexOf('(') + 1, valueStr.indexOf(')')).split(",");
-            GeoPoint geoPoint = new GeoPoint(Double.parseDouble(latlong[0]), Double.parseDouble(latlong[1]));
-            GEO_LOCATION.setProperty(graphVertexMutation, geoPoint, visibility);
-            GEO_LOCATION_DESCRIPTION.setProperty(graphVertexMutation, "", visibility);
-        } else if (SOURCE.getKey().equals(propertyName)) {
-            SOURCE.setProperty(graphVertexMutation, value.toString(), visibility);
-        }
-
+        ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator);
         auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
         graphVertex = graphVertexMutation.save();
         graph.flush();
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
 
-        JSONObject propertiesJson = VertexProperties.propertiesToJson(graphVertex.getProperties());
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(graphVertex.getProperties());
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
 
