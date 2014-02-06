@@ -4,11 +4,11 @@
 
   <span class="value">
     <% if (!popout) { %>
-    <a href="#" class="map-coordinates" data-latitude="<%= property.latitude %>" data-longitude="<%= property.longitude %>">
-      <%= property.title || (property.latitude + ', ' + property.longitude) %>
+    <a href="#" class="map-coordinates" data-latitude="<%= property.value.latitude %>" data-longitude="<%= property.value.longitude %>">
+      <%= property.value._geoLocationDescription || (property.value.latitude + ', ' + property.value.longitude) %>
     </a>
     <% } else { %>
-    <span><%= property.title || (property.latitude + ', ' + property.longitude) %></span>
+    <span><%= property.value._geoLocationDescription || (property.value.latitude + ', ' + property.value.longitude) %></span>
     <% } %>
     <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
   </span>
