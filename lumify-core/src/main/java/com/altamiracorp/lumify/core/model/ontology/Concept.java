@@ -68,4 +68,31 @@ public class Concept {
         vertex.setProperty(propertyName, propertyValue, visibility);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", getDisplayName(), getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + (this.vertex != null ? this.vertex.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Concept other = (Concept) obj;
+        if (this.vertex != other.vertex && (this.vertex == null || !this.vertex.equals(other.vertex))) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -61,10 +61,11 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     /**
      * Convert the SecureGraph value to its original raw type.
-     * @param value the SecureGraph value
+     * @param value the SecureGraph value; may or may not be of type TGraph
      * @return the raw value represented by the input SecureGraph value
+     * @throws ClassCastException if the provided value cannot be unwrapped
      */
-    public abstract TRaw unwrap(final TGraph value);
+    public abstract TRaw unwrap(final Object value);
 
     /**
      * Get the property key for this property.
@@ -165,14 +166,14 @@ public abstract class LumifyProperty<TRaw, TGraph> {
     }
 
     /**
-     * Function that converts the values returned by the Vertex.getPropertyValue()
+     * Function that converts the values returned by the Vertex.getProperty()
      * methods to the configured TRaw type.
      */
     private class RawConverter implements Function<Object, TRaw> {
         @Override
         @SuppressWarnings("unchecked")
         public TRaw apply(final Object input) {
-            return unwrap((TGraph) input);
+            return unwrap(input);
         }
     }
 }

@@ -91,7 +91,13 @@ public class TextLumifyProperty extends LumifyProperty<String, Text> {
     }
 
     @Override
-    public String unwrap(final Text value) {
-        return value != null ? value.getText() : null;
+    public String unwrap(final Object value) {
+        String output = null;
+        if (value instanceof Text) {
+            output = ((Text) value).getText();
+        } else if (value != null) {
+            output = value.toString();
+        }
+        return output;
     }
 }
