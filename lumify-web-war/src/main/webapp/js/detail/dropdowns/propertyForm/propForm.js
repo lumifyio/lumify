@@ -91,6 +91,7 @@ define([
                 visibility = self.select('visibilitySelector');
 
             this.currentProperty = property;
+            this.$node.find('input').removeClass('validation-error');
 
             config.teardownAllComponents();
             visibility.teardownAllComponents();
@@ -126,7 +127,7 @@ define([
                         });
                         self.checkValid();
                     });
-                    require(['configuration/plugins/visibility/visibility'], function(Visibility) {
+                    require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                         Visibility.attachTo(visibility, {
                             value: visibilityValue || ''
                         });

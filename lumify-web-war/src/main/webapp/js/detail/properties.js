@@ -384,6 +384,14 @@ define([
 
                     var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
                     self.$node.html(props);
+
+                    require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
+                        self.$node.find('.visibility').each(function() {
+                            VisibilityDisplay.attachTo(this, {
+                                value: $(this).data('visibility')
+                            })
+                        });
+                    });
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
         };
@@ -426,7 +434,7 @@ define([
                     name !== 'boundingBox' &&
                     name !== 'title' &&
                     !isRelationshipSourceProperty) {
-                    addProperty(name, displayName, value);
+                    addProperty(name, displayName, value, properties[name]._visibility);
                 }
             } else if (isRelationshipType) {
                 addProperty(name, 'relationship type', properties[name].value);
@@ -434,11 +442,12 @@ define([
         });
         return displayProperties;
 
-        function addProperty(name, displayName, value) {
+        function addProperty(name, displayName, value, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
-                displayName: displayName || name
+                displayName: displayName || name,
+                visibility: visibility
             });
         }
     }
