@@ -25,7 +25,9 @@ define([
             this.on('visibilityclear', this.onClear);
             this.on('change keyup paste', {
                 fieldSelector: this.onChange
-            })
+            });
+
+            this.onChange();
         });
 
         this.onClear = function(event, data) {
@@ -33,10 +35,10 @@ define([
         };
 
         this.onChange = function(event, data) {
-            var value = this.select('fieldSelector').val(); 
+            var value = $.trim(this.select('fieldSelector').val());
             this.trigger('visibilitychange', {
                 value: value, 
-                valid: value.length > 0
+                valid: true
             });
         };
     }
