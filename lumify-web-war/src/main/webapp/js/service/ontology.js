@@ -92,7 +92,7 @@ define(
                         flattenedConcepts.push(grandChildren[grandChildIdx]);
                     }
                 }
-                return flattenedConcepts;
+                return _.sortBy(flattenedConcepts, 'flattenedDisplayName');
             }
         };
 
