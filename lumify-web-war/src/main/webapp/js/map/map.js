@@ -229,7 +229,7 @@ define([
         this.findOrCreateMarker = function(map, vertex) {
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
-                geoLocation = vertex.properties.geoLocation && vertex.properties.geoLocation.value,
+                geoLocation = vertex.properties.geoLocation,
                 conceptType = vertex.properties._conceptType.value,
                 heading = vertex.properties.heading && vertex.properties.heading.value,
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),

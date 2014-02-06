@@ -425,6 +425,8 @@ define([
 
                 if (ontologyProperty.dataType == 'date') {
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
+                } else if (ontologyProperty.dataType === 'geoLocation') {
+                    value = properties[name];
                 } else {
                     value = properties[name].value;
                 }
