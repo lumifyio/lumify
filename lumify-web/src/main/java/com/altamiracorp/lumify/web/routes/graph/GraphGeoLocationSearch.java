@@ -9,6 +9,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.GeoCompare;
+import com.altamiracorp.securegraph.type.GeoCircle;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Iterator<Vertex> vertexIterator = graph.query(user.getAuthorizations()).
-                has(GEO_LOCATION.getKey(), GeoCompare.WITHIN, new GeoPoint(latitude, longitude, radius)).
+                has(GEO_LOCATION.getKey(), GeoCompare.WITHIN, new GeoCircle(latitude, longitude, radius)).
                 vertices().
                 iterator();
 
