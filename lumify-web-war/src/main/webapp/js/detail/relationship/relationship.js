@@ -55,8 +55,8 @@ define([
             $.when(
                 self.handleCancelling(self.ontologyService.relationships()),
                 self.handleCancelling(self.vertexService.getVertexToVertexRelationshipDetails(
-                    data.properties.source,
-                    data.properties.target,
+                    data.properties.properties.source,
+                    data.properties.properties.target,
                     data.id
                 ))
             ).done(function(ontologyRelationships, relationshipData) {
