@@ -123,6 +123,7 @@ width: 100%;
 
     .existing {
       white-space: normal;
+      min-height: 30px;
 
       .property {
         color: #555;
@@ -137,7 +138,7 @@ width: 100%;
       }
     }
 
-    .active .concept-type, .active .property {
+    .active .concept-type, .active .property, .active .property .value {
       color: white;
     }
 
@@ -150,7 +151,7 @@ width: 100%;
       width: 39px;
       background-color: transparent;
       background-repeat: no-repeat;
-      background-size: contain;
+      background-size: auto 30px;
       margin-left: -20px;
       top: 0px;
       height: 100%;

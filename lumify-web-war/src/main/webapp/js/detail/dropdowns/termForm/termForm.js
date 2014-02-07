@@ -533,6 +533,7 @@ define([
 
 
         this.runQuery = function(query) {
+            query = $.trim(query || '');
             if (!this.queryCache) this.queryCache = {};
             if (this.queryCache[query]) return this.queryCache[query];
 
@@ -544,7 +545,7 @@ define([
                 .then(function(response) {
                     badge.removeClass('loading');
                     return _.filter(response.vertices, function(v) { 
-                        return !(/^(document|image|video)$/).test(v.concept.displayType);
+                        return ~v.properties.title.value.toLowerCase().indexOf(query.toLowerCase());
                     });
                 }).done(this.updateQueryCountBadge.bind(this));
 
@@ -566,6 +567,7 @@ define([
 
             self.ontologyService.properties().done(function(ontologyProperties) {
                 var field = input.typeahead({
+                    items: 50,
                     source: function(query, callback) {
 
                         if (self.lastQuery && query !== self.lastQuery) {
@@ -615,7 +617,7 @@ define([
                     },
                     matcher: function(item) {
                         if (item === createNewText) return true;
-                        return Object.getPrototypeOf(this).matcher.apply(this, [item.properties.title.value]);
+                        return true;
                     },
                     sorter: function(items) {
                         var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
