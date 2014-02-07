@@ -831,7 +831,13 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    vertices.push({ id: cyIdMap[cyEdge.id()], properties:cyEdge.data() });
+                    var properties = cyEdge.data();
+                    properties.id = cyIdMap[cyEdge.data().id];
+                    properties.properties = {
+                        source: cyIdMap[cyEdge.data().source],
+                        target: cyIdMap[cyEdge.data().target]
+                    }
+                    vertices.push({ id: cyEdge.id() , properties:properties });
                 }
             });
 
@@ -967,12 +973,12 @@ define([
                         relationshipEdges.push ({
                             group: "edges",
                             data: {
-                                relationshipType: relationship.relationshipType,
                                 source: vertexId(relationship.from),
                                 target: vertexId(relationship.to),
                                 _type: 'relationship',
-                                id: relationship.id
-                            },
+                                id: vertexId(relationship.id),
+                                relationshipType: relationship.relationshipType
+                            }
                         });
                     });
                     // Hide edges when zooming if more than threshold
