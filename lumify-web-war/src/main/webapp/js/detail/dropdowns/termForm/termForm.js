@@ -109,12 +109,19 @@ define([
                         .show();
                 }
                 this.select('helpSelector').hide();
+
+                require(['configuration/plugins/visibility/VisibilityEditor'], function(Visibility) {
+                    Visibility.attachTo(self.$node.find('.visibility'), {
+                        value: ''
+                    });
+                });
             }
 
             if (newGraphVertexId) {
                 this.vertexService.getVertexProperties(newGraphVertexId)
                     .done(this.updateResolveImageIcon.bind(this));
             } else this.updateResolveImageIcon();
+
         };
 
         this.updateConceptSelect = function(val) {
@@ -158,7 +165,8 @@ define([
                     conceptId: this.select('conceptSelector').val(),
                     mentionStart: mentionStart,
                     mentionEnd: mentionEnd,
-                    artifactId: this.attr.artifactId
+                    artifactId: this.attr.artifactId,
+                    visibilitySource: this.visibilitySource || ''
                 };
 
             if (this.currentGraphVertexId) {
@@ -326,6 +334,11 @@ define([
             this.updateConceptLabel(select.val());
         };
 
+        this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data.value;
+            // TODO: inspect valid
+        };
+
         this.updateConceptLabel = function(conceptId, vertex) {
             if (conceptId === '') {
                 this.select('resolveButtonSelector').attr('disabled', true);
@@ -461,6 +474,8 @@ define([
         };
 
         this.registerEvents = function() {
+
+            this.on('visibilitychange', this.onVisibilityChange);
 
             this.on('change', {
                 conceptSelector: this.onConceptChanged
