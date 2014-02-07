@@ -41,8 +41,6 @@ public class EntityTermCreate extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO set visibility
-        Visibility visibility = new Visibility("");
 
         // required parameters
         final String artifactId = getRequiredParameter(request, "artifactId");
@@ -50,6 +48,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
+        final String visibilitySource = getOptionalParameter(request, "visibilitySource");
 
         User user = getUser(request);
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
@@ -57,6 +56,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
+        Visibility visibility = new Visibility(visibilitySource == null ? "" : visibilitySource);
         ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, user.getAuthorizations());
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
 
