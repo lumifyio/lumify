@@ -382,15 +382,15 @@ define([
                         popoutEnabled = true;
                     }
 
-                    var props = propertiesTemplate({properties:filtered, popout: popoutEnabled});
-                    self.$node.html(props);
+                    var props = $(propertiesTemplate({properties:filtered, popout: popoutEnabled}));
 
                     require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
-                        self.$node.find('.visibility').each(function() {
+                        props.find('.visibility').each(function() {
                             VisibilityDisplay.attachTo(this, {
                                 value: $(this).data('visibility')
                             })
                         });
+                        self.$node.html(props);
                     });
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
