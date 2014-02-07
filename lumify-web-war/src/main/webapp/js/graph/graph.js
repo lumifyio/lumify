@@ -9,6 +9,7 @@ define([
     './contextmenu/withGraphContextMenuItems',
     './withControlDrag',
     'tpl!./graph',
+    'tpl!./loading',
     'util/controls',
     'util/throttle',
     'util/previews',
@@ -29,6 +30,7 @@ define([
     withGraphContextMenuItems,
     withControlDrag,
     template,
+    loadingTemplate,
     Controls,
     throttle,
     previews,
@@ -360,6 +362,8 @@ define([
                         cy.container().focus();
                         self.trigger(document, 'addVertices', { vertices:addedVertices });
                     }
+
+                    self.hideLoading();
 
                     self.setWorkspaceDirty();
                 });
@@ -950,9 +954,19 @@ define([
 
         this.resetGraph = function() {
             this.cytoscapeReady(function(cy) {
-                cy.nodes().remove();
+                cy.elements().remove();
                 this.setWorkspaceDirty();
             });
+        };
+
+        this.hideLoading = function() {
+            var loading = this.$node.find('.loading-graph');
+            if (loading.length) {
+                loading.one('animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd', function(e) {
+                    loading.remove();
+                });
+                loading.addClass('hidden');
+            }
         };
 
         this.onWorkspaceLoaded = function(evt, workspace) {
@@ -960,7 +974,11 @@ define([
             this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data.vertices.length) {
                 this.addVertices(workspace.data.vertices, { fit:(this.previousWorkspace && this.previousWorkspace != workspace.id) });
-            } else this.checkEmptyGraph();
+            } else {
+                this.hideLoading();
+                this.checkEmptyGraph();
+            } 
+
 
             this.previousWorkspace = workspace.id;
         };
@@ -1122,6 +1140,8 @@ define([
 
             this.setupAsyncQueue('cytoscape');
 
+            this.$node.html(loadingTemplate({}));
+
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'verticesHovering', this.onVerticesHovering);
             this.on(document, 'verticesHoveringEnded', this.onVerticesHoveringEnded);
@@ -1174,12 +1194,11 @@ define([
                 };
 
                 // TODO: make context menus work better
-                self.$node.html(template(templateData)).find('.shortcut').each(function() {
+                self.$node.append(template(templateData)).find('.shortcut').each(function() {
                     var $this = $(this), command = $this.text();
                     $this.text(formatters.string.shortcut($this.text()));
                 });
                 self.bindContextMenuClickEvent();
-                self.checkEmptyGraph();
 
                 Controls.attachTo(self.select('graphToolsSelector'));
 
