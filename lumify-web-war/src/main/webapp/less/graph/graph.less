@@ -4,7 +4,41 @@ background: white;
 
 .empty-graph {
   .fullscreen;
-  background: url(../img/drop-items.png) no-repeat center;
+  background: url(../img/drop-items@2x.png) no-repeat center;
+  background-size: 250px 250px;
+}
+
+.loading-graph {
+  .fullscreen;
+  z-index: 100;
+  .transition(~"all ease-out 0.2s");
+  .scale(1);
+  .opacity(100);
+
+  &.hidden {
+    .scale(0.1);
+    .opacity(0);
+  }
+
+  h1 {
+    position: absolute;
+    top: 50%;
+    font-size: 150%;
+    background: url(../img/loading-large@2x.png) no-repeat top;
+    margin: -125px 0 0 0;
+    width: 100%;
+    text-align: center;
+    padding: 260px 0 0 0;
+    background-size: auto 250px;
+    color: #555;
+    font-weight: normal;
+    font-family: HelveticaNeue-Thin, Arial, "sans serif";
+    letter-spacing: 0.7px;
+    &:after {
+      content: '...';
+      position: absolute;
+    }
+  }
 }
 
 .cytoscape-container {
