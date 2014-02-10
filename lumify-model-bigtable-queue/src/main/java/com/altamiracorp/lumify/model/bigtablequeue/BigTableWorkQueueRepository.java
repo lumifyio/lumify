@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.model.bigtablequeue;
 
-import backtype.storm.topology.IRichSpout;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
@@ -10,7 +9,9 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItem;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -31,14 +32,18 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     public void init(Map config) {
         super.init(config);
 
-        this.tablePrefix = (String) config.get(Configuration.WORK_QUEUE_REPOSITORY + ".tableprefix");
+        this.tablePrefix = getTablePrefix(config);
         if (this.tablePrefix == null) {
             this.tablePrefix = DEFAULT_TABLE_PREFIX;
         }
     }
 
+    public static String getTablePrefix(Map config) {
+        return (String) config.get(Configuration.WORK_QUEUE_REPOSITORY + ".tableprefix");
+    }
+
     @Override
-    public IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime) {
+    public Object createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime) {
         return new BigtableWorkQueueSpout(configuration, queueName);
     }
 
@@ -79,10 +84,20 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("push on queue %s: %s", tableName, json.toString(2));
         }
-        queue.add(json, extra, flushFlag, user);
+        QueueItem queueItem = createQueueItem(tableName, json, extra);
+        queue.save(queueItem, flushFlag, user.getModelUserContext());
     }
 
-    static String getTableName(String tablePrefix, String queueName) {
+    public static QueueItem createVertexIdQueueItem(String queueTableName, Object vertexId) {
+        JSONObject json = contentToJson(ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, vertexId.toString()));
+        return createQueueItem(queueTableName, json);
+    }
+
+    public static QueueItem createQueueItem(String queueTableName, JSONObject json, String... extra) {
+        return new QueueItem(queueTableName, json, extra);
+    }
+
+    public static String getTableName(String tablePrefix, String queueName) {
         return tablePrefix + queueName;
     }
 

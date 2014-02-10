@@ -33,10 +33,4 @@ public class QueueItemRepository extends Repository<QueueItem> {
     public String getTableName() {
         return this.tableName;
     }
-
-
-    public void add(JSONObject json, String[] extra, FlushFlag flushFlag, User user) {
-        QueueItem queueItem = new QueueItem(this.tableName, json, extra);
-        this.save(queueItem, flushFlag, user.getModelUserContext());
-    }
 }
