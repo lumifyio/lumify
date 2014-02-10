@@ -187,5 +187,14 @@ public final class Configuration {
 
         return sb.toString();
     }
+
+    public org.apache.hadoop.conf.Configuration toHadoopConfiguration() {
+        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+        for (Object entryObj : this.toMap().entrySet()) {
+            Map.Entry entry = (Map.Entry) entryObj;
+            conf.set(entry.getKey().toString(), entry.getValue().toString());
+        }
+        return conf;
+    }
 }
 

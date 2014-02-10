@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.model.workQueue;
 
-import backtype.storm.topology.IRichSpout;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -54,14 +53,17 @@ public abstract class WorkQueueRepository {
     }
 
     private void writeToQueue(final String queueName, FlushFlag flushFlag, final Map<String, String> content) {
-        final JSONObject data = new JSONObject();
+        JSONObject data = contentToJson(content);
+        LOGGER.debug("Writing data: %s to queue [%s]", data, queueName);
+        pushOnQueue(queueName, flushFlag, data);
+    }
 
+    public static JSONObject contentToJson(final Map<String, String> content) {
+        final JSONObject data = new JSONObject();
         for (final Map.Entry<String, String> entry : content.entrySet()) {
             data.put(entry.getKey(), entry.getValue());
         }
-
-        LOGGER.debug("Writing data: %s to queue [%s]", data, queueName);
-        pushOnQueue(queueName, flushFlag, data);
+        return data;
     }
 
     public abstract void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra);
@@ -70,7 +72,9 @@ public abstract class WorkQueueRepository {
 
     }
 
-    public abstract IRichSpout createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
+    // TODO this is pretty awful but returning backtype.storm.topology.IRichSpout causes a dependency hell problem because it requires storm jar
+    //      one possibility would be to return a custom type but this just pushes the problem
+    public abstract Object createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
 
     public abstract void flush();
 

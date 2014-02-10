@@ -152,7 +152,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
     }
 
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
-        return this.workQueueRepository.createSpout(getConfiguration(), queueName, getQueueStartOffsetTime());
+        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName, getQueueStartOffsetTime());
     }
 
     @Inject
