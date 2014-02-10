@@ -111,42 +111,46 @@ define([
         this.loadRelationships = function(vertex, ontologyRelationships, vertexRelationships) {
             var self = this,
                 totalReferences = vertexRelationships[0].totalReferences,
-                relationships = vertexRelationships[0].relationships;
+                allRelationships = vertexRelationships[0].relationships,
+                relationships = [];
 
             // Create source/dest/other properties
-            relationships.forEach(function(r) {
-                var src, dest, other;
-                if (vertex.id == r.relationship.sourceVertexId) {
-                    src = vertex;
-                    dest = other = r.vertex;
-                } else {
-                    src = other = r.vertex;
-                    dest = vertex;
-                }
-
-                r.vertices = {
-                    src: src,
-                    dest: dest,
-                    other: other,
-                    classes: {
-                        src: self.classesForVertex(src),
-                        dest: self.classesForVertex(dest),
-                        other: self.classesForVertex(other)
+            allRelationships.forEach(function(r) {
+                if (ontologyRelationships.byTitle[r.relationship.label]) {
+                    r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
+                    var src, dest, other;
+                    if (vertex.id == r.relationship.sourceVertexId) {
+                        src = vertex;
+                        dest = other = r.vertex;
+                    } else {
+                        src = other = r.vertex;
+                        dest = vertex;
                     }
-                };
 
-                r.relationshipInfo = {
-                    id: r.relationship.id,
-                    properties: $.extend({}, r.relationship.properties, {
-                        _type: 'relationship',
-                        _rowKey: r.relationship.sourceVertexId + '->' + r.relationship.destVertexId,
+                    r.vertices = {
+                        src: src,
+                        dest: dest,
+                        other: other,
+                        classes: {
+                            src: self.classesForVertex(src),
+                            dest: self.classesForVertex(dest),
+                            other: self.classesForVertex(other)
+                        }
+                    };
+
+                    r.relationshipInfo = {
                         id: r.relationship.id,
-                        relationshipType: r.relationship.label,
-                        source: r.relationship.sourceVertexId,
-                        target: r.relationship.destVertexId
-                    })
-                };
-                r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
+                        properties: $.extend({}, r.relationship.properties, {
+                            _type: 'relationship',
+                            _rowKey: r.relationship.sourceVertexId + '->' + r.relationship.destVertexId,
+                            id: r.relationship.id,
+                            relationshipType: r.relationship.label,
+                            source: r.relationship.sourceVertexId,
+                            target: r.relationship.destVertexId
+                        })
+                    };
+                    relationships.push(r);
+                }
             });
 
             var groupedByType = _.groupBy(relationships, function(r) { 

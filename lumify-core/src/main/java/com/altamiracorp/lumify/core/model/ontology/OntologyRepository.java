@@ -54,6 +54,7 @@ public class OntologyRepository {
     public Iterable<Relationship> getRelationshipLabels() {
         Iterable<Vertex> vertices = graph.query(user.getAuthorizations())
                 .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                .limit(10000)
                 .vertices();
 
         return new ConvertingIterable<Vertex, Relationship>(vertices) {
