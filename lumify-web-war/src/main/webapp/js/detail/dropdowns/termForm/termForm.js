@@ -110,7 +110,7 @@ define([
                 }
                 this.select('helpSelector').hide();
 
-                require(['configuration/plugins/visibility/VisibilityEditor'], function(Visibility) {
+                require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                     Visibility.attachTo(self.$node.find('.visibility'), {
                         value: ''
                     });
