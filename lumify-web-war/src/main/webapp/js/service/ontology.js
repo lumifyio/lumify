@@ -7,6 +7,17 @@ define(
 
         function OntologyService() {
             ServiceBase.call(this);
+
+            var toMemoize = [
+                'propertiesByConceptId',
+                'propertiesByRelationshipLabel',
+                'conceptToConceptRelationships'
+            ];
+
+            var self = this;
+            toMemoize.forEach(function(f) {
+                self[f] = _.memoize(self[f].bind(self), self[f].memoizeHashFunction);
+            });
             return this;
         }
 
@@ -146,6 +157,9 @@ define(
                     destConceptTypeId: destConceptTypeId
                 }
             });
+        };
+        OntologyService.prototype.conceptToConceptRelationships.memoizeHashFunction = function(s,d) {
+            return s+d;
         };
 
         var cachedProperties;
