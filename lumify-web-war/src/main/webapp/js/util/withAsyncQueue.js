@@ -30,6 +30,10 @@ define([], function() {
                 };
 
                 self[name + 'IsReady'] = function() {
+                    if (deferreds[name]) {
+                        return deferreds[name].isResolved();
+                    }
+
                     return objectData !== undefined;
                 };
 

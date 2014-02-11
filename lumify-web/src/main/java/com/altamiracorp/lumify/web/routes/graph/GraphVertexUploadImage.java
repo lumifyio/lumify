@@ -1,11 +1,5 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
-
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.DisplayType;
@@ -20,27 +14,28 @@ import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.ElementBuilder;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);

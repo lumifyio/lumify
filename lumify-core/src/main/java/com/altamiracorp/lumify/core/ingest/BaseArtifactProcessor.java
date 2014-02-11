@@ -16,10 +16,6 @@
 
 package com.altamiracorp.lumify.core.ingest;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
@@ -31,8 +27,13 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
+
 import java.util.Date;
 import java.util.Iterator;
+
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.CREATE_DATE;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Base class for processes that identify and create Artifacts,

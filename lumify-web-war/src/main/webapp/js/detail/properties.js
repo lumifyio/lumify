@@ -431,7 +431,7 @@ define([
                     value = properties[name].value;
                 }
 
-                var isRelationshipSourceProperty = name === 'source' && properties._type === 'relationship';
+                var isRelationshipSourceProperty = name === 'source' && properties._type.value === 'relationship';
                 if (/^[^_]/.test(name) && 
                     name !== 'boundingBox' &&
                     name !== 'title' &&

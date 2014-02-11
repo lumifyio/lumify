@@ -2,13 +2,10 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -41,7 +38,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graphVertex.removeProperty(propertyName);
         graph.flush();
 
-        auditRepository.auditEntityProperties(AuditAction.DELETE, graphVertex, propertyName, oldValue, null,  "", "", user);
+        auditRepository.auditEntityProperties(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", user);
 
         // TODO: broadcast property delete
 

@@ -1,10 +1,5 @@
 package com.altamiracorp.lumify.core.model.audit;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
@@ -12,17 +7,19 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.ExistingElementMutation;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class AuditRepository extends Repository<Audit> {
@@ -135,7 +132,7 @@ public class AuditRepository extends Repository<Audit> {
 
         if (oldValue != null) {
             if (oldValue instanceof GeoPoint) {
-                String val = String.format("POINT(%f,%f)", ((GeoPoint)oldValue).getLatitude(), ((GeoPoint)oldValue).getLongitude());
+                String val = String.format("POINT(%f,%f)", ((GeoPoint) oldValue).getLatitude(), ((GeoPoint) oldValue).getLongitude());
                 audit.getAuditProperty().setPreviousValue(val);
             } else {
                 audit.getAuditProperty().setPreviousValue(oldValue.toString());
@@ -145,7 +142,7 @@ public class AuditRepository extends Repository<Audit> {
             audit.getAuditProperty().setNewValue("");
         } else {
             if (newValue instanceof GeoPoint) {
-                String val = String.format("POINT(%f,%f)", ((GeoPoint)newValue).getLatitude(), ((GeoPoint)newValue).getLongitude());
+                String val = String.format("POINT(%f,%f)", ((GeoPoint) newValue).getLatitude(), ((GeoPoint) newValue).getLongitude());
                 audit.getAuditProperty().setNewValue(val);
             } else {
                 audit.getAuditProperty().setNewValue(newValue.toString());
