@@ -1,0 +1,8 @@
+
+<% _.keys(actions).forEach(function(actionName) { %>
+  <button 
+      class="actionbarbutton"
+      data-event="<%= actions[actionName] %>"
+      style="background:none;border:0;color: white; padding: 0; margin: 0; font-size: 100%; line-height: 1em;"
+    ><%= actionName %></button>
+<% }); %>
