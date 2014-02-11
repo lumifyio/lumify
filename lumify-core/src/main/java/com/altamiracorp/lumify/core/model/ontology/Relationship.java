@@ -19,8 +19,8 @@ public class Relationship {
         this.destConcept = destConcept;
     }
 
-    public Object getId() {
-        return this.vertex.getId();
+    public String getId() {
+        return this.vertex.getId().toString();
     }
 
     public String getTitle() {
