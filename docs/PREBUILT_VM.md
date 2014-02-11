@@ -12,7 +12,7 @@ The following system requirements must be available/installed for pre-built virt
 
 ## Getting Started
 
-1. Download the [Pre-built VM](http://bits.lumify.io/vm/lumify-2013-12-06.ova)
+1. Download the [Pre-built VM](http://bits.lumify.io.s3.amazonaws.com/vm/lumify-opensource-2014-02-06.ova)
 2. Import the .ova file into your preferred vm application
 3. Start the VM
 4. Browse to ```https://192.168.33.10:8443```

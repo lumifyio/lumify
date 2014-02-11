@@ -1,6 +1,6 @@
 # Lumify
 
-![ScreenShot](lumify-web/src/main/webapp/img/lumify-logo.png?raw=true)
+![ScreenShot](lumify-web-war/src/main/webapp/img/lumify-logo.png?raw=true)
 
 Lumify is an open source big data integration, analytics, and visualization platform. Please see http://lumify.io for more details.
 
@@ -11,14 +11,6 @@ Lumify supplies a pre-built virtual machine to get you started quickly, but you 
 [Use the pre-built VM] (docs/PREBUILT_VM.md)
 
 [Build from source] (docs/BUILD_FROM_SOURCE.md)
-
-## Important Notes
-
-* The following Titan properties are required on every vertex:
-    * ```title```
-    * ```_subType```: concept id
-    * ```type```: type of concept (see [VertexType.java](core/src/main/java/com/altamiracorp/lumify/core/model/ontology/VertexType.java))
-* Accumulo must have a row structure with a SHA256 hash for the row key
 
 ## Less Source Maps in Chrome
 

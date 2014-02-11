@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
-
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -10,13 +8,15 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.GeoCompare;
 import com.altamiracorp.securegraph.type.GeoCircle;
-import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
+
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 
 public class GraphGeoLocationSearch extends BaseRequestHandler {
     private final Graph graph;

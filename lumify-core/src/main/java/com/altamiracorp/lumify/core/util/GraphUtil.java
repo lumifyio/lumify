@@ -1,24 +1,19 @@
 package com.altamiracorp.lumify.core.util;
 
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.*;
-
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Element;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Text;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
 
 public class GraphUtil {
     private static final String VISIBILITY_PROPERTY = "_visibility";
@@ -123,7 +118,7 @@ public class GraphUtil {
     }
 
     public static <T extends Element> ElementMutation<T> setProperty(T element, String propertyName, Object value, String visibilitySource,
-            VisibilityTranslator visibilityTranslator) {
+                                                                     VisibilityTranslator visibilityTranslator) {
         Property oldProperty = element.getProperty(propertyName);
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {

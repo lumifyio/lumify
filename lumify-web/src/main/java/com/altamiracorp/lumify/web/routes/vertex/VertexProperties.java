@@ -7,9 +7,10 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
+import org.json.JSONObject;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
 
 public class VertexProperties extends BaseRequestHandler {
     private final Graph graph;

@@ -15,6 +15,7 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
 import com.altamiracorp.securegraph.query.Predicate;
 import com.altamiracorp.securegraph.query.Query;
+import com.altamiracorp.securegraph.query.TextPredicate;
 import com.google.inject.Inject;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

@@ -1,9 +1,5 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -18,6 +14,10 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class EntityHelper {
     private static final Visibility DEFAULT_VISIBILITY = new Visibility("");
@@ -51,7 +51,7 @@ public class EntityHelper {
     }
 
     public ElementMutation<Vertex> updateMutation(ElementMutation<Vertex> vertexMutation, String subType, String title, String process,
-            String comment, User user) {
+                                                  String comment, User user) {
         CONCEPT_TYPE.setProperty(vertexMutation, subType, DEFAULT_VISIBILITY);
         TITLE.setProperty(vertexMutation, title, DEFAULT_VISIBILITY);
         return vertexMutation;

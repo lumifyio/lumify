@@ -15,11 +15,7 @@
  */
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An occurrence of a Term discovered by an extraction process.
@@ -38,7 +34,7 @@ public class TermMention {
     private Object id;
 
     private TermMention(int start, int end, String sign, String ontologyClassUri, boolean resolved, Map<String, Object> propertyValue,
-            String relationshipLabel, boolean useExisting, String process, Object id) {
+                        String relationshipLabel, boolean useExisting, String process, Object id) {
         this.start = start;
         this.end = end;
         this.sign = sign;
@@ -67,7 +63,9 @@ public class TermMention {
         return ontologyClassUri;
     }
 
-    public Object getId () { return id; }
+    public Object getId() {
+        return id;
+    }
 
     public boolean isResolved() {
         return resolved;
@@ -227,7 +225,7 @@ public class TermMention {
             return this;
         }
 
-        public Builder id (final Object id) {
+        public Builder id(final Object id) {
             this.id = id;
             return this;
         }
