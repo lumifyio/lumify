@@ -83,8 +83,6 @@ define([
             if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
                 if (event.type === 'mouseup' || event.type === 'dblclick') {
                     this.handleSelectionChange();
-                } else if (event.type == 'click') {
-                    this.tearDownDropdowns();
                 }
             }
         };
@@ -244,11 +242,6 @@ define([
                 return;
             } else this.previousSelection = text;
 
-            // Remove all dropdowns if empty selection
-            if (selection.isCollapsed || text.length === 0) {
-                this.tearDownDropdowns();
-            }
-
             this.handleSelectionChange();
         };
 
@@ -283,32 +276,56 @@ define([
                     endContainer = endContainer.parentNode;
                 }
 
-                var isEndTextNode = endContainer.nodeType === 1;
-                if (isEndTextNode) {
-                    this.dropdownEntity(true, endContainer, sel, text);
-                } else {
+                var self = this,
+                    selection = sel && { 
+                        anchor:sel.anchorNode,
+                        focus:sel.focusNode,
+                        anchorOffset: sel.anchorOffset,
+                        focusOffset: sel.focusOffset,
+                        range:sel.rangeCount && sel.getRangeAt(0).cloneRange() 
+                    };
 
-                    // Move to first space in end so as to not break up word when splitting
-                    var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
-                    do {
-                        character = endContainer.textContent.substring(++i, i+1);
-                    } while (whitespaceCheck.test(character));
+                // Don't show action bar if dropdown opened
+                if (this.$node.find('.text.dropdown').length) return;
 
-                    endContainer.splitText(i);
-                    this.dropdownEntity(true, endContainer, sel, text);
-                }
+                require(['util/actionbar/actionbar'], function(ActionBar) {
+                    ActionBar.teardownAll();
+                    ActionBar.attachTo(self.node, {
+                        alignTo: 'textselection',
+                        actions: {
+                            Resolve: 'resolve.actionbar'
+                        }
+                    });
 
+                    self.off('.actionbar').on('resolve.actionbar', function () {
+
+                        var isEndTextNode = endContainer.nodeType === 1;
+                        if (isEndTextNode) {
+                            self.dropdownEntity(true, endContainer, selection, text);
+                        } else {
+
+                            // Move to first space in end so as to not break up word when splitting
+                            var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
+                            do {
+                                character = endContainer.textContent.substring(++i, i+1);
+                            } while (whitespaceCheck.test(character));
+
+                            endContainer.splitText(i);
+                            self.dropdownEntity(true, endContainer, selection, text);
+                        }
+                    });
+                });
             }
-        }, 750);
+        }, 250);
 
-        this.dropdownEntity = function(creating, insertAfterNode, sel, text) {
+        this.dropdownEntity = function(creating, insertAfterNode, selection, text) {
             this.tearDownDropdowns();
 
             var form = $('<div class="underneath"/>');
             $(insertAfterNode).after(form);
             TermForm.attachTo(form, {
                 sign: text,
-                selection: sel && { anchor:sel.anchorNode, focus:sel.focusNode, anchorOffset: sel.anchorOffset, focusOffset: sel.focusOffset, range:sel.rangeCount && sel.getRangeAt(0).cloneRange() },
+                selection: selection,
                 mentionNode: insertAfterNode,
                 existing: !creating,
                 artifactId: this.attr.data.id

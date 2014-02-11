@@ -4,6 +4,10 @@ define([], function() {
 
     function withDropdown() {
 
+        this.defaultAttrs({
+            canceButtonSelector: '.btn.cancel'
+        });
+
         this.open = function() {
             var self = this,
                 node = this.$node;
@@ -47,6 +51,9 @@ define([], function() {
 
         this.after('initialize', function() {
             this.$node.closest('.text').addClass('dropdown');
+            this.on('click', {
+                canceButtonSelector: this.teardown
+            });
             _.defer(this.open.bind(this));
         });
     }
