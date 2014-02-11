@@ -3,13 +3,16 @@ define([
     '../withDropdown',
     'tpl!./propForm',
     'service/ontology',
-    'fields/selection/selection'
+    'fields/selection/selection',
+    'data'
 ], function (
     defineComponent,
     withDropdown,
     template,
     OntologyService,
-    FieldSelection) {
+    FieldSelection,
+    appData
+) {
     'use strict';
 
     return defineComponent(PropertyForm, withDropdown);
@@ -23,7 +26,9 @@ define([
             saveButtonSelector: '.btn-primary',
             deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
+            configurationFieldSelector: '.configuration input',
             visibilitySelector: '.visibility',
+            justificationSelector: '.justification',
             propertyInputSelector: '.input-row input',
             visibilityInputSelector: '.visibility input'
         });
@@ -46,7 +51,9 @@ define([
             this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('propertyselected', this.onPropertySelected);
             this.on('visibilitychange', this.onVisibilityChange);
-
+            this.on('paste', {
+                configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
+            });
             this.$node.html(template({}));
 
             self.select('saveButtonSelector').attr('disabled', true);
@@ -83,18 +90,39 @@ define([
             });
         });
 
+        this.after('teardown', function() {
+            this.select('configurationSelector').teardownAllComponents();
+            this.select('visibilitySelector').teardownAllComponents();
+            this.select('justificationSelector').teardownAllComponents();
+        });
+
+        this.onPaste = function(event) {
+            var self = this,
+                value = $(event.target).val();
+
+            _.defer(function() {
+                self.trigger(
+                    self.select('justificationSelector'),
+                    'valuepasted',
+                    { value: value }
+                );
+            });
+        };
+
         this.onPropertySelected = function(event, data) {
             var self = this,
                 property = data.property,
                 propertyName = property.title,
                 config = self.select('configurationSelector'),
-                visibility = self.select('visibilitySelector');
+                visibility = self.select('visibilitySelector'),
+                justification = self.select('justificationSelector');
 
             this.currentProperty = property;
             this.$node.find('input').removeClass('validation-error');
 
             config.teardownAllComponents();
             visibility.teardownAllComponents();
+            justification.teardownAllComponents();
 
             var vertexProperty = this.attr.data.properties[propertyName],
                 previousValue = vertexProperty && vertexProperty.value,
@@ -126,6 +154,10 @@ define([
                             predicates: false
                         });
                         self.checkValid();
+                    });
+                    require(['detail/dropdowns/propertyForm/justification'], function(Justification) {
+                        Justification.attachTo(justification, {
+                        });
                     });
                     require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                         Visibility.attachTo(visibility, {

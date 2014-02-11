@@ -1,7 +1,7 @@
 
 define(['util/formatters'], function(f) {
 
-    describe.only('formatters', function() {
+    describe('formatters', function() {
 
         describe('for numbers', function() {
 
