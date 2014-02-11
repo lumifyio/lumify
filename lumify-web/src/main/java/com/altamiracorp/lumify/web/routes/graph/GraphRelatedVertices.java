@@ -54,7 +54,10 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         JSONObject json = new JSONObject();
         JSONArray verticesJson = new JSONArray();
         for (Vertex vertex : vertices) {
-            if (!isLimited(limitConceptIds, vertex)) {
+            if (limitConceptIds.size() == 0) {
+                verticesJson.put(GraphUtil.toJson(vertex));
+            }
+            else if (!isLimited(limitConceptIds, vertex)) {
                 verticesJson.put(GraphUtil.toJson(vertex));
             }
         }
