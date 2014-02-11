@@ -87,6 +87,7 @@ define([
             }
         };
 
+
         this.onHighlightTypeClicked = function(evt) {
             var target = $(evt.target),
                 li = target.parents('li'),

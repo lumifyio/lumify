@@ -36,6 +36,7 @@ module.exports = function(config) {
 
       // Test Mocks
       {pattern: 'test/mocks/**/*.js', included: false},
+      {pattern: 'test/utils/**/*.js', included: false},
 
       // Test runner
       'test/runner/main.js'

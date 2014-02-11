@@ -13,3 +13,29 @@
     margin-left: 1px;
   }
 }
+
+.justification .viewing {
+  margin-bottom: 0.5em;
+
+  .text {
+    display:block;
+    font-style: italic;
+    .selection {
+      background: fadeout(@blue-color, 80%);
+      padding: 0 2px;
+      margin: 0 2px;
+      text-shadow: 0 1px 0 fadeout(white, 60%);
+    }
+    &:before { content: '\201C'; }
+    &:after { content: '\201D'; }
+  }
+  .source {
+    strong {
+      font-weight: normal;
+    }
+    font-weight: bold;
+  }
+  .offsets {
+    font-size: 80%;
+  }
+}

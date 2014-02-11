@@ -8,7 +8,7 @@ define([
 
     var EXPECTED_DROPDOWN_SPEED = 1500;
 
-    describe('withHighlighting', function() {
+    xdescribe('withHighlighting', function() {
 
         this.timeout(EXPECTED_DROPDOWN_SPEED * 3);
 

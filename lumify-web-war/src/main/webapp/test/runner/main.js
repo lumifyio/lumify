@@ -22,7 +22,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             'mocha-flight': '../libs/mocha-flight/lib/mocha-flight',
 
             // MOCKS
-            'service/serviceBase': '../test/mocks/serviceBase'
+            'service/serviceBase': '../test/mocks/serviceBase',
+            'testutils': '../test/utils'
         },
 
         shim: {

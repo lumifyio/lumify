@@ -10,6 +10,7 @@ define([
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'tpl!util/alert',
+    'util/range',
     'service/ontology',
     'service/vertex',
     'data'
@@ -23,6 +24,7 @@ define([
     template,
     transcriptEntryTemplate,
     alertTemplate,
+    rangeUtils,
     OntologyService,
     VertexService,
     appData) {
@@ -54,7 +56,9 @@ define([
                 detectedObjectSelector: this.onDetectedObjectClicked,
                 deleteTagSelector: this.onDeleteTagClicked
             });
-
+            this.on('copy cut', {
+                textSelector: this.onCopyText
+            });
             this.on('scrubberFrameChange', this.onScrubberFrameChange);
             this.on('videoTimeUpdate', this.onVideoTimeUpdate);
             this.on('DetectedObjectCoordsChange', this.onCoordsChanged);
@@ -70,6 +74,53 @@ define([
         this.before('teardown', function() {
             this.select('propertiesSelector').teardownComponent(Properties);
         });
+
+        this.onCopyText = function(event) {
+            var selection = getSelection(),
+                target = event.target;
+
+            if (selection.type === 'Range' && 
+                !selection.isCollapsed &&
+                selection.rangeCount === 1) {
+
+                var $anchor = $(selection.anchorNode),
+                    $focus = $(selection.focusNode),
+                    offsets = [];
+                
+                [
+                    {el:$anchor, offset:selection.anchorOffset}, 
+                    {el:$focus, offset:selection.focusOffset}
+                ].forEach(function(node) {
+                    var offset = 
+                        (node.el.parent('.entity').data('info') || {}).start || 
+                        (node.el.prev('.entity').data('info') || {}).end || 
+                        0;
+
+                    offsets.push(offset + node.offset);
+                });
+
+                offsets = _.sortBy(offsets, function(a, b) { return a - b });
+
+                var range = selection.getRangeAt(0),
+                    output = {},
+                    contextRange = rangeUtils.expandRangeByWords(range, 2, output),
+                    context = contextRange.toString(),
+                    contextHighlight =
+                        '...' +
+                        output.before + 
+                        '<span class="selection">' + selection.toString() + '</span>' +
+                        output.after + 
+                        '...';
+
+                this.trigger('copydocumenttext', {
+                    offsets: offsets,
+                    text: selection.toString(),
+                    vertexId: this.attr.data.id,
+                    vertexTitle: this.attr.data.properties.title.value,
+                    context: contextHighlight
+                });
+            }
+        };
 
         this.onVerticesUpdated = function(event, data) {
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });

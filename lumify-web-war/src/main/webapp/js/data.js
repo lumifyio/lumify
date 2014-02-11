@@ -108,6 +108,8 @@ define([
 
             this.on('socketMessage', this.onSocketMessage);
 
+            this.on('copydocumenttext', this.onDocumentTextCopy);
+
             this.on('selectAll', this.onSelectAll);
             this.on('deleteSelected', this.onDelete);
 
@@ -154,6 +156,10 @@ define([
                     //self.trigger('updateVertices', { vertices:[message.data.vertex]});
                     break;
             }
+        };
+
+        this.onDocumentTextCopy = function(event, data) {
+            this.copiedDocumentText = data;
         };
 
         this.onSelectAll = function() {
