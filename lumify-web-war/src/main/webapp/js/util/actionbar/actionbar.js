@@ -15,11 +15,9 @@ define([
         this.before('teardown', function() {
             this.scrollParent.off('.actionbar');
             this.$node.tooltip('destroy');
-            console.log('Destroy actionbar', this.identity);
         });
 
         this.after('initialize', function() {
-            console.log('Creating actionbar', this.identity);
             if (!this.attr.actions) throw "actions attribute required";
             if (this.attr.alignTo !== 'textselection') throw "alignTo only supports textselection";
 
@@ -33,7 +31,9 @@ define([
 
             tooltip.tooltip('show');
                     
-            this.$tip = tooltip.data('tooltip').$tip.on('click', '.actionbarbutton', this.onActionClick.bind(this));
+            this.$tip = tooltip.data('tooltip').$tip
+                .addClass('actionbar')
+                .on('click', '.actionbarbutton', this.onActionClick.bind(this));
             this.updatePosition = _.throttle(this[this.attr.alignTo + 'UpdatePosition'].bind(this), 100);
 
             this[this.attr.alignTo + 'Initializer']();
