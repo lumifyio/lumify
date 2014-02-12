@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.util;
 
+import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
+import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
@@ -110,15 +112,22 @@ public class GraphUtil {
         if (property.getVisibility() != null) {
             result.put(VISIBILITY_PROPERTY, property.getVisibility().toString());
         }
-        if (property.getMetadata() != null && property.getMetadata().get(VISIBILITY_SOURCE_PROPERTY) != null) {
-            result.put(VISIBILITY_SOURCE_PROPERTY, property.getMetadata().get(VISIBILITY_SOURCE_PROPERTY));
+        for (String key : property.getMetadata().keySet()) {
+            if (property.getMetadata().get(key) instanceof PropertyJustificationMetadata) {
+                result.put(key, ((PropertyJustificationMetadata) property.getMetadata().get(key)).toJson());
+            } else if (property.getMetadata().get(key) instanceof PropertySourceMetadata) {
+                result.put(key, ((PropertySourceMetadata) property.getMetadata().get(key)).toJson());
+            } else {
+                result.put(key, property.getMetadata().get(key));
+            }
         }
 
         return result;
     }
 
     public static <T extends Element> ElementMutation<T> setProperty(T element, String propertyName, Object value, String visibilitySource,
-                                                                     VisibilityTranslator visibilityTranslator) {
+                                                                     VisibilityTranslator visibilityTranslator, String justificationText,
+                                                                     JSONObject sourceObject) {
         Property oldProperty = element.getProperty(propertyName);
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
@@ -130,6 +139,17 @@ public class GraphUtil {
 
         Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
         propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
+
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            propertyMetadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata);
+        } else if (sourceObject.length() > 0) {
+            int startOffset = sourceObject.getInt("startOffset");
+            int endOffset = sourceObject.getInt("endOffset");
+            String vertexId = sourceObject.getString("vertexId");
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId);
+            propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
+        }
 
         if (GEO_LOCATION.getKey().equals(propertyName)) {
             GeoPoint geoPoint = (GeoPoint) value;

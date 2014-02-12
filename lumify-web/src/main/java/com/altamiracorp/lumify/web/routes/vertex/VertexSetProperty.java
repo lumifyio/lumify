@@ -51,6 +51,15 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String propertyName = getRequiredParameter(request, "propertyName");
         final String valueStr = getRequiredParameter(request, "value");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+
+        final JSONObject sourceJson;
+        if (sourceInfo != null) {
+            sourceJson = new JSONObject(sourceInfo);
+        } else {
+            sourceJson = new JSONObject();
+        }
 
         User user = getUser(request);
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
@@ -68,7 +77,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator);
+        ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
         auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
         graphVertex = graphVertexMutation.save();
         graph.flush();

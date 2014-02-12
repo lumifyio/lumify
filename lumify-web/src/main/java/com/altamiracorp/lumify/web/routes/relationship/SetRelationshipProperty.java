@@ -48,6 +48,15 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String destId = getRequiredParameter(request, "dest");
         final String edgeId = getRequiredParameter(request, "edgeId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String justificationText = getOptionalParameter(request, "justificationString");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+
+        final JSONObject sourceJson;
+        if (sourceInfo != null) {
+            sourceJson = new JSONObject(sourceInfo);
+        } else {
+            sourceJson = new JSONObject();
+        }
 
         User user = getUser(request);
 
@@ -66,7 +75,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
         Edge edge = graph.getEdge(edgeId, user.getAuthorizations());
         Object oldValue = edge.getPropertyValue(propertyName, 0);
-        ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, this.visibilityTranslator);
+        ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
         graphEdgeMutation.save();
 
         // TODO: replace "" when we implement commenting on ui
