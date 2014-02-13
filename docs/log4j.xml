@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
     <!ENTITY logDir "/opt/lumify/logs">
-    
+
     <!-- Pattern: %d{yyyy-MM-dd HH:mm:ss.SSS/zzz} %-5p [%c{3}] %m%n -->
     <!ENTITY pattern "&#37;d{yyyy-MM-dd HH:mm:ss.SSS/zzz} &#37;-5p [&#37;c{3}] &#37;m&#37;n">
 ]
@@ -15,75 +15,24 @@
         </layout>
     </appender>
 
-    <appender name="applicationLog" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/application.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
+    <appender name="log" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="&logDir;/lumify.log" />
+        <param name="MaxFileSize" value="64MB" />
+        <param name="MaxBackupIndex" value="3" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="&pattern;" />
         </layout>
     </appender>
-    
-    <appender name="applicationLogError" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/application-error.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <param name="Threshold" value="ERROR" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>        
-
-    <appender name="webLog" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/web.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <param name="Threshold" value="DEBUG" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>
-
-    <appender name="webLogError" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/web-error.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <param name="Threshold" value="ERROR" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>
-    
-    <appender name="modelLog" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/model.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <param name="Threshold" value="DEBUG" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>
-
-    <appender name="modelLogError" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/model-error.log" />
-        <param name="MaxFileSize" value="2MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <param name="Threshold" value="ERROR" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="&pattern;" />
-        </layout>
-    </appender>    
-
 
     <logger name="com.altamiracorp.lumify">
-        <level value="DEBUG" />
-        <appender-ref ref="webLog" />
-        <appender-ref ref="webLogError" />
+        <level value="INFO" />
+        <appender-ref ref="log" />
     </logger>
+
     <root>
         <level value="WARN" />
         <appender-ref ref="console" />
-        <appender-ref ref="applicationLog" />
-        <appender-ref ref="applicationLogError" />
+        <appender-ref ref="log" />
     </root>
+
 </log4j:configuration>
