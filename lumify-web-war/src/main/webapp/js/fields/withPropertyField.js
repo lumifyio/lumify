@@ -16,6 +16,18 @@ define([], function() {
             this.$node.empty();
         });
 
+        this.after('initialize', function() {
+            var inputs = this.select('visibleInputsSelector');
+
+            if (this.attr.tooltip) {
+                inputs.eq(0).tooltip(this.attr.tooltip);
+            }
+
+            if (this.attr.preventFocus !== true) {
+                inputs.eq(0).focus();
+            }
+        });
+
         this.filterUpdated = function(values, predicate) {
             values = $.isArray(values) ? values : [values];
 

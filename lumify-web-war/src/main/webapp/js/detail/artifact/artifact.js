@@ -113,11 +113,12 @@ define([
                         '...';
 
                 this.trigger('copydocumenttext', {
-                    offsets: offsets,
-                    text: selection.toString(),
+                    startOffset: offsets[0],
+                    endOffset: offsets[1],
+                    snippet: contextHighlight,
                     vertexId: this.attr.data.id,
-                    vertexTitle: this.attr.data.properties.title.value,
-                    context: contextHighlight
+                    text: selection.toString(),
+                    vertexTitle: this.attr.data.properties.title.value
                 });
             }
         };
