@@ -28,7 +28,6 @@ define([
 
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
-            highlightTypeSelector: '.highlight-options a',
             highlightedWordsSelector: '.entity, .term, .artifact',
             draggablesSelector: '.resolved, .artifact, .generic-draggable'
         });
@@ -63,8 +62,7 @@ define([
 
             this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables.bind(this));
             this.on('click', {
-                resolvableSelector: this.onResolvableClicked,
-                highlightTypeSelector: this.onHighlightTypeClicked
+                resolvableSelector: this.onResolvableClicked
             });
             this.on('mousedown mouseup click dblclick', this.trackMouse.bind(this));
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
@@ -87,24 +85,6 @@ define([
             }
         };
 
-
-        this.onHighlightTypeClicked = function(evt) {
-            var target = $(evt.target),
-                li = target.parents('li'),
-                ul = li.parent('ul'),
-                content = this.highlightNode();
-
-            ul.find('.checked').not(li).removeClass('checked');
-            li.addClass('checked');
-
-            var newClass = li.data('selector');
-            if (newClass) {
-                content.addClass('highlight-' + newClass);
-            } else this.removeHighlightClasses();
-            useDefaultStyle = false;
-
-            this.applyHighlightStyle();
-        };
 
         this.highlightNode = function() {
             return this.$node.closest('.content');
@@ -247,7 +227,6 @@ define([
         };
 
         this.handleSelectionChange = _.debounce(function() {
-
             var sel = window.getSelection(),
                 text = sel && sel.type === 'Range' ? $.trim(sel.toString()) : '';
 
