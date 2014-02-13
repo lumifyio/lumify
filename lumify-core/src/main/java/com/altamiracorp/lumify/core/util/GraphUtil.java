@@ -142,6 +142,9 @@ public class GraphUtil {
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            if (propertyMetadata.containsKey(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
+                propertyMetadata.remove(PropertySourceMetadata.PROPERTY_SOURCE_METADATA);
+            }
             propertyMetadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata);
         } else if (sourceObject.length() > 0) {
             int startOffset = sourceObject.getInt("startOffset");
@@ -149,6 +152,9 @@ public class GraphUtil {
             String vertexId = sourceObject.getString("vertexId");
             String snippet = sourceObject.getString("snippet");
             PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+            if (propertyMetadata.containsKey(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
+                propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
+            }
             propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 

@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
+import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -14,7 +16,9 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class VertexDeleteProperty extends BaseRequestHandler {
     private final Graph graph;
@@ -30,15 +34,30 @@ public class VertexDeleteProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
+        final String justificationText = getOptionalParameter(request, "justificationString");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        Object oldValue = graphVertex.getPropertyValue(propertyName, 0);
+        Object oldValue = graphVertex.getProperty(propertyName);
         graphVertex.removeProperty(propertyName);
         graph.flush();
 
-        auditRepository.auditEntityProperties(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", user);
+        Map<String, Object> metadata = new HashMap<String,Object>();
+        if (justificationText != null) {
+            metadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, new PropertyJustificationMetadata(justificationText));
+        } else if (sourceInfo != null) {
+            JSONObject sourceObject = new JSONObject(sourceInfo);
+            int startOffset = sourceObject.getInt("startOffset");
+            int endOffset = sourceObject.getInt("endOffset");
+            String vertexId = sourceObject.getString("vertexId");
+            String snippet = sourceObject.getString("snippet");
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+            metadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
+        }
+
+        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", metadata, user);
 
         // TODO: broadcast property delete
 

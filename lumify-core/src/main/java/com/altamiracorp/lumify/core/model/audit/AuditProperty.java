@@ -10,6 +10,7 @@ public class AuditProperty extends ColumnFamily {
     public static final String PREVIOUS_VALUE = "previousValue";
     public static final String NEW_VALUE = "newValue";
     public static final String PROPERTY_NAME = "propertyName";
+    public static final String PROPERTY_METADATA = "propertyMetadata";
 
     public AuditProperty () {
         super (NAME);
@@ -42,13 +43,25 @@ public class AuditProperty extends ColumnFamily {
         return this;
     }
 
+    public JSONObject getPropertyMetadata () {
+        return Value.toJson(get(PROPERTY_METADATA));
+    }
+
+    public AuditProperty setPropertyMetadata (Object propertyMetadata) {
+        set (PROPERTY_METADATA, propertyMetadata);
+        return this;
+    }
+
     @Override
     public JSONObject toJson () {
         try {
             JSONObject json = new JSONObject();
-            json.put("previousValue", this.getPreviousValue());
-            json.put("newValue", this.getNewValue());
-            json.put("propertyName", this.getPropertyName());
+            json.put(PREVIOUS_VALUE, this.getPreviousValue());
+            json.put(NEW_VALUE, this.getNewValue());
+            json.put(PROPERTY_NAME, this.getPropertyName());
+            if (this.getPropertyMetadata() != null) {
+                json.put(PROPERTY_METADATA, this.getPropertyMetadata());
+            }
             return  json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
