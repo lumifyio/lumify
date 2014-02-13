@@ -7,9 +7,10 @@ define([
     rangyText
 ) {
 
+    if (!rangy.initialized) rangy.init();
+
     return {
         expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
-            if (!rangy.initialized) rangy.init();
 
             var e = rangy.createRange();
             e.setStart(range.startContainer, range.startOffset);
