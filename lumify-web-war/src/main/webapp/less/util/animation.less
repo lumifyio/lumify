@@ -39,6 +39,23 @@
   .animation-fill-mode(both);
 }
 
+.pop-keyframe() {
+    0%, 100% {.scale(1);}
+    30% {.scale(1.05);}
+}
+@-webkit-keyframes pop {.pop-keyframe;}
+@-moz-keyframes pop {.pop-keyframe;}
+@-ms-keyframes pop {.pop-keyframe;}
+@-o-keyframes pop {.pop-keyframe;}
+@keyframes pop {.pop-keyframe;}
+
+.pop(@duration:1s) {
+  .animation-duration(@duration);
+  .animation-iteration-count(1);
+  .animation-name(pop);
+  .animation-fill-mode(both);
+}
+
 .animation-play-state(@state) {
   -webkit-animation-play-state: @state;
   animation-play-state: @state;
@@ -72,5 +89,12 @@
   .scale(0.1);
   .opacity(0);
   .transition(~"all ease-in 0.5s");
+}
+
+.pop-fast {
+  .pop(0.5s);
+}
+.pop-slow {
+  .pop(1s);
 }
 

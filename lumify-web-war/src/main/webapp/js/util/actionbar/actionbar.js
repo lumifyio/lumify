@@ -18,6 +18,7 @@ define([
         this.before('teardown', function() {
             this.scrollParent.off('.actionbar');
             this.$node.tooltip('destroy');
+            this.$tip.hide();
         });
 
         this.after('initialize', function() {
