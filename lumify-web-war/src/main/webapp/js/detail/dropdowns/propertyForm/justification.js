@@ -58,6 +58,8 @@ define([
         };
 
         this.onValuePasted = function(event, data) {
+            this.fromPaste = true;
+            this.animate = true;
             this.setReferenceWithValue(data.value);
         };
 
@@ -75,6 +77,7 @@ define([
         this.onRemoveReference = function(e) {
             e.stopPropagation();
 
+            this.animate = true;
             this.toggleView(false);
             this.select('fieldSelector').focus();
 
@@ -89,31 +92,76 @@ define([
         };
 
         this.toggleView = function(referenceDisplay, value) {
+            var self = this;
+            
             if (referenceDisplay) {
-
-                var self = this,
-                    update = function() {
-                        self.$node.html(templateRef(value));
-                    };
-
-                if (!value.vertexTitle) {
-                    var v = appData.vertex(value.vertexId);
-                    if (!v) {
-                        return appData.refresh(value.vertexId)
-                            .done(function(vertex) {
-                                value.vertexTitle = v.properties.title.value;
-                                update();
-                            });
-                    } else {
-                        value.vertexTitle = v.properties.title.value;
-                    }
-                }
-
-                update();
+                this.getVertexTitle(value).done(function() {
+                    self.transitionHeight(templateRef(value));
+                });
             } else {
-                this.$node.html(template({value:value || ''}));
+                this.transitionHeight(template({value:value || ''}));
                 this.select('fieldSelector').tooltip();
             }
+        };
+
+        this.transitionHeight = function(content) {
+            var self = this,
+                node = this.$node;
+
+            if (!this.animate) {
+                this.animate = false;
+                return node.html(content);
+            }
+
+            node.css({
+                height: node.height() + 'px',
+                transition: 'height ease-in-out 0.3s',
+                overflow: 'hidden'
+            }).html(content);
+
+            _.defer(function() {
+                var toHeight = node.find('.animationwrap').outerHeight(true);
+                node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                    var oe = e.originalEvent || e;
+                    if (oe.propertyName === 'height') {
+                        node.off('.justification');
+                        node.css({
+                            height:'auto',
+                            overflow: 'inherit',
+                            transition: 'none'
+                        });
+                    }
+                    if (self.fromPaste) {
+                        self.fromPaste = false;
+                        self.trigger('justificationfrompaste');
+                    }
+                });
+                node.css({
+                    height: node.find('.animationwrap').outerHeight(true) + 'px'
+                });
+            });
+
+        };
+
+        this.getVertexTitle = function(value) {
+            var deferredTitle = $.Deferred();
+
+            if (value.vertexTitle) {
+                return deferredTitle.resolve();
+            }
+
+            var v = appData.vertex(value.vertexId);
+            if (v) {
+                value.vertexTitle = v.properties.title.value;
+                return deferredTitle.resolve();
+            }
+
+            appData.refresh(value.vertexId).done(function(vertex) {
+                value.vertexTitle = v.properties.title.value;
+                deferredTitle.resolve();
+            });
+
+            return deferredTitle;
         };
     }
 });

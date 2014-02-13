@@ -72,10 +72,16 @@ define([
         });
 
         this.trackMouse = function(event) {
+            var $target = $(event.target);
+
             if (event.type === 'mouseup' || event.type === 'click' || event.type === 'dblclick') {
                 this.mouseDown = false;
             } else {
                 this.mouseDown = true;
+            }
+
+            if (event.type === 'mousedown' && $target.closest('.tooltip').length === 0 && this.ActionBar) {
+                this.ActionBar.teardownAll();
             }
 
             if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
@@ -269,6 +275,7 @@ define([
                 if (this.$node.find('.text.dropdown').length) return;
 
                 require(['util/actionbar/actionbar'], function(ActionBar) {
+                    self.ActionBar = ActionBar;
                     ActionBar.teardownAll();
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',

@@ -8,6 +8,16 @@
     width: 100%;
   }
 
+  .selection {
+    position: absolute;
+    right: 1em;
+    left: 1em;
+    padding: 0;
+    margin: 0.4em 2px 0px 0;
+
+    .transition(~"all cubic-bezier(.29,.79,0,1.48) 0.7s");
+  }
+
   .add-on .icon-calendar {
     margin-right: 0;
     margin-left: 1px;
@@ -15,6 +25,9 @@
 }
 
 .justification {
+  .animationwrap {
+    .clearfix;
+  }
   .viewing {
     margin-bottom: 0.5em;
 
