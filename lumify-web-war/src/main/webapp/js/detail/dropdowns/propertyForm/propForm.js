@@ -51,6 +51,7 @@ define([
             this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('propertyselected', this.onPropertySelected);
             this.on('visibilitychange', this.onVisibilityChange);
+            this.on('justificationchange', this.onJustificationChange);
             this.on('paste', {
                 configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
             });
@@ -147,22 +148,31 @@ define([
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
                 if (propertyDetails) {
-                    require(['fields/' + propertyDetails.dataType], function(PropertyField) {
+                    require([
+                        'fields/' + propertyDetails.dataType,
+                        'detail/dropdowns/propertyForm/justification',
+                        'configuration/plugins/visibility/visibilityEditor'
+                    ], function(PropertyField, Justification, Visibility) {
+
                         PropertyField.attachTo(config, {
                             property: propertyDetails,
                             value: previousValue,
-                            predicates: false
+                            predicates: false,
+                            tooltip: {
+                                html: true,
+                                title: '<strong>Include a Reference</strong><br>Paste value from document text',
+                                placement: 'left',
+                                trigger: 'focus'
+                            }
                         });
-                        self.checkValid();
-                    });
-                    require(['detail/dropdowns/propertyForm/justification'], function(Justification) {
-                        Justification.attachTo(justification, {
-                        });
-                    });
-                    require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+
+                        Justification.attachTo(justification, vertexProperty);
+
                         Visibility.attachTo(visibility, {
                             value: visibilityValue || ''
                         });
+
+                        self.checkValid();
                     });
                 } else console.warn('Property ' + propertyName + ' not found in ontology');
             });
@@ -170,6 +180,11 @@ define([
 
         this.onVisibilityChange = function(event, data) {
             this.visibilitySource = data;
+            this.checkValid();
+        };
+
+        this.onJustificationChange = function(event, data) {
+            this.justification = data;
             this.checkValid();
         };
 
@@ -182,7 +197,8 @@ define([
 
         this.checkValid = function() {
             this.valid = !this.propertyInvalid && 
-                (this.visibilitySource && this.visibilitySource.valid);
+                (this.visibilitySource && this.visibilitySource.valid) &&
+                (this.justification && this.justification.valid);
 
             if (this.valid) {
                 this.select('saveButtonSelector').removeAttr('disabled');
@@ -228,18 +244,19 @@ define([
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
-                value = this.currentValue;
+                value = this.currentValue,
+                justification = _.pick(this.justification, 'sourceInfo', 'justificationText');
 
             _.defer(this.buttonLoading.bind(this, this.attr.saveButtonSelector));
 
             this.$node.find('input').removeClass('validation-error');
             if (propertyName.length && ((_.isString(value) && value.length) || value)) {
                 this.trigger('addProperty', {
-                    property: {
-                        name: propertyName,
-                        value: value,
-                        visibilitySource: this.visibilitySource.value
-                    }
+                    property: $.extend({
+                            name: propertyName,
+                            value: value,
+                            visibilitySource: this.visibilitySource.value
+                        }, justification)
                 });
             }
         };

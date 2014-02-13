@@ -147,7 +147,8 @@ public class GraphUtil {
             int startOffset = sourceObject.getInt("startOffset");
             int endOffset = sourceObject.getInt("endOffset");
             String vertexId = sourceObject.getString("vertexId");
-            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId);
+            String snippet = sourceObject.getString("snippet");
+            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
             propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 

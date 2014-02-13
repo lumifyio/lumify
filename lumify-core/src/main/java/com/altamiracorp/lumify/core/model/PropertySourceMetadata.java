@@ -10,11 +10,13 @@ public class PropertySourceMetadata implements Serializable{
     public final int startOffset;
     public final int endOffset;
     public final String vertexId;
+    public final String snippet;
 
-    public PropertySourceMetadata(int startOffset, int endOffset, String vertexId) {
+    public PropertySourceMetadata(int startOffset, int endOffset, String vertexId, String snippet) {
         this.startOffset = startOffset;
         this.endOffset = endOffset;
         this.vertexId = vertexId;
+        this.snippet = snippet;
     }
 
     public int getStartOffset() {
@@ -29,11 +31,16 @@ public class PropertySourceMetadata implements Serializable{
         return this.vertexId;
     }
 
+    public String getSnippet() {
+        return snippet;
+    }
+
     public JSONObject toJson() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("startOffset", getStartOffset());
         jsonObject.put("endOffset", getEndOffset());
         jsonObject.put("vertexId", getVertexId());
+        jsonObject.put("snippet", getSnippet());
         return jsonObject;
     }
 }
