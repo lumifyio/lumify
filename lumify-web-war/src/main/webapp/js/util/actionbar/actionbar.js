@@ -8,6 +8,9 @@ define([
 ) {
     'use strict';
 
+    var FPS = 1000/60,
+        TOP_HIDE_THRESHOLD = 40;
+
     return defineComponent(ActionBar);
 
     function ActionBar() {
@@ -34,7 +37,7 @@ define([
             this.$tip = tooltip.data('tooltip').$tip
                 .addClass('actionbar')
                 .on('click', '.actionbarbutton', this.onActionClick.bind(this));
-            this.updatePosition = _.throttle(this[this.attr.alignTo + 'UpdatePosition'].bind(this), 100);
+            this.updatePosition = _.throttle(this[this.attr.alignTo + 'UpdatePosition'].bind(this), FPS);
 
             this[this.attr.alignTo + 'Initializer']();
             this.updatePosition();
@@ -45,6 +48,7 @@ define([
 
         this.onActionClick = function(event) {
             var $target = $(event.target).blur();
+            this.$tip.hide();
 
             this.trigger($target.data('event'));
             this.teardown();
@@ -58,7 +62,8 @@ define([
                 var boundingBox = range.getBoundingClientRect();
                 this.$tip.css({
                     left: boundingBox.left + boundingBox.width - this.$tip.width() / 2,
-                    top: boundingBox.top + boundingBox.height
+                    top: boundingBox.top + boundingBox.height,
+                    opacity: boundingBox.top < TOP_HIDE_THRESHOLD ? '0' : '1'
                 });
             } else this.teardown();
         };
