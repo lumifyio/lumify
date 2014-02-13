@@ -103,7 +103,7 @@ define([
 
                 var range = selection.getRangeAt(0),
                     output = {},
-                    contextRange = rangeUtils.expandRangeByWords(range, 2, output),
+                    contextRange = rangeUtils.expandRangeByWords(range, 4, output),
                     context = contextRange.toString(),
                     contextHighlight =
                         '...' +

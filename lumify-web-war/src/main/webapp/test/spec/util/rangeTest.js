@@ -35,8 +35,11 @@ define([
         });
 
         it('should expand range with two words', function() {
-            var range = selectionUtils.createRange(node, 'Autism affects [information] processing in the');
-            expect(r.expandRangeByWords(range, 2).toString()).to.equal('Autism affects information processing in');
+            var range = selectionUtils.createRange(node, 'Autism affects [information] processing in the'),
+                parts = {};
+            expect(r.expandRangeByWords(range, 2, parts).toString()).to.equal('Autism affects information processing in');
+            expect(parts.before).to.equal('Autism affects ');
+            expect(parts.after).to.equal(' processing in');
         });
 
         it('should expand range with more words than it has before', function() {
@@ -48,5 +51,23 @@ define([
             var range = selectionUtils.createRange(node, 'Autism affects [information processing in] the');
             expect(r.expandRangeByWords(range, 2).toString()).to.equal('Autism affects information processing in the');
         });
+
+        it('should expand range to nearby span', function() {
+            var range = selectionUtils.createRange(node, 'That <span>Autism</span> [affects] information processing in the');
+            expect(r.expandRangeByWords(range, 2).toString()).to.equal('That Autism affects information processing');
+        })
+
+        it('should expand range to nearby spans', function() {
+            var range = selectionUtils.createRange(node, '<span>That </span><span>Autism</span> [affects] <span>information processing in</span> the'), parts = {};
+            expect(r.expandRangeByWords(range, 2, parts).toString()).to.equal('That Autism affects information processing');
+            expect(parts.before).to.equal('That Autism ');
+            expect(parts.after).to.equal(' information processing');
+
+            range = selectionUtils.createRange(node, '<span>That</span> <span>Autism</span> [affects] information processing in the');
+            expect(r.expandRangeByWords(range, 2).toString()).to.equal('That Autism affects information processing');
+
+            range = selectionUtils.createRange(node, 'They<span> say</span> that the <span>Autism</span> [affects] <span>information processing in</span> the');
+            expect(r.expandRangeByWords(range, 5).toString()).to.equal('They say that the Autism affects information processing in the');
+        })
     });
 });
