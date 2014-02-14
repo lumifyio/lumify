@@ -146,22 +146,20 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
-            String workspaceRowKey = dataJson.getString("workspaceRowKey");
+            String workspaceId = dataJson.getString("workspaceId");
             String userId = dataJson.getString("userId");
             if (userId.equals(authUser.getUserId())) {
-                switchWorkspace(authUser, workspaceRowKey);
+                switchWorkspace(authUser, workspaceId);
             }
         }
     }
 
-    private void switchWorkspace(com.altamiracorp.lumify.core.user.User authUser, String workspaceRowKey) {
-        if (!workspaceRowKey.equals(authUser.getCurrentWorkspace())) {
-            authUser.setCurrentWorkspace(workspaceRowKey);
+    private void switchWorkspace(com.altamiracorp.lumify.core.user.User authUser, String workspaceId) {
+        if (!workspaceId.equals(authUser.getCurrentWorkspace())) {
+            userRepository.setCurrentWorkspace(authUser.getUserId(), workspaceId);
+            authUser.setCurrentWorkspace(workspaceId);
 
-            userRepository.setCurrentWorkspace(authUser.getUserId(), workspaceRowKey);
-            authUser.setCurrentWorkspace(workspaceRowKey);
-
-            LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceRowKey);
+            LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);
         }
     }
 

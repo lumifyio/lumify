@@ -22,7 +22,7 @@ import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 public class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final Visibility VISIBILITY = new Visibility(VISIBILITY_STRING);
-    public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/lumifyUser";
+    public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
     private final Graph graph;
     private final String userConceptId;
     private final User authUser;
@@ -105,12 +105,12 @@ public class UserRepository {
         }
     }
 
-    public Vertex setCurrentWorkspace(String userId, String workspaceRowKey) {
+    public Vertex setCurrentWorkspace(String userId, String workspaceId) {
         Vertex user = findById(userId);
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        CURRENT_WORKSPACE.setProperty(user, workspaceRowKey, VISIBILITY);
+        CURRENT_WORKSPACE.setProperty(user, workspaceId, VISIBILITY);
         graph.flush();
         return user;
     }

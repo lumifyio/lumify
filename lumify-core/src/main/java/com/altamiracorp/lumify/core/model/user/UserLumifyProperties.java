@@ -6,12 +6,12 @@ import com.altamiracorp.securegraph.TextIndexHint;
 import com.altamiracorp.securegraph.Vertex;
 
 public final class UserLumifyProperties {
-    public static final TextLumifyProperty USERNAME = new TextLumifyProperty("http://lumify.io/lumifyUser/username", TextIndexHint.EXACT_MATCH);
-    public static final TextLumifyProperty AUTHORIZATIONS = new TextLumifyProperty("http://lumify.io/lumifyUser/authorizations", TextIndexHint.NONE);
-    public static final TextLumifyProperty STATUS = new TextLumifyProperty("http://lumify.io/lumifyUser/status", TextIndexHint.NONE);
-    public static final TextLumifyProperty CURRENT_WORKSPACE = new TextLumifyProperty("http://lumify.io/lumifyUser/currentWorkspace", TextIndexHint.EXACT_MATCH);
-    public static final ByteArrayLumifyProperty PASSWORD_SALT = new ByteArrayLumifyProperty("http://lumify.io/lumifyUser/passwordSalt");
-    public static final ByteArrayLumifyProperty PASSWORD_HASH = new ByteArrayLumifyProperty("http://lumify.io/lumifyUser/passwordHash");
+    public static final TextLumifyProperty USERNAME = new TextLumifyProperty("http://lumify.io/user/username", TextIndexHint.EXACT_MATCH);
+    public static final TextLumifyProperty AUTHORIZATIONS = new TextLumifyProperty("http://lumify.io/user/authorizations", TextIndexHint.NONE);
+    public static final TextLumifyProperty STATUS = new TextLumifyProperty("http://lumify.io/user/status", TextIndexHint.NONE);
+    public static final TextLumifyProperty CURRENT_WORKSPACE = new TextLumifyProperty("http://lumify.io/user/currentWorkspace", TextIndexHint.EXACT_MATCH);
+    public static final ByteArrayLumifyProperty PASSWORD_SALT = new ByteArrayLumifyProperty("http://lumify.io/user/passwordSalt");
+    public static final ByteArrayLumifyProperty PASSWORD_HASH = new ByteArrayLumifyProperty("http://lumify.io/user/passwordHash");
 
     public static String[] getAuthorizationsArray(Vertex user) {
         String authorizations = AUTHORIZATIONS.getPropertyValue(user);

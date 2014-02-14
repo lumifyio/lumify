@@ -4,9 +4,7 @@ import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
-import com.altamiracorp.lumify.core.model.workspace.WorkspacePermissions;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -37,69 +35,46 @@ public class WorkspaceSave extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String data = getOptionalParameter(request, "data");
-        final String users = getOptionalParameter(request, "users");
-        final String title = getOptionalParameter(request, "title");
-        final String workspaceRowKeyString = getAttributeString(request, "workspaceRowKey");
-
         User authUser = getUser(request);
         Vertex user = userRepository.findByUserName(authUser.getUsername());
+
+        final String data = getOptionalParameter(request, "data");
+        final String users = getOptionalParameter(request, "users");
+        String title = getOptionalParameter(request, "title");
+        final String workspaceId = getAttributeString(request, "workspaceId");
+        if (title == null) {
+            title = DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user);
+        }
+
         Workspace workspace;
-        if (workspaceRowKeyString == null) {
-            workspace = handleNew(request, user);
+        if (workspaceId == null) {
+            workspace = workspaceRepository.add(title, user);
         } else {
-            workspace = workspaceRepository.findByRowKey(workspaceRowKeyString, authUser.getModelUserContext());
+            workspace = workspaceRepository.findById(workspaceId, authUser);
+            if (title != null) {
+                workspace.setTitle(title);
+            }
+
+            if (data != null) {
+                workspace.setData(data);
+            }
         }
 
-        LOGGER.info("Saving workspace: %s\ntitle: %s\ndata: %s", workspace.getRowKey(), workspace.getMetadata().getTitle(), data);
-
-        Boolean shouldSave = false;
-
-        if (title != null) {
-            workspace.getMetadata().setTitle(title);
-            shouldSave = true;
-        }
-
-        if (data != null) {
-            workspace.getContent().setData(data);
-            shouldSave = true;
-        }
+        LOGGER.info("Saved workspace: %s\ntitle: %s\ndata: %s", workspace.getId(), workspace.getTitle(), data);
 
         if (users != null) {
             // Getting user permissions
             JSONArray userList = new JSONArray(users);
             String userId = user.getId().toString();
 
-            if (workspace.getMetadata().getCreator() == null ||
-                    workspace.getMetadata().getCreator().equals(userId) ||
+            if (workspace.getCreator() == null ||
+                    workspace.getCreator().equals(userId) ||
                     hasWritePermissions(userId, workspace)) {
                 updateUserList(workspace, userList, authUser);
-                shouldSave = true;
             }
         }
 
-        if (shouldSave) {
-            workspaceRepository.save(workspace, authUser.getModelUserContext());
-        }
-
         respondWithJson(response, workspace.toJson(authUser));
-    }
-
-    public Workspace handleNew(HttpServletRequest request, Vertex user) {
-        WorkspaceRowKey workspaceRowKey = new WorkspaceRowKey(
-                user.getId().toString(), String.valueOf(System.currentTimeMillis()));
-        Workspace workspace = new Workspace(workspaceRowKey);
-        String title = getOptionalParameter(request, "title");
-
-        if (title != null) {
-            workspace.getMetadata().setTitle(title);
-        } else {
-            workspace.getMetadata().setTitle(DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user));
-        }
-
-        workspace.getMetadata().setCreator(user.getId().toString());
-
-        return workspace;
     }
 
     private void updateUserList(Workspace workspace, JSONArray userList, com.altamiracorp.lumify.core.user.User user) {

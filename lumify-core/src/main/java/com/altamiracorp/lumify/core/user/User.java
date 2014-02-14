@@ -8,20 +8,24 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+    private final String[] authorizationsArray;
     private final Authorizations authorizations;
+    private final AuthorizationBuilder authorizationBuilder;
     private String username;
     private String userId;
     private String currentWorkspace;
     private ModelUserContext modelUserContext;
     private UserType userType;
 
-    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType, Authorizations authorizations) {
+    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType, AuthorizationBuilder authorizationBuilder, String[] authorizationsArray) {
         this.userId = userId;
         this.username = username;
         this.currentWorkspace = currentWorkspace;
         this.modelUserContext = modelUserContext;
         this.userType = userType;
-        this.authorizations = authorizations;
+        this.authorizationBuilder = authorizationBuilder;
+        this.authorizationsArray = authorizationsArray;
+        this.authorizations = authorizationBuilder.create(this.authorizationsArray);
     }
 
     public String getUserId() {
@@ -50,5 +54,17 @@ public class User implements Serializable {
 
     public Authorizations getAuthorizations() {
         return authorizations;
+    }
+
+    public Authorizations getAuthorizations(String... additionalAuthorizations) {
+        String[] authorizationsArrayWithAdditional = new String[authorizationsArray.length + additionalAuthorizations.length];
+        int x = 0;
+        for (int i = 0; i < this.authorizationsArray.length; i++, x++) {
+            authorizationsArrayWithAdditional[x] = authorizationsArray[i];
+        }
+        for (int i = 0; i < additionalAuthorizations.length; i++, x++) {
+            authorizationsArrayWithAdditional[x] = additionalAuthorizations[i];
+        }
+        return authorizationBuilder.create(authorizationsArrayWithAdditional);
     }
 }
