@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -12,13 +10,16 @@ import com.altamiracorp.securegraph.Direction;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;
@@ -34,6 +35,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         String limitParentConceptId = getOptionalParameter(request, "limitParentConceptId");
+        long maxVerticesToReturn = getOptionalParameterLong(request, "maxVerticesToReturn", 250);
 
         User user = getUser(request);
         Set<String> limitConceptIds = new HashSet<String>();
@@ -53,11 +55,16 @@ public class GraphRelatedVertices extends BaseRequestHandler {
 
         JSONObject json = new JSONObject();
         JSONArray verticesJson = new JSONArray();
+        long count = 0;
         for (Vertex vertex : vertices) {
             if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
-                verticesJson.put(GraphUtil.toJson(vertex));
+                if (count < maxVerticesToReturn) {
+                    verticesJson.put(GraphUtil.toJson(vertex));
+                }
+                count++;
             }
         }
+        json.put("count", count);
         json.put("vertices", verticesJson);
 
         respondWithJson(response, json);
