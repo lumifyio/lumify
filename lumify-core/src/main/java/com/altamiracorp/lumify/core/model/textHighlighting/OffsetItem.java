@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.artifactHighlighting;
+package com.altamiracorp.lumify.core.model.textHighlighting;
 
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import org.json.JSONArray;
