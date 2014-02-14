@@ -6,17 +6,24 @@ import com.altamiracorp.securegraph.util.ConvertingIterable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class Workspace {
     private final Vertex workspaceVertex;
     private final User user;
+    private final WorkspaceRepository workspaceRepository;
+    private List<Vertex> users;
 
-    public Workspace(Vertex workspaceVertex, User user) {
+    Workspace(Vertex workspaceVertex, WorkspaceRepository workspaceRepository, User user) {
         this.workspaceVertex = workspaceVertex;
+        this.workspaceRepository = workspaceRepository;
         this.user = user;
     }
 
     public JSONObject toJson(boolean includeReferences) {
         try {
+            ensureUsersLoaded();
+
             JSONObject workspaceJson = new JSONObject();
             workspaceJson.put("id", getId());
             workspaceJson.put("title", getTitle());
@@ -57,12 +64,19 @@ public class Workspace {
         }
     }
 
+    private void ensureUsersLoaded() {
+        if (users == null) {
+            users = workspaceRepository.findUsersWithAccess(workspaceVertex, user);
+        }
+    }
+
     public String getId() {
         return this.workspaceVertex.getId().toString();
     }
 
     public String getCreatorUserId() {
-        return WorkspaceLumifyProperties.CREATOR_USER_ID.getPropertyValue(this.workspaceVertex);
+        ensureUsersLoaded();
+        return this.users.get(0).getId().toString();
     }
 
     public String getTitle() {
@@ -73,11 +87,11 @@ public class Workspace {
         return workspaceVertex;
     }
 
-    public static Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final User user) {
+    public static Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final WorkspaceRepository workspaceRepository, final User user) {
         return new ConvertingIterable<Vertex, Workspace>(vertices) {
             @Override
             protected Workspace convert(Vertex vertex) {
-                return new Workspace(vertex, user);
+                return new Workspace(vertex, workspaceRepository, user);
             }
         };
     }

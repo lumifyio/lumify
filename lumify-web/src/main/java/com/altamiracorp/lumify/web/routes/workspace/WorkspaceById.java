@@ -36,7 +36,7 @@ public class WorkspaceById extends BaseRequestHandler {
         } else {
             LOGGER.debug("Successfully found workspace");
             request.getSession().setAttribute("activeWorkspace", workspaceId);
-            final JSONObject resultJSON = workspace.toJson();
+            final JSONObject resultJSON = workspace.toJson(true);
             respondWithJson(response, resultJSON);
         }
 

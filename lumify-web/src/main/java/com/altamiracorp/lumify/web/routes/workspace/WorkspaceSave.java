@@ -42,21 +42,17 @@ public class WorkspaceSave extends BaseRequestHandler {
         final String users = getOptionalParameter(request, "users");
         String title = getOptionalParameter(request, "title");
         final String workspaceId = getAttributeString(request, "workspaceId");
-        if (title == null) {
-            title = DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user);
-        }
 
         Workspace workspace;
         if (workspaceId == null) {
-            workspace = workspaceRepository.add(title, user);
+            if (title == null) {
+                title = DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user);
+            }
+            workspace = workspaceRepository.add(title, authUser);
         } else {
             workspace = workspaceRepository.findById(workspaceId, authUser);
             if (title != null) {
-                workspace.setTitle(title);
-            }
-
-            if (data != null) {
-                workspace.setData(data);
+                workspaceRepository.setTitle(workspace, title);
             }
         }
 
