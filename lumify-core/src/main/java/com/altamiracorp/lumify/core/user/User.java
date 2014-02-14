@@ -1,25 +1,31 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.securegraph.Authorizations;
 
 import java.io.Serializable;
 
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final Authorizations authorizations;
     private String username;
-    private String rowKey;
+    private String userId;
     private String currentWorkspace;
     private ModelUserContext modelUserContext;
-    private String userType;
+    private UserType userType;
 
-    public User(String rowKey, String username, String currentWorkspace, ModelUserContext modelUserContext, String userType, Authorizations authorizations) {
-        this.rowKey = rowKey;
+    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType, Authorizations authorizations) {
+        this.userId = userId;
         this.username = username;
         this.currentWorkspace = currentWorkspace;
         this.modelUserContext = modelUserContext;
         this.userType = userType;
         this.authorizations = authorizations;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public ModelUserContext getModelUserContext() {
@@ -30,10 +36,6 @@ public class User implements Serializable {
         return username;
     }
 
-    public String getRowKey() {
-        return rowKey;
-    }
-
     public String getCurrentWorkspace() {
         return currentWorkspace;
     }
@@ -42,7 +44,7 @@ public class User implements Serializable {
         this.currentWorkspace = currentWorkspace;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 

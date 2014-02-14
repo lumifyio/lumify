@@ -11,7 +11,7 @@ define([
 
     function Users() {
         this.usersService = new UsersService();
-        this.currentUserRowKey = null;
+        this.currentUserId = null;
 
         this.defaultAttrs({
             usersListSelector: '.users-list',
@@ -41,12 +41,12 @@ define([
 
         this.onStartChat = function(event, data) {
 
-            if (data.userId !== this.currentUserRowKey &&
+            if (data.userId !== this.currentUserId &&
                 this.$node.find('.user-' + data.userId).is('.online')) 
             {
 
                 this.trigger(document, 'userSelected', {
-                    rowKey: data.userId
+                    id: data.userId
                 });
             }
         };
@@ -71,7 +71,7 @@ define([
 
         this.onUserSelected = function(event, data) {
             this.$node.find('.active').removeClass('active');
-            this.$node.find('.conversation-' + data.rowKey).addClass('active')
+            this.$node.find('.conversation-' + data.id).addClass('active')
         };
 
         this.onNewUserOnline = function (evt, userData) {
@@ -86,11 +86,11 @@ define([
 
         this.createOrActivateConversation = function (chat) {
             var $usersList = this.select('usersListSelector');
-            var to = chat.rowKey === currentUser.rowKey ? chat.users[0].rowKey : chat.rowKey;
+            var to = chat.rowKey === currentUser.id ? chat.users[0].id : chat.rowKey;
             var activeChat = $usersList.find('li.conversation-' + to);
 
             if (!activeChat.length && chat.users) {
-                activeChat = $usersList.find('li.online.user-' + chat.users[0].rowKey);
+                activeChat = $usersList.find('li.online.user-' + chat.users[0].id);
 
                 if (!activeChat.length) {
                     return;
@@ -103,7 +103,7 @@ define([
 
             $usersList.find('.active').removeClass('active');
             activeChat.addClass('active');
-            this.trigger(document, 'userSelected', {rowKey:to});
+            this.trigger(document, 'userSelected', {id:to});
         };
 
         this.onChatMessage = function (evt, message) {
@@ -113,14 +113,14 @@ define([
             };
             this.createOrActivateConversation(chat);
 
-            var badge = this.select('usersListSelector').find('li.conversation-' + message.from.rowKey + ':not(.active) .badge');
+            var badge = this.select('usersListSelector').find('li.conversation-' + message.from.id + ':not(.active) .badge');
             badge.text(+badge.text() + 1);
         };
 
 
         this.onUserOnlineStatusChanged = function (evt, userData) {
             var $usersList = this.select('usersListSelector');
-            var $user = $('.user-' + userData.rowKey, $usersList);
+            var $user = $('.user-' + userData.id, $usersList);
             if ($user.length) {
                 $user.remove();
                 var html = userListItemTemplate({ user: userData });
@@ -146,12 +146,12 @@ define([
         };
 
         this.updateUser = function (user) {
-            if (!this.currentUserRowKey || user.rowKey == this.currentUserRowKey) {
+            if (!this.currentUserId || user.id == this.currentUserId) {
                 return;
             }
 
             var $usersList = this.select('usersListSelector'),
-                $user = $('.user-' + user.rowKey, $usersList);
+                $user = $('.user-' + user.id, $usersList);
 
             if ($user.length === 0) {
                 this.trigger(document, 'newUserOnline', user);
@@ -171,7 +171,7 @@ define([
                 .done(function(data) {
 
                     window.currentUser = data.user;
-                    self.currentUserRowKey = data.user.rowKey;
+                    self.currentUserId = data.user.id;
 
                     if (data.messages && data.messages.length > 0) {
                         data.messages.forEach(function (message) {

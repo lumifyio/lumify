@@ -1,10 +1,9 @@
 package com.altamiracorp.lumify.web.routes.user;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,9 +22,7 @@ public class UserList extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        User authUser = getUser(request);
-
-        Iterable<UserRow> users = userRepository.findAll(authUser.getModelUserContext());
+        Iterable<Vertex> users = userRepository.findAll();
 
         JSONObject resultJson = new JSONObject();
         JSONArray usersJson = getJson(users);
@@ -34,10 +31,10 @@ public class UserList extends BaseRequestHandler {
         respondWithJson(response, resultJson);
     }
 
-    private JSONArray getJson(Iterable<UserRow> users) throws JSONException {
+    private JSONArray getJson(Iterable<Vertex> users) throws JSONException {
         JSONArray usersJson = new JSONArray();
-        for (UserRow user : users) {
-            usersJson.put(user.toJson());
+        for (Vertex user : users) {
+            usersJson.put(UserRepository.toJson(user));
         }
         return usersJson;
     }

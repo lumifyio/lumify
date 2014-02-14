@@ -139,10 +139,10 @@ define([
         };
 
         this.updateListItemWithData = function(data) {
-            if (!this.usersByRowKey) return;
+            if (!this.usersById) return;
             var li = this.findWorkspaceRow(data._rowKey);
             if (data.createdBy === window.currentUser.userName ||
-                _.contains(_.pluck(data.users, '_rowKey'), window.currentUser._rowKey)
+                _.contains(_.pluck(data.users, 'id'), window.currentUser.id)
             ) {
                 li.find('.badge').removeClass('loading').hide().next().show();
                 data = this.workspaceDataForItemRow(data);
@@ -212,9 +212,9 @@ define([
                    .done(function(usersResponse, workspaceResponse) {
                        var users = usersResponse[0].users || [],
                            workspaces = workspaceResponse[0].workspaces || [],
-                           usersByRowKey = _.groupBy(users, function(u) { return u.rowKey; }); 
+                           usersById = _.groupBy(users, function(u) { return u.id; });
 
-                        self.usersByRowKey = usersByRowKey;
+                        self.usersById = usersById;
                         self.$node.html( workspacesTemplate({}) );
                         self.select('listSelector').html(
                             listTemplate({
@@ -232,7 +232,7 @@ define([
         this.workspaceDataForItemRow = function(w) {
             var row = $.extend({}, w),
                 createdBy = row.createdBy,
-                foundUsers = this.usersByRowKey[row.createdBy];
+                foundUsers = this.usersById[row.createdBy];
 
             if (foundUsers && foundUsers.length) {
                 createdBy = foundUsers[0].userName;
