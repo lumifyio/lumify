@@ -12,11 +12,11 @@ define(
 
         SyncService.prototype = Object.create(ServiceBase.prototype);
 
-        SyncService.prototype.publishWorkspaceSyncEvent = function (eventName, workspaceRowKey, eventData) {
+        SyncService.prototype.publishWorkspaceSyncEvent = function (eventName, workspaceId, eventData) {
             var data = {
                 type: 'sync',
                 permissions: {
-                    workspaces: [workspaceRowKey]
+                    workspaces: [workspaceId]
                 },
                 data: {
                     eventName: eventName,
@@ -28,7 +28,7 @@ define(
             return null;
         };
 
-        SyncService.prototype.publishWorkspaceMetadataSyncEvent = function (eventName, workspaceRowKey, eventData) {
+        SyncService.prototype.publishWorkspaceMetadataSyncEvent = function (eventName, workspaceId, eventData) {
             // Store previous users so we send that last sync event to the user
             // that was "Revoked"
             if (!this._previousUsers) this._previousUsers = [];

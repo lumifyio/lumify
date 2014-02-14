@@ -146,7 +146,7 @@ define([
             ) {
                 li.find('.badge').removeClass('loading').hide().next().show();
                 data = this.workspaceDataForItemRow(data);
-                var content = $(itemTemplate({ workspace: data, selected: this.workspaceRowKey }));
+                var content = $(itemTemplate({ workspace: data, selected: this.workspaceId }));
                 if (li.length === 0) {
                     this.$node.find('li.nav-header').eq(+data.isSharedToUser).after(content);
                 } else {
@@ -171,7 +171,7 @@ define([
 
             data.isSharedToUser = data.createdBy !== window.currentUser.userName;
 
-            if (this.workspaceRowKey === data._rowKey) {
+            if (this.workspaceId === data.id) {
                 appData.loadWorkspace(data);
             } else {
                 this.updateListItemWithData(data);
@@ -182,15 +182,15 @@ define([
             this.loadWorkspaceList();
         };
 
-        this.switchActive = function( rowKey ) {
+        this.switchActive = function( workspaceId ) {
             var self = this;
-            this.workspaceRowKey = rowKey;
+            this.workspaceId = workspaceId;
 
             var found = false;
             this.select( 'workspaceListItemSelector' )
                 .removeClass('active')
                 .each(function() {
-                    if ($(this).data('_rowKey') == rowKey) {
+                    if ($(this).data('is') == workspaceId) {
                         found = true;
                         $(this).addClass('active');
                         return false;
@@ -222,7 +222,7 @@ define([
                                     w = self.workspaceDataForItemRow(w);
                                     return w.isSharedToUser ? 'shared' : 'mine';
                                 }),
-                                selected: self.workspaceRowKey
+                                selected: self.workspaceId
                             })
                         );
                         self.trigger(document, 'paneResized');

@@ -555,16 +555,16 @@ define([
 
         this.loadWorkspace = function(workspaceData) {
             var self = this,
-                workspaceRowKey = _.isString(workspaceData) ? workspaceData : workspaceData._rowKey;
+                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.id;
 
-            self.id = workspaceRowKey;
+            self.id = workspaceId;
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
-                self.getWorkspace(workspaceRowKey).done(function(workspace) {
+                self.getWorkspace(workspaceId).done(function(workspace) {
                     self.loadWorkspaceVertices(workspace).done(function(vertices) {
                         if (workspaceData && workspaceData.title) {
                             workspace.title = workspaceData.title;

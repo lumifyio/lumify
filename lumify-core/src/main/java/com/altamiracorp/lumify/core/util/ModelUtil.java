@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
-import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
 
 import java.util.Arrays;
@@ -16,7 +15,6 @@ public class ModelUtil {
 
     private static final List<String> tables = Arrays.asList(
             ArtifactThumbnail.TABLE_NAME,
-            Workspace.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
             VideoFrame.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
