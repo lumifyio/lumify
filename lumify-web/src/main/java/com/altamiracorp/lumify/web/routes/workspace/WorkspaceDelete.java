@@ -35,7 +35,7 @@ public class WorkspaceDelete extends BaseRequestHandler {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-            workspaceRepository.delete(workspace);
+            workspaceRepository.delete(workspace, user);
 
             JSONObject resultJson = new JSONObject();
             resultJson.put("success", true);

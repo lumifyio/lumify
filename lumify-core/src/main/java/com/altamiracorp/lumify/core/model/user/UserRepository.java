@@ -64,7 +64,8 @@ public class UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        VertexBuilder userBuilder = graph.prepareVertex("USER_" + graph.getIdGenerator().nextId(), VISIBILITY, this.authUser.getAuthorizations());
+        String userId = "USER_" + graph.getIdGenerator().nextId();
+        VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY, this.authUser.getAuthorizations());
         USERNAME.setProperty(userBuilder, username, VISIBILITY);
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY);
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY);
