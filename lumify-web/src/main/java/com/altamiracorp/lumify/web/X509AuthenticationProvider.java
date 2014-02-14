@@ -1,12 +1,12 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +17,7 @@ import java.security.cert.X509Certificate;
 
 public abstract class X509AuthenticationProvider extends AuthenticationProvider {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
+    private static final String X509_USER_PASSWORD = "P1OpQsfZMFizHqqyt7lXNE56a6HSVQxdMJHClZ0hhZPhY1OrHvkfDwysDhvWrUIUZbIuEY09FH99qo9t0rjikwEaHK4u03yTLidY";
     private final UserProvider userProvider;
     private final UserRepository userRepository;
 
@@ -41,8 +42,11 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        UserRow userRow = userRepository.findOrAddUser(username, this.userProvider.getSystemUser());
-        User authUser = this.userProvider.createFromModelUser(userRow);
+        Vertex userVertex = userRepository.findByUserName(username);
+        if (userVertex == null) {
+            userVertex = userRepository.addUser(username, X509_USER_PASSWORD, new String[0]);
+        }
+        User authUser = this.userProvider.createFromVertex(userVertex);
         setUser(request, authUser);
         chain.next(request, response);
     }

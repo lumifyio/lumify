@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.Column;
+import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspacePermissions;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ public class WorkspaceSave extends BaseRequestHandler {
         final String workspaceRowKeyString = getAttributeString(request, "workspaceRowKey");
 
         User authUser = getUser(request);
-        UserRow user = userRepository.findOrAddUser(authUser.getUsername(), authUser);
+        Vertex user = userRepository.findByUserName(authUser.getUsername());
         Workspace workspace;
         if (workspaceRowKeyString == null) {
             workspace = handleNew(request, user);
@@ -67,11 +68,11 @@ public class WorkspaceSave extends BaseRequestHandler {
         if (users != null) {
             // Getting user permissions
             JSONArray userList = new JSONArray(users);
-            String userRowKey = user.getRowKey().toString();
+            String userId = user.getId().toString();
 
             if (workspace.getMetadata().getCreator() == null ||
-                    workspace.getMetadata().getCreator().equals(userRowKey) ||
-                    hasWritePermissions(userRowKey, workspace)) {
+                    workspace.getMetadata().getCreator().equals(userId) ||
+                    hasWritePermissions(userId, workspace)) {
                 updateUserList(workspace, userList, authUser);
                 shouldSave = true;
             }
@@ -84,19 +85,19 @@ public class WorkspaceSave extends BaseRequestHandler {
         respondWithJson(response, workspace.toJson(authUser));
     }
 
-    public Workspace handleNew(HttpServletRequest request, UserRow user) {
+    public Workspace handleNew(HttpServletRequest request, Vertex user) {
         WorkspaceRowKey workspaceRowKey = new WorkspaceRowKey(
-                user.getRowKey().toString(), String.valueOf(System.currentTimeMillis()));
+                user.getId().toString(), String.valueOf(System.currentTimeMillis()));
         Workspace workspace = new Workspace(workspaceRowKey);
         String title = getOptionalParameter(request, "title");
 
         if (title != null) {
             workspace.getMetadata().setTitle(title);
         } else {
-            workspace.getMetadata().setTitle(DEFAULT_WORKSPACE_TITLE + " - " + user.getMetadata().getUserName());
+            workspace.getMetadata().setTitle(DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user));
         }
 
-        workspace.getMetadata().setCreator(user.getRowKey().toString());
+        workspace.getMetadata().setCreator(user.getId().toString());
 
         return workspace;
     }

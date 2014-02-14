@@ -2,7 +2,7 @@ package com.altamiracorp.lumify.tools;
 
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -12,7 +12,7 @@ public class UserAdd extends CommandLineBase {
     private UserRepository userRepository;
     private String username;
     private String password;
-    private String authorizations;
+    private String[] authorizations;
 
     public static void main(String[] args) throws Exception {
         int res = new UserAdd().run(args);
@@ -67,7 +67,11 @@ public class UserAdd extends CommandLineBase {
         super.processOptions(cmd);
         this.username = cmd.getOptionValue("username");
         this.password = cmd.getOptionValue("password");
-        this.authorizations = cmd.getOptionValue("auths");
+        String authorizationsString = cmd.getOptionValue("auths");
+        this.authorizations = new String[0];
+        if (authorizationsString != null && authorizationsString.length() > 0) {
+            this.authorizations = authorizationsString.split(",");
+        }
     }
 
     @Override
@@ -83,27 +87,22 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        UserRow user = this.userRepository.findByUserName(this.username, getUserProvider().getSystemUser());
+        Vertex user = this.userRepository.findByUserName(this.username);
 
         if (cmd.hasOption("reset")) {
             if (user == null) {
                 System.err.println("password reset requested but user not found");
                 return 4;
             }
-            user.setPassword(this.password);
-            this.userRepository.save(user, getUserProvider().getSystemUser().getModelUserContext());
-            System.out.println("User password reset: " + user.getRowKey());
+            this.userRepository.setPassword(user, this.password);
+            System.out.println("User password reset: " + user.getId());
         } else {
             if (user != null) {
                 System.err.println("username already exists");
                 return 3;
             }
-            user = this.userRepository.addUser(this.username, this.password, getUserProvider().getSystemUser());
-            if (this.authorizations != null) {
-                user.getMetadata().setAuthorizations(this.authorizations);
-                this.userRepository.save(user, getUserProvider().getSystemUser().getModelUserContext());
-            }
-            System.out.println("User added: " + user.getRowKey());
+            user = this.userRepository.addUser(this.username, this.password, this.authorizations);
+            System.out.println("User added: " + user.getId());
         }
 
         return 0;

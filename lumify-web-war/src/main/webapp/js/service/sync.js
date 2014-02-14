@@ -49,11 +49,11 @@ define(
             this.socketPush(data);
         };
 
-        SyncService.prototype.publishUserSyncEvent = function (eventName, userRowKeys, eventData) {
+        SyncService.prototype.publishUserSyncEvent = function (eventName, userIds, eventData) {
             var data = {
                 type: 'sync',
                 permissions: {
-                    users: userRowKeys
+                    users: userIds
                 },
                 data: {
                     eventName: eventName,
