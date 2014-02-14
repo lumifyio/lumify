@@ -1,7 +1,5 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
-
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
@@ -9,17 +7,15 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
 
 public class EntityObjectDetectionDelete extends BaseRequestHandler {
     private final Graph graph;
@@ -60,7 +56,11 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             // TODO: replace "" when we implement commenting on ui
             auditRepository.auditEntity(AuditAction.DELETE, graphVertexId, artifactVertex.getId().toString(), jsonObject.getString("title"),
                     jsonObject.getString("_conceptType"), "", "", user);
-            graph.removeVertex(graphVertexId, user.getAuthorizations());
+            Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+            if (graphVertex == null) {
+                throw new RuntimeException("Could not get graph vertex: " + graphVertexId);
+            }
+            graph.removeVertex(graphVertex, user.getAuthorizations());
             obj.put("remove", true);
         }
 
