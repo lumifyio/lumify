@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.artifactHighlighting;
+package com.altamiracorp.lumify.core.model.textHighlighting;
 
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
