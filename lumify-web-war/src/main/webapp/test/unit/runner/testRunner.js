@@ -1,5 +1,5 @@
 var tests = Object.keys(window.__karma__.files).filter(function (file) {
-    return (/^\/base\/test\/spec\/.*\.js$/).test(file);
+    return (/^\/base\/test\/unit\/spec\/.*\.js$/).test(file);
 });
 
 requirejs.config({
@@ -22,8 +22,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             'mocha-flight': '../libs/mocha-flight/lib/mocha-flight',
 
             // MOCKS
-            'service/serviceBase': '../test/mocks/serviceBase',
-            'testutils': '../test/utils'
+            'service/serviceBase': '../test/unit/mocks/serviceBase',
+            'testutils': '../test/unit/utils'
         },
 
         shim: {

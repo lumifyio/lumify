@@ -32,14 +32,14 @@ module.exports = function(config) {
       {pattern: 'libs/**/*.js', included: false},
 
       // Test Files
-      {pattern: 'test/spec/**/*.js', included: false},
+      {pattern: 'test/unit/spec/**/*.js', included: false},
 
       // Test Mocks
-      {pattern: 'test/mocks/**/*.js', included: false},
-      {pattern: 'test/utils/**/*.js', included: false},
+      {pattern: 'test/unit/mocks/**/*.js', included: false},
+      {pattern: 'test/unit/utils/**/*.js', included: false},
 
       // Test runner
-      'test/runner/main.js'
+      'test/unit/runner/testRunner.js'
     ],
 
 
