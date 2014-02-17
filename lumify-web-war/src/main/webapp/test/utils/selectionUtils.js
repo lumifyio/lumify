@@ -19,7 +19,7 @@ define([], function() {
                     textNode = node.childNodes[0];
                 }
                 if (textNode) {
-                    var startIndex = node.textContent.indexOf('[');
+                    var startIndex = textNode.textContent.indexOf('[');
                     if (startIndex >= 0) {
                         textNode.textContent = textNode.textContent.replace('[', '');
                         start.node = textNode;

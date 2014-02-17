@@ -103,7 +103,7 @@ define([
 
                 var range = selection.getRangeAt(0),
                     output = {},
-                    contextRange = rangeUtils.expandRangeByWords(range, 2, output),
+                    contextRange = rangeUtils.expandRangeByWords(range, 4, output),
                     context = contextRange.toString(),
                     contextHighlight =
                         '...' +
@@ -113,11 +113,12 @@ define([
                         '...';
 
                 this.trigger('copydocumenttext', {
-                    offsets: offsets,
-                    text: selection.toString(),
+                    startOffset: offsets[0],
+                    endOffset: offsets[1],
+                    snippet: contextHighlight,
                     vertexId: this.attr.data.id,
-                    vertexTitle: this.attr.data.properties.title.value,
-                    context: contextHighlight
+                    text: selection.toString(),
+                    vertexTitle: this.attr.data.properties.title.value
                 });
             }
         };

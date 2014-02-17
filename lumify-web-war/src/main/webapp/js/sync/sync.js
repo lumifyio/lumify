@@ -54,7 +54,7 @@ define([
                         permissions: {
                         },
                         data: {
-                            userRowKey: user.rowKey,
+                            userId: user.id,
                             workspaceRowKey: this.currentWorkspaceRowKey
                         }
                     };

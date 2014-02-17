@@ -317,7 +317,9 @@ define([
                     this.attr.data.id,
                     data.property.name,
                     data.property.value,
-                    data.property.visibilitySource)
+                    data.property.visibilitySource,
+                    data.property.justificationText,
+                    data.property.sourceInfo)
                     .fail(this.requestFailure.bind(this))
                     .done(function(vertexData) {
                         self.displayProperties(vertexData.properties);

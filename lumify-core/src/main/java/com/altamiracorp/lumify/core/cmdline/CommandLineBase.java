@@ -10,12 +10,16 @@ import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
-import org.apache.commons.cli.*;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.log4j.xml.DOMConfigurator;
-
 import java.io.File;
 import java.net.URI;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.log4j.xml.DOMConfigurator;
 
 public abstract class CommandLineBase {
     protected LumifyLogger LOGGER;
@@ -48,6 +52,7 @@ public abstract class CommandLineBase {
             cmd = parser.parse(options, args);
             if (cmd.hasOption("help")) {
                 printHelp(options);
+                return 0;
             }
             processOptions(cmd);
         } catch (Exception ex) {

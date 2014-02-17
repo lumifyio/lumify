@@ -15,7 +15,6 @@ define([
 
             this.$node.html(template(this.attr));
 
-            this.select('inputSelector').focus();
 
             this.on('change keyup', {
                 inputSelector: function(event) { 

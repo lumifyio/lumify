@@ -962,10 +962,11 @@ define([
         this.hideLoading = function() {
             var loading = this.$node.find('.loading-graph');
             if (loading.length) {
-                loading.one('animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd', function(e) {
+                loading.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function(e) {
                     loading.remove();
                 });
                 loading.addClass('hidden');
+                setTimeout(function() { loading.remove(); }, 2000);
             }
         };
 

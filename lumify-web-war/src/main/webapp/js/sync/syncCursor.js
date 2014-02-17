@@ -11,7 +11,7 @@ define([
 
     function SyncCursor() {
         this.currentUser = null;
-        this.cursorsByUserRowKey = {};
+        this.cursorsByUserId = {};
 
         this.defaultAttrs({
             bodySelector: 'body'
@@ -33,8 +33,8 @@ define([
 
         this.after('teardown', function () {
             var self = this;
-            Object.keys(this.cursorsByUserRowKey).forEach(function (userRowKey) {
-                var cursor = self.cursorsByUserRowKey[userRowKey];
+            Object.keys(this.cursorsByUserId).forEach(function (userId) {
+                var cursor = self.cursorsByUserId[userId];
                 cursor.remove();
             });
         });
@@ -50,18 +50,18 @@ define([
         };
 
         this.getCursor = function (user) {
-            var cursor = this.cursorsByUserRowKey[user.rowKey];
+            var cursor = this.cursorsByUserId[user.id];
             if (cursor) {
                 return cursor;
             }
             cursor = $(template({user: user})).appendTo(document.body);
-            this.cursorsByUserRowKey[user.rowKey] = cursor;
+            this.cursorsByUserId[user.id] = cursor;
             return cursor;
         };
 
         // Remote bound events trigger these
         this.onRemoteCursorMove = function (e, data) {
-            if (this.currentUser.rowKey == data.user.rowKey) {
+            if (this.currentUser.id == data.user.id) {
                 return;
             }
 
@@ -80,7 +80,7 @@ define([
         };
 
         this.onRemoteCursorFocus = function (e, data) {
-            if (this.currentUser.rowKey == data.user.rowKey) {
+            if (this.currentUser.id == data.user.id) {
                 return;
             }
             var cursor = this.getCursor(data.user);
@@ -88,7 +88,7 @@ define([
         };
 
         this.onRemoteCursorBlur = function (e, data) {
-            if (this.currentUser.rowKey == data.user.rowKey) {
+            if (this.currentUser.id == data.user.id) {
                 return;
             }
             var cursor = this.getCursor(data.user);

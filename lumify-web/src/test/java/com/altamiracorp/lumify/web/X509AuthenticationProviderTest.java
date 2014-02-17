@@ -1,26 +1,25 @@
 package com.altamiracorp.lumify.web;
 
-import static org.mockito.Mockito.*;
-
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.lumify.core.model.user.UserMetadata;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
-import com.altamiracorp.lumify.core.model.user.UserRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.miniweb.HandlerChain;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.cert.X509Certificate;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.cert.X509Certificate;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class X509AuthenticationProviderTest {
@@ -44,9 +43,7 @@ public class X509AuthenticationProviderTest {
     @Mock
     private UserProvider userProvider;
     @Mock
-    private UserRow userRow;
-    @Mock
-    private UserMetadata userMetadata;
+    private Vertex userVertex;
     @Mock
     private User user;
 
@@ -93,12 +90,11 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findOrAddUser(eq(TEST_USERNAME), any(User.class))).thenReturn(userRow);
-        when(userRow.getRowKey()).thenReturn(new UserRowKey("rowkey"));
-        when(userRow.getMetadata()).thenReturn(userMetadata);
-        when(userMetadata.getUserName()).thenReturn(TEST_USERNAME);
-        when(userMetadata.getCurrentWorkspace()).thenReturn("workspaceName");
-        when(userProvider.createFromModelUser(userRow)).thenReturn(user);
+        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(userVertex);
+        when(userVertex.getId()).thenReturn("userId");
+//        when(userMetadata.getUserName()).thenReturn(TEST_USERNAME);
+//        when(userMetadata.getCurrentWorkspace()).thenReturn("workspaceName");
+        when(userProvider.createFromVertex(userVertex)).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
         verify(httpSession).setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);
@@ -118,6 +114,7 @@ public class X509AuthenticationProviderTest {
 
     private static interface Delegate {
         String getUsername(X509Certificate cert);
+
         boolean login(HttpServletRequest request);
     }
 

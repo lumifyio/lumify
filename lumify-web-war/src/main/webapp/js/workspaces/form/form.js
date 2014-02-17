@@ -121,7 +121,7 @@ define([
                     user: {
                         userPermissions: userPermission.userPermissions,
                         permissionLabel: userPermission.userPermissions.edit ? 'edit' : 'view',
-                        rowKey: user.rowKey,
+                        rowKey: user.id,
                         userName: user.userName
                     },
                     editable: this.editable
@@ -166,8 +166,8 @@ define([
                 list = $target.closest('.permissions-list'),
                 userRow = list.data('userRow'),
                 badge = userRow.find('.permissions'),
-                rowKey = userRow.data('rowKey'),
-                user = _.findWhere(this.attr.data.users, { user: rowKey });
+                id = userRow.data('id'),
+                user = _.findWhere(this.attr.data.users, { user: id });
 
             if (user) {
                 user.userPermissions = newPermissions;
@@ -178,7 +178,7 @@ define([
                         userRow.replaceWith(newUserRow);
                         self.makePopover(newUserRow.find('.badge'));
                     });
-            } else console.warn('Unable to update permissions because user "' + rowKey + '" not found');
+            } else console.warn('Unable to update permissions because user "' + id + '" not found');
         };
 
         this.onDelete = function(event) {

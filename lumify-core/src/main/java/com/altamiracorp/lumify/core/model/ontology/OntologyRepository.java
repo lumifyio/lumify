@@ -28,7 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class OntologyRepository {
-
     public static final String VISIBILITY_STRING = "ontology";
     public static final Visibility DEFAULT_VISIBILITY = new Visibility(VISIBILITY_STRING);
     private final Graph graph;

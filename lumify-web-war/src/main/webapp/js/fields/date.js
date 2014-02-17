@@ -11,6 +11,12 @@ define([
 
     function DateField() {
 
+        this.before('initialize', function(node, config) {
+            if (_.isUndefined(config.preventFocus)) {
+                config.preventFocus = true;
+            }
+        });
+
         this.after('initialize', function() {
             var value = '';
 

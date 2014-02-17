@@ -8,14 +8,13 @@ The following system requirements must be available/installed for pre-built virt
 
 * At least 4GB of memory (>4GB recommended)
 * Virtual Machine software that imports .ova files
-  * If using Virtual Box, please refer to [Virtual Box Host-Only Network Configuration](./VIRTUALBOX_HOSTONLY_NETWORK_CONFIG.md) instructions
 
 ## Getting Started
 
-1. Download the [Pre-built VM](http://bits.lumify.io.s3.amazonaws.com/vm/lumify-opensource-2014-02-06.ova)
+1. Download the [Pre-built VM](http://bits.lumify.io/vm/lumify-opensource-2014-02-06.ova)
 2. Import the .ova file into your preferred vm application
 3. Start the VM
-4. Browse to ```https://192.168.33.10:8443```
+4. Browse to ```https://localhost:8443```
 5. Login to the webapp with username "lumify" and any password to load a prepopulated workspace
 
 If you would like to see an example of the capabilities Lumify has for ingest, please refer to our [open source ingest example](https://github.com/nearinfinity/lumify-twitter) and follow the instructions there.
@@ -33,6 +32,6 @@ password: lumify
 
 The VM must be running for these URLs to work.
 
-* [Hadoop Administration](http://192.168.33.10:50070/dfshealth.jsp)
-* [Storm UI](http://192.168.33.10:8081/)
+* [Hadoop Administration](http://localhost:50070/dfshealth.jsp)
+* [Storm UI](http://localhost:8081/)
 

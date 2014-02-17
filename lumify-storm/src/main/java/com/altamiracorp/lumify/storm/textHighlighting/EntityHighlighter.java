@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.storm.textHighlighting;
 
-import com.altamiracorp.lumify.core.model.artifactHighlighting.OffsetItem;
-import com.altamiracorp.lumify.core.model.artifactHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.textHighlighting.OffsetItem;
+import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;

@@ -55,12 +55,12 @@ public class Workspace extends Row<WorkspaceRowKey> {
             workspaceJson.put("_rowKey", getRowKey());
             workspaceJson.put("title", getMetadata().getTitle());
             workspaceJson.put("createdBy", getMetadata().getCreator());
-            workspaceJson.put("isSharedToUser", !getMetadata().getCreator().equals(user.getRowKey()));
+            workspaceJson.put("isSharedToUser", !getMetadata().getCreator().equals(user.getUserId()));
 
             Boolean hasAccess = false;
             Boolean hasEdit = false;
 
-            if (getMetadata().getCreator().equals(user.getRowKey())) {
+            if (getMetadata().getCreator().equals(user.getUserId())) {
                 hasAccess = true;
                 hasEdit = true;
             }
@@ -68,13 +68,13 @@ public class Workspace extends Row<WorkspaceRowKey> {
             JSONArray permissions = new JSONArray();
             if (get(WorkspacePermissions.NAME) != null) {
                 for (Column col : get(WorkspacePermissions.NAME).getColumns()) {
-                    String rowKey = col.getName();
+                    String userId = col.getName();
                     JSONObject users = new JSONObject();
                     JSONObject userPermissions = Value.toJson(col.getValue());
-                    users.put("user", rowKey);
+                    users.put("user", userId);
                     users.put("userPermissions", userPermissions);
                     permissions.put(users);
-                    if (rowKey.equals(user.getRowKey())) {
+                    if (userId.equals(user.getUserId())) {
                         if (userPermissions.getBoolean("edit")) {
                             hasEdit = true;
                         }

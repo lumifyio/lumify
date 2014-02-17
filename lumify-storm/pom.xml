@@ -33,7 +33,7 @@
                 <cluster.dependency.scope>provided</cluster.dependency.scope>
             </properties>
         </profile>
-        
+
         <!-- Builds the Storm Uber-JAR -->
         <profile>
             <id>uber-jar</id>
@@ -75,7 +75,7 @@
             </build>
         </profile>
     </profiles>
-    
+
     <dependencies>
         <!-- Storm Dependencies; These override the managed versions for compatibility. -->
         <dependency>
@@ -165,22 +165,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/lumify-build.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**/lumify-build.properties</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

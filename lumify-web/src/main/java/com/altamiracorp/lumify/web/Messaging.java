@@ -1,22 +1,20 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.apache.commons.lang.StringUtils;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.client.TrackMessageSizeInterceptor;
 import org.atmosphere.config.service.AtmosphereHandlerService;
-import org.atmosphere.config.service.Disconnect;
 import org.atmosphere.cpr.*;
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
-import org.atmosphere.interceptor.OnDisconnectInterceptor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,8 +147,8 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
                 throw new RuntimeException("Could not find user in session");
             }
             String workspaceRowKey = dataJson.getString("workspaceRowKey");
-            String userRowKey = dataJson.getString("userRowKey");
-            if (userRowKey.equals(authUser.getRowKey())) {
+            String userId = dataJson.getString("userId");
+            if (userId.equals(authUser.getUserId())) {
                 switchWorkspace(authUser, workspaceRowKey);
             }
         }
@@ -160,12 +158,10 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         if (!workspaceRowKey.equals(authUser.getCurrentWorkspace())) {
             authUser.setCurrentWorkspace(workspaceRowKey);
 
-            UserRow user = userRepository.findByRowKey(authUser.getRowKey(), authUser.getModelUserContext());
-            user.getMetadata().setCurrentWorkspace(workspaceRowKey);
+            userRepository.setCurrentWorkspace(authUser.getUserId(), workspaceRowKey);
             authUser.setCurrentWorkspace(workspaceRowKey);
-            userRepository.save(user, authUser.getModelUserContext());
 
-            LOGGER.debug("User %s switched current workspace to %s", user.getRowKey(), workspaceRowKey);
+            LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceRowKey);
         }
     }
 
@@ -176,13 +172,11 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
-            UserRow user = userRepository.findByRowKey(authUser.getRowKey(), authUser.getModelUserContext());
-            user.getMetadata().setStatus(status);
-            userRepository.save(user, authUser.getModelUserContext());
+            Vertex user = userRepository.setStatus(authUser.getUserId(), status);
 
             JSONObject json = new JSONObject();
             json.put("type", "userStatusChange");
-            json.put("data", user.toJson());
+            json.put("data", UserRepository.toJson(user));
             resource.getBroadcaster().broadcast(json.toString());
         } catch (Exception ex) {
             LOGGER.error("Could not update status", ex);

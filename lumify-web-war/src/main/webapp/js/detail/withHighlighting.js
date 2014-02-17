@@ -28,7 +28,6 @@ define([
 
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
-            highlightTypeSelector: '.highlight-options a',
             highlightedWordsSelector: '.entity, .term, .artifact',
             draggablesSelector: '.resolved, .artifact, .generic-draggable'
         });
@@ -63,8 +62,7 @@ define([
 
             this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables.bind(this));
             this.on('click', {
-                resolvableSelector: this.onResolvableClicked,
-                highlightTypeSelector: this.onHighlightTypeClicked
+                resolvableSelector: this.onResolvableClicked
             });
             this.on('mousedown mouseup click dblclick', this.trackMouse.bind(this));
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
@@ -74,10 +72,16 @@ define([
         });
 
         this.trackMouse = function(event) {
+            var $target = $(event.target);
+
             if (event.type === 'mouseup' || event.type === 'click' || event.type === 'dblclick') {
                 this.mouseDown = false;
             } else {
                 this.mouseDown = true;
+            }
+
+            if (event.type === 'mousedown' && $target.closest('.tooltip').length === 0 && this.ActionBar) {
+                this.ActionBar.teardownAll();
             }
 
             if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
@@ -87,24 +91,6 @@ define([
             }
         };
 
-
-        this.onHighlightTypeClicked = function(evt) {
-            var target = $(evt.target),
-                li = target.parents('li'),
-                ul = li.parent('ul'),
-                content = this.highlightNode();
-
-            ul.find('.checked').not(li).removeClass('checked');
-            li.addClass('checked');
-
-            var newClass = li.data('selector');
-            if (newClass) {
-                content.addClass('highlight-' + newClass);
-            } else this.removeHighlightClasses();
-            useDefaultStyle = false;
-
-            this.applyHighlightStyle();
-        };
 
         this.highlightNode = function() {
             return this.$node.closest('.content');
@@ -220,7 +206,7 @@ define([
 
         this.onSelectionChange = function(e) {
             var selection = window.getSelection(),
-                text = selection.type === 'Range' ? $.trim(selection.toString()) : '';
+                text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
 
             // Ignore selection events within the dropdown
             if ( selection.type == 'None' ||
@@ -247,9 +233,8 @@ define([
         };
 
         this.handleSelectionChange = _.debounce(function() {
-
             var sel = window.getSelection(),
-                text = sel && sel.type === 'Range' ? $.trim(sel.toString()) : '';
+                text = sel && sel.rangeCount === 1 ? $.trim(sel.toString()) : '';
 
             if (text && text.length > 0) {
                 var anchor = $(sel.anchorNode),
@@ -290,6 +275,7 @@ define([
                 if (this.$node.find('.text.dropdown').length) return;
 
                 require(['util/actionbar/actionbar'], function(ActionBar) {
+                    self.ActionBar = ActionBar;
                     ActionBar.teardownAll();
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',

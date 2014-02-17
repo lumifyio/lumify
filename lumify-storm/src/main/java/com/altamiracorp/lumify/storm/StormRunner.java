@@ -3,13 +3,13 @@ package com.altamiracorp.lumify.storm;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.storm.textHighlighting.ArtifactHighlightingBolt;
+import com.altamiracorp.lumify.storm.textHighlighting.TextHighlightingBolt;
 
 public class StormRunner extends StormRunnerBase {
     private static final String TOPOLOGY_NAME = "lumify";
-    private final String ARTIFACT_HIGHLIGHT_SPOUT = "artifactHighlightSpout";
-    private final String USER_ARTIFACT_HIGHLIGHT_SPOUT = "userArtifactHighlightSpout";
-    private final String ARTIFACT_HIGHLIGHT_BOLT = "artifactHighlightBolt";
+    private final String TEXT_HIGHLIGHT_SPOUT = "textHighlightSpout";
+    private final String USER_TEXT_HIGHLIGHT_SPOUT = "userTextHighlightSpout";
+    private final String TEXT_HIGHLIGHT_BOLT = "textHighlightBolt";
 
     public static void main(String[] args) throws Exception {
         int res = new StormRunner().run(args);
@@ -30,12 +30,12 @@ public class StormRunner extends StormRunnerBase {
     }
 
     private void createArtifactHighlightingTopology(TopologyBuilder builder, int parallelismHint) {
-        builder.setSpout(ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
+        builder.setSpout(TEXT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.TEXT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setSpout(USER_ARTIFACT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME), 1)
+        builder.setSpout(USER_TEXT_HIGHLIGHT_SPOUT, createWorkQueueRepositorySpout(WorkQueueRepository.USER_TEXT_HIGHLIGHT_QUEUE_NAME), 1)
                 .setMaxTaskParallelism(1);
-        builder.setBolt(ARTIFACT_HIGHLIGHT_BOLT, new ArtifactHighlightingBolt(), parallelismHint)
-                .shuffleGrouping(ARTIFACT_HIGHLIGHT_SPOUT)
-                .shuffleGrouping(USER_ARTIFACT_HIGHLIGHT_SPOUT);
+        builder.setBolt(TEXT_HIGHLIGHT_BOLT, new TextHighlightingBolt(), parallelismHint)
+                .shuffleGrouping(TEXT_HIGHLIGHT_SPOUT)
+                .shuffleGrouping(USER_TEXT_HIGHLIGHT_SPOUT);
     }
 }
