@@ -206,7 +206,7 @@ define([
 
         this.onSelectionChange = function(e) {
             var selection = window.getSelection(),
-                text = selection.type === 'Range' ? $.trim(selection.toString()) : '';
+                text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
 
             // Ignore selection events within the dropdown
             if ( selection.type == 'None' ||
@@ -234,7 +234,7 @@ define([
 
         this.handleSelectionChange = _.debounce(function() {
             var sel = window.getSelection(),
-                text = sel && sel.type === 'Range' ? $.trim(sel.toString()) : '';
+                text = sel && sel.rangeCount === 1 ? $.trim(sel.toString()) : '';
 
             if (text && text.length > 0) {
                 var anchor = $(sel.anchorNode),
