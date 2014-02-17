@@ -57,8 +57,8 @@ define([
 
             this.positionDialog();
 
-            var src = this.attr.edge.data('source'),
-                dest = this.attr.edge.data('target');
+            var src = this.attr.sourceVertexId,
+                dest = this.attr.targetVertexId;
 
             this.findPathRequest = this.findPath(src, dest)
                 .done(function(result) {

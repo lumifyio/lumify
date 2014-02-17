@@ -42,7 +42,6 @@ define([
             });
 
             this.on('popoverInitialize', function() {
-                console.log(this.dialog, this.popover);
 
                 var self = this,
                     cy = this.attr.cy,
@@ -80,8 +79,8 @@ define([
 
             var self = this,
                 parameters = {
-                    sourceGraphVertexId: self.attr.edge.data('source'),
-                    destGraphVertexId: self.attr.edge.data('target'),
+                    sourceGraphVertexId: this.attr.sourceVertexId,
+                    destGraphVertexId: this.attr.targetVertexId,
                     predicateLabel: $target.siblings('select').val()
                 };
 
@@ -100,8 +99,8 @@ define([
 
         this.getRelationshipLabels = function (source, dest) {
             var self = this,
-                sourceConceptTypeId = source.data('_conceptType'),
-                destConceptTypeId = dest.data('_conceptType');
+                sourceConceptTypeId = source.data('_conceptType').value,
+                destConceptTypeId = dest.data('_conceptType').value;
 
             return $.when(
                 this.relationshipRequest = this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
