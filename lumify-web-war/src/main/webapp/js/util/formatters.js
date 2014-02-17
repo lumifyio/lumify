@@ -3,6 +3,7 @@ define(['sf'], function() {
     'use strict';
 
     var isMac = checkIfMac(),
+        isFirefox = ~navigator.userAgent.indexOf('Firefox'),
         keyboardMappings = {
             metaIcons: {
                 shift: isMac ? '⇧' : 'Shift',
@@ -19,7 +20,7 @@ define(['sf'], function() {
                 down: '↓',
                 left: '←', 
                 right: '→',
-                drag: isMac ? '' : null
+                drag: isMac ? (isFirefox ? null : '') : null
             }
         };
 

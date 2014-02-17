@@ -80,6 +80,10 @@ define([
                 return cyId;
             };
 
+        this.vertexId = vertexId;
+        this.cyIdMap = cyIdMap;
+        this.vertexIdMap = vertexIdMap;
+
         this.defaultAttrs({
             cytoscapeContainerSelector: '.cytoscape-container',
             emptyGraphSelector: '.empty-graph',
@@ -841,7 +845,7 @@ define([
                         source: cyIdMap[cyEdge.data().source],
                         target: cyIdMap[cyEdge.data().target]
                     }
-                    vertices.push({ id: cyEdge.id() , properties:properties });
+                    vertices.push(properties)
                 }
             });
 
