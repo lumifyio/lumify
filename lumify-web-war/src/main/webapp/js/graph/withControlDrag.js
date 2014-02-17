@@ -24,6 +24,13 @@ define([], function() {
 
             this.on(document, 'controlKey', function() { controlKeyPressed = true; });
             this.on(document, 'controlKeyUp', function() { controlKeyPressed = false; });
+            this.on(document, 'mouseup', function() {
+                if (state === STATE_STARTED) {
+                    self.trigger('endVertexConnection', {
+                        edgeId: currentEdgeId
+                    });
+                }
+            });
 
             this.on('startVertexConnection', this.onStartVertexConnection);
             this.on('endVertexConnection', this.onEndVertexConnection);
@@ -31,21 +38,23 @@ define([], function() {
             this.on('selectObjects', this.onSelectObjects);
 
             this.cytoscapeReady(function(cy) {
+                var mousedown = function(event) {
+                    if (state > STATE_NONE) return;
+                    if (controlKeyPressed && event.cyTarget !== cy) {
+                        self.trigger('startVertexConnection', {
+                            sourceId: self.cyIdMap[event.cyTarget.id()]
+                        });
+                    }
+                };
+
                 cy.on({
                     tap: function(event) {
                         if (state === STATE_CONNECTED) {
                             this.trigger('finishedVertexConnection');
                         }
                     },
-                    tapstart: function(event) {
-                        if (state > STATE_NONE) return;
-
-                        if (controlKeyPressed && event.cyTarget !== cy) {
-                            self.trigger('startVertexConnection', {
-                                sourceId: self.cyIdMap[event.cyTarget.id()]
-                            });
-                        }
-                    },
+                    cxttapstart: mousedown,
+                    tapstart: mousedown,
                     grab: function(event) {
 
                         if (controlKeyPressed) {
@@ -54,13 +63,6 @@ define([], function() {
                             }
                             lockedCyTarget = event.cyTarget;
                             lockedCyTarget.lock();
-                        }
-                    },
-                    free: function() {
-                        if (state === STATE_STARTED) {
-                            self.trigger('endVertexConnection', {
-                                edgeId: currentEdgeId
-                            });
                         }
                     }
                 });
