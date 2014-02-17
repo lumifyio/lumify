@@ -48,6 +48,8 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             return;
         }
         try {
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
             IOUtils.copy(in, out);
         } finally {
             in.close();

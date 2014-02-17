@@ -71,10 +71,10 @@ define([
 
         this.textselectionInitializer = function() {
             var selection = getSelection(),
-                anchor = $(selection.anchorNode);
+                closest = selection.anchorNode.parentNode;
 
             // Reposition on scroll events
-            this.scrollParent = anchor.scrollParent().off('.actionbar').on('scroll.actionbar', this.updatePosition);
+            this.scrollParent = $(closest).scrollParent().off('.actionbar').on('scroll.actionbar', this.updatePosition);
         };
     }
 });

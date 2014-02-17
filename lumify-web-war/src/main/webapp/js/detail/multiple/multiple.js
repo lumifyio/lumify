@@ -96,10 +96,13 @@ define([
             }
 
             var self = this,
-                moduleName = (
-                    (first.properties._type.value != 'artifact' && first.properties._type.value != 'relationship') ? 'entity' :
-                    (first.properties._type.value || 'entity')
-                ).toLowerCase();
+                type = first.concept.displayType;
+
+            if (type === 'relationship') {
+                moduleName = type;
+            } else {
+                moduleName = (((type != 'document' && type != 'image' && type != 'video') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+            }
 
             this._selectedGraphId = first.id;
             require([

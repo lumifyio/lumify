@@ -5,6 +5,8 @@ import com.altamiracorp.miniweb.Handler;
 import com.google.inject.Injector;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 
 
@@ -29,5 +31,14 @@ public class WebApp extends App {
             handlers[i] = injector.getInstance(handlerClasses[i]);
         }
         return handlers;
+    }
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (request.getRequestURI().endsWith("ejs")) {
+            response.setContentType("text/plain");
+        }
+        response.setCharacterEncoding("UTF-8");
+        super.handle(request, response);
     }
 }
