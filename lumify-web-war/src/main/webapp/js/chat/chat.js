@@ -29,12 +29,12 @@ define([
             });
         });
 
-        this.findChatByUserRowKey = function (userRowKey) {
+        this.findChatByUserId = function (userId) {
             var self = this;
             var chatRowKey = Object.keys(this.openChats).filter(function (chatRowKey) {
                 var chat = self.openChats[chatRowKey];
                 return chat.users.some(function (u) {
-                    return u.rowKey == userRowKey;
+                    return u.id == userId;
                 });
             });
             if (chatRowKey.length > 0) {
@@ -48,13 +48,13 @@ define([
         };
 
         this.onUserSelected = function (evt, userData) {
-            var chat = this.findChatByUserRowKey(userData.rowKey);
+            var chat = this.findChatByUserId(userData.id);
             if (chat) {
                 return this.createChatWindowAndFocus(chat);
             }
 
             chat = {
-                rowKey: userData.rowKey,
+                rowKey: userData.id,
                 users: [userData]
             };
             this.openChats[chat.rowKey] = chat;
@@ -163,12 +163,12 @@ define([
             };
             this.addMessage(messageData);
 
-            var userRowKeys = chat.users.map(function (u) {
-                return u.rowKey;
+            var userIds = chat.users.map(function (u) {
+                return u.id;
             });
-            userRowKeys.push(currentUser.rowKey);
+            userIds.push(currentUser.id);
 
-            this.chatService.sendChatMessage(userRowKeys, messageData);
+            this.chatService.sendChatMessage(userIds, messageData);
 
             $messageInput.val('');
             $messageInput.focus();

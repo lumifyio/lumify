@@ -4,6 +4,8 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
+import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;
@@ -12,9 +14,14 @@ import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.json.JSONObject;
+import sun.tools.jar.resources.jar;
 
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
@@ -108,8 +115,8 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public Audit auditEntityProperties(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
-                                       String process, String comment, User user) {
+    public Audit auditEntityProperty(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
+                                     String process, String comment, Map<String, Object> metadata, User user) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
@@ -150,6 +157,10 @@ public class AuditRepository extends Repository<Audit> {
         }
         audit.getAuditProperty().setPropertyName(propertyName);
 
+        if (metadata != null || !metadata.isEmpty()) {
+            audit.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString());
+        }
+
         save(audit, user.getModelUserContext());
         return audit;
     }
@@ -174,8 +185,8 @@ public class AuditRepository extends Repository<Audit> {
         return audits;
     }
 
-    public List<Audit> auditRelationshipProperties(AuditAction action, String sourceId, String destId, String propertyName,
-                                                   Object oldValue, Edge edge, String process, String comment, User user) {
+    public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyName,
+                                                 Object oldValue, Edge edge, String process, String comment, User user) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(sourceId, "sourceId cannot be null");
         checkNotNull(sourceId.length() > 0, "sourceId cannot be empty");
@@ -282,7 +293,8 @@ public class AuditRepository extends Repository<Audit> {
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditEntityProperties(AuditAction.UPDATE, oldVertex.getId(), property.getName(), oldPropertyValue, newPropertyValue, process, "", user);
+                    auditEntityProperty(AuditAction.UPDATE, oldVertex.getId(), property.getName(), oldPropertyValue,
+                            newPropertyValue, process, "", property.getMetadata(), user);
                 }
             }
         } else {
@@ -291,8 +303,23 @@ public class AuditRepository extends Repository<Audit> {
                 // TODO handle multi-valued properties
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditEntityProperties(AuditAction.UPDATE, vertex.getId(), property.getName(), null, newPropertyValue, process, "", user);
+                auditEntityProperty(AuditAction.UPDATE, vertex.getId(), property.getName(), null, newPropertyValue, process, "",
+                        property.getMetadata(), user);
             }
         }
+    }
+
+    private JSONObject jsonMetadata (Map<String, Object> metadata) {
+        JSONObject json = new JSONObject();
+        for (String key : metadata.keySet()){
+            if (key.equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
+                json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadata.get(key)).toJson());
+            } else if (key.equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {
+                json.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, ((PropertySourceMetadata) metadata.get(key)).toJson());
+            } else {
+                json.put(key, metadata.get(key));
+            }
+        }
+        return json;
     }
 }

@@ -66,6 +66,6 @@ public class VertexDeletePropertyTest extends RouteTestBase {
 //        assertEquals(AUTHOR, responseProperties.getString(PropertyName.AUTHOR.toString()));
 //        assertEquals(CONCEPT_TYPE, responseProperties.getString(PropertyName.CONCEPT_TYPE.toString()));
 //
-//        verify(mockAuditRepository, times(1)).auditEntityProperties(AuditAction.DELETE.toString(), vertex, PropertyName.TITLE.toString(), "", "", mockUser);
+//        verify(mockAuditRepository, times(1)).auditEntityProperty(AuditAction.DELETE.toString(), vertex, PropertyName.TITLE.toString(), "", "", mockUser);
     }
 }

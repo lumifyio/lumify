@@ -55,10 +55,10 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
     }
 
     private boolean isUserInList(JSONArray users, User user) throws JSONException {
-        String userRowKey = user.getRowKey();
+        String userId = user.getUserId();
         for (int i = 0; i < users.length(); i++) {
-            String userItemRowKey = users.getString(i);
-            if (userItemRowKey.equals(userRowKey)) {
+            String userItemId = users.getString(i);
+            if (userItemId.equals(userId)) {
                 return true;
             }
         }

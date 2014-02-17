@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.user.User;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,12 +24,12 @@ public class AuditCommon extends ColumnFamily {
         super(NAME);
     }
 
-    public String getActorType() {
-        return Value.toString(get(ACTOR_TYPE));
+    public UserType getActorType() {
+        return UserType.valueOf(Value.toString(get(ACTOR_TYPE)));
     }
 
-    public AuditCommon setActorType(String actorType) {
-        set(ACTOR_TYPE, actorType);
+    public AuditCommon setActorType(UserType actorType) {
+        set(ACTOR_TYPE, actorType.toString());
         return this;
     }
 
@@ -78,7 +79,7 @@ public class AuditCommon extends ColumnFamily {
     }
 
     public AuditCommon setUser(User user) {
-        setUserId(user.getRowKey());
+        setUserId(user.getUserId());
         setUserName(user.getUsername());
         setActorType(user.getUserType());
         return this;

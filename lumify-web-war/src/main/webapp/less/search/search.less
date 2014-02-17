@@ -6,15 +6,16 @@ width: 175px;
 
 .navbar-search { 
   text-align: center;
-  width: 100%; 
+  width: auto;
   float: none;
+  margin: 1em;
   .box-sizing(border-box);
+
+  .search-query {
+    margin-bottom: 0.5em;
+  }
 }
 
-.search-query {
-  width: 75%;
-  margin-bottom: 0.5em;
-}
 
 .badge {
   float:right;
@@ -162,29 +163,28 @@ width: 175px;
     &:focus { outline:none; }
   }
 
-  input {
-    //width: auto;
-    width: 100%;
-    min-width: 110px;
-    box-sizing: border-box;
-    padding: 1em 0.5em;
-  }
+  .add-on {
+    padding: 14px 4px;
+    line-height: 0px;
+    .box-sizing(border-box);
 
-  .add-on select {
-    .appearance(none);
-    outline: none;
-    &:focus { outline:none; }
-    background: inherit;
-    border: none;
-    width: auto;
-    margin: 0;
-    padding: 0px 0;
-    height: auto;
-    line-height: inherit;
-    text-shadow: 0 1px 0 #ffffff;
-    color: #333333;
-    position: relative;
-    top: -1px;
+    select {
+      .appearance(none);
+      outline: none;
+      &:focus { outline:none; }
+      background: inherit;
+      border: none;
+      width: auto;
+      height: auto;
+      text-shadow: 0 1px 0 #ffffff;
+      color: #333333;
+      position: relative;
+      top: -13px;
+
+      option {
+        text-shadow: none;
+      }
+    }
   }
 }
 

@@ -1,48 +1,40 @@
 
-define([], function() {
+define([
+    'rangy',
+    'rangy-text'
+], function(
+    rangy,
+    rangyText
+) {
+
+    if (!rangy.initialized) rangy.init();
+
     return {
         expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
-            var expanded = range.cloneRange(),
-                start = expanded.startContainer,
-                startOffset = expanded.startOffset,
-                end = expanded.endContainer,
-                endOffset = expanded.endOffset,
-                beforeRange = start.textContent.substring(0, startOffset),
-                afterRange = end.textContent.substring(endOffset),
-                wordRegex = /[.\s;-]/,
-                wordsBefore = $.trim(beforeRange).split('').reverse().join('') + ' ',
-                wordsAfter = $.trim(afterRange) + ' ',
-                index = 0, 
-                foundIndex = 0;
 
-            for (var i = 0, previousIndex = 0; i < numberWords; i++) {
-                foundIndex = wordsBefore.indexOf(' ', previousIndex);
-                if (~foundIndex) {
-                    index = foundIndex;
-                    previousIndex = foundIndex + 1;
-                }
-            }
+            var e = rangy.createRange();
+            e.setStart(range.startContainer, range.startOffset);
+            e.setEnd(range.endContainer, range.endOffset);
 
-            expanded.setStart(start, startOffset - index - 1);
+            // Move range start to include n more of words
+            e.moveStart('word', -numberWords);
+
+            // Move range end to include n more words
+            e.moveEnd('word', numberWords);
+
+            // Calculate what we just included and send that back
             if (splitBeforeAfterOutput) {
-                splitBeforeAfterOutput.before = wordsBefore.substring(0, index).split('').reverse().join('');
+                var output = rangy.createRange();
+                output.setStart(e.startContainer, e.startOffset);
+                output.setEnd(range.startContainer, range.startOffset);
+                splitBeforeAfterOutput.before = output.text();
+
+                output.setStart(range.endContainer, range.endOffset);
+                output.setEnd(e.endContainer, e.endOffset);
+                splitBeforeAfterOutput.after = output.text();
             }
 
-            index = 0;
-            for (i = 0, previousIndex = 0; i < numberWords; i++) {
-                foundIndex = wordsAfter.indexOf(' ', previousIndex);
-                if (~foundIndex) {
-                    index = foundIndex;
-                    previousIndex = foundIndex + 1;
-                }
-            }
-
-            expanded.setEnd(end, endOffset + index + 1);
-            if (splitBeforeAfterOutput) {
-                splitBeforeAfterOutput.after = wordsAfter.substring(0, index);
-            }
-
-            return expanded;
+            return e;
         }
     };
 });

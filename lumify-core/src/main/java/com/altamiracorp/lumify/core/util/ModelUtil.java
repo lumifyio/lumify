@@ -5,7 +5,6 @@ import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
-import com.altamiracorp.lumify.core.model.user.UserRow;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
@@ -20,7 +19,6 @@ public class ModelUtil {
             Workspace.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
             VideoFrame.TABLE_NAME,
-            UserRow.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
             // TODO refactor to config file info. But since this is only for development this is low priority

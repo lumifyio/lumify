@@ -51,7 +51,6 @@ html.fullscreenDetails {
   }
 }
 
-
 .above-graph(@extra:1) {
   z-index: @graph-zIndex + @extra;
 }
@@ -221,6 +220,17 @@ a {
   cursor: pointer;
 }
 
+
+// Fix for firefox when using box-sizing (can't see text otherwise)
+body {
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  .input-block-level;
+ }
+}
+.navbar-search .search-query {
+  .input-block-level;
+}
+
 .ui-draggable-dragging {
   .opacity(100);
   .scale(1.0);
@@ -239,3 +249,5 @@ a {
 }
 
 @import "util/badge-loading.less";
+
+

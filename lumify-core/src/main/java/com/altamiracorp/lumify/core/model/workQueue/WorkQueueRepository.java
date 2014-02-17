@@ -16,20 +16,20 @@ public abstract class WorkQueueRepository {
 
     public static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
 
-    public static final String ARTIFACT_HIGHLIGHT_QUEUE_NAME = "artifactHighlight";
-    public static final String USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME = "userArtifactHighlight";
+    public static final String TEXT_HIGHLIGHT_QUEUE_NAME = "textHighlight";
+    public static final String USER_TEXT_HIGHLIGHT_QUEUE_NAME = "userTextHighlight";
     public static final String USER_IMAGE_QUEUE_NAME = "userImage";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
     public static final String DOCUMENT_QUEUE_NAME = "document";
 
-    public void pushArtifactHighlight(final String artifactGraphVertexId) {
-        pushArtifactHighlight(artifactGraphVertexId, FlushFlag.DEFAULT);
+    public void pushTextHighlight(final String artifactGraphVertexId) {
+        pushTextHighlight(artifactGraphVertexId, FlushFlag.DEFAULT);
     }
 
-    public void pushArtifactHighlight(final String artifactGraphVertexId, FlushFlag flushFlag) {
+    public void pushTextHighlight(final String artifactGraphVertexId, FlushFlag flushFlag) {
         checkNotNull(artifactGraphVertexId);
-        writeToQueue(ARTIFACT_HIGHLIGHT_QUEUE_NAME, flushFlag, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
+        writeToQueue(TEXT_HIGHLIGHT_QUEUE_NAME, flushFlag, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
     public void pushText(final String artifactGraphVertexId) {
@@ -42,9 +42,9 @@ public abstract class WorkQueueRepository {
         writeToQueue(PROCESSED_VIDEO_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId.toString()));
     }
 
-    public void pushUserArtifactHighlight(final String artifactGraphVertexId) {
+    public void pushUserTextHighlight(final String artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
-        writeToQueue(USER_ARTIFACT_HIGHLIGHT_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
+        writeToQueue(USER_TEXT_HIGHLIGHT_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
     public void pushUserImageQueue(final String graphVertexId) {

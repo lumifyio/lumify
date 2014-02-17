@@ -12,7 +12,7 @@
     "grunt": "~0.4.1",
     "grunt-bower-task": "~0.3.4",
     "grunt-exec": "~0.4.2",
-    "karma": "0.10.1",
+    "karma": "~0.10.9",
     "karma-chrome-launcher": "0.1.0",
     "karma-coffee-preprocessor": "0.1.0",
     "karma-coverage": "0.1.0",

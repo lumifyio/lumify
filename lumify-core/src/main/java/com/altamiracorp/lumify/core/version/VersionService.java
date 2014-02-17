@@ -19,13 +19,17 @@ package com.altamiracorp.lumify.core.version;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Singleton;
-
-import javax.management.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
 
 /**
  * This implementation of the LumifyVersionService loads its configuration
@@ -40,22 +44,22 @@ public class VersionService implements VersionServiceMXBean {
     /**
      * The name of the properties file to read.
      */
-    private static final String LUMIFY_BUILD_PROPERTIES = "lumify-build.properties";
+    private static final String LUMIFY_BUILD_PROPERTIES = "META-INF/lumify/lumify-core-build.properties";
 
     /**
      * The Lumify version property.
      */
-    private static final String LUMIFY_VERSION_PROPERTY = "lumify.version";
+    private static final String LUMIFY_VERSION_PROPERTY = "project.version";
 
     /**
      * The SCM build number property.
      */
-    private static final String SCM_BUILD_NUMBER_PROPERTY = "lumify.buildNumber";
+    private static final String SCM_BUILD_NUMBER_PROPERTY = "project.scm.revision";
 
     /**
      * The build timestamp property.
      */
-    private static final String BUILD_TIME_PROPERTY = "lumify.buildTime";
+    private static final String BUILD_TIME_PROPERTY = "build.timestamp";
 
     /**
      * The Lumify version.

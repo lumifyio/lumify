@@ -15,8 +15,8 @@ import com.google.inject.Inject;
 import java.io.ByteArrayInputStream;
 import org.json.JSONObject;
 
-public class ArtifactHighlightingBolt extends BaseTextProcessingBolt {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightingBolt.class);
+public class TextHighlightingBolt extends BaseTextProcessingBolt {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(TextHighlightingBolt.class);
     private TermMentionRepository termMentionRepository;
     private EntityHighlighter entityHighlighter;
 
