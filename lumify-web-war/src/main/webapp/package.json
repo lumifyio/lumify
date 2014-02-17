@@ -30,7 +30,7 @@
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-notify": "~0.2.17",
     "grunt-concurrent": "~0.4.3",
-    "grunt-mocha-selenium": "0.7.0",
+    "grunt-mocha-selenium": "git://github.com/jharwig/grunt-mocha-selenium",
     "grunt-karma": "~0.6.2"
   },
   "scripts": {
