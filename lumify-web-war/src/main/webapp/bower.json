@@ -2,7 +2,7 @@
   "name": "lumify",
   "version": "0.0.1",
   "dependencies": {
-    "bootstrap": "http://getbootstrap.com/2.3.2/assets/bootstrap.zip",
+    "bootstrap": "git://github.com/twbs/bootstrap.git#2.3.2",
     "bootstrap-datepicker": "~1.2.0",
     "color-js": "~1.0.1",
     "cytoscape.js": "git://github.com/altamiracorp/cytoscape.js.git#6d7bb93fbd4956da6d632ba4fa90f8d421bc9a1f",
@@ -27,9 +27,6 @@
     "PathFinding.js": "*",
     "requirejs-plugins": "~1.0.2",
     "rangy-1.3": "*"
-  },
-  "resolutions": {
-    "bootstrap": "*"
   },
   "devDependencies": {
     "sinon": "~1.7.1",
