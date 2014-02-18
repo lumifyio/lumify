@@ -1,44 +1,54 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
-
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
+import java.io.InputStream;
+
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.RAW_POSTER_FRAME;
 
 public class ArtifactPosterFrame extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactPosterFrame.class);
     private final Graph graph;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    public ArtifactPosterFrame(final Graph graph, final ArtifactThumbnailRepository artifactThumbnailRepository) {
+    public ArtifactPosterFrame(
+            final Graph graph,
+            final ArtifactThumbnailRepository artifactThumbnailRepository,
+            final UserRepository userRepository) {
         this.graph = graph;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
         String widthStr = getOptionalParameter(request, "width");
         int[] boundaryDims = new int[]{200, 200};
 
-        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);

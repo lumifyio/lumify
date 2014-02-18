@@ -3,9 +3,11 @@ package com.altamiracorp.lumify.web.routes.vertex;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -18,12 +20,18 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    public VertexRelationshipRemoval(final Graph graph, final AuditRepository auditRepository, final OntologyRepository ontologyRepository) {
+    public VertexRelationshipRemoval(
+            final Graph graph,
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository) {
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,10 +42,12 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
-        Vertex sourceVertex = graph.getVertex(sourceId, user.getAuthorizations());
-        Vertex destVertex = graph.getVertex(targetId, user.getAuthorizations());
+        Authorizations authorizations = userRepository.getAuthorizations(user);
 
-        graph.removeEdge(edgeId, user.getAuthorizations());
+        Vertex sourceVertex = graph.getVertex(sourceId, authorizations);
+        Vertex destVertex = graph.getVertex(targetId, authorizations);
+
+        graph.removeEdge(edgeId, authorizations);
 
         String displayName = ontologyRepository.getDisplayNameForLabel(label);
         // TODO: replace "" when we implement commenting on ui

@@ -2,10 +2,12 @@ package com.altamiracorp.lumify.web.routes.graph;
 
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Direction;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -23,12 +25,14 @@ import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperti
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;
+    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphRelatedVertices(final OntologyRepository ontologyRepo, final Graph graph) {
+    public GraphRelatedVertices(final OntologyRepository ontologyRepo, final Graph graph, final UserRepository userRepository) {
         ontologyRepository = ontologyRepo;
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         long maxVerticesToReturn = getOptionalParameterLong(request, "maxVerticesToReturn", 250);
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         Set<String> limitConceptIds = new HashSet<String>();
 
         if (limitParentConceptId != null) {
@@ -50,8 +56,8 @@ public class GraphRelatedVertices extends BaseRequestHandler {
             }
         }
 
-        Iterable<Vertex> vertices = graph.getVertex(graphVertexId, user.getAuthorizations())
-                .getVertices(Direction.BOTH, user.getAuthorizations());
+        Iterable<Vertex> vertices = graph.getVertex(graphVertexId, authorizations)
+                .getVertices(Direction.BOTH, authorizations);
 
         JSONObject json = new JSONObject();
         JSONArray verticesJson = new JSONArray();

@@ -11,7 +11,7 @@ public class AccumuloAuthorizationBuilder implements AuthorizationBuilder, Seria
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Authorizations create(Set<String> authorizationsArray) {
-        return new AccumuloAuthorizations(Iterables.toArray(authorizationsArray, String.class));
+    public Authorizations create(Set<String> authorizations) {
+        return new AccumuloAuthorizations(Iterables.toArray(authorizations, String.class));
     }
 }

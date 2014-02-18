@@ -1,28 +1,30 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
-
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
 import com.altamiracorp.securegraph.query.Predicate;
 import com.altamiracorp.securegraph.query.Query;
-import com.altamiracorp.securegraph.query.TextPredicate;
 import com.google.inject.Inject;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexSearch extends BaseRequestHandler {
     //TODO should we limit to 10000??
@@ -30,12 +32,17 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
+    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphVertexSearch(final OntologyRepository ontologyRepo, final Graph graph) {
-        ontologyRepository = ontologyRepo;
+    public GraphVertexSearch(
+            final OntologyRepository ontologyRepository,
+            final Graph graph,
+            final UserRepository userRepository) {
+        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -56,6 +63,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
         long startTime = System.nanoTime();
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         JSONArray filterJson = new JSONArray(filter);
 
         ontologyRepository.resolvePropertyIds(filterJson);
@@ -64,11 +73,11 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         Query graphQuery = null;
         if (relatedToVertexId == null) {
-            graphQuery = graph.query(query, user.getAuthorizations());
+            graphQuery = graph.query(query, authorizations);
         } else if (query == null || StringUtils.isBlank(query)) {
-            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(user.getAuthorizations());
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(authorizations);
         } else {
-            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(query, user.getAuthorizations());
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(query, authorizations);
         }
 
         for (int i = 0; i < filterJson.length(); i++) {

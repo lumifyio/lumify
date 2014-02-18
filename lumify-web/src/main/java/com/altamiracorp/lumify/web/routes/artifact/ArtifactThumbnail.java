@@ -1,35 +1,41 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.RAW;
-
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import java.io.InputStream;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.RAW;
 
 public class ArtifactThumbnail extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactThumbnail.class);
 
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
     private final Graph graph;
+    private final UserRepository userRepository;
 
     @Inject
     public ArtifactThumbnail(
             final ArtifactThumbnailRepository thumbnailRepo,
-            final Graph graph) {
+            final Graph graph,
+            final UserRepository userRepository) {
         artifactThumbnailRepository = thumbnailRepo;
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     public static String getUrl(Object graphVertexId) {
@@ -39,9 +45,11 @@ public class ArtifactThumbnail extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);

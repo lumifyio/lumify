@@ -1,21 +1,23 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
 import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,10 +27,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
 
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ArtifactRaw extends BaseRequestHandler {
@@ -40,10 +41,14 @@ public class ArtifactRaw extends BaseRequestHandler {
     )));
 
     private final Graph graph;
+    private final UserRepository userRepository;
 
     @Inject
-    public ArtifactRaw(final Graph graph) {
+    public ArtifactRaw(
+            final Graph graph,
+            final UserRepository userRepository) {
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,9 +57,11 @@ public class ArtifactRaw extends BaseRequestHandler {
         boolean videoPlayback = getOptionalParameter(request, "playback") != null;
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);
@@ -123,7 +130,7 @@ public class ArtifactRaw extends BaseRequestHandler {
 
             StreamingPropertyValue videoPropertyValue = videoProperty.getPropertyValue(artifactVertex);
             checkNotNull(videoPropertyValue, String.format("Could not find video property %s on artifact %s", videoProperty.getKey(),
-                        artifactVertex.getId()));
+                    artifactVertex.getId()));
             in = videoPropertyValue.getInputStream();
 
             totalLength = videoSizeProperty.getPropertyValue(artifactVertex);
