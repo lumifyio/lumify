@@ -40,6 +40,8 @@ public class WorkspaceRepository {
         this.graph = graph;
         this.userRepository = userRepository;
 
+        userRepository.addAuthorizationToGraph(VISIBILITY_STRING);
+
         Concept entityConcept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY);
 
         Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_NAME, "workspace");
