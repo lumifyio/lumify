@@ -865,8 +865,6 @@ define([
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
                     var vertex = cyEdge.data('vertex');
                     vertices.push(vertex)
-                    }
-                    vertices.push(properties)
                 }
             });
 
