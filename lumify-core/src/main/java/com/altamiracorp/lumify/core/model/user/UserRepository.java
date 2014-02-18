@@ -18,10 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
@@ -34,10 +31,12 @@ public class UserRepository {
     private final Graph graph;
     private final String userConceptId;
     private final com.altamiracorp.securegraph.Authorizations authorizations;
+    private final AuthorizationBuilder authorizationBuilder;
 
     @Inject
     public UserRepository(final Graph graph, final OntologyRepository ontologyRepository, final AuthorizationBuilder authorizationBuilder) {
         this.graph = graph;
+        this.authorizationBuilder = authorizationBuilder;
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();
@@ -180,6 +179,9 @@ public class UserRepository {
     }
 
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        throw new RuntimeException("TODO");
+        Vertex userVertex = findById(user.getUserId());
+        Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(userVertex);
+        Collections.addAll(authorizationsSet, additionalAuthorizations);
+        return authorizationBuilder.create(authorizationsSet);
     }
 }
