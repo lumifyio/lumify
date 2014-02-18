@@ -144,10 +144,21 @@ public class UserRepository {
         if (authorizations.contains(auth)) {
             return;
         }
+        authorizations.add(auth);
 
         addAuthorizationToGraph(auth);
 
-        authorizations.add(auth);
+        String authorizationsString = StringUtils.join(authorizations, ",");
+        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
+        graph.flush();
+    }
+
+    public void removeAuthorization(Vertex userVertex, String auth) {
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        if (!authorizations.contains(auth)) {
+            return;
+        }
+        authorizations.remove(auth);
         String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
         graph.flush();
@@ -170,6 +181,37 @@ public class UserRepository {
                         newAuthorizationsArray.add(currentAuth);
                     }
                     newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
+                    Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
+                    accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
+                } catch (Exception ex) {
+                    throw new RuntimeException("Could not update authorizations in accumulo", ex);
+                }
+            } else {
+                throw new RuntimeException("graph type not supported to add authorizations.");
+            }
+        }
+    }
+
+    public void removeAuthorizationFromGraph(String auth) {
+        // TODO this code should be moved out of UserRepository
+        // TODO this code is not safe across a cluster since it is not atomic. One possibility is to create a table of authorizations and always read/write from that table.
+        synchronized (graph) {
+            if (graph instanceof AccumuloGraph) {
+                try {
+                    AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
+                    String principal = accumuloGraph.getConnector().whoami();
+                    Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
+                    if (!currentAuthorizations.contains(auth)) {
+                        return;
+                    }
+                    byte[] authBytes = auth.getBytes(Constants.UTF8);
+                    List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
+                    for (byte[] currentAuth : currentAuthorizations) {
+                        if (Arrays.equals(currentAuth, authBytes)) {
+                            continue;
+                        }
+                        newAuthorizationsArray.add(currentAuth);
+                    }
                     Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
                     accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
                 } catch (Exception ex) {
