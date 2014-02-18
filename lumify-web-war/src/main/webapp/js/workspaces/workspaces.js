@@ -239,8 +239,7 @@ define([
             }
 
             var text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
-                people = (row.permissions && row.permissions.length) ||
-                        (row.users && row.users.length) || 0;
+                people = (row.users && row.users.length) || 0;
 
             if (people === 1) {
                 row.sharingSubtitle = text + ' 1 person';

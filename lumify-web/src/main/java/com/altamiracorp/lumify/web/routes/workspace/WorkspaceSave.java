@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
@@ -13,12 +12,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WorkspaceSave extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceSave.class);
@@ -63,7 +59,7 @@ public class WorkspaceSave extends BaseRequestHandler {
             JSONArray userList = new JSONArray(users);
             String userId = user.getId().toString();
 
-            if (hasWritePermissions(userId, workspace)) {
+            if (workspace.hasWritePermissions(userId)) {
                 updateUserList(workspace, userList, authUser);
             }
         }
@@ -97,17 +93,5 @@ public class WorkspaceSave extends BaseRequestHandler {
 //                }
 //            }
 //        }
-    }
-
-    private boolean hasWritePermissions(String user, Workspace workspace) {
-        throw new RuntimeException("TODO workspace");
-//        if (workspace.get(WorkspacePermissions.NAME) != null && workspace.get(WorkspacePermissions.NAME).get(user) != null) {
-//            JSONObject permissions = new JSONObject(workspace.get(WorkspacePermissions.NAME).get(user).toString());
-//            if (permissions.length() > 0 && permissions.getBoolean("edit")) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
     }
 }
