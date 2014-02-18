@@ -660,7 +660,7 @@ define([
                                 .pluck('id')
                                 .value(),
                         end = colorjs('#0088cc').shiftHue(i * (360 / paths.length)).toCSSHex(),
-                        lastNode = cy.getElementById(sourceId),
+                        lastNode = cy.getElementById(vertexId(sourceId)),
                         count = 0,
                         existingOrNewEdgeBetween = function(node1, node2, count) {
                             var edge = node1.edgesWith(node2);

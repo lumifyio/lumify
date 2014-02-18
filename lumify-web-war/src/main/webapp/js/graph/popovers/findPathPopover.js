@@ -61,6 +61,10 @@ define([
                 dest = this.attr.targetVertexId;
 
             this.findPathRequest = this.findPath(src, dest)
+                .fail(function() {
+                    self.popover.find('span.path').text('Server returned an error finding paths');
+                    self.positionDialog();
+                })
                 .done(function(result) {
 
                     var paths = result.paths,
