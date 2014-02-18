@@ -29,6 +29,7 @@ define(
 
         UserService.prototype.logout = function() {
             try {
+                this.clearLocalStorage();
                 this.disconnect();
             } catch(e) {
                 console.log('Unable to disconnect socket', e);
@@ -58,6 +59,16 @@ define(
             return this._ajaxGet({
                 url: '/user'
             });
+        };
+
+        UserService.prototype.clearLocalStorage = function() {
+            if (window.localStorage) {
+                _.keys(localStorage).forEach(function(key) {
+                    if (/^SESSION_/.test(key)) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            }
         };
 
         return UserService;
