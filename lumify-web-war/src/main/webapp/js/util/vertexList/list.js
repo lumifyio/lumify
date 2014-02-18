@@ -267,7 +267,7 @@ define([
 
                         li.data('previewloaded', true).addClass('preview-loading');
 
-                        if (vertex.properties._glyphIcon.value) {
+                        if (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) {
                             li.removeClass('preview-loading')
                                 .data('preview-loaded', true)
                                 .find('.preview').html("<img src='" + vertex.properties._glyphIcon.value + "' />");

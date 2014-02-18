@@ -80,25 +80,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${plugin.maven.exec.version}</version>
-                <executions>
-                    <!-- Install all webapp dependencies -->
-                    <execution>
-                        <id>WebApp Dependencies and Minification</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${basedir}/src/main/scripts/grunt.sh</executable>
-                            <commandlineArgs>${grunt.target}</commandlineArgs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -152,6 +133,60 @@
                         </configuration>
                     </plugin>
                 </plugins>
+            </build>
+        </profile>
+        <profile>
+          <id>grunt windows</id>
+          <activation><os><family>windows</family></os></activation>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${plugin.maven.exec.version}</version>
+                <executions>
+                  <!-- Install all webapp dependencies -->
+                  <execution>
+                    <id>WebApp Dependencies and Minification</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                      <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                      <executable>cmd</executable>
+                      <commandlineArgs>/c "${basedir}/src/main/scripts/grunt.bat" ${grunt.target}</commandlineArgs>
+                    </configuration>
+                  </execution>
+                </executions>
+              </plugin>
+            </plugins>
+          </build>
+        </profile>
+        <profile>
+          <id>grunt unix</id>
+          <activation><os><family>!windows</family></os></activation>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${plugin.maven.exec.version}</version>
+                <executions>
+                  <!-- Install all webapp dependencies -->
+                  <execution>
+                    <id>WebApp Dependencies and Minification</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                      <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                      <executable>${basedir}/src/main/scripts/grunt.sh</executable>
+                      <commandlineArgs>${grunt.target}</commandlineArgs>
+                    </configuration>
+                  </execution>
+                </executions>
+              </plugin>
+            </plugins>
             </build>
         </profile>
     </profiles>
