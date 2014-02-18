@@ -38,6 +38,8 @@ public class UserRepository {
         this.graph = graph;
         this.authorizationBuilder = authorizationBuilder;
 
+        addAuthorizationToGraph(VISIBILITY_STRING);
+
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();
 
@@ -150,7 +152,7 @@ public class UserRepository {
         graph.flush();
     }
 
-    protected void addAuthorizationToGraph(String auth) {
+    public void addAuthorizationToGraph(String auth) {
         // TODO this code should be moved out of UserRepository
         // TODO this code is not safe across a cluster since it is not atomic. One possibility is to create a table of authorizations and always read/write from that table.
         synchronized (graph) {
