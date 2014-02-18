@@ -21,7 +21,7 @@ define(
                 var cachedFunction = self[f],
                     hashFunction = self[f].memoizeHashFunction;
                 self[f] = function() {
-                    var key = hashFunction.apply(self, arguments),
+                    var key = hashFunction ? hashFunction.apply(self, arguments) : arguments[0],
                         result = memoizedMap[key];
 
                     if (result && result.statusText != 'abort') {
