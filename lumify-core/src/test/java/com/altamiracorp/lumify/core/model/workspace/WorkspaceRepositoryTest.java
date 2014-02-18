@@ -30,7 +30,7 @@ public class WorkspaceRepositoryTest {
         MockitoAnnotations.initMocks(this);
 
         session = new MockSession();
-        ModelUtil.initializeTables(session,user);
+        ModelUtil.initializeTables(session, user);
         workspaceRepository = new WorkspaceRepository(session);
     }
 
@@ -78,7 +78,7 @@ public class WorkspaceRepositoryTest {
                 new ColumnFamily("testExtraColumnFamily")
                         .set("testExtraColumn", "testExtraValue"));
 
-        workspaceRepository.save(workspace, user.getModelUserContext());
+        workspaceRepository.save(workspace);
 
         assertEquals(1, session.tables.get(Workspace.TABLE_NAME).size());
         Row row = session.tables.get(Workspace.TABLE_NAME).get(0);
