@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.workspace;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,7 +13,7 @@ public class Workspace {
     private final Vertex workspaceVertex;
     private final User user;
     private final WorkspaceRepository workspaceRepository;
-    private List<Vertex> users;
+    private List<WorkspaceUser> users;
 
     Workspace(Vertex workspaceVertex, WorkspaceRepository workspaceRepository, User user) {
         this.workspaceVertex = workspaceVertex;
@@ -20,44 +21,42 @@ public class Workspace {
         this.user = user;
     }
 
-    public JSONObject toJson(boolean includeReferences) {
+    public JSONObject toJson(boolean includeVertices) {
         try {
             ensureUsersLoaded();
+            boolean hasWritePermissions = hasWritePermissions(user.getUserId());
 
             JSONObject workspaceJson = new JSONObject();
             workspaceJson.put("workspaceId", getId());
             workspaceJson.put("title", getTitle());
             workspaceJson.put("createdBy", getCreatorUserId());
             workspaceJson.put("isSharedToUser", !getCreatorUserId().equals(user.getUserId()));
+            workspaceJson.put("isEditable", hasWritePermissions);
 
-            Boolean hasEdit = false;
+            JSONArray usersJson = new JSONArray();
+            for (WorkspaceUser user : users) {
+                String userId = user.getUserId();
+                JSONObject userJson = new JSONObject();
+                userJson.put("userId", userId);
+                userJson.put("access", user.getWorkspaceAccess().toString().toLowerCase());
+                usersJson.put(userJson);
+            }
+            workspaceJson.put("users", usersJson);
 
-            if (getCreatorUserId().equals(user.getUserId())) {
-                hasEdit = true;
+            if (includeVertices) {
+                List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(this, user);
+                JSONObject entitiesJson = new JSONObject();
+                for (WorkspaceEntity workspaceEntity : workspaceEntities) {
+                    JSONObject workspaceEntityJson = new JSONObject();
+                    JSONObject graphPositionJson = new JSONObject();
+                    graphPositionJson.put("x", workspaceEntity.getGraphPositionX());
+                    graphPositionJson.put("y", workspaceEntity.getGraphPositionY());
+                    workspaceEntityJson.put("graphPosition", graphPositionJson);
+                    entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
+                }
+                workspaceJson.put("entities", entitiesJson);
             }
 
-            // TODO send back permissions
-//            JSONArray permissions = new JSONArray();
-//            if (get(WorkspacePermissions.NAME) != null) {
-//                for (Column col : get(WorkspacePermissions.NAME).getColumns()) {
-//                    String userId = col.getName();
-//                    JSONObject users = new JSONObject();
-//                    JSONObject userPermissions = Value.toJson(col.getValue());
-//                    users.put("user", userId);
-//                    users.put("userPermissions", userPermissions);
-//                    permissions.put(users);
-//                    if (userId.equals(user.getUserId())) {
-//                        if (userPermissions.getBoolean("edit")) {
-//                            hasEdit = true;
-//                        }
-//                        hasAccess = true;
-//                    }
-//                }
-//
-//                workspaceJson.put("permissions", permissions);
-//            }
-
-            workspaceJson.put("isEditable", hasEdit);
             return workspaceJson;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -76,10 +75,12 @@ public class Workspace {
 
     public String getCreatorUserId() {
         ensureUsersLoaded();
-        if (this.users.size() == 0) {
-            throw new RuntimeException("Invalid number of users found. Expected greater than 0 users.");
+        for (WorkspaceUser user : users) {
+            if (user.isCreator()) {
+                return user.getUserId();
+            }
         }
-        return this.users.get(0).getId().toString();
+        return null;
     }
 
     public String getTitle() {
@@ -97,5 +98,15 @@ public class Workspace {
                 return new Workspace(vertex, workspaceRepository, user);
             }
         };
+    }
+
+    public boolean hasWritePermissions(String userId) {
+        ensureUsersLoaded();
+        for (WorkspaceUser user : users) {
+            if (user.getUserId().equals(userId)) {
+                return user.getWorkspaceAccess() == WorkspaceAccess.WRITE;
+            }
+        }
+        return false;
     }
 }

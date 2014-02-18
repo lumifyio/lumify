@@ -39,6 +39,7 @@ public class UserRepository {
         this.authorizationBuilder = authorizationBuilder;
 
         addAuthorizationToGraph(VISIBILITY_STRING);
+        addAuthorizationToGraph(OntologyRepository.VISIBILITY_STRING); // This can't be moved to the OntologyRepository because it would create an injection circular dependency
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();

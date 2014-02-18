@@ -12,8 +12,6 @@ import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
@@ -80,7 +78,8 @@ public class WorkspaceRepository {
 
         visibility = new Visibility(VISIBILITY_STRING);
         EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, visibility, authorizations);
-        WorkspaceLumifyProperties.WORKSPACE_TO_USER.setProperty(edgeBuilder, true, visibility);
+        WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, visibility);
+        WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, WorkspaceAccess.WRITE.toString(), visibility);
         edgeBuilder.save();
 
         userRepository.addAuthorization(userVertex, workspaceId);
@@ -103,31 +102,39 @@ public class WorkspaceRepository {
         graph.flush();
     }
 
-    /**
-     * The first user will be the creator.
-     */
-    public List<Vertex> findUsersWithAccess(final Workspace workspace, final User user) {
+    public List<WorkspaceUser> findUsersWithAccess(final Workspace workspace, final User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        List<Edge> userEdges = toList(workspace.getVertex().query(authorizations).edges(workspaceToUserRelationshipId));
-        Collections.sort(userEdges, new Comparator<Edge>() {
+        Iterable<Edge> userEdges = workspace.getVertex().query(authorizations).edges(workspaceToUserRelationshipId);
+        return toList(new ConvertingIterable<Edge, WorkspaceUser>(userEdges) {
             @Override
-            public int compare(Edge o1, Edge o2) {
-                Boolean isCreator1 = WorkspaceLumifyProperties.WORKSPACE_TO_USER.getPropertyValue(o1);
-                if (isCreator1 != null && isCreator1) {
-                    return -1;
+            protected WorkspaceUser convert(Edge edge) {
+                String userId = edge.getOtherVertexId(workspace.getVertex().getId()).toString();
+
+                String accessString = WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.getPropertyValue(edge);
+                WorkspaceAccess workspaceAccess = WorkspaceAccess.NONE;
+                if (accessString != null && accessString.length() > 0) {
+                    workspaceAccess = WorkspaceAccess.valueOf(accessString);
                 }
-                Boolean isCreator2 = WorkspaceLumifyProperties.WORKSPACE_TO_USER.getPropertyValue(o2);
-                if (isCreator2 != null && isCreator2) {
-                    return 1;
-                }
-                return 0;
+
+                boolean isCreator = WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.getPropertyValue(edge, false);
+
+                return new WorkspaceUser(userId, workspaceAccess, isCreator);
             }
         });
-        return toList(new ConvertingIterable<Edge, Vertex>(userEdges) {
+    }
+
+    public List<WorkspaceEntity> findEntities(final Workspace workspace, User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Iterable<Edge> entityEdges = workspace.getVertex().query(authorizations).edges(workspaceToEntityRelationshipId);
+        return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
             @Override
-            protected Vertex convert(Edge edge) {
-                String userId = edge.getOtherVertexId(workspace.getVertex().getId()).toString();
-                return userRepository.findById(userId);
+            protected WorkspaceEntity convert(Edge edge) {
+                Object entityVertexId = edge.getOtherVertexId(workspace.getVertex().getId());
+
+                int graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge, 0);
+                int graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge, 0);
+
+                return new WorkspaceEntity(entityVertexId, graphPositionX, graphPositionY);
             }
         });
     }

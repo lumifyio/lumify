@@ -41,11 +41,8 @@ public class OntologyRepository {
     @Inject
     public OntologyRepository(
             Graph graph,
-            AuthorizationBuilder authorizationBuilder,
-            UserRepository userRepository) {
+            AuthorizationBuilder authorizationBuilder) {
         this.graph = graph;
-
-        userRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
