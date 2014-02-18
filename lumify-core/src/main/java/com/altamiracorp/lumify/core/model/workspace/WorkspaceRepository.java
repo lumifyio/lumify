@@ -150,28 +150,19 @@ public class WorkspaceRepository {
         });
     }
 
-    public Workspace copy(Workspace workspace, User authUser) {
-        throw new RuntimeException("TODO workspace");
-//        Workspace originalWorkspace = workspaceRepository.findByRowKey(originalRowKey, authUser.getModelUserContext());
-//        Workspace workspace = createNewWorkspace(originalWorkspace.getMetadata().getTitle(), user);
-//
-//        if (originalWorkspace.getContent().getData() != null) {
-//            workspace.getContent().setData(originalWorkspace.getContent().getData());
-//        }
-//
-//        workspaceRepository.save(workspace, authUser.getModelUserContext());
+    public Workspace copy(Workspace workspace, User user) {
+        Workspace newWorkspace = add("Copy of" + workspace.getTitle(), user);
 
-//        public Workspace createNewWorkspace(String title, Vertex user) {
-//            WorkspaceRowKey workspaceRowKey = new WorkspaceRowKey(
-//                    user.getId().toString(), String.valueOf(System.currentTimeMillis()));
-//            Workspace workspace = new Workspace(workspaceRowKey);
-//
-//            workspace.getMetadata().setTitle("Copy of " + title);
-//            workspace.getMetadata().setCreator(user.getId().toString());
-//
-//            return workspace;
-//        }
+        List<WorkspaceEntity> entities = findEntities(workspace, user);
+        for (WorkspaceEntity entity : entities) {
+            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
+        }
 
+        // TODO should we copy users?
+
+        graph.flush();
+
+        return newWorkspace;
     }
 
     public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
