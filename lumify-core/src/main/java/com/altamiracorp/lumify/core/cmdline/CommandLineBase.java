@@ -5,21 +5,19 @@ import com.altamiracorp.lumify.core.FrameworkUtils;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Authorizations;
 import com.google.inject.Inject;
-import java.io.File;
-import java.net.URI;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.log4j.xml.DOMConfigurator;
+
+import java.io.File;
+import java.net.URI;
 
 public abstract class CommandLineBase {
     protected LumifyLogger LOGGER;
@@ -28,6 +26,9 @@ public abstract class CommandLineBase {
     private boolean willExit = false;
     protected boolean initFramework = true;
     private UserProvider userProvider;
+    private UserRepository userRepository;
+    private Authorizations authorizations;
+    private User user;
 
     public int run(String[] args) throws Exception {
         ensureLoggerInitialized();
@@ -146,11 +147,26 @@ public abstract class CommandLineBase {
     }
 
     protected User getUser() {
-        return this.userProvider.getSystemUser();
+        if (this.user == null) {
+            this.user = this.userProvider.getSystemUser();
+        }
+        return this.user;
+    }
+
+    protected Authorizations getAuthorizations() {
+        if (this.authorizations == null) {
+            this.authorizations = this.userRepository.getAuthorizations(getUser());
+        }
+        return this.authorizations;
     }
 
     protected boolean willExit() {
         return willExit;
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Inject

@@ -53,13 +53,13 @@ public class WorkspaceRepository {
     }
 
     public void delete(Workspace workspace, User user) {
-        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         graph.removeVertex(workspace.getVertex(), authorizations);
         graph.flush();
     }
 
     public Workspace findById(String workspaceId, User user) {
-        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspaceId);
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, authorizations);
         return new Workspace(workspaceVertex, this, user);
     }
@@ -70,7 +70,7 @@ public class WorkspaceRepository {
 
         String workspaceId = "WORKSPACE_" + graph.getIdGenerator().nextId();
         Visibility visibility = getVisibility(workspaceId);
-        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspaceId);
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, authorizations);
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, visibility);
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, visibility);
@@ -80,7 +80,7 @@ public class WorkspaceRepository {
         WorkspaceLumifyProperties.WORKSPACE_TO_USER.setProperty(edgeBuilder, true, visibility);
         edgeBuilder.save();
 
-        userRepository.addAuthorization(user, userVertex, workspaceId);
+        userRepository.addAuthorization(userVertex, workspaceId);
 
         graph.flush();
         return new Workspace(workspaceVertex, this, user);
@@ -91,7 +91,7 @@ public class WorkspaceRepository {
     }
 
     public Iterable<Workspace> findAll(User user) {
-        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING);
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Iterable<Vertex> vertices = graph.query(authorizations)
                 .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), workspaceConceptId)
                 .vertices();
@@ -108,7 +108,7 @@ public class WorkspaceRepository {
      * The first user will be the creator.
      */
     public List<Vertex> findUsersWithAccess(final Workspace workspace, final User user) {
-        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         List<Edge> userEdges = toList(workspace.getVertex().query(authorizations).edges(workspaceToUserRelationshipId));
         Collections.sort(userEdges, new Comparator<Edge>() {
             @Override

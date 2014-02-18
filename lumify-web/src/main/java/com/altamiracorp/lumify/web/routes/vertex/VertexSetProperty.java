@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -11,10 +12,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -31,18 +29,21 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
-    private VisibilityTranslator visibilityTranslator;
+    private final VisibilityTranslator visibilityTranslator;
+    private final UserRepository userRepository;
 
     @Inject
     public VertexSetProperty(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final AuditRepository auditRepository,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final UserRepository userRepository) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -62,6 +63,8 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
@@ -76,7 +79,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             return;
         }
 
-        Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
         auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
         graphVertex = graphVertexMutation.save();

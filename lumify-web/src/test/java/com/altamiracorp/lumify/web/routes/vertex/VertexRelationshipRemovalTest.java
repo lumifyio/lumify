@@ -1,20 +1,16 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VertexRelationshipRemovalTest extends RouteTestBase {
@@ -30,12 +26,14 @@ public class VertexRelationshipRemovalTest extends RouteTestBase {
     private Vertex mockSourceVertex;
     @Mock
     private Vertex mockDestVertex;
+    @Mock
+    private UserRepository userRepository;
 
     @Override
     @Before
     public void setUp() throws Exception {
 //        super.setUp();
-        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraph, mockAuditRepository, mockOntologyRepositiory);
+        vertexRelationshipRemoval = new VertexRelationshipRemoval(mockGraph, mockAuditRepository, mockOntologyRepositiory, userRepository);
     }
 
     @Test

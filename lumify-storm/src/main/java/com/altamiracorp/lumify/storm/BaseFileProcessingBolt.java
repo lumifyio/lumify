@@ -71,7 +71,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
 
             String vertexId = json.optString("graphVertexId");
             if (vertexId != null && vertexId.length() > 0) {
-                Vertex artifactVertex = graph.getVertex(vertexId, getUser().getAuthorizations());
+                Vertex artifactVertex = graph.getVertex(vertexId, getAuthorizations());
                 if (artifactVertex == null) {
                     throw new RuntimeException("Could not find vertex with id: " + vertexId);
                 }

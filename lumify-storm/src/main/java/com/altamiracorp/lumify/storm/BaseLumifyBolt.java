@@ -16,6 +16,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -71,6 +72,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     protected Graph graph;
     protected AuditRepository auditRepository;
     protected TermMentionRepository termMentionRepository;
+    private UserRepository userRepository;
     private Injector injector;
     private Counter totalProcessedCounter;
     private Counter processingCounter;
@@ -80,6 +82,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     protected WorkQueueRepository workQueueRepository;
     private UserProvider userProvider;
     private User user;
+    private Authorizations authorizations;
 
     @Override
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -97,6 +100,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         if (user == null) {
             user = this.userProvider.getSystemUser();
         }
+        authorizations = userRepository.getAuthorizations(user);
 
         Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
         try {
@@ -210,7 +214,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             artifactExtractedInfo.setSource(artifactExtractedInfo.getUrl());
         }
 
-        ElementMutation<Vertex> vertexMutation = BaseArtifactProcessor.findOrPrepareArtifactVertex(graph, user, artifactExtractedInfo.getRowKey());
+        ElementMutation<Vertex> vertexMutation = BaseArtifactProcessor.findOrPrepareArtifactVertex(graph, authorizations, artifactExtractedInfo.getRowKey());
         updateMutationWithArtifactExtractedInfo(vertexMutation, artifactExtractedInfo);
         Vertex vertex = null;
         if (!(vertexMutation instanceof ExistingElementMutation)) {
@@ -332,6 +336,10 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         return user;
     }
 
+    protected Authorizations getAuthorizations() {
+        return authorizations;
+    }
+
     @Inject
     public void setGraph(Graph graph) {
         this.graph = graph;
@@ -354,6 +362,11 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
     protected WorkQueueRepository getWorkQueueRepository() {
         return workQueueRepository;
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Inject
