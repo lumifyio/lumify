@@ -441,7 +441,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 data.vertices
                     .forEach(function(updatedVertex) {
-                        var cyNode = cy.getElementById(vertexId(updatedVertex));
+                        var cyNode = cy.nodes().filter('#' + vertexId(updatedVertex));
                         if (cyNode.length) {
                             if (updatedVertex.workspace.graphPosition) {
                                 cyNode.position( retina.pointsToPixels(updatedVertex.workspace.graphPosition) );
@@ -539,7 +539,7 @@ define([
 
         this.onEdgesDeleted = function (event, data) {
             this.cytoscapeReady(function (cy) {
-                cy.remove('#' + data.edgeId);
+                cy.remove('#' + this.vertexId(data.edgeId));
                 this.updateEdgeOptions(cy);
             });
         };
@@ -819,7 +819,7 @@ define([
             if (this.ignoreCySelectionEvents) return;
 
             var self = this,
-                selection = event.cy.nodes().filter(':selected');
+                selection = event.cy.elements().filter(':selected');
 
             if (!selection.length) {
                 self.trigger('selectObjects');
@@ -839,13 +839,8 @@ define([
 
             edges.each(function(index, cyEdge) {
                 if (!cyEdge.hasClass('temp') && !cyEdge.hasClass('path-edge')) {
-                    var properties = cyEdge.data();
-                    properties.id = cyIdMap[cyEdge.data().id];
-                    properties.properties = {
-                        source: cyIdMap[cyEdge.data().source],
-                        target: cyIdMap[cyEdge.data().target]
-                    }
-                    vertices.push(properties)
+                    var vertex = cyEdge.data('vertex');
+                    vertices.push(vertex)
                 }
             });
 
@@ -996,11 +991,18 @@ define([
                         relationshipEdges.push ({
                             group: "edges",
                             data: {
+                                id: vertexId(relationship.id),
                                 source: vertexId(relationship.from),
                                 target: vertexId(relationship.to),
-                                _type: 'relationship',
-                                id: vertexId(relationship.id),
-                                relationshipType: relationship.relationshipType
+                                vertex: {
+                                    id: relationship.id,
+                                    properties: {
+                                        _type: 'relationship',
+                                        source: relationship.from,
+                                        target: relationship.to,
+                                        relationshipType: relationship.relationshipType
+                                    }
+                                }
                             }
                         });
                     });
