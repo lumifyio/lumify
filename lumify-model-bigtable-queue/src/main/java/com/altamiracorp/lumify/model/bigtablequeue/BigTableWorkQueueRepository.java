@@ -85,7 +85,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
             LOGGER.trace("push on queue %s: %s", tableName, json.toString(2));
         }
         QueueItem queueItem = createQueueItem(tableName, json, extra);
-        queue.save(queueItem, flushFlag, user.getModelUserContext());
+        queue.save(queueItem, flushFlag);
     }
 
     public static QueueItem createVertexIdQueueItem(String queueTableName, Object vertexId) {

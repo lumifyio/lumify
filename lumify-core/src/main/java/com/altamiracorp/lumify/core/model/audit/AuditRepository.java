@@ -15,11 +15,8 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONObject;
-import sun.tools.jar.resources.jar;
 
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,7 +76,7 @@ public class AuditRepository extends Repository<Audit> {
             audit.getAuditCommon().setProcess(process);
         }
 
-        save(audit, flushFlag, user.getModelUserContext());
+        save(audit, flushFlag);
         return audit;
     }
 
@@ -111,7 +108,7 @@ public class AuditRepository extends Repository<Audit> {
         List<Audit> audits = new ArrayList<Audit>();
         audits.add(auditEntityHelper(auditEntity, action, entityId, entityTitle, entitySubtype, process, comment, user));
         audits.add(auditEntityHelper(auditArtifact, action, entityId, entityTitle, entitySubtype, process, comment, user));
-        saveMany(audits, user.getModelUserContext());
+        saveMany(audits);
         return audits;
     }
 
@@ -161,7 +158,7 @@ public class AuditRepository extends Repository<Audit> {
             audit.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString());
         }
 
-        save(audit, user.getModelUserContext());
+        save(audit);
         return audit;
     }
 
@@ -181,7 +178,7 @@ public class AuditRepository extends Repository<Audit> {
         List<Audit> audits = new ArrayList<Audit>();
         audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, label, process, comment, user));
         audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, label, process, comment, user));
-        saveMany(audits, user.getModelUserContext());
+        saveMany(audits);
         return audits;
     }
 
@@ -239,7 +236,7 @@ public class AuditRepository extends Repository<Audit> {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName);
 
         List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource);
-        saveMany(audits, user.getModelUserContext());
+        saveMany(audits);
         return audits;
     }
 
@@ -309,9 +306,9 @@ public class AuditRepository extends Repository<Audit> {
         }
     }
 
-    private JSONObject jsonMetadata (Map<String, Object> metadata) {
+    private JSONObject jsonMetadata(Map<String, Object> metadata) {
         JSONObject json = new JSONObject();
-        for (String key : metadata.keySet()){
+        for (String key : metadata.keySet()) {
             if (key.equals(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
                 json.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, ((PropertyJustificationMetadata) metadata.get(key)).toJson());
             } else if (key.equals(PropertySourceMetadata.PROPERTY_SOURCE_METADATA)) {

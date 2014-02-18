@@ -41,7 +41,7 @@ public class VideoFrameRepository extends Repository<VideoFrame> {
         VideoFrameRowKey videoFrameRowKey = new VideoFrameRowKey(artifactVertexId, frameStartTime);
         VideoFrame videoFrame = new VideoFrame(videoFrameRowKey);
         videoFrame.getMetadata().setData(data);
-        save(videoFrame, user.getModelUserContext());
+        save(videoFrame);
     }
 
     public Iterable<VideoFrame> findAllByArtifactGraphVertexId(String artifactGraphVertexId, User user) {

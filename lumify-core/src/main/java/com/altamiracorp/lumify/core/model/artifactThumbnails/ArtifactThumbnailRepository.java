@@ -113,7 +113,7 @@ public class ArtifactThumbnailRepository extends Repository<ArtifactThumbnail> {
         artifactThumbnail.getMetadata().setData(bytes);
         artifactThumbnail.getMetadata().setType(type);
         artifactThumbnail.getMetadata().setFormat(format);
-        save(artifactThumbnail, user.getModelUserContext());
+        save(artifactThumbnail);
         return artifactThumbnail;
     }
 
