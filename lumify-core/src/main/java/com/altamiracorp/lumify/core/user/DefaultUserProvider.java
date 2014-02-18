@@ -9,7 +9,10 @@ import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Vertex;
+import com.google.common.collect.Iterables;
 import org.apache.accumulo.core.security.Authorizations;
+
+import java.util.Set;
 
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 
@@ -26,8 +29,8 @@ public class DefaultUserProvider implements UserProvider {
     private AuthorizationBuilder authorizationBuilder = new AccumuloAuthorizationBuilder();
 
     public User createFromVertex(Vertex user) {
-        String[] authorizations = UserLumifyProperties.getAuthorizationsArray(user);
-        ModelUserContext modelUserContext = getSystemUserContext(authorizations);
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(user);
+        ModelUserContext modelUserContext = getSystemUserContext(Iterables.toArray(authorizations, String.class));
 
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", USERNAME.getPropertyValue(user), AUTHORIZATIONS.getPropertyValue(user));
         return new User(

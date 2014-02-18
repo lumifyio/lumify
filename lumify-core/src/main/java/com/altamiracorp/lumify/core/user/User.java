@@ -5,10 +5,13 @@ import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.securegraph.Authorizations;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final String[] authorizationsArray;
+    private final Set<String> authorizationsSet;
     private final Authorizations authorizations;
     private final AuthorizationBuilder authorizationBuilder;
     private String username;
@@ -18,14 +21,24 @@ public class User implements Serializable {
     private UserType userType;
 
     public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType, AuthorizationBuilder authorizationBuilder, String[] authorizationsArray) {
+        this(userId, username, currentWorkspace, modelUserContext, userType, authorizationBuilder, toSet(authorizationsArray));
+    }
+
+    private static Set<String> toSet(String[] authorizationsArray) {
+        Set<String> r = new HashSet<String>();
+        Collections.addAll(r, authorizationsArray);
+        return r;
+    }
+
+    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType, AuthorizationBuilder authorizationBuilder, Set<String> authorizationsSet) {
         this.userId = userId;
         this.username = username;
         this.currentWorkspace = currentWorkspace;
         this.modelUserContext = modelUserContext;
         this.userType = userType;
         this.authorizationBuilder = authorizationBuilder;
-        this.authorizationsArray = authorizationsArray;
-        this.authorizations = authorizationBuilder.create(this.authorizationsArray);
+        this.authorizationsSet = authorizationsSet;
+        this.authorizations = authorizationBuilder.create(this.authorizationsSet);
     }
 
     public String getUserId() {
@@ -57,14 +70,8 @@ public class User implements Serializable {
     }
 
     public Authorizations getAuthorizations(String... additionalAuthorizations) {
-        String[] authorizationsArrayWithAdditional = new String[authorizationsArray.length + additionalAuthorizations.length];
-        int x = 0;
-        for (int i = 0; i < this.authorizationsArray.length; i++, x++) {
-            authorizationsArrayWithAdditional[x] = authorizationsArray[i];
-        }
-        for (int i = 0; i < additionalAuthorizations.length; i++, x++) {
-            authorizationsArrayWithAdditional[x] = additionalAuthorizations[i];
-        }
+        Set<String> authorizationsArrayWithAdditional = new HashSet<String>(this.authorizationsSet);
+        Collections.addAll(authorizationsArrayWithAdditional, additionalAuthorizations);
         return authorizationBuilder.create(authorizationsArrayWithAdditional);
     }
 }

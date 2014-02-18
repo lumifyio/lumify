@@ -192,7 +192,7 @@ define([
                 self.trigger('workspaceSaving', ws);
 
                 saveFn({ data:{ workspaceVertices:self.workspaceVertices }}).done(function(data) {
-                    self.id = data._rowKey;
+                    self.id = data.workspaceId;
                     self.trigger('workspaceSaved', data);
                 });
             });
@@ -521,20 +521,20 @@ define([
         };
 
         this.onSwitchWorkspace = function(evt, data) {
-            if (data._rowKey != this.id) {
-                this.loadWorkspace(data._rowKey);
+            if (data.workspaceId != this.id) {
+                this.loadWorkspace(data.workspaceId);
             }
         };
 
         this.onWorkspaceDeleted = function(evt, data) {
-            if (this.id === data._rowKey) {
+            if (this.id === data.workspaceId) {
                 this.id = null;
                 this.loadActiveWorkspace();
             }
         };
 
         this.onWorkspaceCopied = function (evt, data) {
-            this.id = data._rowKey;
+            this.id = data.workspaceId;
             this.loadActiveWorkspace();
         }
 
@@ -548,7 +548,7 @@ define([
         };
 
         this.onWorkspaceDeleting = function (evt, data) {
-            if (this.id == data._rowKey) {
+            if (this.id == data.workspaceId) {
                 // TODO: use activity to display message
             }
         };

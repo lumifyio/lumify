@@ -63,51 +63,51 @@ public class WorkspaceSave extends BaseRequestHandler {
             JSONArray userList = new JSONArray(users);
             String userId = user.getId().toString();
 
-            if (workspace.getCreator() == null ||
-                    workspace.getCreator().equals(userId) ||
-                    hasWritePermissions(userId, workspace)) {
+            if (hasWritePermissions(userId, workspace)) {
                 updateUserList(workspace, userList, authUser);
             }
         }
 
-        respondWithJson(response, workspace.toJson(authUser));
+        respondWithJson(response, workspace.toJson(true));
     }
 
     private void updateUserList(Workspace workspace, JSONArray userList, com.altamiracorp.lumify.core.user.User user) {
-        boolean updateList = false;
-        if (workspace.get(WorkspacePermissions.NAME) != null) {
-            updateList = workspace.get(WorkspacePermissions.NAME).getColumns().size() > 0;
-        } else {
-            workspace.getPermissions();
-        }
-
-        List<String> users = new ArrayList<String>();
-
-        for (int i = 0; i < userList.length(); i++) {
-            JSONObject obj = userList.getJSONObject(i);
-            workspace.get(WorkspacePermissions.NAME).set(obj.getString("user"), obj.getJSONObject("userPermissions"));
-            if (updateList) {
-                users.add(obj.getString("user"));
-            }
-        }
-
-        if (updateList) {
-            for (Column col : workspace.get(WorkspacePermissions.NAME).getColumns()) {
-                if (!users.contains(col.getName())) {
-                    col.setDelete(true);
-                }
-            }
-        }
+        throw new RuntimeException("TODO workspace");
+//        boolean updateList = false;
+//        if (workspace.get(WorkspacePermissions.NAME) != null) {
+//            updateList = workspace.get(WorkspacePermissions.NAME).getColumns().size() > 0;
+//        } else {
+//            workspace.getPermissions();
+//        }
+//
+//        List<String> users = new ArrayList<String>();
+//
+//        for (int i = 0; i < userList.length(); i++) {
+//            JSONObject obj = userList.getJSONObject(i);
+//            workspace.get(WorkspacePermissions.NAME).set(obj.getString("user"), obj.getJSONObject("userPermissions"));
+//            if (updateList) {
+//                users.add(obj.getString("user"));
+//            }
+//        }
+//
+//        if (updateList) {
+//            for (Column col : workspace.get(WorkspacePermissions.NAME).getColumns()) {
+//                if (!users.contains(col.getName())) {
+//                    col.setDelete(true);
+//                }
+//            }
+//        }
     }
 
     private boolean hasWritePermissions(String user, Workspace workspace) {
-        if (workspace.get(WorkspacePermissions.NAME) != null && workspace.get(WorkspacePermissions.NAME).get(user) != null) {
-            JSONObject permissions = new JSONObject(workspace.get(WorkspacePermissions.NAME).get(user).toString());
-            if (permissions.length() > 0 && permissions.getBoolean("edit")) {
-                return true;
-            }
-        }
-
-        return false;
+        throw new RuntimeException("TODO workspace");
+//        if (workspace.get(WorkspacePermissions.NAME) != null && workspace.get(WorkspacePermissions.NAME).get(user) != null) {
+//            JSONObject permissions = new JSONObject(workspace.get(WorkspacePermissions.NAME).get(user).toString());
+//            if (permissions.length() > 0 && permissions.getBoolean("edit")) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
     }
 }

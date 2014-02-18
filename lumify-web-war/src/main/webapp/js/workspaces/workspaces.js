@@ -40,9 +40,9 @@ define([
 			if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
             if ($target.closest('.workspace-form').length) return;
 
-            var _rowKey = $(event.target).parents('li').data('_rowKey');
-            if (_rowKey) {
-                this.trigger( document, 'switchWorkspace', { _rowKey: _rowKey });
+            var workspaceId = $(event.target).parents('li').data('workspaceId');
+            if (workspaceId) {
+                this.trigger( document, 'switchWorkspace', { workspaceId: workspaceId });
             }
         };
 
@@ -58,7 +58,7 @@ define([
                     self.loadWorkspaceList()
                         .done(function() {
                             self.onWorkspaceLoad(null, workspace);
-                            self.trigger( document, 'switchWorkspace', { _rowKey: workspace._rowKey });
+                            self.trigger( document, 'switchWorkspace', { workspaceId: workspace.workspaceId });
                         });
                 });
         };
@@ -77,7 +77,7 @@ define([
 
             event.preventDefault();
 
-            this.trigger( document, 'switchWorkspace', { _rowKey: data._rowKey });
+            this.trigger( document, 'switchWorkspace', { workspaceId: data.workspaceId });
 
             var container = this.select('formSelector'),
                 form = container.resizable({
@@ -90,7 +90,7 @@ define([
                     }).show().find('.content'),
                 instance = form.lookupComponent(WorkspaceForm);
 
-            if (instance && instance.attr.data._rowKey === data._rowKey) {
+            if (instance && instance.attr.data.workspaceId === data.workspaceId) {
                 container.hide();
                 instance.teardown();
                 return self.trigger(document, 'paneResized');
@@ -127,20 +127,20 @@ define([
             this.switchActive( data.id );
         };
 
-        this.findWorkspaceRow = function(rowKey) {
+        this.findWorkspaceRow = function(workspaceId) {
             return this.select('workspaceListItemSelector').filter(function() {
-                return $(this).data('_rowKey') == rowKey;
+                return $(this).data('workspaceId') == workspaceId;
             });
         };
 
         this.onWorkspaceSaving = function ( event, data ) {
-            var li = this.findWorkspaceRow(data._rowKey);
+            var li = this.findWorkspaceRow(data.workspaceId);
             li.find('.badge').addClass('loading').show().next().hide();
         };
 
         this.updateListItemWithData = function(data) {
             if (!this.usersById) return;
-            var li = this.findWorkspaceRow(data._rowKey);
+            var li = this.findWorkspaceRow(data.workspaceId);
             if (data.createdBy === window.currentUser.userName ||
                 _.contains(_.pluck(data.users, 'id'), window.currentUser.id)
             ) {
