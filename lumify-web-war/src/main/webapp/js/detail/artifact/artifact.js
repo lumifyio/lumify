@@ -79,9 +79,7 @@ define([
             var selection = getSelection(),
                 target = event.target;
 
-            if (selection.type === 'Range' && 
-                !selection.isCollapsed &&
-                selection.rangeCount === 1) {
+            if (!selection.isCollapsed && selection.rangeCount === 1) {
 
                 var $anchor = $(selection.anchorNode),
                     $focus = $(selection.focusNode),

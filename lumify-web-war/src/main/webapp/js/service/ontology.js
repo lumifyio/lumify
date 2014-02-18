@@ -5,6 +5,8 @@ define(
     function (ServiceBase) {
       'use strict';
 
+        var memoizedMap = {};
+
         function OntologyService() {
             ServiceBase.call(this);
 
@@ -16,7 +18,24 @@ define(
 
             var self = this;
             toMemoize.forEach(function(f) {
-                self[f] = _.memoize(self[f].bind(self), self[f].memoizeHashFunction);
+                var cachedFunction = self[f],
+                    hashFunction = self[f].memoizeHashFunction;
+                self[f] = function() {
+                    var key = hashFunction ? hashFunction.apply(self, arguments) : arguments[0],
+                        result = memoizedMap[key];
+
+                    if (result && result.statusText != 'abort') {
+                        return result;
+                    }
+                    result = cachedFunction.apply(self, arguments);
+                    if (result.fail) {
+                        result.fail(function() {
+                            delete memoizedMap[key];
+                        })
+                    }
+                    memoizedMap[key] = result;
+                    return result;
+                }
             });
             return this;
         }

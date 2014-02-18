@@ -27,7 +27,7 @@ module.exports = function(grunt) {
             cwd: 'libs/openlayers/build'
         },
         build_cytoscape: {
-            command: 'make',
+            command: 'make minify',
             stdout: false,
             cwd: 'libs/cytoscape.js'
         }
