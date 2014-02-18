@@ -11,8 +11,7 @@ import java.util.Set;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final Set<String> authorizationsSet;
-    private final Authorizations authorizations;
+    private Set<String> authorizationsSet;
     private final AuthorizationBuilder authorizationBuilder;
     private String username;
     private String userId;
@@ -38,7 +37,6 @@ public class User implements Serializable {
         this.userType = userType;
         this.authorizationBuilder = authorizationBuilder;
         this.authorizationsSet = authorizationsSet;
-        this.authorizations = authorizationBuilder.create(this.authorizationsSet);
     }
 
     public String getUserId() {
@@ -65,8 +63,12 @@ public class User implements Serializable {
         return userType;
     }
 
+    public void setAuthorizationsSet(Set<String> authorizationsSet) {
+        this.authorizationsSet = authorizationsSet;
+    }
+
     public Authorizations getAuthorizations() {
-        return authorizations;
+        return authorizationBuilder.create(this.authorizationsSet);
     }
 
     public Authorizations getAuthorizations(String... additionalAuthorizations) {

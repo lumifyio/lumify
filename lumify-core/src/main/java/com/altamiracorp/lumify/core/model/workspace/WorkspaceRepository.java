@@ -80,7 +80,7 @@ public class WorkspaceRepository {
         WorkspaceLumifyProperties.WORKSPACE_TO_USER.setProperty(edgeBuilder, true, visibility);
         edgeBuilder.save();
 
-        userRepository.addAuthorization(userVertex, workspaceId);
+        userRepository.addAuthorization(user, userVertex, workspaceId);
 
         graph.flush();
         return new Workspace(workspaceVertex, this, user);
@@ -91,7 +91,8 @@ public class WorkspaceRepository {
     }
 
     public Iterable<Workspace> findAll(User user) {
-        Iterable<Vertex> vertices = graph.query(user.getAuthorizations(VISIBILITY_STRING))
+        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING);
+        Iterable<Vertex> vertices = graph.query(authorizations)
                 .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), workspaceConceptId)
                 .vertices();
         return Workspace.toWorkspaceIterable(vertices, this, user);

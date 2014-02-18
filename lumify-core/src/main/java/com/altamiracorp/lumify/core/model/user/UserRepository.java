@@ -133,18 +133,20 @@ public class UserRepository {
         return user;
     }
 
-    public void addAuthorization(Vertex userVertex, String auth) {
-        Set<String> existingAuthorizations = UserLumifyProperties.getAuthorizations(userVertex);
-        if (existingAuthorizations.contains(auth)) {
+    public void addAuthorization(User user, Vertex userVertex, String auth) {
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        if (authorizations.contains(auth)) {
             return;
         }
 
         addAuthorizationToGraph(auth);
 
-        existingAuthorizations.add(auth);
-        String authorizationsString = StringUtils.join(existingAuthorizations, ",");
+        authorizations.add(auth);
+        String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
         graph.flush();
+
+        user.setAuthorizationsSet(authorizations);
     }
 
     protected void addAuthorizationToGraph(String auth) {
