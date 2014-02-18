@@ -22,7 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class WorkspaceRepository {
     public static final String VISIBILITY_STRING = "workspace";
-    public static final Visibility VISIBILITY = new Visibility(VISIBILITY_STRING);
     public static final String WORKSPACE_CONCEPT_NAME = "http://lumify.io/workspace";
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
@@ -54,12 +53,14 @@ public class WorkspaceRepository {
     }
 
     public void delete(Workspace workspace, User user) {
-        graph.removeVertex(workspace.getVertex(), user.getAuthorizations(VISIBILITY_STRING));
+        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspace.getId());
+        graph.removeVertex(workspace.getVertex(), authorizations);
         graph.flush();
     }
 
     public Workspace findById(String workspaceId, User user) {
-        Vertex workspaceVertex = graph.getVertex(workspaceId, user.getAuthorizations(VISIBILITY_STRING));
+        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspaceId);
+        Vertex workspaceVertex = graph.getVertex(workspaceId, authorizations);
         return new Workspace(workspaceVertex, this, user);
     }
 
@@ -69,14 +70,17 @@ public class WorkspaceRepository {
 
         String workspaceId = "WORKSPACE_" + graph.getIdGenerator().nextId();
         Visibility visibility = getVisibility(workspaceId);
-        VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, user.getAuthorizations(VISIBILITY_STRING));
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, VISIBILITY);
+        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspaceId);
+        VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, authorizations);
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, visibility);
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, visibility);
         Vertex workspaceVertex = workspaceVertexBuilder.save();
 
-        EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, visibility, user.getAuthorizations(VISIBILITY_STRING));
-        WorkspaceLumifyProperties.WORKSPACE_TO_USER_CREATOR.setProperty(edgeBuilder, true, visibility);
+        EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, visibility, authorizations);
+        WorkspaceLumifyProperties.WORKSPACE_TO_USER.setProperty(edgeBuilder, true, visibility);
         edgeBuilder.save();
+
+        userRepository.addAuthorization(userVertex, workspaceId);
 
         graph.flush();
         return new Workspace(workspaceVertex, this, user);
@@ -102,16 +106,17 @@ public class WorkspaceRepository {
     /**
      * The first user will be the creator.
      */
-    public List<Vertex> findUsersWithAccess(final Vertex workspaceVertex, final User user) {
-        List<Edge> userEdges = toList(workspaceVertex.query(workspaceToUserRelationshipId, user.getAuthorizations(VISIBILITY_STRING)).edges());
+    public List<Vertex> findUsersWithAccess(final Workspace workspace, final User user) {
+        Authorizations authorizations = user.getAuthorizations(VISIBILITY_STRING, workspace.getId());
+        List<Edge> userEdges = toList(workspace.getVertex().query(authorizations).edges(workspaceToUserRelationshipId));
         Collections.sort(userEdges, new Comparator<Edge>() {
             @Override
             public int compare(Edge o1, Edge o2) {
-                Boolean isCreator1 = WorkspaceLumifyProperties.WORKSPACE_TO_USER_CREATOR.getPropertyValue(o1);
+                Boolean isCreator1 = WorkspaceLumifyProperties.WORKSPACE_TO_USER.getPropertyValue(o1);
                 if (isCreator1 != null && isCreator1) {
                     return -1;
                 }
-                Boolean isCreator2 = WorkspaceLumifyProperties.WORKSPACE_TO_USER_CREATOR.getPropertyValue(o2);
+                Boolean isCreator2 = WorkspaceLumifyProperties.WORKSPACE_TO_USER.getPropertyValue(o2);
                 if (isCreator2 != null && isCreator2) {
                     return 1;
                 }
@@ -121,9 +126,33 @@ public class WorkspaceRepository {
         return toList(new ConvertingIterable<Edge, Vertex>(userEdges) {
             @Override
             protected Vertex convert(Edge edge) {
-                String userId = edge.getOtherVertexId(workspaceVertex.getId()).toString();
+                String userId = edge.getOtherVertexId(workspace.getVertex().getId()).toString();
                 return userRepository.findById(userId);
             }
         });
+    }
+
+    public Workspace copy(Workspace workspace, User authUser) {
+        throw new RuntimeException("TODO workspace");
+//        Workspace originalWorkspace = workspaceRepository.findByRowKey(originalRowKey, authUser.getModelUserContext());
+//        Workspace workspace = createNewWorkspace(originalWorkspace.getMetadata().getTitle(), user);
+//
+//        if (originalWorkspace.getContent().getData() != null) {
+//            workspace.getContent().setData(originalWorkspace.getContent().getData());
+//        }
+//
+//        workspaceRepository.save(workspace, authUser.getModelUserContext());
+
+//        public Workspace createNewWorkspace(String title, Vertex user) {
+//            WorkspaceRowKey workspaceRowKey = new WorkspaceRowKey(
+//                    user.getId().toString(), String.valueOf(System.currentTimeMillis()));
+//            Workspace workspace = new Workspace(workspaceRowKey);
+//
+//            workspace.getMetadata().setTitle("Copy of " + title);
+//            workspace.getMetadata().setCreator(user.getId().toString());
+//
+//            return workspace;
+//        }
+
     }
 }

@@ -83,7 +83,7 @@ define([
             clearTimeout(timeout);
             timeout = setTimeout(function() {
                 self.trigger(document, 'workspaceSaving', self.attr.data);
-                self.workspaceService.save(self.attr.data._rowKey, self.attr.data)
+                self.workspaceService.save(self.attr.data.workspaceId, self.attr.data)
                     .done(function(workspace) {
                         self.trigger(document, 'workspaceSaved', self.attr.data);
                         _.invoke(deferred, 'resolve', { workspace: self.attr.data });
@@ -183,15 +183,15 @@ define([
 
         this.onDelete = function(event) {
             var self = this,
-                _rowKey = this.attr.data._rowKey,
+                workspaceId = this.attr.data.workspaceId,
                 $target = $(event.target),
                 previousText = $target.text();
 
-            this.trigger(document, 'workspaceDeleting', { _rowKey:_rowKey });
+            this.trigger(document, 'workspaceDeleting', { workspaceId: workspaceId });
 
             $target.text('Deleting...').attr('disabled', true);
 
-            this.workspaceService['delete'](_rowKey)
+            this.workspaceService['delete'](workspaceId)
                 .fail(function(xhr) {
                     if (xhr.status === 403) {
                         // TODO: alert user with error:
@@ -202,19 +202,19 @@ define([
                     $target.text(previousText).removeAttr('disabled');
                 })
                 .done(function() {
-                    self.trigger('workspaceDeleted', { _rowKey:_rowKey });
+                    self.trigger('workspaceDeleted', { workspaceId: workspaceId });
                 });
         };
 
         this.onCopy = function (event) {
             var self = this,
-                _rowKey = this.attr.data._rowKey,
+                workspaceId = this.attr.data.workspaceId,
                 $target = $(event.target),
                 previousText = $target.text();
 
             $target.text('Copying...').attr('disabled', true);
 
-            this.workspaceService.copy(_rowKey)
+            this.workspaceService.copy(workspaceId)
                 .fail(function(xhr) {
                     if (xhr.status === 403) {
                         // TODO: alert user with error:
@@ -225,7 +225,7 @@ define([
                     $target.text(previousText).removeAttr('disabled');
                 })
                 .done(function(workspace) {
-                    self.trigger(document, 'workspaceCopied', { _rowKey:workspace._rowKey });
+                    self.trigger(document, 'workspaceCopied', { workspaceId: workspace.workspaceId });
                 });
         };
 

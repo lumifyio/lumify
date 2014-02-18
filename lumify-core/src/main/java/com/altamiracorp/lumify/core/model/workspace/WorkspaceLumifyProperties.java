@@ -6,5 +6,5 @@ import com.altamiracorp.securegraph.TextIndexHint;
 
 public class WorkspaceLumifyProperties {
     public static final TextLumifyProperty TITLE = new TextLumifyProperty("http://lumify.io/workspace/title", TextIndexHint.ALL);
-    public static final BooleanLumifyProperty WORKSPACE_TO_USER_CREATOR = new BooleanLumifyProperty("http://lumify.io/workspace/toUser/creator");
+    public static final BooleanLumifyProperty WORKSPACE_TO_USER = new BooleanLumifyProperty("http://lumify.io/workspace/toUser");
 }

@@ -20,9 +20,9 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getByRowKey = function (_rowKey) {
+    WorkspaceService.prototype.getByRowKey = function (workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(_rowKey)
+            url: 'workspace/' + encodeURIComponent(workspaceId)
         });
     };
 
@@ -30,11 +30,11 @@ function(ServiceBase) {
         return this.save(null, workspace);
     };
 
-    WorkspaceService.prototype.save = function (_rowKey, workspace) {
+    WorkspaceService.prototype.save = function (workspaceId, workspace) {
         var options = {
-            url: _rowKey === null ? 
+            url: workspaceId === null ?
                     'workspace/save' :
-                    'workspace/' + encodeURIComponent(_rowKey) + '/save',
+                    'workspace/' + encodeURIComponent(workspaceId) + '/save',
             data: {}
         };
         
@@ -50,19 +50,19 @@ function(ServiceBase) {
         return this._ajaxPost(options);
     };
 
-    WorkspaceService.prototype.copy = function (_rowKey) {
+    WorkspaceService.prototype.copy = function (workspaceId) {
         var options = {
-            url: 'workspace/' + _rowKey + '/copy'
+            url: 'workspace/' + workspaceId + '/copy'
         }
 
         return this._ajaxPost(options);
     }
 
-    WorkspaceService.prototype['delete'] = function(_rowKey) {
+    WorkspaceService.prototype['delete'] = function(workspaceId) {
         return this._ajaxDelete({
-            url: 'workspace/' + encodeURIComponent(_rowKey),
+            url: 'workspace/' + encodeURIComponent(workspaceId),
             data: {
-                _rowKey: _rowKey
+                workspaceId: workspaceId
             }
         });
     };

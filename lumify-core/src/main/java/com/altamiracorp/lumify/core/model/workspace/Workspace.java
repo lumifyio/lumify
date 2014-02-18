@@ -25,7 +25,7 @@ public class Workspace {
             ensureUsersLoaded();
 
             JSONObject workspaceJson = new JSONObject();
-            workspaceJson.put("id", getId());
+            workspaceJson.put("workspaceId", getId());
             workspaceJson.put("title", getTitle());
             workspaceJson.put("createdBy", getCreatorUserId());
             workspaceJson.put("isSharedToUser", !getCreatorUserId().equals(user.getUserId()));
@@ -66,7 +66,7 @@ public class Workspace {
 
     private void ensureUsersLoaded() {
         if (users == null) {
-            users = workspaceRepository.findUsersWithAccess(workspaceVertex, user);
+            users = workspaceRepository.findUsersWithAccess(this, user);
         }
     }
 
@@ -76,6 +76,9 @@ public class Workspace {
 
     public String getCreatorUserId() {
         ensureUsersLoaded();
+        if (this.users.size() == 0) {
+            throw new RuntimeException("Invalid number of users found. Expected greater than 0 users.");
+        }
         return this.users.get(0).getId().toString();
     }
 
