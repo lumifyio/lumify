@@ -54,7 +54,9 @@ define([
                 this.getRelationshipLabels(
                     cy.getElementById(this.attr.edge.data('source')),
                     cy.getElementById(this.attr.edge.data('target'))
-                ).done(function(relationships) {
+                ).fail(function() {
+                    select.html('<option>Unknown Server Error</option>');
+                }).done(function(relationships) {
 
                     if (relationships.length) {
                         select.html(
