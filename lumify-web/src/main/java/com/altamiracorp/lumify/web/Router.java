@@ -106,9 +106,9 @@ public class Router extends HttpServlet {
             app.post("/graph/vertex/{graphVertexId}/uploadImage", authenticator, GraphVertexUploadImage.class);
 
             app.get("/workspace", authenticator, WorkspaceList.class);
-            app.post("/workspace/save", authenticator, WorkspaceSave.class);
+            app.post("/workspace/new", authenticator, WorkspaceNew.class);
             app.post("/workspace/{workspaceId}/copy", authenticator, WorkspaceCopy.class);
-            app.post("/workspace/{workspaceId}/save", authenticator, WorkspaceSave.class);
+            app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
             app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);
             app.delete("/workspace/{workspaceId}", authenticator, WorkspaceDelete.class);
 

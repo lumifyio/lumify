@@ -162,4 +162,24 @@ public class WorkspaceRepository {
 //        }
 
     }
+
+    public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Vertex otherVertex = graph.getVertex(vertexId, authorizations);
+        if (otherVertex == null) {
+            throw new RuntimeException("Could not find vertex: " + vertexId);
+        }
+        Iterable<Edge> edges = workspace.getVertex().getEdges(otherVertex, Direction.BOTH, authorizations);
+        for (Edge edge : edges) {
+            graph.removeEdge(edge, authorizations);
+        }
+    }
+
+    public void addEntityToWorkspace(Workspace workspace, Object vertexId, int graphPositionX, int graphPositionY, User user) {
+        // TODO workspace
+    }
+
+    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, int graphPositionX, int graphPositionY, User user) {
+        // TODO workspace
+    }
 }
