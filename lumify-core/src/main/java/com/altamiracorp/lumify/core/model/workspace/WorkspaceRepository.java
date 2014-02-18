@@ -53,7 +53,7 @@ public class WorkspaceRepository {
     }
 
     public void delete(Workspace workspace, User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
         graph.removeVertex(workspace.getVertex(), authorizations);
         graph.flush();
     }
@@ -69,13 +69,14 @@ public class WorkspaceRepository {
         checkNotNull(userVertex, "Could not find user: " + user.getUserId());
 
         String workspaceId = "WORKSPACE_" + graph.getIdGenerator().nextId();
-        Visibility visibility = getVisibility(workspaceId);
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
+        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspaceId);
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspaceId);
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, authorizations);
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, visibility);
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, visibility);
         Vertex workspaceVertex = workspaceVertexBuilder.save();
 
+        visibility = new Visibility(VISIBILITY_STRING);
         EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, visibility, authorizations);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER.setProperty(edgeBuilder, true, visibility);
         edgeBuilder.save();
@@ -84,10 +85,6 @@ public class WorkspaceRepository {
 
         graph.flush();
         return new Workspace(workspaceVertex, this, user);
-    }
-
-    private Visibility getVisibility(String workspaceId) {
-        return new Visibility(VISIBILITY_STRING + "&" + workspaceId);
     }
 
     public Iterable<Workspace> findAll(User user) {
@@ -99,7 +96,7 @@ public class WorkspaceRepository {
     }
 
     public void setTitle(Workspace workspace, String title) {
-        Visibility visibility = getVisibility(workspace.getId());
+        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         WorkspaceLumifyProperties.TITLE.setProperty(workspace.getVertex(), title, visibility);
         graph.flush();
     }
