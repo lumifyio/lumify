@@ -158,8 +158,34 @@ define([
             }
         };
 
+
+        var copiedDocumentText,
+            copiedDocumentTextStorageKey = 'SESSION_copiedDocumentText';
         this.onDocumentTextCopy = function(event, data) {
-            this.copiedDocumentText = data;
+            copiedDocumentText = data;
+            if (window.localStorage) {
+                try {
+                    localStorage.setItem(copiedDocumentTextStorageKey, JSON.stringify(data));
+                } catch(e) {
+                    console.warn('Unable to set localStorage item');
+                }
+            }
+        };
+
+        this.copiedDocumentText = function() {
+            var text; 
+            if (window.localStorage) {
+                text = localStorage.getItem(copiedDocumentTextStorageKey);
+                if (text) {
+                    text = JSON.parse(text);
+                }
+            }
+
+            if (text === null || _.isUndefined(text)) {
+                return copiedDocumentText;
+            }
+
+            return text;
         };
 
         this.onSelectAll = function() {
