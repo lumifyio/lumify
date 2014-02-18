@@ -13,7 +13,7 @@ define([], function() {
 
             function vertexProperties(json, updated) {
                 var cache;
-                if (_.isString(json.id) && _.isObject(json.properties)) {
+                if (_.isString(json.id) && _.isObject(json.properties) && _.keys(json.properties).length) {
                     cache = this.updateCacheWithVertex(json);
                     $.extend(true, json, cache);
                     updated.push(cache);
