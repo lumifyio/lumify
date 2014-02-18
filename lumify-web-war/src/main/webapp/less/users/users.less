@@ -1,7 +1,7 @@
 @import (reference) "../util/constants";
 
 background: #efefef;
-width: 340px;
+width: 390px;
 
 .content {
   display: block;
@@ -9,13 +9,15 @@ width: 340px;
   width: auto;
   box-sizing: border-box;
   white-space: normal;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .users-list {
   float: left;
-  overflow: auto;
   height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  width: 130px;
 
   .user a {
     max-width: 95px;
