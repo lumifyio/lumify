@@ -390,8 +390,11 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title')); 
+            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title'));
             merged.truncatedTitle = truncatedTitle;
+            if (vertex.properties._glyphIcon) {
+                merged._glyphIconUri = vertex.properties._glyphIcon.value;
+            }
 
             return merged;
         };

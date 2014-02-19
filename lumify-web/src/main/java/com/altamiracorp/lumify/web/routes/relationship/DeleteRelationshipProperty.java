@@ -13,6 +13,7 @@ import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        Visibility visibility = new Visibility("");
         final String propertyName = getRequiredParameter(request, "propertyName");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
@@ -58,11 +60,10 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, property.getDisplayName(), oldValue, edge, "", "", user);
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, property.getDisplayName(), oldValue, edge, "", "", user, visibility);
         edge.removeProperty(propertyName);
         graph.flush();
 
-        // TODO get all properties from all edges?
         List<Property> properties = new ArrayList<Property>();
         for (Property p : edge.getProperties()) {
             properties.add(p);

@@ -10,6 +10,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -36,6 +37,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        Visibility visibility = new Visibility("");
         final String sourceId = getRequiredParameter(request, "sourceId");
         final String targetId = getRequiredParameter(request, "targetId");
         final String label = getRequiredParameter(request, "label");
@@ -51,7 +53,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
 
         String displayName = ontologyRepository.getDisplayNameForLabel(label);
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user, visibility);
 
         graph.flush();
 

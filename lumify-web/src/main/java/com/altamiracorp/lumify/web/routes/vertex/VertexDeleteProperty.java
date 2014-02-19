@@ -12,6 +12,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +63,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             metadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 
-        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", metadata, user);
+        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", metadata, user, new Visibility(""));
 
         // TODO: broadcast property delete
 

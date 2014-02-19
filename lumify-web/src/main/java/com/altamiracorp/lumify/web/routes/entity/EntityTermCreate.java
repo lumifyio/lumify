@@ -69,7 +69,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         Vertex createdVertex = createdVertexMutation.save();
 
-        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user);
+        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, visibility);
 
         graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
 
@@ -79,7 +79,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         }
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);

@@ -60,7 +60,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         } else {
             // TODO: replace "" when we implement commenting on ui
             auditRepository.auditEntity(AuditAction.DELETE, graphVertexId, artifactVertex.getId().toString(), jsonObject.getString("title"),
-                    jsonObject.getString("_conceptType"), "", "", user);
+                    jsonObject.getString("_conceptType"), "", "", user, visibility);
             Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
             if (graphVertex == null) {
                 throw new RuntimeException("Could not get graph vertex: " + graphVertexId);
@@ -84,7 +84,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
             throw new RuntimeException("Tag was not found in the list of detected objects");
         }
         DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
-        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
+        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
         artifactVertex = artifactVertexMutation.save();
         graph.flush();
 
