@@ -9,7 +9,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.id.UUIDIdGenerator;
+import com.altamiracorp.securegraph.id.IdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;
@@ -22,10 +22,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceRepositoryTest {
@@ -55,13 +57,16 @@ public class WorkspaceRepositoryTest {
     @Mock
     private Vertex userVertex;
 
+    @Mock
+    private IdGenerator idGenerator;
+
     private WorkspaceRepository workspaceRepository;
     private AuthorizationRepository authorizationRepository;
 
     @Before
     public void setup() {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
-        graph = new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig()));
+        graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         when(ontologyRepository.getConceptByName(eq(OntologyRepository.TYPE_ENTITY))).thenReturn(entityConcept);
@@ -82,10 +87,19 @@ public class WorkspaceRepositoryTest {
 
     @Test
     public void testAddWorkspace() {
+        String workspaceId = "testWorkspaceId";
+        when(idGenerator.nextId()).thenReturn(workspaceId);
+
         Workspace workspace = workspaceRepository.add("workspace1", user);
+        verify(userRepository, times(1)).addAuthorization((Vertex) any(), eq(WorkspaceRepository.WORKSPACE_ID_PREFIX + workspaceId));
 
         assertNull("Should not have access", graph.getVertex(workspace.getId(), new InMemoryAuthorizations()));
         assertNull("Should not have access", graph.getVertex(workspace.getId(), new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING)));
-        assertNotNull("Should have access", graph.getVertex(workspace.getId(), new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getId())));
+        InMemoryAuthorizations authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
+        assertNotNull("Should have access", graph.getVertex(workspace.getId(), authorizations));
+
+        when(userRepository.getAuthorizations(eq(user), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace.getId()))).thenReturn(authorizations);
+        Workspace foundWorkspace = workspaceRepository.findById(workspace.getId(), user);
+        assertEquals(workspace.getId(), foundWorkspace.getId());
     }
 }
