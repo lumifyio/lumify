@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
 import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,12 +25,12 @@ public class AuditCommon extends ColumnFamily {
         super(NAME);
     }
 
-    public UserType getActorType() {
-        return UserType.valueOf(Value.toString(get(ACTOR_TYPE)));
+    public String getActorType () {
+        return Value.toString(get(ACTOR_TYPE));
     }
 
-    public AuditCommon setActorType(UserType actorType) {
-        set(ACTOR_TYPE, actorType.toString());
+    public AuditCommon setActorType(UserType actorType, Visibility visibility) {
+        set(ACTOR_TYPE, actorType.toString(), visibility.getVisibilityString());
         return this;
     }
 
@@ -37,8 +38,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(USER_ID));
     }
 
-    public AuditCommon setUserId(String userId) {
-        set(USER_ID, userId);
+    public AuditCommon setUserId(String userId, Visibility visibility) {
+        set(USER_ID, userId, visibility.getVisibilityString());
         return this;
     }
 
@@ -46,8 +47,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(USER_NAME));
     }
 
-    public AuditCommon setUserName(String userName) {
-        set(USER_NAME, userName);
+    public AuditCommon setUserName(String userName, Visibility visibility) {
+        set(USER_NAME, userName, visibility.getVisibilityString());
         return this;
     }
 
@@ -55,8 +56,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(ACTION));
     }
 
-    public AuditCommon setAction(AuditAction action) {
-        set(ACTION, action.toString());
+    public AuditCommon setAction(AuditAction action, Visibility visibility) {
+        set(ACTION, action.toString(), visibility.getVisibilityString());
         return this;
     }
 
@@ -64,8 +65,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(TYPE));
     }
 
-    public AuditCommon setType(String type) {
-        set(TYPE, type);
+    public AuditCommon setType(String type, Visibility visibility) {
+        set(TYPE, type, visibility.getVisibilityString());
         return this;
     }
 
@@ -73,15 +74,15 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(COMMENT));
     }
 
-    public AuditCommon setComment(String comment) {
-        set(COMMENT, comment);
+    public AuditCommon setComment(String comment, Visibility visibility) {
+        set(COMMENT, comment, visibility.getVisibilityString());
         return this;
     }
 
-    public AuditCommon setUser(User user) {
-        setUserId(user.getUserId());
-        setUserName(user.getUsername());
-        setActorType(user.getUserType());
+    public AuditCommon setUser(User user, Visibility visibility) {
+        setUserId(user.getUserId(), visibility);
+        setUserName(user.getUsername(), visibility);
+        setActorType(user.getUserType(), visibility);
         return this;
     }
 
@@ -89,8 +90,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(PROCESS));
     }
 
-    public AuditCommon setProcess(String process) {
-        set(PROCESS, process);
+    public AuditCommon setProcess(String process, Visibility visibility) {
+        set(PROCESS, process, visibility.getVisibilityString());
         return this;
     }
 
@@ -98,8 +99,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toLong(get(UNIX_BUILD_TIME));
     }
 
-    public AuditCommon setUnixBuildTime(Long unixBuildTime) {
-        set(UNIX_BUILD_TIME, unixBuildTime);
+    public AuditCommon setUnixBuildTime(Long unixBuildTime, Visibility visibility) {
+        set(UNIX_BUILD_TIME, unixBuildTime, visibility.getVisibilityString());
         return this;
     }
 
@@ -107,8 +108,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(VERSION));
     }
 
-    public AuditCommon setVersion(String version) {
-        set(VERSION, version);
+    public AuditCommon setVersion(String version, Visibility visibility) {
+        set(VERSION, version, visibility.getVisibilityString());
         return this;
     }
 
@@ -116,8 +117,8 @@ public class AuditCommon extends ColumnFamily {
         return Value.toString(get(SCM_BUILD_NUMBER));
     }
 
-    public AuditCommon setScmBuildNumber(String scmBuildNumber) {
-        set(SCM_BUILD_NUMBER, scmBuildNumber);
+    public AuditCommon setScmBuildNumber(String scmBuildNumber, Visibility visibility) {
+        set(SCM_BUILD_NUMBER, scmBuildNumber, visibility.getVisibilityString());
         return this;
     }
 

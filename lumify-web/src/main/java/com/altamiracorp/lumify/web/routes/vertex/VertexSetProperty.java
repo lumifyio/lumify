@@ -11,10 +11,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONException;
@@ -78,7 +75,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
         ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
-        auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user);
+        auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user, visibilityTranslator.toVisibility(visibilitySource));
         graphVertex = graphVertexMutation.save();
         graph.flush();
 

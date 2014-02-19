@@ -41,6 +41,7 @@ public final class Configuration {
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
     public static final String OBJECT_DETECTOR = "object.detector";
+    public static final String AUDIT_VISIBILITY_LABEL="audit.visibilityLabel";
 
     private org.apache.commons.configuration.Configuration config;
 
@@ -48,7 +49,7 @@ public final class Configuration {
     /**
      * Default value for a {@link String} property that could not be parsed
      */
-    private static final String UNKNOWN_STRING = "Unknown";
+    public static final String UNKNOWN_STRING = "Unknown";
 
     /**
      * Default value for a {@link Integer} property that could not be parsed

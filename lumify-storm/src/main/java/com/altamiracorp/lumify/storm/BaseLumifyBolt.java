@@ -215,9 +215,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         Vertex vertex = null;
         if (!(vertexMutation instanceof ExistingElementMutation)) {
             vertex = vertexMutation.save();
-            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
+            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, new Visibility(""));
         } else {
-            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user);
+            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, new Visibility(""));
             vertex = vertexMutation.save();
         }
         graph.flush();
