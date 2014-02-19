@@ -44,7 +44,7 @@ public class EntityHelper {
                 .setOntologyClassUri(concept.getDisplayName())
                 .setConceptGraphVertexId(concept.getId())
                 .setVertexId(resolvedVertex.getId().toString());
-        termMentionRepository.save(termMention, user.getModelUserContext());
+        termMentionRepository.save(termMention);
     }
 
     public ElementMutation<Vertex> updateMutation(ElementMutation<Vertex> vertexMutation, String subType, String title, String process,
