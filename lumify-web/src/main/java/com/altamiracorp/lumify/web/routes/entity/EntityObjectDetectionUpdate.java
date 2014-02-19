@@ -57,7 +57,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
         ElementMutation<Vertex> resolvedVertexMutation;
         Vertex resolvedVertex = null;
-        if (resolvedGraphVertexId != null) {
+        if (!resolvedGraphVertexId.equals("")) {
             resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
             resolvedVertexMutation = resolvedVertex.prepareMutation();
         } else {
@@ -107,7 +107,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId,
                         DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);
-
+                graph.flush();
                 respondWithJson(response, result);
                 break;
             }
