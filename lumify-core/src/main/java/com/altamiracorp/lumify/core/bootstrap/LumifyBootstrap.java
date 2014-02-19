@@ -31,6 +31,10 @@ import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.lumify.core.version.VersionServiceMXBean;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.*;
+import com.netflix.curator.RetryPolicy;
+import com.netflix.curator.framework.CuratorFramework;
+import com.netflix.curator.framework.CuratorFrameworkFactory;
+import com.netflix.curator.retry.ExponentialBackoffRetry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -102,6 +106,10 @@ public class LumifyBootstrap extends AbstractModule {
         bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
         bind(AuthorizationBuilder.class).toInstance(new AccumuloAuthorizationBuilder()); // TODO make reconfigurable
 
+        bind(CuratorFramework.class)
+                .toProvider(new CuratorFrameworkProvider(configuration))
+                .in(Scopes.SINGLETON);
+
         bind(ModelSession.class)
                 .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))
                 .in(Scopes.SINGLETON);
@@ -162,6 +170,23 @@ public class LumifyBootstrap extends AbstractModule {
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
             provider.addBindings(binder, configuration);
+        }
+    }
+
+    private static class CuratorFrameworkProvider implements Provider<CuratorFramework> {
+        private String zookeeperConnectionString;
+        private RetryPolicy retryPolicy;
+
+        public CuratorFrameworkProvider(Configuration configuration) {
+            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS);
+            retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        }
+
+        @Override
+        public CuratorFramework get() {
+            CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
+            client.start();
+            return client;
         }
     }
 
