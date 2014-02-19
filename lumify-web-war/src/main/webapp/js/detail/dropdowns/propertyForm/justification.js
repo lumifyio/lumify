@@ -64,7 +64,7 @@ define([
         };
 
         this.setReferenceWithValue = function(val) {
-            var clipboard = appData.copiedDocumentText;
+            var clipboard = appData.copiedDocumentText();
 
             if (clipboard && clipboard.text === val) {
                 this.setValue(Object.freeze(clipboard));

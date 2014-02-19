@@ -81,12 +81,14 @@ li {
   input.new {
     width: 80%;
     margin: 0;
+    display: inline-block;
   }
   button.new {
     width: 20%;
-    height: 2.7em;
     position: relative;
+    display: inline-block;
     left: -1px;
+    padding: 0.4em;
   }
 }
 
@@ -140,7 +142,7 @@ li {
   }
   .scroller {
     position: absolute;
-    bottom: 7em;
+    bottom: 8em;
     top: 0;
     overflow: auto;
     left: 0;
@@ -148,25 +150,25 @@ li {
     padding: 0 1em;
     .box-sizing(border-box);
   }
-  .delete {
+
+  .buttons {
     position: absolute;
-    margin: 0;
     bottom: 1em;
     right: 1em;
     left: 1em;
-    width: auto;
-  }
-  .copy {
-    position: absolute;
-    margin: 0;
-    bottom: 4em;
-    right: 1em;
-    left: 1em;
-    width: auto;
+
+    button {
+      margin-bottom: 1em;
+      width: 100%;
+    }
   }
 
   .share-list li.user-row {
     margin: 0.5em 0;
+  }
+  .share-list .nav-header {
+    margin: 0.5em 0 0;
+    padding: 0;
   }
   .share-form {
     position: relative;

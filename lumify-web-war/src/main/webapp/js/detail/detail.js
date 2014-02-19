@@ -64,7 +64,8 @@ define([
                 moduleData = vertices;
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
-                    type = vertices[0].concept && vertices[0].concept.displayType || 'relationship';
+                    type = vertices[0].concept && vertices[0].concept.displayType ||
+                        (vertices[0].properties._type ? 'relationship' : 'entity');
                 if (type === 'relationship') {
                     moduleName = type;
                 } else {

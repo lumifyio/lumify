@@ -140,9 +140,10 @@ define([
 
         this.updateListItemWithData = function(data) {
             if (!this.usersById) return;
-            var li = this.findWorkspaceRow(data.workspaceId);
-            if (data.createdBy === window.currentUser.userName ||
-                _.contains(_.pluck(data.users, 'id'), window.currentUser.id)
+            var li = this.findWorkspaceRow(data._rowKey);
+            if (data.createdBy === window.currentUser.id ||
+                _.contains(_.pluck(data.users, 'id'), window.currentUser.id) || 
+                _.contains(_.pluck(data.users, 'user'), window.currentUser.id)
             ) {
                 li.find('.badge').removeClass('loading').hide().next().show();
                 data = this.workspaceDataForItemRow(data);
@@ -169,7 +170,7 @@ define([
         this.onWorkspaceRemoteSave = function ( event, data) {
             if (!data || !data.remoteEvent) return;
 
-            data.isSharedToUser = data.createdBy !== window.currentUser.userName;
+            data.isSharedToUser = data.createdBy !== window.currentUser.id;
 
             if (this.workspaceId === data.id) {
                 appData.loadWorkspace(data);
@@ -218,8 +219,7 @@ define([
                         self.$node.html( workspacesTemplate({}) );
                         self.select('listSelector').html(
                             listTemplate({
-                                results: _.groupBy(workspaces, function(w) { 
-                                    w = self.workspaceDataForItemRow(w);
+                                results: _.groupBy(_.map(workspaces, self.workspaceDataForItemRow.bind(self)), function(w) { 
                                     return w.isSharedToUser ? 'shared' : 'mine';
                                 }),
                                 selected: self.workspaceId
