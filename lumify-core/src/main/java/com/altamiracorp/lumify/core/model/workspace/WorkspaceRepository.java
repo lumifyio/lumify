@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.ontology.Relationship;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
@@ -34,7 +33,6 @@ public class WorkspaceRepository {
     @Inject
     public WorkspaceRepository(
             final Graph graph,
-            final UserProvider userProvider,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
             final AuthorizationRepository authorizationRepository) {
