@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.user.AuthorizationBuilder;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
@@ -41,8 +41,11 @@ public class OntologyRepository {
     @Inject
     public OntologyRepository(
             Graph graph,
-            AuthorizationBuilder authorizationBuilder) {
+            AuthorizationBuilder authorizationBuilder,
+            AuthorizationRepository authorizationRepository) {
         this.graph = graph;
+
+        authorizationRepository.addAuthorizationToGraph(OntologyRepository.VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);

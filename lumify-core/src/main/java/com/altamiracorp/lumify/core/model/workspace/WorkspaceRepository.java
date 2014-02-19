@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Relationship;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -28,17 +29,20 @@ public class WorkspaceRepository {
     private final String workspaceToEntityRelationshipId;
     private final String workspaceToUserRelationshipId;
     private final UserRepository userRepository;
+    private final AuthorizationRepository authorizationRepository;
 
     @Inject
     public WorkspaceRepository(
             final Graph graph,
             final UserProvider userProvider,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final AuthorizationRepository authorizationRepository) {
         this.graph = graph;
         this.userRepository = userRepository;
+        this.authorizationRepository = authorizationRepository;
 
-        userRepository.addAuthorizationToGraph(VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Concept entityConcept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY);
 
@@ -64,7 +68,7 @@ public class WorkspaceRepository {
             userRepository.removeAuthorization(userVertex, workspace.getId());
         }
 
-        userRepository.removeAuthorizationFromGraph(workspace.getId());
+        authorizationRepository.removeAuthorizationFromGraph(workspace.getId());
 
         graph.removeVertex(workspace.getVertex(), authorizations);
         graph.flush();
