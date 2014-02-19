@@ -23,6 +23,7 @@ public class WorkspaceRepository {
     public static final String WORKSPACE_CONCEPT_NAME = "http://lumify.io/workspace";
     public static final String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
     public static final String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
+    public static final String WORKSPACE_ID_PREFIX = "WORKSPACE_";
     private final Graph graph;
     private final String workspaceConceptId;
     private final String workspaceToEntityRelationshipId;
@@ -82,7 +83,7 @@ public class WorkspaceRepository {
         Vertex userVertex = this.userRepository.findById(user.getUserId());
         checkNotNull(userVertex, "Could not find user: " + user.getUserId());
 
-        String workspaceId = "WORKSPACE_" + graph.getIdGenerator().nextId();
+        String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspaceId);
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspaceId);
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, authorizations);
