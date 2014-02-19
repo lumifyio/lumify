@@ -39,7 +39,7 @@ define([
             var info = $(this.attr.mentionNode).removeClass('focused').data('info');
 
             if (info) {
-                this.updateConceptLabel(info._conceptType);
+                this.updateConceptLabel(info._conceptType || '');
             }
 
             // Remove extra textNodes
@@ -99,7 +99,8 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                this.updateConceptSelect(info && info._conceptType || '').show();
+                var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType)) || '';
+                this.updateConceptSelect(conceptType).show();
                 if (newGraphVertexId && initial && !this.attr.coords) {
                     this.select('resolveButtonSelector')
                         .hide();
