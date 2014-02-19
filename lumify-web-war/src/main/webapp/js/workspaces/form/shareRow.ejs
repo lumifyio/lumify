@@ -1,4 +1,4 @@
-<li class="user-row" data-row-key="<%= user.id %>"
+<li class="user-row" data-user-id="<%= user.id %>"
 ><span class="badge permissions" 
        data-user-permissions="<%= JSON.stringify(user.userPermissions) %>"
        ><%= user.permissionLabel %> <% if (editable) { %><span class="caret"></span><% } %></span><%= user.userName %></li>

@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,16 +13,16 @@ public class AuditProperty extends ColumnFamily {
     public static final String PROPERTY_NAME = "propertyName";
     public static final String PROPERTY_METADATA = "propertyMetadata";
 
-    public AuditProperty () {
-        super (NAME);
+    public AuditProperty() {
+        super(NAME);
     }
 
     public String getPreviousValue() {
         return Value.toString(get(PREVIOUS_VALUE));
     }
 
-    public AuditProperty setPreviousValue (Object previousValue) {
-        set (PREVIOUS_VALUE, previousValue);
+    public AuditProperty setPreviousValue(Object previousValue, Visibility visibility) {
+        set(PREVIOUS_VALUE, previousValue, visibility.getVisibilityString());
         return this;
     }
 
@@ -29,31 +30,31 @@ public class AuditProperty extends ColumnFamily {
         return Value.toString(get(NEW_VALUE));
     }
 
-    public AuditProperty setNewValue (Object newValue) {
-        set (NEW_VALUE, newValue);
+    public AuditProperty setNewValue(Object newValue, Visibility visibility) {
+        set(NEW_VALUE, newValue, visibility.getVisibilityString());
         return this;
     }
 
-    public String getPropertyName () {
+    public String getPropertyName() {
         return Value.toString(get(PROPERTY_NAME));
     }
 
-    public AuditProperty setPropertyName (Object propertyName) {
-        set (PROPERTY_NAME, propertyName);
+    public AuditProperty setPropertyName(Object propertyName, Visibility visibility) {
+        set(PROPERTY_NAME, propertyName, visibility.getVisibilityString());
         return this;
     }
 
-    public JSONObject getPropertyMetadata () {
+    public JSONObject getPropertyMetadata() {
         return Value.toJson(get(PROPERTY_METADATA));
     }
 
-    public AuditProperty setPropertyMetadata (Object propertyMetadata) {
-        set (PROPERTY_METADATA, propertyMetadata);
+    public AuditProperty setPropertyMetadata(Object propertyMetadata, Visibility visibility) {
+        set(PROPERTY_METADATA, propertyMetadata, visibility.getVisibilityString());
         return this;
     }
 
     @Override
-    public JSONObject toJson () {
+    public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
             json.put(PREVIOUS_VALUE, this.getPreviousValue());
@@ -62,7 +63,7 @@ public class AuditProperty extends ColumnFamily {
             if (this.getPropertyMetadata() != null) {
                 json.put(PROPERTY_METADATA, this.getPropertyMetadata());
             }
-            return  json;
+            return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

@@ -159,14 +159,15 @@ define([
 
             this.vertexService.getArtifactHighlightedTextById(vertex.id)
                 .done(function(artifactText, status, xhr) {
-                    if (xhr.status === 204) {
+                    var displayType = vertex.concept.displayType;
+                    if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
                         self.select('textSelector').html(alertTemplate({ error: 'No Text Available' }));
                     } else {
-                        self.select('textSelector').html(artifactText.replace(/[\n]+/g, "<br><br>\n"));
-                        self.updateEntityAndArtifactDraggables();
-                        if (self[vertex.concept.displayType + 'Setup']) {
-                            self[vertex.concept.displayType + 'Setup'](vertex);
-                        }
+                        self.select('textSelector').html(!artifactText ? '' : artifactText.replace(/[\n]+/g, "<br><br>\n"));
+                    }
+                    self.updateEntityAndArtifactDraggables();
+                    if (self[displayType + 'Setup']) {
+                        self[displayType + 'Setup'](vertex);
                     }
             });
         };
@@ -227,12 +228,15 @@ define([
         this.onCoordsChanged = function(event, data) {
             var self = this,
                 vertex = appData.vertex(this.attr.data.id);
-            var detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects.value == 'string' ? JSON.parse(vertex.properties._detectedObjects.value)
-                : vertex.properties._detectedObjects.value, function(obj) {
-                    return (obj && obj.graphVertexId) === data.id;
-                })),
+            var detectedObject,
                 width = parseFloat(data.x2)-parseFloat(data.x1),
                 height = parseFloat(data.y2)-parseFloat(data.y1);
+            if (vertex.properties.detectedObjects) {
+                detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects.value == 'string' ? JSON.parse(vertex.properties._detectedObjects.value)
+                    : vertex.properties._detectedObjects.value, function(obj) {
+                    return (obj && obj.graphVertexId) === data.id;
+                }));
+            }
 
             if (width < 5 || height < 5) {
                 return TermForm.teardownAll();
