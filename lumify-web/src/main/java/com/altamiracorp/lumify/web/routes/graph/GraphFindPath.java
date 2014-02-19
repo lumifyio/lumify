@@ -47,7 +47,7 @@ public class GraphFindPath extends BaseRequestHandler {
 
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, user.getAuthorizations());
         for (Path path : paths) {
-            JSONArray verticesJson = GraphUtil.toJson(graph.getVertices(path, user.getAuthorizations()));
+            JSONArray verticesJson = GraphUtil.toJson(graph.getVerticesInOrder(path, user.getAuthorizations()));
             pathResults.put(verticesJson);
         }
 

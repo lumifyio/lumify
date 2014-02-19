@@ -79,7 +79,7 @@ public class WorkspaceSave extends BaseRequestHandler {
         }
 
         if (shouldSave) {
-            workspaceRepository.save(workspace, authUser.getModelUserContext());
+            workspaceRepository.save(workspace);
         }
 
         respondWithJson(response, workspace.toJson(authUser));

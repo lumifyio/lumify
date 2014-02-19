@@ -57,7 +57,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
         ElementMutation<Vertex> resolvedVertexMutation;
         Vertex resolvedVertex = null;
-        if (resolvedGraphVertexId != null) {
+        if (!resolvedGraphVertexId.equals("")) {
             resolvedVertex = graph.getVertex(resolvedGraphVertexId, user.getAuthorizations());
             resolvedVertexMutation = resolvedVertex.prepareMutation();
         } else {
@@ -75,13 +75,13 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
             resolvedVertex = resolvedVertexMutation.save();
         }
 
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
         resolvedVertex = resolvedVertexMutation.save();
 
         graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, user.getAuthorizations());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
 
         // update the detected object property on the artifact
         JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
@@ -101,13 +101,13 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
                 DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
                 result.put("entityVertex", entityTag);
 
-                auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
+                auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
                 artifactVertex = artifactVertexMutation.save();
 
                 JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId,
                         DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
                 result.put("updatedArtifactVertex", updatedArtifactVertex);
-
+                graph.flush();
                 respondWithJson(response, result);
                 break;
             }

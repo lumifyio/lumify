@@ -390,8 +390,11 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title')); 
+            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title'));
             merged.truncatedTitle = truncatedTitle;
+            if (vertex.properties._glyphIcon) {
+                merged._glyphIconUri = vertex.properties._glyphIcon.value;
+            }
 
             return merged;
         };
@@ -1053,13 +1056,20 @@ define([
                 this.configService.getProperties(),
                 (req = this.vertexService.getRelatedVertices(data)),
                 this.cytoscapeReady()
-            ).done(function(config, verticesResponse, cy) {
+            ).always(function() {
                 clearTimeout(timeout);
                 if (LoadingPopover) {
                     LoadingPopover.teardownAll();
                 }
                 self.trigger('hideInformation');
                 self.off('popovercancel');
+            }).fail(function() {
+                self.trigger('displayInformation', {
+                    message: 'Error Loading Related Items',
+                    dismiss: 'click',
+                    dismissDuration: 5000
+                });
+            }).done(function(config, verticesResponse, cy) {
 
                 var vertices = verticesResponse[0].vertices,
                     count = vertices.length,

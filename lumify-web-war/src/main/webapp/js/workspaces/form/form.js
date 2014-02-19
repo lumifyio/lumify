@@ -115,13 +115,13 @@ define([
         };
 
         this.shareRowDataForPermission = function(userPermission) {
-            var user = _.findWhere(this.currentUsers, { rowKey: userPermission.user });
+            var user = _.findWhere(this.currentUsers, { id: userPermission.user });
             if (user) {
                 return {
                     user: {
                         userPermissions: userPermission.userPermissions,
                         permissionLabel: userPermission.userPermissions.edit ? 'edit' : 'view',
-                        rowKey: user.id,
+                        id: user.id,
                         userName: user.userName
                     },
                     editable: this.editable
@@ -166,7 +166,7 @@ define([
                 list = $target.closest('.permissions-list'),
                 userRow = list.data('userRow'),
                 badge = userRow.find('.permissions'),
-                id = userRow.data('id'),
+                id = userRow.data('userId'),
                 user = _.findWhere(this.attr.data.users, { user: id });
 
             if (user) {
@@ -232,11 +232,11 @@ define([
         this.onRevokeAccess = function(event) {
             var list = $(event.target).closest('.permissions-list'),
                 row = list.data('userRow'),
-                rowKey = row.data('rowKey');
+                id = row.data('userId');
             
             row.find('.permissions').popover('disable').addClass('loading');
             this.attr.data.users = _.reject(this.attr.data.users, function(user) {
-                return user.user === rowKey;
+                return user.user === id;
             });
             this.saveWorkspace(true)
                 .done(function() {
@@ -249,7 +249,7 @@ define([
             var self = this,
                 form = this.select('shareFormSelector'),
                 userPermission = {
-                    user: data.user.rowKey,
+                    user: data.user.id,
                     userPermissions: { view: true, edit: false }
                 },
                 row = $(shareRowTemplate(this.shareRowDataForPermission(userPermission))).insertBefore(form),
@@ -291,7 +291,7 @@ define([
                                     userMap[user.userName] = user;
 
                                     // Can't share with oneself
-                                    if (user.rowKey === self.attr.data.createdBy) return false;
+                                    if (user.id === self.attr.data.createdBy) return false;
 
                                     return regex.test(user.userName);
                                 }),

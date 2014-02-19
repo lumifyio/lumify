@@ -5,7 +5,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.google.inject.Inject;
 
 import java.util.Collection;
-import java.util.List;
 
 public class DictionaryEntryRepository extends Repository<DictionaryEntry> {
 
@@ -39,17 +38,17 @@ public class DictionaryEntryRepository extends Repository<DictionaryEntry> {
         return DictionaryEntry.TABLE_NAME;
     }
 
-    public Iterable<DictionaryEntry> findByConcept (String concept, User user) {
-        Iterable<Row> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME,".*\\c_" + concept, user.getModelUserContext());
+    public Iterable<DictionaryEntry> findByConcept(String concept, User user) {
+        Iterable<Row> rows = getModelSession().findByRowKeyRegex(DictionaryEntry.TABLE_NAME, ".*\\c_" + concept, user.getModelUserContext());
         return fromRows(rows);
     }
 
-    public DictionaryEntry createNew (String tokens, String concept) {
+    public DictionaryEntry createNew(String tokens, String concept) {
         return createNew(tokens, concept, null);
     }
 
-    public DictionaryEntry createNew (String tokens, String concept, String resolvedName) {
-        DictionaryEntry entry = new DictionaryEntry(new DictionaryEntryRowKey(tokens,concept));
+    public DictionaryEntry createNew(String tokens, String concept, String resolvedName) {
+        DictionaryEntry entry = new DictionaryEntry(new DictionaryEntryRowKey(tokens, concept));
         DictionaryEntryMetadata metadata = new DictionaryEntryMetadata()
                 .setTokens(tokens)
                 .setConcept(concept);
@@ -62,15 +61,15 @@ public class DictionaryEntryRepository extends Repository<DictionaryEntry> {
         return entry;
     }
 
-    public DictionaryEntry saveNew (String tokens, String concept, String resolvedName, User user) {
+    public DictionaryEntry saveNew(String tokens, String concept, String resolvedName, User user) {
         DictionaryEntry entry = createNew(tokens, concept, resolvedName);
-        this.save(entry, user.getModelUserContext());
+        this.save(entry);
         return entry;
     }
 
-    public DictionaryEntry saveNew (String tokens, String concept, User user) {
-        DictionaryEntry entry = createNew(tokens,concept);
-        this.save(entry, user.getModelUserContext());
+    public DictionaryEntry saveNew(String tokens, String concept, User user) {
+        DictionaryEntry entry = createNew(tokens, concept);
+        this.save(entry);
         return entry;
     }
 }

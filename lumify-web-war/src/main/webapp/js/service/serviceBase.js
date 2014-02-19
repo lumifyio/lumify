@@ -69,10 +69,10 @@ define(['atmosphere'],
                         if (config.onOpen) config.onOpen.apply(null, arguments);
                     },
                     onClientTimeout: function() {
-                        console.error('timeout', arguments);
+                        console.error('timeout');
                     },
-                    onClose: function() {
-                        console.error('closed', arguments);
+                    onClose: function(req) {
+                        console.error('closed', req.reasonPhrase, req.error);
                     },
                     onMessage: function (response) {
                         var body = response.responseBody,

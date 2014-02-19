@@ -2,10 +2,11 @@ package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AuditRelationship extends ColumnFamily{
+public class AuditRelationship extends ColumnFamily {
     public static final String NAME = "relationship";
     public static final String SOURCE_TYPE = "sourceType";
     public static final String SOURCE_TITLE = "sourceTitle";
@@ -17,16 +18,16 @@ public class AuditRelationship extends ColumnFamily{
     public static final String DEST_SUBTYPE = "destSubtype";
     public static final String LABEL = "label";
 
-    public AuditRelationship () {
-        super (NAME);
+    public AuditRelationship() {
+        super(NAME);
     }
 
     public String getSourceType() {
         return Value.toString(get(SOURCE_TYPE));
     }
 
-    public AuditRelationship setSourceType (Object sourceType) {
-        set (SOURCE_TYPE, sourceType);
+    public AuditRelationship setSourceType(Object sourceType, Visibility visibility) {
+        set(SOURCE_TYPE, sourceType, visibility.getVisibilityString());
         return this;
     }
 
@@ -34,8 +35,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_TITLE));
     }
 
-    public AuditRelationship setSourceTitle (Object sourceTitle) {
-        set (SOURCE_TITLE, sourceTitle);
+    public AuditRelationship setSourceTitle(Object sourceTitle, Visibility visibility) {
+        set(SOURCE_TITLE, sourceTitle, visibility.getVisibilityString());
         return this;
     }
 
@@ -43,8 +44,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_ID));
     }
 
-    public AuditRelationship setSourceId (Object sourceId) {
-        set (SOURCE_ID, sourceId);
+    public AuditRelationship setSourceId(Object sourceId, Visibility visibility) {
+        set(SOURCE_ID, sourceId, visibility.getVisibilityString());
         return this;
     }
 
@@ -52,8 +53,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_TYPE));
     }
 
-    public AuditRelationship setDestType (Object destType) {
-        set (DEST_TYPE, destType);
+    public AuditRelationship setDestType(Object destType, Visibility visibility) {
+        set(DEST_TYPE, destType, visibility.getVisibilityString());
         return this;
     }
 
@@ -61,8 +62,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_TITLE));
     }
 
-    public AuditRelationship setDestTitle (Object destTitle) {
-        set (DEST_TITLE, destTitle);
+    public AuditRelationship setDestTitle(Object destTitle, Visibility visibility) {
+        set(DEST_TITLE, destTitle, visibility.getVisibilityString());
         return this;
     }
 
@@ -70,8 +71,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_ID));
     }
 
-    public AuditRelationship setDestId (Object destId) {
-        set (DEST_ID, destId);
+    public AuditRelationship setDestId(Object destId, Visibility visibility) {
+        set(DEST_ID, destId, visibility.getVisibilityString());
         return this;
     }
 
@@ -79,8 +80,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(LABEL));
     }
 
-    public AuditRelationship setLabel (String label) {
-        set (LABEL, label);
+    public AuditRelationship setLabel(String label, Visibility visibility) {
+        set(LABEL, label, visibility.getVisibilityString());
         return this;
     }
 
@@ -88,8 +89,8 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(DEST_SUBTYPE));
     }
 
-    public AuditRelationship setDestSubtype (Object destSubtype) {
-        set (DEST_SUBTYPE, destSubtype);
+    public AuditRelationship setDestSubtype(Object destSubtype, Visibility visibility) {
+        set(DEST_SUBTYPE, destSubtype, visibility.getVisibilityString());
         return this;
     }
 
@@ -97,13 +98,13 @@ public class AuditRelationship extends ColumnFamily{
         return Value.toString(get(SOURCE_SUBTYPE));
     }
 
-    public AuditRelationship setSourceSubtype (Object source) {
-        set (SOURCE_SUBTYPE, source);
+    public AuditRelationship setSourceSubtype(Object source, Visibility visibility) {
+        set(SOURCE_SUBTYPE, source, visibility.getVisibilityString());
         return this;
     }
 
     @Override
-    public JSONObject toJson () {
+    public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
             json.put(SOURCE_ID, this.getSourceId());
