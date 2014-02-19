@@ -239,16 +239,14 @@ define([
 
         this.createEntity = function (parameters) {
             var self = this;
-
             this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
                     var resolvedVertex ={
                         graphVertexId: data.entityVertex.graphVertexId,
-                        _rowKey: data.entityVertex._rowKey,
-                        _conceptType: data.entityVertex._conceptType,
-                        _type: data.entityVertex._type,
-                        title: data.entityVertex.title,
-                        info: data.entityVertex.info
+                        _conceptType: {
+                            value: data.entityVertex._conceptType
+                        },
+                        title: data.entityVertex.title
                     };
 
                     // Temporarily creating a new tag to show on ui prior to backend update
@@ -303,11 +301,10 @@ define([
             var self = this;
             var resolvedVertex = {
                 graphVertexId: data.entityVertex.graphVertexId,
-                _rowKey: data.entityVertex._rowKey,
-                _conceptType: data.entityVertex._conceptType,
-                _type: data.entityVertex._type,
+                _conceptType: {
+                    value: data.entityVertex._conceptType
+                },
                 title: data.entityVertex.title,
-                info: data.entityVertex.info
             };
             var $focused = $('.focused');
             var $tag = $focused.find('.label-info');
