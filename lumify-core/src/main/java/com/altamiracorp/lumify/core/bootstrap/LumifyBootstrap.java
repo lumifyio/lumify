@@ -22,9 +22,13 @@ import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
-import com.altamiracorp.lumify.core.user.*;
+import com.altamiracorp.lumify.core.user.DefaultUserProvider;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
@@ -100,11 +104,11 @@ public class LumifyBootstrap extends AbstractModule {
 
         MetricsManager metricsManager = new JmxMetricsManager();
 
+        bind(AuthorizationRepository.class).to(AccumuloAuthorizationRepository.class);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
         bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
-        bind(AuthorizationBuilder.class).toInstance(new AccumuloAuthorizationBuilder()); // TODO make reconfigurable
 
         bind(CuratorFramework.class)
                 .toProvider(new CuratorFrameworkProvider(configuration))

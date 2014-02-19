@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.core.model.user;
 
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.user.AuthorizationBuilder;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -30,17 +29,14 @@ public class UserRepository {
     private final Graph graph;
     private final String userConceptId;
     private final com.altamiracorp.securegraph.Authorizations authorizations;
-    private final AuthorizationBuilder authorizationBuilder;
     private final AuthorizationRepository authorizationRepository;
 
     @Inject
     public UserRepository(
             final Graph graph,
             final OntologyRepository ontologyRepository,
-            final AuthorizationBuilder authorizationBuilder,
             final AuthorizationRepository authorizationRepository) {
         this.graph = graph;
-        this.authorizationBuilder = authorizationBuilder;
         this.authorizationRepository = authorizationRepository;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
@@ -50,7 +46,7 @@ public class UserRepository {
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
-        this.authorizations = authorizationBuilder.create(authorizationsSet);
+        this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
     public Vertex findByUserName(String username) {
@@ -172,6 +168,6 @@ public class UserRepository {
         Vertex userVertex = findById(user.getUserId());
         Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(userVertex);
         Collections.addAll(authorizationsSet, additionalAuthorizations);
-        return authorizationBuilder.create(authorizationsSet);
+        return authorizationRepository.createAuthorizations(authorizationsSet);
     }
 }
