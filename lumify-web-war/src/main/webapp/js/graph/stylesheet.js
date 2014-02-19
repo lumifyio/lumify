@@ -44,7 +44,7 @@ define([
             .css({
                 'width': 60 * retina.devicePixelRatio,
                 'height': 60 * retina.devicePixelRatio,
-                'background-image': 'data(_glyphIcon)'
+                'background-image': 'data(_glyphIconUri)'
             })
 
             .selector('node.hover')

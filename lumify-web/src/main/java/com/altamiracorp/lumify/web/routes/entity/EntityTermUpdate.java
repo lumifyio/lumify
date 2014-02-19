@@ -75,7 +75,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
 
         // TODO: replace second "" when we implement commenting on ui
         resolvedVertexMutation = entityHelper.updateMutation(resolvedVertexMutation, conceptId, sign, "", "", user);
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, new Visibility(""));
         resolvedVertex = resolvedVertexMutation.save();
 
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
@@ -84,7 +84,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
             graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), new Visibility(""), authorizations);
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
             // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, new Visibility(""));
         }
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);

@@ -85,7 +85,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         graphEdgeMutation.save();
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user);
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user, visibilityTranslator.toVisibility(visibilitySource));
 
         JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties());
         respondWithJson(response, resultsJson);

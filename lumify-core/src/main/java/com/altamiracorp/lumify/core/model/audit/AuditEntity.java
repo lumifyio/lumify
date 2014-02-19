@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,16 +13,16 @@ public class AuditEntity extends ColumnFamily {
     public static final String SUBTYPE = "subtype";
     public static final String ID = "id";
 
-    public AuditEntity () {
-        super (NAME);
+    public AuditEntity() {
+        super(NAME);
     }
 
     public String getTitle() {
         return Value.toString(get(TITLE));
     }
 
-    public AuditEntity setTitle (Object title) {
-        set(TITLE, title);
+    public AuditEntity setTitle(Object title, Visibility visibility) {
+        set(TITLE, title, visibility.getVisibilityString());
         return this;
     }
 
@@ -29,8 +30,8 @@ public class AuditEntity extends ColumnFamily {
         return Value.toString(get(TYPE));
     }
 
-    public AuditEntity setType (Object type) {
-        set (TYPE, type);
+    public AuditEntity setType(Object type, Visibility visibility) {
+        set(TYPE, type, visibility.getVisibilityString());
         return this;
     }
 
@@ -38,28 +39,29 @@ public class AuditEntity extends ColumnFamily {
         return Value.toString(get(SUBTYPE));
     }
 
-    public AuditEntity setSubtype (Object subtype) {
-        set (SUBTYPE, subtype);
+    public AuditEntity setSubtype(Object subtype, Visibility visibility) {
+        set(SUBTYPE, subtype, visibility.getVisibilityString());
         return this;
     }
-     public String getId () {
+
+    public String getId() {
         return Value.toString(get(ID));
     }
 
-    public AuditEntity setID (String id) {
-        set (ID, id);
+    public AuditEntity setID(String id, Visibility visibility) {
+        set(ID, id, visibility.getVisibilityString());
         return this;
     }
 
     @Override
-    public JSONObject toJson () {
+    public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
             json.put("title", this.getTitle());
             json.put("type", this.getType());
             json.put("subType", this.getSubtype());
             json.put("id", this.getId());
-            return  json;
+            return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
