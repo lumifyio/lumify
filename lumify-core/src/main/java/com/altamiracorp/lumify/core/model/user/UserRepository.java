@@ -8,17 +8,16 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
 import com.altamiracorp.securegraph.Visibility;
-import com.altamiracorp.securegraph.accumulo.AccumuloGraph;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.apache.accumulo.core.Constants;
-import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
@@ -32,14 +31,19 @@ public class UserRepository {
     private final String userConceptId;
     private final com.altamiracorp.securegraph.Authorizations authorizations;
     private final AuthorizationBuilder authorizationBuilder;
+    private final AuthorizationRepository authorizationRepository;
 
     @Inject
-    public UserRepository(final Graph graph, final OntologyRepository ontologyRepository, final AuthorizationBuilder authorizationBuilder) {
+    public UserRepository(
+            final Graph graph,
+            final OntologyRepository ontologyRepository,
+            final AuthorizationBuilder authorizationBuilder,
+            final AuthorizationRepository authorizationRepository) {
         this.graph = graph;
         this.authorizationBuilder = authorizationBuilder;
+        this.authorizationRepository = authorizationRepository;
 
-        addAuthorizationToGraph(VISIBILITY_STRING);
-        addAuthorizationToGraph(OntologyRepository.VISIBILITY_STRING); // This can't be moved to the OntologyRepository because it would create an injection circular dependency
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();
@@ -146,7 +150,7 @@ public class UserRepository {
         }
         authorizations.add(auth);
 
-        addAuthorizationToGraph(auth);
+        this.authorizationRepository.addAuthorizationToGraph(auth);
 
         String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
@@ -162,65 +166,6 @@ public class UserRepository {
         String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
         graph.flush();
-    }
-
-    public void addAuthorizationToGraph(String auth) {
-        // TODO this code should be moved out of UserRepository
-        // TODO this code is not safe across a cluster since it is not atomic. One possibility is to create a table of authorizations and always read/write from that table.
-        synchronized (graph) {
-            if (graph instanceof AccumuloGraph) {
-                try {
-                    AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
-                    String principal = accumuloGraph.getConnector().whoami();
-                    Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                    if (currentAuthorizations.contains(auth)) {
-                        return;
-                    }
-                    List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
-                    for (byte[] currentAuth : currentAuthorizations) {
-                        newAuthorizationsArray.add(currentAuth);
-                    }
-                    newAuthorizationsArray.add(auth.getBytes(Constants.UTF8));
-                    Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
-                    accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
-                } catch (Exception ex) {
-                    throw new RuntimeException("Could not update authorizations in accumulo", ex);
-                }
-            } else {
-                throw new RuntimeException("graph type not supported to add authorizations.");
-            }
-        }
-    }
-
-    public void removeAuthorizationFromGraph(String auth) {
-        // TODO this code should be moved out of UserRepository
-        // TODO this code is not safe across a cluster since it is not atomic. One possibility is to create a table of authorizations and always read/write from that table.
-        synchronized (graph) {
-            if (graph instanceof AccumuloGraph) {
-                try {
-                    AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
-                    String principal = accumuloGraph.getConnector().whoami();
-                    Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
-                    if (!currentAuthorizations.contains(auth)) {
-                        return;
-                    }
-                    byte[] authBytes = auth.getBytes(Constants.UTF8);
-                    List<byte[]> newAuthorizationsArray = new ArrayList<byte[]>();
-                    for (byte[] currentAuth : currentAuthorizations) {
-                        if (Arrays.equals(currentAuth, authBytes)) {
-                            continue;
-                        }
-                        newAuthorizationsArray.add(currentAuth);
-                    }
-                    Authorizations newAuthorizations = new Authorizations(newAuthorizationsArray);
-                    accumuloGraph.getConnector().securityOperations().changeUserAuthorizations(principal, newAuthorizations);
-                } catch (Exception ex) {
-                    throw new RuntimeException("Could not update authorizations in accumulo", ex);
-                }
-            } else {
-                throw new RuntimeException("graph type not supported to add authorizations.");
-            }
-        }
     }
 
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
