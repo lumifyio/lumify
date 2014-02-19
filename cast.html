@@ -14,10 +14,10 @@
       window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
       window.castReceiverManager.start(appConfig);
 
-      var customMessageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:lumify.io');
-      customMessageBus.onMessage = function(event) {
-        document.getElementById("message").innerHTML = JSON.stringify(event);
-      }
+      //var customMessageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:lumify.io');
+      //customMessageBus.onMessage = function(event) {
+      //  document.getElementById("message").innerHTML = JSON.stringify(event);
+      //}
     }
   </script>
 </body>
