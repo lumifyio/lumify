@@ -54,6 +54,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         String existing = getOptionalParameter(request, "existing");
         String graphVertexId = getOptionalParameter(request, "graphVertexId");
 
+
         User user = getUser(request);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
@@ -65,7 +66,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         ElementMutation<Vertex> resolvedVertexMutation =
                 entityHelper.createGraphMutation(concept, sign, existing, graphVertexId, "", "", user);
         Vertex resolvedVertex = resolvedVertexMutation.save();
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user);
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
 
         ArtifactDetectedObject newDetectedObject = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, concept);
 
@@ -83,13 +84,13 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         detectedObjectList.put(entityVertex);
 
         DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjectList.toString(), visibility);
-        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user);
+        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
         artifactVertex = artifactVertexMutation.save();
 
         graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, user.getAuthorizations());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
 
         result.put("entityVertex", entityVertex);
 
