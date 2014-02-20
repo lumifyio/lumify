@@ -230,7 +230,7 @@ define([
         };
 
         this.addVertices = function(vertices, opts) {
-            var options = $.extend({ fit:false }, opts),
+            var options = $.extend({ fit:false, animate:false }, opts),
                 addedVertices = [],
                 updatedVertices = [],
                 self = this;
@@ -252,7 +252,8 @@ define([
             }
 
             this.cytoscapeReady(function(cy) {
-                var currentNodes = cy.nodes(),
+                var container = $(cy.container()),
+                    currentNodes = cy.nodes(),
                     boundingBox = currentNodes.boundingBox(),
                     validBox = isFinite(boundingBox.x1),
                     zoom = cy.zoom(),
@@ -262,6 +263,8 @@ define([
                         x: validBox ? (boundingBox.x1/* + xInc*/) : 0,
                         y: validBox ? (boundingBox.y2/* + yInc*/) : 0
                     });
+
+                if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
                 nextAvailablePosition.y += yInc;
 
@@ -284,6 +287,7 @@ define([
 
                 customLayout.done(function(layoutPositions) {
 
+                    var cyNodes = [];
                     vertices.forEach(function(vertex) {
 
                         var cyNodeData = {
@@ -329,31 +333,47 @@ define([
                             }
                         }
 
-                        var cyNode = cy.add(cyNodeData);
 
                         if (needsAdding || needsUpdating) {
                             (needsAdding ? addedVertices : updatedVertices).push({
                                 id: vertex.id,
                                 workspace: {
-                                    graphPosition: retina.pixelsToPoints(cyNode.position())
                                 }
                             });
                         }
 
                         if (/^(image|video)$/i.test(vertex.concept.displayType)) {
-                            _.delay(function() {
-                                previews.generatePreview(vertex, { width:178 * retina.devicePixelRatio }, function(dataUri) {
-                                    if (dataUri) {
-                                        cyNode.css('background-image', dataUri);
-                                    }
-                                });
-                            }, 500);
+                            previews.syncGeneratePreview(vertex, { width:178 * retina.devicePixelRatio },
+                                                         function(dataUri) {
+                                                             if (dataUri) {
+                                                                 cyNodeData.data._previewImageUri = dataUri;
+                                                             }
+                                                         });
                         }
+
+                        cyNodes.push(cyNodeData);
 
                     });
 
+                    cy.add(cyNodes);
+                    addedVertices.concat(updatedVertices).forEach(function(v) {
+                        v.workspace.graphPosition = cy.getElementById(vertexId(v)).position();
+                    });
+
+
                     if (options.fit && cy.nodes().length) {
                         _.defer(self.fit.bind(self));
+                    }
+                    if (options.animate) {
+                        if (cy.nodes().length) {
+                            _.delay(function again() {
+                                container.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function(e) {
+                                    container.removeClass('animatein animatestart');
+                                });
+                                container.addClass('animateinstart');
+
+                            }, 250);
+                        } else container.removeClass('animatein animateinstart');
                     }
 
                     if (existingNodes.length && cloned && cloned.length) {
@@ -363,7 +383,7 @@ define([
                     if (updatedVertices.length) {
                         self.trigger(document, 'updateVertices', { vertices:updatedVertices });
                     } else if (addedVertices.length) {
-                        cy.container().focus();
+                        container.focus();
                         self.trigger(document, 'addVertices', { vertices:addedVertices });
                     }
 
@@ -379,6 +399,7 @@ define([
 
             if (vertex.properties._conceptType.value) cls.push('concept-' + vertex.properties._conceptType.value);
             if (vertex.properties._glyphIcon) cls.push('hasCustomGlyph');
+            if (/^(image|video)$/i.test(vertex.concept.displayType)) cls.push('hasPreview');
             
             return cls.join(' ');
         };
@@ -978,7 +999,8 @@ define([
             if (workspace.data.vertices.length) {
                 var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.id;
                 this.addVertices(workspace.data.vertices, { 
-                    fit: newWorkspace
+                    fit: newWorkspace,
+                    animate: false
                 });
             } else {
                 this.hideLoading();

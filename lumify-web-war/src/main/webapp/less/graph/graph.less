@@ -44,6 +44,16 @@ background: white;
 .cytoscape-container {
   position: relative;
 
+  &.animatein {
+    .scale(0.95);
+    .opacity(0);
+  }
+  &.animateinstart {
+    .transition(~"all ease-in 0.2s");
+    .scale(1);
+    .opacity(100);
+  }
+
   // Cytoscape hardcodes 1000 here, breaks resizing
   div { z-index: @graph-zIndex !important; }
 }
