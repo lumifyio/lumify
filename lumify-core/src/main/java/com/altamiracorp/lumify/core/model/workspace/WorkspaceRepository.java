@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.model.workspace;
 
+import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
+import com.altamiracorp.lumify.core.exception.LumifyResourceNotFoundException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -62,7 +64,7 @@ public class WorkspaceRepository {
         for (WorkspaceUser workspaceUser : users) {
             Vertex userVertex = userRepository.findById(workspaceUser.getUserId());
             if (userVertex == null) {
-                throw new RuntimeException("Could not find user: " + workspaceUser.getUserId());
+                throw new LumifyResourceNotFoundException("Could not find user: " + workspaceUser.getUserId(), workspaceUser.getUserId());
             }
             userRepository.removeAuthorization(userVertex, workspace.getId());
         }
@@ -172,7 +174,7 @@ public class WorkspaceRepository {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
-            throw new RuntimeException("Could not find vertex: " + vertexId);
+            throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
         }
         Iterable<Edge> edges = workspace.getVertex().getEdges(otherVertex, Direction.BOTH, authorizations);
         for (Edge edge : edges) {
@@ -186,7 +188,7 @@ public class WorkspaceRepository {
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
-            throw new RuntimeException("Could not find vertex: " + vertexId);
+            throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
         }
         EdgeBuilder edgeBuilder = graph.prepareEdge(workspace.getVertex(), otherVertex, workspaceToEntityRelationshipId, visibility, authorizations);
         WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, visibility);
@@ -199,7 +201,7 @@ public class WorkspaceRepository {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
-            throw new RuntimeException("Could not find user: " + userId);
+            throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
         Iterable<Edge> edges = workspace.getVertex().getEdges(userVertex, Direction.BOTH, workspaceToUserRelationshipId, authorizations);
         for (Edge edge : edges) {
@@ -209,12 +211,25 @@ public class WorkspaceRepository {
         graph.flush();
     }
 
+    public boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
+        for (WorkspaceUser userWithAccess : usersWithAccess) {
+            if (userWithAccess.getUserId().equals(user.getUserId()) && userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user) {
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
-            throw new RuntimeException("Could not find user: " + userId);
+            throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
         EdgeBuilder edgeBuilder = graph.prepareEdge(workspace.getVertex(), userVertex, workspaceToUserRelationshipId, visibility, authorizations);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, visibility);
