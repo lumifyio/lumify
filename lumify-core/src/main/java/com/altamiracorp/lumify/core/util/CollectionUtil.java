@@ -6,6 +6,9 @@ import java.util.List;
 
 public class CollectionUtil {
     public static <T> List<T> toList(final Iterable<T> it) {
+        if (it instanceof List) {
+            return (List<T>) it;
+        }
         List<T> list = new ArrayList<T>();
         for (T t : it) {
             list.add(t);
