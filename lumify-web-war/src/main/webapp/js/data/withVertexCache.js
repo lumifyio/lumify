@@ -104,7 +104,7 @@ define([
             } 
             */
 
-            cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value]
+            cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value || cache.properties._conceptType]
             if (!cache.concept) {
                 console.error('Unable to attach concept to vertex', cache.concept, cache.properties._conceptType);
             }
