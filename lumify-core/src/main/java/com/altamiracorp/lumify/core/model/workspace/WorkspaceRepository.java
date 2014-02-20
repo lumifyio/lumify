@@ -58,7 +58,11 @@ public class WorkspaceRepository {
     }
 
     public void delete(Workspace workspace, User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
+
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
 
         List<WorkspaceUser> users = findUsersWithAccess(workspace, user);
         for (WorkspaceUser workspaceUser : users) {
@@ -171,12 +175,15 @@ public class WorkspaceRepository {
     }
 
     public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
         }
-        Iterable<Edge> edges = workspace.getVertex().getEdges(otherVertex, Direction.BOTH, authorizations);
+        List<Edge> edges = toList(workspace.getVertex().getEdges(otherVertex, Direction.BOTH, authorizations));
         for (Edge edge : edges) {
             graph.removeEdge(edge, authorizations);
         }
@@ -184,6 +191,9 @@ public class WorkspaceRepository {
     }
 
     public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, int graphPositionX, int graphPositionY, User user) {
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
@@ -198,12 +208,15 @@ public class WorkspaceRepository {
     }
 
     public void deleteUserFromWorkspace(Workspace workspace, String userId, User user) {
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
-        Iterable<Edge> edges = workspace.getVertex().getEdges(userVertex, Direction.BOTH, workspaceToUserRelationshipId, authorizations);
+        List<Edge> edges = toList(workspace.getVertex().getEdges(userVertex, Direction.BOTH, workspaceToUserRelationshipId, authorizations));
         for (Edge edge : edges) {
             userRepository.removeAuthorization(userVertex, workspace.getId());
             graph.removeEdge(edge, authorizations);
