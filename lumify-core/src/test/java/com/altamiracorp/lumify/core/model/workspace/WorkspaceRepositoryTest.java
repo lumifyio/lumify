@@ -265,9 +265,23 @@ public class WorkspaceRepositoryTest {
         }
 
         idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 100, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 200, user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
+
+        List<WorkspaceEntity> entities = workspaceRepository.findEntities(workspace, user1);
+        assertEquals(1, entities.size());
+        assertEquals(entity1Vertex.getId(), entities.get(0).getEntityVertexId());
+        assertEquals(100, entities.get(0).getGraphPositionX());
+        assertEquals(200, entities.get(0).getGraphPositionY());
+
+        try {
+            workspaceRepository.findEntities(workspace, user2);
+            fail("user2 should not have read access to workspace");
+        } catch (LumifyAccessDeniedException ex) {
+            assertEquals(user2, ex.getUser());
+            assertEquals(workspace.getId(), ex.getResourceId());
+        }
 
         try {
             workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
