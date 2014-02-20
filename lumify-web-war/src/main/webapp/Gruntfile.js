@@ -91,6 +91,12 @@ module.exports = function(grunt) {
         }
     },
 
+    concurrent: {
+        development: ['requirejs:development', 'less:development'],
+        selenium: ['mochaSelenium:chrome', 'mochaSelenium:firefox'],
+        tests: ['karma', 'jshint', 'mochaSelenium:chrome', 'mochaSelenium:firefox']
+    },
+
     jshint: {
         development: {
             files: {
@@ -141,22 +147,54 @@ module.exports = function(grunt) {
                 message: 'Less finished',
             }
         }
+    },
+
+    mochaSelenium: {
+        options: { 
+            screenshotAfterEach: true,
+            screenshotDir: 'test/reports',
+            reporter: 'spec', // doc for html
+            viewport: { width: 900, height: 700 },
+            timeout: 30e3,
+            slow: 10e3,
+            usePromises: true,
+            useChaining: true,
+            ignoreLeaks: false
+        },
+        safari:  { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'safari' } },
+        firefox: { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'firefox' } },
+        chrome:  { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'chrome' } }
+    },
+
+    karma: {
+        unit: {
+            configFile: 'karma.conf.js',
+            runnerPort: 9999,
+            singleRun: true
+        }
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-mocha-selenium');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('deps', ['bower:install', 'bower:prune', 'exec']);
+  grunt.registerTask('deps', 'Install Webapp Dependencies', ['bower:install', 'bower:prune', 'exec']);
 
-  grunt.registerTask('development', ['less:development', 'requirejs:development']);
-  grunt.registerTask('production', ['less:production', 'requirejs:production']);
+  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['concurrent:selenium']);
+  grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', ['karma']);
+  grunt.registerTask('test:lint', 'Run JavaScript Lint Tests', ['jshint']);
+  grunt.registerTask('test', 'Run unit and functional tests', ['concurrent:tests'])
+
+  grunt.registerTask('development', 'Build js/less for development', ['less:development', 'requirejs:development']);
+  grunt.registerTask('production', 'Build js/less for production', ['less:production', 'requirejs:production']);
 
   grunt.registerTask('default', ['development']);
-
 };
