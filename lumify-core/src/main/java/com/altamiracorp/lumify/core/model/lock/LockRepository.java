@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.core.model.lock;
 import com.google.inject.Inject;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.recipes.locks.InterProcessLock;
-import com.netflix.curator.framework.recipes.locks.InterProcessSemaphoreMutex;
+import com.netflix.curator.framework.recipes.locks.InterProcessMutex;
 
 public class LockRepository {
     public static final String DEFAULT_PATH_PREFIX = "/lumify/locks/";
@@ -17,7 +17,7 @@ public class LockRepository {
     }
 
     public Lock createLock(String lockName) {
-        InterProcessLock l = new InterProcessSemaphoreMutex(this.curatorFramework, getPath(lockName));
+        InterProcessLock l = new InterProcessMutex(this.curatorFramework, getPath(lockName));
         return new Lock(l);
     }
 

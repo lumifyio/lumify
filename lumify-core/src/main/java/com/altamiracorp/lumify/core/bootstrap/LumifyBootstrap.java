@@ -19,6 +19,7 @@ package com.altamiracorp.lumify.core.bootstrap;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
@@ -40,6 +41,7 @@ import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -188,9 +190,13 @@ public class LumifyBootstrap extends AbstractModule {
 
         @Override
         public CuratorFramework get() {
-            CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
-            client.start();
-            return client;
+            try {
+                CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
+                client.start();
+                return client;
+            } catch (IOException ex) {
+                throw new LumifyException("Could not create curator: " + zookeeperConnectionString, ex);
+            }
         }
     }
 
