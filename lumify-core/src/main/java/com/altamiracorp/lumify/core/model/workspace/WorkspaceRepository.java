@@ -144,6 +144,9 @@ public class WorkspaceRepository {
     }
 
     public List<WorkspaceEntity> findEntities(final Workspace workspace, User user) {
+        if (!doesUserHaveReadAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Iterable<Edge> entityEdges = workspace.getVertex().query(authorizations).edges(workspaceToEntityRelationshipId);
         return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
@@ -228,6 +231,17 @@ public class WorkspaceRepository {
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId()) && userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
+        for (WorkspaceUser userWithAccess : usersWithAccess) {
+            if (userWithAccess.getUserId().equals(user.getUserId())
+                    && (userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE || userWithAccess.getWorkspaceAccess() == WorkspaceAccess.READ)) {
                 return true;
             }
         }
