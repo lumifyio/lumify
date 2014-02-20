@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.InMemoryAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.id.IdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
@@ -31,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceRepositoryTest {
-    private Graph graph;
+    private InMemoryGraph graph;
 
     @Mock
     private OntologyRepository ontologyRepository;
@@ -87,6 +86,9 @@ public class WorkspaceRepositoryTest {
 
     @Test
     public void testAddWorkspace() {
+        int startingVertexCount = graph.getAllVertices().size();
+        int startingEdgeCount = graph.getAllEdges().size();
+
         String workspaceId = "testWorkspaceId";
         when(idGenerator.nextId()).thenReturn(workspaceId);
 
@@ -101,5 +103,8 @@ public class WorkspaceRepositoryTest {
         when(userRepository.getAuthorizations(eq(user), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace.getId()))).thenReturn(authorizations);
         Workspace foundWorkspace = workspaceRepository.findById(workspace.getId(), user);
         assertEquals(workspace.getId(), foundWorkspace.getId());
+
+        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
+        assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edge between workspace and user
     }
 }
