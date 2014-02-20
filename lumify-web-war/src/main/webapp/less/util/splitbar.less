@@ -10,16 +10,21 @@
     height: 100%;
     width: 1px;
     background: @border;
-    left: 10px;
     top: 0;
   }
 }
 
 .ui-resizable-handle.ui-resizable-e {
-  width: 20px;
-  right: -10px;
+  width: 10px;
+  right: -8px;
+  &:before {
+    left: 2px;
+  }
 }
 .ui-resizable-handle.ui-resizable-w {
   width: 20px;
   left: -10px;
+  &:before {
+    left: 10px;
+  }
 }

@@ -145,6 +145,11 @@ function(VertexService, template) {
             delete options.queueName;
 
             queue.addTask( new Preview(vertex, options, callback) );
+        },
+
+        syncGeneratePreview: function(vertex, opts, callback) {
+            var preview = new Preview(vertex, opts, callback);
+            preview.start();
         }
     };
 });
