@@ -976,7 +976,10 @@ define([
             this.resetGraph();
             this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data.vertices.length) {
-                this.addVertices(workspace.data.vertices, { fit:(this.previousWorkspace && this.previousWorkspace != workspace.id) });
+                var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.id;
+                this.addVertices(workspace.data.vertices, { 
+                    fit: newWorkspace
+                });
             } else {
                 this.hideLoading();
                 this.checkEmptyGraph();
