@@ -38,7 +38,10 @@ define([
                 'shape': 'roundrectangle'
             })
 
-            // TODO: make shape movieStrip if video type
+            .selector('node.hasPreview')
+            .css({
+                'background-image': 'data(_previewImageUri)'
+            })
 
             .selector('node.hasCustomGlyph')
             .css({
