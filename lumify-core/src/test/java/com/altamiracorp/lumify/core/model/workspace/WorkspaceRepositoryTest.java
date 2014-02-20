@@ -66,6 +66,8 @@ public class WorkspaceRepositoryTest {
 
     private WorkspaceRepository workspaceRepository;
     private AuthorizationRepository authorizationRepository;
+    private Vertex entity1Vertex;
+    private Vertex entity2Vertex;
 
     @Before
     public void setup() {
@@ -96,6 +98,11 @@ public class WorkspaceRepositoryTest {
         when(user2.getUserId()).thenReturn(user2Id);
         user2Vertex = graph.addVertex(user2Id, new Visibility(UserRepository.VISIBILITY_STRING), new InMemoryAuthorizations(UserRepository.VISIBILITY_STRING));
         when(userRepository.findById(eq(user2Id))).thenReturn(user2Vertex);
+
+        Object entity1VertexId = "entity1Id";
+        entity1Vertex = graph.addVertex(entity1VertexId, new Visibility(""), new InMemoryAuthorizations());
+        Object entity2VertexId = "entity2Id";
+        entity2Vertex = graph.addVertex(entity2VertexId, new Visibility(""), new InMemoryAuthorizations());
     }
 
     @Test
@@ -124,7 +131,7 @@ public class WorkspaceRepositoryTest {
     }
 
     @Test
-    public void testFindAllByUser() {
+    public void testAccessControl() {
         int startingVertexCount = graph.getAllVertices().size();
         int startingEdgeCount = graph.getAllEdges().size();
 
@@ -205,5 +212,73 @@ public class WorkspaceRepositoryTest {
         }
         assertTrue("could not find user1", foundUser1);
         assertTrue("could not find user2", foundUser2);
+
+        try {
+            workspaceRepository.deleteUserFromWorkspace(user2Workspaces.get(0), user1.getUserId(), user1);
+            fail("user1 should not have write access to user2's workspace");
+        } catch (LumifyAccessDeniedException ex) {
+            assertEquals(user1, ex.getUser());
+            assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
+        }
+
+        try {
+            workspaceRepository.delete(user2Workspaces.get(0), user1);
+            fail("user1 should not have write access to user2's workspace");
+        } catch (LumifyAccessDeniedException ex) {
+            assertEquals(user1, ex.getUser());
+            assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
+        }
+
+        workspaceRepository.deleteUserFromWorkspace(user2Workspaces.get(0), user1.getUserId(), user2);
+        assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
+        assertEquals(startingEdgeCount + 3, graph.getAllEdges().size()); // +3 = the edges between workspaces and users
+
+        workspaceRepository.delete(user2Workspaces.get(0), user2);
+        assertEquals(startingVertexCount + 2, graph.getAllVertices().size()); // +2 = the workspace vertices
+        assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces and users
+    }
+
+    @Test
+    public void testEntities() {
+        int startingVertexCount = graph.getAllVertices().size();
+        int startingEdgeCount = graph.getAllEdges().size();
+
+        String workspaceId = "testWorkspaceId";
+        idGenerator.push(workspaceId);
+        idGenerator.push(workspaceId + "_to_" + user1.getUserId());
+
+        Workspace workspace = workspaceRepository.add("workspace1", user1);
+        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
+        assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edges between workspaces and users
+
+        InMemoryAuthorizations user1Authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
+        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace.getId()))).thenReturn(user1Authorizations);
+        InMemoryAuthorizations user2Authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING);
+        when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace.getId()))).thenReturn(user2Authorizations);
+
+        try {
+            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 100, user2);
+            fail("user2 should not have write access to workspace");
+        } catch (LumifyAccessDeniedException ex) {
+            assertEquals(user2, ex.getUser());
+            assertEquals(workspace.getId(), ex.getResourceId());
+        }
+
+        idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 100, user1);
+        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
+        assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
+
+        try {
+            workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
+            fail("user2 should not have write access to workspace");
+        } catch (LumifyAccessDeniedException ex) {
+            assertEquals(user2, ex.getUser());
+            assertEquals(workspace.getId(), ex.getResourceId());
+        }
+
+        workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
+        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
+        assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edges between workspaces, users
     }
 }
