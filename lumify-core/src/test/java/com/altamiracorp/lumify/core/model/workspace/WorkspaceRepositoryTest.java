@@ -229,6 +229,10 @@ public class WorkspaceRepositoryTest {
             assertEquals(user2Workspaces.get(0).getId(), ex.getResourceId());
         }
 
+        workspaceRepository.updateUserOnWorkspace(user2Workspaces.get(0), user1.getUserId(), WorkspaceAccess.WRITE, user2);
+        assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
+        assertEquals(startingEdgeCount + 4, graph.getAllEdges().size()); // +4 = the edges between workspaces and users
+
         workspaceRepository.deleteUserFromWorkspace(user2Workspaces.get(0), user1.getUserId(), user2);
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 3, graph.getAllEdges().size()); // +3 = the edges between workspaces and users
