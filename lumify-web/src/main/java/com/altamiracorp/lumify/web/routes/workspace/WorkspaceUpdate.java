@@ -39,6 +39,10 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         JSONObject dataJson = new JSONObject(data);
 
+        if (dataJson.has("title")) {
+            setTitle(workspace, dataJson.getString("title"), authUser);
+        }
+
         JSONArray entityUpdates = dataJson.getJSONArray("entityUpdates");
         updateEntities(workspace, entityUpdates, authUser);
 
@@ -54,6 +58,11 @@ public class WorkspaceUpdate extends BaseRequestHandler {
         JSONObject resultJson = new JSONObject();
         resultJson.put("result", "OK");
         respondWithJson(response, resultJson);
+    }
+
+    private void setTitle(Workspace workspace, String title, User authUser) {
+        LOGGER.debug("setting title (%s): %s", workspace.getId(), title);
+        workspaceRepository.setTitle(workspace, title, authUser);
     }
 
     private void deleteUsers(Workspace workspace, JSONArray userDeletes, User authUser) {
