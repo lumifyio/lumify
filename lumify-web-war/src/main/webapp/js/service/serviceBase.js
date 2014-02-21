@@ -3,14 +3,6 @@ define(['atmosphere'],
     function() {
         'use strict';
 
-        $(function() {
-            $(document).ajaxError(function( event, jqxhr, settings, exception ) {
-                if (jqxhr.status === 403 && settings.url !== 'user/me') {
-                    $(document).trigger('logout');
-                }
-            });
-        })
-
         function ServiceBase(options) {
             options = options || {};
 
