@@ -1,8 +1,8 @@
 <ul class="nav nav-list permissions-list">
-  <li><label><input data-permissions="<%= JSON.stringify({edit:false,view:true}) %>" 
-                    type="radio" name="permission" <%= !userPermissions.edit ? 'checked' : '' %>/>View</label></li>
-  <li><label><input data-permissions="<%= JSON.stringify({edit:true,view:true}) %>" 
-                    type="radio" name="permission" <%= userPermissions.edit ? 'checked' : '' %>/>Edit</label></li>
+  <li><label><input data-permissions="READ" 
+                    type="radio" name="permission" <%= access == 'READ' ? 'checked' : '' %>/>View</label></li>
+  <li><label><input data-permissions="WRITE" 
+                    type="radio" name="permission" <%= access == 'WRITE' ? 'checked' : '' %>/>Edit</label></li>
   <li class="divider"> </li>
 
   <li><button class="remove-access btn btn-danger">Revoke access</button></li>

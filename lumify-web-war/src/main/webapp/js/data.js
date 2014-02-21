@@ -215,12 +215,15 @@ define([
                     delete wv.dropPosition;
                 });
 
+                // FIXME
+                /*
                 self.trigger('workspaceSaving', ws);
 
                 saveFn({ data:{ workspaceVertices:self.workspaceVertices }}).done(function(data) {
                     self.id = data.workspaceId;
                     self.trigger('workspaceSaved', data);
                 });
+                */
             });
         };
 
@@ -530,7 +533,7 @@ define([
                         });
 
                     if (myWorkspaces.length === 0) {
-                        self.workspaceService.saveNew({data:{}}).done(function(workspace) {
+                        self.workspaceService.saveNew().done(function(workspace) {
                             self.loadWorkspace(workspace);
                         });
                         return;
@@ -581,7 +584,7 @@ define([
 
         this.loadWorkspace = function(workspaceData) {
             var self = this,
-                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.id;
+                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
 
             self.id = workspaceId;
 
@@ -590,6 +593,18 @@ define([
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
+                // FIXME
+                var workspace = workspaceData;
+                if (workspaceData && workspaceData.title) {
+                    workspace.title = workspaceData.title;
+                }
+                workspace.data = {};
+                workspace.data.vertices = [];
+                workspace.data.verticesById = {};
+
+                self.workspaceMarkReady(workspace);
+                self.trigger('workspaceLoaded', freeze(workspace));
+                /*
                 self.getWorkspace(workspaceId).done(function(workspace) {
                     self.loadWorkspaceVertices(workspace).done(function(vertices) {
                         if (workspaceData && workspaceData.title) {
@@ -606,6 +621,7 @@ define([
                         self.trigger('workspaceLoaded', freeze(workspace));
                     });
                 });
+                */
             });
         };
 

@@ -77,7 +77,7 @@ define([
 
             event.preventDefault();
 
-            this.trigger( document, 'switchWorkspace', { workspaceId: data.workspaceId });
+            //this.trigger( document, 'switchWorkspace', { workspaceId: data.workspaceId });
 
             var container = this.select('formSelector'),
                 form = container.resizable({
@@ -142,8 +142,7 @@ define([
             if (!this.usersById) return;
             var li = this.findWorkspaceRow(data._rowKey);
             if (data.createdBy === window.currentUser.id ||
-                _.contains(_.pluck(data.users, 'id'), window.currentUser.id) || 
-                _.contains(_.pluck(data.users, 'user'), window.currentUser.id)
+                _.contains(_.pluck(data.users, 'userId'), window.currentUser.id)
             ) {
                 li.find('.badge').removeClass('loading').hide().next().show();
                 data = this.workspaceDataForItemRow(data);
@@ -239,7 +238,10 @@ define([
             }
 
             var text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
-                people = (row.users && row.users.length) || 0;
+                usersNotCurrent = row.users.filter(function(u) {
+                    return u.userId != window.currentUser.id;
+                }),
+                people = usersNotCurrent.length;
 
             if (people === 1) {
                 row.sharingSubtitle = text + ' 1 person';
