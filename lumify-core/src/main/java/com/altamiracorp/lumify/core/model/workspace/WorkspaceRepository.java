@@ -85,7 +85,11 @@ public class WorkspaceRepository {
         if (workspaceVertex == null) {
             return null;
         }
-        return new Workspace(workspaceVertex, this, user);
+        Workspace workspace = new Workspace(workspaceVertex, this, user);
+        if (!doesUserHaveReadAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
+        }
+        return workspace;
     }
 
     public Workspace add(String title, User user) {
