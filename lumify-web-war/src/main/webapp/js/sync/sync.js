@@ -45,7 +45,7 @@ define([
 
         this.onWorkspaceLoaded = function(evt, workspace) {
             this.workspaceEditable = workspace.isEditable;
-            this.currentWorkspaceId = workspace.id;
+            this.currentWorkspaceId = workspace.workspaceId;
 
             this.usersReady(function(usersData) {
                 var user = usersData.user,

@@ -32,7 +32,7 @@ define(
             // Store previous users so we send that last sync event to the user
             // that was "Revoked"
             if (!this._previousUsers) this._previousUsers = [];
-            var users = _.uniq(_.pluck(eventData.users,'user').concat([eventData.createdBy]).concat(this._previousUsers));
+            var users = _.uniq(_.pluck(eventData.users,'userId').concat([eventData.createdBy]).concat(this._previousUsers));
             this._previousUsers = users;
 
             var data = {

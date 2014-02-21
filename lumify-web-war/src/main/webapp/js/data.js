@@ -61,7 +61,7 @@ define([
         this.ontologyService = new OntologyService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
-        this.id = null;
+        this.workspaceId = null;
 
         this.defaultAttrs({
             droppableSelector: 'body'
@@ -204,8 +204,8 @@ define([
             var self = this,
                 saveFn;
 
-            if (self.id) {
-                saveFn = self.workspaceService.save.bind(self.workspaceService, self.id);
+            if (self.workspaceId) {
+                saveFn = self.workspaceService.save.bind(self.workspaceService, self.workspaceId);
             } else {
                 saveFn = self.workspaceService.saveNew.bind(self.workspaceService);
             }
@@ -220,7 +220,7 @@ define([
                 self.trigger('workspaceSaving', ws);
 
                 saveFn({ data:{ workspaceVertices:self.workspaceVertices }}).done(function(data) {
-                    self.id = data.workspaceId;
+                    self.workspaceId = data.workspaceId;
                     self.trigger('workspaceSaved', data);
                 });
                 */
@@ -550,20 +550,20 @@ define([
         };
 
         this.onSwitchWorkspace = function(evt, data) {
-            if (data.workspaceId != this.id) {
+            if (data.workspaceId != this.workspaceId) {
                 this.loadWorkspace(data.workspaceId);
             }
         };
 
         this.onWorkspaceDeleted = function(evt, data) {
-            if (this.id === data.workspaceId) {
-                this.id = null;
+            if (this.workspaceId === data.workspaceId) {
+                this.workspaceId = null;
                 this.loadActiveWorkspace();
             }
         };
 
         this.onWorkspaceCopied = function (evt, data) {
-            this.id = data.workspaceId;
+            this.workspaceId = data.workspaceId;
             this.loadActiveWorkspace();
         }
 
@@ -577,7 +577,7 @@ define([
         };
 
         this.onWorkspaceDeleting = function (evt, data) {
-            if (this.id == data.workspaceId) {
+            if (this.workspaceId == data.workspaceId) {
                 // TODO: use activity to display message
             }
         };
@@ -586,24 +586,22 @@ define([
             var self = this,
                 workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
 
-            self.id = workspaceId;
+            self.workspaceId = workspaceId;
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
-                // FIXME
-                var workspace = workspaceData;
-                if (workspaceData && workspaceData.title) {
-                    workspace.title = workspaceData.title;
-                }
-                workspace.data = {};
-                workspace.data.vertices = [];
-                workspace.data.verticesById = {};
+                self.getWorkspace(workspaceId).done(function(workspace) {
+                    // FIXME
+                    workspace.data = {};
+                    workspace.data.vertices = [];
+                    workspace.data.verticesById = {};
 
-                self.workspaceMarkReady(workspace);
-                self.trigger('workspaceLoaded', freeze(workspace));
+                    self.workspaceMarkReady(workspace);
+                    self.trigger('workspaceLoaded', freeze(workspace));
+                });
                 /*
                 self.getWorkspace(workspaceId).done(function(workspace) {
                     self.loadWorkspaceVertices(workspace).done(function(vertices) {
@@ -632,7 +630,7 @@ define([
             if (id) {
                 self.workspaceService.getByRowKey(id)
                     .fail(function(xhr) {
-                        if (xhr.status === 404) {
+                        if (_.contains([403,404], xhr.status)) {
                             self.trigger('workspaceNotAvailable');
                             self.loadActiveWorkspace();
                         }

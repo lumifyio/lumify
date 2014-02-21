@@ -26,26 +26,34 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.saveNew = function (workspace) {
-        return this.save(null, workspace);
+    WorkspaceService.prototype.saveNew = function(title) {
+        return this._ajaxPost({
+            url: 'workspace/new',
+            data: {
+                title: title
+            }
+        });
     };
 
     WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
-            url: workspaceId === null ?
-                    'workspace/new' :
-                    'workspace/' + encodeURIComponent(workspaceId) + '/update',
-            data: {}
+            url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',
+            data: {
+                data: {
+                    entityUpdates: [],
+                    entityDeletes: [],
+                    userUpdates: [],
+                    userDeletes: []
+                }
+            }
         };
+
+        if (_.isEmpty(changes)) {
+            console.warn('Workspace update called with no changes');
+        }
         
         if (changes) {
-            if (changes.title) {
-                options.data.title = changes.title;
-                delete changes.title;
-            }
-            options.data.data = JSON.stringify($.extend({
-                entityUpdates: [], entityDeletes: [], userUpdates: [], userDeletes: []
-            }, changes));
+            options.data.data = JSON.stringify($.extend(options.data.data, changes));
         }
         return this._ajaxPost(options);
     };
