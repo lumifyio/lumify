@@ -6,11 +6,10 @@
     <parent>
         <groupId>com.altamiracorp.lumify</groupId>
         <artifactId>lumify-root</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1.0</version>
     </parent>
     
     <artifactId>lumify</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Lumify</name>
