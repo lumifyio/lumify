@@ -128,6 +128,8 @@ public class WorkspaceRepositoryTest {
         when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace.getId()))).thenReturn(authorizations);
         Workspace foundWorkspace = workspaceRepository.findById(workspace.getId(), user1);
         assertEquals(workspace.getId(), foundWorkspace.getId());
+
+        assertEquals(user1.getUserId(), foundWorkspace.getCreatorUserId());
     }
 
     @Test
@@ -156,13 +158,12 @@ public class WorkspaceRepositoryTest {
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 3, graph.getAllEdges().size()); // +3 = the edges between workspaces and users
 
-        InMemoryAuthorizations user1Authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace1.getId(), workspace2.getId());
-        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING))).thenReturn(user1Authorizations);
-        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(user1Authorizations);
+        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace1.getId(), workspace2.getId()));
+        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace1.getId(), workspace2.getId()));
 
-        InMemoryAuthorizations user2Authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace3.getId());
-        when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING))).thenReturn(user2Authorizations);
-        when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(user2Authorizations);
+        when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace3.getId()));
+        when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace3.getId()));
+        when(userRepository.getAuthorizations(eq(user2), eq(UserRepository.VISIBILITY_STRING), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING, workspace3.getId()));
 
         List<Workspace> user1Workspaces = toList(workspaceRepository.findAll(user1));
         assertEquals(2, user1Workspaces.size());
