@@ -62,7 +62,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
 
         List<WorkspaceUser> users = findUsersWithAccess(workspace, user);
         for (WorkspaceUser workspaceUser : users) {
@@ -217,7 +217,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
