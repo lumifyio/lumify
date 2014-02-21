@@ -2,3 +2,4 @@ build/
 libs/*
 css/*
 jsc/*
+test/reports
