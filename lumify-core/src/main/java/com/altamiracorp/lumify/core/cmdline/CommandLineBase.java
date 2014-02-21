@@ -11,7 +11,9 @@ import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
+import com.netflix.curator.framework.CuratorFramework;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -29,6 +31,8 @@ public abstract class CommandLineBase {
     private UserRepository userRepository;
     private Authorizations authorizations;
     private User user;
+    private CuratorFramework curatorFramework;
+    private Graph graph;
 
     public int run(String[] args) throws Exception {
         ensureLoggerInitialized();
@@ -67,7 +71,23 @@ public abstract class CommandLineBase {
             FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userProvider.getSystemUser());
         }
 
-        return run(cmd);
+        int result = run(cmd);
+        LOGGER.debug("command result: %d", result);
+
+        if (initFramework) {
+            shutdown();
+        }
+
+        return result;
+    }
+
+    protected void shutdown() {
+        if (curatorFramework != null) {
+            curatorFramework.close();
+        }
+        if (graph != null) {
+            graph.shutdown();
+        }
     }
 
     protected void ensureLoggerInitialized() {
@@ -172,6 +192,16 @@ public abstract class CommandLineBase {
     @Inject
     public void setUserProvider(UserProvider userProvider) {
         this.userProvider = userProvider;
+    }
+
+    @Inject
+    public void setCuratorFramework(CuratorFramework curatorFramework) {
+        this.curatorFramework = curatorFramework;
+    }
+
+    @Inject
+    public void setGraph(Graph graph) {
+        this.graph = graph;
     }
 
     public UserProvider getUserProvider() {

@@ -56,6 +56,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void format() {
+        LOGGER.debug("BEGIN format");
         ModelUserContext ctx = this.userProvider.getSystemUser().getModelUserContext();
         List<String> tableList = this.modelSession.getTableList(ctx);
         for (String tableName : tableList) {
@@ -64,6 +65,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
                 this.modelSession.deleteTable(tableName, ctx);
             }
         }
+        LOGGER.debug("END format");
     }
 
     @Override

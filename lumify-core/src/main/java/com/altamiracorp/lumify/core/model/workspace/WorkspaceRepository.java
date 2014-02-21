@@ -62,7 +62,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING);
 
         List<WorkspaceUser> users = findUsersWithAccess(workspace, user);
         for (WorkspaceUser workspaceUser : users) {
@@ -80,8 +80,11 @@ public class WorkspaceRepository {
     }
 
     public Workspace findById(String workspaceId, User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Vertex workspaceVertex = graph.getVertex(workspaceId, authorizations);
+        if (workspaceVertex == null) {
+            return null;
+        }
         return new Workspace(workspaceVertex, this, user);
     }
 
@@ -126,7 +129,7 @@ public class WorkspaceRepository {
     }
 
     public List<WorkspaceUser> findUsersWithAccess(final Workspace workspace, final User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Iterable<Edge> userEdges = workspace.getVertex().query(authorizations).edges(workspaceToUserRelationshipId);
         return toList(new ConvertingIterable<Edge, WorkspaceUser>(userEdges) {
             @Override
@@ -150,7 +153,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Iterable<Edge> entityEdges = workspace.getVertex().query(authorizations).edges(workspaceToEntityRelationshipId);
         return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
             @Override
@@ -184,7 +187,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
@@ -200,7 +203,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
@@ -217,7 +220,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING);
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
@@ -256,7 +259,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
