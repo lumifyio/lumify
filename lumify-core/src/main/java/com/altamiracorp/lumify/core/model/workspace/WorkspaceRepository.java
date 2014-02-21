@@ -173,7 +173,7 @@ public class WorkspaceRepository {
     }
 
     public Workspace copy(Workspace workspace, User user) {
-        Workspace newWorkspace = add("Copy of" + workspace.getTitle(), user);
+        Workspace newWorkspace = add("Copy of " + workspace.getTitle(), user);
 
         List<WorkspaceEntity> entities = findEntities(workspace, user);
         for (WorkspaceEntity entity : entities) {
