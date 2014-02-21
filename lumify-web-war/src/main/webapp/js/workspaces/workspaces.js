@@ -268,7 +268,9 @@ define([
                 }),
                 people = usersNotCurrent.length;
 
-            if (people === 1) {
+            if (people === 1 && row.isSharedToUser) {
+                row.sharingSubtitle = text + ' you';
+            } else if (people === 1) {
                 row.sharingSubtitle = text + ' 1 person';
             } else if (people) {
                 row.sharingSubtitle = text + ' ' + people + ' people';
@@ -279,8 +281,12 @@ define([
         };
 
         this.onToggleMenu = function(event, data) {
-            if (data.name === 'workspaces' && this.$node.closest('.visible').length) {
-                this.loadWorkspaceList();
+            if (data.name === 'workspaces') {
+                if (this.$node.closest('.visible').length) {
+                    this.loadWorkspaceList();
+                } else {
+                    this.collapseEditForm();
+                }
             }
         };
 
