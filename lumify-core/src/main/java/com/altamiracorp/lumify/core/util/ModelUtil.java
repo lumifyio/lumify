@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ModelUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ModelUtil.class);
 
     private static final List<String> tables = Arrays.asList(
             ArtifactThumbnail.TABLE_NAME,
@@ -31,6 +32,7 @@ public class ModelUtil {
     }
 
     public static void deleteTables(ModelSession modelSession, User user) {
+        LOGGER.debug("BEGIN deleting tables");
         for (String table : tables) {
             modelSession.deleteTable(table, user.getModelUserContext());
         }
@@ -39,5 +41,6 @@ public class ModelUtil {
                 modelSession.deleteTable(table, user.getModelUserContext());
             }
         }
+        LOGGER.debug("END deleting tables");
     }
 }

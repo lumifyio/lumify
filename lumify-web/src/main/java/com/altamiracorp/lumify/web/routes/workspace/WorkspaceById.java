@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -27,24 +26,18 @@ public class WorkspaceById extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String workspaceId = getAttributeString(request, "workspaceId");
         final User authUser = getUser(request);
-        try {
-            LOGGER.info("Attempting to retrieve workspace: %s", workspaceId);
-            final Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
-
-            if (workspace == null) {
-                LOGGER.warn("Could not find workspace: %s", workspaceId);
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else {
-                LOGGER.debug("Successfully found workspace");
-                request.getSession().setAttribute("activeWorkspace", workspaceId);
-                final JSONObject resultJSON = workspace.toJson(true);
-                respondWithJson(response, resultJSON);
-            }
-
-            chain.next(request, response);
-        } catch (LumifyAccessDeniedException ex) {
-            LOGGER.warn("access denied for workspace: %s", workspaceId, ex);
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        LOGGER.info("Attempting to retrieve workspace: %s", workspaceId);
+        final Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
+        if (workspace == null) {
+            LOGGER.warn("Could not find workspace: %s", workspaceId);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            LOGGER.debug("Successfully found workspace");
+            request.getSession().setAttribute("activeWorkspace", workspaceId);
+            final JSONObject resultJSON = workspace.toJson(true);
+            respondWithJson(response, resultJSON);
         }
+
+        chain.next(request, response);
     }
 }
