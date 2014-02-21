@@ -30,22 +30,22 @@ function(ServiceBase) {
         return this.save(null, workspace);
     };
 
-    WorkspaceService.prototype.save = function (workspaceId, workspace) {
+    WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
             url: workspaceId === null ?
-                    'workspace/save' :
-                    'workspace/' + encodeURIComponent(workspaceId) + '/save',
+                    'workspace/new' :
+                    'workspace/' + encodeURIComponent(workspaceId) + '/update',
             data: {}
         };
         
-        if (workspace.data) {
-            options.data.data = JSON.stringify(workspace.data);
-        }
-        if (workspace.title) {
-            options.data.title = workspace.title;
-        }
-        if (workspace.users) {
-            options.data.users = JSON.stringify(workspace.users);
+        if (changes) {
+            if (changes.title) {
+                options.data.title = changes.title;
+                delete changes.title;
+            }
+            options.data.data = JSON.stringify($.extend({
+                entityUpdates: [], entityDeletes: [], userUpdates: [], userDeletes: []
+            }, changes));
         }
         return this._ajaxPost(options);
     };
@@ -60,10 +60,7 @@ function(ServiceBase) {
 
     WorkspaceService.prototype['delete'] = function(workspaceId) {
         return this._ajaxDelete({
-            url: 'workspace/' + encodeURIComponent(workspaceId),
-            data: {
-                workspaceId: workspaceId
-            }
+            url: 'workspace/' + encodeURIComponent(workspaceId)
         });
     };
 
