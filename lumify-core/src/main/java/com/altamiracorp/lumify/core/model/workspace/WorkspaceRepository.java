@@ -116,7 +116,10 @@ public class WorkspaceRepository {
         return Workspace.toWorkspaceIterable(vertices, this, user);
     }
 
-    public void setTitle(Workspace workspace, String title) {
+    public void setTitle(Workspace workspace, String title, User user) {
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
         WorkspaceLumifyProperties.TITLE.setProperty(workspace.getVertex(), title, visibility);
         graph.flush();
