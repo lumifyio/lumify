@@ -171,6 +171,7 @@ define([
                 .done(function(data) {
 
                     window.currentUser = data.user;
+                    self.trigger('currentUserChanged', { user:data.user });
                     self.currentUserId = data.user.id;
 
                     if (data.messages && data.messages.length > 0) {

@@ -79,13 +79,13 @@ define([
             var self = this,
                 d = $.Deferred(),
                 save = function() {
-                    //self.trigger(document, 'workspaceSaving', self.attr.data);
+                    self.trigger(document, 'workspaceSaving', self.attr.data);
                     return self.workspaceService.save(self.attr.data.workspaceId, changes)
                         .fail(function() {
                             d.reject();
                         })
                         .done(function(workspace) {
-                            //self.trigger(document, 'workspaceSaved', self.attr.data);
+                            self.trigger(document, 'workspaceSaved', self.attr.data);
                             d.resolve({ workspace: self.attr.data });
                         });
                 }
@@ -165,7 +165,9 @@ define([
 
             if (val !== this.attr.data.title) {
                 this.attr.data.title = val;
-                // FIXME this.saveWorkspace();
+                this.saveWorkspace(false, {
+                    title: val
+                });
             }
         };
 
@@ -183,8 +185,7 @@ define([
                 user.access = newPermissions;
                 badge.popover('disable').addClass('loading');
                 this.saveWorkspace(true, {
-                    userUpdates: [user],
-                    userDeletes: [userId]
+                    userUpdates: [user]
                 })
                     .done(function() {
                         var newUserRow = $(shareRowTemplate(self.shareRowDataForPermission(user)));
@@ -200,7 +201,7 @@ define([
                 $target = $(event.target),
                 previousText = $target.text();
 
-            this.trigger(document, 'workspaceDeleting', { workspaceId: workspaceId });
+            this.trigger('workspaceDeleting', this.attr.data);
 
             $target.text('Deleting...').attr('disabled', true);
 
@@ -250,7 +251,7 @@ define([
                 badge = row.find('.permissions').popover('disable').addClass('loading');
 
             this.attr.data.users = _.reject(this.attr.data.users, function(user) {
-                return user.user === userId;
+                return user.userId === userId;
             });
             this.saveWorkspace(true, {
                 userDeletes: [userId]
