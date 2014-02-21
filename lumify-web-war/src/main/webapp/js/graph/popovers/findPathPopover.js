@@ -32,7 +32,7 @@ define([
         });
 
         this.before('initialize', function(node, config) {
-            config.hops = config.connectionData && config.connectionData.hops || 1;
+            config.hops = config.connectionData && config.connectionData.hops || 2;
             config.template = 'findPathPopover';
         });
 
