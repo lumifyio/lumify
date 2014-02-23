@@ -18,7 +18,7 @@ The following system requirements must be available/installed for pre-built virt
 5. Browse to ```https://localhost:8443```
 6. Login to the webapp with username "lumify" and any password to load a prepopulated workspace
 
-If you would like to see an example of the capabilities Lumify has for ingest, please refer to our [open source ingest example](https://github.com/nearinfinity/lumify-twitter) and follow the instructions there.
+If you would like to see an example of the capabilities Lumify has for ingest, please refer to our [open source ingest example](https://github.com/altamiracorp/lumify-twitter) and follow the instructions there.
 
 ## DISCLAIMER
 * The pre-built VM comes with Maven installed, so you will be able to develop within the VM if you choose to do so.
