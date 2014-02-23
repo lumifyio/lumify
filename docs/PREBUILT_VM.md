@@ -28,11 +28,14 @@ If you would like to see an example of the capabilities Lumify has for ingest, p
 username: lumify
 password: lumify
 ```
+    
+    ssh lumify@192.168.33.10 
+
 
 ## Useful URLS
 
 The VM must be running for these URLs to work.
 
-* [Hadoop Administration](http://localhost:50070/dfshealth.jsp)
-* [Storm UI](http://localhost:8081/)
+* [Hadoop Administration](http://192.168.33.10:50070/dfshealth.jsp)
+* [Storm UI](http://192.168.33.10:8081/)
 
