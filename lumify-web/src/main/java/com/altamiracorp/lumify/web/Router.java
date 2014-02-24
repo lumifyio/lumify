@@ -68,6 +68,7 @@ public class Router extends HttpServlet {
             app.get("/ontology/concept", authenticator, ConceptList.class);
             app.get("/ontology/property", authenticator, PropertyList.class);
             app.get("/ontology/relationship", authenticator, RelationshipLabelList.class);
+            app.get("/ontology", authenticator, Ontology.class);
 
             app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
 

@@ -167,6 +167,31 @@ public class OntologyRepository {
         }
     }
 
+    public Iterable<Concept> getConcepts() {
+        return getConcepts(false);
+    }
+
+    public Iterable<Concept> getConceptsWithProperties() {
+        return getConcepts(true);
+    }
+
+    private Iterable<Concept> getConcepts(final boolean withProperties) {
+        return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
+                .has(CONCEPT_TYPE.getKey(), TYPE_CONCEPT)
+                .vertices()) {
+            @Override
+            protected Concept convert(Vertex vertex) {
+                if (withProperties) {
+                    List<OntologyProperty> conceptProperties = getPropertiesByVertexNoRecursion(vertex);
+                    Vertex parentConceptVertex = getParentConceptVertex(vertex);
+                    return new Concept(vertex, parentConceptVertex, conceptProperties);
+                } else {
+                    return new Concept(vertex);
+                }
+            }
+        };
+    }
+
     public Concept getRootConcept() {
         try {
             Vertex rootVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
@@ -245,10 +270,7 @@ public class OntologyRepository {
     private List<OntologyProperty> getPropertiesByVertex(Vertex vertex) {
         List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
 
-        Iterable<Vertex> propertyVertices = vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations());
-        for (Vertex propertyVertex : propertyVertices) {
-            properties.add(new OntologyProperty(propertyVertex));
-        }
+        properties.addAll(getPropertiesByVertexNoRecursion(vertex));
 
         Vertex parentConceptVertex = getParentConceptVertex(vertex);
         if (parentConceptVertex != null) {
