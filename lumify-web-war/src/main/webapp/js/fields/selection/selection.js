@@ -54,6 +54,7 @@ define([
                     })
                     .typeahead({
                         minLength: 0,
+                        items: 100,
                         source: _.map(this.attr.properties, function(p) {
                             return p.displayName || p.title;
                         }),
