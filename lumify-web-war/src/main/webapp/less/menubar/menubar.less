@@ -160,3 +160,21 @@ background: @menubar-background;
   left: 0;
   right: 0;
 }
+
+@media (max-height:28em) {
+    .menu-top a, .menu-bottom a {
+        font-size: 0; 
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+}
+@media (max-height:19em) {    
+    .menu-bottom .activity, .menu-top .dashboard {
+        display: none;        
+    }
+}
+@media (max-height:15em) {    
+    .menu-bottom .users, .menu-bottom .divider {
+        display: none;        
+    }
+}
