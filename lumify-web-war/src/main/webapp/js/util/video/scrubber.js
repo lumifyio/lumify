@@ -159,7 +159,8 @@ define([
                         e.stopPropagation();
                         self.showPoster();
                     } else {
-                        var percent = e.offsetX / this.offsetWidth,
+                        var left = e.pageX - $(e.target).closest('.preview').offset().left,
+                            percent = left / this.offsetWidth,
                             index = Math.round(percent * NUMBER_FRAMES);
 
                         self.scrubPercent = index / NUMBER_FRAMES;

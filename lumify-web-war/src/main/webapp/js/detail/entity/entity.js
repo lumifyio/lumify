@@ -141,8 +141,7 @@ define([
                     r.relationshipInfo = {
                         id: r.relationship.id,
                         properties: $.extend({}, r.relationship.properties, {
-                            _type: 'relationship',
-                            _rowKey: r.relationship.sourceVertexId + '->' + r.relationship.destVertexId,
+                            _conceptType: 'relationship',
                             id: r.relationship.id,
                             relationshipType: r.relationship.label,
                             source: r.relationship.sourceVertexId,

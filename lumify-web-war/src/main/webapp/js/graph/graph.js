@@ -1025,7 +1025,7 @@ define([
                                 vertex: {
                                     id: relationship.id,
                                     properties: {
-                                        _type: 'relationship',
+                                        _conceptType: 'relationship',
                                         source: relationship.from,
                                         target: relationship.to,
                                         relationshipType: relationship.relationshipType

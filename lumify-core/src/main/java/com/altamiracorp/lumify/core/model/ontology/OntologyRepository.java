@@ -326,7 +326,7 @@ public class OntologyRepository {
         try {
             return Iterables.getOnlyElement(graph.query(getAuthorizations())
                     .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
-                    .has(ONTOLOGY_TITLE.getKey(), relationshipLabel)
+                    .has(DISPLAY_NAME.getKey(), relationshipLabel)
                     .vertices());
         } catch (NoSuchElementException nsee) {
             throw new IllegalStateException(String.format("Could not find \"%s\" vertex", relationshipLabel), nsee);
