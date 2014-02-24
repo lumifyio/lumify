@@ -209,14 +209,31 @@ public class WorkspaceRepository {
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
+
+        Vertex workspaceVertex = graph.getVertex(workspace.getId(), authorizations);
+        if (workspaceVertex == null) {
+            throw new LumifyResourceNotFoundException("Could not find workspace vertex: " + workspace.getId(), workspace.getId());
+        }
+
         Vertex otherVertex = graph.getVertex(vertexId, authorizations);
         if (otherVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find vertex: " + vertexId, vertexId);
         }
-        EdgeBuilder edgeBuilder = graph.prepareEdge(workspace.getVertex(), otherVertex, workspaceToEntityRelationshipId, visibility, authorizations);
-        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, visibility);
-        WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPositionY, visibility);
-        edgeBuilder.save();
+
+        List<Edge> existingEdges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
+        if (existingEdges.size() > 0) {
+            for (Edge existingEdge : existingEdges) {
+                ElementMutation<Edge> m = existingEdge.prepareMutation();
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPositionX, visibility);
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPositionY, visibility);
+                m.save();
+            }
+        } else {
+            EdgeBuilder edgeBuilder = graph.prepareEdge(workspace.getVertex(), otherVertex, workspaceToEntityRelationshipId, visibility, authorizations);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, visibility);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPositionY, visibility);
+            edgeBuilder.save();
+        }
         graph.flush();
     }
 
