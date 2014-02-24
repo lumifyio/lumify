@@ -823,7 +823,7 @@ define([
 
                             var properties = {};
                             _.keys(info).forEach(function(key) {
-                                if ((/^(start|end|graphVertexId)$/).test(key)) return;
+                                if ((/^(start|end|graphVertexId|type)$/).test(key)) return;
                                 properties[key] = {
                                     value: info[key]
                                 };
