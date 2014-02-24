@@ -4,10 +4,12 @@ import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
@@ -24,11 +26,13 @@ import java.util.Map;
 public class VertexDeleteProperty extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    public VertexDeleteProperty(final Graph graphRepo, final AuditRepository auditRepo) {
+    public VertexDeleteProperty(final Graph graphRepo, final AuditRepository auditRepo, final UserRepository userRepository) {
         graph = graphRepo;
         auditRepository = auditRepo;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -39,8 +43,9 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
 
-        Vertex graphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         Object oldValue = graphVertex.getProperty(propertyName);
         graphVertex.removeProperty(propertyName);
         graph.flush();

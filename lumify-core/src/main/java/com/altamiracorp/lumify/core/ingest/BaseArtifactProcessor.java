@@ -19,13 +19,11 @@ package com.altamiracorp.lumify.core.ingest;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import java.util.Date;
@@ -42,35 +40,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * operations in the Lumify system.
  */
 public abstract class BaseArtifactProcessor {
-    /**
-     * The User this processor is executing as.
-     */
     private User user;
-
-    /**
-     * The Ontology Repository.
-     */
     private OntologyRepository ontologyRepository;
-
-    /**
-     * The Graph Repository.
-     */
     private Graph graph;
-
-    /**
-     * The Audit Repository.
-     */
     private AuditRepository auditRepository;
-
-    /**
-     * The Term Mention Repository.
-     */
     private TermMentionRepository termMentionRepository;
-
-    /**
-     * The Work Queue Repository.
-     */
     private WorkQueueRepository workQueueRepository;
+    private UserRepository userRepository;
+    private Authorizations authorizations;
 
     protected final OntologyRepository getOntologyRepository() {
         return ontologyRepository;
@@ -121,19 +98,33 @@ public abstract class BaseArtifactProcessor {
         return user;
     }
 
+    protected final Authorizations getAuthorizations() {
+        return authorizations;
+    }
+
     @Inject
-    public final void setUser(final UserProvider user) {
-        this.user = user.getSystemUser();
+    public final void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey) {
-        return findOrPrepareArtifactVertex(getGraph(), getUser(), rowKey);
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
 
-    public static ElementMutation<Vertex> findOrPrepareArtifactVertex(Graph graph, User user, String rowKey) {
+    @Inject
+    public final void setUser(final UserProvider userProvider) {
+        this.user = userProvider.getSystemUser();
+        this.authorizations = this.userRepository.getAuthorizations(this.user);
+    }
+
+    public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey, Authorizations authorizations) {
+        return findOrPrepareArtifactVertex(getGraph(), authorizations, rowKey);
+    }
+
+    public static ElementMutation<Vertex> findOrPrepareArtifactVertex(Graph graph, Authorizations authorizations, String rowKey) {
         ElementMutation<Vertex> vertex;
         checkNotNull(rowKey, "rowKey is required to save artifact");
-        Iterator<Vertex> existingVertices = graph.query(user.getAuthorizations())
+        Iterator<Vertex> existingVertices = graph.query(authorizations)
                 .has(ROW_KEY.getKey(), rowKey)
                 .vertices()
                 .iterator();
@@ -144,7 +135,7 @@ public abstract class BaseArtifactProcessor {
             }
         } else {
             Visibility visibility = new Visibility("");
-            vertex = graph.prepareVertex(visibility, user.getAuthorizations());
+            vertex = graph.prepareVertex(visibility, authorizations);
             CREATE_DATE.setProperty(vertex, new Date(), visibility);
             ROW_KEY.setProperty(vertex, rowKey, visibility);
         }

@@ -31,7 +31,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 
 public class Router extends HttpServlet {
@@ -69,6 +68,7 @@ public class Router extends HttpServlet {
             app.get("/ontology/concept", authenticator, ConceptList.class);
             app.get("/ontology/property", authenticator, PropertyList.class);
             app.get("/ontology/relationship", authenticator, RelationshipLabelList.class);
+            app.get("/ontology", authenticator, Ontology.class);
 
             app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
 
@@ -107,11 +107,11 @@ public class Router extends HttpServlet {
             app.post("/graph/vertex/{graphVertexId}/uploadImage", authenticator, GraphVertexUploadImage.class);
 
             app.get("/workspace", authenticator, WorkspaceList.class);
-            app.post("/workspace/save", authenticator, WorkspaceSave.class);
-            app.post("/workspace/{workspaceRowKey}/copy", authenticator, WorkspaceCopy.class);
-            app.post("/workspace/{workspaceRowKey}/save", authenticator, WorkspaceSave.class);
-            app.get("/workspace/{workspaceRowKey}", authenticator, WorkspaceByRowKey.class);
-            app.delete("/workspace/{workspaceRowKey}", authenticator, WorkspaceDelete.class);
+            app.post("/workspace/new", authenticator, WorkspaceNew.class);
+            app.post("/workspace/{workspaceId}/copy", authenticator, WorkspaceCopy.class);
+            app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
+            app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);
+            app.delete("/workspace/{workspaceId}", authenticator, WorkspaceDelete.class);
 
             //app.get("/user/messages", authenticator, MessagesGet.class);
             app.get("/user/me", authenticator, MeGet.class);

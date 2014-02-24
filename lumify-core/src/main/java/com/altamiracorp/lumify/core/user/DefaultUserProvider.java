@@ -2,30 +2,26 @@ package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
-import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.accumulo.AccumuloAuthorizations;
+import com.google.common.collect.Iterables;
 import org.apache.accumulo.core.security.Authorizations;
+
+import java.util.Set;
 
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 
 public class DefaultUserProvider implements UserProvider {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(DefaultUserProvider.class);
-    private static final String ONTOLOGY_USERNAME = "ontology";
     private static final String SYSTEM_USERNAME = "system";
-    private static final String USER_MANAGER_USERNAME = "userManager";
     private User systemUser;
-    private User ontologyUser;
-    private User userManagerUser;
 
     public User createFromVertex(Vertex user) {
-        String[] authorizations = UserLumifyProperties.getAuthorizationsArray(user);
-        ModelUserContext modelUserContext = getSystemUserContext(authorizations);
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(user);
+        ModelUserContext modelUserContext = getSystemUserContext(Iterables.toArray(authorizations, String.class));
 
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", USERNAME.getPropertyValue(user), AUTHORIZATIONS.getPropertyValue(user));
         return new User(
@@ -33,8 +29,7 @@ public class DefaultUserProvider implements UserProvider {
                 USERNAME.getPropertyValue(user),
                 CURRENT_WORKSPACE.getPropertyValue(user),
                 modelUserContext,
-                UserType.USER,
-                new AccumuloAuthorizations(authorizations));
+                UserType.USER);
     }
 
     @Override
@@ -42,29 +37,9 @@ public class DefaultUserProvider implements UserProvider {
         if (systemUser == null) {
             String workspace = null;
             String rowKey = "";
-            systemUser = new User(rowKey, SYSTEM_USERNAME, workspace, getSystemUserContext(), UserType.SYSTEM, new AccumuloAuthorizations());
+            systemUser = new User(rowKey, SYSTEM_USERNAME, workspace, getSystemUserContext(), UserType.SYSTEM);
         }
         return systemUser;
-    }
-
-    @Override
-    public User getOntologyUser() {
-        if (ontologyUser == null) {
-            String workspace = null;
-            String userId = "";
-            ontologyUser = new User(userId, ONTOLOGY_USERNAME, workspace, getSystemUserContext(), UserType.SYSTEM, new AccumuloAuthorizations(OntologyRepository.VISIBILITY_STRING));
-        }
-        return ontologyUser;
-    }
-
-    @Override
-    public User getUserManagerUser() {
-        if (userManagerUser == null) {
-            String workspace = null;
-            String userId = "";
-            userManagerUser = new User(userId, USER_MANAGER_USERNAME, workspace, getSystemUserContext(), UserType.SYSTEM, new AccumuloAuthorizations(UserRepository.VISIBILITY_STRING));
-        }
-        return userManagerUser;
     }
 
     private static ModelUserContext getSystemUserContext(String... authorizations) {

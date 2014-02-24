@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.junit.Before;
@@ -15,15 +14,13 @@ public class WorkspaceCopyTest extends RouteTestBase {
 
     @Mock
     private WorkspaceRepository mockWorkspaceRepository;
-    @Mock
-    private UserRepository mockUserRepository;
 
     @Before
     @Override
     public void setUp() throws Exception {
 //        super.setUp();
 
-        workspaceCopy = new WorkspaceCopy(mockWorkspaceRepository, mockUserRepository);
+        workspaceCopy = new WorkspaceCopy(mockWorkspaceRepository);
     }
 
     @Test

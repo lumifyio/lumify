@@ -1,12 +1,14 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
@@ -24,21 +26,26 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
     private final Graph graph;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    public ArtifactVideoPreviewImage(final Graph graph,
-                                     final ArtifactThumbnailRepository artifactThumbnailRepository) {
+    public ArtifactVideoPreviewImage(
+            final Graph graph,
+            final ArtifactThumbnailRepository artifactThumbnailRepository,
+            final UserRepository userRepository) {
         this.graph = graph;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
 
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 
-        Vertex artifactVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             chain.next(request, response);

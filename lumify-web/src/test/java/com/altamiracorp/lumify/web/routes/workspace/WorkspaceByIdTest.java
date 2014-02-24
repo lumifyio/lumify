@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +9,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WorkspaceByRowKeyTest extends RouteTestBase {
-    private WorkspaceByRowKey workspaceByRowKey;
-    private WorkspaceRowKey workspaceRowKey;
+public class WorkspaceByIdTest extends RouteTestBase {
+    private WorkspaceById workspaceById;
 
     @Mock
     private WorkspaceRepository mockWorkspaceRespository;

@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.altamiracorp.lumify</groupId>
         <artifactId>lumify</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>lumify-core</artifactId>
     <packaging>jar</packaging>
@@ -37,12 +37,28 @@
             <artifactId>guice</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.atteo</groupId>
+            <artifactId>evo-inflector</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
         </dependency>
         <dependency>
             <groupId>net.lingala.zip4j</groupId>

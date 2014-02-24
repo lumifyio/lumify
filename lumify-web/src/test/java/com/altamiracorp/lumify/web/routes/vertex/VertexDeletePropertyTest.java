@@ -1,9 +1,8 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
-import static org.mockito.Mockito.when;
-
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import com.altamiracorp.securegraph.Graph;
 import org.junit.Before;
@@ -11,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VertexDeletePropertyTest extends RouteTestBase {
@@ -24,12 +25,14 @@ public class VertexDeletePropertyTest extends RouteTestBase {
     private AuditRepository mockAuditRepository;
     @Mock
     private OntologyProperty mockProperty;
+    @Mock
+    private UserRepository userRepository;
 
     @Before
     @Override
     public void setUp() throws Exception {
 //        super.setUp();
-        vertexDeleteProperty = new VertexDeleteProperty(mockGraph, mockAuditRepository);
+        vertexDeleteProperty = new VertexDeleteProperty(mockGraph, mockAuditRepository, userRepository);
     }
 
     @Test(expected = RuntimeException.class)

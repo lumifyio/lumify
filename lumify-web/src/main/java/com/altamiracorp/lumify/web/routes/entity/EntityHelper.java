@@ -8,10 +8,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -78,13 +75,13 @@ public class EntityHelper {
     }
 
     public ElementMutation<Vertex> createGraphMutation(Concept concept, String sign, String existing, Object graphVertexId, String process, String comment,
-                                                       User user) {
+                                                       Authorizations authorizations) {
         ElementMutation<Vertex> resolvedVertexMutation;
         // If the user chose to use an existing resolved entity
         if (existing != null && Boolean.valueOf(existing)) {
-            resolvedVertexMutation = graph.getVertex(graphVertexId, user.getAuthorizations()).prepareMutation();
+            resolvedVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
         } else {
-            resolvedVertexMutation = graph.prepareVertex(DEFAULT_VISIBILITY, user.getAuthorizations());
+            resolvedVertexMutation = graph.prepareVertex(DEFAULT_VISIBILITY, authorizations);
         }
 
         CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), DEFAULT_VISIBILITY);

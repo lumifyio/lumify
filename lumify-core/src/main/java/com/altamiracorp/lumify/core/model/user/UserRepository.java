@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
@@ -15,6 +14,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 
@@ -22,49 +25,60 @@ import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 public class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final Visibility VISIBILITY = new Visibility(VISIBILITY_STRING);
-    public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/lumifyUser";
+    public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
     private final Graph graph;
     private final String userConceptId;
-    private final User authUser;
+    private final com.altamiracorp.securegraph.Authorizations authorizations;
+    private final AuthorizationRepository authorizationRepository;
 
     @Inject
-    public UserRepository(final Graph graph, final UserProvider userProvider, final OntologyRepository ontologyRepository) {
+    public UserRepository(
+            final Graph graph,
+            final OntologyRepository ontologyRepository,
+            final AuthorizationRepository authorizationRepository) {
         this.graph = graph;
-        this.authUser = userProvider.getUserManagerUser();
+        this.authorizationRepository = authorizationRepository;
+
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();
+
+        Set<String> authorizationsSet = new HashSet<String>();
+        authorizationsSet.add(VISIBILITY_STRING);
+        this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
     public Vertex findByUserName(String username) {
-        return Iterables.getFirst(graph.query(authUser.getAuthorizations())
+        return Iterables.getFirst(graph.query(authorizations)
                 .has(USERNAME.getKey(), username)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
                 .vertices(), null);
     }
 
     public Iterable<Vertex> findAll() {
-        return graph.query(authUser.getAuthorizations())
+        return graph.query(authorizations)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
                 .vertices();
     }
 
     public Vertex findById(String userId) {
-        return graph.getVertex(userId, authUser.getAuthorizations());
+        return graph.getVertex(userId, authorizations);
     }
 
-    public Vertex addUser(String username, String password, String[] authorizations) {
+    public Vertex addUser(String username, String password, String[] userAuthorizations) {
         Vertex existingUser = findByUserName(username);
         if (existingUser != null) {
             throw new RuntimeException("");
         }
 
-        String authorizationsString = StringUtils.join(authorizations, ",");
+        String authorizationsString = StringUtils.join(userAuthorizations, ",");
 
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        VertexBuilder userBuilder = graph.prepareVertex("USER_" + graph.getIdGenerator().nextId(), VISIBILITY, this.authUser.getAuthorizations());
+        String userId = "USER_" + graph.getIdGenerator().nextId();
+        VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY, this.authorizations);
         USERNAME.setProperty(userBuilder, username, VISIBILITY);
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY);
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY);
@@ -105,12 +119,12 @@ public class UserRepository {
         }
     }
 
-    public Vertex setCurrentWorkspace(String userId, String workspaceRowKey) {
+    public Vertex setCurrentWorkspace(String userId, String workspaceId) {
         Vertex user = findById(userId);
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        CURRENT_WORKSPACE.setProperty(user, workspaceRowKey, VISIBILITY);
+        CURRENT_WORKSPACE.setProperty(user, workspaceId, VISIBILITY);
         graph.flush();
         return user;
     }
@@ -123,5 +137,37 @@ public class UserRepository {
         STATUS.setProperty(user, status.toString(), VISIBILITY);
         graph.flush();
         return user;
+    }
+
+    public void addAuthorization(Vertex userVertex, String auth) {
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        if (authorizations.contains(auth)) {
+            return;
+        }
+        authorizations.add(auth);
+
+        this.authorizationRepository.addAuthorizationToGraph(auth);
+
+        String authorizationsString = StringUtils.join(authorizations, ",");
+        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
+        graph.flush();
+    }
+
+    public void removeAuthorization(Vertex userVertex, String auth) {
+        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        if (!authorizations.contains(auth)) {
+            return;
+        }
+        authorizations.remove(auth);
+        String authorizationsString = StringUtils.join(authorizations, ",");
+        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
+        graph.flush();
+    }
+
+    public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
+        Vertex userVertex = findById(user.getUserId());
+        Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(userVertex);
+        Collections.addAll(authorizationsSet, additionalAuthorizations);
+        return authorizationRepository.createAuthorizations(authorizationsSet);
     }
 }

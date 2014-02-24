@@ -24,14 +24,14 @@ public class WorkspaceList extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
 
-        Iterable<Workspace> workspaces = workspaceRepository.findAll(user.getModelUserContext());
-        String activeWorkspaceRowKey = (String) request.getSession().getAttribute("activeWorkspace");
-        activeWorkspaceRowKey = activeWorkspaceRowKey != null ? activeWorkspaceRowKey : "";
+        Iterable<Workspace> workspaces = workspaceRepository.findAll(user);
+        String activeWorkspaceId = (String) request.getSession().getAttribute("activeWorkspace");
+        activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
         JSONArray workspacesJson = new JSONArray();
         for (Workspace workspace : workspaces) {
-            JSONObject workspaceJson = workspace.toJson(user);
+            JSONObject workspaceJson = workspace.toJson(false);
             if (workspaceJson != null) {
-                if (activeWorkspaceRowKey.equals(workspace.getRowKey().toString())) { //if its the active one
+                if (activeWorkspaceId.equals(workspace.getId())) { //if its the active one
                     workspaceJson.put("active", true);
                 }
                 workspacesJson.put(workspaceJson);

@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.ontology.DisplayType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -49,17 +50,20 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final UserRepository userRepository;
 
     @Inject
     public GraphVertexUploadImage(
             final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final UserRepository userRepository) {
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.workQueueRepository = workQueueRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -72,9 +76,10 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         final User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
         final Part file = files.get(0);
 
-        Vertex entityVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+        Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
         if (entityVertex == null) {
             LOGGER.warn("Could not find associated entity vertex for id: %s", graphVertexId);
@@ -83,7 +88,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, user);
+        ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
         String conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
         DISPLAY_TYPE.setProperty(artifactBuilder, DisplayType.IMAGE.toString(), visibility);
         CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, visibility);
@@ -100,9 +105,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
-        Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), user.getAuthorizations()).iterator();
+        Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations).iterator();
         if (!existingEdges.hasNext()) {
-            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility, user.getAuthorizations());
+            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility, authorizations);
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
@@ -113,7 +118,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         respondWithJson(response, toJson(entityVertex));
     }
 
-    private ElementBuilder<Vertex> convertToArtifact(final Part file, User user) throws IOException {
+    private ElementBuilder<Vertex> convertToArtifact(final Part file, Authorizations authorizations) throws IOException {
         final InputStream fileInputStream = file.getInputStream();
         final byte[] rawContent = IOUtils.toByteArray(fileInputStream);
         LOGGER.debug("Uploaded file raw content byte length: %d", rawContent.length);
@@ -133,7 +138,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, user.getAuthorizations());
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, authorizations);
         CREATE_DATE.setProperty(vertexBuilder, new Date(), visibility);
         FILE_NAME.setProperty(vertexBuilder, fileName, visibility);
         FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), visibility);

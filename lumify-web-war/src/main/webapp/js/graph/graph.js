@@ -997,7 +997,7 @@ define([
             this.resetGraph();
             this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data.vertices.length) {
-                var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.id;
+                var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.workspaceId;
                 this.addVertices(workspace.data.vertices, { 
                     fit: newWorkspace,
                     animate: false
@@ -1008,7 +1008,7 @@ define([
             } 
 
 
-            this.previousWorkspace = workspace.id;
+            this.previousWorkspace = workspace.workspaceId;
         };
 
         this.onRelationshipsLoaded = function(evt, relationshipData) {
@@ -1025,7 +1025,7 @@ define([
                                 vertex: {
                                     id: relationship.id,
                                     properties: {
-                                        _type: 'relationship',
+                                        _conceptType: 'relationship',
                                         source: relationship.from,
                                         target: relationship.to,
                                         relationshipType: relationship.relationshipType

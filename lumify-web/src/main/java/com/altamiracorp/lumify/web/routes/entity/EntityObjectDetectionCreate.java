@@ -6,13 +6,11 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,17 +25,20 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
 
     @Inject
     public EntityObjectDetectionCreate(
             final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,
-            final OntologyRepository ontologyRepository) {
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository) {
         this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -56,15 +57,16 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
-        Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
+        Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> artifactVertexMutation = artifactVertex.prepareMutation();
 
         // create new graph vertex
         // TODO: replace second "" when we implement commenting on ui
         ElementMutation<Vertex> resolvedVertexMutation =
-                entityHelper.createGraphMutation(concept, sign, existing, graphVertexId, "", "", user);
+                entityHelper.createGraphMutation(concept, sign, existing, graphVertexId, "", "", authorizations);
         Vertex resolvedVertex = resolvedVertexMutation.save();
         auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
 
@@ -87,7 +89,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
         auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
         artifactVertex = artifactVertexMutation.save();
 
-        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, user.getAuthorizations());
+        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, authorizations);
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);

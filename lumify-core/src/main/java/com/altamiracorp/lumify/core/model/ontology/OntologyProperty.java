@@ -84,7 +84,7 @@ public class OntologyProperty {
         Object value = valueStr;
         switch (dataType) {
             case DATE:
-                value = DATE_FORMAT.parse(valueStr).getTime();
+                value = DATE_FORMAT.parse(valueStr);
                 break;
             case GEO_LOCATION:
                 value = parseGeoLocation(valueStr);
