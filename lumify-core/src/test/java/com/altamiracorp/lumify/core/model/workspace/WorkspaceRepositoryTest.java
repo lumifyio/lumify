@@ -274,11 +274,15 @@ public class WorkspaceRepositoryTest {
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 200, 300, user1);
+        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
+        assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
+
         List<WorkspaceEntity> entities = workspaceRepository.findEntities(workspace, user1);
         assertEquals(1, entities.size());
         assertEquals(entity1Vertex.getId(), entities.get(0).getEntityVertexId());
-        assertEquals(100, entities.get(0).getGraphPositionX());
-        assertEquals(200, entities.get(0).getGraphPositionY());
+        assertEquals(200, entities.get(0).getGraphPositionX());
+        assertEquals(300, entities.get(0).getGraphPositionY());
 
         try {
             workspaceRepository.findEntities(workspace, user2);
