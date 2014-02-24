@@ -45,7 +45,7 @@ define([
 
         this.onWorkspaceLoaded = function(evt, workspace) {
             this.workspaceEditable = workspace.isEditable;
-            this.currentWorkspaceRowKey = workspace.id;
+            this.currentWorkspaceId = workspace.workspaceId;
 
             this.usersReady(function(usersData) {
                 var user = usersData.user,
@@ -55,7 +55,7 @@ define([
                         },
                         data: {
                             userId: user.id,
-                            workspaceRowKey: this.currentWorkspaceRowKey
+                            workspaceId: this.currentWorkspaceId
                         }
                     };
                 this.syncService.socketPush(data);
@@ -75,7 +75,7 @@ define([
         };
 
         this.onSyncedEvent = function (evt, data) {
-            if (!this.currentWorkspaceRowKey) {
+            if (!this.currentWorkspaceId) {
                 return;
             }
             if (!this.workspaceEditable && !data.remoteEvent) {
@@ -95,8 +95,8 @@ define([
             }
 
             if (evt.type === 'workspaceRemoteSave') {
-                this.syncService.publishWorkspaceMetadataSyncEvent(evt.type, this.currentWorkspaceRowKey, data);
-            } else this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceRowKey, data);
+                this.syncService.publishWorkspaceMetadataSyncEvent(evt.type, this.currentWorkspaceId, data);
+            } else this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
         };
 
         this.onOnlineStatusChanged = function (evt, data) {

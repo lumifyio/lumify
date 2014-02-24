@@ -20,50 +20,55 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getByRowKey = function (_rowKey) {
+    WorkspaceService.prototype.getByRowKey = function (workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(_rowKey)
+            url: 'workspace/' + encodeURIComponent(workspaceId)
         });
     };
 
-    WorkspaceService.prototype.saveNew = function (workspace) {
-        return this.save(null, workspace);
+    WorkspaceService.prototype.saveNew = function(title) {
+        return this._ajaxPost({
+            url: 'workspace/new',
+            data: {
+                title: title
+            }
+        });
     };
 
-    WorkspaceService.prototype.save = function (_rowKey, workspace) {
+    WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
-            url: _rowKey === null ? 
-                    'workspace/save' :
-                    'workspace/' + encodeURIComponent(_rowKey) + '/save',
-            data: {}
+            url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',
+            data: {
+                data: {
+                    entityUpdates: [],
+                    entityDeletes: [],
+                    userUpdates: [],
+                    userDeletes: []
+                }
+            }
         };
+
+        if (_.isEmpty(changes)) {
+            console.warn('Workspace update called with no changes');
+        }
         
-        if (workspace.data) {
-            options.data.data = JSON.stringify(workspace.data);
-        }
-        if (workspace.title) {
-            options.data.title = workspace.title;
-        }
-        if (workspace.users) {
-            options.data.users = JSON.stringify(workspace.users);
+        if (changes) {
+            options.data.data = JSON.stringify($.extend(options.data.data, changes));
         }
         return this._ajaxPost(options);
     };
 
-    WorkspaceService.prototype.copy = function (_rowKey) {
+    WorkspaceService.prototype.copy = function (workspaceId) {
         var options = {
-            url: 'workspace/' + _rowKey + '/copy'
+            url: 'workspace/' + workspaceId + '/copy'
         }
 
         return this._ajaxPost(options);
     }
 
-    WorkspaceService.prototype['delete'] = function(_rowKey) {
+    WorkspaceService.prototype['delete'] = function(workspaceId) {
         return this._ajaxDelete({
-            url: 'workspace/' + encodeURIComponent(_rowKey),
-            data: {
-                _rowKey: _rowKey
-            }
+            url: 'workspace/' + encodeURIComponent(workspaceId)
         });
     };
 

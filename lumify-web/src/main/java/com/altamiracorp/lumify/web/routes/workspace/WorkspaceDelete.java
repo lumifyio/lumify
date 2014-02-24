@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -25,13 +25,17 @@ public class WorkspaceDelete extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         if (isDeleteAuthorized(request)) {
-            final String strRowKey = getAttributeString(request, "workspaceRowKey");
+            final String workspaceId = getAttributeString(request, "workspaceId");
 
             User user = getUser(request);
-            WorkspaceRowKey rowKey = new WorkspaceRowKey(strRowKey);
 
-            LOGGER.info("Deleting workspace with id: %s", strRowKey);
-            workspaceRepository.delete(rowKey, user.getModelUserContext());
+            LOGGER.info("Deleting workspace with id: %s", workspaceId);
+            Workspace workspace = workspaceRepository.findById(workspaceId, user);
+            if (workspace == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            workspaceRepository.delete(workspace, user);
 
             JSONObject resultJson = new JSONObject();
             resultJson.put("success", true);

@@ -21,8 +21,7 @@ define([
             var self = this;
 
             this.$node.html(template({placeholder:this.attr.placeholder}));
-
-            if (this.attr.properties.length.value === 0) {
+            if (this.attr.properties.length === 0 || this.attr.properties.length.value === 0) {
                 this.select('findPropertySelection')
                     .attr('placeholder', 'No valid properties')
                     .attr('disabled', true);
@@ -54,9 +53,12 @@ define([
                     })
                     .typeahead({
                         minLength: 0,
-                        source: _.map(this.attr.properties, function(p) {
-                            return p.displayName || p.title;
-                        }),
+                        items: 100,
+                        source: _.chain(this.attr.properties)
+                            .map(function(p) { return p.displayName || p.title; })
+                            .sortBy(function(name) { return name.toLowerCase(); })
+                            .uniq()
+                            .value(),
                         matcher: function(item) {
                             if (this.query === ' ') return -1;
                             if (

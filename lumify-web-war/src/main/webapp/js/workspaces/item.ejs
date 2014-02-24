@@ -1,9 +1,9 @@
-<li class="<%= selected === workspace._rowKey ? 'active' : '' %>" 
-    data-users="<%= JSON.stringify(workspace.permissions || workspace.users || []) %>"
+<li class="<%= selected === workspace.workspaceId ? 'active' : '' %>"
+    data-users="<%= JSON.stringify(workspace.users || []) %>"
     data-created-by="<%= workspace.createdBy || '' %>"
     data-is-editable="<%= workspace.isEditable || false %>"
     data-title="<%= workspace.title %>"
-    data-_row-key="<%= workspace._rowKey %>"
+    data-workspace-id="<%= workspace.workspaceId %>"
     ><a>
-      <span class="badge" style="display:none"/><button class="disclosure btn btn-mini"></button><span class="nav-list-title"><%= workspace.title || workspace._rowKey %></span><% if (workspace.sharingSubtitle) { %><span class="nav-list-subtitle"><%= workspace.sharingSubtitle %></span><% } %></a></li>
+      <span class="badge" style="display:none"/><button class="disclosure btn btn-mini"></button><span class="nav-list-title"><%= workspace.title || workspace.workspaceId %></span><% if (workspace.sharingSubtitle) { %><span class="nav-list-subtitle"><%= workspace.sharingSubtitle %></span><% } %></a></li>
 

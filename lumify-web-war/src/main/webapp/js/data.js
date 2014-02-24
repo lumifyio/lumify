@@ -21,7 +21,7 @@ define([
     Keyboard, WorkspaceService, VertexService, OntologyService, undoManager, ClipboardManager) {
     'use strict';
 
-    var WORKSPACE_SAVE_DELAY = 1000,
+    var WORKSPACE_SAVE_DELAY = 1500,
         RELOAD_RELATIONSHIPS_DELAY = 250,
         ADD_VERTICES_DELAY = 100;
 
@@ -61,7 +61,7 @@ define([
         this.ontologyService = new OntologyService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
-        this.id = null;
+        this.workspaceId = null;
 
         this.defaultAttrs({
             droppableSelector: 'body'
@@ -76,7 +76,7 @@ define([
             this.setupAsyncQueue('socketSubscribe');
             this.setupDroppable();
 
-            this.onSaveWorkspace = _.debounce(this.onSaveWorkspace.bind(this), WORKSPACE_SAVE_DELAY);
+            this.onSaveWorkspaceInternal = _.debounce(this.onSaveWorkspaceInternal.bind(this), WORKSPACE_SAVE_DELAY);
             this.refreshRelationships = _.debounce(this.refreshRelationships.bind(this), RELOAD_RELATIONSHIPS_DELAY);
 
             this.cachedConceptsDeferred = $.Deferred();
@@ -200,26 +200,55 @@ define([
             }
         };
 
-        this.onSaveWorkspace = function(evt, workspace) {
+        this.throttledUpdatesByVertex = {};
+        this.onSaveWorkspace = function(evt, data) {
             var self = this,
-                saveFn;
+                updates = this.throttledUpdatesByVertex,
+                vertexToEntityUpdate = function(vertex, updateType) {
+                    if (~updateType.indexOf('Deletes')) {
+                        return vertex.id;
+                    }
 
-            if (self.id) {
-                saveFn = self.workspaceService.save.bind(self.workspaceService, self.id);
-            } else {
-                saveFn = self.workspaceService.saveNew.bind(self.workspaceService);
-            }
+                    return {
+                        vertexId: vertex.id,
+                        graphPosition: vertex.workspace.graphPosition
+                    };
+                },
+                uniqueVertices = function(v) { return v.vertexId; };
 
-            self.workspaceReady(function(ws) {
-                _.values(self.workspaceVertices).forEach(function(wv) {
-                    delete wv.dropPosition;
+            _.keys(data).forEach(function(key) {
+                if (_.isArray(data[key])) {
+                    data[key].forEach(function(vertex) {
+                        updates[vertex.id] = {
+                            updateType: key,
+                            updateJson: vertexToEntityUpdate(vertex, key)
+                        }
+                    });
+                }
+            });
+
+            this.onSaveWorkspaceInternal();
+        };
+
+        this.onSaveWorkspaceInternal = function() {
+            var self = this;
+            
+            this.workspaceReady(function(ws) {
+                this.trigger('workspaceSaving', ws);
+
+                var updateJson = {}, updates = this.throttledUpdatesByVertex;
+                _.keys(updates).forEach(function(vertexId) {
+                    var update = updates[vertexId],
+                        updateType = update.updateType;
+                    (updateJson[updateType] || (updateJson[updateType] = [])).push(update.updateJson);
                 });
+                this.throttledUpdatesByVertex = {};
 
-                self.trigger('workspaceSaving', ws);
-
-                saveFn({ data:{ workspaceVertices:self.workspaceVertices }}).done(function(data) {
-                    self.id = data._rowKey;
-                    self.trigger('workspaceSaved', data);
+                this.workspaceService.save(this.workspaceId, updateJson).done(function(data) {
+                   self.trigger('workspaceSaved', ws);
+                   _.values(self.workspaceVertices).forEach(function(wv) {
+                       delete wv.dropPosition;
+                   });
                 });
             });
         };
@@ -334,7 +363,7 @@ define([
                     }
 
                     self.trigger('refreshRelationships');
-                    if (!data.remoteEvent) self.trigger('saveWorkspace');
+                    if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added });
                     if (added.length) {
                         ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
@@ -384,7 +413,7 @@ define([
                 }
 
                 if (shouldSave && !data.remoteEvent) {
-                    this.trigger('saveWorkspace');
+                    this.trigger('saveWorkspace', { entityUpdates:updated });
                 }
                 if (updated.length) {
                     this.trigger('verticesUpdated', { 
@@ -449,7 +478,7 @@ define([
             var self = this,
                 vertices = data && data.vertices || [],
                 selectedIds = _.pluck(vertices, 'id'),
-                selected = _.groupBy(vertices, function(v) { return v.properties._type ? 'edges' : 'vertices'; });
+                selected = _.groupBy(vertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
 
             selected.vertices = selected.vertices || [];
             selected.edges = selected.edges || [];
@@ -505,7 +534,7 @@ define([
                 }
 
                 if (!data.remoteEvent) {
-                    this.trigger('saveWorkspace');
+                    this.trigger('saveWorkspace', { entityDeletes:toDelete });
                 }
                 if (toDelete.length) {
                     var ids = _.pluck(toDelete, 'id');
@@ -530,7 +559,7 @@ define([
                         });
 
                     if (myWorkspaces.length === 0) {
-                        self.workspaceService.saveNew({data:{}}).done(function(workspace) {
+                        self.workspaceService.saveNew().done(function(workspace) {
                             self.loadWorkspace(workspace);
                         });
                         return;
@@ -547,20 +576,20 @@ define([
         };
 
         this.onSwitchWorkspace = function(evt, data) {
-            if (data._rowKey != this.id) {
-                this.loadWorkspace(data._rowKey);
+            if (data.workspaceId != this.workspaceId) {
+                this.loadWorkspace(data.workspaceId);
             }
         };
 
         this.onWorkspaceDeleted = function(evt, data) {
-            if (this.id === data._rowKey) {
-                this.id = null;
+            if (this.workspaceId === data.workspaceId) {
+                this.workspaceId = null;
                 this.loadActiveWorkspace();
             }
         };
 
         this.onWorkspaceCopied = function (evt, data) {
-            this.id = data._rowKey;
+            this.workspaceId = data.workspaceId;
             this.loadActiveWorkspace();
         }
 
@@ -574,27 +603,24 @@ define([
         };
 
         this.onWorkspaceDeleting = function (evt, data) {
-            if (this.id == data._rowKey) {
+            if (this.workspaceId == data.workspaceId) {
                 // TODO: use activity to display message
             }
         };
 
         this.loadWorkspace = function(workspaceData) {
             var self = this,
-                workspaceRowKey = _.isString(workspaceData) ? workspaceData : workspaceData._rowKey;
+                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
 
-            self.id = workspaceRowKey;
+            self.workspaceId = workspaceId;
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
             self.relationshipsUnload();
 
             self.socketSubscribeReady(function() {
-                self.getWorkspace(workspaceRowKey).done(function(workspace) {
+                self.getWorkspace(workspaceId).done(function(workspace) {
                     self.loadWorkspaceVertices(workspace).done(function(vertices) {
-                        if (workspaceData && workspaceData.title) {
-                            workspace.title = workspaceData.title;
-                        }
                         vertices.forEach(function(v) { delete v.dropPosition; });
                         workspace.data.vertices = vertices.sort(function(a,b) { 
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
@@ -616,7 +642,7 @@ define([
             if (id) {
                 self.workspaceService.getByRowKey(id)
                     .fail(function(xhr) {
-                        if (xhr.status === 404) {
+                        if (_.contains([403,404], xhr.status)) {
                             self.trigger('workspaceNotAvailable');
                             self.loadActiveWorkspace();
                         }
@@ -631,7 +657,6 @@ define([
             return deferred.then(function(workspace) {
                     workspace = workspace || {};
                     workspace.data = workspace.data || {};
-                    workspace.data.workspaceVertices = workspace.data.workspaceVertices || {};
                     workspace.data.vertices = workspace.data.vertices || [];
                     workspace.data.verticesById = {};
 
@@ -642,7 +667,7 @@ define([
         this.loadWorkspaceVertices = function(workspace) {
             var self = this,
                 deferred = $.Deferred(),
-                ids = _.keys(workspace.data.workspaceVertices);
+                ids = _.keys(workspace.entities);
 
             _.each(_.values(self.cachedVertices), function(v) {
                 v.workspace = {};
@@ -652,7 +677,7 @@ define([
                 self.vertexService.getMultiple(ids).done(function(serverVertices) {
 
                     var vertices = serverVertices.map(function(vertex) {
-                        var workspaceData = workspace.data.workspaceVertices[vertex.id];
+                        var workspaceData = workspace.entities[vertex.id];
                         delete workspaceData.dropPosition;
 
                         var cache = self.updateCacheWithVertex(vertex);
@@ -798,7 +823,7 @@ define([
 
                             var properties = {};
                             _.keys(info).forEach(function(key) {
-                                if ((/^(start|end|graphVertexId)$/).test(key)) return;
+                                if ((/^(start|end|graphVertexId|type)$/).test(key)) return;
                                 properties[key] = {
                                     value: info[key]
                                 };

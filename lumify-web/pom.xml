@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.altamiracorp.lumify</groupId>
         <artifactId>lumify</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>lumify-web</artifactId>
@@ -71,10 +71,6 @@
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-runtime</artifactId>
             <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.atteo</groupId>
-            <artifactId>evo-inflector</artifactId>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>

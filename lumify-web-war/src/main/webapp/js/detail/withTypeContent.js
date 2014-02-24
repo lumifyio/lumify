@@ -91,7 +91,7 @@ define([
                 if ($.isArray(this.attr.data)) {
                     ids = _.map(
                             _.reject(this.attr.data, function(v) { 
-                                return v._type === 'relationship'; 
+                                return v._conceptType === 'relationship';
                             }), function(v) {
                                 return v.id || v.graphVertexId;
                             });
@@ -154,11 +154,11 @@ define([
                 props = vertex.properties || vertex;
 
             if (vertex.concept.displayType === 'document' || vertex.concept.displayType === 'image' || vertex.concept.displayType === 'video') {
-                cls.push('artifact');
-                cls.push(props._conceptType);
+                cls.push('artifact entity resolved');
+                if (props._conceptType) cls.push(props._conceptType.value);
             } else {
                 cls.push('entity resolved');
-                cls.push('conceptType-' + props._conceptType);
+                if (props._conceptType) cls.push('conceptType-' + props._conceptType.value);
             }
             cls.push('gId-' + (vertex.id || props.graphNodeId));
 

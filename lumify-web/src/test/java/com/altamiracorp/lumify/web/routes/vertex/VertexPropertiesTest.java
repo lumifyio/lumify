@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.routes.RouteTestBase;
 import com.altamiracorp.securegraph.Graph;
 import org.junit.Before;
@@ -20,12 +21,14 @@ public class VertexPropertiesTest extends RouteTestBase {
 
     @Mock
     private Graph mockGraph;
+    @Mock
+    private UserRepository userRepository;
 
     @Before
     @Override
     public void setUp() throws Exception {
 //        super.setUp();
-        vertexProperties = new VertexProperties(mockGraph);
+        vertexProperties = new VertexProperties(mockGraph, userRepository);
     }
 
     @Test

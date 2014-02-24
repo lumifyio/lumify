@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
-import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -8,13 +7,12 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
+import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.ElementMutation;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,17 +25,20 @@ public class EntityTermCreate extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
 
     @Inject
     public EntityTermCreate(
             final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,
-            final OntologyRepository ontologyRepository) {
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository) {
         this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,13 +53,15 @@ public class EntityTermCreate extends BaseRequestHandler {
         final String visibilitySource = getOptionalParameter(request, "visibilitySource");
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
-        final Vertex artifactVertex = graph.getVertex(artifactId, user.getAuthorizations());
+        final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         Visibility visibility = new Visibility(visibilitySource == null ? "" : visibilitySource);
-        ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, user.getAuthorizations());
+        ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, authorizations);
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
 
         // TODO: replace second "" when we implement commenting on ui
@@ -68,7 +71,7 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, visibility);
 
-        graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, user.getAuthorizations());
+        graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
 
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
         if (labelDisplayName == null) {

@@ -1,12 +1,10 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,27 +16,31 @@ import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class VertexRelationships extends BaseRequestHandler {
     private final Graph graph;
+    private final UserRepository userRepository;
 
     @Inject
-    public VertexRelationships(final Graph graph) {
+    public VertexRelationships(final Graph graph, final UserRepository userRepository) {
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         String graphVertexId = (String) request.getAttribute("graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
         long size = getOptionalParameterLong(request, "size", 25);
 
-        Vertex vertex = graph.getVertex(graphVertexId, user.getAuthorizations());
-        Iterable<Edge> edges = vertex.getEdges(Direction.BOTH, user.getAuthorizations());
+        Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        Iterable<Edge> edges = vertex.getEdges(Direction.BOTH, authorizations);
 
         JSONObject json = new JSONObject();
         JSONArray relationshipsJson = new JSONArray();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
-            if (edge.getLabel().equals("hasEntity")) {
+            if (edge.getLabel().equals("rawHasEntity")) {
                 totalReferences++;
                 if (referencesAdded >= size) continue;
                 if (skipped < offset) {
@@ -51,7 +53,7 @@ public class VertexRelationships extends BaseRequestHandler {
 
             JSONObject relationshipJson = new JSONObject();
             relationshipJson.put("relationship", toJson(edge));
-            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), user.getAuthorizations());
+            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
             relationshipJson.put("vertex", toJson(otherVertex));
             relationshipsJson.put(relationshipJson);
         }

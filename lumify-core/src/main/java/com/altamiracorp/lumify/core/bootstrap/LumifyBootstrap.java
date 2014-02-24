@@ -19,9 +19,12 @@ package com.altamiracorp.lumify.core.bootstrap;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.DefaultUserProvider;
@@ -33,7 +36,12 @@ import com.altamiracorp.lumify.core.version.VersionService;
 import com.altamiracorp.lumify.core.version.VersionServiceMXBean;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.*;
+import com.netflix.curator.RetryPolicy;
+import com.netflix.curator.framework.CuratorFramework;
+import com.netflix.curator.framework.CuratorFrameworkFactory;
+import com.netflix.curator.retry.ExponentialBackoffRetry;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -98,10 +106,15 @@ public class LumifyBootstrap extends AbstractModule {
 
         MetricsManager metricsManager = new JmxMetricsManager();
 
+        bind(AuthorizationRepository.class).to(AccumuloAuthorizationRepository.class);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
         bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
+
+        bind(CuratorFramework.class)
+                .toProvider(new CuratorFrameworkProvider(configuration))
+                .in(Scopes.SINGLETON);
 
         bind(ModelSession.class)
                 .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))
@@ -163,6 +176,27 @@ public class LumifyBootstrap extends AbstractModule {
         for (BootstrapBindingProvider provider : bindingProviders) {
             LOGGER.debug("Configuring bindings from BootstrapBindingProvider: %s", provider.getClass().getName());
             provider.addBindings(binder, configuration);
+        }
+    }
+
+    private static class CuratorFrameworkProvider implements Provider<CuratorFramework> {
+        private String zookeeperConnectionString;
+        private RetryPolicy retryPolicy;
+
+        public CuratorFrameworkProvider(Configuration configuration) {
+            zookeeperConnectionString = configuration.get(Configuration.ZK_SERVERS);
+            retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        }
+
+        @Override
+        public CuratorFramework get() {
+            try {
+                CuratorFramework client = CuratorFrameworkFactory.newClient(zookeeperConnectionString, retryPolicy);
+                client.start();
+                return client;
+            } catch (IOException ex) {
+                throw new LumifyException("Could not create curator: " + zookeeperConnectionString, ex);
+            }
         }
     }
 

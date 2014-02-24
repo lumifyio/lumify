@@ -5,6 +5,18 @@ define(
     function (ServiceBase) {
         'use strict';
 
+        $(function() {
+            $(document).ajaxError(function( event, jqxhr, settings, exception ) {
+                if (jqxhr.status === 403 && settings.url !== 'user/me') {
+                    new UserService().isLoginRequired()
+                        .fail(function() {
+                            $(document).trigger('logout');
+                        })
+                }
+            });
+        })
+
+
         function UserService() {
             ServiceBase.call(this);
 

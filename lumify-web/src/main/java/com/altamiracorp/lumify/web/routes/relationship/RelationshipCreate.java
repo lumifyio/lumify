@@ -3,15 +3,13 @@ package com.altamiracorp.lumify.web.routes.relationship;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,14 +23,17 @@ public class RelationshipCreate extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
 
     @Inject
     public RelationshipCreate(final Graph graph,
                               final AuditRepository auditRepository,
-                              final OntologyRepository ontologyRepository) {
+                              final OntologyRepository ontologyRepository,
+                              final UserRepository userRepository) {
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -43,11 +44,12 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
         String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel);
-        Vertex destVertex = graph.getVertex(destGraphVertexId, user.getAuthorizations());
-        Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, user.getAuthorizations());
+        Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
+        Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, new Visibility(""), user.getAuthorizations());
+        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, new Visibility(""), authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, new Visibility(""));

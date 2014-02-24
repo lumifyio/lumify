@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -11,6 +12,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
@@ -26,6 +28,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
+    private final UserRepository userRepository;
     private VisibilityTranslator visibilityTranslator;
 
     @Inject
@@ -33,11 +36,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final AuditRepository auditRepository,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final UserRepository userRepository) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -59,6 +64,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
@@ -73,7 +79,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
             return;
         }
-        Edge edge = graph.getEdge(edgeId, user.getAuthorizations());
+        Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
         graphEdgeMutation.save();

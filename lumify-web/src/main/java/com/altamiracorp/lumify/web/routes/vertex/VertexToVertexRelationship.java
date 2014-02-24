@@ -1,13 +1,11 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,12 +17,14 @@ import java.util.Iterator;
 
 public class VertexToVertexRelationship extends BaseRequestHandler {
     private final Graph graph;
+    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public VertexToVertexRelationship(final OntologyRepository ontologyRepo, final Graph graph) {
+    public VertexToVertexRelationship(final OntologyRepository ontologyRepo, final Graph graph, final UserRepository userRepository) {
         ontologyRepository = ontologyRepo;
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,14 +34,16 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
         final String id = getRequiredParameter(request, "id");
 
         User user = getUser(request);
-        Vertex sourceVertex = graph.getVertex(source, user.getAuthorizations());
-        Vertex targetVertex = graph.getVertex(target, user.getAuthorizations());
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
+        Vertex sourceVertex = graph.getVertex(source, authorizations);
+        Vertex targetVertex = graph.getVertex(target, authorizations);
 
         JSONObject results = new JSONObject();
         results.put("source", resultsToJson(source, sourceVertex));
         results.put("target", resultsToJson(target, targetVertex));
 
-        Edge edge = graph.getEdge(id, user.getAuthorizations());
+        Edge edge = graph.getEdge(id, authorizations);
 
         JSONArray propertyJson = new JSONArray();
         for (Property edgeProperty : edge.getProperties()) {

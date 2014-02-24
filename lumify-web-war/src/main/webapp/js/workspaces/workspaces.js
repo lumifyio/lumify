@@ -8,7 +8,8 @@ define([
     'tpl!./workspaces',
     'tpl!./list',
     'tpl!./item',
-    'util/jquery.flight'
+    'util/jquery.flight',
+    'util/withAsyncQueue'
 ], function(defineComponent,
     appData,
     WorkspaceService,
@@ -16,10 +17,12 @@ define([
     WorkspaceForm,
     workspacesTemplate,
     listTemplate,
-    itemTemplate) {
+    itemTemplate,
+    jqueryFlight,
+    withAsyncQueue) {
     'use strict';
 
-    return defineComponent(Workspaces);
+    return defineComponent(Workspaces, withAsyncQueue);
 
     function Workspaces() {
         this.workspaceService = new WorkspaceService();
@@ -40,10 +43,16 @@ define([
 			if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
             if ($target.closest('.workspace-form').length) return;
 
-            var _rowKey = $(event.target).parents('li').data('_rowKey');
-            if (_rowKey) {
-                this.trigger( document, 'switchWorkspace', { _rowKey: _rowKey });
+            var li = $(event.target).closest('li');
+            var workspaceId = li.data('workspaceId');
+            if (workspaceId) {
+                this.switchToWorkspace(workspaceId);
             }
+        };
+
+        this.switchToWorkspace = function(workspaceId) {
+            if (workspaceId === appData.workspaceId) return;
+            this.trigger( document, 'switchWorkspace', { workspaceId: workspaceId });
         };
 
         this.onAddNew = function(event) {
@@ -52,13 +61,12 @@ define([
             var title = $(event.target).parents('li').find('input').val();
             if (!title) return;
 
-            var data = { title: title };
-            this.workspaceService.saveNew(data)
+            this.workspaceService.saveNew(title)
                 .done(function(workspace) {
                     self.loadWorkspaceList()
                         .done(function() {
                             self.onWorkspaceLoad(null, workspace);
-                            self.trigger( document, 'switchWorkspace', { _rowKey: workspace._rowKey });
+                            self.switchToWorkspace(workspace.workspaceId)
                         });
                 });
         };
@@ -77,7 +85,7 @@ define([
 
             event.preventDefault();
 
-            this.trigger( document, 'switchWorkspace', { _rowKey: data._rowKey });
+            this.switchToWorkspace(data.workspaceId);
 
             var container = this.select('formSelector'),
                 form = container.resizable({
@@ -90,7 +98,7 @@ define([
                     }).show().find('.content'),
                 instance = form.lookupComponent(WorkspaceForm);
 
-            if (instance && instance.attr.data._rowKey === data._rowKey) {
+            if (instance && instance.attr.data.workspaceId === data.workspaceId) {
                 container.hide();
                 instance.teardown();
                 return self.trigger(document, 'paneResized');
@@ -112,54 +120,67 @@ define([
             }
         };
 
-        this.onSwitchWorkspace = function ( event, data ) {
-            this.collapseEditForm();
+        this.onWorkspaceDeleting = function( event, data) {
+            this.deletingWorkspace = $.extend({}, data);
         };
 
         this.onWorkspaceDeleted = function ( event, data ) {
             this.collapseEditForm();
-
             this.loadWorkspaceList();
+
+            if (this.deletingWorkspace) {
+                this.trigger(document, 'workspaceRemoteSave', this.deletingWorkspace);
+            }
+        };
+
+        this.onSwitchWorkspace = function ( event, data ) {
+            var li = this.findWorkspaceRow(data.workspaceId);
+            if (li.length) {
+                this.switchActive( data.workspaceId );
+                li.find('.badge').addClass('loading').show().next().hide();
+            }
+            this.collapseEditForm();
         };
 
         this.onWorkspaceLoad = function ( event, data ) {
             this.updateListItemWithData(data);
-            this.switchActive( data.id );
+            this.switchActive( data.workspaceId );
         };
 
-        this.findWorkspaceRow = function(rowKey) {
+        this.findWorkspaceRow = function(workspaceId) {
             return this.select('workspaceListItemSelector').filter(function() {
-                return $(this).data('_rowKey') == rowKey;
+                return $(this).data('workspaceId') == workspaceId;
             });
         };
 
         this.onWorkspaceSaving = function ( event, data ) {
-            var li = this.findWorkspaceRow(data._rowKey);
+            var li = this.findWorkspaceRow(data.workspaceId);
             li.find('.badge').addClass('loading').show().next().hide();
-        };
-
-        this.updateListItemWithData = function(data) {
-            if (!this.usersById) return;
-            var li = this.findWorkspaceRow(data._rowKey);
-            if (data.createdBy === window.currentUser.id ||
-                _.contains(_.pluck(data.users, 'id'), window.currentUser.id) || 
-                _.contains(_.pluck(data.users, 'user'), window.currentUser.id)
-            ) {
-                li.find('.badge').removeClass('loading').hide().next().show();
-                data = this.workspaceDataForItemRow(data);
-                var content = $(itemTemplate({ workspace: data, selected: this.workspaceRowKey }));
-                if (li.length === 0) {
-                    this.$node.find('li.nav-header').eq(+data.isSharedToUser).after(content);
-                } else {
-                    li.replaceWith(content);
-                }
-            } else li.remove();
         };
 
         this.onWorkspaceSaved = function ( event, data ) {
             this.updateListItemWithData(data);
-
             this.trigger(document, 'workspaceRemoteSave', data);
+        };
+
+        this.updateListItemWithData = function(data, timestamp) {
+            if (!this.usersById) return;
+
+            this.currentUserReady(function(currentUser) {
+                var li = this.findWorkspaceRow(data.workspaceId);
+                if (data.createdBy === currentUser.id ||
+                    _.contains(_.pluck(data.users, 'userId'), currentUser.id)
+                ) {
+                    li.find('.badge').removeClass('loading').hide().next().show();
+                    data = this.workspaceDataForItemRow(data);
+                    var content = $(itemTemplate({ workspace: data, selected: this.workspaceId }));
+                    if (li.length === 0) {
+                        this.$node.find('li.nav-header').eq(+data.isSharedToUser).after(content);
+                    } else {
+                        li.replaceWith(content);
+                    }
+                } else li.remove();
+            });
         };
 
         this.onWorkspaceCopied = function ( event, data ) {
@@ -170,28 +191,31 @@ define([
         this.onWorkspaceRemoteSave = function ( event, data) {
             if (!data || !data.remoteEvent) return;
 
-            data.isSharedToUser = data.createdBy !== window.currentUser.id;
+            this.currentUserReady(function(currentUser) {
+                data.isSharedToUser = data.createdBy !== currentUser.id;
 
-            if (this.workspaceRowKey === data._rowKey) {
-                appData.loadWorkspace(data);
-            } else {
-                this.updateListItemWithData(data);
-            }
+                if (this.workspaceId === data.workspaceId) {
+                    appData.loadWorkspace(data);
+                } else {
+                    this.updateListItemWithData(data);
+                }
+            });
         };
 
         this.onWorkspaceNotAvailable = function ( event, data) {
             this.loadWorkspaceList();
+            this.trigger('displayInformation', { message:'Workspace not found' });
         };
 
-        this.switchActive = function( rowKey ) {
+        this.switchActive = function( workspaceId ) {
             var self = this;
-            this.workspaceRowKey = rowKey;
+            this.workspaceId = workspaceId;
 
             var found = false;
             this.select( 'workspaceListItemSelector' )
                 .removeClass('active')
                 .each(function() {
-                    if ($(this).data('_rowKey') == rowKey) {
+                    if ($(this).data('workspaceId') == workspaceId) {
                         found = true;
                         $(this).addClass('active');
                         return false;
@@ -222,7 +246,7 @@ define([
                                 results: _.groupBy(_.map(workspaces, self.workspaceDataForItemRow.bind(self)), function(w) { 
                                     return w.isSharedToUser ? 'shared' : 'mine';
                                 }),
-                                selected: self.workspaceRowKey
+                                selected: self.workspaceId
                             })
                         );
                         self.trigger(document, 'paneResized');
@@ -239,10 +263,14 @@ define([
             }
 
             var text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
-                people = (row.permissions && row.permissions.length) ||
-                        (row.users && row.users.length) || 0;
+                usersNotCurrent = row.users.filter(function(u) {
+                    return u.userId != window.currentUser.id;
+                }),
+                people = usersNotCurrent.length;
 
-            if (people === 1) {
+            if (people === 1 && row.isSharedToUser) {
+                row.sharingSubtitle = text + ' you';
+            } else if (people === 1) {
                 row.sharingSubtitle = text + ' 1 person';
             } else if (people) {
                 row.sharingSubtitle = text + ' ' + people + ' people';
@@ -254,11 +282,31 @@ define([
 
         this.onToggleMenu = function(event, data) {
             if (data.name === 'workspaces') {
-                this.loadWorkspaceList();
+                if (this.$node.closest('.visible').length) {
+                    this.loadWorkspaceList();
+                } else {
+                    this.collapseEditForm();
+                }
             }
         };
 
+        this.registerForCurrentUser = function() {
+            var self = this;
+
+            this.setupAsyncQueue('currentUser');
+            if (window.currentUser) {
+                this.currentUserMarkReady(window.currentUser);
+            } else {
+                this.on(document, 'currentUserChanged', function(event, data) {
+                    self.currentUserMarkReady(data.user);
+                });
+            }
+        }
+
         this.after( 'initialize', function() {
+
+            this.registerForCurrentUser();
+
             this.on( document, 'workspaceLoaded', this.onWorkspaceLoad );
             this.on( document, 'workspaceSaving', this.onWorkspaceSaving );
             this.on( document, 'workspaceSaved', this.onWorkspaceSaved );
@@ -269,6 +317,8 @@ define([
 
             this.on( document, 'menubarToggleDisplay', this.onToggleMenu );
             this.on( document, 'switchWorkspace', this.onSwitchWorkspace );
+
+            this.on('workspaceDeleting', this.onWorkspaceDeleting);
             this.on( 'click', {
                 workspaceListItemSelector: this.onWorkspaceItemClick,
                 addNewSelector: this.onAddNew,

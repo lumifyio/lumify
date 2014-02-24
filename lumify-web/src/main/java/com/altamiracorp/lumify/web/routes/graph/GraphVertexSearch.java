@@ -1,41 +1,53 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
-
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.DateOnly;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
-import com.altamiracorp.securegraph.query.Predicate;
 import com.altamiracorp.securegraph.query.Query;
 import com.altamiracorp.securegraph.query.TextPredicate;
 import com.google.inject.Inject;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
+
 public class GraphVertexSearch extends BaseRequestHandler {
     //TODO should we limit to 10000??
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private final int MAX_RESULT_COUNT = 10000;
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
+    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphVertexSearch(final OntologyRepository ontologyRepo, final Graph graph) {
-        ontologyRepository = ontologyRepo;
+    public GraphVertexSearch(
+            final OntologyRepository ontologyRepository,
+            final Graph graph,
+            final UserRepository userRepository) {
+        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -56,33 +68,29 @@ public class GraphVertexSearch extends BaseRequestHandler {
         long startTime = System.nanoTime();
 
         User user = getUser(request);
+        Authorizations authorizations = userRepository.getAuthorizations(user);
+
         JSONArray filterJson = new JSONArray(filter);
 
         ontologyRepository.resolvePropertyIds(filterJson);
 
         graph.flush();
 
+        LOGGER.debug("search %s\n%s", query, filterJson.toString(2));
+
         Query graphQuery = null;
         if (relatedToVertexId == null) {
-            graphQuery = graph.query(query, user.getAuthorizations());
+            graphQuery = graph.query(query, authorizations);
         } else if (query == null || StringUtils.isBlank(query)) {
-            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(user.getAuthorizations());
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(authorizations);
         } else {
-            graphQuery = graph.getVertex(relatedToVertexId, user.getAuthorizations()).query(query, user.getAuthorizations());
+            graphQuery = graph.getVertex(relatedToVertexId, authorizations).query(query, authorizations);
         }
 
         for (int i = 0; i < filterJson.length(); i++) {
             JSONObject obj = filterJson.getJSONObject(i);
             if (obj.length() > 0) {
-                if (obj.getJSONArray("values").length() > 0) {
-                    JSONArray values = obj.getJSONArray("values");
-                    for (int j = 0; j < values.length(); j++) {
-                        Object val = values.get(j);
-                        Predicate predicate = Compare.EQUAL;
-                        // TODO how can we specify a contains query?
-                        graphQuery.has(obj.getString("propertyName"), predicate, val);
-                    }
-                }
+                updateQueryWithFilter(graphQuery, obj);
             }
         }
 
@@ -135,5 +143,38 @@ public class GraphVertexSearch extends BaseRequestHandler {
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);
 
         respondWithJson(response, results);
+    }
+
+    private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {
+        String predicateString = obj.optString("predicate");
+        JSONArray values = obj.getJSONArray("values");
+        String propertyDataType = obj.optString("propertyDataType");
+        String propertyName = obj.getString("propertyName");
+        Object value0 = jsonValueToObject(values, propertyDataType, 0);
+
+        if ("string".equals(propertyDataType) && (predicateString == null || "".equals(predicateString))) {
+            graphQuery.has(propertyName, TextPredicate.CONTAINS, value0);
+        } else if ("<".equals(predicateString)) {
+            graphQuery.has(propertyName, Compare.LESS_THAN, value0);
+        } else if (">".equals(predicateString)) {
+            graphQuery.has(propertyName, Compare.GREATER_THAN, value0);
+        } else if ("range".equals(predicateString)) {
+            graphQuery.has(propertyName, Compare.GREATER_THAN_EQUAL, value0);
+            graphQuery.has(propertyName, Compare.LESS_THAN_EQUAL, jsonValueToObject(values, propertyDataType, 1));
+        } else if ("=".equals(predicateString) || "equal".equals(predicateString)) {
+            graphQuery.has(propertyName, Compare.EQUAL, value0);
+        } else {
+            throw new LumifyException("unhandled query\n" + obj.toString(2));
+        }
+    }
+
+    private Object jsonValueToObject(JSONArray values, String propertyDataType, int index) throws ParseException {
+        if ("date".equals(propertyDataType)) {
+            return new DateOnly(DATE_FORMAT.parse(values.getString(index)));
+        } else if ("string".equals(propertyDataType)) {
+            return values.getString(index);
+        } else {
+            return values.getDouble(index);
+        }
     }
 }

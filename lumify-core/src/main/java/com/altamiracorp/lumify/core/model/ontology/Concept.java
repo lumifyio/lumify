@@ -1,19 +1,32 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
+import org.atteo.evo.inflector.English;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collection;
+
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.COLOR;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
 
 public class Concept {
 
     private final Vertex vertex;
+    private final Collection<OntologyProperty> properties;
+    private final Vertex parentConceptVertex;
 
     public Concept(Vertex vertex) {
+        this(vertex, null, null);
+    }
+
+    public Concept(Vertex vertex, Vertex parentConceptVertex, Collection<OntologyProperty> properties) {
         this.vertex = vertex;
+        this.parentConceptVertex = parentConceptVertex;
+        this.properties = properties;
     }
 
     public String getId() {
@@ -52,11 +65,24 @@ public class Concept {
             result.put("title", getTitle());
             result.put("displayName", getDisplayName());
             result.put("displayType", getDisplayType());
+            if (this.parentConceptVertex != null) {
+                result.put("parentConcept", this.parentConceptVertex.getId().toString());
+            }
+            if (getDisplayName() != null) {
+                result.put("pluralDisplayName", English.plural(getDisplayName()));
+            }
             if (hasGlyphIconResource()) {
                 result.put("glyphIconHref", "/resource/" + getId());
             }
             if (getColor() != null) {
                 result.put("color", getColor());
+            }
+            if (this.properties != null) {
+                JSONArray propertiesJson = new JSONArray();
+                for (OntologyProperty property : this.properties) {
+                    propertiesJson.put(property.getId().toString());
+                }
+                result.put("properties", propertiesJson);
             }
             return result;
         } catch (JSONException e) {
@@ -94,5 +120,13 @@ public class Concept {
             return false;
         }
         return true;
+    }
+
+    public static JSONArray toJsonConcepts(Iterable<Concept> concepts) {
+        JSONArray conceptsJson = new JSONArray();
+        for (Concept concept : concepts) {
+            conceptsJson.put(concept.toJson());
+        }
+        return conceptsJson;
     }
 }

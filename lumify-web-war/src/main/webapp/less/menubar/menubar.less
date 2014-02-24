@@ -96,7 +96,8 @@ background: @menubar-background;
   .users { 
 
     &.synchronizing a:before {
-      .spinning-image('glyphicons_081_refresh@2x', 10px, 1px, -22px, 4s, forward);
+      .spinning-image('glyphicons_081_refresh@2x', 10px, 1px, -22px);
+      .spin(4s, forward);
       .animation-play-state(running);
     }
 
@@ -114,17 +115,19 @@ background: @menubar-background;
 
     a {
       &:before {
-        .spinning-image('white/glyphicons_019_cogwheel@2x', 18px, -4px, -4px, 4s, forward);
+        .spinning-image('white/glyphicons_019_cogwheel@2x', 18px, -4px, -4px);
       }
 
       &:after {
-        .spinning-image('white/glyphicons_019_cogwheel@2x', 14px, 6px, 6px, 4s, reverse);
+        .spinning-image('white/glyphicons_019_cogwheel@2x', 14px, 6px, 6px);
       }
     }
 
-    &.animating a:before, 
+    &.animating a:before {
+      .spin(4s, forward);
+    }
     &.animating a:after { 
-        .animation-play-state(running);
+      .spin(4s, reverse);
     }
   }
 
@@ -137,7 +140,7 @@ background: @menubar-background;
 
 
 
-.spinning-image(@image, @dimension, @offsetLeft, @offsetTop, @spin, @direction) {
+.spinning-image(@image, @dimension, @offsetLeft, @offsetTop) {
   content: '';
   position: absolute;
   left: 50%;
@@ -150,7 +153,6 @@ background: @menubar-background;
   background-size: 100%;
   background-position: center;
   background-repeat: no-repeat;
-  .spin(@spin, @direction);
 }
 
 
@@ -159,4 +161,22 @@ background: @menubar-background;
   bottom: 5px;
   left: 0;
   right: 0;
+}
+
+@media (max-height:28em) {
+    .menu-top a, .menu-bottom a {
+        font-size: 0; 
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+}
+@media (max-height:19em) {    
+    .menu-bottom .activity, .menu-top .dashboard {
+        display: none;        
+    }
+}
+@media (max-height:15em) {    
+    .menu-bottom .users, .menu-bottom .divider {
+        display: none;        
+    }
 }

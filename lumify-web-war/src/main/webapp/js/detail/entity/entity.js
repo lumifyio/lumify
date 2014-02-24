@@ -85,7 +85,7 @@ define([
 
                 Image.attachTo(self.select('glyphIconSelector'), {
                     data: self.attr.data,
-                    service: self.vertexService,
+                    service: vertexService,
                     defaultIconSrc: concept && concept.glyphIconHref || ''
                 });
 
@@ -96,8 +96,8 @@ define([
                 self.updateEntityAndArtifactDraggables();
 
                 $.when(
-                        self.handleCancelling(self.ontologyService.relationships()),
-                        self.handleCancelling(self.vertexService.getVertexRelationships(self.attr.data.id))
+                        self.handleCancelling(ontologyService.relationships()),
+                        self.handleCancelling(vertexService.getVertexRelationships(self.attr.data.id))
                     )
                     .fail(function() {
                         self.select('relationshipsSelector').html(alertTemplate({
@@ -141,8 +141,7 @@ define([
                     r.relationshipInfo = {
                         id: r.relationship.id,
                         properties: $.extend({}, r.relationship.properties, {
-                            _type: 'relationship',
-                            _rowKey: r.relationship.sourceVertexId + '->' + r.relationship.destVertexId,
+                            _conceptType: 'relationship',
                             id: r.relationship.id,
                             relationshipType: r.relationship.label,
                             source: r.relationship.sourceVertexId,
@@ -157,7 +156,7 @@ define([
 
                 // Has Entity are collected into references (no matter
                 // relationship direction
-                if (r.relationship.label === 'hasEntity') {
+                if (r.relationship.label === 'rawHasEntity') {
                     return 'references';
                 }
 
@@ -217,7 +216,7 @@ define([
         this.handleReferenceLoadingRequest = function(evt, data) {
             var self = this;
 
-            this.handleCancelling(this.service.getVertexRelationships(this.attr.data.id, data.paging))
+            this.handleCancelling(vertexService.getVertexRelationships(this.attr.data.id, data.paging))
                 .done(function(response) {
                     var relationships = response.relationships,
                         total = response.totalReferences;

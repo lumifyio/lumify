@@ -1,9 +1,9 @@
 package com.altamiracorp.lumify.storm.textHighlighting;
 
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.textHighlighting.OffsetItem;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
-import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
-import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -25,8 +25,8 @@ public class EntityHighlighter {
         this.graph = graph;
     }
 
-    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions, User user) {
-        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, user);
+    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions, Authorizations authorizations) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, authorizations);
         return getHighlightedText(text, 0, offsetItems);
     }
 
@@ -99,13 +99,13 @@ public class EntityHighlighter {
         return result.toString();
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, User user) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, Authorizations authorizations) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
         for (TermMentionModel termMention : termMentions) {
             Vertex glyphVertex = null;
             String graphVertexId = termMention.getMetadata().getGraphVertexId();
             if (graphVertexId != null) {
-                glyphVertex = graph.getVertex(graphVertexId, user.getAuthorizations());
+                glyphVertex = graph.getVertex(graphVertexId, authorizations);
             }
             termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, glyphVertex));
         }
