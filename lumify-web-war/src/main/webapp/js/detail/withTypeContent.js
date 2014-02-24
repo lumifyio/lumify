@@ -91,7 +91,7 @@ define([
                 if ($.isArray(this.attr.data)) {
                     ids = _.map(
                             _.reject(this.attr.data, function(v) { 
-                                return v._type === 'relationship'; 
+                                return v._conceptType === 'relationship';
                             }), function(v) {
                                 return v.id || v.graphVertexId;
                             });

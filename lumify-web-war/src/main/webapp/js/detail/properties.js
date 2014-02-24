@@ -260,7 +260,7 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties._type) {
+            if (self.attr.data.properties._conceptType) {
                 self.relationshipService.deleteProperty(
                         data.property.name,
                         this.attr.data.properties.source.value,
@@ -295,14 +295,16 @@ define([
 
         this.onAddProperty = function (event, data) {
             var self = this;
-
-            if (self.attr.data.properties._type && self.attr.data.properties._type === 'relationship') {
+            if (self.attr.data.properties._conceptType.value === 'relationship') {
                 self.relationshipService.setProperty(
                         data.property.name,
                         data.property.value,
+                        data.property.visibilitySource,
+                        data.property.justificationText,
+                        data.property.sourceInfo,
                         this.attr.data.properties.source.value,
                         this.attr.data.properties.target.value,
-                        this.attr.data.properties.id.value)
+                        this.attr.data.id)
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
@@ -420,7 +422,7 @@ define([
         keys.forEach(function (name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isRelationshipType = name === 'relationshipType' && properties._type;
+                isRelationshipType = name === 'relationshipType' && properties._conceptType;
 
             if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
@@ -433,7 +435,7 @@ define([
                     value = properties[name].value;
                 }
 
-                var isRelationshipSourceProperty = name === 'source' && properties._type;
+                var isRelationshipSourceProperty = name === 'source' && properties._conceptType;
                 if (/^[^_]/.test(name) && 
                     name !== 'boundingBox' &&
                     name !== 'title' &&

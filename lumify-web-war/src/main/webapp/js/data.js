@@ -478,7 +478,7 @@ define([
             var self = this,
                 vertices = data && data.vertices || [],
                 selectedIds = _.pluck(vertices, 'id'),
-                selected = _.groupBy(vertices, function(v) { return v.properties._type ? 'edges' : 'vertices'; });
+                selected = _.groupBy(vertices, function(v) { return v.properties._conceptType ? 'edges' : 'vertices'; });
 
             selected.vertices = selected.vertices || [];
             selected.edges = selected.edges || [];
