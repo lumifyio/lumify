@@ -55,9 +55,11 @@ define([
                     .typeahead({
                         minLength: 0,
                         items: 100,
-                        source: _.map(this.attr.properties, function(p) {
-                            return p.displayName || p.title;
-                        }),
+                        source: _.chain(this.attr.properties)
+                            .map(function(p) { return p.displayName || p.title; })
+                            .sortBy(function(name) { return name.toLowerCase(); })
+                            .uniq()
+                            .value(),
                         matcher: function(item) {
                             if (this.query === ' ') return -1;
                             if (
