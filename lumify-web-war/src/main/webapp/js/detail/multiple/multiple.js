@@ -39,7 +39,7 @@ define([
         this.after('initialize', function () {
             var self = this,
                 vertices = this.attr.data.filter(function (v) {
-                    return !v.properties._type || v.properties._type != 'relationship';
+                    return !v.properties._conceptType || v.properties._conceptType != 'relationship';
                 }),
                 ids = _.pluck(vertices, 'id');
 

@@ -12,15 +12,19 @@ define(
 
         RelationshipService.prototype = Object.create(ServiceBase.prototype);
 
-        RelationshipService.prototype.setProperty = function (propertyName, value, sourceId, destId, edgeId) {
+        RelationshipService.prototype.setProperty = function (propertyName, value, visibilitySource, justificationText,
+            sourceInfo, sourceId, destId, id) {
             return this._ajaxPost({
                 url: 'relationship/property/set',
                 data: {
                     propertyName: propertyName,
                     value: value,
+                    visibilitySource: visibilitySource,
+                    justificationText: justificationText,
+                    sourceInfo: sourceInfo,
                     source: sourceId,
                     dest: destId,
-                    edgeId: edgeId
+                    edgeId: id
                 }
             });
         };

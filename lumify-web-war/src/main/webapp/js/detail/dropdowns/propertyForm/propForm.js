@@ -64,9 +64,9 @@ define([
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
 
-            (vertex.properties._conceptType.value ?
+            (vertex.properties._conceptType.value != 'relationship' ?
                 self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
-                self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipLabel.value)
+                self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
             ).done(function (properties) {
                 var propertiesList = [];
 
