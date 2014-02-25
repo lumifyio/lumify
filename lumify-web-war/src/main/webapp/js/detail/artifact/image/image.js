@@ -182,7 +182,7 @@ define([
         this.onHoverLeave = function(event, data) {
             var toHide = this.select('boxSelector');
 
-            if (this.currentlyEditing) {
+            if (this.currentlyEditing === 0 || this.currentlyEditing) {
                 toHide = toHide.not('.editing');
             }
 
@@ -191,7 +191,7 @@ define([
 
         this.onEdit = function(event, data) {
             if (this.currentlyEditing && data.graphVertexId === this.currentlyEditing) return;
-            this.currentlyEditing = !data.graphVertexId ? 'NEW' : data.graphVertexId;
+            this.currentlyEditing = !data.graphVertexId ? data.detectedObjectId : data.graphVertexId;
             this.showFaceboxForEdit(data);
         };
 
