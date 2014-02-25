@@ -1,241 +1,190 @@
-define(
-    [
-        'service/serviceBase'
-    ],
-    function (ServiceBase) {
-      'use strict';
+define([
+    'service/serviceBase'
+], function (ServiceBase) {
+    'use strict';
 
-        var memoizedMap = {};
 
-        function OntologyService() {
-            ServiceBase.call(this);
+    function OntologyService() {
+        ServiceBase.call(this);
 
-            var toMemoize = [
-                'propertiesByConceptId',
-                'propertiesByRelationshipLabel',
-                'conceptToConceptRelationships'
-            ];
+        var toMemoize = [
+            'ontology',
+            'concepts',
+            'relationships',
+            'conceptToConceptRelationships',
+            'properties',
+            'propertiesByConceptId',
+            'propertiesByRelationshipLabel'
+        ];
 
-            var self = this;
-            toMemoize.forEach(function(f) {
-                var cachedFunction = self[f],
-                    hashFunction = self[f].memoizeHashFunction;
-                self[f] = function() {
-                    var key = hashFunction ? hashFunction.apply(self, arguments) : arguments[0],
-                        result = memoizedMap[key];
+        this.memoizeFunctions(toMemoize);
+        return this;
+    }
 
-                    if (result && result.statusText != 'abort') {
-                        return result;
-                    }
-                    result = cachedFunction.apply(self, arguments);
-                    if (result.fail) {
-                        result.fail(function() {
-                            delete memoizedMap[key];
+    OntologyService.prototype = Object.create(ServiceBase.prototype);
+
+    OntologyService.prototype.ontology = function() {
+        return this._ajaxGet({ url:'ontology' })
+                    .then(function(ontology) {
+                        return $.extend({}, ontology, {
+                            conceptsById: _.indexBy(ontology.concepts, 'id'),
+                            propertiesById: _.indexBy(ontology.properties, 'id')
+                        });
+                    });
+    };
+
+    OntologyService.prototype.concepts = function () {
+        console.log('BUILDING concepts')
+        return this.ontology()
+                    .then(function(ontology) {
+                        return {
+                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {title:'entity'})),
+                            byId: ontology.conceptsById, 
+                            byTitle: _.chain(ontology.concepts)
+                                .map(addFlattenedTitles.bind(null, ontology.conceptsById))
+                                .sortBy('flattenedDisplayName')
+                                .value()
+                        };
+                    });
+
+        function buildTree(concepts, root) {
+            var groupedByParent = _.groupBy(concepts, 'parentConcept'),
+                findChildrenForNode = function(node) {
+                    node.children = groupedByParent[node.id] || [];
+                    node.children.forEach(findChildrenForNode);
+                }
+
+            findChildrenForNode(root);
+
+            return root;
+        }
+
+        function addFlattenedTitles(conceptsById, concept) {
+            var parentConceptId = concept.parentConcept,
+                currentParentConcept = null,
+                parents = [];
+
+            while (parentConceptId) {
+                currentParentConcept = conceptsById[parentConceptId];
+                if (_.contains(['rootConcept', 'entity'], currentParentConcept.title)) break;
+                parents.push(currentParentConcept);
+                parentConceptId = currentParentConcept.parentConcept;
+            }
+
+            parents.reverse();
+            var leadingSlashIfNeeded = parents.length ? '/' : '';
+
+            return $.extend({}, concept, {
+                flattenedTitle: _.pluck(parents, 'title').join('/') + 
+                                leadingSlashIfNeeded + concept.title,
+                flattenedDisplayName: _.pluck(parents, 'displayName').join('/') + 
+                                leadingSlashIfNeeded + concept.displayName
+            });
+        }
+    };
+
+    OntologyService.prototype.relationships = function () {
+        return this.ontology()
+                    .then(function(ontology) {
+                        return {
+                            list: _.sortBy(ontology.relationships, 'displayName'),
+                            byId: _.indexBy(ontology.relationships, 'id'),
+                            byTitle: _.indexBy(ontology.relationships, 'title')
+                        };
+                    });
+    };
+
+    OntologyService.prototype.conceptToConceptRelationships = function(sourceConceptTypeId, destConceptTypeId) {
+        return this.relationships()
+                    .then(function(relationships) {
+                        var groupedBySourceDest = _.groupBy(relationships.list, function(r) {
+                            return r.source + '>' + r.dest;
                         })
-                    }
-                    memoizedMap[key] = result;
+
+                        return _.sortBy(groupedBySourceDest[sourceConceptTypeId + '>' + destConceptTypeId] || [], 'displayName');
+                    });
+    };
+    OntologyService.prototype.conceptToConceptRelationships.memoizeHashFunction = function(s,d) {
+        return s+d;
+    };
+
+    OntologyService.prototype.properties = function () {
+        return this.ontology()
+                    .then(function(ontology) {
+                        return {
+                            list: _.sortBy(ontology.properties, 'displayName'),
+                            byTitle: _.indexBy(ontology.properties, 'title')
+                        };
+                    });
+    };
+
+    OntologyService.prototype.propertiesByConceptId = function (conceptId) {
+        return this.ontology()
+                    .then(function(ontology) {
+                        var propertyIds = ontology.conceptsById[conceptId].properties,
+                            properties = _.map(propertyIds, function(pId) {
+                                return ontology.propertiesById[pId];
+                            });
+
+                        return {
+                            list: _.sortBy(properties, 'displayName'),
+                            byTitle: _.indexBy(properties, 'title')
+                        };
+                    });
+    };
+
+    OntologyService.prototype.propertiesByRelationshipLabel = function (relationshipLabel) {
+        return this.ontology()
+                    .then(function(ontology) {
+                        var relationship = _.findWhere(ontology.relationships, { displayName:relationshipLabel }),
+                            propertyIds = ontology.conceptsById[relationship.id].properties,
+                            properties = _.map(propertyIds, function(pId) {
+                                return ontology.propertiesById[pId];
+                            });
+
+                        return {
+                            list: _.sortBy(properties, 'displayName'),
+                            byTitle: _.indexBy(properties, 'title')
+                        };
+                    });
+    };
+
+    var memoizedMap = {};
+    OntologyService.prototype.memoizeFunctions = function(toMemoize) {
+        var self = this;
+        toMemoize.forEach(function(f) {
+            var cachedFunction = self[f],
+            hashFunction = self[f].memoizeHashFunction;
+            self[f] = function() {
+                var key = hashFunction && hashFunction.apply(self, arguments);
+                if (!key && arguments.length) key = arguments[0];
+                if (!key) key = '(noargs)';
+                key = f + key;
+
+                var result = memoizedMap[key];
+
+                if (result && result.statusText != 'abort') {
                     return result;
                 }
-            });
-            return this;
-        }
-
-        OntologyService.prototype = Object.create(ServiceBase.prototype);
-
-        OntologyService.prototype.clearCaches = function () {
-            cachedConcepts = null;
-            cachedRelationships = null;
-            cachedProperties = null;
-        };
-
-        var cachedConcepts;
-        OntologyService.prototype.concepts = function (refresh, callback) {
-            if (typeof refresh === 'function') {
-                callback = refresh;
-                refresh = false;
-            }
-            if (!callback) callback = function() { };
-
-            if (!refresh && cachedConcepts) {
-                cachedConcepts.done(function(v) {callback(null, v); });
-                return cachedConcepts;
-            }
-
-            cachedConcepts = this._ajaxGet({
-                url: 'ontology/concept'
-            }).then(function(response) {
-                var entityConcept = findConceptByTitle(response, 'entity');
-                return {
-                    tree: response,
-                    entityConcept: entityConcept,
-                    byId: buildConceptMapById(response, {}),
-                    byTitle: flattenConcepts(entityConcept)
-                };
-            }).always(function(data) {callback(null, data); });
-
-            return cachedConcepts;
-
-            function findConceptByTitle(concept, title) {
-                if (concept.title == title) {
-                    return concept;
+                memoizedMap[key] = result = cachedFunction.apply(self, arguments);
+                if (result.fail) {
+                    result.fail(function() {
+                        delete memoizedMap[key];
+                    })
                 }
-                if (concept.children) {
-                    for (var i = 0; i < concept.children.length; i++) {
-                        var child = concept.children[i];
-                        var c = findConceptByTitle(child, title);
-                        if (c) {
-                            return c;
-                        }
-                    }
-                }
-                return null;
-            }
-
-            function buildConceptMapById(concept, map, parentId) {
-                map[concept.id] = concept;
-                if (parentId) {
-                    concept.parentId = parentId;
-                }
-                if (concept.children) {
-                    for (var i = 0; i < concept.children.length; i++) {
-                        buildConceptMapById(concept.children[i], map, concept.id);
-                    }
-                }
-                return map;
-            }
-
-            function flattenConcepts(concept) {
-                var childIdx, child, grandChildIdx;
-                var flattenedConcepts = [];
-                for (childIdx in concept.children) {
-                    child = concept.children[childIdx];
-                    if (concept.flattenedTitle) {
-                        child.flattenedTitle = concept.flattenedTitle + "/" + child.title;
-                        child.flattenedDisplayName = concept.flattenedDisplayName + "/" + child.displayName;
-                    } else {
-                        child.flattenedTitle = child.title;
-                        child.flattenedDisplayName = child.displayName;
-                    }
-                    flattenedConcepts.push(child);
-                    var grandChildren = flattenConcepts(child);
-                    for (grandChildIdx in grandChildren) {
-                        flattenedConcepts.push(grandChildren[grandChildIdx]);
-                    }
-                }
-                return _.sortBy(flattenedConcepts, 'flattenedDisplayName');
-            }
-        };
-
-        var cachedRelationships;
-        OntologyService.prototype.relationships = function (refresh, callback) {
-            if (typeof refresh === 'function') {
-                callback = refresh;
-                refresh = false;
-            }
-            if (!callback) callback = function() { };
-
-            if (!refresh && cachedRelationships) {
-                cachedRelationships.done(function(v) {callback(null, v); });
-                return cachedRelationships;
-            }
-
-            cachedRelationships = this._ajaxGet({
-                url: 'ontology/relationship'
-            }).then(function(response) {
-                return {
-                    list: response.relationships,
-                    byTitle: buildRelationshipsByTitle(response.relationships),
-                    byId: buildRelationshipsById(response.relationships)
-                };
-            }).always(function(data) {callback(null, data); });
-
-            return cachedRelationships;
-
-            function buildRelationshipsByTitle(relationships) {
-                var result = {};
-                relationships.forEach(function (relationship) {
-                    result[relationship.title] = relationship;
-                });
                 return result;
             }
+        });
+    }
 
-            function buildRelationshipsById(relationships) {
-                var result = {};
-                relationships.forEach(function (relationship) {
-                    result[relationship.id] = relationship;
-                });
-                return result;
-            }
-        };
+    function buildPropertiesByTitle(properties) {
+        var result = {};
+        properties.forEach(function (property) {
+            result[property.title] = property;
+        });
+        return result;
+    }
 
-        OntologyService.prototype.conceptToConceptRelationships = function(sourceConceptTypeId, destConceptTypeId) {
-            return this._ajaxGet({
-                url: 'ontology/relationship',
-                data: {
-                    sourceConceptTypeId: sourceConceptTypeId,
-                    destConceptTypeId: destConceptTypeId
-                }
-            });
-        };
-        OntologyService.prototype.conceptToConceptRelationships.memoizeHashFunction = function(s,d) {
-            return s+d;
-        };
-
-        var cachedProperties;
-        OntologyService.prototype.properties = function (refresh, callback) {
-            if (typeof refresh === 'function') {
-                callback = refresh;
-                refresh = false;
-            }
-            if (!callback) callback = function() { };
-
-            if (!refresh && cachedProperties) {
-                cachedProperties.done(function(v) {callback(null, v); });
-                return cachedProperties;
-            }
-
-            cachedProperties = this._ajaxGet({
-                url: 'ontology/property'
-            }).then(function(response) {
-                return {
-                    list: response.properties,
-                    byTitle: buildPropertiesByTitle(response.properties)
-                };
-            }).always(function(data) {callback(null, data); });
-
-            return cachedProperties;
-        };
-
-        OntologyService.prototype.propertiesByConceptId = function (conceptId) {
-            return this._ajaxGet({
-                url: 'ontology/concept/' + conceptId + '/properties'
-            }).then(function(response) {
-                return {
-                    list: response.properties,
-                    byTitle: buildPropertiesByTitle(response.properties)
-                };
-            });
-        };
-
-        OntologyService.prototype.propertiesByRelationshipLabel = function (relationshipLabel) {
-            return this._ajaxGet({
-                url: 'ontology/' + relationshipLabel + '/properties'
-            }).then(function(response) {
-                return {
-                    list: response.properties,
-                    byTitle: buildPropertiesByTitle(response.properties)
-                };
-            });
-        };
-
-        function buildPropertiesByTitle(properties) {
-            var result = {};
-            properties.forEach(function (property) {
-                result[property.title] = property;
-            });
-            return result;
-        }
-
-        return OntologyService;
-    });
+    return OntologyService;
+});
 

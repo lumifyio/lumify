@@ -1224,12 +1224,7 @@ define([
                 this.addVertices(self.attr.vertices);
             }
 
-            this.ontologyService.concepts(function(err, concepts) {
-                if (err) {
-                    console.error('concepts', err);
-                    return self.trigger(document, 'error', err);
-                }
-
+            this.ontologyService.concepts().done(function(concepts) {
                 var templateData = {
                     firstLevelConcepts: concepts.entityConcept.children || [],
                     pathHopOptions: ["2","3","4"]

@@ -4,7 +4,7 @@ if (relationships.length == 0) { %>
 <% }
 else
 {%>
-    <option value=''>Select a relationship...</option>
+    <option value=''>Select...</option>
     <% relationships.forEach(function(relationship) { %>
     <option
         value="<%= relationship.title%>"><%= relationship.displayName %></option>

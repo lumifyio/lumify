@@ -25,12 +25,6 @@ define([
             buttonSelector: 'button'
         });
 
-        this.after('teardown', function() {
-            if (this.relationshipRequest) {
-                this.relationshipRequest.abort();
-            }
-        });
-
         this.before('initialize', function(node, config) {
             config.template = 'createConnectionPopover';
         });
@@ -105,12 +99,10 @@ define([
                 destConceptTypeId = dest.data('_conceptType').value;
 
             return $.when(
-                this.relationshipRequest = this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
+                this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
                 this.ontologyService.relationships()
-            ).then(function(conceptToConceptResponse, ontologyRelationships) {
-                var results = conceptToConceptResponse[0],
-                    relationships = results.relationships,
-                    relationshipsTpl = [];
+            ).then(function(relationships, ontologyRelationships) {
+                var relationshipsTpl = [];
 
                 relationships.forEach(function (relationship) {
                     var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];

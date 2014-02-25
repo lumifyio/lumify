@@ -626,7 +626,7 @@ define([
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
                             return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
                         });
-                        workspace.data.verticesById = _.groupBy(vertices, 'id');
+                        workspace.data.verticesById = _.indexBy(vertices, 'id');
 
                         self.workspaceMarkReady(workspace);
                         self.trigger('workspaceLoaded', freeze(workspace));
