@@ -52,6 +52,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         Object resolvedGraphVertexId = getOptionalParameter(request, "graphVertexId");
+        int detectedObjectId = getOptionalParameter(request, "detectedObjectId") != null ? Integer.parseInt(getOptionalParameter(request, "detectedObjectId")) - 1 : -1;
         String existing = getOptionalParameter(request, "existing");
         String x1 = getRequiredParameter(request, "x1"), x2 = getRequiredParameter(request, "x2"),
                 y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
@@ -93,7 +94,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
             String oldCoordinates = "x1: " + detectedObject.get("x1") + ", y1: " + detectedObject.get("y1") +
                     ", x2: " + detectedObject.get("x2") + ", y2: " + detectedObject.get("y2");
             if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(resolvedGraphVertexId) ||
-                    (oldCoordinates.equals(boundingBox))) {
+                    (oldCoordinates.equals(boundingBox)) || detectedObjectId == i) {
                 ArtifactDetectedObject tag = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, concept);
                 JSONObject result = new JSONObject();
 
