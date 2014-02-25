@@ -1,22 +1,22 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
-
 import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+
 public class Relationship {
     private final Vertex vertex;
-    private final Concept sourceConcept;
-    private final Concept destConcept;
+    private final String sourceConceptId;
+    private final String destConceptId;
 
-    public Relationship(Vertex vertex, Concept sourceConcept, Concept destConcept) {
+    public Relationship(Vertex vertex, String sourceConceptId, String destConceptId) {
         this.vertex = vertex;
-        this.sourceConcept = sourceConcept;
-        this.destConcept = destConcept;
+        this.sourceConceptId = sourceConceptId;
+        this.destConceptId = destConceptId;
     }
 
     public String getId() {
@@ -31,12 +31,12 @@ public class Relationship {
         return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
-    public Concept getSourceConcept() {
-        return this.sourceConcept;
+    public String getSourceConceptId() {
+        return sourceConceptId;
     }
 
-    public Concept getDestConcept() {
-        return this.destConcept;
+    public String getDestConceptId() {
+        return destConceptId;
     }
 
     public Vertex getVertex() {
@@ -49,8 +49,8 @@ public class Relationship {
             json.put("id", getId());
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
-            json.put("source", getSourceConcept().getId());
-            json.put("dest", getDestConcept().getId());
+            json.put("source", getSourceConceptId());
+            json.put("dest", getDestConceptId());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
