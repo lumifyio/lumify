@@ -219,6 +219,7 @@ define([
                     sign: newSign,
                     conceptId: this.select('conceptSelector').val(),
                     graphVertexId: this.attr.graphVertexId || this.currentGraphVertexId,
+                    detectedObjectId: this.attr.detectedObjectId,
                     artifactId: this.attr.artifactData.id,
                     x1: parseFloat(this.attr.x1),
                     y1: parseFloat(this.attr.y1),
