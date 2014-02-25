@@ -506,7 +506,7 @@ define([
         this.loadConcepts = function() {
             var self = this;
             self.allConcepts = [];
-            return self.ontologyService.concepts(function(err, concepts) {
+            return self.ontologyService.concepts().done(function(concepts) {
                 var vertexInfo;
 
                 if (self.attr.detectedObject) {
@@ -591,7 +591,7 @@ define([
                                 });
 
 
-                            items = $.extend(true, {}, items, _.groupBy(all, 'id'));
+                            items = $.extend(true, {}, items, _.indexBy(all, 'id'));
                             items[createNewText] = [query];
 
                             self.sourceCache[query] = function(aCallback) {

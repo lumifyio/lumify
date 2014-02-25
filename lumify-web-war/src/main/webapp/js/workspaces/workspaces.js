@@ -237,7 +237,7 @@ define([
                    .done(function(usersResponse, workspaceResponse) {
                        var users = usersResponse[0].users || [],
                            workspaces = workspaceResponse[0].workspaces || [],
-                           usersById = _.groupBy(users, function(u) { return u.id; });
+                           usersById = _.indexBy(users, function(u) { return u.id; });
 
                         self.usersById = usersById;
                         self.$node.html( workspacesTemplate({}) );
@@ -255,14 +255,8 @@ define([
 
         this.workspaceDataForItemRow = function(w) {
             var row = $.extend({}, w),
-                createdBy = row.createdBy,
-                foundUsers = this.usersById[row.createdBy];
-
-            if (foundUsers && foundUsers.length) {
-                createdBy = foundUsers[0].userName;
-            }
-
-            var text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
+                createdBy = this.usersById[row.createdBy].userName,
+                text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != window.currentUser.id;
                 }),

@@ -136,7 +136,7 @@ define([
     }
 
     function load(styleReady) {
-        ontologyService.concepts(function(err, concepts) {
+        ontologyService.concepts().done(function(concepts) {
             if(concepts.entityConcept.children) {
                 concepts.entityConcept.children.forEach(apply);
             }
