@@ -2,9 +2,10 @@ var utils = require('../utils');
 
 describe('Login', function () {
 
+    before(utils.logout);
+
     it('Should be able to login using button', function () {
       return this.browser
-          .get(utils.url)
           .title()
             .should.become('Lumify')
           .waitForElementByCss('.login button')

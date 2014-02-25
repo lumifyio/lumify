@@ -1,6 +1,6 @@
 var utils = require('../utils');
 
-describe.only('Search', function () {
+describe('Search', function () {
 
     before(utils.login);
 
@@ -8,33 +8,33 @@ describe.only('Search', function () {
         return this.browser
           .waitForElementByCss('.menubar-pane .search a').should.eventually.be.ok
           .click()
-          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , 2000).should.eventually.be.ok
+          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.be.ok
           .waitForElementByCss('.search-query:focus') 
           .elementByCss('.menubar-pane .search a')
           .click()
-          .waitFor(this.asserters.jsCondition(utils.animations.closeSearchAnimationFinished) , 2000)
+          .waitFor(this.asserters.jsCondition(utils.animations.closeSearchAnimationFinished) , utils.animationTimeout)
     })
 
     it('Should be able to toggle search with shortcut', function () {
         return this.browser
-          .waitForElementByCss('.menubar-pane .search a').should.eventually.be.ok
+          .waitForElementByCss('.menubar-pane .search a').should.eventually.exist
           .elementByTagName('body')
           .sendKeys('/')
-          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , 2000).should.eventually.be.ok
+          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.be.ok
           .waitForElementByCss('.search-query:focus') 
           .elementByTagName('body')
           .sendKeys(this.KEYS.Escape)
           .sendKeys(this.KEYS.Escape)
-          .waitFor(this.asserters.jsCondition(utils.animations.closeSearchAnimationFinished) , 2000)
+          .waitFor(this.asserters.jsCondition(utils.animations.closeSearchAnimationFinished) , utils.animationTimeout)
     })
 
     it('Should be able to search *', function() {
         var browser = this.browser, Q = this.Q;
 
         return browser
-          .waitForElementByCss('.menubar-pane .search a').should.eventually.be.ok
+          .waitForElementByCss('.menubar-pane .search a').should.eventually.exist
           .click()
-          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , 2000).should.eventually.exist
+          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.exist
           .waitForElementByCss('.search-query:focus').should.eventually.exist
           .type('*')
           .keys(this.KEYS.Return)
@@ -51,7 +51,7 @@ describe.only('Search', function () {
               ])
           })
           .elementByCss('.search-results').getComputedCss('display').should.become('block')
-          .waitFor(this.asserters.jsCondition("$('.search-results .vertex-item').length === 8") , 500).should.eventually.be.ok
+          .waitFor(this.asserters.jsCondition("$('.search-results .vertex-item').length === 8") , utils.requestTimeout).should.eventually.be.ok
     })
 
     it('Should be able to drag result to graph', function() {
@@ -79,8 +79,8 @@ describe.only('Search', function () {
             .sendKeys(this.KEYS['Back space'])
             .waitFor(this.asserters.jsCondition("$('.cytoscape-container').cytoscape('get').nodes().length === 0"), 1000)
             .should.eventually.be.ok
-            .waitForElementByCss('.menubar-pane .activity.animating', 1000).should.eventually.exist
-            .waitForElementByCss('.menubar-pane .activity:not(.animating)', 10000).should.eventually.exist
+            .waitForElementByCss('.menubar-pane .activity.animating', 2000).should.eventually.exist
+            .waitForElementByCss('.menubar-pane .activity:not(.animating)', utils.requestTimeout).should.eventually.exist
     })
 
 })
