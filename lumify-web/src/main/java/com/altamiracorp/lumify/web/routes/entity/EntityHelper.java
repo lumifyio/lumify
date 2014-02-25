@@ -62,10 +62,11 @@ public class EntityHelper {
             conceptName = concept.getVertex().getPropertyValue("ontologyTitle", 0).toString();
         }
 
-        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, conceptName);
-        detectedObject.setGraphVertexId(resolvedVertex.getId().toString());
-
-        detectedObject.setResolvedVertex(resolvedVertex);
+//        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(x1, y1, x2, y2, conceptName);
+        ArtifactDetectedObject detectedObject = new ArtifactDetectedObject(0,0,0,0, conceptName);
+//        detectedObject.setGraphVertexId(resolvedVertex.getId().toString());
+//
+//        detectedObject.setResolvedVertex(resolvedVertex);
 
         return detectedObject;
     }

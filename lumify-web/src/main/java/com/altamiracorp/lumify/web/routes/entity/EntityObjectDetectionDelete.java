@@ -16,8 +16,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
-
 public class EntityObjectDetectionDelete extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
@@ -70,30 +68,30 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         }
 
         // Delete the appropriate detected object json object from the array and reset the property
-        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
-        boolean deleted = false;
-        for (int i = 0; i < detectedObjects.length(); i++) {
-            JSONObject detectedObject = detectedObjects.getJSONObject(i);
-            if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(jsonObject.get("graphVertexId"))) {
-                detectedObjects.remove(i);
-                deleted = true;
-                break;
-            }
-        }
-        if (!deleted) {
-            throw new RuntimeException("Tag was not found in the list of detected objects");
-        }
-        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
-        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
-        artifactVertex = artifactVertexMutation.save();
-        graph.flush();
-
-        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(),
-                DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
-        obj.put("updatedArtifactVertex", updatedArtifactVertex);
-
-        //TODO: Overwrite old ElasticSearch index with new info
-
-        respondWithJson(response, obj);
+//        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
+//        boolean deleted = false;
+//        for (int i = 0; i < detectedObjects.length(); i++) {
+//            JSONObject detectedObject = detectedObjects.getJSONObject(i);
+//            if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(jsonObject.get("graphVertexId"))) {
+//                detectedObjects.remove(i);
+//                deleted = true;
+//                break;
+//            }
+//        }
+//        if (!deleted) {
+//            throw new RuntimeException("Tag was not found in the list of detected objects");
+//        }
+//        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
+//        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
+//        artifactVertex = artifactVertexMutation.save();
+//        graph.flush();
+//
+//        JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactVertex.getId(),
+//                DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
+//        obj.put("updatedArtifactVertex", updatedArtifactVertex);
+//
+//        //TODO: Overwrite old ElasticSearch index with new info
+//
+//        respondWithJson(response, obj);
     }
 }

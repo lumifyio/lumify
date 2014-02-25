@@ -18,8 +18,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
-
 public class EntityObjectDetectionCreate extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
@@ -74,33 +72,33 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
         // adding to detected object property if one exists, if not add detected object property to the artifact vertex
         JSONArray detectedObjectList = new JSONArray();
-        String detectedObjects = DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex);
-        if (detectedObjects != null && !detectedObjects.trim().isEmpty()) {
-            detectedObjectList = new JSONArray(detectedObjects);
-        }
+//        String detectedObjects = DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex);
+//        if (detectedObjects != null && !detectedObjects.trim().isEmpty()) {
+//            detectedObjectList = new JSONArray(detectedObjects);
+//        }
 
         JSONObject result = new JSONObject();
 
-        JSONObject entityVertex = newDetectedObject.getJson();
-        entityVertex.put("artifactId", artifactId);
-        detectedObjectList.put(entityVertex);
-
-        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjectList.toString(), visibility);
-        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
-        artifactVertex = artifactVertexMutation.save();
-
-        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, authorizations);
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
-        // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
-
-        result.put("entityVertex", entityVertex);
-
-        JSONObject updatedArtifactVertex =
-                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, DETECTED_OBJECTS_JSON.getKey(),
-                        DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
-
-        result.put("updatedArtifactVertex", updatedArtifactVertex);
+//        JSONObject entityVertex = newDetectedObject.getJson();
+//        entityVertex.put("artifactId", artifactId);
+//        detectedObjectList.put(entityVertex);
+//
+//        DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjectList.toString(), visibility);
+//        auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
+//        artifactVertex = artifactVertexMutation.save();
+//
+//        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, authorizations);
+//        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
+//        // TODO: replace second "" when we implement commenting on ui
+//        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
+//
+//        result.put("entityVertex", entityVertex);
+//
+//        JSONObject updatedArtifactVertex =
+//                entityHelper.formatUpdatedArtifactVertexProperty(artifactId, DETECTED_OBJECTS_JSON.getKey(),
+//                        DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
+//
+//        result.put("updatedArtifactVertex", updatedArtifactVertex);
 
         // TODO: index the new vertex
 

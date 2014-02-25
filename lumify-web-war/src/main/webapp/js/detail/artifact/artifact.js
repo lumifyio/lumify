@@ -143,7 +143,7 @@ define([
             this.videoDuration = vertex.videoDuration;
 
             if (vertex.properties._detectedObjects) {
-                vertex.properties._detectedObjects.value = JSON.parse(vertex.properties._detectedObjects.value).sort(function(a, b){
+                vertex.properties._detectedObjects.value = vertex.properties._detectedObjects.sort(function(a, b){
                     var aX = a.x1, bX = b.x1;
                     return aX - bX;
                 });

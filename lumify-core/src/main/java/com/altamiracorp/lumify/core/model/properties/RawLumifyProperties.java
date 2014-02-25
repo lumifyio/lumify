@@ -73,11 +73,6 @@ public class RawLumifyProperties {
     public static final TextLumifyProperty MAPPING_JSON = new TextLumifyProperty("_mappingJson", TextIndexHint.NONE);
 
     /**
-     * The detected objects property.
-     */
-    public static final TextLumifyProperty DETECTED_OBJECTS_JSON = new TextLumifyProperty("_detectedObjects", TextIndexHint.NONE);
-
-    /**
      * Utility class constructor.
      */
     private RawLumifyProperties() {
