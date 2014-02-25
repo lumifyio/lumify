@@ -173,12 +173,7 @@ define([
         this.loadPropertyFilters = function() {
             var self = this;
 
-            this.ontologyService.properties(function(err, properties) {
-                if(err) {
-                    console.error('Error', err);
-                    return self.trigger(document, 'error', { message: err.toString() });
-                }
-
+            this.ontologyService.properties().done(function(properties) {
                 self.properties = _.filter(properties.list, function(p) { 
                     if (p.title === 'boundingBox') return false; 
                     if (/^_/.test(p.title)) return false;

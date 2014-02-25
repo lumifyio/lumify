@@ -137,7 +137,7 @@ define([
 
             if (!style.styleApplied) {
 
-                this.ontologyService.concepts(function(err, concepts) {
+                this.ontologyService.concepts().done(function(concepts) {
                     var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css';
                     require([styleFile], function(tpl) {
                         function apply(concept) {

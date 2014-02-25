@@ -63,11 +63,6 @@ public class Router extends HttpServlet {
             app.get("/js/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
             app.get("/jsc/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
 
-            app.get("/ontology/concept/{conceptId}/properties", authenticator, PropertyListByConceptId.class);
-            app.get("/ontology/{relationshipLabel}/properties", authenticator, PropertyListByRelationshipLabel.class);
-            app.get("/ontology/concept", authenticator, ConceptList.class);
-            app.get("/ontology/property", authenticator, PropertyList.class);
-            app.get("/ontology/relationship", authenticator, RelationshipLabelList.class);
             app.get("/ontology", authenticator, Ontology.class);
 
             app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
