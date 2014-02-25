@@ -83,9 +83,9 @@ public class OntologyRepository {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            Vertex sourceVertex = single(vertex.getVertices(Direction.IN, getAuthorizations()));
-                            Vertex destVertex = single(vertex.getVertices(Direction.OUT, getAuthorizations()));
-                            return new Relationship(vertex, new Concept(sourceVertex), new Concept(destVertex));
+                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
+                            return new Relationship(vertex, sourceVertexId, destVertexId);
                         }
                     });
                 }
@@ -152,8 +152,8 @@ public class OntologyRepository {
                     .vertices(), null);
             Relationship relationship = null;
             if (relVertex != null) {
-                Concept from = getConceptById(relVertex.getVertices(Direction.IN, getAuthorizations()).iterator().next().getId());
-                Concept to = getConceptById(relVertex.getVertices(Direction.OUT, getAuthorizations()).iterator().next().getId());
+                String from = single(relVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                String to = single(relVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
                 relationship = new Relationship(relVertex, from, to);
             }
             return relationship;
@@ -410,7 +410,7 @@ public class OntologyRepository {
         findOrAddEdge(relationshipVertex, to.getVertex(), LabelName.HAS_EDGE.toString());
 
         graph.flush();
-        return new Relationship(relationshipVertex, from, to);
+        return new Relationship(relationshipVertex, from.getId(), to.getId());
     }
 
     public void resolvePropertyIds(JSONArray filterJson) throws JSONException {
