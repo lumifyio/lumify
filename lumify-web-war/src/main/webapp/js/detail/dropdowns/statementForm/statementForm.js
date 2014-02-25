@@ -135,8 +135,8 @@ define([
             var self = this;
             var sourceConceptTypeId = this.attr.sourceTerm.data('info')._conceptType;
             var destConceptTypeId = this.attr.destTerm.data('info')._conceptType;
-            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (results) {
-                self.displayRelationships(results.relationships);
+            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (relationships) {
+                self.displayRelationships(relationships);
             });
         };
 

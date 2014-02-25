@@ -177,7 +177,7 @@ define([
 
             var self = this;
 
-            this.ontologyService.concepts(function(err, concepts) {
+            this.ontologyService.concepts().done(function(concepts) {
                 this.updateConceptSections(concepts);
 
                 var paging = { offset:0, size:100 },

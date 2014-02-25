@@ -190,9 +190,8 @@ define([
         };
 
         this.onEdit = function(event, data) {
-            if (data.graphVertexId === this.currentlyEditing) return;
-            this.currentlyEditing = data.graphVertexId;
-
+            if (this.currentlyEditing && data.graphVertexId === this.currentlyEditing) return;
+            this.currentlyEditing = !data.graphVertexId ? 'NEW' : data.graphVertexId;
             this.showFaceboxForEdit(data);
         };
 
