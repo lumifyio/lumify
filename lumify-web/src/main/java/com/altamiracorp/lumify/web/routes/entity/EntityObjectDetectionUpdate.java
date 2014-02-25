@@ -18,8 +18,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.DETECTED_OBJECTS_JSON;
-
 public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
@@ -88,33 +86,33 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
 
         // update the detected object property on the artifact
-        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
-        for (int i = 0; i < detectedObjects.length(); i++) {
-            JSONObject detectedObject = detectedObjects.getJSONObject(i);
-            String oldCoordinates = "x1: " + detectedObject.get("x1") + ", y1: " + detectedObject.get("y1") +
-                    ", x2: " + detectedObject.get("x2") + ", y2: " + detectedObject.get("y2");
-            if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(resolvedGraphVertexId) ||
-                    (oldCoordinates.equals(boundingBox)) || detectedObjectId == i) {
-                ArtifactDetectedObject tag = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, concept);
-                JSONObject result = new JSONObject();
+//        JSONArray detectedObjects = new JSONArray(DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
+//        for (int i = 0; i < detectedObjects.length(); i++) {
+//            JSONObject detectedObject = detectedObjects.getJSONObject(i);
+//            String oldCoordinates = "x1: " + detectedObject.get("x1") + ", y1: " + detectedObject.get("y1") +
+//                    ", x2: " + detectedObject.get("x2") + ", y2: " + detectedObject.get("y2");
+//            if (detectedObject.has("graphVertexId") && detectedObject.get("graphVertexId").equals(resolvedGraphVertexId) ||
+//                    (oldCoordinates.equals(boundingBox)) || detectedObjectId == i) {
+//                ArtifactDetectedObject tag = entityHelper.createObjectTag(x1, x2, y1, y2, resolvedVertex, concept);
+//                JSONObject result = new JSONObject();
 
-                JSONObject entityTag = tag.getJson();
-                entityTag.put("artifactId", artifactId);
-                detectedObjects.put(i, entityTag);
-
-                DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
-                result.put("entityVertex", entityTag);
-
-                auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
-                artifactVertex = artifactVertexMutation.save();
-
-                JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId,
-                        DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
-                result.put("updatedArtifactVertex", updatedArtifactVertex);
-                graph.flush();
-                respondWithJson(response, result);
-                break;
-            }
-        }
+//                JSONObject entityTag = tag.getJson();
+//                entityTag.put("artifactId", artifactId);
+//                detectedObjects.put(i, entityTag);
+//
+//                DETECTED_OBJECTS_JSON.setProperty(artifactVertexMutation, detectedObjects.toString(), visibility);
+//                result.put("entityVertex", entityTag);
+//
+//                auditRepository.auditVertexElementMutation(artifactVertexMutation, artifactVertex, "", user, visibility);
+//                artifactVertex = artifactVertexMutation.save();
+//
+//                JSONObject updatedArtifactVertex = entityHelper.formatUpdatedArtifactVertexProperty(artifactId,
+//                        DETECTED_OBJECTS_JSON.getKey(), DETECTED_OBJECTS_JSON.getPropertyValue(artifactVertex));
+//                result.put("updatedArtifactVertex", updatedArtifactVertex);
+//                graph.flush();
+//                respondWithJson(response, result);
+//                break;
+//            }
+//        }
     }
 }

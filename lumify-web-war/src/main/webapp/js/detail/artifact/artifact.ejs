@@ -35,11 +35,11 @@
     if (object.graphVertexId) {
         var classes = 'label-info detected-object resolved entity conceptType-' + object._conceptType;%>
         <span class="label detected-object-tag">
-            <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.concept %></a><a class="delete-tag">&times;</a>
+            <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a><a class="delete-tag">&times;</a>
         </span>
     <%} else { %>
     <span class="label detected-object-tag">
-        <a class="label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.concept %></a>
+        <a class="label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a>
     </span>
   <% }}); %>
 </div>
