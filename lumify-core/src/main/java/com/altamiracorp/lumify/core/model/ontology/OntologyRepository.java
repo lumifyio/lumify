@@ -283,14 +283,12 @@ public class OntologyRepository {
     }
 
     private List<OntologyProperty> getPropertiesByVertexNoRecursion(Vertex vertex) {
-        List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
-
-        Iterable<Vertex> propertyVertices = vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations());
-        for (Vertex propertyVertex : propertyVertices) {
-            properties.add(new OntologyProperty(propertyVertex));
-        }
-
-        return properties;
+        return toList(new ConvertingIterable<Vertex, OntologyProperty>(vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations())) {
+            @Override
+            protected OntologyProperty convert(Vertex o) {
+                return new OntologyProperty(o);
+            }
+        });
     }
 
     public OntologyProperty getPropertyById(String propertyId) {
