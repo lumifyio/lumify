@@ -84,4 +84,13 @@ describe('Filters', function () {
                .waitForSearchFinished().should.eventually.be.ok
     })
 
+
+    it('Should be able to set date property')
+
+    it('Should be able to set geolocation property')
+
+    it('Should be able to set number property')
+
+    it('Should be able to clear filters from search')
+
 })
