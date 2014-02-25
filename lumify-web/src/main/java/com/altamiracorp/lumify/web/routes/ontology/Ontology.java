@@ -25,7 +25,7 @@ public class Ontology extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         JSONObject resultJson = new JSONObject();
 
-        Iterable<Concept> concepts = ontologyRepository.getConceptsWithProperties();
+        Iterable<Concept> concepts = ontologyRepository.getConcepts();
         resultJson.put("concepts", Concept.toJsonConcepts(concepts));
 
         List<OntologyProperty> properties = ontologyRepository.getProperties();
