@@ -34,7 +34,6 @@ define([
     };
 
     OntologyService.prototype.concepts = function () {
-        console.log('BUILDING concepts')
         return this.ontology()
                     .then(function(ontology) {
                         return {

@@ -153,7 +153,6 @@ define([
             this.select('queryValidationSelector').empty();
             this.hideSearchResults();
             this.popoutIfNeeded();
-            this.select('querySelector').focus();
 
             if (this.previousSearch) {
                 this.previousSearch.abort();
