@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-import static com.altamiracorp.lumify.core.util.CollectionUtil.singleOrDefault;
+import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -83,8 +83,8 @@ public class OntologyRepository {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            String sourceVertexId = singleOrDefault(vertex.getVertexIds(Direction.IN, getAuthorizations()), "").toString();
-                            String destVertexId = singleOrDefault(vertex.getVertexIds(Direction.OUT, getAuthorizations()), "").toString();
+                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
                             return new Relationship(vertex, sourceVertexId, destVertexId);
                         }
                     });
@@ -152,8 +152,8 @@ public class OntologyRepository {
                     .vertices(), null);
             Relationship relationship = null;
             if (relVertex != null) {
-                String from = singleOrDefault(relVertex.getVertexIds(Direction.IN, getAuthorizations()), "").toString();
-                String to = singleOrDefault(relVertex.getVertexIds(Direction.OUT, getAuthorizations()), "").toString();
+                String from = single(relVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                String to = single(relVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
                 relationship = new Relationship(relVertex, from, to);
             }
             return relationship;
@@ -370,7 +370,7 @@ public class OntologyRepository {
     }
 
     protected void findOrAddEdge(Vertex fromVertex, final Vertex toVertex, String edgeLabel) {
-        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.BOTH, edgeLabel, getAuthorizations())) {
+        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
             @Override
             protected boolean isIncluded(Vertex vertex) {
                 return vertex.getId().equals(toVertex.getId());
