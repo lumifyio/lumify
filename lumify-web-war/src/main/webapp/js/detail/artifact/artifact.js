@@ -231,10 +231,10 @@ define([
             var detectedObject,
                 width = parseFloat(data.x2)-parseFloat(data.x1),
                 height = parseFloat(data.y2)-parseFloat(data.y1);
-            if (vertex.properties.detectedObjects) {
+            if (vertex.properties._detectedObjects) {
                 detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects.value == 'string' ? JSON.parse(vertex.properties._detectedObjects.value)
                     : vertex.properties._detectedObjects.value, function(obj) {
-                    return (obj && obj.graphVertexId) === data.id;
+                    return (obj && (obj.graphVertexId || obj.detectedObjectId)) === data.id;
                 }));
             }
 
@@ -334,8 +334,9 @@ define([
                 x2: dataInfo.x2,
                 y2: dataInfo.y2,
                 graphVertexId: dataInfo.graphVertexId,
+                detectedObjectId: dataInfo.detectedObjectId,
                 resolvedVertex: resolvedVertex,
-                existing: dataInfo.existing || dataInfo.graphVertexId ? true : false,
+                existing: dataInfo.existing || dataInfo.graphVertexId || dataInfo.detectedObjectId ? true : false,
                 detectedObject: true
             });
         };
