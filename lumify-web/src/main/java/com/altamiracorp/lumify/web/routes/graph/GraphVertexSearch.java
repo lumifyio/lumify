@@ -134,7 +134,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
                     detectedObject.put("value", detectedObjectModels.next().toJson());
                     detectedObjects.put(detectedObject);
                 }
-                vertices.getJSONObject(verticesCount).getJSONObject("properties").put("_detectedObjects", detectedObjects);
+                vertices.getJSONObject(verticesCount).put("detectedObjects", detectedObjects);
             }
             String type = CONCEPT_TYPE.getPropertyValue(vertex);
             if (type == null) {
