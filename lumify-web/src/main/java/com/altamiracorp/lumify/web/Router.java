@@ -77,11 +77,10 @@ public class Router extends HttpServlet {
             app.post("/artifact/import", authenticator, ArtifactImport.class);
 
             app.post("/entity/relationships", authenticator, EntityRelationships.class);
-            app.post("/entity/createTerm", authenticator, EntityTermCreate.class);
-            app.post("/entity/updateTerm", authenticator, EntityTermUpdate.class);
-            app.post("/entity/createResolvedDetectedObject", authenticator, EntityObjectDetectionCreate.class);
-            app.post("/entity/updateResolvedDetectedObject", authenticator, EntityObjectDetectionUpdate.class);
-            app.post("/entity/deleteResolvedDetectedObject", authenticator, EntityObjectDetectionDelete.class);
+            app.post("/entity/resolveTerm", authenticator, EntityTermCreate.class);
+            app.post("/entity/unresolveTerm", authenticator, EntityTermUpdate.class);
+            app.post("/entity/resolveDetectedObject", authenticator, EntityObjectDetectionCreate.class);
+            app.post("/entity/unresolveDetectedObject", authenticator, EntityObjectDetectionDelete.class);
 
             app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
             app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
