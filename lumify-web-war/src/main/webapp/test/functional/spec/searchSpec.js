@@ -73,7 +73,7 @@ describe('Search', function () {
             .moveTo(625,275)
             .buttonDown()
             .buttonUp()
-            .sleep(1000)
+            .sleep(100)
             .elementByTagName('body')
             .sendKeys(this.KEYS.Delete)
             .sendKeys(this.KEYS['Back space'])
