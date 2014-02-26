@@ -22,7 +22,7 @@ define([
 
         this.defaultAttrs({
             entityConceptMenuSelector: '.underneath .dropdown-menu a',
-            resolveButtonSelector: '.create-term',
+            actionButtonSelector: '.btn.btn-small.btn-primary',
             buttonDivSelector: '.buttons',
             objectSignSelector: '.object-sign',
             graphVertexSelector: '.graphVertexId',
@@ -60,10 +60,10 @@ define([
 
         this.onKeyPress = function(event) {
             if (!this.lastQuery || this.lastQuery === this.select('objectSignSelector').val()) {
-                if (!this.select('resolveButtonSelector').is(":disabled")) {
+                if (!this.select('actionButtonSelector').is(":disabled")) {
                     switch (event.which) {
                         case $.ui.keyCode.ENTER:
-                            this.onResolveClicked(event);
+                            this.onButtonClicked(event);
                     }
                 }
                 return;
@@ -82,7 +82,7 @@ define([
             this.currentGraphVertexId = null;
             this.select('helpSelector').show();
             this.select('conceptSelector').attr('disabled', true).hide();
-            this.select('resolveButtonSelector').hide();
+            this.select('actionButtonSelector').hide();
             this.updateResolveImageIcon();
         };
 
@@ -101,14 +101,9 @@ define([
                 }
                 var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType)) || '';
                 this.updateConceptSelect(conceptType).show();
-                if (newGraphVertexId && initial && !this.attr.coords) {
-                    this.select('resolveButtonSelector')
-                        .hide();
-                } else {
-                    this.select('resolveButtonSelector')
-                        .text(newGraphVertexId ? 'Resolve to Existing' : 'Resolve as New')
+                this.select('actionButtonSelector')
+                        .text(newGraphVertexId && initial && !this.attr.coords ? 'Unresolve' : 'Resolve as New')
                         .show();
-                }
                 this.select('helpSelector').hide();
 
                 require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
@@ -129,24 +124,23 @@ define([
             var conceptSelect = this.select('conceptSelector').val(val);
 
             if (val) {
-                this.select('resolveButtonSelector').removeAttr('disabled');
+                this.select('actionButtonSelector').removeAttr('disabled');
             } else {
-                this.select('resolveButtonSelector').attr('disabled', true);
+                this.select('actionButtonSelector').attr('disabled', true);
             }
 
             return conceptSelect;
         };
 
-        this.onResolveClicked = function (event) {
+        this.onButtonClicked = function (event) {
             if (!this.attr.detectedObject) {
-                this.termResolution (event);
-                return;
+                this.termModification (event);
             } else {
-                this.detectObjectResolution (event);
+                this.detectedObjectModification (event);
             }
         }
 
-        this.termResolution = function(event) {
+        this.termModification = function(event) {
             var self = this,
                 $mentionNode = $(this.attr.mentionNode),
                 newObjectSign = $.trim(this.select('objectSignSelector').val()),
@@ -187,7 +181,7 @@ define([
             }
 
             if (!this.currentGraphVertexId) {
-                this.vertexService.createTerm(parameters)
+                this.vertexService.resolveTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -197,7 +191,7 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             } else {
-                this.vertexService.updateTerm(parameters)
+                this.vertexService.unresolveTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -212,7 +206,7 @@ define([
             }
         };
 
-        this.detectObjectResolution = function (event){
+        this.detectedObjectModification = function (event){
             var self = this,
                 newSign = $.trim(this.select('objectSignSelector').val()),
                 parameters = {
@@ -231,14 +225,14 @@ define([
             _.defer(this.buttonLoading.bind(this));
 
             if (this.attr.existing) {
-                self.updateEntity (parameters);
+                self.unresolveDetectedObject (parameters);
             } else {
-                self.createEntity (parameters);
+                self.resolveDetectedObject (parameters);
             }
 
         }
 
-        this.createEntity = function (parameters) {
+        this.resolveDetectedObject = function (parameters) {
             var self = this;
             this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
@@ -291,7 +285,7 @@ define([
               });
         };
 
-        this.updateEntity = function (parameters) {
+        this.unresolveDetectedObject = function (parameters) {
             var self = this;
             this.vertexService.updateDetectedObject(parameters).done(function(data) {
                 self.updateEntityTag(data, parameters.conceptId);
@@ -340,10 +334,10 @@ define([
 
         this.updateConceptLabel = function(conceptId, vertex) {
             if (conceptId === '') {
-                this.select('resolveButtonSelector').attr('disabled', true);
+                this.select('actionButtonSelector').attr('disabled', true);
                 return;
             }
-            this.select('resolveButtonSelector').removeAttr('disabled');
+            this.select('actionButtonSelector').removeAttr('disabled');
 
             if (this.allConcepts && this.allConcepts.length) {
 
@@ -404,7 +398,7 @@ define([
                 sign: $.trim(sign),
                 graphVertexId: graphVertexId,
                 objectSign: $.trim(objectSign) || '',
-                buttonText: existingEntity ? 'Resolve to Existing' : 'Resolve as New'
+                buttonText: existingEntity ? 'Unresolve' : 'Resolve as New'
             }));
 
             this.graphVertexChanged(graphVertexId, data, true);
@@ -482,7 +476,7 @@ define([
 
             this.on('click', {
                 entityConceptMenuSelector: this.onEntityConceptSelected,
-                resolveButtonSelector: this.onResolveClicked,
+                actionButtonSelector: this.onButtonClicked,
                 objectSignSelector: this.showTypeahead,
                 helpSelector: function() {
                     this.select('objectSignSelector').focus();
@@ -525,7 +519,7 @@ define([
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
-                    self.select('resolveButtonSelector').attr('disabled', true);
+                    self.select('actionButtonSelector').attr('disabled', true);
                 }
             });
         };
