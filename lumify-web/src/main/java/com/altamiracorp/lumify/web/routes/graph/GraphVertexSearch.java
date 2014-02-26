@@ -130,7 +130,9 @@ public class GraphVertexSearch extends BaseRequestHandler {
                 Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(vertex.getId().toString(), user).iterator();
                 JSONArray detectedObjects = new JSONArray();
                 while (detectedObjectModels.hasNext()) {
-                    detectedObjects.put(detectedObjectModels.next().toJson());
+                    JSONObject detectedObject = new JSONObject();
+                    detectedObject.put("value", detectedObjectModels.next().toJson());
+                    detectedObjects.put(detectedObject);
                 }
                 vertices.getJSONObject(verticesCount).getJSONObject("properties").put("_detectedObjects", detectedObjects);
             }
