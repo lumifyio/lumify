@@ -17,10 +17,7 @@ var EXPECTED_PROPERTY_COUNT = 13,
         pad(today.getDate(), 2)
     ].join('-');
 
-
-
-
-describe.only('Filters', function () {
+describe('Filters', function () {
 
     before(function() {
         return utils.login.call(this)
