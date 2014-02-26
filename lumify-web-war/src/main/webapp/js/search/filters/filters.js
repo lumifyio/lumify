@@ -20,7 +20,7 @@ define([
     OntologyService) {
     'use strict';
 
-    var FILTER_SEARCH_DELAY_SECONDS = 0.25;
+    var FILTER_SEARCH_DELAY_SECONDS = 0.5;
 
     return defineComponent(Filters);
 

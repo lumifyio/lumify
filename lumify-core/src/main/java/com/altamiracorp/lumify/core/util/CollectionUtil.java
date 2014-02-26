@@ -57,6 +57,21 @@ public class CollectionUtil {
         return result;
     }
 
+    public static <T> T singleOrDefault(final Iterable<T> it, T defaultValue) {
+        Iterator<T> i = it.iterator();
+        if (!i.hasNext()) {
+            return defaultValue;
+        }
+
+        T result = i.next();
+
+        if (i.hasNext()) {
+            throw new IllegalStateException("More than 1 item found.");
+        }
+
+        return result;
+    }
+
     public static <T> T trySingle(final Iterable<T> it) {
         return trySingle(it, null);
     }
