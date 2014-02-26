@@ -84,7 +84,7 @@ define([
 
             $.extend(true, cache.properties || (cache.properties = {}), vertex.properties);
             $.extend(true, cache.workspace ||  (cache.workspace = {}),  vertex.workspace || {});
-            $.extend(true, cache.properties._detectedObjects || (cache.properties._detectedObjects = {}), vertex.properties._detectedObjects);
+            $.extend(true, cache.detectedObjects || (cache.detectedObjects = []), vertex.detectedObjects || []);
 
             if (this.workspaceVertices[id]) {
                 this.workspaceVertices[id] = cache.workspace;

@@ -31,7 +31,7 @@
 <% } %>
 
 <div class='detected-object-labels'>
-  <% ((vertex.properties._detectedObjects) || []).forEach(function(object) {
+  <% (vertex.detectedObjects).forEach(function(object) { debugger;
     if (object.value.graphVertexId) {
         var classes = 'label-info detected-object resolved entity conceptType-' + object.value._conceptType;%>
         <span class="label detected-object-tag">

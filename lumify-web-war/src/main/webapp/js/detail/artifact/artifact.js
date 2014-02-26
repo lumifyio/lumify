@@ -141,9 +141,8 @@ define([
             var self = this;
             this.videoTranscript = vertex.videoTranscript;
             this.videoDuration = vertex.videoDuration;
-
-            if (vertex.properties._detectedObjects) {
-                vertex.properties._detectedObjects = vertex.properties._detectedObjects.sort(function(a, b){
+            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
+                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
                     var aX = a.value.x1, bX = b.value.x1;
                     return aX - bX;
                 });
