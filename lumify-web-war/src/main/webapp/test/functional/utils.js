@@ -1,6 +1,6 @@
 var utils = {
 
-    url: 'https://localhost:8443#DEBUG',
+    url: 'https://localhost:8443',
     username: 'selenium',
     password: 'password',
 
@@ -40,6 +40,16 @@ var utils = {
                       "$('.search-results-summary li:visible').length > 1"), utils.requestTimeout)
         },
 
+        clickMenubarIcon: function(menubarCls) {
+            return this.browser
+                    .waitForElementByCss('.menubar-pane .' + menubarCls)
+                        .should.eventually.exist
+                    // Click doesn't seem to work right in firefox
+                    .moveTo()
+                    .buttonDown()
+                    .buttonUp()
+        },
+
         searchForText: function(query) {
             return this.browser
                   .waitForElementByCss('.search-query')
@@ -68,7 +78,9 @@ var utils = {
                   $('.login button').click();
               }
           }, [utils.username, utils.password])
-          .waitForElementByCss('.menubar-pane')
+          .waitFor(this.asserters.jsCondition("$('#login').length === 0"), utils.pageLoadTimeout)
+          .waitForElementByCss('.menubar-pane', utils.animationTimeout)
+            .should.eventually.exist
           .waitFor(this.asserters.jsCondition(utils.animations.menubarAnimationFinished), utils.animationTimeout)
           .waitFor(this.asserters.jsCondition("$('.loading-graph').length === 0"), utils.pageLoadTimeout)
     },

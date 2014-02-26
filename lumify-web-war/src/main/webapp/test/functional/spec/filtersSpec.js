@@ -7,10 +7,8 @@ describe('Filters', function () {
 
     before(function() {
         return utils.login.call(this)
-              .waitForElementByCss('.menubar-pane .search a')
-                .should.eventually.exist
-              .click()
-              .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished))
+              .clickMenubarIcon('search')
+              .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished), utils.animationTimeout)
                 .should.eventually.be.ok
               .waitForElementByCss('.search-query:focus')
                 .should.eventually.exist
