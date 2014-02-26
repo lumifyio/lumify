@@ -1,6 +1,8 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.util.TimingCallable;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.altamiracorp.securegraph.util.FilterIterable;
@@ -15,11 +17,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
 import static com.altamiracorp.lumify.core.util.CollectionUtil.single;
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
@@ -36,6 +40,15 @@ public class OntologyRepository {
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
+    private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build();
+    private Cache<String, List<OntologyProperty>> allPropertiesCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build();
+    private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build();
 
     @Inject
     public OntologyRepository(
@@ -50,63 +63,36 @@ public class OntologyRepository {
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
+    public void clearCache() {
+        this.allConceptsWithPropertiesCache.invalidateAll();
+        this.allPropertiesCache.invalidateAll();
+        this.conceptsCache.invalidateAll();
+        this.relationshipLabelsCache.invalidateAll();
+    }
+
     public Iterable<Relationship> getRelationshipLabels() {
-        Iterable<Vertex> vertices = graph.query(getAuthorizations())
-                .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
-                .limit(10000)
-                .vertices();
+        try {
+            return relationshipLabelsCache.get("", new TimingCallable<List<Relationship>>("getRelationshipLabels") {
+                @Override
+                public List<Relationship> callWithTime() throws Exception {
+                    Iterable<Vertex> vertices = graph.query(getAuthorizations())
+                            .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                            .limit(10000)
+                            .vertices();
 
-        return new ConvertingIterable<Vertex, Relationship>(vertices) {
-            @Override
-            protected Relationship convert(Vertex vertex) {
-                Vertex sourceVertex = single(vertex.getVertices(Direction.IN, getAuthorizations()));
-                Vertex destVertex = single(vertex.getVertices(Direction.OUT, getAuthorizations()));
-                return new Relationship(vertex, new Concept(sourceVertex), new Concept(destVertex));
-            }
-        };
-    }
-
-    public Iterable<Relationship> getRelationships(String sourceConceptTypeId, String destConceptTypeId) {
-        Concept sourceConcept = getConceptById(sourceConceptTypeId);
-        if (sourceConcept == null) {
-            sourceConcept = getConceptByName(sourceConceptTypeId);
-            if (sourceConcept == null) {
-                throw new RuntimeException("Could not find concept: " + sourceConceptTypeId);
-            }
-        }
-        Concept destConcept = getConceptById(destConceptTypeId);
-        if (destConcept == null) {
-            destConcept = getConceptByName(destConceptTypeId);
-            if (destConcept == null) {
-                throw new RuntimeException("Could not find concept: " + destConceptTypeId);
-            }
-        }
-
-        return getRelationships(sourceConcept, destConcept);
-    }
-
-    private Iterable<Relationship> getRelationships(final Concept sourceConcept, final Concept destConcept) {
-        final List<Vertex> sourceAndParents = getConceptParents(sourceConcept);
-        final List<Vertex> destAndParents = getConceptParents(destConcept);
-
-        return new FilterIterable<Relationship>(getRelationshipLabels()) {
-            @Override
-            protected boolean isIncluded(Relationship relationship) {
-                Object sourceId = relationship.getSourceConcept().getId();
-                Object destId = relationship.getDestConcept().getId();
-                for (Vertex s : sourceAndParents) {
-                    if (!s.getId().equals(sourceId)) {
-                        continue;
-                    }
-                    for (Vertex d : destAndParents) {
-                        if (d.getId().equals(destId)) {
-                            return true;
+                    return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
+                        @Override
+                        protected Relationship convert(Vertex vertex) {
+                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
+                            return new Relationship(vertex, sourceVertexId, destVertexId);
                         }
-                    }
+                    });
                 }
-                return false;
-            }
-        };
+            });
+        } catch (ExecutionException e) {
+            throw new LumifyException("Could not get relationship labels");
+        }
     }
 
     public String getDisplayNameForLabel(String relationshipLabel) {
@@ -127,14 +113,23 @@ public class OntologyRepository {
     }
 
     public List<OntologyProperty> getProperties() {
-        List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
-        Iterable<Vertex> vertices = graph.query(getAuthorizations())
-                .has(DISPLAY_TYPE.getKey(), TYPE_PROPERTY)
-                .vertices();
-        for (Vertex vertex : vertices) {
-            properties.add(new OntologyProperty(vertex));
+        try {
+            return allPropertiesCache.get("", new TimingCallable<List<OntologyProperty>>("getProperties") {
+                @Override
+                public List<OntologyProperty> callWithTime() throws Exception {
+                    return toList(new ConvertingIterable<Vertex, OntologyProperty>(graph.query(getAuthorizations())
+                            .has(DISPLAY_TYPE.getKey(), TYPE_PROPERTY)
+                            .vertices()) {
+                        @Override
+                        protected OntologyProperty convert(Vertex vertex) {
+                            return new OntologyProperty(vertex);
+                        }
+                    });
+                }
+            });
+        } catch (ExecutionException e) {
+            throw new LumifyException("Could not get properties", e);
         }
-        return properties;
     }
 
     public OntologyProperty getProperty(String propertyName) {
@@ -157,8 +152,8 @@ public class OntologyRepository {
                     .vertices(), null);
             Relationship relationship = null;
             if (relVertex != null) {
-                Concept from = getConceptById(relVertex.getVertices(Direction.IN, getAuthorizations()).iterator().next().getId());
-                Concept to = getConceptById(relVertex.getVertices(Direction.OUT, getAuthorizations()).iterator().next().getId());
+                String from = single(relVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+                String to = single(relVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
                 relationship = new Relationship(relVertex, from, to);
             }
             return relationship;
@@ -172,7 +167,16 @@ public class OntologyRepository {
     }
 
     public Iterable<Concept> getConceptsWithProperties() {
-        return getConcepts(true);
+        try {
+            return allConceptsWithPropertiesCache.get("", new TimingCallable<List<Concept>>("getConceptsWithProperties") {
+                @Override
+                public List<Concept> callWithTime() throws Exception {
+                    return toList(getConcepts(true));
+                }
+            });
+        } catch (ExecutionException e) {
+            throw new LumifyException("could not get concepts with properties", e);
+        }
     }
 
     private Iterable<Concept> getConcepts(final boolean withProperties) {
@@ -212,7 +216,7 @@ public class OntologyRepository {
     }
 
     public Concept getParentConcept(final Concept concept) {
-        return getParentConcept(concept.getId().toString());
+        return getParentConcept(concept.getId());
     }
 
     public Concept getParentConcept(String conceptId) {
@@ -256,17 +260,6 @@ public class OntologyRepository {
         return findVertexByOntologyTitle(title);
     }
 
-    public List<OntologyProperty> getPropertiesByConceptId(String conceptVertexId) {
-        Concept conceptVertex = getConceptById(conceptVertexId);
-        if (conceptVertex == null) {
-            conceptVertex = getConceptByName(conceptVertexId);
-            if (conceptVertex == null) {
-                throw new NoSuchElementException("Could not find concept: " + conceptVertexId);
-            }
-        }
-        return getPropertiesByVertex(conceptVertex.getVertex());
-    }
-
     private List<OntologyProperty> getPropertiesByVertex(Vertex vertex) {
         List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
 
@@ -290,14 +283,12 @@ public class OntologyRepository {
     }
 
     private List<OntologyProperty> getPropertiesByVertexNoRecursion(Vertex vertex) {
-        List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
-
-        Iterable<Vertex> propertyVertices = vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations());
-        for (Vertex propertyVertex : propertyVertices) {
-            properties.add(new OntologyProperty(propertyVertex));
-        }
-
-        return properties;
+        return toList(new ConvertingIterable<Vertex, OntologyProperty>(vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations())) {
+            @Override
+            protected OntologyProperty convert(Vertex o) {
+                return new OntologyProperty(o);
+            }
+        });
     }
 
     public OntologyProperty getPropertyById(String propertyId) {
@@ -379,7 +370,7 @@ public class OntologyRepository {
     }
 
     protected void findOrAddEdge(Vertex fromVertex, final Vertex toVertex, String edgeLabel) {
-        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.BOTH, edgeLabel, getAuthorizations())) {
+        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
             @Override
             protected boolean isIncluded(Vertex vertex) {
                 return vertex.getId().equals(toVertex.getId());
@@ -419,7 +410,7 @@ public class OntologyRepository {
         findOrAddEdge(relationshipVertex, to.getVertex(), LabelName.HAS_EDGE.toString());
 
         graph.flush();
-        return new Relationship(relationshipVertex, from, to);
+        return new Relationship(relationshipVertex, from.getId(), to.getId());
     }
 
     public void resolvePropertyIds(JSONArray filterJson) throws JSONException {
@@ -452,16 +443,6 @@ public class OntologyRepository {
             graph.flush();
         }
         return typeProperty;
-    }
-
-    private List<Vertex> getConceptParents(Concept concept) {
-        ArrayList<Vertex> results = new ArrayList<Vertex>();
-        results.add(concept.getVertex());
-        Vertex v = concept.getVertex();
-        while ((v = getParentConceptVertex(v)) != null) {
-            results.add(v);
-        }
-        return results;
     }
 
     private Vertex getParentConceptVertex(Vertex conceptVertex) {
