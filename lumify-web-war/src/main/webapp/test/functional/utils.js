@@ -25,11 +25,14 @@ var utils = {
                 .waitFor(this.asserters.jsCondition(utils.lumifyReady), utils.pageLoadTimeout)
         },
 
-        openAddFilterMenu: function() {
+        openAddFilterMenu: function(nth) {
+            if (!nth) nth = 2;
+            var parentSelector = '.prop-filters > li:nth-child(' + nth + ')'; 
+
             return this.browser
-                .elementByCss('.add-property input')
+                .elementByCss(parentSelector + ' .add-property input')
                 .click()
-                .waitForElementByCss('.prop-filters .dropdown-menu', this.asserters.isDisplayed)
+                .waitForElementByCss(parentSelector + ' .dropdown-menu', this.asserters.isDisplayed)
         },
 
         waitForSearchFinished: function() {
