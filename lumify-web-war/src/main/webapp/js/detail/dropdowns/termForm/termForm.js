@@ -752,7 +752,10 @@ define([
                 updatingEntity = this.attr.existing;
 
             if (updatingEntity) {
-                mentionVertex.removeClass().addClass(data.cssClasses.join(' '));
+                mentionVertex.removeClass();
+                if (data.cssClasses) {
+                    mentionVertex.addClass(data.cssClasses.join(' '));
+                }
                 mentionVertex.data('info', data.info).removeClass('focused');
 
             } else if (this.promoted) {
