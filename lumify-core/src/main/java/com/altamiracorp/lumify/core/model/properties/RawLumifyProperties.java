@@ -63,11 +63,6 @@ public class RawLumifyProperties {
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("_text");
 
     /**
-     * The highlighted text property.
-     */
-    public static final StreamingLumifyProperty HIGHLIGHTED_TEXT = new StreamingLumifyProperty("_highlightedText");
-
-    /**
      * The mapping JSON property.
      */
     public static final TextLumifyProperty MAPPING_JSON = new TextLumifyProperty("_mappingJson", TextIndexHint.NONE);

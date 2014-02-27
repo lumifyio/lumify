@@ -96,9 +96,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         this.graph.flush();
 
-        // Modify the highlighted artifact text in a background thread
-        entityHelper.scheduleHighlight(artifactId, user);
-
         TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, createdVertex);
         respondWithJson(response, offsetItem.toJson());
     }
