@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
+import java.util.List;
 
 public class UnresolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
@@ -93,16 +94,29 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
         termMention.getMetadata().setVertexId("");
 
-        // If there is only one relationship between the artifact and the vertex, then delete the relationship
-        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(resolvedVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
+        // If there is only instance of the term entity in this artifact delete the relationship
+        Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(artifactVertex.getId().toString(), user).iterator();
         boolean deleteEdge = false;
         Object edgeId = null;
-        if (IterableUtils.count(edgeIds) == 1) {
-            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
-            edgeId = edge.getId();
-            graph.removeEdge(edge, authorizations);
-            deleteEdge = true;
-            graph.flush();
+        int termCount = 0;
+        while (termMentionModels.hasNext()) {
+            TermMentionModel termMentionModel = termMentionModels.next();
+            Object termMentionId = termMentionModel.getMetadata().getGraphVertexId();
+            if (termMentionId != null && termMentionId.equals(graphVertexId)) {
+                termCount ++;
+                break;
+            }
+        }
+        if (termCount == 0) {
+            Iterable<Edge> edges = artifactVertex.getEdges(resolvedVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
+            Edge edge = edges.iterator().next();
+            if (edge != null) {
+                edgeId = edge.getId();
+                graph.removeEdge(edge, authorizations);
+                deleteEdge = true;
+                graph.flush();
+                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), "", "", user, new Visibility(""));
+            }
         }
 
         entityHelper.scheduleHighlight(artifactId, user);
