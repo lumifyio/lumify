@@ -11,6 +11,7 @@ var utils = {
     animations: {
         menubarAnimationFinished:     "$('.menubar-pane').offset().left >= -1",
         openSearchAnimationFinished:  "$('.search-pane').offset().left >= ($('.menubar-pane').width() - 5)",
+        openWorkspaceAnimationFinished:  "$('.workspaces-pane').offset().left >= ($('.menubar-pane').width() - 5)",
         closeSearchAnimationFinished: "$('.search-pane').offset().left < (-1 * $('.search-pane').width())"
     },
 
@@ -50,6 +51,7 @@ var utils = {
                     // Click doesn't seem to work right in firefox
                     .moveTo()
                     .buttonDown()
+                    .sleep(10)
                     .buttonUp()
         },
 
@@ -59,7 +61,26 @@ var utils = {
                   .type('*')
                   .keys(this.KEYS.Return)
                   .waitForSearchFinished()
+        },
+
+        login: function(user, pass) {
+            return this.browser
+              .get(utils.url)
+              .waitForApplicationLoad()
+              .execute(function(user, pass) {
+                  if ($('.login button').length) {
+                      $('.login .username').val(user);
+                      $('.login .password').val(pass);
+                      $('.login button').click();
+                  }
+              }, [user, pass])
+              .waitFor(this.asserters.jsCondition("$('#login').length === 0"), utils.pageLoadTimeout)
+              .waitForElementByCss('.menubar-pane', utils.animationTimeout)
+                .should.eventually.exist
+              .waitFor(this.asserters.jsCondition(utils.animations.menubarAnimationFinished), utils.animationTimeout)
+              .waitFor(this.asserters.jsCondition("$('.loading-graph').length === 0"), utils.pageLoadTimeout)
         }
+
     },
 
     initializeMethods: function(wd) {
@@ -71,21 +92,7 @@ var utils = {
     login: function() {
         utils.initializeMethods.call(this, this.wd);
 
-        return this.browser
-          .get(utils.url)
-          .waitForApplicationLoad()
-          .execute(function(user, pass) {
-              if ($('.login button').length) {
-                  $('.login .username').val(user);
-                  $('.login .password').val(pass);
-                  $('.login button').click();
-              }
-          }, [utils.username, utils.password])
-          .waitFor(this.asserters.jsCondition("$('#login').length === 0"), utils.pageLoadTimeout)
-          .waitForElementByCss('.menubar-pane', utils.animationTimeout)
-            .should.eventually.exist
-          .waitFor(this.asserters.jsCondition(utils.animations.menubarAnimationFinished), utils.animationTimeout)
-          .waitFor(this.asserters.jsCondition("$('.loading-graph').length === 0"), utils.pageLoadTimeout)
+        return this.browser.login(utils.username, utils.password)
     },
 
     logout: function() {
