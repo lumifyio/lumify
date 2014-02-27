@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
+import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
 public class ResolveTermEntity extends BaseRequestHandler {
     private final EntityHelper entityHelper;
@@ -51,6 +52,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getOptionalParameter(request, "visibilitySource");
+        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
 
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
@@ -61,7 +63,12 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         Visibility visibility = new Visibility(visibilitySource == null ? "" : visibilitySource);
-        ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, authorizations);
+        ElementMutation<Vertex> createdVertexMutation;
+        if (graphVertexId != null) {
+            createdVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+        } else {
+            createdVertexMutation = graph.prepareVertex(visibility, authorizations);
+        }
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
 
         // TODO: replace second "" when we implement commenting on ui
@@ -71,15 +78,18 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, visibility);
 
-        graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+        // TODO: a better way to check if the same edge exists instead of looking it up every time?
+        Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
+        if (edge == null) {
+            graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
+            if (labelDisplayName == null) {
+                labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
+            }
 
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
-        if (labelDisplayName == null) {
-            labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
+            // TODO: replace second "" when we implement commenting on ui
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
         }
-
-        // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);
