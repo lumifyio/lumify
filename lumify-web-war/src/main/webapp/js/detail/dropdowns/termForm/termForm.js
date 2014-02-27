@@ -101,7 +101,8 @@ define([
                 }
                 var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType)) || '';
                 this.updateConceptSelect(conceptType).show();
-                if (!this.attr.existing) {
+
+                if (this.unresolve){
                     this.select('actionButtonSelector')
                         .text('Unresolve')
                         .show();
@@ -185,7 +186,8 @@ define([
                 parameters.objectSign = newObjectSign;
                 $mentionNode.attr('title', newObjectSign);
             }
-            if (!this.currentGraphVertexId || this.attr.existing) {
+
+            if (!this.unresolve) {
                 this.vertexService.resolveTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
@@ -370,8 +372,7 @@ define([
             if (!this.attr.detectedObject){
                 var mentionVertex = $(this.attr.mentionNode);
                 data = mentionVertex.data('info');
-                sign = this.attr.sign || mentionVertex.text();
-                existingEntity = !this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
+                existingEntity = this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
                 graphVertexId = data && (data.id || data.graphVertexId);
                 title = $.trim(data && data.title || '');
 
@@ -390,17 +391,20 @@ define([
 
                 if (existingEntity && mentionVertex.hasClass('resolved')) {
                     objectSign = title;
+                    this.unresolve = true;
+                } else {
+                    objectSign = this.attr.sign || mentionVertex.text();
                 }
             } else {
                 data = this.attr.resolvedVertex;
-                sign = data.title || '';
+                objectSign = data.title || '';
                 existingEntity = this.attr.existing;
                 graphVertexId = data.graphVertexId;
                 title = data.title;
             }
 
             vertex.html(dropdownTemplate({
-                sign: $.trim(sign),
+                sign: $.trim(objectSign),
                 graphVertexId: graphVertexId,
                 objectSign: $.trim(objectSign) || '',
                 buttonText: existingEntity ? 'Resolve as Existing' : 'Resolve as New'
@@ -408,16 +412,16 @@ define([
 
             this.graphVertexChanged(graphVertexId, data, true);
 
-            if (sign) {
+            if (objectSign) {
                 var input = this.select('objectSignSelector');
                 input.attr('disabled', true);
-                this.runQuery(sign).done(function() {
+                this.runQuery(objectSign).done(function() {
                     input.removeAttr('disabled');
                 });
             }
 
-            this.sign = sign;
-            this.startSign = sign;
+            this.sign = objectSign;
+            this.startSign = objectSign;
         };
 
         this.updateResolveImageIcon = function(vertex, conceptId) {
