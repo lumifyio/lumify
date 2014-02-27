@@ -10,6 +10,7 @@ public class TermMentionMetadata extends ColumnFamily {
     public static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
     public static final String VERTEX_ID = "graphVertexId";
     public static final String CONCEPT_GRAPH_VERTEX_ID = "conceptGraphVertexId";
+    public static final String ANALYTIC_PROCESS = "analyticProcess";
     public static final String GEO_LOCATION = "geoLocation";
     public static final String GEO_LOCATION_TITLE = "geoLocationTitle";
     public static final String GEO_LOCATION_POPULATION = "geoLocationPopulation";
@@ -52,6 +53,15 @@ public class TermMentionMetadata extends ColumnFamily {
 
     public String getConceptGraphVertexId() {
         return Value.toString(get(CONCEPT_GRAPH_VERTEX_ID));
+    }
+
+    public String getAnalyticProcess () {
+        return Value.toString(get(ANALYTIC_PROCESS));
+    }
+
+    public TermMentionMetadata setAnalyticProcess (String analyticProcess) {
+        set (ANALYTIC_PROCESS, analyticProcess);
+        return this;
     }
 
     public String getGeoLocation() {

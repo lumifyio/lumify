@@ -75,6 +75,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
+        JSONObject result = new JSONObject();
 
         // Unlinking the term with the vertex
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
@@ -83,11 +84,21 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             termMention = new TermMentionModel(termMentionRowKey);
         }
 
+        // Clean up term mentions if system analytics wasn't performed on term
         String columnFamilyName = termMention.getMetadata().getColumnFamilyName();
         String columnName = termMention.getMetadata().VERTEX_ID;
-        termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
-        modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
-        termMention.getMetadata().setVertexId("");
+        String analyticProcess = termMention.getMetadata().getAnalyticProcess();
+
+        if (analyticProcess == null) {
+            modelSession.deleteRow(termMention.getTableName(), termMentionRowKey, user.getModelUserContext());
+        } else {
+            termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
+            modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
+            termMention.getMetadata().setVertexId("");
+
+            TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
+            result = offsetItem.toJson();
+        }
 
         // If there is only instance of the term entity in this artifact delete the relationship
         Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(artifactVertex.getId().toString(), user).iterator();
@@ -114,10 +125,6 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             }
         }
 
-//        entityHelper.scheduleHighlight(artifactId, user);
-
-        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
-        JSONObject result = offsetItem.toJson();
         if (deleteEdge) {
             result.put("deleteEdge", deleteEdge);
             result.put("edgeId", edgeId);
