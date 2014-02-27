@@ -194,11 +194,11 @@ define([
                 this.vertexService.unresolveTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
-                        self.trigger('termCreated', data);
 
-                        var vertices = [];
-                        vertices.push(data.info);
-                        self.trigger(document, 'updateVertices', { vertices: vertices });
+                        if (data.deleteEdge) {
+                            self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
+                        }
+
                         self.trigger(document, 'refreshRelationships');
 
                         _.defer(self.teardown.bind(self));
@@ -447,7 +447,6 @@ define([
             }
 
             function updateCss(src) {
-                
                 var preview = self.$node.find('.resolve-wrapper > .preview');
 
                 if (src) {
@@ -740,12 +739,10 @@ define([
                 updatingEntity = this.attr.existing;
 
             if (updatingEntity) {
-
-                this.updateConceptLabel(data.cssClasses.join(' '), mentionVertex);
+                mentionVertex.removeClass().addClass(data.cssClasses.join(' '));
                 mentionVertex.data('info', data.info).removeClass('focused');
 
             } else if (this.promoted) {
-
                 this.promoted.data('info', data.info)
                              .addClass(data.cssClasses.join(' '))
                              .removeClass('focused');

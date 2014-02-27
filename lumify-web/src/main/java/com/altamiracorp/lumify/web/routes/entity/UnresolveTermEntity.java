@@ -1,5 +1,8 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.bigtable.model.Column;
+import com.altamiracorp.bigtable.model.ColumnFamily;
+import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -16,35 +19,40 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
 
-public class EntityTermUpdate extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EntityTermUpdate.class);
+public class UnresolveTermEntity extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final EntityHelper entityHelper;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
+    private final ModelSession modelSession;
 
     @Inject
-    public EntityTermUpdate(
+    public UnresolveTermEntity(
             final TermMentionRepository termMentionRepository,
             final Graph graph,
             final EntityHelper entityHelper,
             final OntologyRepository ontologyRepository,
             final AuditRepository auditRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final ModelSession modelSession) {
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.ontologyRepository = ontologyRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
+        this.modelSession = modelSession;
     }
 
     @Override
@@ -58,7 +66,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
         final String graphVertexId = getRequiredParameter(request, "graphVertexId");
 
         LOGGER.debug(
-                "EntityTermUpdate (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
+                "UnresolveTermEntity (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
                 artifactId,
                 mentionStart,
                 mentionEnd,
@@ -69,36 +77,42 @@ public class EntityTermUpdate extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
 
-        Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
-        ElementMutation<Vertex> resolvedVertexMutation = resolvedVertex.prepareMutation();
-
-        // TODO: replace second "" when we implement commenting on ui
-        resolvedVertexMutation = entityHelper.updateMutation(resolvedVertexMutation, conceptId, sign, "", "", user);
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, new Visibility(""));
-        resolvedVertex = resolvedVertexMutation.save();
-
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        Iterator<Edge> edges = artifactVertex.getEdges(resolvedVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), authorizations).iterator();
-        if (!edges.hasNext()) {
-            graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), new Visibility(""), authorizations);
-            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
-            // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, new Visibility(""));
-        }
 
+        // Unlinking the term with the vertex
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), user.getModelUserContext());
         if (termMention == null) {
             termMention = new TermMentionModel(termMentionRowKey);
         }
-        entityHelper.updateTermMention(termMention, sign, concept, resolvedVertex, user);
 
-        this.graph.flush();
+        String columnFamilyName = termMention.getMetadata().getColumnFamilyName();
+        String columnName = termMention.getMetadata().VERTEX_ID;
+        termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
+        modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
+        termMention.getMetadata().setVertexId("");
+
+        // If there is only one relationship between the artifact and the vertex, then delete the relationship
+        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(resolvedVertex, Direction.BOTH, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
+        boolean deleteEdge = false;
+        Object edgeId = null;
+        if (IterableUtils.count(edgeIds) == 1) {
+            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
+            edgeId = edge.getId();
+            graph.removeEdge(edge, authorizations);
+            deleteEdge = true;
+            graph.flush();
+        }
 
         entityHelper.scheduleHighlight(artifactId, user);
 
-        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, resolvedVertex);
-        respondWithJson(response, offsetItem.toJson());
+        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
+        JSONObject result = offsetItem.toJson();
+        if (deleteEdge) {
+            result.put("deleteEdge", deleteEdge);
+            result.put("edgeId", edgeId);
+        }
+        respondWithJson(response, result);
     }
 }

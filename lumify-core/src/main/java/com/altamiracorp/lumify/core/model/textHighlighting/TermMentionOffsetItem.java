@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.textHighlighting;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
 
+import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.securegraph.Vertex;
@@ -106,7 +107,7 @@ public class TermMentionOffsetItem extends OffsetItem {
     public List<String> getCssClasses() {
         List<String> classes = new ArrayList<String>();
         classes.add("entity");
-        if (getGraphVertexId() != null) {
+        if (getGraphVertexId() != null && !getGraphVertexId().equals("") ) {
             classes.add("resolved");
         }
         if (getConceptGraphVertexId() != null) {
