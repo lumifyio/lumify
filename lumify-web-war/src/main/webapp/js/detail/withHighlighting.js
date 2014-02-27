@@ -324,11 +324,7 @@ define([
             if ($target.is('.underneath') || $target.parents('.underneath').length) {
                 return;
             }
-            if ($target.hasClass('resolved')) {
-                _.defer(this.dropdownEntity.bind(this), true, $target);
-            } else {
-                _.defer(this.dropdownEntity.bind(this), false, $target);
-            }
+            _.defer(this.dropdownEntity.bind(this), false, $target);
         };
 
         this.updateEntityAndArtifactDraggables = function() {
