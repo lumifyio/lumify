@@ -1,8 +1,10 @@
 package com.altamiracorp.lumify.core;
 
+import com.altamiracorp.lumify.core.model.termMention.TermMentionGraphVertexIdIterable;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.textHighlighting.OffsetItem;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.util.CollectionUtil;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -12,10 +14,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
+
+import static com.altamiracorp.lumify.core.util.CollectionUtil.toMap;
 
 public class EntityHighlighter {
     private final Graph graph;
@@ -100,15 +101,24 @@ public class EntityHighlighter {
     }
 
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, Authorizations authorizations) {
+        Map<Object, Vertex> graphVertices = getGraphVertices(termMentions, authorizations);
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
         for (TermMentionModel termMention : termMentions) {
             String graphVertexId = termMention.getMetadata().getGraphVertexId();
-            Vertex graphVertex = null;
-            if (graphVertexId != null) {
-                graphVertex = graph.getVertex(graphVertexId, authorizations);
-            }
+            Vertex graphVertex = graphVertices.get(graphVertexId);
             termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, graphVertex));
         }
         return termMetadataOffsetItems;
+    }
+
+    private Map<Object, Vertex> getGraphVertices(final Iterable<TermMentionModel> termMentions, Authorizations authorizations) {
+        Iterable<Object> graphVertexIds = new TermMentionGraphVertexIdIterable(termMentions);
+        Iterable<Vertex> vertices = graph.getVertices(graphVertexIds, authorizations);
+        return toMap(vertices, new CollectionUtil.ValueToKey<Vertex, Object>() {
+            @Override
+            public Object toKey(Vertex v) {
+                return v.getId();
+            }
+        });
     }
 }
