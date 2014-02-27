@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class EntityObjectDetectionCreate extends BaseRequestHandler {
+public class ResolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
@@ -26,7 +26,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
     private final UserRepository userRepository;
 
     @Inject
-    public EntityObjectDetectionCreate(
+    public ResolveDetectedObject(
             final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,

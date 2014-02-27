@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
 
-public class EntityTermCreate extends BaseRequestHandler {
+public class ResolveTermEntity extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final Graph graph;
     private final AuditRepository auditRepository;
@@ -28,7 +28,7 @@ public class EntityTermCreate extends BaseRequestHandler {
     private final UserRepository userRepository;
 
     @Inject
-    public EntityTermCreate(
+    public ResolveTermEntity(
             final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,

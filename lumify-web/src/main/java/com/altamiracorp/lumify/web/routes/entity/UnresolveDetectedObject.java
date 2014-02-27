@@ -16,14 +16,14 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class EntityObjectDetectionDelete extends BaseRequestHandler {
+public class UnresolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
 
     @Inject
-    public EntityObjectDetectionDelete(
+    public UnresolveDetectedObject(
             final Graph graph,
             final EntityHelper entityHelper,
             final AuditRepository auditRepository,
