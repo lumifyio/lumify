@@ -17,6 +17,9 @@ import java.io.IOException;
  * and provides common methods for handler usage
  */
 public abstract class BaseRequestHandler implements Handler {
+
+    public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+
     @Override
     public abstract void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception;
 
@@ -106,6 +109,14 @@ public abstract class BaseRequestHandler implements Handler {
 
     protected String getAttributeString(final HttpServletRequest request, final String name) {
         return (String) request.getAttribute(name);
+    }
+
+    protected String getWorkspaceId(final HttpServletRequest request) {
+        String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
+        if (workspaceId == null || workspaceId.trim().length() == 0) {
+            throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+        }
+        return workspaceId;
     }
 
     /**

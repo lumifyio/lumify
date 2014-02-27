@@ -125,9 +125,15 @@ public class GraphUtil {
         return result;
     }
 
-    public static <T extends Element> ElementMutation<T> setProperty(T element, String propertyName, Object value, String visibilitySource,
-                                                                     VisibilityTranslator visibilityTranslator, String justificationText,
-                                                                     JSONObject sourceObject) {
+    public static <T extends Element> ElementMutation<T> setProperty(
+            T element,
+            String propertyName,
+            Object value,
+            String visibilitySource,
+            String workspaceId,
+            VisibilityTranslator visibilityTranslator,
+            String justificationText,
+            JSONObject sourceObject) {
         Property oldProperty = element.getProperty(propertyName);
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
@@ -137,7 +143,13 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
+        String[] additionalRequiredVisibilities;
+        if (workspaceId == null) {
+            additionalRequiredVisibilities = new String[0];
+        } else {
+            additionalRequiredVisibilities = new String[]{workspaceId};
+        }
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource, additionalRequiredVisibilities);
         propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
 
         if (justificationText != null) {

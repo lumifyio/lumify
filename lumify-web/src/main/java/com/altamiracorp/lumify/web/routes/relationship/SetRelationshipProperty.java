@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
@@ -29,6 +31,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
+    private final Configuration configuration;
     private VisibilityTranslator visibilityTranslator;
 
     @Inject
@@ -37,12 +40,14 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             final Graph graph,
             final AuditRepository auditRepository,
             final VisibilityTranslator visibilityTranslator,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.userRepository = userRepository;
+        this.configuration = configuration;
     }
 
     @Override
@@ -55,6 +60,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+
+        String workspaceId;
+        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
+            workspaceId = getWorkspaceId(request);
+        } else {
+            workspaceId = null;
+        }
 
         final JSONObject sourceJson;
         if (sourceInfo != null) {
@@ -81,7 +93,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
         Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
-        ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, this.visibilityTranslator, justificationText, sourceJson);
+        ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
         graphEdgeMutation.save();
 
         // TODO: replace "" when we implement commenting on ui
