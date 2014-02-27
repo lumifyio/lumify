@@ -30,12 +30,13 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public void addAuthorizationToGraph(final String auth) {
-        LOGGER.info("Adding authorization to graph user %s", auth);
+        LOGGER.info("adding authorization to graph user %s", auth);
         synchronized (graph) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
                 @Override
                 public void run() {
+                    LOGGER.debug("got lock adding authorization to graph user %s", auth);
                     if (graph instanceof AccumuloGraph) {
                         try {
                             AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
@@ -63,13 +64,13 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public void removeAuthorizationFromGraph(final String auth) {
-        LOGGER.info("Remove authorization to graph user %s", auth);
+        LOGGER.info("removing authorization to graph user %s", auth);
         synchronized (graph) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
                 @Override
                 public void run() {
-
+                    LOGGER.debug("got lock removing authorization to graph user %s", auth);
                     if (graph instanceof AccumuloGraph) {
                         try {
                             AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
