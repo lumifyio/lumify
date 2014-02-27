@@ -101,9 +101,15 @@ define([
                 }
                 var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType)) || '';
                 this.updateConceptSelect(conceptType).show();
-                this.select('actionButtonSelector')
-                        .text(newGraphVertexId && initial && !this.attr.coords ? 'Unresolve' : 'Resolve as New')
+                if (!this.attr.existing) {
+                    this.select('actionButtonSelector')
+                        .text('Unresolve')
                         .show();
+                } else {
+                    this.select('actionButtonSelector')
+                        .text(newGraphVertexId && !initial && !this.attr.coords ? 'Resolve as Existing' : 'Resolve as New')
+                        .show();
+                }
                 this.select('helpSelector').hide();
 
                 require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
@@ -156,13 +162,13 @@ define([
                 mentionEnd = this.selectedEnd;
             }
             var parameters = {
-                    sign: newObjectSign,
-                    conceptId: this.select('conceptSelector').val(),
-                    mentionStart: mentionStart,
-                    mentionEnd: mentionEnd,
-                    artifactId: this.attr.artifactId,
-                    visibilitySource: this.visibilitySource || ''
-                };
+                sign: newObjectSign,
+                conceptId: this.select('conceptSelector').val(),
+                mentionStart: mentionStart,
+                mentionEnd: mentionEnd,
+                artifactId: this.attr.artifactId,
+                visibilitySource: this.visibilitySource || ''
+            };
 
             if (this.currentGraphVertexId) {
                 parameters.graphVertexId = this.currentGraphVertexId;
@@ -179,8 +185,7 @@ define([
                 parameters.objectSign = newObjectSign;
                 $mentionNode.attr('title', newObjectSign);
             }
-
-            if (!this.currentGraphVertexId) {
+            if (!this.currentGraphVertexId || this.attr.existing) {
                 this.vertexService.resolveTerm(parameters)
                     .done(function(data) {
                         self.highlightTerm(data);
@@ -282,7 +287,7 @@ define([
                     self.trigger(document, 'refreshRelationships');
 
                     _.defer(self.teardown.bind(self));
-              });
+                });
         };
 
         this.unresolveDetectedObject = function (parameters) {
@@ -299,7 +304,7 @@ define([
                 _conceptType: {
                     value: data.entityVertex._conceptType
                 },
-                title: data.entityVertex.title,
+                title: data.entityVertex.title
             };
             var $focused = $('.focused');
             var $tag = $focused.find('.label-info');
@@ -366,7 +371,7 @@ define([
                 var mentionVertex = $(this.attr.mentionNode);
                 data = mentionVertex.data('info');
                 sign = this.attr.sign || mentionVertex.text();
-                existingEntity = this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
+                existingEntity = !this.attr.existing ? mentionVertex.addClass('focused').hasClass('resolved') : false;
                 graphVertexId = data && (data.id || data.graphVertexId);
                 title = $.trim(data && data.title || '');
 
@@ -398,7 +403,7 @@ define([
                 sign: $.trim(sign),
                 graphVertexId: graphVertexId,
                 objectSign: $.trim(objectSign) || '',
-                buttonText: existingEntity ? 'Unresolve' : 'Resolve as New'
+                buttonText: existingEntity ? 'Resolve as Existing' : 'Resolve as New'
             }));
 
             this.graphVertexChanged(graphVertexId, data, true);
@@ -514,7 +519,7 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (self.attr.existing && vertexInfo && vertexInfo._conceptType) || ''
+                    selectedConceptId: (vertexInfo && vertexInfo._conceptType) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -536,7 +541,7 @@ define([
             this.queryCache[query] = this.vertexService.graphVertexSearch(query)
                 .then(function(response) {
                     badge.removeClass('loading');
-                    return _.filter(response.vertices, function(v) { 
+                    return _.filter(response.vertices, function(v) {
                         return ~v.properties.title.value.toLowerCase().indexOf(query.toLowerCase());
                     });
                 }).done(this.updateQueryCountBadge.bind(this));
@@ -552,7 +557,7 @@ define([
 
         this.setupObjectTypeAhead = function() {
             var self = this,
-                items = {},
+                items = [],
                 input = this.select('objectSignSelector'),
                 createNewText = 'Resolve as new entity';
 
@@ -571,21 +576,21 @@ define([
                             self.sourceCache[query](callback);
                             return;
                         }
-                    
+
                         self.lastQuery = query;
                         var instance = this;
 
                         self.runQuery(query).done(function(entities) {
                             var all = _.map(entities, function(e) {
-                                    return $.extend({
-                                        toLowerCase: function() { return e.properties.title.value.toLowerCase(); },
-                                        toString: function() { return e.id; },
-                                        indexOf: function(s) { return e.properties.title.value.indexOf(s); }
-                                    }, e);
-                                });
+                                return $.extend({
+                                    toLowerCase: function() { return e.properties.title.value.toLowerCase(); },
+                                    toString: function() { return e.id; },
+                                    indexOf: function(s) { return e.properties.title.value.indexOf(s); }
+                                }, e);
+                            });
 
 
-                            items = $.extend(true, {}, items, _.indexBy(all, 'id'));
+                            items = $.extend(true, [], items, _.indexBy(all, 'id'));
                             items[createNewText] = [query];
 
                             self.sourceCache[query] = function(aCallback) {
@@ -633,9 +638,13 @@ define([
                             graphVertexId = '',
                             label = item;
 
+                        if (!matchingItem.length) {
+                            matchingItem = [matchingItem];
+                        }
+
                         if (matchingItem && matchingItem.length) {
                             graphVertexId = item;
-                            label = matchingItem[0].properties ? matchingItem[0].properties.title.value : matchingItem[0];
+                            label = matchingItem[0].properties ? matchingItem[0].properties.title.value : matchingItem;
 
                             if (graphVertexId == createNewText) {
                                 graphVertexId = '';
@@ -653,11 +662,11 @@ define([
                     },
                     highlighter: function(item) {
 
-                        var html = (item === createNewText) ? 
+                        var html = (item === createNewText) ?
                                 item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title.value]),
                             icon = '',
-                            concept = _.find(self.allConcepts, function(c) { 
-                                    return item.properties && c.id === item.properties._conceptType.value;
+                            concept = _.find(self.allConcepts, function(c) {
+                                return item.properties && c.id === item.properties._conceptType.value;
                             });
 
                         if (item.properties) {
@@ -709,7 +718,7 @@ define([
                             scrollTotalHeight = scrollParent[0].scrollHeight,
                             scrollTop = scrollParent.scrollTop(),
                             scrollHeight = scrollParent.outerHeight(true),
-                            menuHeight = Math.min(scrollHeight - 100, typeahead.$menu.outerHeight(true)), 
+                            menuHeight = Math.min(scrollHeight - 100, typeahead.$menu.outerHeight(true)),
                             menuMaxY = menuHeight + typeahead.$menu.offset().top,
                             bottomSpace = scrollHeight - menuMaxY,
                             padding = 10;
@@ -744,8 +753,8 @@ define([
 
             } else if (this.promoted) {
                 this.promoted.data('info', data.info)
-                             .addClass(data.cssClasses.join(' '))
-                             .removeClass('focused');
+                    .addClass(data.cssClasses.join(' '))
+                    .removeClass('focused');
                 this.promoted = null;
             }
         };
