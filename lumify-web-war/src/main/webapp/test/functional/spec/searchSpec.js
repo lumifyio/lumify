@@ -80,6 +80,10 @@ describe('Search', function () {
             .sendKeys(this.KEYS['Back space'])
             .waitFor(this.asserters.jsCondition("$('.cytoscape-container').cytoscape('get').nodes().length === 0"), 1000)
             .should.eventually.be.ok
+    })
+
+    it('Should trigger workspace save event', function() {
+        return this.browser
             .waitForElementByCss('.menubar-pane .activity.animating', 2000).should.eventually.exist
             .waitForElementByCss('.menubar-pane .activity:not(.animating)', utils.requestTimeout).should.eventually.exist
     })
