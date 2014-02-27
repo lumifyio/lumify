@@ -8,4 +8,6 @@ public interface VisibilityTranslator {
     void init(Map configuration);
 
     Visibility toVisibility(String source, String... additionalRequiredVisibilities);
+
+    Visibility toVisibilityWithWorkspace(String source, String workspaceId);
 }

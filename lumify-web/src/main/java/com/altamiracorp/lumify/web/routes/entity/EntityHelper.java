@@ -37,13 +37,13 @@ public class EntityHelper {
         this.ontologyRepository = ontologyRepository;
     }
 
-    public void updateTermMention(TermMentionModel termMention, String sign, Concept concept, Vertex resolvedVertex, User user) {
+    public void updateTermMention(TermMentionModel termMention, String sign, Concept concept, Vertex resolvedVertex, Visibility visibility, User user) {
         checkNotNull(concept, "conceptVertex cannot be null");
         termMention.getMetadata()
-                .setSign(sign)
-                .setOntologyClassUri(concept.getDisplayName())
-                .setConceptGraphVertexId(concept.getId())
-                .setVertexId(resolvedVertex.getId().toString());
+                .setSign(sign, visibility)
+                .setOntologyClassUri(concept.getDisplayName(), visibility)
+                .setConceptGraphVertexId(concept.getId(), visibility)
+                .setVertexId(resolvedVertex.getId().toString(), visibility);
         termMentionRepository.save(termMention);
     }
 

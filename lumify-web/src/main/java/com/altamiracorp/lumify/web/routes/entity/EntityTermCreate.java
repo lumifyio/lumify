@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -9,6 +11,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -26,6 +29,8 @@ public class EntityTermCreate extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final UserRepository userRepository;
+    private final VisibilityTranslator visibilityTranslator;
+    private final Configuration configuration;
 
     @Inject
     public EntityTermCreate(
@@ -33,24 +38,33 @@ public class EntityTermCreate extends BaseRequestHandler {
             final Graph graphRepository,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final VisibilityTranslator visibilityTranslator,
+            final Configuration configuration) {
         this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.userRepository = userRepository;
+        this.visibilityTranslator = visibilityTranslator;
+        this.configuration = configuration;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-
-        // required parameters
         final String artifactId = getRequiredParameter(request, "artifactId");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getOptionalParameter(request, "visibilitySource");
+
+        String workspaceId;
+        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
+            workspaceId = getWorkspaceId(request);
+        } else {
+            workspaceId = null;
+        }
 
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
@@ -60,7 +74,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        Visibility visibility = new Visibility(visibilitySource == null ? "" : visibilitySource);
+        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource == null ? "" : visibilitySource, workspaceId);
         ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, authorizations);
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
 
@@ -82,7 +96,7 @@ public class EntityTermCreate extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-        entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);
+        entityHelper.updateTermMention(termMention, sign, concept, createdVertex, visibility, user);
 
         this.graph.flush();
 

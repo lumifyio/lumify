@@ -49,7 +49,6 @@ public class EntityTermUpdate extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // required parameters
         final String artifactId = getRequiredParameter(request, "artifactId");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
@@ -73,6 +72,8 @@ public class EntityTermUpdate extends BaseRequestHandler {
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation = resolvedVertex.prepareMutation();
 
+        Visibility visibility = resolvedVertex.getVisibility();
+
         // TODO: replace second "" when we implement commenting on ui
         resolvedVertexMutation = entityHelper.updateMutation(resolvedVertexMutation, conceptId, sign, "", "", user);
         auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, new Visibility(""));
@@ -92,7 +93,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
         if (termMention == null) {
             termMention = new TermMentionModel(termMentionRowKey);
         }
-        entityHelper.updateTermMention(termMention, sign, concept, resolvedVertex, user);
+        entityHelper.updateTermMention(termMention, sign, concept, resolvedVertex, visibility, user);
 
         this.graph.flush();
 

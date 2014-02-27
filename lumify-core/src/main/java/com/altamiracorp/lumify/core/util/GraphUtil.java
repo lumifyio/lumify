@@ -143,7 +143,7 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        Visibility visibility = createVisibility(visibilitySource, workspaceId, visibilityTranslator);
+        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
         propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
 
         if (justificationText != null) {
@@ -183,17 +183,7 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
-        Visibility visibility = createVisibility(visibilitySource, workspaceId, visibilityTranslator);
+        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
         return graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
-    }
-
-    private static Visibility createVisibility(String visibilitySource, String workspaceId, VisibilityTranslator visibilityTranslator) {
-        String[] additionalRequiredVisibilities;
-        if (workspaceId == null) {
-            additionalRequiredVisibilities = new String[0];
-        } else {
-            additionalRequiredVisibilities = new String[]{workspaceId};
-        }
-        return visibilityTranslator.toVisibility(visibilitySource, additionalRequiredVisibilities);
     }
 }
