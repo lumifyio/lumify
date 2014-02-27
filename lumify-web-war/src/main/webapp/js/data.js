@@ -88,6 +88,16 @@ define([
             ClipboardManager.attachTo(this.node);
             Keyboard.attachTo(this.node);
 
+
+            // Set Current WorkspaceId header on all ajax requests
+            $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+                if (!options.headers) options.headers = {};
+                if (self.workspaceId) {
+                    options.headers['Lumify-Workspace-Id'] = self.workspaceId;
+                }
+            });
+
+
             // Vertices
             this.on('addVertices', this.onAddVertices);
             this.on('updateVertices', this.onUpdateVertices);
