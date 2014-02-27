@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm.textHighlighting;
+package com.altamiracorp.lumify.core;
 
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.textHighlighting.OffsetItem;
@@ -102,12 +102,12 @@ public class EntityHighlighter {
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, Authorizations authorizations) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
         for (TermMentionModel termMention : termMentions) {
-            Vertex glyphVertex = null;
             String graphVertexId = termMention.getMetadata().getGraphVertexId();
+            Vertex graphVertex = null;
             if (graphVertexId != null) {
-                glyphVertex = graph.getVertex(graphVertexId, authorizations);
+                graphVertex = graph.getVertex(graphVertexId, authorizations);
             }
-            termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, glyphVertex));
+            termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, graphVertex));
         }
         return termMetadataOffsetItems;
     }
