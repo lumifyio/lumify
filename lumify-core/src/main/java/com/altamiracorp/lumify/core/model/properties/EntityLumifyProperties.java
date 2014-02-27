@@ -33,7 +33,7 @@ public class EntityLumifyProperties {
     public static final TextLumifyProperty GEO_LOCATION_DESCRIPTION = TextLumifyProperty.all("_geoLocationDescription");
 
     /**
-     * The source of the entity.
+     * The ingest source of the entity.
      */
     public static final TextLumifyProperty SOURCE = TextLumifyProperty.all("_source");
 

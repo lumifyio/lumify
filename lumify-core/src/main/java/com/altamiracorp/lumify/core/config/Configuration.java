@@ -41,7 +41,9 @@ public final class Configuration {
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
     public static final String OBJECT_DETECTOR = "object.detector";
-    public static final String AUDIT_VISIBILITY_LABEL="audit.visibilityLabel";
+    public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
+    public static final String SANDBOX_LEVEL = "sandbox.level";
+    public static final String SANDBOX_LEVEL_DEFAULT = SandboxLevel.PUBLIC.toString();
 
     private org.apache.commons.configuration.Configuration config;
 
@@ -196,6 +198,10 @@ public final class Configuration {
             conf.set(entry.getKey().toString(), entry.getValue().toString());
         }
         return conf;
+    }
+
+    public SandboxLevel getSandboxLevel() {
+        return SandboxLevel.valueOf(get(SANDBOX_LEVEL, SANDBOX_LEVEL_DEFAULT));
     }
 }
 

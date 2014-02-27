@@ -7,5 +7,5 @@ import java.util.Map;
 public interface VisibilityTranslator {
     void init(Map configuration);
 
-    Visibility toVisibility(String source);
+    Visibility toVisibility(String source, String... additionalRequiredVisibilities);
 }
