@@ -40,6 +40,7 @@ define([
                             entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {title:'entity'})),
                             byId: ontology.conceptsById, 
                             byTitle: _.chain(ontology.concepts)
+                                .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
                                 .map(addFlattenedTitles.bind(null, ontology.conceptsById))
                                 .sortBy('flattenedDisplayName')
                                 .value()
@@ -58,6 +59,21 @@ define([
             return root;
         }
 
+        function onlyEntityConcepts(conceptsById, concept) {
+            var parentConceptId = concept.parentConcept,
+                currentParentConcept = null;
+
+            while (parentConceptId) {
+                currentParentConcept = conceptsById[parentConceptId];
+                if (currentParentConcept.title === 'entity') {
+                    return true;
+                }
+                parentConceptId = currentParentConcept.parentConcept;
+            }
+
+            return false;
+        }
+
         function addFlattenedTitles(conceptsById, concept) {
             var parentConceptId = concept.parentConcept,
                 currentParentConcept = null,
@@ -65,7 +81,7 @@ define([
 
             while (parentConceptId) {
                 currentParentConcept = conceptsById[parentConceptId];
-                if (_.contains(['rootConcept', 'entity'], currentParentConcept.title)) break;
+                if (currentParentConcept.title === 'entity') break;
                 parents.push(currentParentConcept);
                 parentConceptId = currentParentConcept.parentConcept;
             }

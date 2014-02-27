@@ -6,9 +6,9 @@ describe('Search', function () {
 
     it('Should be able to toggle search with menubar', function () {
         return this.browser
-          .waitForElementByCss('.menubar-pane .search a').should.eventually.be.ok
-          .click()
-          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.be.ok
+          .clickMenubarIcon('search')
+          .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout)
+            .should.eventually.be.ok
           .waitForElementByCss('.search-query:focus') 
           .elementByCss('.menubar-pane .search a')
           .click()
@@ -17,7 +17,8 @@ describe('Search', function () {
 
     it('Should be able to toggle search with shortcut', function () {
         return this.browser
-          .waitForElementByCss('.menubar-pane .search a').should.eventually.exist
+          .waitForElementByCss('.menubar-pane .search a')
+            .should.eventually.exist
           .elementByTagName('body')
           .sendKeys('/')
           .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.be.ok
@@ -79,6 +80,10 @@ describe('Search', function () {
             .sendKeys(this.KEYS['Back space'])
             .waitFor(this.asserters.jsCondition("$('.cytoscape-container').cytoscape('get').nodes().length === 0"), 1000)
             .should.eventually.be.ok
+    })
+
+    it('Should trigger workspace save event', function() {
+        return this.browser
             .waitForElementByCss('.menubar-pane .activity.animating', 2000).should.eventually.exist
             .waitForElementByCss('.menubar-pane .activity:not(.animating)', utils.requestTimeout).should.eventually.exist
     })
