@@ -1,6 +1,6 @@
 var utils = {
 
-    url: 'https://localhost:8443#DEBUG',
+    url: 'https://localhost:8443',
     username: 'selenium',
     password: 'password',
 
@@ -11,6 +11,7 @@ var utils = {
     animations: {
         menubarAnimationFinished:     "$('.menubar-pane').offset().left >= -1",
         openSearchAnimationFinished:  "$('.search-pane').offset().left >= ($('.menubar-pane').width() - 5)",
+        openWorkspaceAnimationFinished:  "$('.workspaces-pane').offset().left >= ($('.menubar-pane').width() - 5)",
         closeSearchAnimationFinished: "$('.search-pane').offset().left < (-1 * $('.search-pane').width())"
     },
 
@@ -25,11 +26,14 @@ var utils = {
                 .waitFor(this.asserters.jsCondition(utils.lumifyReady), utils.pageLoadTimeout)
         },
 
-        openAddFilterMenu: function() {
+        openAddFilterMenu: function(nth) {
+            if (!nth) nth = 2;
+            var parentSelector = '.prop-filters > li:nth-child(' + nth + ')'; 
+
             return this.browser
-                .elementByCss('.add-property input')
+                .elementByCss(parentSelector + ' .add-property input')
                 .click()
-                .waitForElementByCss('.prop-filters .dropdown-menu', this.asserters.isDisplayed)
+                .waitForElementByCss(parentSelector + ' .dropdown-menu', this.asserters.isDisplayed)
         },
 
         waitForSearchFinished: function() {
@@ -40,13 +44,43 @@ var utils = {
                       "$('.search-results-summary li:visible').length > 1"), utils.requestTimeout)
         },
 
+        clickMenubarIcon: function(menubarCls) {
+            return this.browser
+                    .waitForElementByCss('.menubar-pane .' + menubarCls)
+                        .should.eventually.exist
+                    // Click doesn't seem to work right in firefox
+                    .moveTo()
+                    .buttonDown()
+                    .sleep(10)
+                    .buttonUp()
+        },
+
         searchForText: function(query) {
             return this.browser
                   .waitForElementByCss('.search-query')
                   .type('*')
                   .keys(this.KEYS.Return)
                   .waitForSearchFinished()
+        },
+
+        login: function(user, pass) {
+            return this.browser
+              .get(utils.url)
+              .waitForApplicationLoad()
+              .execute(function(user, pass) {
+                  if ($('.login button').length) {
+                      $('.login .username').val(user);
+                      $('.login .password').val(pass);
+                      $('.login button').click();
+                  }
+              }, [user, pass])
+              .waitFor(this.asserters.jsCondition("$('#login').length === 0"), utils.pageLoadTimeout)
+              .waitForElementByCss('.menubar-pane', utils.animationTimeout)
+                .should.eventually.exist
+              .waitFor(this.asserters.jsCondition(utils.animations.menubarAnimationFinished), utils.animationTimeout)
+              .waitFor(this.asserters.jsCondition("$('.loading-graph').length === 0"), utils.pageLoadTimeout)
         }
+
     },
 
     initializeMethods: function(wd) {
@@ -58,19 +92,7 @@ var utils = {
     login: function() {
         utils.initializeMethods.call(this, this.wd);
 
-        return this.browser
-          .get(utils.url)
-          .waitForApplicationLoad()
-          .execute(function(user, pass) {
-              if ($('.login button').length) {
-                  $('.login .username').val(user);
-                  $('.login .password').val(pass);
-                  $('.login button').click();
-              }
-          }, [utils.username, utils.password])
-          .waitForElementByCss('.menubar-pane')
-          .waitFor(this.asserters.jsCondition(utils.animations.menubarAnimationFinished), utils.animationTimeout)
-          .waitFor(this.asserters.jsCondition("$('.loading-graph').length === 0"), utils.pageLoadTimeout)
+        return this.browser.login(utils.username, utils.password)
     },
 
     logout: function() {

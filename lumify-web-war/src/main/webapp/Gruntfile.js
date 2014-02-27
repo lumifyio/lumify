@@ -190,7 +190,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deps', 'Install Webapp Dependencies', ['bower:install', 'bower:prune', 'exec']);
 
-  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['concurrent:selenium']);
+
+  grunt.registerTask('test:functional:chrome', 'Run JavaScript Functional Tests in Chrome', ['mochaSelenium:chrome']);
+  grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', ['mochaSelenium:firefox']);
+  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['test:functional:chrome', 'test:functional:firefox']);
   grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', ['karma']);
   grunt.registerTask('test:lint', 'Run JavaScript Lint Tests', ['jshint']);
   grunt.registerTask('test', 'Run unit and functional tests', ['concurrent:tests'])
