@@ -21,7 +21,10 @@ describe('Login', function () {
       return this.browser
           .elementByTagName('body')
           .sendKeys(this.KEYS.Alt + ' L')
+          .waitForElementByCss('#app:empty')
+            .should.eventually.exist
           .waitForElementByCss('.login button')
+            .should.eventually.exist
     })
 
     it('Should be able to login using [ENTER]', function () {
@@ -37,6 +40,9 @@ describe('Login', function () {
       return this.browser
           .elementByCss('.menubar-pane .logout a')
           .click()
+          .waitForElementByCss('#app:empty')
+            .should.eventually.exist
           .waitForElementByCss('.login button')
+            .should.eventually.exist
     })
 });
