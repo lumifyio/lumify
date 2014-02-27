@@ -435,11 +435,9 @@ define([
                     value = properties[name].value;
                 }
 
-                var isRelationshipSourceProperty = name === 'source' && properties._conceptType;
-                if (/^[^_]/.test(name) && 
+                if (/^[^_]/.test(name) &&
                     name !== 'boundingBox' &&
-                    name !== 'title' &&
-                    !isRelationshipSourceProperty) {
+                    name !== 'title') {
                     addProperty(name, displayName, value, properties[name]._visibility);
                 }
             } else if (isRelationshipType) {
