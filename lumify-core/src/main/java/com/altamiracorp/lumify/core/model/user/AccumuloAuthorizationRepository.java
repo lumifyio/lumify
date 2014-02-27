@@ -2,6 +2,8 @@ package com.altamiracorp.lumify.core.model.user;
 
 import com.altamiracorp.lumify.core.model.lock.Lock;
 import com.altamiracorp.lumify.core.model.lock.LockRepository;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.accumulo.AccumuloAuthorizations;
 import com.altamiracorp.securegraph.accumulo.AccumuloGraph;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
     public static final String LOCK_NAME = "AuthorizationRepository";
     private final Graph graph;
     private final LockRepository lockRepository;
@@ -27,6 +30,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public void addAuthorizationToGraph(final String auth) {
+        LOGGER.info("Adding authorization to graph user %s", auth);
         synchronized (graph) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
@@ -59,6 +63,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public void removeAuthorizationFromGraph(final String auth) {
+        LOGGER.info("Remove authorization to graph user %s", auth);
         synchronized (graph) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
