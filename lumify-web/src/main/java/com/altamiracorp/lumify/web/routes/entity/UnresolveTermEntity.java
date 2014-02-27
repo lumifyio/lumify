@@ -114,7 +114,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             }
         }
 
-        entityHelper.scheduleHighlight(artifactId, user);
+//        entityHelper.scheduleHighlight(artifactId, user);
 
         TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
         JSONObject result = offsetItem.toJson();
