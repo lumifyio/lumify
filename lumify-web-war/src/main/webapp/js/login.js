@@ -76,7 +76,10 @@ define([
                             App.attachTo('#app', {
                                 animateFromLogin: true
                             });
-                            _.delay(function() { self.teardown(); }, 2000);
+
+                            self.$node.find('.logo').one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
+                                self.teardown();
+                            });
                         });
                     }
                 })
@@ -94,11 +97,11 @@ define([
                             break;
                         default:
                             error.text(err.statusText || 'Unknown Server Error');
+                            console.error(err);
                             break;
                     }
 
                     error.removeClass('no-error');
-                    console.error(err);
                 });
         }
     }

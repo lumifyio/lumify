@@ -48,6 +48,8 @@ define([
         });
 
         this.after('initialize', function() {
+            var self = this;
+
             window.lumifyApp = this;
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
@@ -134,18 +136,20 @@ define([
 
             this.setupWindowResizeTrigger();
 
-            data.loadActiveWorkspace();
-
-            this.trigger(document, 'applicationReady');
-
-            var self = this;
-            _.defer(function() {
-                self.triggerPaneResized();
-                if (self.attr.animateFromLogin) {
-                    $(document.body).addClass('animateloginstart');
+            this.triggerPaneResized();
+            if (self.attr.animateFromLogin) {
+                $(document.body).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
+                    data.loadActiveWorkspace();
+                    self.trigger(document, 'applicationReady');
                     graphPane.focus();
-                }
-            });
+                });
+                _.defer(function() {
+                    $(document.body).addClass('animateloginstart');
+                })
+            } else {
+                data.loadActiveWorkspace();
+                self.trigger(document, 'applicationReady');
+            }
         });
 
         this.toggleSearchPane = function() {
