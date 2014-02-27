@@ -1,14 +1,16 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
-
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 
 public class TermRegexFinder {
     public static List<TermMentionModel> find(String artifactId, Vertex concept, String text, String regex) {
@@ -28,10 +30,11 @@ public class TermRegexFinder {
 
             TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, groupCaptureOffset, groupCaptureOffset + groupCapture.length());
             TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
+            Visibility visibility = new Visibility("");
             termMention.getMetadata()
-                    .setSign(m.group(2))
-                    .setOntologyClassUri(DISPLAY_NAME.getPropertyValue(concept))
-                    .setConceptGraphVertexId(concept.getId());
+                    .setSign(m.group(2), visibility)
+                    .setOntologyClassUri(DISPLAY_NAME.getPropertyValue(concept), visibility)
+                    .setConceptGraphVertexId(concept.getId(), visibility);
             termMentions.add(termMention);
         }
         return termMentions;

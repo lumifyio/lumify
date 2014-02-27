@@ -35,4 +35,15 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
         }
         return new Visibility(visibilityString.toString());
     }
+
+    @Override
+    public Visibility toVisibilityWithWorkspace(String source, String workspaceId) {
+        String[] additionalRequiredVisibilities;
+        if (workspaceId == null) {
+            additionalRequiredVisibilities = new String[0];
+        } else {
+            additionalRequiredVisibilities = new String[]{workspaceId};
+        }
+        return toVisibility(source, additionalRequiredVisibilities);
+    }
 }
