@@ -24,7 +24,14 @@ utils = {
     addMethods: {
 
         waitForApplicationLoad: function() {
+            var browser = this.browser;
+
             return this.browser
+                .waitForElementByCss('#app', utils.requestTimeout)
+                .catch(function() {
+                    console.log('Webserver is unreachable')
+                    browser.quit()
+                })
                 .waitForElementByCss('#app:not(:empty),#login:not(:empty)', utils.pageLoadTimeout)
                     .should.eventually.exist
                 .waitFor(this.asserters.jsCondition(utils.lumifyReady), utils.pageLoadTimeout)

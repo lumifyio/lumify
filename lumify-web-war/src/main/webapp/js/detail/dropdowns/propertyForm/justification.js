@@ -100,7 +100,9 @@ define([
                 });
             } else {
                 this.transitionHeight(template({value:value || ''}));
-                this.select('fieldSelector').tooltip();
+                this.select('fieldSelector').tooltip({ 
+                    container:'body' 
+                }).data('tooltip').tip().addClass('field-tooltip');
             }
         };
 
