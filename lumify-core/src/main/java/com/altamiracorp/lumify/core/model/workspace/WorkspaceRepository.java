@@ -63,20 +63,10 @@ public class WorkspaceRepository {
         }
 
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING);
-
-        List<WorkspaceUser> users = findUsersWithAccess(workspace, user);
-        for (WorkspaceUser workspaceUser : users) {
-            Vertex userVertex = userRepository.findById(workspaceUser.getUserId());
-            if (userVertex == null) {
-                throw new LumifyResourceNotFoundException("Could not find user: " + workspaceUser.getUserId(), workspaceUser.getUserId());
-            }
-            userRepository.removeAuthorization(userVertex, workspace.getId());
-        }
-
-        authorizationRepository.removeAuthorizationFromGraph(workspace.getId());
-
         graph.removeVertex(workspace.getVertex(), authorizations);
         graph.flush();
+
+        authorizationRepository.removeAuthorizationFromGraph(workspace.getId());
     }
 
     public Workspace findById(String workspaceId, User user) {
@@ -97,7 +87,7 @@ public class WorkspaceRepository {
         checkNotNull(userVertex, "Could not find user: " + user.getUserId());
 
         String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
-        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspaceId);
+        Visibility visibility = new Visibility(VISIBILITY_STRING);
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspaceId);
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, visibility, authorizations);
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, visibility);
@@ -108,8 +98,6 @@ public class WorkspaceRepository {
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, visibility);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, WorkspaceAccess.WRITE.toString(), visibility);
         edgeBuilder.save();
-
-        userRepository.addAuthorization(userVertex, workspaceId);
 
         graph.flush();
         return new Workspace(workspaceVertex, this, user);
@@ -127,7 +115,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
+        Visibility visibility = new Visibility(VISIBILITY_STRING);
         WorkspaceLumifyProperties.TITLE.setProperty(workspace.getVertex(), title, visibility);
         graph.flush();
     }
@@ -208,7 +196,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
-        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
+        Visibility visibility = new Visibility(VISIBILITY_STRING);
 
         Vertex workspaceVertex = graph.getVertex(workspace.getId(), authorizations);
         if (workspaceVertex == null) {
@@ -248,7 +236,6 @@ public class WorkspaceRepository {
         }
         List<Edge> edges = toList(workspace.getVertex().getEdges(userVertex, Direction.BOTH, workspaceToUserRelationshipId, authorizations));
         for (Edge edge : edges) {
-            userRepository.removeAuthorization(userVertex, workspace.getId());
             graph.removeEdge(edge, authorizations);
         }
         graph.flush();
@@ -279,7 +266,7 @@ public class WorkspaceRepository {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-        Visibility visibility = new Visibility(VISIBILITY_STRING + "&" + workspace.getId());
+        Visibility visibility = new Visibility(VISIBILITY_STRING);
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
         Vertex userVertex = userRepository.findById(userId);
         if (userVertex == null) {
@@ -301,8 +288,6 @@ public class WorkspaceRepository {
             WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, workspaceAccess.toString(), visibility);
             edgeBuilder.save();
         }
-
-        userRepository.addAuthorization(userVertex, workspace.getId());
 
         graph.flush();
     }

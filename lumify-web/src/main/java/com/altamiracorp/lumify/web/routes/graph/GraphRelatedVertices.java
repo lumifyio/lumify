@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -25,14 +26,17 @@ import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperti
 
 public class GraphRelatedVertices extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public GraphRelatedVertices(final OntologyRepository ontologyRepo, final Graph graph, final UserRepository userRepository) {
-        ontologyRepository = ontologyRepo;
+    public GraphRelatedVertices(
+            final OntologyRepository ontologyRepository,
+            final Graph graph,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
+        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         long maxVerticesToReturn = getOptionalParameterLong(request, "maxVerticesToReturn", 250);
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Set<String> limitConceptIds = new HashSet<String>();
 

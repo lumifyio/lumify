@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.DisplayType;
@@ -50,7 +51,6 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final WorkQueueRepository workQueueRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public GraphVertexUploadImage(
@@ -58,12 +58,13 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final WorkQueueRepository workQueueRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.workQueueRepository = workQueueRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         final User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
         final Part file = files.get(0);
 
         Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);

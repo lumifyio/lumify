@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -22,12 +23,14 @@ import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperti
 
 public class GraphGeoLocationSearch extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
 
     @Inject
-    public GraphGeoLocationSearch(final Graph graph, final UserRepository userRepository) {
+    public GraphGeoLocationSearch(
+            final Graph graph,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
         final double radius = getRequiredParameterAsDouble(request, "radius");
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Iterator<Vertex> vertexIterator = graph.query(authorizations).
                 has(GEO_LOCATION.getKey(), GeoCompare.WITHIN, new GeoCircle(latitude, longitude, radius)).

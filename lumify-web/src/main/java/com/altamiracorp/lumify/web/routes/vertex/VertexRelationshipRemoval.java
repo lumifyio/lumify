@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -21,18 +22,18 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public VertexRelationshipRemoval(
             final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Vertex sourceVertex = graph.getVertex(sourceId, authorizations);
         Vertex destVertex = graph.getVertex(targetId, authorizations);

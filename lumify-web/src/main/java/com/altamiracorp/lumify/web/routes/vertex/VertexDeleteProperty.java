@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
@@ -26,13 +27,16 @@ import java.util.Map;
 public class VertexDeleteProperty extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
-    private final UserRepository userRepository;
 
     @Inject
-    public VertexDeleteProperty(final Graph graphRepo, final AuditRepository auditRepo, final UserRepository userRepository) {
-        graph = graphRepo;
-        auditRepository = auditRepo;
-        this.userRepository = userRepository;
+    public VertexDeleteProperty(
+            final Graph graph,
+            final AuditRepository auditRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
+        this.graph = graph;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -43,14 +47,14 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         Object oldValue = graphVertex.getProperty(propertyName);
         graphVertex.removeProperty(propertyName);
         graph.flush();
 
-        Map<String, Object> metadata = new HashMap<String,Object>();
+        Map<String, Object> metadata = new HashMap<String, Object>();
         if (justificationText != null) {
             metadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, new PropertyJustificationMetadata(justificationText));
         } else if (sourceInfo != null) {

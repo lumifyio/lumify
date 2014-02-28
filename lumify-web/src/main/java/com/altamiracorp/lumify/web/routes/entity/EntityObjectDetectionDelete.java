@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
@@ -22,18 +23,18 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
     private final Graph graph;
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public EntityObjectDetectionDelete(
             final Graph graph,
             final EntityHelper entityHelper,
             final AuditRepository auditRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.auditRepository = auditRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class EntityObjectDetectionDelete extends BaseRequestHandler {
         Visibility visibility = new Visibility("");
         JSONObject jsonObject = new JSONObject(getRequiredParameter(request, "objectInfo"));
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         // Delete just the relationship if vertex has more than one relationship otherwise delete vertex
         String graphVertexId = jsonObject.getString("graphVertexId");

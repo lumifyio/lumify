@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -16,18 +17,20 @@ import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class VertexRelationships extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
 
     @Inject
-    public VertexRelationships(final Graph graph, final UserRepository userRepository) {
+    public VertexRelationships(
+            final Graph graph,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         String graphVertexId = (String) request.getAttribute("graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);

@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
 import com.altamiracorp.lumify.core.EntityHighlighter;
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -22,7 +23,6 @@ import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
     private final TermMentionRepository termMentionRepository;
     private final EntityHighlighter entityHighlighter;
 
@@ -31,9 +31,10 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final TermMentionRepository termMentionRepository,
-            final EntityHighlighter entityHighlighter) {
+            final EntityHighlighter entityHighlighter,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
         this.termMentionRepository = termMentionRepository;
         this.entityHighlighter = entityHighlighter;
     }
@@ -41,7 +42,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         String graphVertexId = getAttributeString(request, "graphVertexId");
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);

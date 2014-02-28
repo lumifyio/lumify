@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -29,7 +30,6 @@ public class EntityTermUpdate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public EntityTermUpdate(
@@ -38,13 +38,14 @@ public class EntityTermUpdate extends BaseRequestHandler {
             final EntityHelper entityHelper,
             final OntologyRepository ontologyRepository,
             final AuditRepository auditRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.ontologyRepository = ontologyRepository;
         this.auditRepository = auditRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class EntityTermUpdate extends BaseRequestHandler {
                 graphVertexId);
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);

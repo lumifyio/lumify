@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -15,7 +17,11 @@ public class WorkspaceCopy extends BaseRequestHandler {
     private final WorkspaceRepository workspaceRepository;
 
     @Inject
-    public WorkspaceCopy(final WorkspaceRepository workspaceRepository) {
+    public WorkspaceCopy(
+            final WorkspaceRepository workspaceRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.workspaceRepository = workspaceRepository;
     }
 

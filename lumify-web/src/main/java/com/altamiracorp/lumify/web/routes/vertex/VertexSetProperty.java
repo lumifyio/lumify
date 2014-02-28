@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -17,7 +16,6 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +30,6 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserRepository userRepository;
-    private final Configuration configuration;
 
     @Inject
     public VertexSetProperty(
@@ -43,12 +39,11 @@ public class VertexSetProperty extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final UserRepository userRepository,
             final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.userRepository = userRepository;
-        this.configuration = configuration;
     }
 
     @Override
@@ -61,12 +56,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
         User user = getUser(request);
 
-        String workspaceId;
-        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
-            workspaceId = getWorkspaceId(request);
-        } else {
-            workspaceId = null;
-        }
+        String workspaceId = getWorkspaceId(request);
 
         final JSONObject sourceJson;
         if (sourceInfo != null) {
@@ -75,7 +65,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             sourceJson = new JSONObject();
         }
 
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
@@ -112,23 +102,18 @@ public class VertexSetProperty extends BaseRequestHandler {
 
     private JSONObject toJson(Vertex vertex) {
         JSONObject obj = new JSONObject();
-        try {
-            obj.put("graphVertexId", vertex.getId());
-            for (Property property : vertex.getProperties()) {
-                if (GEO_LOCATION.getKey().equals(property.getName())) {
-                    JSONObject geo = new JSONObject();
-                    GeoPoint geoPoint = (GeoPoint) property.getValue();
-                    geo.put("latitude", geoPoint.getLatitude());
-                    geo.put("longitude", geoPoint.getLongitude());
-                    obj.put(property.getName(), geo);
-                } else {
-                    obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
-                }
+        obj.put("graphVertexId", vertex.getId());
+        for (Property property : vertex.getProperties()) {
+            if (GEO_LOCATION.getKey().equals(property.getName())) {
+                JSONObject geo = new JSONObject();
+                GeoPoint geoPoint = (GeoPoint) property.getValue();
+                geo.put("latitude", geoPoint.getLatitude());
+                geo.put("longitude", geoPoint.getLongitude());
+                obj.put(property.getName(), geo);
+            } else {
+                obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
             }
-            return obj;
-        } catch (JSONException e) {
-            new RuntimeException(e);
         }
-        return null;
+        return obj;
     }
 }
