@@ -139,6 +139,7 @@ public abstract class BaseRequestHandler implements Handler {
     protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {
         if (getConfiguration().getSandboxLevel() == SandboxLevel.WORKSPACE) {
             String workspaceId = getWorkspaceId(request);
+            // TODO verify user has access to see this workspace
             return getUserRepository().getAuthorizations(user, workspaceId);
         } else {
             return getUserRepository().getAuthorizations(user);
