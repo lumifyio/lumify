@@ -26,7 +26,6 @@ import java.util.Iterator;
 
 public class UnresolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
-    private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
@@ -36,14 +35,12 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     @Inject
     public UnresolveDetectedObject(
             final Graph graph,
-            final EntityHelper entityHelper,
             final AuditRepository auditRepository,
             final UserRepository userRepository,
             final DetectedObjectRepository detectedObjectRepository,
             final ModelSession modelSession,
             final VisibilityTranslator visibilityTranslator) {
         this.graph = graph;
-        this.entityHelper = entityHelper;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;

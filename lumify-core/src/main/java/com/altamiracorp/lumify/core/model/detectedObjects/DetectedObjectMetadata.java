@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.detectedObjects;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
+import com.altamiracorp.securegraph.Visibility;
 
 public class DetectedObjectMetadata extends ColumnFamily {
     public static final String NAME = "Metadata";
@@ -16,8 +17,8 @@ public class DetectedObjectMetadata extends ColumnFamily {
         super(NAME);
     }
 
-    public DetectedObjectMetadata setClassifierConcept(String classifierConcept) {
-        set(CLASSIFER_CONCEPT, classifierConcept);
+    public DetectedObjectMetadata setClassifierConcept(String classifierConcept, Visibility visibility) {
+        set(CLASSIFER_CONCEPT, classifierConcept, visibility.getVisibilityString());
         return this;
     }
 
@@ -25,8 +26,8 @@ public class DetectedObjectMetadata extends ColumnFamily {
         return Value.toString(get(CLASSIFER_CONCEPT));
     }
 
-    public DetectedObjectMetadata setX1(long x1) {
-        set(X1, x1);
+    public DetectedObjectMetadata setX1(long x1, Visibility visibility) {
+        set(X1, x1, visibility.getVisibilityString());
         return this;
     }
 
@@ -34,8 +35,8 @@ public class DetectedObjectMetadata extends ColumnFamily {
         return Value.toLong(get(X1));
     }
 
-    public DetectedObjectMetadata setX2(long x2) {
-        set(X2, x2);
+    public DetectedObjectMetadata setX2(long x2, Visibility visibility) {
+        set(X2, x2, visibility.getVisibilityString());
         return this;
     }
 
@@ -43,8 +44,8 @@ public class DetectedObjectMetadata extends ColumnFamily {
         return Value.toLong(get(X2));
     }
 
-    public DetectedObjectMetadata setY1(long y1) {
-        set(Y1, y1);
+    public DetectedObjectMetadata setY1(long y1, Visibility visibility) {
+        set(Y1, y1, visibility.getVisibilityString());
         return this;
     }
 
@@ -52,8 +53,8 @@ public class DetectedObjectMetadata extends ColumnFamily {
         return Value.toLong(get(Y1));
     }
 
-    public DetectedObjectMetadata setY2(long y2) {
-        set(Y2, y2);
+    public DetectedObjectMetadata setY2(long y2, Visibility visibility) {
+        set(Y2, y2, visibility.getVisibilityString());
         return this;
     }
 
@@ -61,12 +62,12 @@ public class DetectedObjectMetadata extends ColumnFamily {
         return Value.toLong(get(Y2));
     }
 
-    public DetectedObjectMetadata setResolvedId (Object id) {
-        set(RESOLVED_ID, id);
+    public DetectedObjectMetadata setResolvedId(Object id, Visibility visibility) {
+        set(RESOLVED_ID, id, visibility.getVisibilityString());
         return this;
     }
 
-    public Object getResolvedId () {
+    public Object getResolvedId() {
         return Value.toString(get(RESOLVED_ID));
     }
 }

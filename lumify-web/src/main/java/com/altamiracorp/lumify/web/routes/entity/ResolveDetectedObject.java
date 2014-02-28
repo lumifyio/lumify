@@ -26,7 +26,6 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TIT
 
 public class ResolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
-    private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final UserRepository userRepository;
@@ -35,14 +34,12 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
     @Inject
     public ResolveDetectedObject(
-            final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
             final DetectedObjectRepository detectedObjectRepository,
             final VisibilityTranslator visibilityTranslator) {
-        this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
@@ -74,11 +71,11 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
             resolvedVertexMutation = graph.prepareVertex(detectedObjectRowKey.getId(), visibility, authorizations);
             detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
-            detectedObjectModel.getMetadata().setResolvedId(detectedObjectRowKey.getId());
+            detectedObjectModel.getMetadata().setResolvedId(detectedObjectRowKey.getId(), visibility);
             detectedObjectRepository.save(detectedObjectModel);
         } else {
             Object id = graph.getIdGenerator().nextId();
-            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Long.getLong(x1), Long.getLong(y1), Long.getLong(x2), Long.getLong(y2), true);
+            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Long.getLong(x1), Long.getLong(y1), Long.getLong(x2), Long.getLong(y2), true, visibility);
             resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
         }
 
