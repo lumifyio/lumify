@@ -42,7 +42,7 @@ describe('Search', function () {
           .elementByCss('.search-results').getComputedCss('display').should.become('none')
           .then(function() {
               var concept = 'Raw',
-                  expected = '8',
+                  expected = '13',
                   el = browser.waitForElementByCss('.search-results-summary a[title=' + concept + '] .badge:not(:empty)');
 
               return Q.all([
@@ -52,7 +52,7 @@ describe('Search', function () {
               ])
           })
           .elementByCss('.search-results').getComputedCss('display').should.become('block')
-          .waitFor(this.asserters.jsCondition("$('.search-results .vertex-item').length === 8") , utils.requestTimeout).should.eventually.be.ok
+          .waitFor(this.asserters.jsCondition("$('.search-results .vertex-item').length === " + expected) , utils.requestTimeout).should.eventually.be.ok
     })
 
     it('Should be able to drag result to graph', function() {
