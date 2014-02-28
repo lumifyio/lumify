@@ -7,7 +7,7 @@ define(
 
         $(function() {
             $(document).ajaxError(function( event, jqxhr, settings, exception ) {
-                if (jqxhr.status === 403 && settings.url !== 'user/me') {
+                if (jqxhr.status === 403 && !_.contains(['user/me', 'login'], settings.url)) {
                     new UserService().isLoginRequired()
                         .fail(function() {
                             $(document).trigger('logout');
