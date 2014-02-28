@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.core.model.termMention;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -31,7 +31,7 @@ public class TermMentionRepository extends Repository<TermMentionModel> {
         return termMentionBuilder.getTableName();
     }
 
-    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, User user) {
-        return findByRowStartsWith(graphVertexId + ":", user.getModelUserContext());
+    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext) {
+        return findByRowStartsWith(graphVertexId + ":", modelUserContext);
     }
 }
