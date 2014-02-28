@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
 import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
@@ -186,7 +187,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     private void saveDetectedObject (Object artifactVertexId, ArtifactDetectedObject detectedObject) {
         detectedObjectRepository.saveDetectedObject(artifactVertexId, detectedObject.getId(), detectedObject.getConcept(),
-                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(), false);
+                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(), false, new Visibility(""));
     }
 
     protected void runWorkers(InputStream in, FileMetadata fileMetadata, ArtifactExtractedInfo artifactExtractedInfo, File archiveTempDir) throws Exception {

@@ -8,6 +8,8 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.securegraph.Text;
 import com.altamiracorp.securegraph.Vertex;
 import java.util.List;
+
+import com.altamiracorp.securegraph.Visibility;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +20,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class TermRegexFinderTest {
     @Mock
     private Vertex concept;
+
+    @Mock
+    private Visibility visibility;
 
     @Before
     public void setup() {
@@ -30,7 +35,7 @@ public class TermRegexFinderTest {
         String artifactId = "1234";
         String text = "@item1 is a @item2";
         String regex = "(@(\\w+))";
-        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex);
+        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex, visibility);
         assertEquals(2, terms.size());
 
         TermMentionModel termMention1 = terms.get(0);
@@ -49,7 +54,7 @@ public class TermRegexFinderTest {
         String artifactId = "1234";
         String text = "@item1 is a @item2";
         String regex = "((@\\w+))";
-        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex);
+        List<TermMentionModel> terms = TermRegexFinder.find(artifactId, concept, text, regex, visibility);
         assertEquals(2, terms.size());
 
         TermMentionModel termMention1 = terms.get(0);

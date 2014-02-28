@@ -4,7 +4,6 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -28,8 +27,6 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
-    private final EntityHelper entityHelper;
-    private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final ModelSession modelSession;
@@ -39,16 +36,12 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     public UnresolveTermEntity(
             final TermMentionRepository termMentionRepository,
             final Graph graph,
-            final EntityHelper entityHelper,
-            final OntologyRepository ontologyRepository,
             final AuditRepository auditRepository,
             final UserRepository userRepository,
             final ModelSession modelSession,
             final VisibilityTranslator visibilityTranslator) {
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
-        this.entityHelper = entityHelper;
-        this.ontologyRepository = ontologyRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.modelSession = modelSession;
@@ -100,7 +93,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         } else {
             termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
             modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
-            termMention.getMetadata().setVertexId("");
+            termMention.getMetadata().setVertexId("", visibility);
 
             TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
             result = offsetItem.toJson();
@@ -115,7 +108,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             TermMentionModel termMentionModel = termMentionModels.next();
             Object termMentionId = termMentionModel.getMetadata().getGraphVertexId();
             if (termMentionId != null && termMentionId.equals(graphVertexId)) {
-                termCount ++;
+                termCount++;
                 break;
             }
         }

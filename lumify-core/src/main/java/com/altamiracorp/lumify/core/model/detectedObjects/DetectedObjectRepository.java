@@ -5,6 +5,7 @@ import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -40,20 +41,20 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
     }
 
     public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object id, String concept,
-                                                  long x1, long y1, long x2, long y2, boolean resolved) {
+                                                  long x1, long y1, long x2, long y2, boolean resolved, Visibility visibility) {
         if (id == null) {
             id = graph.getIdGenerator().nextId();
         }
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, id);
         DetectedObjectModel detectedObjectModel = new DetectedObjectModel(detectedObjectRowKey);
-        detectedObjectModel.getMetadata().setClassifierConcept(concept)
-                .setX1(x1)
-                .setY1(y1)
-                .setX2(x2)
-                .setY2(y2);
+        detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility)
+                .setX1(x1, visibility)
+                .setY1(y1, visibility)
+                .setX2(x2, visibility)
+                .setY2(y2, visibility);
 
         if (resolved) {
-            detectedObjectModel.getMetadata().setResolvedId(id);
+            detectedObjectModel.getMetadata().setResolvedId(id, visibility);
         }
         save(detectedObjectModel);
         return detectedObjectModel;

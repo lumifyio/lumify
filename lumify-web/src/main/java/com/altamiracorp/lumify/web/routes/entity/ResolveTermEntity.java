@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -23,31 +24,33 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
 public class ResolveTermEntity extends BaseRequestHandler {
-    private final EntityHelper entityHelper;
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final UserRepository userRepository;
     private final VisibilityTranslator visibilityTranslator;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
     public ResolveTermEntity(
-            final EntityHelper entityHelper,
             final Graph graphRepository,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
-            final VisibilityTranslator visibilityTranslator) {
-        this.entityHelper = entityHelper;
+            final VisibilityTranslator visibilityTranslator,
+            final TermMentionRepository termMentionRepository) {
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.userRepository = userRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String artifactId = getRequiredParameter(request, "artifactId");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
-        final String sign = getRequiredParameter(request, "sign");
+        final String title = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
@@ -79,9 +82,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
-
-        // TODO: replace second "" when we implement commenting on ui
-        createdVertexMutation = entityHelper.updateMutation(createdVertexMutation, conceptId, sign, "", "", user);
+        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, visibility);
+        TITLE.setProperty(createdVertexMutation, title, visibility);
 
         Vertex createdVertex = createdVertexMutation.save();
 
@@ -101,7 +103,12 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-        entityHelper.updateTermMention(termMention, sign, concept, createdVertex, user);
+        termMention.getMetadata()
+                .setSign(title, visibility)
+                .setOntologyClassUri(concept.getDisplayName(), visibility)
+                .setConceptGraphVertexId(concept.getId(), visibility)
+                .setVertexId(createdVertex.getId().toString(), visibility);
+        termMentionRepository.save(termMention);
 
         this.graph.flush();
 
