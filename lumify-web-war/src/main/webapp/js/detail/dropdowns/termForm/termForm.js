@@ -99,7 +99,7 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType)) || '';
+                var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType || info.properties._conceptType.value)) || '';
                 this.updateConceptSelect(conceptType).show();
 
                 if (this.unresolve){
@@ -217,21 +217,20 @@ define([
             var self = this,
                 newSign = $.trim(this.select('objectSignSelector').val()),
                 parameters = {
-                    sign: newSign,
+                    title: newSign,
                     conceptId: this.select('conceptSelector').val(),
-                    graphVertexId: this.attr.graphVertexId || this.currentGraphVertexId,
-                    detectedObjectId: this.attr.detectedObjectId,
+                    graphVertexId: this.attr.resolvedVertex ? this.attr.resolvedVertex.id : this.currentGraphVertexId,
+                    rowKey: this.attr.dataInfo.value._rowKey,
                     artifactId: this.attr.artifactData.id,
-                    x1: parseFloat(this.attr.x1),
-                    y1: parseFloat(this.attr.y1),
-                    x2: parseFloat(this.attr.x2),
-                    y2: parseFloat(this.attr.y2),
+                    x1: parseFloat(this.attr.dataInfo.value.x1),
+                    y1: parseFloat(this.attr.dataInfo.value.y1),
+                    x2: parseFloat(this.attr.dataInfo.value.x2),
+                    y2: parseFloat(this.attr.dataInfo.value.y2),
                     existing: !!this.currentGraphVertexId
                 };
 
             _.defer(this.buttonLoading.bind(this));
-
-            if (this.attr.existing) {
+            if (this.unresolve) {
                 self.unresolveDetectedObject (parameters);
             } else {
                 self.resolveDetectedObject (parameters);
@@ -243,47 +242,50 @@ define([
             var self = this;
             this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
-                    var resolvedVertex ={
-                        graphVertexId: data.entityVertex.graphVertexId,
-                        _conceptType: {
-                            value: data.entityVertex._conceptType
-                        },
-                        title: data.entityVertex.title
-                    };
+                    var resolvedVertex = data.entityVertex;
 
-                    // Temporarily creating a new tag to show on ui prior to backend update
-                    var $allDetectedObjects = self.$node.closest('.type-content').find('.detected-object-labels');
-                    var $allDetectedObjectLabels =$allDetectedObjects.find('.detected-object-tag .label-info');
-                    var $parentSpan = $('<span>').addClass ('label detected-object-tag focused');
-                    var $deleteButton = $("<a>").addClass("delete-tag").text('x');
+                    var $focused = $('.focused');
+                    if ($focused) {
+                        var $tag = $focused.find('.label-info');
 
-                    var classes = $allDetectedObjectLabels.attr('class');
-                    if (!classes){
-                        classes = 'label-info detected-object'
-                    }
-                    var $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(data.entityVertex.title);
+                        $tag.text(data.entityVertex.properties.title.value).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
+                        $tag.addClass('resolved entity conceptType-' + resolvedVertex.properties._conceptType.value);
 
-                    var added = false;
+                        $focused.removeClass('focused');
+                    } else {
+                        // Temporarily creating a new tag to show on ui prior to backend update
+                        var $allDetectedObjects = self.$node.closest('.type-content').find('.detected-object-labels');
+                        var $allDetectedObjectLabels =$allDetectedObjects.find('.detected-object-tag .label-info');
+                        var $parentSpan = $('<span>').addClass ('label detected-object-tag focused');
 
-                    $parentSpan.append($tag);
-                    $parentSpan.append($deleteButton);
-                    $parentSpan.after(' ');
-
-                    $allDetectedObjectLabels.each(function(){
-                        if(parseFloat($(this).data("info").x1) > data.entityVertex.x1){
-                            $tag.removePrefixedClasses('conceptType-').addClass('conceptType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
-                            added = true;
-                            return false;
+                        var classes = $allDetectedObjectLabels.attr('class');
+                        if (!classes){
+                            classes = 'label-info detected-object'
                         }
-                    });
+                        var $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(data.entityVertex.properties.title.value);
 
-                    if (!added){
-                        $tag.addClass('conceptType-' + parameters.conceptId);
-                        $allDetectedObjects.append($parentSpan);
+                        var added = false;
+
+                        $parentSpan.append($tag);
+                        $parentSpan.after(' ');
+
+                        $allDetectedObjectLabels.each(function(){
+                            if(parseFloat($(this).data("info").value.x1) > data.x1){
+                                $tag.removePrefixedClasses('conceptType-').addClass('conceptType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
+                                added = true;
+                                return false;
+                            }
+                        });
+
+                        if (!added){
+                            $tag.addClass('conceptType-' + parameters.conceptId);
+                            $allDetectedObjects.append($parentSpan);
+                        }
+                        $tag.attr('data-info', JSON.stringify(resolvedVertex));
+                        $parentSpan.removeClass('focused');
                     }
-                    $tag.attr('data-info', JSON.stringify(data.entityVertex));
-                    $parentSpan.removeClass('focused');
-                    self.trigger('termCreated', data.entityVertex);
+
+                    self.trigger('termCreated', resolvedVertex);
 
                     self.trigger(document, 'updateVertices', { vertices: [resolvedVertex] });
                     self.trigger(document, 'refreshRelationships');
@@ -294,39 +296,25 @@ define([
 
         this.unresolveDetectedObject = function (parameters) {
             var self = this;
-            this.vertexService.updateDetectedObject(parameters).done(function(data) {
-                self.updateEntityTag(data, parameters.conceptId);
+            this.vertexService.unresolveDetectedObject(parameters).done(function(data) {
+                var $focused = $('.focused');
+                var $tag = $focused.find('.label-info');
+                if (data._rowKey) {
+                    $tag.text(data.classifierConcept).removeAttr('data-info').data('info', data).removeClass();
+                    $tag.addClass('label-info detected-object opens-dropdown');
+                } else {
+                    $tag.remove();
+                }
+
+                if (data.deleteEdge) {
+                    self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
+                }
+
+                self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });
+                self.trigger(document, 'refreshRelationships');
+                _.defer(self.teardown.bind(self));
             });
         };
-
-        this.updateEntityTag = function (data, conceptId) {
-            var self = this;
-            var resolvedVertex = {
-                graphVertexId: data.entityVertex.graphVertexId,
-                _conceptType: {
-                    value: data.entityVertex._conceptType
-                },
-                title: data.entityVertex.title
-            };
-            var $focused = $('.focused');
-            var $tag = $focused.find('.label-info');
-
-            $tag.text(data.entityVertex.title).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
-            $tag.addClass('resolved entity conceptType-' + conceptId);
-
-            if (!$focused.children().hasClass('delete-tag')){
-                var $buttonTag = $('<span>').addClass('delete-tag').text('x');
-                $focused.append($buttonTag);
-            }
-
-            $focused.removeClass('focused');
-
-            self.trigger('termCreated', data.entityVertex);
-            self.trigger(document, 'updateVertices', { vertices: [resolvedVertex] });
-            self.trigger(document, 'refreshRelationships');
-
-            _.defer(self.teardown.bind(self));
-        }
 
         this.onConceptChanged = function(event) {
             var select = $(event.target);
@@ -397,10 +385,10 @@ define([
                 }
             } else {
                 data = this.attr.resolvedVertex;
-                objectSign = data.title || '';
+                objectSign = data ? data.properties.title.value : '';
                 existingEntity = this.attr.existing;
-                graphVertexId = data.graphVertexId;
-                title = data.title;
+                graphVertexId = data ? data.id : '';
+                this.unresolve = graphVertexId && graphVertexId != '';
             }
 
             vertex.html(dropdownTemplate({
@@ -523,7 +511,7 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (vertexInfo && vertexInfo._conceptType) || ''
+                    selectedConceptId: (vertexInfo && (vertexInfo._conceptType || (vertexInfo.properties && vertexInfo.properties._conceptType.value))) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {

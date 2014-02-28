@@ -186,7 +186,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     private void saveDetectedObject (Object artifactVertexId, ArtifactDetectedObject detectedObject) {
         detectedObjectRepository.saveDetectedObject(artifactVertexId, detectedObject.getId(), detectedObject.getConcept(),
-                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2());
+                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(), false);
     }
 
     protected void runWorkers(InputStream in, FileMetadata fileMetadata, ArtifactExtractedInfo artifactExtractedInfo, File archiveTempDir) throws Exception {
