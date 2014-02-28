@@ -126,7 +126,10 @@ public abstract class BaseRequestHandler implements Handler {
         if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
             String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
             if (workspaceId == null || workspaceId.trim().length() == 0) {
-                throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+                workspaceId = getOptionalParameter(request, "workspaceId");
+                if (workspaceId == null || workspaceId.trim().length() == 0) {
+                    throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+                }
             }
             return workspaceId;
         }

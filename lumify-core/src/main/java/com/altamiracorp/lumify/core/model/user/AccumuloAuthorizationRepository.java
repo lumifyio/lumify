@@ -100,6 +100,26 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
         }
     }
 
+    @Override
+    public List<String> getGraphAuthorizations() {
+        if (graph instanceof AccumuloGraph) {
+            try {
+                AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
+                String principal = accumuloGraph.getConnector().whoami();
+                Authorizations currentAuthorizations = accumuloGraph.getConnector().securityOperations().getUserAuthorizations(principal);
+                ArrayList<String> auths = new ArrayList<String>();
+                for (byte[] currentAuth : currentAuthorizations) {
+                    auths.add(new String(currentAuth));
+                }
+                return auths;
+            } catch (Exception ex) {
+                throw new RuntimeException("Could not get authorizations from accumulo", ex);
+            }
+        } else {
+            throw new RuntimeException("graph type not supported to add authorizations.");
+        }
+    }
+
     public com.altamiracorp.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
         return new AccumuloAuthorizations(Iterables.toArray(authorizationsSet, String.class));
     }
