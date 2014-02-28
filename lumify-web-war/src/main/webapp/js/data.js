@@ -436,7 +436,7 @@ define([
 
         this.getVerticesFromClipboardData = function(data) {
             if (data) {
-                var vertexUrlMatch = data.match(/#v=([0-9,]+)$/);
+                var vertexUrlMatch = data.match(/#v=(.+)$/);
                 if (vertexUrlMatch) {
                     return vertexUrlMatch[1].split(',');
                 }
