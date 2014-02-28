@@ -245,8 +245,9 @@ define([
                     var resolvedVertex = data.entityVertex;
 
                     var $focused = $('.focused');
+                    var $tag;
                     if ($focused) {
-                        var $tag = $focused.find('.label-info');
+                        $tag = $focused.find('.label-info');
 
                         $tag.text(data.entityVertex.properties.title.value).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
                         $tag.addClass('resolved entity conceptType-' + resolvedVertex.properties._conceptType.value);
@@ -262,7 +263,7 @@ define([
                         if (!classes){
                             classes = 'label-info detected-object'
                         }
-                        var $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(data.entityVertex.properties.title.value);
+                        $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(data.entityVertex.properties.title.value);
 
                         var added = false;
 
@@ -388,7 +389,7 @@ define([
                 objectSign = data ? data.properties.title.value : '';
                 existingEntity = this.attr.existing;
                 graphVertexId = data ? data.id : '';
-                this.unresolve = graphVertexId && graphVertexId != '';
+                this.unresolve = graphVertexId && graphVertexId !== '';
             }
 
             vertex.html(dropdownTemplate({
