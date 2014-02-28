@@ -3,17 +3,10 @@ package com.altamiracorp.lumify.core.model.detectedObjects;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
-import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
-import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRowKey;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 @Singleton
 public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
@@ -46,8 +39,8 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
         return findByRowStartsWith(vertexId + ":", user.getModelUserContext());
     }
 
-    public void saveDetectedObject (Object artifactVertexId, Object id, String concept,
-                                    long x1, long y1, long x2, long y2) {
+    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object id, String concept,
+                                                  long x1, long y1, long x2, long y2, boolean resolved) {
         if (id == null) {
             id = graph.getIdGenerator().nextId();
         }
@@ -58,6 +51,11 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
                 .setY1(y1)
                 .setX2(x2)
                 .setY2(y2);
+
+        if (resolved) {
+            detectedObjectModel.getMetadata().setResolvedId(id);
+        }
         save(detectedObjectModel);
+        return detectedObjectModel;
     }
 }

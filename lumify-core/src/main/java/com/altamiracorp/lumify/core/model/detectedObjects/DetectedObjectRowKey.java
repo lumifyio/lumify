@@ -32,9 +32,8 @@ public class DetectedObjectRowKey extends RowKey {
         return result;
     }
 
-    public long getId() {
+    public String getId() {
         String[] keyElements = this.toString().split(":");
-        String startOffsetPadded = keyElements[keyElements.length - 1];
-        return Long.parseLong(startOffsetPadded);
+        return keyElements[keyElements.length - 1];
     }
 }

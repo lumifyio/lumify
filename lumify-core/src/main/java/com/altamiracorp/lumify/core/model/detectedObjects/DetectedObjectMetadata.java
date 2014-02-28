@@ -10,6 +10,7 @@ public class DetectedObjectMetadata extends ColumnFamily {
     public static final String X2 = "x2";
     public static final String Y1 = "y1";
     public static final String Y2 = "y2";
+    public static final String RESOLVED_ID = "resolvedId";
 
     public DetectedObjectMetadata() {
         super(NAME);
@@ -58,5 +59,14 @@ public class DetectedObjectMetadata extends ColumnFamily {
 
     public long getY2() {
         return Value.toLong(get(Y2));
+    }
+
+    public DetectedObjectMetadata setResolvedId (Object id) {
+        set(RESOLVED_ID, id);
+        return this;
+    }
+
+    public Object getResolvedId () {
+        return Value.toString(get(RESOLVED_ID));
     }
 }

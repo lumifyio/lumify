@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -131,7 +132,12 @@ public class GraphVertexSearch extends BaseRequestHandler {
                 JSONArray detectedObjects = new JSONArray();
                 while (detectedObjectModels.hasNext()) {
                     JSONObject detectedObject = new JSONObject();
-                    detectedObject.put("value", detectedObjectModels.next().toJson());
+                    DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
+                    JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
+                    if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+                        detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
+                    }
+                    detectedObject.put("value", detectedObjectModelJson);
                     detectedObjects.put(detectedObject);
                 }
                 vertices.getJSONObject(verticesCount).put("detectedObjects", detectedObjects);

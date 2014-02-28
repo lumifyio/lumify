@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -9,19 +11,23 @@ import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 
 public class VertexProperties extends BaseRequestHandler {
     private final Graph graph;
     private final UserRepository userRepository;
+    private final DetectedObjectRepository detectedObjectRepository;
 
     @Inject
-    public VertexProperties(final Graph graph, final UserRepository userRepository) {
+    public VertexProperties(final Graph graph, final UserRepository userRepository, final DetectedObjectRepository detectedObjectRepository) {
         this.graph = graph;
         this.userRepository = userRepository;
+        this.detectedObjectRepository = detectedObjectRepository;
     }
 
     @Override
@@ -36,6 +42,20 @@ public class VertexProperties extends BaseRequestHandler {
         JSONObject json = new JSONObject();
         json.put("id", graphVertexId);
         json.put("properties", propertiesJson);
+
+        Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(graphVertexId, user).iterator();
+        JSONArray detectedObjects = new JSONArray();
+        while (detectedObjectModels.hasNext()) {
+            JSONObject detectedObject = new JSONObject();
+            DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
+            JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
+            if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
+            }
+            detectedObject.put("value", detectedObjectModelJson);
+            detectedObjects.put(detectedObject);
+        }
+        json.put("detectedObjects", detectedObjects);
 
         respondWithJson(response, json);
     }
