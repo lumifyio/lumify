@@ -27,10 +27,20 @@ define([
         });
 
         this.after('initialize', function () {
+            var self = this;
+
             this.$node.html(statementFormTemplate({
                 source: this.attr.sourceTerm.text(),
                 dest: this.attr.destTerm.text()
             }));
+            
+            require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                Visibility.attachTo(self.$node.find('.visibility'), {
+                    value: ''
+                });
+            });
+            this.on('visibilitychange', this.onVisibilityChange);
+
 
             this.applyTermClasses(this.attr.sourceTerm, this.select('sourceTermSelector'));
             this.applyTermClasses(this.attr.destTerm, this.select('destTermSelector'));
@@ -64,6 +74,10 @@ define([
                 }
             }
         }
+
+        this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data.value;
+        };
 
         this.applyTermClasses = function (el, applyToElement) {
             var classes = el.attr('class').split(/\s+/),
@@ -114,7 +128,8 @@ define([
                 parameters = {
                     sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId || this.attr.sourceTerm.data('vertex-id'),
                     destGraphVertexId: this.attr.destTerm.data('info').graphVertexId || this.attr.destTerm.data('vertex-id'),
-                    predicateLabel: this.select('relationshipSelector').val()
+                    predicateLabel: this.select('relationshipSelector').val(),
+                    visibilitySource: this.visibilitySource
                 };
 
             if (this.select('formSelector').hasClass('invert')) {

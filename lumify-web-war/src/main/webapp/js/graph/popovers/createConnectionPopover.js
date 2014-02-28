@@ -45,6 +45,14 @@ define([
                 select.html('<option>Loading...</option>');
                 button.text('Connect').attr('disabled', true).focus();
 
+                require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                    Visibility.attachTo(self.$node.find('.visibility'), {
+                        value: ''
+                    });
+                    self.positionDialog();
+                });
+                this.on('visibilitychange', this.onVisibilityChange);
+
                 this.getRelationshipLabels(
                     cy.getElementById(this.attr.edge.data('source')),
                     cy.getElementById(this.attr.edge.data('target'))
@@ -67,6 +75,10 @@ define([
             });
         });
 
+        this.onVisibilityChange = function(event, data) {
+            this.visibilitySource = data.value;
+        };
+
 
         this.onCreateConnection = function(e) {
             var $target = $(e.target);
@@ -77,7 +89,8 @@ define([
                 parameters = {
                     sourceGraphVertexId: this.attr.sourceVertexId,
                     destGraphVertexId: this.attr.targetVertexId,
-                    predicateLabel: $target.siblings('select').val()
+                    predicateLabel: $target.siblings('select').val(),
+                    visibilitySource: this.visibilitySource
                 };
 
             this.relationshipService.createRelationship(parameters)
