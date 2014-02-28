@@ -12,6 +12,64 @@ describe('Workspace', function () {
             .waitFor(this.asserters.jsCondition(utils.animations.openWorkspaceAnimationFinished) , utils.animationTimeout)
     })
 
+    it('Should be able to add new workspace', function() {
+        var title = 'My new workspace';
+
+        return this.browser
+            .elementByCss('.new-workspace input')
+            .type(title)
+            .sendKeys(this.KEYS.Return)
+            .waitForElementByCss('.workspaces-list li:nth-child(3).active', utils.requestTimeout)
+            .should.eventually.exist
+            .text().should.eventually.include(title)
+    })
+
+    it('Should be able to rename workspace', function() {
+        var Q = this.Q,
+            newTitle = 'Another name';
+
+        return this.browser
+            .elementByCss('.workspaces-list li:nth-child(3) .disclosure')
+            .click()
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
+                .should.eventually.exist
+            .elementByCss('input.workspace-title').getValue().should.become('My new workspace')
+            .elementByCss('input.workspace-title').clear().type(newTitle)
+            .waitForElementByCss(
+                '.workspaces-list li:nth-child(3) .nav-list-title',
+                utils.assertions.includesText(newTitle), utils.requestTimeout)
+            .text().should.eventually.include(newTitle)
+    })
+
+    it('Should be able to delete workspace', function() {
+        return this.browser
+            .elementByCss('.workspace-form button.delete')
+            .click()
+            .waitForElementByCss('.workspaces-list li:nth-child(3).new-workspace', utils.requestTimeout)
+            .should.eventually.exist
+    })
+
+    it('Should be able to copy workspace', function() {
+        return this.browser
+            .elementByCss('.workspaces-list .disclosure')
+            .click()
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
+            .elementByCss('.workspace-form button.copy')
+            .click()
+            .waitForElementByCss(
+                '.workspaces-list li:nth-child(2) .nav-list-title',
+                utils.assertions.includesText('Copy of Default - selenium'), 
+                utils.requestTimeout)
+            .waitForElementByCss('.workspaces-list li:nth-child(2) .disclosure')
+                .should.eventually.exist
+            .click()
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
+            .elementByCss('.workspace-form button.delete')
+            .click()
+            .waitForElementByCss('.workspaces-list li:nth-child(3).new-workspace', utils.requestTimeout)
+                .should.eventually.exist
+    })
+
     it('Should be able to share workspace', function () {
         return this.browser
             .getSessionId()
