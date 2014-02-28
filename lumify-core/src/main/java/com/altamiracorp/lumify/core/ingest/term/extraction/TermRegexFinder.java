@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 
 public class TermRegexFinder {
-    public static List<TermMentionModel> find(String artifactId, Vertex concept, String text, String regex) {
-        return find(artifactId, concept, text, Pattern.compile(regex));
+    public static List<TermMentionModel> find(String artifactId, Vertex concept, String text, String regex, Visibility visibility) {
+        return find(artifactId, concept, text, Pattern.compile(regex), visibility);
     }
 
-    public static List<TermMentionModel> find(String artifactId, Vertex concept, String text, Pattern regex) {
+    public static List<TermMentionModel> find(String artifactId, Vertex concept, String text, Pattern regex, Visibility visibility) {
         Matcher m = regex.matcher(text);
         List<TermMentionModel> termMentions = new ArrayList<TermMentionModel>();
         while (m.find()) {
@@ -30,7 +30,6 @@ public class TermRegexFinder {
 
             TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, groupCaptureOffset, groupCaptureOffset + groupCapture.length());
             TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-            Visibility visibility = new Visibility("");
             termMention.getMetadata()
                     .setSign(m.group(2), visibility)
                     .setOntologyClassUri(DISPLAY_NAME.getPropertyValue(concept), visibility)

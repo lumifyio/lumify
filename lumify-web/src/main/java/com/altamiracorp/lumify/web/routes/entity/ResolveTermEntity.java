@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -20,30 +21,33 @@ import com.google.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
-public class EntityTermCreate extends BaseRequestHandler {
-    private final EntityHelper entityHelper;
+public class ResolveTermEntity extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final VisibilityTranslator visibilityTranslator;
+    private final TermMentionRepository termMentionRepository;
 
     @Inject
-    public EntityTermCreate(
-            final EntityHelper entityHelper,
+    public ResolveTermEntity(
             final Graph graphRepository,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final TermMentionRepository termMentionRepository) {
         super(userRepository, configuration);
-        this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.termMentionRepository = termMentionRepository;
     }
 
     @Override
@@ -51,9 +55,10 @@ public class EntityTermCreate extends BaseRequestHandler {
         final String artifactId = getRequiredParameter(request, "artifactId");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
-        final String sign = getRequiredParameter(request, "sign");
+        final String title = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
-        final String visibilitySource = getOptionalParameter(request, "visibilitySource");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
 
         String workspaceId = getWorkspaceId(request);
 
@@ -66,28 +71,41 @@ public class EntityTermCreate extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource == null ? "" : visibilitySource, workspaceId);
-        ElementMutation<Vertex> createdVertexMutation = graph.prepareVertex(visibility, authorizations);
-        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
+        ElementMutation<Vertex> createdVertexMutation;
+        if (graphVertexId != null) {
+            createdVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+        } else {
+            createdVertexMutation = graph.prepareVertex(visibility, authorizations);
+        }
 
-        // TODO: replace second "" when we implement commenting on ui
-        createdVertexMutation = entityHelper.updateMutation(createdVertexMutation, conceptId, sign, "", "", user);
+        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
+        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, visibility);
+        TITLE.setProperty(createdVertexMutation, title, visibility);
 
         Vertex createdVertex = createdVertexMutation.save();
 
         auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, visibility);
 
-        graph.addEdge(createdVertex, artifactVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+        // TODO: a better way to check if the same edge exists instead of looking it up every time?
+        Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
+        if (edge == null) {
+            graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
+            if (labelDisplayName == null) {
+                labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
+            }
 
-        String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
-        if (labelDisplayName == null) {
-            labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
+            // TODO: replace second "" when we implement commenting on ui
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
         }
 
-        // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
-
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
-        entityHelper.updateTermMention(termMention, sign, concept, createdVertex, visibility, user);
+        termMention.getMetadata()
+                .setSign(title, visibility)
+                .setOntologyClassUri(concept.getDisplayName(), visibility)
+                .setConceptGraphVertexId(concept.getId(), visibility)
+                .setVertexId(createdVertex.getId().toString(), visibility);
+        termMentionRepository.save(termMention);
 
         this.graph.flush();
 

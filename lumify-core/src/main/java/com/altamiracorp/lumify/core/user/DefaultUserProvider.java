@@ -10,6 +10,8 @@ import com.altamiracorp.securegraph.Vertex;
 import com.google.common.collect.Iterables;
 import org.apache.accumulo.core.security.Authorizations;
 
+import java.util.ArrayList;
+
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 
 public class DefaultUserProvider implements UserProvider {
@@ -44,19 +46,25 @@ public class DefaultUserProvider implements UserProvider {
 
     @Override
     public ModelUserContext getModelUserContext(User user, String... additionalAuthorizations) {
-        int userAuthCount = user.getAuthorizations() == null ? 0 : user.getAuthorizations().length;
-        int additionalAuthCount = additionalAuthorizations == null ? 0 : additionalAuthorizations.length;
-        String[] authorizations = new String[userAuthCount + additionalAuthCount];
+        ArrayList<String> authorizations = new ArrayList<String>();
 
         if (user.getAuthorizations() != null) {
-            System.arraycopy(user.getAuthorizations(), 0, authorizations, 0, user.getAuthorizations().length);
+            for (String a : user.getAuthorizations()) {
+                if (a != null && a.length() > 0) {
+                    authorizations.add(a);
+                }
+            }
         }
 
         if (additionalAuthorizations != null) {
-            System.arraycopy(additionalAuthorizations, 0, authorizations, userAuthCount, additionalAuthorizations.length);
+            for (String a : additionalAuthorizations) {
+                if (a != null && a.length() > 0) {
+                    authorizations.add(a);
+                }
+            }
         }
 
-        return getModelUserContext(authorizations);
+        return getModelUserContext(authorizations.toArray(new String[authorizations.size()]));
     }
 
     private static ModelUserContext getModelUserContext(String... authorizations) {

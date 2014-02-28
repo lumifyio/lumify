@@ -10,6 +10,7 @@ public class TermMentionMetadata extends ColumnFamily {
     public static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
     public static final String VERTEX_ID = "graphVertexId";
     public static final String CONCEPT_GRAPH_VERTEX_ID = "conceptGraphVertexId";
+    public static final String ANALYTIC_PROCESS = "analyticProcess";
 
     public TermMentionMetadata() {
         super(NAME);
@@ -49,5 +50,14 @@ public class TermMentionMetadata extends ColumnFamily {
 
     public String getConceptGraphVertexId() {
         return Value.toString(get(CONCEPT_GRAPH_VERTEX_ID));
+    }
+
+    public String getAnalyticProcess() {
+        return Value.toString(get(ANALYTIC_PROCESS));
+    }
+
+    public TermMentionMetadata setAnalyticProcess(String analyticProcess, Visibility visibility) {
+        set(ANALYTIC_PROCESS, analyticProcess, visibility.getVisibilityString());
+        return this;
     }
 }
