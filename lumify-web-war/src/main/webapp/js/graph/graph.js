@@ -101,7 +101,9 @@ define([
 
         var vertices, idToCyNode;
         this.onVerticesHovering = function(evt, data) {
-            if (!this.isWorkspaceEditable) return;
+            if (!this.isWorkspaceEditable) {
+                return this.trigger('displayInformation', { message: 'Workspace is read only' })
+            }
             this.cytoscapeReady(function(cy) {
                 var self = this,
                     offset = this.$node.offset(),
