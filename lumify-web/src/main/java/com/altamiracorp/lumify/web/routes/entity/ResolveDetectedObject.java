@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -30,6 +31,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
+    private final VisibilityTranslator visibilityTranslator;
 
     @Inject
     public ResolveDetectedObject(
@@ -38,30 +40,30 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
-            final DetectedObjectRepository detectedObjectRepository) {
+            final DetectedObjectRepository detectedObjectRepository,
+            final VisibilityTranslator visibilityTranslator) {
         this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
+        this.visibilityTranslator = visibilityTranslator;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO set visibility
-        Visibility visibility = new Visibility("");
-
-        // required parameters
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String title = getRequiredParameter(request, "title");
         final String conceptId = getRequiredParameter(request, "conceptId");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String rowKey = getOptionalParameter(request, "rowKey");
         String x1 = getRequiredParameter(request, "x1"), x2 = getRequiredParameter(request, "x2"),
                 y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
 
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);

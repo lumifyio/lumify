@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -32,6 +33,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final ModelSession modelSession;
+    private final VisibilityTranslator visibilityTranslator;
 
     @Inject
     public UnresolveTermEntity(
@@ -41,7 +43,8 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             final OntologyRepository ontologyRepository,
             final AuditRepository auditRepository,
             final UserRepository userRepository,
-            final ModelSession modelSession) {
+            final ModelSession modelSession,
+            final VisibilityTranslator visibilityTranslator) {
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.entityHelper = entityHelper;
@@ -49,6 +52,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.modelSession = modelSession;
+        this.visibilityTranslator = visibilityTranslator;
     }
 
     @Override
@@ -60,6 +64,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String graphVertexId = getRequiredParameter(request, "graphVertexId");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
 
         LOGGER.debug(
                 "UnresolveTermEntity (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
@@ -72,6 +77,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
@@ -121,7 +127,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
                 graph.removeEdge(edge, authorizations);
                 deleteEdge = true;
                 graph.flush();
-                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), "", "", user, new Visibility(""));
+                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), "", "", user, visibility);
             }
         }
 
