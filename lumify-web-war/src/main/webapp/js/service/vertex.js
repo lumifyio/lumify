@@ -170,42 +170,35 @@ define(
             //maybe it's an object for future options stuff?
             var i = encodeURIComponent(typeof id == "object" ? id.id : id);
             return this._ajaxGet({
-                url: resource + "/" + i,
+                url: resource + "/" + i
             });
         };
 
-        VertexService.prototype.createTerm = function (createRequest) {
+        VertexService.prototype.resolveTerm = function (resolveRequest) {
             return this._ajaxPost({
-                url: 'entity/createTerm',
-                data: createRequest
+                url: 'entity/resolveTerm',
+                data: resolveRequest
             });
         };
 
-        VertexService.prototype.updateTerm = function (updateRequest) {
+        VertexService.prototype.unresolveTerm = function (unresolveRequest) {
             return this._ajaxPost({
-                url: 'entity/updateTerm',
-                data: updateRequest
+                url: 'entity/unresolveTerm',
+                data: unresolveRequest
             });
         };
 
-        VertexService.prototype.resolveDetectedObject = function (createRequest) {
+        VertexService.prototype.resolveDetectedObject = function (resolveRequest) {
             return this._ajaxPost({
-                url: 'entity/createResolvedDetectedObject',
-                data: createRequest
+                url: 'entity/resolveDetectedObject',
+                data: resolveRequest
             });
         };
 
-        VertexService.prototype.updateDetectedObject = function (updateRequest) {
+        VertexService.prototype.unresolveDetectedObject = function (unresolveRequest) {
             return this._ajaxPost({
-                url: 'entity/updateResolvedDetectedObject',
-                data: updateRequest
-            });
-        };
-
-        VertexService.prototype.deleteDetectedObject = function (deleteRequest) {
-            return this._ajaxPost({
-                url: 'entity/deleteResolvedDetectedObject',
-                data: deleteRequest
+                url: 'entity/unresolveDetectedObject',
+                data: unresolveRequest
             });
         };
 

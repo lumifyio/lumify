@@ -29,7 +29,7 @@ public abstract class OffsetItem implements Comparable {
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
             infoJson.put("_rowKey", RowKeyHelper.jsonEncode(getRowKey()));
-            if (getGraphVertexId() != null) {
+            if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
                 infoJson.put("graphVertexId", getGraphVertexId());
             }
             if (getGlyphIcon() != null) {
@@ -45,7 +45,7 @@ public abstract class OffsetItem implements Comparable {
     public List<String> getCssClasses() {
         ArrayList<String> classes = new ArrayList<String>();
         classes.add(getType());
-        if (getGraphVertexId() != null) {
+        if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
             classes.add("resolved");
         }
         return classes;

@@ -294,10 +294,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             SOURCE.setProperty(artifact, artifactExtractedInfo.getSource(), visibility);
         }
 
-        if (artifactExtractedInfo.getDetectedObjects() != null) {
-            DETECTED_OBJECTS_JSON.setProperty(artifact, artifactExtractedInfo.getDetectedObjects(), visibility);
-        }
-
         if (artifactExtractedInfo.getDate() != null) {
             PUBLISHED_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), visibility);
         }
