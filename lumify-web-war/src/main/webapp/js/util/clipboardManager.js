@@ -108,7 +108,7 @@ define([
         };
 
         this._verticesInData = function(val) {
-            var match = val.match(/#v=([0-9,]+)$/);
+            var match = val.match(/#v=(.+)$/);
             if (match && match.length === 2) {
                 return match[1].split(',');
             }

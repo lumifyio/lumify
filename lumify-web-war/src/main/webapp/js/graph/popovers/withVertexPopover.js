@@ -19,7 +19,7 @@ define([
             if (!this.attr.cy) throw "cy attr required";
             if (!this.attr.cyNode || this.attr.cyNode.length !== 1) throw "cyNode attr required: " + this.attr.cyNode;
 
-            this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 100);
+            this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 1000 / 30);
             this.onTap = this.onTap.bind(this);
 
             require(['tpl!graph/popovers/' + (this.attr.template || 'noTemplate')], 

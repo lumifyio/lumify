@@ -1,10 +1,13 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
@@ -39,15 +43,18 @@ public class GraphVertexSearch extends BaseRequestHandler {
     private final Graph graph;
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
+    private final DetectedObjectRepository detectedObjectRepository;
 
     @Inject
     public GraphVertexSearch(
             final OntologyRepository ontologyRepository,
             final Graph graph,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final DetectedObjectRepository detectedObjectRepository) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.userRepository = userRepository;
+        this.detectedObjectRepository = detectedObjectRepository;
     }
 
     @Override
@@ -121,6 +128,19 @@ public class GraphVertexSearch extends BaseRequestHandler {
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
                 vertices.put(toJson(vertex));
+                Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(vertex.getId().toString(), user).iterator();
+                JSONArray detectedObjects = new JSONArray();
+                while (detectedObjectModels.hasNext()) {
+                    JSONObject detectedObject = new JSONObject();
+                    DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
+                    JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
+                    if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+                        detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
+                    }
+                    detectedObject.put("value", detectedObjectModelJson);
+                    detectedObjects.put(detectedObject);
+                }
+                vertices.getJSONObject(verticesCount).put("detectedObjects", detectedObjects);
             }
             String type = CONCEPT_TYPE.getPropertyValue(vertex);
             if (type == null) {

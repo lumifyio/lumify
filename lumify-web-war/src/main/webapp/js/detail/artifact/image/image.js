@@ -154,6 +154,7 @@ define([
             var box = toEdit ? this.select('boxEditingSelector') :
                         this.select('boxSelector').not('.editing');
             var image = this.select('imageSelector');
+
             var width = image.width(),
                 height = image.height(),
                 aspectWidth = width / image[0].naturalWidth,
@@ -191,7 +192,7 @@ define([
 
         this.onEdit = function(event, data) {
             if (this.currentlyEditing && data.graphVertexId === this.currentlyEditing) return;
-            this.currentlyEditing = !data.graphVertexId ? data.detectedObjectId : data.graphVertexId;
+            this.currentlyEditing = !data.graphVertexId ? data._rowKey : data.graphVertexId;
             this.showFaceboxForEdit(data);
         };
 
