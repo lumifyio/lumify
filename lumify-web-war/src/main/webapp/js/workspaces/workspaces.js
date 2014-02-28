@@ -243,9 +243,13 @@ define([
                         self.$node.html( workspacesTemplate({}) );
                         self.select('listSelector').html(
                             listTemplate({
-                                results: _.groupBy(_.map(workspaces, self.workspaceDataForItemRow.bind(self)), function(w) { 
-                                    return w.isSharedToUser ? 'shared' : 'mine';
-                                }),
+                                results: _.chain(workspaces)
+                                    .map(self.workspaceDataForItemRow.bind(self))
+                                    .sortBy(function(w) { return w.title.toLowerCase() })
+                                    .groupBy(function(w) { 
+                                        return w.isSharedToUser ? 'shared' : 'mine';
+                                    })
+                                    .value(),
                                 selected: self.workspaceId
                             })
                         );
