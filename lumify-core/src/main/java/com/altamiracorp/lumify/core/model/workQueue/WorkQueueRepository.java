@@ -16,21 +16,10 @@ public abstract class WorkQueueRepository {
 
     public static final String KEY_GRAPH_VERTEX_ID = "graphVertexId";
 
-    public static final String TEXT_HIGHLIGHT_QUEUE_NAME = "textHighlight";
-    public static final String USER_TEXT_HIGHLIGHT_QUEUE_NAME = "userTextHighlight";
     public static final String USER_IMAGE_QUEUE_NAME = "userImage";
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
     public static final String DOCUMENT_QUEUE_NAME = "document";
-
-    public void pushTextHighlight(final String artifactGraphVertexId) {
-        pushTextHighlight(artifactGraphVertexId, FlushFlag.DEFAULT);
-    }
-
-    public void pushTextHighlight(final String artifactGraphVertexId, FlushFlag flushFlag) {
-        checkNotNull(artifactGraphVertexId);
-        writeToQueue(TEXT_HIGHLIGHT_QUEUE_NAME, flushFlag, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
-    }
 
     public void pushText(final String artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
@@ -40,11 +29,6 @@ public abstract class WorkQueueRepository {
     public void pushProcessedVideo(final Object artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
         writeToQueue(PROCESSED_VIDEO_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId.toString()));
-    }
-
-    public void pushUserTextHighlight(final String artifactGraphVertexId) {
-        checkNotNull(artifactGraphVertexId);
-        writeToQueue(USER_TEXT_HIGHLIGHT_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, artifactGraphVertexId));
     }
 
     public void pushUserImageQueue(final String graphVertexId) {
