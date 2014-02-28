@@ -1,9 +1,13 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.config.SandboxLevel;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
 import com.google.common.base.Preconditions;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +23,13 @@ import java.io.IOException;
 public abstract class BaseRequestHandler implements Handler {
 
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+    private UserRepository userRepository;
+    private Configuration configuration;
+
+    protected BaseRequestHandler(UserRepository userRepository, Configuration configuration) {
+        this.userRepository = userRepository;
+        this.configuration = configuration;
+    }
 
     @Override
     public abstract void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception;
@@ -112,11 +123,23 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getWorkspaceId(final HttpServletRequest request) {
-        String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
-        if (workspaceId == null || workspaceId.trim().length() == 0) {
-            throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
+            String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
+            if (workspaceId == null || workspaceId.trim().length() == 0) {
+                throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+            }
+            return workspaceId;
         }
-        return workspaceId;
+        return null;
+    }
+
+    protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {
+        if (getConfiguration().getSandboxLevel() == SandboxLevel.WORKSPACE) {
+            String workspaceId = getWorkspaceId(request);
+            return getUserRepository().getAuthorizations(user, workspaceId);
+        } else {
+            return getUserRepository().getAuthorizations(user);
+        }
     }
 
     /**
@@ -175,5 +198,13 @@ public abstract class BaseRequestHandler implements Handler {
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while writing response", e);
         }
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

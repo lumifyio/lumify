@@ -1,24 +1,31 @@
 package com.altamiracorp.lumify.web.routes.resource;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
-
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import java.io.ByteArrayOutputStream;
+import org.apache.commons.io.IOUtils;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
+import java.io.ByteArrayOutputStream;
+
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
 
 public class ResourceGet extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public ResourceGet(final OntologyRepository ontologyRepository) {
+    public ResourceGet(
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
     }
 

@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -24,9 +26,12 @@ public class ArtifactImport extends BaseRequestHandler {
 
     private final FileImporter fileImporter;
 
-
     @Inject
-    public ArtifactImport(FileImporter fileImporter) {
+    public ArtifactImport(
+            final FileImporter fileImporter,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.fileImporter = fileImporter;
     }
 

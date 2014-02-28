@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.user;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -11,18 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class MeGet extends BaseRequestHandler {
-
-    private final UserRepository userRepository;
-
     @Inject
-    public MeGet(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public MeGet(
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Vertex userVertex = userRepository.findByUserName(user.getUsername());
+        Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
         if (userVertex == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;

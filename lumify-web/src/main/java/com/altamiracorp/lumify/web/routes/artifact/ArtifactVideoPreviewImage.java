@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -26,22 +27,22 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
     private final Graph graph;
     private final ArtifactThumbnailRepository artifactThumbnailRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public ArtifactVideoPreviewImage(
             final Graph graph,
             final ArtifactThumbnailRepository artifactThumbnailRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 

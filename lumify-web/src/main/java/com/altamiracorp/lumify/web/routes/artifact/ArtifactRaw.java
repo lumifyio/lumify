@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
 import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -41,14 +42,14 @@ public class ArtifactRaw extends BaseRequestHandler {
     )));
 
     private final Graph graph;
-    private final UserRepository userRepository;
 
     @Inject
     public ArtifactRaw(
             final Graph graph,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         boolean videoPlayback = getOptionalParameter(request, "playback") != null;
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
 

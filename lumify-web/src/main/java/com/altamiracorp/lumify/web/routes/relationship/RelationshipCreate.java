@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -27,8 +26,6 @@ public class RelationshipCreate extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
-    private final UserRepository userRepository;
-    private final Configuration configuration;
     private final VisibilityTranslator visibilityTranslator;
 
     @Inject
@@ -39,12 +36,11 @@ public class RelationshipCreate extends BaseRequestHandler {
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
-        this.userRepository = userRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.configuration = configuration;
     }
 
     @Override
@@ -54,15 +50,10 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
         final String visibilitySource = getOptionalParameter(request, "visibilitySource"); // TODO change this to required when the front end is complete
 
-        String workspaceId;
-        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
-            workspaceId = getWorkspaceId(request);
-        } else {
-            workspaceId = null;
-        }
+        String workspaceId = getWorkspaceId(request);
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
         String relationshipDisplayName = ontologyRepository.getDisplayNameForLabel(predicateLabel);
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);

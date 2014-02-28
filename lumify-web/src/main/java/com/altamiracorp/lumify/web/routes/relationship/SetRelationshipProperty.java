@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
@@ -30,8 +29,6 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
-    private final UserRepository userRepository;
-    private final Configuration configuration;
     private VisibilityTranslator visibilityTranslator;
 
     @Inject
@@ -42,12 +39,11 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final UserRepository userRepository,
             final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.userRepository = userRepository;
-        this.configuration = configuration;
     }
 
     @Override
@@ -61,12 +57,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
-        String workspaceId;
-        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
-            workspaceId = getWorkspaceId(request);
-        } else {
-            workspaceId = null;
-        }
+        String workspaceId = getWorkspaceId(request);
 
         final JSONObject sourceJson;
         if (sourceInfo != null) {
@@ -76,7 +67,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {

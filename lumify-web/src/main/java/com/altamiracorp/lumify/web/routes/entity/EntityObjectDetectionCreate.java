@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -25,7 +26,6 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public EntityObjectDetectionCreate(
@@ -33,12 +33,13 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
             final Graph graphRepository,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.entityHelper = entityHelper;
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class EntityObjectDetectionCreate extends BaseRequestHandler {
 
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);

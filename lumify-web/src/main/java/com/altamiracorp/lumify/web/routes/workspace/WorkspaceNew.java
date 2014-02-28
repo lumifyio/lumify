@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
@@ -20,18 +21,20 @@ public class WorkspaceNew extends BaseRequestHandler {
     private static final String DEFAULT_WORKSPACE_TITLE = "Default";
 
     private final WorkspaceRepository workspaceRepository;
-    private final UserRepository userRepository;
 
     @Inject
-    public WorkspaceNew(final WorkspaceRepository workspaceRepository, final UserRepository userRepository) {
+    public WorkspaceNew(
+            final WorkspaceRepository workspaceRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.workspaceRepository = workspaceRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User authUser = getUser(request);
-        Vertex user = userRepository.findByUserName(authUser.getUsername());
+        Vertex user = getUserRepository().findByUserName(authUser.getUsername());
 
         String title = getOptionalParameter(request, "title");
 

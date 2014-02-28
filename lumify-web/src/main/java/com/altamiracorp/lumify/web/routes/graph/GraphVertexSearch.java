@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -37,17 +38,17 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
-    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
     public GraphVertexSearch(
             final OntologyRepository ontologyRepository,
             final Graph graph,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         long startTime = System.nanoTime();
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -78,7 +79,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         LOGGER.debug("search %s\n%s", query, filterJson.toString(2));
 
-        Query graphQuery = null;
+        Query graphQuery;
         if (relatedToVertexId == null) {
             graphQuery = graph.query(query, authorizations);
         } else if (query == null || StringUtils.isBlank(query)) {

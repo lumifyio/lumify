@@ -1,9 +1,11 @@
 package com.altamiracorp.lumify.web.routes.ontology;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Relationship;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -17,8 +19,12 @@ public class Ontology extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public Ontology(final OntologyRepository repo) {
-        ontologyRepository = repo;
+    public Ontology(
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override

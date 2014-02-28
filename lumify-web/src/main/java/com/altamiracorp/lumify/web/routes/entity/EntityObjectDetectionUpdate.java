@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.ingest.ArtifactDetectedObject;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -25,7 +26,6 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
     private final EntityHelper entityHelper;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public EntityObjectDetectionUpdate(
@@ -33,12 +33,13 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
             final EntityHelper entityHelper,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class EntityObjectDetectionUpdate extends BaseRequestHandler {
         //TODO set visibility
         Visibility visibility = new Visibility("");
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String sign = getRequiredParameter(request, "sign");

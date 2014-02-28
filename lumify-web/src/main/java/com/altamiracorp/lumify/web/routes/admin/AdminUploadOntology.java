@@ -1,6 +1,8 @@
 package com.altamiracorp.lumify.web.routes.admin;
 
 import com.altamiracorp.lumify.core.cmdline.OwlImport;
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -30,7 +32,11 @@ public class AdminUploadOntology extends BaseRequestHandler {
     private final OwlImport owlImport;
 
     @Inject
-    public AdminUploadOntology(OwlImport owlImport) {
+    public AdminUploadOntology(
+            final OwlImport owlImport,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.owlImport = owlImport;
     }
 

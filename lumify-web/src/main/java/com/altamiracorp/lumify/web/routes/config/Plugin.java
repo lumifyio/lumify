@@ -1,19 +1,17 @@
 package com.altamiracorp.lumify.web.routes.config;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Responder;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileReader;
 
 public class Plugin extends BaseRequestHandler {
     private static final String WEB_PLUGINS_PREFIX = "web.plugins.";
@@ -21,18 +19,18 @@ public class Plugin extends BaseRequestHandler {
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Plugin.class);
 
-    private final com.altamiracorp.lumify.core.config.Configuration configuration;
-
     @Inject
-    public Plugin(final com.altamiracorp.lumify.core.config.Configuration configuration) {
-        this.configuration = configuration;
+    public Plugin(
+            final UserRepository userRepository,
+            final com.altamiracorp.lumify.core.config.Configuration configuration) {
+        super(userRepository, configuration);
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String pluginName = getAttributeString(request, "pluginName");
         final String configurationKey = WEB_PLUGINS_PREFIX + pluginName;
-        String pluginPath = configuration.get(configurationKey, null);
+        String pluginPath = getConfiguration().get(configurationKey, null);
 
         // Default behavior if not customized
         if (pluginPath == null) {

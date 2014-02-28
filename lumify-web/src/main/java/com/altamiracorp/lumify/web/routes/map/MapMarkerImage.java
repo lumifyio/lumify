@@ -1,10 +1,10 @@
 package com.altamiracorp.lumify.web.routes.map;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
-
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -14,16 +14,20 @@ import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
-import java.awt.Graphics2D;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.MAP_GLYPH_ICON;
 
 public class MapMarkerImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
@@ -34,7 +38,11 @@ public class MapMarkerImage extends BaseRequestHandler {
             .build();
 
     @Inject
-    public MapMarkerImage(final OntologyRepository ontologyRepository) {
+    public MapMarkerImage(
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
     }
 

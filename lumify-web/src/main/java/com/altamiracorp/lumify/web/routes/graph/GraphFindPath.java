@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.graph;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -18,18 +19,20 @@ import javax.servlet.http.HttpServletResponse;
 
 public class GraphFindPath extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
 
     @Inject
-    public GraphFindPath(final Graph graph, final UserRepository userRepository) {
+    public GraphFindPath(
+            final Graph graph,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");

@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.user;
 
+import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.AuthenticationProvider;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -13,13 +15,17 @@ public class Login extends BaseRequestHandler {
     private final AuthenticationProvider authenticationProvider;
 
     @Inject
-    public Login(final AuthenticationProvider authenticationProvider) {
+    public Login(
+            final AuthenticationProvider authenticationProvider,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.authenticationProvider = authenticationProvider;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        if(authenticationProvider.login(request)){
+        if (authenticationProvider.login(request)) {
             JSONObject json = new JSONObject();
             json.put("status", "OK");
             respondWithJson(response, json);

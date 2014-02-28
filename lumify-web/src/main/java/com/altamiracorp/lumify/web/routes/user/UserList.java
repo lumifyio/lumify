@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.user;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -13,16 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UserList extends BaseRequestHandler {
-    private final UserRepository userRepository;
-
     @Inject
-    public UserList(final UserRepository repo) {
-        this.userRepository = repo;
+    public UserList(
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        Iterable<Vertex> users = userRepository.findAll();
+        Iterable<Vertex> users = getUserRepository().findAll();
 
         JSONObject resultJson = new JSONObject();
         JSONArray usersJson = getJson(users);

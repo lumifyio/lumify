@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.relationship;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
@@ -9,11 +10,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -26,18 +23,18 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
-    private final UserRepository userRepository;
 
     @Inject
     public DeleteRelationshipProperty(
             final OntologyRepository ontologyRepository,
             final Graph graph,
             final AuditRepository auditRepository,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         final String edgeId = getRequiredParameter(request, "edgeId");
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {

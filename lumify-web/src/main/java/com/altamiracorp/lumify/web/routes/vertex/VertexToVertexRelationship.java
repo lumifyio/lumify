@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -13,18 +14,20 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 
 public class VertexToVertexRelationship extends BaseRequestHandler {
     private final Graph graph;
-    private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
 
     @Inject
-    public VertexToVertexRelationship(final OntologyRepository ontologyRepo, final Graph graph, final UserRepository userRepository) {
-        ontologyRepository = ontologyRepo;
+    public VertexToVertexRelationship(
+            final OntologyRepository ontologyRepository,
+            final Graph graph,
+            final UserRepository userRepository,
+            final Configuration configuration) {
+        super(userRepository, configuration);
+        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
         final String id = getRequiredParameter(request, "id");
 
         User user = getUser(request);
-        Authorizations authorizations = userRepository.getAuthorizations(user);
+        Authorizations authorizations = getAuthorizations(request, user);
 
         Vertex sourceVertex = graph.getVertex(source, authorizations);
         Vertex targetVertex = graph.getVertex(target, authorizations);
@@ -66,9 +69,7 @@ public class VertexToVertexRelationship extends BaseRequestHandler {
     private JSONObject resultsToJson(String id, Vertex vertex) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id", id);
-        Iterator<Property> properties = vertex.getProperties().iterator();
-        while (properties.hasNext()) {
-            Property property = properties.next();
+        for (Property property : vertex.getProperties()) {
             json.put(property.getName(), vertex.getPropertyValue(property.getName(), 0));
         }
 
