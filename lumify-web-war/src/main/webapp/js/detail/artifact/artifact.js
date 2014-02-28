@@ -141,10 +141,9 @@ define([
             var self = this;
             this.videoTranscript = vertex.videoTranscript;
             this.videoDuration = vertex.videoDuration;
-
-            if (vertex.properties._detectedObjects) {
-                vertex.properties._detectedObjects.value = JSON.parse(vertex.properties._detectedObjects.value).sort(function(a, b){
-                    var aX = a.x1, bX = b.x1;
+            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
+                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
+                    var aX = a.value.x1, bX = b.value.x1;
                     return aX - bX;
                 });
             }
@@ -221,7 +220,7 @@ define([
 
             $target.closest('.label-info').parent().addClass('focused');
             info.existing = true;
-            this.trigger('DetectedObjectEdit', info);
+            this.trigger('DetectedObjectEdit', info.value);
             this.showForm(info, this.attr.data, $target);
         };
 
@@ -290,7 +289,7 @@ define([
 
             this.trigger(
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
-                info
+                info.value
             );
         };
 
@@ -319,24 +318,15 @@ define([
             if ($('.detected-object-labels .underneath').length === 0) {
                 TermForm.teardownAll ();
             }
+
             var root = $('<div class="underneath">').insertAfter($target.closest('.type-content').find('.detected-object-labels'));
-            var resolvedVertex = {
-                graphVertexId: dataInfo.graphVertexId,
-                _rowKey: dataInfo._rowKey,
-                _conceptType: dataInfo._conceptType,
-                title: dataInfo.title
-            };
+            var resolvedVertex = dataInfo.value.entityVertex;
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,
-                x1: dataInfo.x1,
-                y1: dataInfo.y1,
-                x2: dataInfo.x2,
-                y2: dataInfo.y2,
-                graphVertexId: dataInfo.graphVertexId,
-                detectedObjectId: dataInfo.detectedObjectId,
+                dataInfo: dataInfo,
                 resolvedVertex: resolvedVertex,
-                existing: dataInfo.existing || dataInfo.graphVertexId || dataInfo.detectedObjectId ? true : false,
+                existing: dataInfo.existing || resolvedVertex.id ? true : false,
                 detectedObject: true
             });
         };

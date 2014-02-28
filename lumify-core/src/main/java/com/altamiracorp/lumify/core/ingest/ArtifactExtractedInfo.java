@@ -302,23 +302,12 @@ public class ArtifactExtractedInfo {
         return (String) properties.get(AUDIO_HDFS_PATH);
     }
 
-    public void setDetectedObjects(String detectedObjectsJsonString) {
-        set(DETECTED_OBJECTS, detectedObjectsJsonString);
+    public void setDetectedObjects(List<ArtifactDetectedObject> detectedObjects) {
+        properties.put(DETECTED_OBJECTS, detectedObjects);
     }
 
-    /**
-     * Builder pattern for detectedObjects property
-     *
-     * @param detectedObjectsJson the JSON-serialized detected objects
-     * @return this
-     */
-    public ArtifactExtractedInfo detectedObjects(final String detectedObjectsJson) {
-        setDetectedObjects(detectedObjectsJson);
-        return this;
-    }
-
-    public String getDetectedObjects() {
-        return (String) properties.get(DETECTED_OBJECTS);
+    public List<ArtifactDetectedObject> getDetectedObjects() {
+        return (List<ArtifactDetectedObject>) properties.get(DETECTED_OBJECTS);
     }
 
     public void setVideoTranscript(VideoTranscript videoTranscript) {

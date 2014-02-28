@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.util;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrame;
@@ -20,6 +21,7 @@ public class ModelUtil {
             VideoFrame.TABLE_NAME,
             DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
+            DetectedObjectModel.TABLE_NAME,
             // TODO refactor to config file info. But since this is only for development this is low priority
             "atc_securegraph_d",
             "atc_securegraph_v",
