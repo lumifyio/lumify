@@ -1,4 +1,8 @@
-var utils = {
+var tagChaiAssertionError = function(err) {
+    err.retriable = true;
+    throw err;
+},
+utils = {
 
     url: 'https://localhost:8443',
     username: 'selenium',
@@ -83,9 +87,28 @@ var utils = {
 
     },
 
+    assertions: {
+        includesText: function(text) {
+            console.log('checking for ', text)
+            return this
+                .text().should.eventually.include(text)
+                .catch(tagChaiAssertionError);
+        }
+    },
+
     initializeMethods: function(wd) {
         for (var method in utils.addMethods) {
             wd.addPromiseChainMethod(method, utils.addMethods[method].bind(this));
+        }
+
+        for (var assertion in utils.assertions) {
+            var a = utils.assertions[assertion]
+            utils.assertions[assertion] = function() {
+                var args = arguments;
+                return new wd.Asserter(function(el) {
+                    return a.apply(el, args);
+                })
+            }
         }
     },
 
