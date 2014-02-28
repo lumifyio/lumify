@@ -1,5 +1,8 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
+import com.altamiracorp.lumify.core.EntityHighlighter;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -13,22 +16,26 @@ import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.HIGHLIGHTED_TEXT;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.TEXT;
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
     private final Graph graph;
     private final UserRepository userRepository;
+    private final TermMentionRepository termMentionRepository;
+    private final EntityHighlighter entityHighlighter;
 
     @Inject
     public ArtifactHighlightedText(
             final Graph graph,
-            final UserRepository userRepository) {
+            final UserRepository userRepository,
+            final TermMentionRepository termMentionRepository,
+            final EntityHighlighter entityHighlighter) {
         this.graph = graph;
         this.userRepository = userRepository;
+        this.termMentionRepository = termMentionRepository;
+        this.entityHighlighter = entityHighlighter;
     }
 
     @Override
@@ -42,28 +49,26 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        OutputStream out = response.getOutputStream();
 
-        StreamingPropertyValue textValue = HIGHLIGHTED_TEXT.getPropertyValue(artifactVertex);
-        if (textValue == null) {
-            textValue = TEXT.getPropertyValue(artifactVertex);
-            if (textValue == null) {
-                response.sendError(HttpServletResponse.SC_NO_CONTENT);
-                return;
-            }
+        String highlightedText;
+        String text = getText(artifactVertex);
+        if (text == null) {
+            highlightedText = "";
+        } else {
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(artifactVertex.getId().toString(), user);
+            highlightedText = entityHighlighter.getHighlightedText(text, termMentions, authorizations);
         }
-        InputStream in = textValue.getInputStream();
-        if (in == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        response.getOutputStream().print(highlightedText);
+    }
+
+    private String getText(Vertex artifactVertex) throws IOException {
+        StreamingPropertyValue textPropertyValue = TEXT.getPropertyValue(artifactVertex);
+        if (textPropertyValue == null) {
+            return "";
         }
-        try {
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            IOUtils.copy(in, out);
-        } finally {
-            in.close();
-        }
-        out.close();
+        return IOUtils.toString(textPropertyValue.getInputStream());
     }
 }
