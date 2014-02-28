@@ -7,17 +7,19 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+    private final String[] authorizations;
     private String username;
     private String userId;
     private String currentWorkspace;
     private ModelUserContext modelUserContext;
     private UserType userType;
 
-    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType) {
+    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, String[] authorizations, UserType userType) {
         this.userId = userId;
         this.username = username;
         this.currentWorkspace = currentWorkspace;
         this.modelUserContext = modelUserContext;
+        this.authorizations = authorizations;
         this.userType = userType;
     }
 
@@ -43,5 +45,9 @@ public class User implements Serializable {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public String[] getAuthorizations() {
+        return authorizations;
     }
 }
