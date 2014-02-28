@@ -226,7 +226,8 @@ define([
                     y1: parseFloat(this.attr.dataInfo.value.y1),
                     x2: parseFloat(this.attr.dataInfo.value.x2),
                     y2: parseFloat(this.attr.dataInfo.value.y2),
-                    existing: !!this.currentGraphVertexId
+                    existing: !!this.currentGraphVertexId,
+                    visibilitySource: this.visibilitySource || ''
                 };
 
             _.defer(this.buttonLoading.bind(this));

@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -30,6 +31,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final ModelSession modelSession;
+    private final VisibilityTranslator visibilityTranslator;
 
     @Inject
     public UnresolveDetectedObject(
@@ -38,22 +40,24 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final UserRepository userRepository,
             final DetectedObjectRepository detectedObjectRepository,
-            final ModelSession modelSession) {
+            final ModelSession modelSession,
+            final VisibilityTranslator visibilityTranslator) {
         this.graph = graph;
         this.entityHelper = entityHelper;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.modelSession = modelSession;
+        this.visibilityTranslator = visibilityTranslator;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        // TODO set visibility
-        Visibility visibility = new Visibility("");
         final String rowKey = getRequiredParameter(request, "rowKey");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
 
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
