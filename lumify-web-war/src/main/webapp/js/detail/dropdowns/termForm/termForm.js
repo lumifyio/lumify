@@ -220,12 +220,12 @@ define([
                     title: newSign,
                     conceptId: this.select('conceptSelector').val(),
                     graphVertexId: this.attr.resolvedVertex ? this.attr.resolvedVertex.id : this.currentGraphVertexId,
-                    rowKey: this.attr.dataInfo.value._rowKey,
+                    rowKey: this.attr.dataInfo._rowKey,
                     artifactId: this.attr.artifactData.id,
-                    x1: parseFloat(this.attr.dataInfo.value.x1),
-                    y1: parseFloat(this.attr.dataInfo.value.y1),
-                    x2: parseFloat(this.attr.dataInfo.value.x2),
-                    y2: parseFloat(this.attr.dataInfo.value.y2),
+                    x1: parseFloat(this.attr.dataInfo.x1),
+                    y1: parseFloat(this.attr.dataInfo.y1),
+                    x2: parseFloat(this.attr.dataInfo.x2),
+                    y2: parseFloat(this.attr.dataInfo.y2),
                     existing: !!this.currentGraphVertexId,
                     visibilitySource: this.visibilitySource || ''
                 };
@@ -244,13 +244,14 @@ define([
             this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
                     var resolvedVertex = data.entityVertex;
-
                     var $focused = $('.focused');
                     var $tag;
+                    delete data.entityVertex;
+                    var result = $.extend(data,resolvedVertex);
                     if ($focused) {
                         $tag = $focused.find('.label-info');
 
-                        $tag.text(data.entityVertex.properties.title.value).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
+                        $tag.text(resolvedVertex.properties.title.value).removeAttr('data-info').data('info', result).removePrefixedClasses('conceptType-');
                         $tag.addClass('resolved entity conceptType-' + resolvedVertex.properties._conceptType.value);
 
                         $focused.removeClass('focused');
@@ -387,9 +388,9 @@ define([
                 }
             } else {
                 data = this.attr.resolvedVertex;
-                objectSign = data ? data.properties.title.value : '';
+                objectSign = data.properties ? data.properties.title.value : '';
                 existingEntity = this.attr.existing;
-                graphVertexId = data ? data.id : '';
+                graphVertexId = data.id
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 
@@ -432,7 +433,7 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon.value);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = (vertex && vertex.properties._conceptType.value) || conceptId;
+                    var conceptType = (vertex && vertex._conceptType.value) || conceptId;
                     if (conceptType) {
                         var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {

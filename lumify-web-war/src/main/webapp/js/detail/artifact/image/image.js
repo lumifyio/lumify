@@ -183,17 +183,23 @@ define([
         this.onHoverLeave = function(event, data) {
             var toHide = this.select('boxSelector');
 
-            if (this.currentlyEditing === 0 || this.currentlyEditing) {
+            if (this.currentlyEditing) {
                 toHide = toHide.not('.editing');
             }
 
-            toHide.hide();
+            if (data.id !== this.currentlyEditing){
+                toHide.hide();
+            }
         };
 
         this.onEdit = function(event, data) {
-            if (this.currentlyEditing && data.graphVertexId === this.currentlyEditing) return;
-            this.currentlyEditing = !data.graphVertexId ? data._rowKey : data.graphVertexId;
-            this.showFaceboxForEdit(data);
+            if (data.id) {
+                this.currentlyEditing = data.id;
+                this.showFacebox(data);
+            } else {
+                this.currentlyEditing = data._rowKey;
+                this.showFaceboxForEdit(data);
+            }
         };
 
         this.onDoneEditing = function(event) {

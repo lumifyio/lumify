@@ -829,7 +829,7 @@ define([
 
                         // Highlighted entities (legacy info)
                         var info = a.data('info') || a.closest('li').data('info');
-                        if (info && info.graphVertexId) {
+                        if (info && (info.graphVertexId || info.id)) {
 
                             var properties = {};
                             _.keys(info).forEach(function(key) {
@@ -839,10 +839,10 @@ define([
                                 };
                             });
                             self.updateCacheWithVertex({
-                                id: info.graphVertexId,
+                                id: info.graphVertexId || info.id,
                                 properties: properties
                             });
-                            id = info.graphVertexId;
+                            id = info.graphVertexId || info.id;
                         } 
                         
                         if (!id) return console.error('No data-vertex-id attribute for draggable element found', a[0]);

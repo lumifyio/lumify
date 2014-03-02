@@ -16,6 +16,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
+import org.apache.hadoop.hdfs.web.JsonUtil;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,14 +68,13 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         ElementMutation<Vertex> resolvedVertexMutation;
         DetectedObjectModel detectedObjectModel;
+        Object id = graph.getIdGenerator().nextId();
         if (rowKey != null) {
-            DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
-            resolvedVertexMutation = graph.prepareVertex(detectedObjectRowKey.getId(), visibility, authorizations);
+            resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
             detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
-            detectedObjectModel.getMetadata().setResolvedId(detectedObjectRowKey.getId(), visibility);
+            detectedObjectModel.getMetadata().setResolvedId(id, visibility);
             detectedObjectRepository.save(detectedObjectModel);
         } else {
-            Object id = graph.getIdGenerator().nextId();
             detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Long.getLong(x1), Long.getLong(y1), Long.getLong(x2), Long.getLong(y2), true, visibility);
             resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
         }
