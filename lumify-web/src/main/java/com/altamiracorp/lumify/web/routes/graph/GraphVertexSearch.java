@@ -131,14 +131,12 @@ public class GraphVertexSearch extends BaseRequestHandler {
                 Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(vertex.getId().toString(), user).iterator();
                 JSONArray detectedObjects = new JSONArray();
                 while (detectedObjectModels.hasNext()) {
-                    JSONObject detectedObject = new JSONObject();
                     DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
                     JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
                     if (detectedObjectModel.getMetadata().getResolvedId() != null) {
                         detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
                     }
-                    detectedObject.put("value", detectedObjectModelJson);
-                    detectedObjects.put(detectedObject);
+                    detectedObjects.put(detectedObjectModelJson);
                 }
                 vertices.getJSONObject(verticesCount).put("detectedObjects", detectedObjects);
             }

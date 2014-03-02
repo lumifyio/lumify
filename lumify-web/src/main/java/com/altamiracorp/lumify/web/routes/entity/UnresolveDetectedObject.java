@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -31,6 +32,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     private final DetectedObjectRepository detectedObjectRepository;
     private final ModelSession modelSession;
     private final VisibilityTranslator visibilityTranslator;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public UnresolveDetectedObject(
@@ -39,18 +41,21 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final UserRepository userRepository,
             final DetectedObjectRepository detectedObjectRepository,
             final ModelSession modelSession,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final OntologyRepository ontologyRepository) {
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.modelSession = modelSession;
         this.visibilityTranslator = visibilityTranslator;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String rowKey = getRequiredParameter(request, "rowKey");
+        final String artifactId = getRequiredParameter(request, "artifactId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         User user = getUser(request);
         Authorizations authorizations = userRepository.getAuthorizations(user);
@@ -59,21 +64,11 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
         Object resolvedId = detectedObjectModel.getMetadata().getResolvedId();
-        Object artifactId = detectedObjectRowKey.getVertexId();
 
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
 
         JSONObject result = new JSONObject();
-        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(resolvedVertex, Direction.BOTH, authorizations);
-        if (IterableUtils.count(edgeIds) == 1) {
-            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
-            graph.removeEdge(edge, authorizations);
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, edge.getLabel(), "", "", user, visibility);
-            result.put("deleteEdge", true);
-            result.put("edgeId", edge.getId());
-        }
-
         // Clean up term mentions if system analytics wasn't performed on term
         String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
         String columnName = detectedObjectModel.getMetadata().RESOLVED_ID;
@@ -84,22 +79,30 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         } else {
             detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
             modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
-
             result = detectedObjectModel.toJson();
+        }
+
+        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(resolvedVertex, Direction.BOTH, authorizations);
+        if (IterableUtils.count(edgeIds) == 1) {
+            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
+            graph.removeEdge(edge, authorizations);
+            String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
+            result.put("deleteEdge", true);
+            result.put("edgeId", edge.getId());
+            graph.flush();
         }
 
         JSONObject artifactJson = GraphUtil.toJson(artifactVertex);
         Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(artifactId.toString(), user).iterator();
         JSONArray detectedObjects = new JSONArray();
         while (detectedObjectModels.hasNext()) {
-            JSONObject detectedObject = new JSONObject();
             DetectedObjectModel model = detectedObjectModels.next();
             JSONObject detectedObjectModelJson = model.toJson();
-            if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+            if (model.getMetadata().getResolvedId() != null) {
                 detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations)));
             }
-            detectedObject.put("value", detectedObjectModelJson);
-            detectedObjects.put(detectedObject);
+            detectedObjects.put(detectedObjectModelJson);
         }
         artifactJson.put("detectedObjects", detectedObjects);
         result.put("artifactVertex", artifactJson);
