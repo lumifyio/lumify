@@ -69,13 +69,12 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
 
         JSONObject result = new JSONObject();
-        // Clean up term mentions if system analytics wasn't performed on term
         String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
         String columnName = detectedObjectModel.getMetadata().RESOLVED_ID;
-        String classiferConcept = detectedObjectModel.getMetadata().getClassiferConcept();
 
-        if (classiferConcept == null) {
+        if (detectedObjectModel.getMetadata().getProcess() == null) {
             modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectRowKey, user.getModelUserContext());
+            result.put("deleteTag", true);
         } else {
             detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
             modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
