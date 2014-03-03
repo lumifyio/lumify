@@ -2,8 +2,9 @@
 define([
     'flight/lib/component',
     'tpl!./image',
+    'data',
     'util/retina'
-], function(defineComponent, template, retina) {
+], function(defineComponent, template, appData, retina) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
@@ -53,16 +54,13 @@ define([
         });
 
         this.srcForGlyphIconUrl = function(url) {
-            return url ? url.replace(/\/thumbnail$/, '/raw') : '';
+            return url ? url.replace(/\/thumbnail/, '/raw') : '';
         };
 
         this.updateImageBackground = function(src) {
-            var _glyphIconProperty = this.attr.data.properties._glyphIcon;
-
-            this.$node.css({
-                backgroundImage: 'url("' + (src || this.srcForGlyphIconUrl(_glyphIconProperty && _glyphIconProperty.value) || this.attr.defaultIconSrc) + '")'
-            });
-            this.$node.toggleClass('custom-image', !!(src || this.attr.data.properties._glyphIcon));
+            this.$node
+                .css({ backgroundImage: 'url("' + this.srcForGlyphIconUrl(src || this.attr.data.imageSrc) + '")' })
+                .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
         };
 
         this.onFileChange = function(e) {
@@ -91,7 +89,7 @@ define([
         this.onUpdateIcon = function(e, data) {
             var src = this.srcForGlyphIconUrl(data.src);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.properties._glyphIcon.value)) {
+            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageSrc)) {
                 this.updateImageBackground(src);
             }
         };
@@ -123,7 +121,8 @@ define([
             xhr.onload = function(event) {
                 if (xhr.status === 200) {
                     var result = JSON.parse(xhr.responseText);
-                    self.trigger('filecomplete', { vertex:result });
+                    var vertex = appData.updateCacheWithVertex(result);
+                    self.trigger('filecomplete', { vertex:vertex });
                 } else {
                     self.trigger('fileerror', { status:xhr.status, response:xhr.responseText });
                 }
@@ -200,7 +199,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.properties._glyphIcon.value));
+            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageSrc));
             
             this.trigger(document, 'updateVertices', { vertices:[data.vertex] });
         };

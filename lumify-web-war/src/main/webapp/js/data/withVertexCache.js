@@ -100,6 +100,9 @@ define([
 
 
         function setPreviewsForVertex(vertex) {
+            var vId = encodeURIComponent(vertex.id),
+                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>");
+
             vertex.imageSrcIsFromConcept = false;
 
             if (vertex.properties._glyphIcon) {
@@ -108,13 +111,14 @@ define([
                 switch (vertex.concept.displayType) {
 
                     case 'image': 
-                        vertex.imageSrc = '/artifact/' + vertex.id + '/thumbnail';
-                        vertex.imageRawSrc = '/artifact/' + vertex.id + '/raw';
+                        vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         break;
 
                     case 'video': 
-                        vertex.imageSrc = '/artifact/' + vertex.id + '/poster-frame';
-                        vertex.imageFramesSrc = '/artifact/' + vertex.id + '/video-preview';
+                        vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
+                        vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
                         break;
 
                     default:
