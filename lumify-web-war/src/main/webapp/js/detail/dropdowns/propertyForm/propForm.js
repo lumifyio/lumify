@@ -130,7 +130,7 @@ define([
             justification.teardownAllComponents();
 
             var vertexProperty = this.attr.data.properties[propertyName],
-                previousValue = vertexProperty && vertexProperty.value,
+                previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty._visibility,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 

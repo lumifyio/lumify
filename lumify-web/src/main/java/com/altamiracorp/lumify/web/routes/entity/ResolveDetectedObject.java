@@ -16,6 +16,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
+import org.apache.hadoop.hdfs.web.JsonUtil;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String rowKey = getOptionalParameter(request, "rowKey");
+        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         String x1 = getRequiredParameter(request, "x1"), x2 = getRequiredParameter(request, "x2"),
                 y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
 
@@ -64,29 +66,31 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-
+        Vertex resolvedVertex;
         ElementMutation<Vertex> resolvedVertexMutation;
         DetectedObjectModel detectedObjectModel;
+        Object id = graphVertexId != null && !graphVertexId.equals("") ? graphVertexId : graph.getIdGenerator().nextId();
+
         if (rowKey != null) {
-            DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
-            resolvedVertexMutation = graph.prepareVertex(detectedObjectRowKey.getId(), visibility, authorizations);
             detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
-            detectedObjectModel.getMetadata().setResolvedId(detectedObjectRowKey.getId(), visibility);
+            detectedObjectModel.getMetadata().setResolvedId(id, visibility);
             detectedObjectRepository.save(detectedObjectModel);
         } else {
-            Object id = graph.getIdGenerator().nextId();
-            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Long.getLong(x1), Long.getLong(y1), Long.getLong(x2), Long.getLong(y2), true, visibility);
-            resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
+            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, visibility);
         }
 
+        if (graphVertexId == null || graphVertexId.equals("")) {
+            resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
+            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), visibility);
+            TITLE.setProperty(resolvedVertexMutation, title, visibility);
+
+            resolvedVertex = resolvedVertexMutation.save();
+            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
+
+        } else {
+            resolvedVertex = graph.getVertex(id, authorizations);
+        }
         JSONObject result = detectedObjectModel.toJson();
-
-        CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), visibility);
-        TITLE.setProperty(resolvedVertexMutation, title, visibility);
-
-        Vertex resolvedVertex = resolvedVertexMutation.save();
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
-
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex));
 
         graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, authorizations);

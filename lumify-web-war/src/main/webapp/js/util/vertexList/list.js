@@ -6,19 +6,13 @@ define([
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
-    'util/previews',
     'util/video/scrubber',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
-], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, previews, VideoScrubber) {
+], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, VideoScrubber) {
     'use strict';
 
     return defineComponent(List);
-
-    function hasPreview(vertex) {
-        return (/^(image|video)$/).test(vertex.concept.displayType) || 
-            !!vertex.properties._glyphIcon;
-    }
 
     function List() {
 
@@ -54,7 +48,7 @@ define([
                 if ( vertexState.inGraph ) classes.push('graph-displayed');
                 if ( vertexState.inMap ) classes.push('map-displayed');
 
-                if (hasPreview(v)) {
+                if (!v.imageSrcIsFromConcept) {
                     classes.push('has_preview');
                 }
 
@@ -246,9 +240,6 @@ define([
             var self = this;
 
             this.disableHover = false;
-            if ( !this.previewQueue ) {
-                this.previewQueue = previews.createQueue('vertexList', { maxConcurrent: 1 });
-            }
 
             var lisVisible = this.$node.find('.nav-list').children('li');
             if (this.scrollNode.length) {
@@ -259,34 +250,20 @@ define([
                 var li = $(this),
                     vertex = appData.vertex(li.data('vertexId'));
                 
-                if (!vertex) return;
+                if (vertex && !vertex.imageSrcIsFromConcept && !li.data('previewLoaded')) {
 
-                if (hasPreview(vertex) && !li.data('preview-loaded')) {
+                    var preview = li.data('previewLoaded', true)
+                                    .find('.preview');
 
-                        if (li.data('previewloaded')) return;
-
-                        li.data('previewloaded', true).addClass('preview-loading');
-
-                        if (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) {
-                            li.removeClass('preview-loading')
-                                .data('preview-loaded', true)
-                                .find('.preview').html("<img src='" + vertex.properties._glyphIcon.value + "' />");
-                        } else {
-                            previews.generatePreview(vertex, { width: 200 }, function(poster, frames) {
-                                li.removeClass('preview-loading')
-                                  .data('preview-loaded', true);
-
-                                if(vertex.concept.displayType === 'video') {
-                                    VideoScrubber.attachTo(li.find('.preview'), {
-                                        posterFrameUrl: poster,
-                                        videoPreviewImageUrl: frames
-                                    });
-                                } else if(vertex.concept.displayType === 'image') {
-                                    li.find('.preview').html("<img src='" + poster + "' />");
-                                }
-                            });
-                        }
+                    if (vertex.imageFramesSrc) { 
+                        VideoScrubber.attachTo(preview, {
+                            posterFrameUrl: vertex.imageSrc,
+                            videoPreviewImageUrl: vertex.imageFramesSrc
+                        });
+                    } else {
+                        preview.html("<img src='" + vertex.imageSrc + "' />");
                     }
+                }
             });
         };
 
@@ -357,19 +334,18 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) ||
-                        (
-                            vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
-                            vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null
-                        );
+                    src = vertex.imageSrc,
+                    showImageSrc = src && !vertex.imageSrcIsFromConcept;
 
-                if (src) {
-                    $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
-                }
+                if (currentAnchor.length) {
+                    if (showImageSrc) {
+                        $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
+                    }
 
-                var newHtml = newAnchor.html();
-                if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', !!src);
+                    var newHtml = newAnchor.html();
+                    if (currentAnchor.length && newHtml !== currentHtml) {
+                        currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', showImageSrc);
+                    }
                 }
             });
         };

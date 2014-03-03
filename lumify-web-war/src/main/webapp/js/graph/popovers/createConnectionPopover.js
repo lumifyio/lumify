@@ -45,12 +45,6 @@ define([
                 select.html('<option>Loading...</option>');
                 button.text('Connect').attr('disabled', true).focus();
 
-                require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
-                    Visibility.attachTo(self.$node.find('.visibility'), {
-                        value: ''
-                    });
-                    self.positionDialog();
-                });
                 this.on('visibilitychange', this.onVisibilityChange);
 
                 this.getRelationshipLabels(
@@ -66,6 +60,13 @@ define([
                                 return '<option value="' + d.title + '">' + d.displayName + '</option>';
                             }).join('')
                         ).siblings('button').removeAttr('disabled');
+
+                        require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                            Visibility.attachTo(self.$node.find('.visibility'), {
+                                value: ''
+                            });
+                            self.positionDialog();
+                        });
                     } else {
                         select.html('<option>No valid relationships</option>');
                     }

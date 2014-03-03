@@ -71,41 +71,38 @@ define([
         this.loadEntity = function() {
             var self = this;
 
-            $.when( 
-                this.handleCancelling(appData.refresh(this.attr.data)),
-                this.handleCancelling(ontologyService.concepts())
-            ).done(function(vertex, concepts) {
-                var concept = concepts.byId[self.attr.data.properties._conceptType.value];
+            this.handleCancelling(appData.refresh(this.attr.data))
+                .done(function(vertex) {
 
-                self.$node.html(template({
-                    vertex: self.attr.data,
-                    fullscreenButton: self.fullscreenButton([self.attr.data.id]),
-                    auditsButton: self.auditsButton()
-                }));
+                    self.$node.html(template({
+                        vertex: vertex,
+                        fullscreenButton: self.fullscreenButton([vertex.id]),
+                        auditsButton: self.auditsButton()
+                    }));
 
-                Image.attachTo(self.select('glyphIconSelector'), {
-                    data: self.attr.data,
-                    service: vertexService,
-                    defaultIconSrc: concept && concept.glyphIconHref || ''
+                    Image.attachTo(self.select('glyphIconSelector'), {
+                        data: vertex,
+                        service: vertexService
+                    });
+
+
+                   Properties.attachTo(self.select('propertiesSelector'), {
+                       data: vertex
+                   });
+
+                   self.updateEntityAndArtifactDraggables();
+
+                    $.when(
+                            self.handleCancelling(ontologyService.relationships()),
+                            self.handleCancelling(vertexService.getVertexRelationships(vertex.id))
+                        )
+                        .fail(function() {
+                            self.select('relationshipsSelector').html(alertTemplate({
+                                error: 'Unable to load relationships'
+                            }));
+                        })
+                        .done(self.loadRelationships.bind(self, vertex));
                 });
-
-                Properties.attachTo(self.select('propertiesSelector'), {
-                    data: self.attr.data
-                });
-
-                self.updateEntityAndArtifactDraggables();
-
-                $.when(
-                        self.handleCancelling(ontologyService.relationships()),
-                        self.handleCancelling(vertexService.getVertexRelationships(self.attr.data.id))
-                    )
-                    .fail(function() {
-                        self.select('relationshipsSelector').html(alertTemplate({
-                            error: 'Unable to load relationships'
-                        }));
-                    })
-                    .done(self.loadRelationships.bind(self, vertex));
-            });
         };
 
         this.loadRelationships = function(vertex, ontologyRelationships, vertexRelationships) {
