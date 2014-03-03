@@ -12,7 +12,6 @@ define([
     'tpl!./loading',
     'util/controls',
     'util/throttle',
-    'util/previews',
     'util/formatters',
     'service/vertex',
     'service/ontology',
@@ -33,7 +32,6 @@ define([
     loadingTemplate,
     Controls,
     throttle,
-    previews,
     formatters,
     VertexService,
     OntologyService,
@@ -344,17 +342,7 @@ define([
                             });
                         }
 
-                        if (/^(image|video)$/i.test(vertex.concept.displayType)) {
-                            previews.syncGeneratePreview(vertex, { width:178 * retina.devicePixelRatio },
-                                                         function(dataUri) {
-                                                             if (dataUri) {
-                                                                 cyNodeData.data._previewImageUri = dataUri;
-                                                             }
-                                                         });
-                        }
-
                         cyNodes.push(cyNodeData);
-
                     });
 
                     cy.add(cyNodes);
@@ -397,13 +385,9 @@ define([
         };
 
         this.classesForVertex = function(vertex) {
-            var cls = [];
+            if (vertex.properties._glyphIcon) return 'hasCustomGlyph';
 
-            if (vertex.properties._conceptType.value) cls.push('concept-' + vertex.properties._conceptType.value);
-            if (vertex.properties._glyphIcon) cls.push('hasCustomGlyph');
-            if (/^(image|video)$/i.test(vertex.concept.displayType)) cls.push('hasPreview');
-            
-            return cls.join(' ');
+            return '';
         };
 
         this.updateCyNodeData = function (data, vertex) {
@@ -415,9 +399,7 @@ define([
 
             var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title'));
             merged.truncatedTitle = truncatedTitle;
-            if (vertex.properties._glyphIcon) {
-                merged._glyphIconUri = vertex.properties._glyphIcon.value;
-            }
+            merged.imageSrc = vertex.imageSrc;
 
             return merged;
         };
