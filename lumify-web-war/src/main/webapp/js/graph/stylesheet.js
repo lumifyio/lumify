@@ -11,21 +11,11 @@ define([
 
     return load;
 
-    function apply(concept) {
-        style.selector('.concept-' + concept.id)
-             .css({
-                 'background-image': concept.glyphIconHref
-             });
-
-        if (concept.children) {
-            concept.children.forEach(apply);
-        }
-    }
-
     function defaultStyle() {
         style
             .selector('node')
             .css({
+                'background-image': 'data(imageSrc)',
                 'width': 30 * retina.devicePixelRatio,
                 'height': 30 * retina.devicePixelRatio,
                 'content': 'data(truncatedTitle)',
@@ -38,16 +28,10 @@ define([
                 'shape': 'roundrectangle'
             })
 
-            .selector('node.hasPreview')
-            .css({
-                'background-image': 'data(_previewImageUri)'
-            })
-
             .selector('node.hasCustomGlyph')
             .css({
                 'width': 60 * retina.devicePixelRatio,
-                'height': 60 * retina.devicePixelRatio,
-                'background-image': 'data(_glyphIconUri)'
+                'height': 60 * retina.devicePixelRatio
             })
 
             .selector('node.hover')
@@ -136,15 +120,8 @@ define([
     }
 
     function load(styleReady) {
-        ontologyService.concepts().done(function(concepts) {
-            if(concepts.entityConcept.children) {
-                concepts.entityConcept.children.forEach(apply);
-            }
-
-            defaultStyle();
-
-            styleReady(style);
-        });
+        defaultStyle();
+        styleReady(style);
     }
 
 });

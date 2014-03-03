@@ -82,50 +82,72 @@ define([
                 delete cache.properties[options.deletedProperty]
             }
 
-            $.extend(true, cache.properties || (cache.properties = {}), vertex.properties);
-            $.extend(true, cache.workspace ||  (cache.workspace = {}),  vertex.workspace || {});
-            $.extend(true, cache.detectedObjects || (cache.detectedObjects = []), vertex.detectedObjects || []);
+            if (!cache.properties) cache.properties = {};
+            if (!cache.workspace) cache.workspace = {};
+
+            cache.properties = $.extend(true, {}, cache.properties, vertex.properties);
+            cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
+
+            if (!cache.properties.source || !cache.properties.source.value) {
+                if (cache.properties._source && cache.properties._source.value) {
+                    cache.properties.source = cache.properties._source;
+                }
+            }
+
+            cache.detectedObjects = vertex.detectedObjects;
 
             if (this.workspaceVertices[id]) {
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            /*
-            if (_.isString(cache.properties.geoLocation && cache.properties.geoLocation.value)) {
-                var m = cache.properties.geoLocation.value.match(/point\[(.*?),(.*?)\]/);
-                if (m) {
-                    var latitude = m[1];
-                    var longitude = m[2];
-                    cache.properties.geoLocation.value = {
-                        latitude: latitude,
-                        longitude: longitude,
-                        title: cache.properties._geoLocationDescription.value
-                    };
-                }
-            } 
-            */
-
             cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value || cache.properties._conceptType]
-            if (!cache.concept) {
-                console.error('Unable to attach concept to vertex', cache.concept, cache.properties._conceptType);
-            }
+            if (cache.concept) {
+                setPreviewsForVertex(cache);
+            } else console.error('Unable to attach concept to vertex', cache.properties._conceptType);
 
-            /*
-            if ((cache.properties.latitude && cache.properties.latitude.value) || 
-                (cache.properties.longitude && cache.properties.longitude.value)) {
-                $.extend(cache.properties.geoLocation.value || (cache.properties.geoLocation.value = {}), {
-                    latitude: cache.properties.latitude.value,
-                    longitude: cache.properties.longitude.value,
-                    title: cache.properties._geoLocationDescription.value
-                });
-                delete cache.properties.latitude.value;
-                delete cache.properties.longitude.value;
-                delete cache.properties._geoLocationDescription.value;
-            }
-            */
+            cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
 
             return cache;
         };
 
+
+        function setPreviewsForVertex(vertex) {
+            var vId = encodeURIComponent(vertex.id),
+                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>");
+
+            vertex.imageSrcIsFromConcept = false;
+
+            if (vertex.properties._glyphIcon) {
+                vertex.imageSrc = vertex.properties._glyphIcon.value;
+            } else {
+                switch (vertex.concept.displayType) {
+
+                    case 'image': 
+                        vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
+                        break;
+
+                    case 'video': 
+                        vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
+                        vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
+                        break;
+
+                    default:
+                        vertex.imageSrc = vertex.concept.glyphIconHref;
+                        vertex.imageSrcIsFromConcept = true;
+                }
+            }
+        }
+
+
+        this.resolvedSourceForProperties = function(p) {
+            var source = p.source && p.source.value,
+                author = p.author && p.author.value;
+            
+            return source ? 
+                author ? ([source,author].join(' / ')) : source : 
+                author ? author : '';
+        }
     }
 });

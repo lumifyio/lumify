@@ -9,11 +9,7 @@
       <div>
         <span class="preview"/>
         <span class="date"><%= vertex.properties.publishedDate ? new Date(vertex.properties.publishedDate.value).toDateString() : '' %></span>
-        <span class="source"><% 
-          var source = vertex.properties._source && vertex.properties._source.value, author = (vertex.properties.author && vertex.properties.author.value);
-        %><%= source ? 
-          author ? ([source,author].join(' / ')) : source : 
-          author ? author : '' %></span>
+        <span class="source"><%= vertex.resolvedSource %></span>
       </div>
     </a>
 </li>

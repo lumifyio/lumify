@@ -219,13 +219,13 @@ define([
                 parameters = {
                     title: newSign,
                     conceptId: this.select('conceptSelector').val(),
-                    graphVertexId: this.attr.resolvedVertex ? this.attr.resolvedVertex.id : this.currentGraphVertexId,
-                    rowKey: this.attr.dataInfo.value._rowKey,
+                    graphVertexId: !this.attr.resolvedVertex ? this.attr.resolvedVertex.id : this.currentGraphVertexId,
+                    rowKey: this.attr.dataInfo._rowKey,
                     artifactId: this.attr.artifactData.id,
-                    x1: parseFloat(this.attr.dataInfo.value.x1),
-                    y1: parseFloat(this.attr.dataInfo.value.y1),
-                    x2: parseFloat(this.attr.dataInfo.value.x2),
-                    y2: parseFloat(this.attr.dataInfo.value.y2),
+                    x1: parseFloat(this.attr.dataInfo.x1),
+                    y1: parseFloat(this.attr.dataInfo.y1),
+                    x2: parseFloat(this.attr.dataInfo.x2),
+                    y2: parseFloat(this.attr.dataInfo.y2),
                     existing: !!this.currentGraphVertexId,
                     visibilitySource: this.visibilitySource || ''
                 };
@@ -244,13 +244,15 @@ define([
             this.vertexService.resolveDetectedObject(parameters)
                 .done(function(data) {
                     var resolvedVertex = data.entityVertex;
-
                     var $focused = $('.focused');
                     var $tag;
-                    if ($focused) {
+                    delete data.entityVertex;
+                    var result = $.extend(data,resolvedVertex);
+
+                    if ($focused.length !== 0) {
                         $tag = $focused.find('.label-info');
 
-                        $tag.text(data.entityVertex.properties.title.value).removeAttr('data-info').data('info', data.entityVertex).removePrefixedClasses('conceptType-');
+                        $tag.text(resolvedVertex.properties.title.value).removeAttr('data-info').data('info', result).removePrefixedClasses('conceptType-');
                         $tag.addClass('resolved entity conceptType-' + resolvedVertex.properties._conceptType.value);
 
                         $focused.removeClass('focused');
@@ -264,7 +266,7 @@ define([
                         if (!classes){
                             classes = 'label-info detected-object'
                         }
-                        $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(data.entityVertex.properties.title.value);
+                        $tag = $("<a>").addClass(classes + ' resolved entity').attr("href", "#").text(resolvedVertex.properties.title.value);
 
                         var added = false;
 
@@ -272,7 +274,7 @@ define([
                         $parentSpan.after(' ');
 
                         $allDetectedObjectLabels.each(function(){
-                            if(parseFloat($(this).data("info").value.x1) > data.x1){
+                            if(parseFloat($(this).data("info").x1) > data.x1){
                                 $tag.removePrefixedClasses('conceptType-').addClass('conceptType-' + parameters.conceptId).parent().insertBefore($(this).parent()).after(' ');
                                 added = true;
                                 return false;
@@ -283,7 +285,7 @@ define([
                             $tag.addClass('conceptType-' + parameters.conceptId);
                             $allDetectedObjects.append($parentSpan);
                         }
-                        $tag.attr('data-info', JSON.stringify(resolvedVertex));
+                        $tag.attr('data-info', JSON.stringify(result));
                         $parentSpan.removeClass('focused');
                     }
 
@@ -301,11 +303,13 @@ define([
             this.vertexService.unresolveDetectedObject(parameters).done(function(data) {
                 var $focused = $('.focused');
                 var $tag = $focused.find('.label-info');
-                if (data._rowKey) {
+
+                if (data.deleteTag) {
+                    $focused.remove();
+                } else {
                     $tag.text(data.classifierConcept).removeAttr('data-info').data('info', data).removeClass();
                     $tag.addClass('label-info detected-object opens-dropdown');
-                } else {
-                    $tag.remove();
+                    $focused.removeClass('focused');
                 }
 
                 if (data.deleteEdge) {
@@ -387,9 +391,9 @@ define([
                 }
             } else {
                 data = this.attr.resolvedVertex;
-                objectSign = data ? data.properties.title.value : '';
+                objectSign = data.properties ? data.properties.title.value : '';
                 existingEntity = this.attr.existing;
-                graphVertexId = data ? data.id : '';
+                graphVertexId = data.id
                 this.unresolve = graphVertexId && graphVertexId !== '';
             }
 
@@ -432,7 +436,7 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon.value);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = (vertex && vertex.properties._conceptType.value) || conceptId;
+                    var conceptType = (vertex && vertex._conceptType.value) || conceptId;
                     if (conceptType) {
                         var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {
