@@ -92,21 +92,22 @@ define([
 
             cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value || cache.properties._conceptType]
             if (cache.concept) {
-                setPreviewsForVertex(cache);
+                setPreviewsForVertex(cache, this.workspaceId);
             } else console.error('Unable to attach concept to vertex', cache.properties._conceptType);
 
             return cache;
         };
 
 
-        function setPreviewsForVertex(vertex) {
-            var vId = encodeURIComponent(vertex.id),
-                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>");
+        function setPreviewsForVertex(vertex, currentWorkspace) {
+            var workspaceParameter = '?workspaceId=' + encodeURIComponent(currentWorkspace),
+                vId = encodeURIComponent(vertex.id),
+                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>" + workspaceParameter);
 
             vertex.imageSrcIsFromConcept = false;
 
             if (vertex.properties._glyphIcon) {
-                vertex.imageSrc = vertex.properties._glyphIcon.value;
+                vertex.imageSrc = vertex.properties._glyphIcon.value + workspaceParameter;
             } else {
                 switch (vertex.concept.displayType) {
 

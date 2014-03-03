@@ -2,8 +2,9 @@
 define([
     'tpl!./toolbar/fullscreen',
     'tpl!./toolbar/fullscreen-item',
-    'tpl!./toolbar/audits'
-], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate) {
+    'tpl!./toolbar/audits',
+    'data'
+], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate, appData) {
     'use strict';
 
     var intercomInstance;
@@ -101,7 +102,8 @@ define([
                 intercomInstance.emit('addVertices', {
                     message: JSON.stringify({
                         targetIdentifier: info.identifier,
-                        vertices: ids
+                        vertices: ids,
+                        workspaceId: appData.workspaceId
                     })
                 });
             }
