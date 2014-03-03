@@ -301,7 +301,7 @@ define([
 
             var root = $('<div class="underneath">').insertAfter($target.closest('.type-content').find('.detected-object-labels'));
             var resolvedVertex =  { id: dataInfo.id, properties: dataInfo.properties } ;
-debugger;
+
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,
                 dataInfo: dataInfo,
