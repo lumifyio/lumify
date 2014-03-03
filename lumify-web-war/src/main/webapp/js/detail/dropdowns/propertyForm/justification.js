@@ -95,6 +95,7 @@ define([
             var self = this;
             
             if (referenceDisplay) {
+                this.select('fieldSelector').tooltip('destroy');
                 this.getVertexTitle(value).done(function() {
                     self.transitionHeight(templateRef(value));
                 });
