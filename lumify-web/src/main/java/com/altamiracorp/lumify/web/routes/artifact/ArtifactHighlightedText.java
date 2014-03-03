@@ -61,7 +61,8 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
 
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
-        response.getOutputStream().print(highlightedText);
+
+        IOUtils.write(highlightedText, response.getOutputStream(), "UTF-8");
     }
 
     private String getText(Vertex artifactVertex) throws IOException {
@@ -69,6 +70,6 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         if (textPropertyValue == null) {
             return "";
         }
-        return IOUtils.toString(textPropertyValue.getInputStream());
+        return IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8");
     }
 }
