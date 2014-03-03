@@ -34,11 +34,6 @@ define([
                 dest: this.attr.destTerm.text()
             }));
             
-            require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
-                Visibility.attachTo(self.$node.find('.visibility'), {
-                    value: ''
-                });
-            });
             this.on('visibilitychange', this.onVisibilityChange);
 
 
@@ -176,6 +171,14 @@ define([
 
                     relationshipsTpl.push(data);
                 });
+
+                if (relationships.length) {
+                    require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                        Visibility.attachTo(self.$node.find('.visibility'), {
+                            value: ''
+                        });
+                    });
+                } else self.$node.find('.visibility').teardownAllComponents().empty();
 
                 self.select('relationshipSelector').html(relationshipTypeTemplate({ relationships: relationshipsTpl }));
             });
