@@ -78,9 +78,7 @@ define([
             this.animate = true;
             this.toggleView(false);
             this.select('fieldSelector').focus();
-
-            var val = this.attr.value || '';
-            this.trigger('justificationchange', { justificationText:val, valid:$.trim(val).length > 0 });
+            this.trigger('justificationchange', { justificationText:'', valid:false });
         };
 
         this.setValue = function(value) {
