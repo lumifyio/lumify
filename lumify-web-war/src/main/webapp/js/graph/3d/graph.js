@@ -3,9 +3,8 @@
 define([
     'flight/lib/component',
     'service/ontology',
-    './3djs/3djs',
-    'util/previews'
-], function(defineComponent, OntologyService, $3djs, previews) {
+    './3djs/3djs'
+], function(defineComponent, OntologyService, $3djs) {
     'use strict';
 
     var imageCache = {};
@@ -29,18 +28,6 @@ define([
         image.src = src;
         imageCache[src] = deferred.promise();
         return imageCache[src];
-    }
-
-    function iconImageSource(vertex) {
-        if (vertex.properties._glyphIcon) {
-            return vertex.properties._glyphIcon.value;
-        }
-
-        switch (vertex.concept.displayType) {
-            case 'image': return '/artifact/' + vertex.id + '/raw';
-            case 'video': return '/artifact/' + vertex.id + '/poster-frame';
-            default: return vertex.concept.glyphIconHref;
-        }
     }
 
     function Graph3D() {
@@ -88,7 +75,7 @@ define([
                 var node = new $3djs.Graph.Node(vertex.id);
 
                 node.data.vertex = vertex;
-                node.data.icon = iconImageSource(vertex);
+                node.data.icon = vertex.imageSrc;
 
                 if (node.data.icon) {
                     deferredImages.push(
