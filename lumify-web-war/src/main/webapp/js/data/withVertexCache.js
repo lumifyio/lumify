@@ -135,6 +135,7 @@ define([
 
                     default:
                         vertex.imageSrc = vertex.concept.glyphIconHref;
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         vertex.imageSrcIsFromConcept = true;
                 }
             }

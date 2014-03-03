@@ -404,7 +404,8 @@ define([
         keys.forEach(function (name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isRelationshipType = name === 'relationshipType' && properties._conceptType;
+                isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
+                isRelationshipType = name === 'relationshipType' && isEdge;
 
             if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
@@ -421,11 +422,15 @@ define([
                 if (// Ignore underscore leading property names
                     /^[^_]/.test(name) &&
 
+                    // Showing the source and target for an edge is redundant (shown in title)
+                    (!isEdge || !_.contains(['source', 'target'], name)) &&
+
                     // Bounding box not useful to show
                     name !== 'boundingBox' &&
 
                     // Title is displayed above property list
                     name !== 'title') {
+
                     addProperty(name, displayName, value, properties[name]._visibility);
                 }
             } else if (isRelationshipType) {
