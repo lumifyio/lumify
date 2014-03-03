@@ -334,19 +334,18 @@ define([
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = (vertex.properties._glyphIcon && vertex.properties._glyphIcon.value) ||
-                        (
-                            vertex.concept.displayType === 'image' ? ('/artifact/' + vertex.id + '/thumbnail') :
-                            vertex.concept.displayType === 'video' ? ('/artifact/' + vertex.id + '/poster-frame') : null
-                        );
+                    src = vertex.imageSrc,
+                    showImageSrc = src && !vertex.imageSrcIsFromConcept;
 
-                if (src) {
-                    $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
-                }
+                if (currentAnchor.length) {
+                    if (showImageSrc) {
+                        $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
+                    }
 
-                var newHtml = newAnchor.html();
-                if (currentAnchor.length && newHtml !== currentHtml) {
-                    currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', !!src);
+                    var newHtml = newAnchor.html();
+                    if (currentAnchor.length && newHtml !== currentHtml) {
+                        currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', showImageSrc);
+                    }
                 }
             });
         };
