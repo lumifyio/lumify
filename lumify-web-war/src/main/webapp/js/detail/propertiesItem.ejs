@@ -3,13 +3,21 @@
 <% if (property.key === 'geoLocation' && property.value) { %>
 
   <span class="value">
-    <% if (!popout) { %>
-    <a href="#" class="map-coordinates" data-latitude="<%= property.value.latitude %>" data-longitude="<%= property.value.longitude %>">
-      <%= property.value._geoLocationDescription || (property.value.latitude + ', ' + property.value.longitude) %>
-    </a>
+
+    <% if (popout) { %>
+      <span>
     <% } else { %>
-    <span><%= property.value._geoLocationDescription || (property.value.latitude + ', ' + property.value.longitude) %></span>
+      <a href="#" class="map-coordinates" data-latitude="<%= property.value.latitude %>" data-longitude="<%= property.value.longitude %>">
     <% } %>
+
+    <%= (property.value._geoLocationDescription && property.value._geoLocationDescription.value) || (property.value.latitude + ', ' + property.value.longitude) %>
+
+    <% if (popout) { %>
+      </span>
+    <% } else { %>
+      </a>
+    <% } %>
+
     <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
   </span>
 
