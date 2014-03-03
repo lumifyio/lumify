@@ -7,7 +7,8 @@ define([
 ], function(defineComponent, OntologyService, $3djs) {
     'use strict';
 
-    var imageCache = {};
+    var MAX_TITLE_LENGTH = 15,
+        imageCache = {};
 
     return defineComponent(Graph3D);
 
@@ -102,7 +103,12 @@ define([
             function addToGraph(width, height, node) {
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
-                node.data.label = node.data.vertex.properties.title.value;
+
+                var title = node.data.vertex.properties.title.value;
+                if (title.length > MAX_TITLE_LENGTH) {
+                    node.data.label = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
+                } else node.data.label = title;
+
                 node.needsUpdate = true;
                 graph.addNode(node);
             }

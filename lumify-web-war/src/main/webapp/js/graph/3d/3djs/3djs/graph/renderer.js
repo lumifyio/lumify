@@ -371,7 +371,8 @@ define([
         if (edgesLength) {
             this._lines = new THREE.Line(
                 geometry,
-                new THREE.LineBasicMaterial( { color: 0x000000 } )
+                new THREE.LineBasicMaterial( { color: 0xBBBBBB } ),
+                THREE.LinePieces
             );
             for (var edgeIndex = 0; edgeIndex < edgesLength; edgeIndex++) {
                 var edge = edges[edgeIndex];
