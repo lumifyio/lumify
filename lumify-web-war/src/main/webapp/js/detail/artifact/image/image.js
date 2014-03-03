@@ -187,7 +187,7 @@ define([
                 toHide = toHide.not('.editing');
             }
 
-            if (data.id !== this.currentlyEditing){
+            if (!this.currentlyEditing || data.id !== this.currentlyEditing){
                 toHide.hide();
             }
         };
