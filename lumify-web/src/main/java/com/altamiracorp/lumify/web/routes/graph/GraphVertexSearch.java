@@ -125,6 +125,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
         int verticesCount = 0;
+        int count = 0;
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
                 vertices.put(toJson(vertex));
@@ -138,7 +139,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
                     }
                     detectedObjects.put(detectedObjectModelJson);
                 }
-                vertices.getJSONObject(verticesCount).put("detectedObjects", detectedObjects);
+                vertices.getJSONObject(count).put("detectedObjects", detectedObjects);
+                count ++;
             }
             String type = CONCEPT_TYPE.getPropertyValue(vertex);
             if (type == null) {
