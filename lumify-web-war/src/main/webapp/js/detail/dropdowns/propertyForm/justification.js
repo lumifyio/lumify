@@ -24,11 +24,9 @@ define([
 
         this.after('initialize', function() {
             if (this.attr.sourceMetadata) {
-                this.toggleView(true, this.attr.sourceMetadata);
+                this.setValue(this.attr.sourceMetadata)
             } else {
-                this.toggleView(false, 
-                    this.attr.justificationMetadata && 
-                    this.attr.justificationMetadata.justificationText);
+                this.setValue(this.attr.justificationMetadata && this.attr.justificationMetadata.justificationText);
             }
 
             this.on('valuepasted', this.onValuePasted);
@@ -86,9 +84,16 @@ define([
         };
 
         this.setValue = function(value) {
-            var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
-            this.toggleView(true, value);
-            this.trigger('justificationchange', { sourceInfo:sourceInfo, valid:true });
+            if (_.isUndefined(value)) value = '';
+
+            if (_.isString(value)) {
+                this.toggleView(false, value);
+                this.trigger('justificationchange', { justificationText:value, valid:$.trim(value).length > 0 });
+            } else {
+                var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
+                this.toggleView(true, value);
+                this.trigger('justificationchange', { sourceInfo:sourceInfo, valid:true });
+            }
         };
 
         this.toggleView = function(referenceDisplay, value) {
