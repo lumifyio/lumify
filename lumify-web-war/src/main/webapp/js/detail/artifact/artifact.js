@@ -45,7 +45,6 @@ define([
             artifactSelector: '.artifact-image',
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
-            deleteTagSelector: '.detected-object-tag .delete-tag',
             textSelector: '.text'
         });
 
@@ -53,8 +52,7 @@ define([
             var self = this;
 
             this.on('click', {
-                detectedObjectSelector: this.onDetectedObjectClicked,
-                deleteTagSelector: this.onDeleteTagClicked
+                detectedObjectSelector: this.onDetectedObjectClicked
             });
             this.on('copy cut', {
                 textSelector: this.onCopyText
@@ -143,7 +141,7 @@ define([
             this.videoDuration = vertex.videoDuration;
             if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
                 vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
-                    var aX = a.value.x1, bX = b.value.x1;
+                    var aX = a.x1, bX = b.x1;
                     return aX - bX;
                 });
             }
@@ -219,8 +217,13 @@ define([
                 info = $target.closest('.label-info').data('info');
 
             $target.closest('.label-info').parent().addClass('focused');
-            info.existing = true;
-            this.trigger('DetectedObjectEdit', info.value);
+            info.existing = true
+            if (info.entityVertex) {
+                var result = $.extend(info,info.entityVertex);
+                delete result.entityVertex;
+                info = result;
+            }
+            this.trigger('DetectedObjectEdit', info);
             this.showForm(info, this.attr.data, $target);
         };
 
@@ -230,10 +233,9 @@ define([
             var detectedObject,
                 width = parseFloat(data.x2)-parseFloat(data.x1),
                 height = parseFloat(data.y2)-parseFloat(data.y1);
-            if (vertex.properties._detectedObjects) {
-                detectedObject = $.extend(true, {}, _.find( typeof vertex.properties._detectedObjects.value == 'string' ? JSON.parse(vertex.properties._detectedObjects.value)
-                    : vertex.properties._detectedObjects.value, function(obj) {
-                    return (obj && (obj.graphVertexId || obj.detectedObjectId)) === data.id;
+            if (vertex.detectedObjects) {
+                detectedObject = $.extend(true, {}, _.find(vertex.detectedObjects, function(obj) {
+                    return (obj && (obj.graphVertexId || obj._rowKey)) === data.id;
                 }));
             }
 
@@ -253,43 +255,21 @@ define([
             this.trigger('DetectedObjectDoneEditing');
         };
 
-        this.onDeleteTagClicked = function (event) {
-            var self = this;
-            var $detectedObjectTag = $(event.target).siblings();
-            var info = { objectInfo: JSON.stringify($detectedObjectTag.data('info')) };
-            var $loading = $("<span>")
-                .addClass("badge")
-                .addClass("loading");
-
-            $detectedObjectTag.closest('.detected-object-tag').addClass('loading');
-            $(event.target).replaceWith($loading);
-
-            this.vertexService.deleteDetectedObject(info)
-                .done(function(data) {
-                    var resolvedVertex = {
-                        id: data.entityVertex.id,
-                        _conceptType: data.entityVertex.properties._conceptType.value
-                    };
-                    $detectedObjectTag.parent().remove();
-                    self.trigger('DetectedObjectLeave', $detectedObjectTag.data('info'));
-
-                    if (data.remove){
-                        self.trigger(document, 'deleteVertices', { vertices: [resolvedVertex] });
-                    } else {
-                        self.trigger(document, 'updateVertices', { vertices: [resolvedVertex] });
-                    }
-                });
-        };
-
         this.onDetectedObjectHover = function(event) {
             var $target = $(event.target),
                 tag = $target.closest('.detected-object-tag'),
                 badge = tag.find('.label-info'),
                 info = badge.data('info');
 
+            if (info.entityVertex) {
+                var result = $.extend(info,info.entityVertex);
+                delete info.entityVertex;
+                info = result;
+            }
+
             this.trigger(
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
-                info.value
+                info
             );
         };
 
@@ -320,7 +300,7 @@ define([
             }
 
             var root = $('<div class="underneath">').insertAfter($target.closest('.type-content').find('.detected-object-labels'));
-            var resolvedVertex = dataInfo.value.entityVertex;
+            var resolvedVertex =  { id: dataInfo.id, properties: dataInfo.properties } ;
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,

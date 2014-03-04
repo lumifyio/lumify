@@ -82,9 +82,19 @@ define([
                 delete cache.properties[options.deletedProperty]
             }
 
-            $.extend(true, cache.properties || (cache.properties = {}), vertex.properties);
-            $.extend(true, cache.workspace ||  (cache.workspace = {}),  vertex.workspace || {});
-            $.extend(true, cache.detectedObjects || (cache.detectedObjects = []), vertex.detectedObjects || []);
+            if (!cache.properties) cache.properties = {};
+            if (!cache.workspace) cache.workspace = {};
+
+            cache.properties = $.extend(true, {}, cache.properties, vertex.properties);
+            cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
+
+            if (!cache.properties.source || !cache.properties.source.value) {
+                if (cache.properties._source && cache.properties._source.value) {
+                    cache.properties.source = cache.properties._source;
+                }
+            }
+
+            cache.detectedObjects = vertex.detectedObjects;
 
             if (this.workspaceVertices[id]) {
                 this.workspaceVertices[id] = cache.workspace;
@@ -95,6 +105,7 @@ define([
                 setPreviewsForVertex(cache, this.workspaceId);
             } else console.error('Unable to attach concept to vertex', cache.properties._conceptType);
 
+            cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
             return cache;
         };
 
@@ -124,9 +135,19 @@ define([
 
                     default:
                         vertex.imageSrc = vertex.concept.glyphIconHref;
+                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         vertex.imageSrcIsFromConcept = true;
                 }
             }
+        }
+
+        this.resolvedSourceForProperties = function(p) {
+            var source = p.source && p.source.value,
+                author = p.author && p.author.value;
+            
+            return source ? 
+                author ? ([source,author].join(' / ')) : source : 
+                author ? author : '';
         }
     }
 });

@@ -8,7 +8,7 @@
       </a>
       <ul class="dropdown-menu">
         <li><a class="" href="<%= vertex.imageRawSrc %>" target="_blank">Open <%= vertex.concept.displayType %></a></li>
-        <li><a class="" href="<%= vertex.imageRawSrc %>&download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
+        <li><a class="" href="<%= vertex.imageRawSrc %><%= /\?/.test(vertex.imageRawSrc) ? '&' : '?' %>download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
       </ul>
     </div>
 
@@ -32,16 +32,16 @@
 
 <div class='detected-object-labels'>
   <% (vertex.detectedObjects).forEach(function(object) {
-    if (object.value.entityVertex) {
-        var conceptType = object.value.entityVertex.properties._conceptType.value || object.value._conceptType;
-        var title = object.value.entityVertex.properties.title.value || object.value.classiferConcept;
+    if (object.entityVertex) {
+        var conceptType = object.entityVertex.properties._conceptType.value || object._conceptType;
+        var title = object.entityVertex.properties.title.value || object.classiferConcept;
         var classes = 'label-info detected-object resolved entity conceptType-' + conceptType;%>
         <span class="label detected-object-tag">
             <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= title %></a>
         </span>
     <%} else { %>
     <span class="label detected-object-tag">
-        <a class="label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.value.classifierConcept %></a>
+        <a class="label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a>
     </span>
   <% }}); %>
 </div>

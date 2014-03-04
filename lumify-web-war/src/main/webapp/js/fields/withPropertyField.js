@@ -19,8 +19,10 @@ define([], function() {
         this.after('initialize', function() {
             var inputs = this.select('visibleInputsSelector');
 
-            if (this.attr.tooltip) {
-                inputs.eq(0).tooltip(this.attr.tooltip);
+            if (this.attr.tooltip && this.$node.find('.input-prepend').length === 0) {
+                inputs.eq(0)
+                    .tooltip($.extend({ container:'body' }, this.attr.tooltip))
+                    .data('tooltip').tip().addClass('field-tooltip');
             }
 
             if (this.attr.preventFocus !== true) {
