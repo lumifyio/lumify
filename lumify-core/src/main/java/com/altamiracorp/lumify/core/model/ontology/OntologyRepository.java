@@ -76,7 +76,7 @@ public class OntologyRepository {
                 @Override
                 public List<Relationship> callWithTime() throws Exception {
                     Iterable<Vertex> vertices = graph.query(getAuthorizations())
-                            .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                            .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
                             .limit(10000)
                             .vertices();
 
@@ -100,7 +100,7 @@ public class OntologyRepository {
         if (relationshipLabel != null && !relationshipLabel.trim().isEmpty()) {
             try {
                 Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                        .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                        .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
                         .has(ONTOLOGY_TITLE.getKey(), relationshipLabel)
                         .vertices(), null);
                 displayName = relVertex != null ? DISPLAY_NAME.getPropertyValue(relVertex) : null;
@@ -118,7 +118,7 @@ public class OntologyRepository {
                 @Override
                 public List<OntologyProperty> callWithTime() throws Exception {
                     return toList(new ConvertingIterable<Vertex, OntologyProperty>(graph.query(getAuthorizations())
-                            .has(DISPLAY_TYPE.getKey(), TYPE_PROPERTY)
+                            .has(CONCEPT_TYPE.getKey(), TYPE_PROPERTY)
                             .vertices()) {
                         @Override
                         protected OntologyProperty convert(Vertex vertex) {
@@ -135,7 +135,7 @@ public class OntologyRepository {
     public OntologyProperty getProperty(String propertyName) {
         try {
             Vertex propVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(DISPLAY_TYPE.getKey(), TYPE_PROPERTY)
+                    .has(CONCEPT_TYPE.getKey(), TYPE_PROPERTY)
                     .has(ONTOLOGY_TITLE.getKey(), propertyName)
                     .vertices(), null);
             return propVertex != null ? new OntologyProperty(propVertex) : null;
@@ -147,7 +147,7 @@ public class OntologyRepository {
     public Relationship getRelationship(String propertyName) {
         try {
             Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                    .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
                     .has(ONTOLOGY_TITLE.getKey(), propertyName)
                     .vertices(), null);
             Relationship relationship = null;
@@ -338,7 +338,7 @@ public class OntologyRepository {
     private Vertex getRelationshipVertexId(String relationshipLabel) {
         try {
             return Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(DISPLAY_TYPE.getKey(), TYPE_RELATIONSHIP)
+                    .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
                     .has(DISPLAY_NAME.getKey(), relationshipLabel)
                     .vertices());
         } catch (NoSuchElementException nsee) {
@@ -400,10 +400,9 @@ public class OntologyRepository {
         }
 
         VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY, getAuthorizations());
-        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY);
+        CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, DEFAULT_VISIBILITY);
         ONTOLOGY_TITLE.setProperty(builder, relationshipName, DEFAULT_VISIBILITY);
         DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY);
-        DISPLAY_TYPE.setProperty(builder, TYPE_RELATIONSHIP, DEFAULT_VISIBILITY);
         Vertex relationshipVertex = builder.save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
@@ -433,7 +432,6 @@ public class OntologyRepository {
         if (typeProperty == null) {
             VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY, getAuthorizations());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY);
-            DISPLAY_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY);
             ONTOLOGY_TITLE.setProperty(builder, propertyName, DEFAULT_VISIBILITY);
             DATA_TYPE.setProperty(builder, dataType.toString(), DEFAULT_VISIBILITY);
             if (displayName != null && !displayName.trim().isEmpty()) {
