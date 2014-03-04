@@ -1,0 +1,74 @@
+package com.altamiracorp.lumify.core.model.workspace.diff;
+
+import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
+import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.securegraph.*;
+import com.google.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+
+public class WorkspaceDiff {
+    private final Graph graph;
+    private final UserRepository userRepository;
+
+    @Inject
+    public WorkspaceDiff(
+            final Graph graph,
+            final UserRepository userRepository) {
+        this.graph = graph;
+        this.userRepository = userRepository;
+    }
+
+    public List<DiffItem> diff(Workspace workspace, List<WorkspaceEntity> workspaceEntities, User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
+
+        List<DiffItem> result = new ArrayList<DiffItem>();
+        for (WorkspaceEntity workspaceEntity : workspaceEntities) {
+            List<DiffItem> entityDiffs = diff(workspace, workspaceEntity, authorizations);
+            result.addAll(entityDiffs);
+        }
+        return result;
+    }
+
+    public List<DiffItem> diff(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
+        List<DiffItem> result = new ArrayList<DiffItem>();
+
+        Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
+        if (visibilityHasWorkspace(workspace, entityVertex.getVisibility())) {
+            result.add(new VertexDiffItem(entityVertex));
+        }
+
+        List<Property> properties = toList(entityVertex.getProperties());
+        for (Property property : properties) {
+            if (visibilityHasWorkspace(workspace, property.getVisibility())) {
+                Property existingProperty = findExistingProperty(properties, property);
+                result.add(new PropertyDiffItem(entityVertex, property, existingProperty));
+            }
+        }
+
+        return result;
+    }
+
+    private Property findExistingProperty(List<Property> properties, Property workspaceProperty) {
+        for (Property property : properties) {
+            if (property.equals(workspaceProperty)) {
+                continue;
+            }
+
+            if (property.getName().equals(workspaceProperty.getName())) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    private boolean visibilityHasWorkspace(Workspace workspace, Visibility visibility) {
+        return visibility.getVisibilityString().contains(workspace.getId());
+    }
+}
