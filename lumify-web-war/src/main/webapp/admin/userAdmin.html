@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>Lumify: User Admin</title>
+    <script src='/libs/jquery/jquery.js'></script>
+    <script src='/libs/ejs/ejs.js'></script>
+</head>
+<body>
+<h1>Lumify: User Admin</h1>
+
+<h3>User ID</h3>
+
+<div id="user-id"></div>
+
+<h3>User name</h3>
+
+<div id="user-name"></div>
+
+<h3>Authorizations</h3>
+
+<ul id="authorizations"></ul>
+
+<h3>Add Authorizations</h3>
+
+<form>
+    Value: <input type="text" id="new-auth"/>
+    <button id="add">Add Auth</button>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        document.authorizationsTemplate = document.getElementById('authorizationsTemplate').innerHTML;
+
+        $('#add').click(function () {
+            try {
+                var auth = $('#new-auth').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/auth/add',
+                    data: { auth: auth },
+                    success: function (data) {
+                        console.log(data);
+                        $('#new-auth').val('');
+                        reload();
+                    }
+                });
+            } catch (e) {
+                console.log('could not add auth', e);
+            }
+            return false;
+        });
+
+        reload();
+    });
+
+    function reload() {
+        $.ajax({
+            url: '/user/me',
+            success: function (data) {
+                console.log(data);
+                $('#user-id').html(data.id);
+                $('#user-name').html(data.userName);
+                var html = ejs.render(document.authorizationsTemplate, data);
+                $('#authorizations').html(html);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function removeAuth(auth) {
+        $.ajax({
+            type: 'POST',
+            url: '/user/auth/remove',
+            data: { auth: auth },
+            success: function (data) {
+                console.log(data);
+                reload();
+            }
+        });
+    }
+</script>
+
+<script id="authorizationsTemplate" type="text/template">
+    <% authorizations.forEach(function(auth) { %>
+    <li>
+        <%= auth %> <a href="javascript:removeAuth('<%= auth %>')">remove</a>
+    </li>
+    <% }) %>
+</script>
+
+</body>
+</html>

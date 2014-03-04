@@ -29,7 +29,6 @@ public class DefaultUserProvider implements UserProvider {
                 USERNAME.getPropertyValue(user),
                 CURRENT_WORKSPACE.getPropertyValue(user),
                 modelUserContext,
-                authorizations,
                 UserType.USER);
     }
 
@@ -39,19 +38,19 @@ public class DefaultUserProvider implements UserProvider {
             String[] authorizations = new String[0];
             String workspace = null;
             String rowKey = "";
-            systemUser = new User(rowKey, SYSTEM_USERNAME, workspace, getModelUserContext(authorizations), authorizations, UserType.SYSTEM);
+            systemUser = new User(rowKey, SYSTEM_USERNAME, workspace, getModelUserContext(authorizations), UserType.SYSTEM);
         }
         return systemUser;
     }
 
     @Override
-    public ModelUserContext getModelUserContext(User user, String... additionalAuthorizations) {
-        ArrayList<String> authorizations = new ArrayList<String>();
+    public ModelUserContext getModelUserContext(com.altamiracorp.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
+        ArrayList<String> auths = new ArrayList<String>();
 
-        if (user.getAuthorizations() != null) {
-            for (String a : user.getAuthorizations()) {
+        if (authorizations.getAuthorizations() != null) {
+            for (String a : authorizations.getAuthorizations()) {
                 if (a != null && a.length() > 0) {
-                    authorizations.add(a);
+                    auths.add(a);
                 }
             }
         }
@@ -59,12 +58,12 @@ public class DefaultUserProvider implements UserProvider {
         if (additionalAuthorizations != null) {
             for (String a : additionalAuthorizations) {
                 if (a != null && a.length() > 0) {
-                    authorizations.add(a);
+                    auths.add(a);
                 }
             }
         }
 
-        return getModelUserContext(authorizations.toArray(new String[authorizations.size()]));
+        return getModelUserContext(auths.toArray(new String[auths.size()]));
     }
 
     private static ModelUserContext getModelUserContext(String... authorizations) {

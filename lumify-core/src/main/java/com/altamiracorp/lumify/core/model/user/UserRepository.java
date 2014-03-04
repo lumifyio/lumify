@@ -109,11 +109,11 @@ public class UserRepository {
         }
     }
 
-    public static JSONObject toJson(Vertex userVertex, User user) {
+    public JSONObject toJson(Vertex userVertex, User user) {
         JSONObject json = toJson(userVertex);
 
         JSONArray authorizations = new JSONArray();
-        for (String a : user.getAuthorizations()) {
+        for (String a : getAuthorizations(user).getAuthorizations()) {
             authorizations.put(a);
         }
         json.put("authorizations", authorizations);

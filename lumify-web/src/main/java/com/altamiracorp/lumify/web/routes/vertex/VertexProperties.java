@@ -44,7 +44,7 @@ public class VertexProperties extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
         Iterable<Property> properties = graph.getVertex(graphVertexId, authorizations).getProperties();
         JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);

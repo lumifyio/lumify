@@ -82,7 +82,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -147,7 +147,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
                     detectedObjects.put(detectedObjectModelJson);
                 }
                 vertices.getJSONObject(count).put("detectedObjects", detectedObjects);
-                count ++;
+                count++;
             }
             String type = CONCEPT_TYPE.getPropertyValue(vertex);
             if (type == null) {
