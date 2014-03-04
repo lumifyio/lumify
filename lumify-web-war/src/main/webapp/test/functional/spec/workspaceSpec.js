@@ -58,7 +58,7 @@ describe('Workspace', function () {
             .click()
             .waitForElementByCss(
                 '.workspaces-list li:nth-child(2) .nav-list-title',
-                utils.assertions.includesText('Copy of Default - selenium'), 
+                utils.assertions.includesText('Copy of Default - ' + utils.username), 
                 utils.requestTimeout)
             .waitForElementByCss('.workspaces-list li:nth-child(2) .disclosure')
                 .should.eventually.exist
@@ -92,7 +92,7 @@ describe('Workspace', function () {
                     .setWindowSize(mainWindowSize.width,mainWindowSize.height)
                     .setWindowPosition(500,0)
             })
-            .login('selenium-alt', 'password')
+            .login(utils.usernameAlt, 'password')
             .clickMenubarIcon('workspaces')
             .waitFor(this.asserters.jsCondition(utils.animations.openWorkspaceAnimationFinished) , utils.animationTimeout)
             .elementByCss('.workspaces-list button.disclosure')
@@ -101,7 +101,7 @@ describe('Workspace', function () {
             .elementByCss('.share-form input')
             .type('selenium')
             .waitForElementByCss('.share-form .dropdown-menu', this.asserters.isDisplayed)
-            .waitForElementByCss('.share-form .dropdown-menu li[data-value="selenium"]')
+            .waitForElementByCss('.share-form .dropdown-menu li[data-value="' + utils.username + '"]')
             .click()
             .waitFor(this.asserters.jsCondition("/View/i.test($('.user-row .permissions').text())"), utils.requestTimeout)
 
@@ -124,9 +124,9 @@ describe('Workspace', function () {
         return this.browser
             .elementByCss('.workspaces-list li:nth-child(6) .nav-list-title')
                 .click()
-                .text().should.become('Default - selenium-alt')
+                .text().should.become('Default - ' + utils.usernameAlt)
 
-            .waitFor(this.asserters.jsCondition("$('.workspace-overlay h1.name').text() === 'Default - selenium-alt'"), utils.requestTimeout)
+            .waitFor(this.asserters.jsCondition("$('.workspace-overlay h1.name').text() === 'Default - " + utils.usernameAlt + "'"), utils.requestTimeout)
             .waitForElementByCss('.workspace-overlay .subtitle').text().should.become('read only')
 
     })
@@ -170,7 +170,7 @@ describe('Workspace', function () {
                 .should.eventually.be.ok
             .waitForElementByCss('.workspaces-list > li:nth-child(2).active')
                 .should.eventually.exist
-                .text().should.become('Default - selenium')
+                .text().should.become('Default - ' + utils.username)
 
     })
 
