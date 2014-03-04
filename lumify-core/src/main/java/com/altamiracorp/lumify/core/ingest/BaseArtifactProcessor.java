@@ -21,6 +21,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.*;
@@ -134,10 +135,10 @@ public abstract class BaseArtifactProcessor {
                 throw new RuntimeException("Found multiple vertex matches for " + rowKey);
             }
         } else {
-            Visibility visibility = new Visibility("");
-            vertex = graph.prepareVertex(visibility, authorizations);
-            CREATE_DATE.setProperty(vertex, new Date(), visibility);
-            ROW_KEY.setProperty(vertex, rowKey, visibility);
+            LumifyVisibility visibility = new LumifyVisibility();
+            vertex = graph.prepareVertex(visibility.getVisibility(), authorizations);
+            CREATE_DATE.setProperty(vertex, new Date(), visibility.getVisibility());
+            ROW_KEY.setProperty(vertex, rowKey, visibility.getVisibility());
         }
         return vertex;
     }

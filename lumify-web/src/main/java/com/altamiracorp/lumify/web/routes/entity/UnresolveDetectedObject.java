@@ -8,10 +8,9 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -65,7 +64,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilitySource);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
 
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
@@ -93,7 +92,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
             graph.removeEdge(edge, authorizations);
             String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
+            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, lumifyVisibility.getVisibility());
             result.put("deleteEdge", true);
             result.put("edgeId", edge.getId());
             graph.flush();

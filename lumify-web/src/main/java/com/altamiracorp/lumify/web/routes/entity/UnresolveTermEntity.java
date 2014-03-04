@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -80,7 +81,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilitySource);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
@@ -104,7 +105,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         } else {
             termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
             modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, modelUserContext);
-            termMention.getMetadata().setVertexId("", visibility);
+            termMention.getMetadata().setVertexId("", lumifyVisibility.getVisibility());
 
             TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
             result = offsetItem.toJson();
@@ -132,7 +133,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
                 graph.removeEdge(edge, authorizations);
                 deleteEdge = true;
                 graph.flush();
-                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
+                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, lumifyVisibility.getVisibility());
             }
         }
 

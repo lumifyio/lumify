@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.util.TimingCallable;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
@@ -29,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class OntologyRepository {
     public static final String VISIBILITY_STRING = "ontology";
-    public static final Visibility DEFAULT_VISIBILITY = new Visibility(VISIBILITY_STRING);
+    public static final LumifyVisibility DEFAULT_VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     private final Graph graph;
     public static final String ROOT_CONCEPT_NAME = "rootConcept";
     public static final String TYPE_RELATIONSHIP = "relationship";
@@ -354,10 +355,10 @@ public class OntologyRepository {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY, getAuthorizations());
-        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY);
-        ONTOLOGY_TITLE.setProperty(builder, conceptName, DEFAULT_VISIBILITY);
-        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY);
+        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
+        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, conceptName, DEFAULT_VISIBILITY.getVisibility());
+        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY.getVisibility());
         Vertex vertex = builder.save();
 
         concept = new Concept(vertex);
@@ -379,7 +380,7 @@ public class OntologyRepository {
         if (matchingEdges.hasNext()) {
             return;
         }
-        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY, getAuthorizations());
+        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
     }
 
     public OntologyProperty addPropertyTo(Vertex vertex, String propertyName, String displayName, PropertyType dataType) {
@@ -399,11 +400,11 @@ public class OntologyRepository {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY, getAuthorizations());
-        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY);
-        ONTOLOGY_TITLE.setProperty(builder, relationshipName, DEFAULT_VISIBILITY);
-        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY);
-        DISPLAY_TYPE.setProperty(builder, TYPE_RELATIONSHIP, DEFAULT_VISIBILITY);
+        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
+        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, relationshipName, DEFAULT_VISIBILITY.getVisibility());
+        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY.getVisibility());
+        DISPLAY_TYPE.setProperty(builder, TYPE_RELATIONSHIP, DEFAULT_VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
@@ -431,13 +432,13 @@ public class OntologyRepository {
     public OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
-            VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY, getAuthorizations());
-            CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY);
-            DISPLAY_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY);
-            ONTOLOGY_TITLE.setProperty(builder, propertyName, DEFAULT_VISIBILITY);
-            DATA_TYPE.setProperty(builder, dataType.toString(), DEFAULT_VISIBILITY);
+            VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
+            CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY.getVisibility());
+            DISPLAY_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY.getVisibility());
+            ONTOLOGY_TITLE.setProperty(builder, propertyName, DEFAULT_VISIBILITY.getVisibility());
+            DATA_TYPE.setProperty(builder, dataType.toString(), DEFAULT_VISIBILITY.getVisibility());
             if (displayName != null && !displayName.trim().isEmpty()) {
-                DISPLAY_NAME.setProperty(builder, displayName.trim(), DEFAULT_VISIBILITY);
+                DISPLAY_NAME.setProperty(builder, displayName.trim(), DEFAULT_VISIBILITY.getVisibility());
             }
             typeProperty = new OntologyProperty(builder.save());
             graph.flush();

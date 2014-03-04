@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.user;
 
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
@@ -24,7 +25,7 @@ import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 @Singleton
 public class UserRepository {
     public static final String VISIBILITY_STRING = "user";
-    public static final Visibility VISIBILITY = new Visibility(VISIBILITY_STRING);
+    public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
     private final Graph graph;
     private final String userConceptId;
@@ -40,12 +41,14 @@ public class UserRepository {
         this.authorizationRepository = authorizationRepository;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getId();
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
+        authorizationsSet.add(LumifyVisibility.VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
@@ -78,13 +81,13 @@ public class UserRepository {
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
         String userId = "USER_" + graph.getIdGenerator().nextId();
-        VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY, this.authorizations);
-        USERNAME.setProperty(userBuilder, username, VISIBILITY);
-        CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY);
-        PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY);
-        PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY);
-        STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY);
-        AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY);
+        VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY.getVisibility(), this.authorizations);
+        USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
+        CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
+        PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
+        PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
+        STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
+        AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
         Vertex user = userBuilder.save();
         graph.flush();
         return user;
@@ -93,8 +96,8 @@ public class UserRepository {
     public void setPassword(Vertex user, String password) {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
-        PASSWORD_SALT.setProperty(user, salt, VISIBILITY);
-        PASSWORD_HASH.setProperty(user, passwordHash, VISIBILITY);
+        PASSWORD_SALT.setProperty(user, salt, VISIBILITY.getVisibility());
+        PASSWORD_HASH.setProperty(user, passwordHash, VISIBILITY.getVisibility());
         graph.flush();
     }
 
@@ -124,7 +127,7 @@ public class UserRepository {
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        CURRENT_WORKSPACE.setProperty(user, workspaceId, VISIBILITY);
+        CURRENT_WORKSPACE.setProperty(user, workspaceId, VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }
@@ -134,7 +137,7 @@ public class UserRepository {
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        STATUS.setProperty(user, status.toString(), VISIBILITY);
+        STATUS.setProperty(user, status.toString(), VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }
@@ -149,7 +152,7 @@ public class UserRepository {
         this.authorizationRepository.addAuthorizationToGraph(auth);
 
         String authorizationsString = StringUtils.join(authorizations, ",");
-        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
+        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
         graph.flush();
     }
 
@@ -160,7 +163,7 @@ public class UserRepository {
         }
         authorizations.remove(auth);
         String authorizationsString = StringUtils.join(authorizations, ",");
-        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY);
+        AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
         graph.flush();
     }
 

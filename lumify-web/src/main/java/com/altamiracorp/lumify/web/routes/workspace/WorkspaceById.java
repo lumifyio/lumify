@@ -30,7 +30,7 @@ public class WorkspaceById extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String workspaceId = super.getWorkspaceId(request);
+        final String workspaceId = super.getAttributeString(request, "workspaceId");
         final User authUser = getUser(request);
         LOGGER.info("Attempting to retrieve workspace: %s", workspaceId);
         final Workspace workspace = workspaceRepository.findById(workspaceId, authUser);

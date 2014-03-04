@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -70,41 +71,41 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource == null ? "" : visibilitySource, workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource == null ? "" : visibilitySource, workspaceId);
         ElementMutation<Vertex> createdVertexMutation;
         if (graphVertexId != null) {
             createdVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
         } else {
-            createdVertexMutation = graph.prepareVertex(visibility, authorizations);
+            createdVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
         }
 
-        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), visibility);
-        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, visibility);
-        TITLE.setProperty(createdVertexMutation, title, visibility);
+        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), lumifyVisibility.getVisibility());
+        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, lumifyVisibility.getVisibility());
+        TITLE.setProperty(createdVertexMutation, title, lumifyVisibility.getVisibility());
 
         Vertex createdVertex = createdVertexMutation.save();
 
-        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, visibility);
+        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
         if (edge == null) {
-            graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+            graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
             if (labelDisplayName == null) {
                 labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
             }
 
             // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, visibility);
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, lumifyVisibility.getVisibility());
         }
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
-                .setSign(title, visibility)
-                .setOntologyClassUri(concept.getDisplayName(), visibility)
-                .setConceptGraphVertexId(concept.getId(), visibility)
-                .setVertexId(createdVertex.getId().toString(), visibility);
+                .setSign(title, lumifyVisibility.getVisibility())
+                .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
+                .setConceptGraphVertexId(concept.getId(), lumifyVisibility.getVisibility())
+                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 
         this.graph.flush();
