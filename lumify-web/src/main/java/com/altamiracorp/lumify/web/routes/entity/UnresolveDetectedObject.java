@@ -8,9 +8,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
@@ -63,9 +61,9 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         final String rowKey = getRequiredParameter(request, "rowKey");
         final String artifactId = getRequiredParameter(request, "artifactId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
 
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
@@ -93,7 +91,11 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
             graph.removeEdge(edge, authorizations);
             String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+
+            JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+            Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
+
             result.put("deleteEdge", true);
             result.put("edgeId", edge.getId());
             graph.flush();

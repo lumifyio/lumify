@@ -15,6 +15,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -78,14 +79,17 @@ public class UnresolveTermEntity extends BaseRequestHandler {
                 conceptId,
                 graphVertexId);
 
+        String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilitySource);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject result = new JSONObject();
+
+        JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
 
         // Unlinking the term with the vertex
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
@@ -104,6 +108,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         } else {
             termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
             modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, modelUserContext);
+
             termMention.getMetadata().setVertexId("", visibility);
 
             TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
@@ -132,6 +137,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
                 graph.removeEdge(edge, authorizations);
                 deleteEdge = true;
                 graph.flush();
+
                 auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
             }
         }
