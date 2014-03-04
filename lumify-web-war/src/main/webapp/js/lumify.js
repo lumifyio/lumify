@@ -49,6 +49,9 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
             console.warn('Error enabling DEBUG mode for flight, probably because Safari Private Browsing enabled', e);
         }
 
+        // Default templating
+        _.templateSettings.interpolate = /\{([\s\S]+?)\}/g;
+
         // Default datepicker options
         $.fn.datepicker.defaults.format = "yyyy-mm-dd";
         $.fn.datepicker.defaults.autoclose = true;

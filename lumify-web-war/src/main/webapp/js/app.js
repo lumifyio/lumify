@@ -22,6 +22,7 @@ define([
     return defineComponent(App);
 
     function App() {
+        var Graph3D;
         var MAX_RESIZE_TRIGGER_INTERVAL = 250;
         var DATA_MENUBAR_NAME = 'menubar-name';
 
@@ -44,6 +45,26 @@ define([
         });
 
         this.before('teardown', function() {
+
+            _.invoke([
+                WorkspaceOverlay,
+                MouseOverlay,
+                Sync,
+                Menubar,
+                Dashboard,
+                Search,
+                Workspaces,
+                Users,
+                Graph,
+                Map,
+                Detail,
+                Help
+            ], 'teardownAll');
+
+            if (Graph3D) {
+                Graph3D.teardownAll();
+            }
+
             this.$node.empty();
         });
 
@@ -138,11 +159,11 @@ define([
 
             this.triggerPaneResized();
             if (self.attr.animateFromLogin) {
-                $(document.body).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
+                $(document.body).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', _.once(function(e) {
                     data.loadActiveWorkspace();
                     self.trigger(document, 'applicationReady');
                     graphPane.focus();
-                });
+                }));
                 _.defer(function() {
                     $(document.body).addClass('animateloginstart');
                 })
@@ -203,9 +224,9 @@ define([
                 node3d = this.$node.find('.graph-pane-3d'),
                 reloadWorkspace = !this._graphDimensions;
 
-            // TODO: redraw graph
+            require(['graph/3d/graph'], function(graph3d) {
+                Graph3D = graph3d;
 
-            require(['graph/3d/graph'], function(Graph3D) {
                 if (!self._graphDimensions || self._graphDimensions === 2) {
                     node2d.removeClass('visible');
                     Graph3D.attachTo(node3d.addClass('visible'));

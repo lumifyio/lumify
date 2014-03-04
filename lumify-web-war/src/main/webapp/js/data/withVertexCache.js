@@ -113,7 +113,7 @@ define([
 
         function setPreviewsForVertex(vertex) {
             var vId = encodeURIComponent(vertex.id),
-                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>");
+                artifactUrl = _.template("/artifact/" + vId + "/{ type }");
 
             vertex.imageSrcIsFromConcept = false;
 
