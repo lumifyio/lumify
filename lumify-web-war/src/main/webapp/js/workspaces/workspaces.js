@@ -179,8 +179,34 @@ define([
                     } else {
                         li.replaceWith(content);
                     }
+
+                    // Sort section because title might be renamed
+                    var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser)
+                        titleGetter = function() { return $(this).data('title'); },
+                        lowerCase = function(s) { return s.toLowerCase(); },
+                        titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
+                        insertIndex = _.indexOf(titles, data.title),
+                        currentIndex = lis.index(content);
+
+                    if (currentIndex < insertIndex) {
+                        content.insertAfter(lis.eq(insertIndex));
+                    } else if (currentIndex > insertIndex) {
+                        content.insertBefore(lis.eq(insertIndex));
+                    }
                 } else li.remove();
             });
+        };
+
+        this.getWorkspaceListItemsInSection = function(shared) {
+            if (shared) {
+                return this.select('listSelector')
+                    .children('.nav-header').eq(1)
+                    .nextUntil();
+            } else {
+                return this.select('listSelector')
+                    .children('.nav-header').eq(0)
+                    .nextUntil('.new-workspace');
+            }
         };
 
         this.onWorkspaceCopied = function ( event, data ) {

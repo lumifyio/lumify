@@ -16,12 +16,14 @@ describe('Workspace', function () {
         var title = 'My new workspace';
 
         return this.browser
-            .elementByCss('.new-workspace input')
+            .waitForElementByCss('.new-workspace input')
             .type(title)
             .sendKeys(this.KEYS.Return)
-            .waitForElementByCss('.workspaces-list li:nth-child(3).active', utils.requestTimeout)
-            .should.eventually.exist
-            .text().should.eventually.include(title)
+            .waitForElementByCss(
+                '.workspaces-list > li:nth-child(3)', 
+                this.asserters.textInclude(title), 
+                utils.requestTimeout, 10
+            ).should.eventually.exist
     })
 
     it('Should be able to rename workspace', function() {
@@ -29,44 +31,50 @@ describe('Workspace', function () {
             newTitle = 'Another name';
 
         return this.browser
-            .elementByCss('.workspaces-list li:nth-child(3) .disclosure')
+            .waitForElementByCss('.workspaces-list > li:nth-child(3).active .disclosure')
             .click()
-            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed, utils.requestTimeout)
                 .should.eventually.exist
-            .elementByCss('input.workspace-title').getValue().should.become('My new workspace')
-            .elementByCss('input.workspace-title').clear().type(newTitle)
+            .waitForElementByCss('input.workspace-title').getValue().should.become('My new workspace')
+            .waitForElementByCss('input.workspace-title').clear().type(newTitle)
             .waitForElementByCss(
-                '.workspaces-list li:nth-child(3) .nav-list-title',
-                utils.assertions.includesText(newTitle), utils.requestTimeout)
-            .text().should.eventually.include(newTitle)
+                '.workspaces-list > li:nth-child(2) .nav-list-title',
+                this.asserters.textInclude(newTitle), 
+                utils.requestTimeout
+            ).should.eventually.be.ok
     })
 
     it('Should be able to delete workspace', function() {
         return this.browser
-            .elementByCss('.workspace-form button.delete')
+            .waitForElementByCss('.workspace-form button.delete')
             .click()
-            .waitForElementByCss('.workspaces-list li:nth-child(3).new-workspace', utils.requestTimeout)
+            .waitForElementByCss('.workspaces-list > li:nth-child(3).new-workspace', utils.requestTimeout)
             .should.eventually.exist
+            .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 5"), utils.requestTimeout)
+                .should.eventually.be.ok
+            .waitForElementByCss('.workspaces-list > li:nth-child(2).active')
+                .should.eventually.exist
     })
 
     it('Should be able to copy workspace', function() {
         return this.browser
-            .elementByCss('.workspaces-list .disclosure')
+            .waitForElementByCss('.workspaces-list > li:nth-child(2) .disclosure')
             .click()
-            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
-            .elementByCss('.workspace-form button.copy')
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed, utils.requestTimeout)
+            .waitForElementByCss('.workspace-form button.copy').should.eventually.exist
             .click()
+            .waitForElementByCss('.workspace-form', this.asserters.isNotDisplayed, utils.requestTimeout)
+            .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 6"), utils.requestTimeout).should.eventually.be.ok
             .waitForElementByCss(
-                '.workspaces-list li:nth-child(2) .nav-list-title',
-                utils.assertions.includesText('Copy of Default - ' + utils.username), 
-                utils.requestTimeout)
-            .waitForElementByCss('.workspaces-list li:nth-child(2) .disclosure')
-                .should.eventually.exist
+                '.workspaces-list > li:nth-child(2).active .nav-list-title',
+                this.asserters.textInclude('Copy of Default - ' + utils.username), 
+                utils.requestTimeout).should.eventually.exist
+            .waitForElementByCss('.workspaces-list > li:nth-child(2).active .disclosure')
             .click()
-            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
-            .elementByCss('.workspace-form button.delete')
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed, utils.requestTimeout)
+            .waitForElementByCss('.workspace-form button.delete')
             .click()
-            .waitForElementByCss('.workspaces-list li:nth-child(3).new-workspace', utils.requestTimeout)
+            .waitForElementByCss('.workspaces-list > li:nth-child(3).new-workspace', utils.requestTimeout)
                 .should.eventually.exist
     })
 
@@ -81,7 +89,6 @@ describe('Workspace', function () {
                         mainWindowSize = { width:s.width, height:s.height }
                         return browser;
                     })
-                    .setWindowPosition(0, 0)
             })
             .sessionCapabilities()
             .then(function(capabilities) {
@@ -90,21 +97,21 @@ describe('Workspace', function () {
                     .init(capabilities)
                     .getSessionId().then(function(sessionId) { altSession = sessionId; return browser; })
                     .setWindowSize(mainWindowSize.width,mainWindowSize.height)
-                    .setWindowPosition(500,0)
+                    .setWindowPosition(mainWindowSize.width,0)
             })
             .login(utils.usernameAlt, 'password')
             .clickMenubarIcon('workspaces')
             .waitFor(this.asserters.jsCondition(utils.animations.openWorkspaceAnimationFinished) , utils.animationTimeout)
-            .elementByCss('.workspaces-list button.disclosure')
+            .waitForElementByCss('.workspaces-list button.disclosure')
             .click()
-            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed)
-            .elementByCss('.share-form input')
-            .type('selenium')
-            .waitForElementByCss('.share-form .dropdown-menu', this.asserters.isDisplayed)
-            .waitForElementByCss('.share-form .dropdown-menu li[data-value="' + utils.username + '"]')
+            .waitForElementByCss('.workspace-form', this.asserters.isDisplayed, utils.requestTimeout)
+            .waitForElementByCss('.workspace-form .share-form input')
+            .type(utils.username)
+            .waitForElementByCss('.share-form .dropdown-menu', this.asserters.isDisplayed, utils.requestTimeout)
+            .waitForElementByCss('.share-form .dropdown-menu > li', utils.requestTimeout)
             .click()
-            .waitFor(this.asserters.jsCondition("/View/i.test($('.user-row .permissions').text())"), utils.requestTimeout)
-
+            .waitForElementByCss('.user-row .permissions', this.asserters.textInclude('View'), utils.requestTimeout)
+                .should.eventually.exist
             .waitForElementByCss('.workspaces-list .nav-list-subtitle')
                 .text().should.become('Shared with 1 person')
     })
@@ -115,20 +122,24 @@ describe('Workspace', function () {
             // Switch back to main
             .detach().then(function() { return browser.attach(mainSession) })
 
-            .waitForElementByCss('.workspaces-list li:nth-child(6)')
+            .waitForElementByCss('.workspaces-list > li:nth-child(6)')
                 .should.eventually.exist
 
     })
 
     it('Should be able to open shared workspace', function() {
         return this.browser
-            .elementByCss('.workspaces-list li:nth-child(6) .nav-list-title')
+            .waitForElementByCss('.workspaces-list > li:nth-child(6) .nav-list-title')
                 .click()
                 .text().should.become('Default - ' + utils.usernameAlt)
-
-            .waitFor(this.asserters.jsCondition("$('.workspace-overlay h1.name').text() === 'Default - " + utils.usernameAlt + "'"), utils.requestTimeout)
+            .waitForElementByCss('.workspaces-list > li:nth-child(6).active')
+                .should.eventually.exist
+            .waitForElementByCss(
+                '.workspace-overlay h1.name', 
+                this.asserters.textInclude('Default - ' + utils.usernameAlt),
+                utils.requestTimeout
+            ).should.eventually.exist
             .waitForElementByCss('.workspace-overlay .subtitle').text().should.become('read only')
-
     })
 
     it('Should be able to change access to edit', function() {
@@ -139,14 +150,18 @@ describe('Workspace', function () {
             .waitForElementByCss('.user-row .badge').click()
             .waitForElementByCss('.workspace-form .popover', this.asserters.isDisplayed)
             .waitForElementByCss('.permissions-list input[data-permissions=WRITE]').click()
-            .waitFor(this.asserters.jsCondition("/Edit/i.test($('.user-row .permissions').text())"), utils.requestTimeout)
+            .waitForElementByCss(
+                '.user-row .permissions', 
+                this.asserters.textInclude('Edit'), utils.requestTimeout)
 
     })
 
     it('Should have workspace thats not read only', function() {
         return this.browser
             .detach().then(function() { return browser.attach(mainSession) })
-            .waitFor(this.asserters.jsCondition("/no changes/i.test($('.workspace-overlay .subtitle').text())"), utils.requestTimeout)
+            .waitForElementByCss(
+                '.workspace-overlay .subtitle', 
+                this.asserters.textInclude('no changes'), utils.requestTimeout)
     })
 
     it('Should be able to remove access', function() {
