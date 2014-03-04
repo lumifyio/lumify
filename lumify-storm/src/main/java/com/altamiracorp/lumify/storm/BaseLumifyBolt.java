@@ -18,6 +18,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -230,14 +231,14 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     }
 
     private void updateMutationWithArtifactExtractedInfo(ElementMutation<Vertex> artifact, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
-        Visibility visibility = new Visibility("");
+        LumifyVisibility lumifyVisibility = new LumifyVisibility();
 
         Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
-        CONCEPT_TYPE.setProperty(artifact, concept.getId(), visibility);
+        CONCEPT_TYPE.setProperty(artifact, concept.getId(), lumifyVisibility.getVisibility());
 
         if (artifactExtractedInfo.getDate() != null) {
-            CREATE_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), visibility);
+            CREATE_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getRaw() != null || artifactExtractedInfo.getRawHdfsPath() != null) {
@@ -248,13 +249,13 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
                 rawStreamingPropertyValue = new StreamingPropertyValue(openFile(artifactExtractedInfo.getRawHdfsPath()), byte[].class);
             }
             rawStreamingPropertyValue.searchIndex(false);
-            RAW.setProperty(artifact, rawStreamingPropertyValue, visibility);
+            RAW.setProperty(artifact, rawStreamingPropertyValue, lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getVideoTranscript() != null) {
             // TODO should video transcript be converted to a StreamingPropertyValue?
-            VIDEO_TRANSCRIPT.setProperty(artifact, artifactExtractedInfo.getVideoTranscript().toString(), visibility);
-            VIDEO_DURATION.setProperty(artifact, artifactExtractedInfo.getVideoDuration(), visibility);
+            VIDEO_TRANSCRIPT.setProperty(artifact, artifactExtractedInfo.getVideoTranscript().toString(), lumifyVisibility.getVisibility());
+            VIDEO_DURATION.setProperty(artifact, artifactExtractedInfo.getVideoDuration(), lumifyVisibility.getVisibility());
 
             // TODO should we combine text like this? If the text ends up on HDFS the text here is technically invalid
             if (artifactExtractedInfo.getText() == null) {
@@ -271,60 +272,60 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             } else {
                 textStreamingPropertyValue = new StreamingPropertyValue(openFile(artifactExtractedInfo.getTextHdfsPath()), String.class);
             }
-            TEXT.setProperty(artifact, textStreamingPropertyValue, visibility);
+            TEXT.setProperty(artifact, textStreamingPropertyValue, lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getMappingJson() != null) {
-            MAPPING_JSON.setProperty(artifact, artifactExtractedInfo.getMappingJson(), visibility);
+            MAPPING_JSON.setProperty(artifact, artifactExtractedInfo.getMappingJson(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getTitle() != null) {
-            TITLE.setProperty(artifact, artifactExtractedInfo.getTitle(), visibility);
+            TITLE.setProperty(artifact, artifactExtractedInfo.getTitle(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getFileExtension() != null) {
-            FILE_NAME_EXTENSION.setProperty(artifact, artifactExtractedInfo.getFileExtension(), visibility);
+            FILE_NAME_EXTENSION.setProperty(artifact, artifactExtractedInfo.getFileExtension(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getMimeType() != null) {
-            MIME_TYPE.setProperty(artifact, artifactExtractedInfo.getMimeType(), visibility);
+            MIME_TYPE.setProperty(artifact, artifactExtractedInfo.getMimeType(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getSource() != null) {
-            SOURCE.setProperty(artifact, artifactExtractedInfo.getSource(), visibility);
+            SOURCE.setProperty(artifact, artifactExtractedInfo.getSource(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getDate() != null) {
-            PUBLISHED_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), visibility);
+            PUBLISHED_DATE.setProperty(artifact, artifactExtractedInfo.getDate(), lumifyVisibility.getVisibility());
         }
 
         String author = artifactExtractedInfo.getAuthor();
         if (author != null && !author.trim().isEmpty()) {
-            AUTHOR.setProperty(artifact, author.trim(), visibility);
+            AUTHOR.setProperty(artifact, author.trim(), lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getMp4HdfsFilePath()), byte[].class);
             spv.searchIndex(false);
-            getVideoProperty(VIDEO_TYPE_MP4).setProperty(artifact, spv, visibility);
-            getVideoSizeProperty(VIDEO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), visibility);
+            getVideoProperty(VIDEO_TYPE_MP4).setProperty(artifact, spv, lumifyVisibility.getVisibility());
+            getVideoSizeProperty(VIDEO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), lumifyVisibility.getVisibility());
         }
         if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getWebMHdfsFilePath()), byte[].class);
             spv.searchIndex(false);
-            getVideoProperty(VIDEO_TYPE_WEBM).setProperty(artifact, spv, visibility);
+            getVideoProperty(VIDEO_TYPE_WEBM).setProperty(artifact, spv, lumifyVisibility.getVisibility());
             getVideoSizeProperty(VIDEO_TYPE_WEBM).setProperty(artifact, getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()),
-                    visibility);
+                    lumifyVisibility.getVisibility());
         }
         if (artifactExtractedInfo.getAudioHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioHdfsPath()), byte[].class);
             spv.searchIndex(false);
-            AUDIO.setProperty(artifact, spv, visibility);
+            AUDIO.setProperty(artifact, spv, lumifyVisibility.getVisibility());
         }
         if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getPosterFrameHdfsPath()), byte[].class);
             spv.searchIndex(false);
-            RAW_POSTER_FRAME.setProperty(artifact, spv, visibility);
+            RAW_POSTER_FRAME.setProperty(artifact, spv, lumifyVisibility.getVisibility());
         }
     }
 

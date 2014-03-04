@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -57,16 +58,16 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Visibility visibility;
+        LumifyVisibility lumifyVisibility;
         if (visibilitySource != null) {
-            visibility = visibilityTranslator.toVisibility(visibilitySource);
+            lumifyVisibility = visibilityTranslator.toVisibility(visibilitySource);
         } else {
-            visibility = new Visibility("");
+            lumifyVisibility = new LumifyVisibility();
         }
-        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
+        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, visibility);
+        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, lumifyVisibility.getVisibility());
 
         graph.flush();
 

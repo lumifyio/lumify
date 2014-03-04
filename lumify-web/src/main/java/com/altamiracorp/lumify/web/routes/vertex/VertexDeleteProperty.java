@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -67,7 +68,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             metadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 
-        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", metadata, user, new Visibility(""));
+        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, oldValue, null, "", "", metadata, user, new LumifyVisibility().getVisibility());
 
         // TODO: broadcast property delete
 

@@ -13,7 +13,7 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
     }
 
     @Override
-    public Visibility toVisibility(String source, String... additionalRequiredVisibilities) {
+    public LumifyVisibility toVisibility(String source, String... additionalRequiredVisibilities) {
         StringBuilder visibilityString = new StringBuilder();
         List<String> all = new ArrayList<String>();
 
@@ -33,11 +33,11 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
                     .append(additionalRequiredVisibility)
                     .append(")");
         }
-        return new Visibility(visibilityString.toString());
+        return new LumifyVisibility(visibilityString.toString());
     }
 
     @Override
-    public Visibility toVisibilityWithWorkspace(String source, String workspaceId) {
+    public LumifyVisibility toVisibilityWithWorkspace(String source, String workspaceId) {
         String[] additionalRequiredVisibilities;
         if (workspaceId == null) {
             additionalRequiredVisibilities = new String[0];

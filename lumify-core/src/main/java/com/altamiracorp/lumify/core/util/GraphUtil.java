@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
@@ -143,7 +144,7 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
         propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
 
         if (justificationText != null) {
@@ -166,10 +167,10 @@ public class GraphUtil {
 
         if (GEO_LOCATION.getKey().equals(propertyName)) {
             GeoPoint geoPoint = (GeoPoint) value;
-            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, visibility);
-            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, visibility);
+            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, lumifyVisibility.getVisibility());
+            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, lumifyVisibility.getVisibility());
         } else {
-            elementMutation.setProperty(propertyName, value, propertyMetadata, visibility);
+            elementMutation.setProperty(propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         }
         return elementMutation;
     }
@@ -183,7 +184,7 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
-        return graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
+        return graph.addEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations);
     }
 }
