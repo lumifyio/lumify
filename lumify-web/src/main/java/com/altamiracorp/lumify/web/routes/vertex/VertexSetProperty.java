@@ -86,7 +86,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
-        auditRepository.auditVertexElementMutation(setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility);
+        auditRepository.auditVertexElementMutation(setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
         graphVertex = setPropertyResult.elementMutation.save();
         graph.flush();
 

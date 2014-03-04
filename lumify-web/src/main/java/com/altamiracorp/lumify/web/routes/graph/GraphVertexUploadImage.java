@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -46,6 +47,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final String DEFAULT_MIME_TYPE = "image";
     private static final String SOURCE_UPLOAD = "User Upload";
     private static final String PROCESS = GraphVertexUploadImage.class.getName();
+    private final LumifyVisibility lumifyVisibility = new LumifyVisibility();
 
     private final Graph graph;
     private final AuditRepository auditRepository;
@@ -88,31 +90,30 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             return;
         }
 
-        Visibility visibility = new Visibility("");
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
         String conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
-        DISPLAY_TYPE.setProperty(artifactBuilder, DisplayType.IMAGE.toString(), visibility);
-        CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, visibility);
-        TITLE.setProperty(artifactBuilder, String.format("Image of %s", TITLE.getPropertyValue(entityVertex)), visibility);
-        SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, visibility);
-        LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, visibility);
+        DISPLAY_TYPE.setProperty(artifactBuilder, DisplayType.IMAGE.toString(), lumifyVisibility.getVisibility());
+        CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, lumifyVisibility.getVisibility());
+        TITLE.setProperty(artifactBuilder, String.format("Image of %s", TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());
+        SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, lumifyVisibility.getVisibility());
+        LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, lumifyVisibility.getVisibility());
         Vertex artifactVertex = artifactBuilder.save();
 
-        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user, visibility);
+        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
         // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
-        entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), visibility);
-        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user, visibility);
+        entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations).iterator();
         if (!existingEdges.hasNext()) {
-            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), visibility, authorizations);
+            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user, visibility);
+        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user, lumifyVisibility.getVisibility());
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 
@@ -138,13 +139,12 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.searchIndex(false);
         rawValue.store(true);
 
-        Visibility visibility = new Visibility("");
-        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(visibility, authorizations);
-        CREATE_DATE.setProperty(vertexBuilder, new Date(), visibility);
-        FILE_NAME.setProperty(vertexBuilder, fileName, visibility);
-        FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), visibility);
-        MIME_TYPE.setProperty(vertexBuilder, mimeType, visibility);
-        RAW.setProperty(vertexBuilder, rawValue, visibility);
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
+        CREATE_DATE.setProperty(vertexBuilder, new Date(), lumifyVisibility.getVisibility());
+        FILE_NAME.setProperty(vertexBuilder, fileName, lumifyVisibility.getVisibility());
+        FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), lumifyVisibility.getVisibility());
+        MIME_TYPE.setProperty(vertexBuilder, mimeType, lumifyVisibility.getVisibility());
+        RAW.setProperty(vertexBuilder, rawValue, lumifyVisibility.getVisibility());
         return vertexBuilder;
     }
 }

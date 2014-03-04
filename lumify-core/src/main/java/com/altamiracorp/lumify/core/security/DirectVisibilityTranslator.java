@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.security;
 
-import com.altamiracorp.securegraph.Visibility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +13,7 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
     }
 
     @Override
-    public Visibility toVisibility(JSONObject visibilityJson) {
+    public LumifyVisibility toVisibility(JSONObject visibilityJson) {
         StringBuilder visibilityString = new StringBuilder();
 
         List<String> all = new ArrayList<String>();
@@ -42,6 +41,7 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
                     .append(additionalRequiredVisibility)
                     .append(")");
         }
-        return new Visibility(visibilityString.toString());
+
+        return new LumifyVisibility(visibilityString.toString());
     }
 }

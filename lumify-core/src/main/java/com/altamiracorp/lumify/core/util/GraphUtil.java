@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
@@ -127,9 +128,9 @@ public class GraphUtil {
 
     public static class VisibilityAndElementMutation<T extends Element> {
         public final ElementMutation<T> elementMutation;
-        public final Visibility visibility;
+        public final LumifyVisibility visibility;
 
-        public VisibilityAndElementMutation(Visibility visibility, ElementMutation<T> elementMutation) {
+        public VisibilityAndElementMutation(LumifyVisibility visibility, ElementMutation<T> elementMutation) {
             this.visibility = visibility;
             this.elementMutation = elementMutation;
         }
@@ -155,11 +156,9 @@ public class GraphUtil {
 
         String visibilityJsonString = (String) propertyMetadata.get(VISIBILITY_JSON_PROPERTY);
         JSONObject visibilityJson = updateVisibilityJson(visibilityJsonString, visibilitySource, workspaceId);
-        if (propertyMetadata != null) {
-            propertyMetadata.put(VISIBILITY_JSON_PROPERTY, visibilityJson.toString());
-        }
+        propertyMetadata.put(VISIBILITY_JSON_PROPERTY, visibilityJson.toString());
 
-        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
@@ -181,12 +180,12 @@ public class GraphUtil {
 
         if (GEO_LOCATION.getKey().equals(propertyName)) {
             GeoPoint geoPoint = (GeoPoint) value;
-            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, visibility);
-            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, visibility);
+            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, lumifyVisibility.getVisibility());
+            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, lumifyVisibility.getVisibility());
         } else {
-            elementMutation.setProperty(propertyName, value, propertyMetadata, visibility);
+            elementMutation.setProperty(propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         }
-        return new VisibilityAndElementMutation<T>(visibility, elementMutation);
+        return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
     }
 
     public static Edge addEdge(
@@ -199,9 +198,9 @@ public class GraphUtil {
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
         JSONObject visibilityJson = updateVisibilityJson(null, visibilitySource, workspaceId);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
-        return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations)
-                .setProperty(VISIBILITY_JSON_PROPERTY, visibilityJson.toString(), visibility)
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+        return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
+                .setProperty(VISIBILITY_JSON_PROPERTY, visibilityJson.toString(), lumifyVisibility.getVisibility())
                 .save();
     }
 
