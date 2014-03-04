@@ -113,7 +113,7 @@ define([
         function setPreviewsForVertex(vertex, currentWorkspace) {
             var workspaceParameter = '?workspaceId=' + encodeURIComponent(currentWorkspace),
                 vId = encodeURIComponent(vertex.id),
-                artifactUrl = _.template("/artifact/" + vId + "/<%= type %>" + workspaceParameter);
+                artifactUrl = _.template("/artifact/" + vId + "/{ type }" + workspaceParameter);
 
             vertex.imageSrcIsFromConcept = false;
 
