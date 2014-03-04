@@ -19,7 +19,7 @@ import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperti
 
 public class GraphUtil {
     private static final String VISIBILITY_PROPERTY = "_visibility";
-    private static final String VISIBILITY_SOURCE_PROPERTY = "_visibilitySource";
+    private static final String VISIBILITY_JSON_PROPERTY = "_visibilityJson";
 
     public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
@@ -125,7 +125,17 @@ public class GraphUtil {
         return result;
     }
 
-    public static <T extends Element> ElementMutation<T> setProperty(
+    public static class VisibilityAndElementMutation<T extends Element> {
+        public final ElementMutation<T> elementMutation;
+        public final Visibility visibility;
+
+        public VisibilityAndElementMutation(Visibility visibility, ElementMutation<T> elementMutation) {
+            this.visibility = visibility;
+            this.elementMutation = elementMutation;
+        }
+    }
+
+    public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
             T element,
             String propertyName,
             Object value,
@@ -143,8 +153,13 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
-        propertyMetadata.put(VISIBILITY_SOURCE_PROPERTY, visibilitySource);
+        String visibilityJsonString = (String) propertyMetadata.get(VISIBILITY_JSON_PROPERTY);
+        JSONObject visibilityJson = updateVisibilityJson(visibilityJsonString, visibilitySource, workspaceId);
+        if (propertyMetadata != null) {
+            propertyMetadata.put(VISIBILITY_JSON_PROPERTY, visibilityJson.toString());
+        }
+
+        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
 
         if (justificationText != null) {
             PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
@@ -171,7 +186,7 @@ public class GraphUtil {
         } else {
             elementMutation.setProperty(propertyName, value, propertyMetadata, visibility);
         }
-        return elementMutation;
+        return new VisibilityAndElementMutation<T>(visibility, elementMutation);
     }
 
     public static Edge addEdge(
@@ -183,7 +198,26 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource, workspaceId);
-        return graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
+        JSONObject visibilityJson = updateVisibilityJson(null, visibilitySource, workspaceId);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
+        return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations)
+                .setProperty(VISIBILITY_JSON_PROPERTY, visibilityJson.toString(), visibility)
+                .save();
+    }
+
+    public static JSONObject updateVisibilityJson(String jsonString, String visibilitySource, String workspaceId) {
+        JSONObject json;
+        if (jsonString == null) {
+            json = new JSONObject();
+        } else {
+            json = new JSONObject(jsonString);
+        }
+
+        json.put("source", visibilitySource);
+
+        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, "workspaces");
+        JSONUtil.addToJSONArrayIfDoesNotExist(workspacesJsonArray, workspaceId);
+
+        return json;
     }
 }

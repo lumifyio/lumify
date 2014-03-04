@@ -7,11 +7,15 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,16 +61,10 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Visibility visibility;
-        if (visibilitySource != null) {
-            visibility = visibilityTranslator.toVisibility(visibilitySource);
-        } else {
-            visibility = new Visibility("");
-        }
-        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
+        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, visibilitySource, workspaceId, visibilityTranslator, authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, visibility);
+        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, edge.getVisibility());
 
         graph.flush();
 

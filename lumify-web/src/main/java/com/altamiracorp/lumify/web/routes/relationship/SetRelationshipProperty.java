@@ -15,7 +15,6 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -84,11 +83,11 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
         Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
-        ElementMutation<Edge> graphEdgeMutation = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
-        graphEdgeMutation.save();
+        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
+        setPropertyResult.elementMutation.save();
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user, visibilityTranslator.toVisibility(visibilitySource));
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user, setPropertyResult.visibility);
 
         JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties());
         respondWithJson(response, resultsJson);

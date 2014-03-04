@@ -13,7 +13,10 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -82,9 +85,9 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        ElementMutation<Vertex> graphVertexMutation = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
-        auditRepository.auditVertexElementMutation(graphVertexMutation, graphVertex, "", user, visibilityTranslator.toVisibility(visibilitySource));
-        graphVertex = graphVertexMutation.save();
+        GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
+        auditRepository.auditVertexElementMutation(setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility);
+        graphVertex = setPropertyResult.elementMutation.save();
         graph.flush();
 
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));

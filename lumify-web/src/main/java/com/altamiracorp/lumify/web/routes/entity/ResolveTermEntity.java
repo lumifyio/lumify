@@ -13,10 +13,12 @@ import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,7 +72,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        Visibility visibility = visibilityTranslator.toVisibilityWithWorkspace(visibilitySource == null ? "" : visibilitySource, workspaceId);
+        JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementMutation<Vertex> createdVertexMutation;
         if (graphVertexId != null) {
             createdVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
