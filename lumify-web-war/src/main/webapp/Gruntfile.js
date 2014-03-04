@@ -157,8 +157,8 @@ module.exports = function(grunt) {
             viewport: { width: 900, height: 700 },
             timeout: 30e3,
             slow: 10e3,
-            implicitWaitTimeout: 1,
-            asyncScriptTimeout: 1000,
+            implicitWaitTimeout: 100,
+            asyncScriptTimeout: 5000,
             usePromises: true,
             useChaining: true,
             ignoreLeaks: false
