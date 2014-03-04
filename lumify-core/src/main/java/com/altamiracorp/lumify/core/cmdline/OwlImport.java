@@ -131,7 +131,7 @@ public class OwlImport extends CommandLineBase {
                 propertyName = MAP_GLYPH_ICON.getKey();
                 propertyValue = importGlyphIconFile(propertyValue.toString(), user);
             }
-            concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY);
+            concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY.getVisibility());
         }
         graph.flush();
     }

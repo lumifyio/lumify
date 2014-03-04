@@ -9,12 +9,16 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.ElementMutation;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -63,7 +67,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
-        Visibility visibility = visibilityTranslator.toVisibility(visibilityJson);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
@@ -74,19 +78,19 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         if (rowKey != null) {
             detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
-            detectedObjectModel.getMetadata().setResolvedId(id, visibility);
+            detectedObjectModel.getMetadata().setResolvedId(id, lumifyVisibility.getVisibility());
             detectedObjectRepository.save(detectedObjectModel);
         } else {
-            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, visibility);
+            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility());
         }
 
         if (graphVertexId == null || graphVertexId.equals("")) {
-            resolvedVertexMutation = graph.prepareVertex(id, visibility, authorizations);
-            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), visibility);
-            TITLE.setProperty(resolvedVertexMutation, title, visibility);
+            resolvedVertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
+            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
+            TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();
-            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, visibility);
+            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         } else {
             resolvedVertex = graph.getVertex(id, authorizations);
@@ -94,10 +98,10 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex));
 
-        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), visibility, authorizations);
+        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, visibility);
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
 
