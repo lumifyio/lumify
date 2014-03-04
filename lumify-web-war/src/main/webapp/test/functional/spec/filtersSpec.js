@@ -24,7 +24,7 @@ describe('Filters', function () {
               .clickMenubarIcon('search')
               .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished), utils.animationTimeout)
                 .should.eventually.be.ok
-              .waitForElementByCss('.search-query:focus')
+              .waitForElementByCss('.search-query:focus', utils.animationTimeout)
                 .should.eventually.exist
               .clear()
     })

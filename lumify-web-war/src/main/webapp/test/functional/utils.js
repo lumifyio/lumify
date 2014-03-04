@@ -15,7 +15,7 @@ utils = {
 
     pageLoadTimeout:  10000, // For initial page display
     animationTimeout: 2000,  // For animations to finish
-    requestTimeout:   10000, // For things that require a server response
+    requestTimeout:   15000, // For things that require a server response
 
     animations: {
         menubarAnimationFinished:     "$('.menubar-pane').offset().left >= -1",
@@ -66,13 +66,14 @@ utils = {
 
         clickMenubarIcon: function(menubarCls) {
             return this.browser
-                    .waitForElementByCss('.menubar-pane .' + menubarCls)
+                    .waitForElementByCss('.menubar-pane .' + menubarCls + ' a')
                         .should.eventually.exist
                     // Click doesn't seem to work right in firefox
                     .moveTo()
                     .buttonDown()
                     .sleep(10)
                     .buttonUp()
+                    .sleep(10)
         },
 
         searchForText: function(query) {
