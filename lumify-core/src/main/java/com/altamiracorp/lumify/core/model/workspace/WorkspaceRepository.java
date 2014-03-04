@@ -8,6 +8,8 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Relationship;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
+import com.altamiracorp.lumify.core.model.workspace.diff.WorkspaceDiff;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
@@ -32,16 +34,19 @@ public class WorkspaceRepository {
     private final String workspaceToUserRelationshipId;
     private final UserRepository userRepository;
     private final AuthorizationRepository authorizationRepository;
+    private final WorkspaceDiff workspaceDiff;
 
     @Inject
     public WorkspaceRepository(
             final Graph graph,
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
-            final AuthorizationRepository authorizationRepository) {
+            final AuthorizationRepository authorizationRepository,
+            final WorkspaceDiff workspaceDiff) {
         this.graph = graph;
         this.userRepository = userRepository;
         this.authorizationRepository = authorizationRepository;
+        this.workspaceDiff = workspaceDiff;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
 
@@ -292,5 +297,14 @@ public class WorkspaceRepository {
         }
 
         graph.flush();
+    }
+
+    public List<DiffItem> getDiff(Workspace workspace, User user) {
+        if (!doesUserHaveReadAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
+
+        List<WorkspaceEntity> workspaceEntities = findEntities(workspace, user);
+        return workspaceDiff.diff(workspace, workspaceEntities, user);
     }
 }

@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.Relationship;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.InMemoryAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.diff.WorkspaceDiff;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
@@ -55,6 +56,9 @@ public class WorkspaceRepositoryTest {
     private UserRepository userRepository;
 
     @Mock
+    private WorkspaceDiff workspaceDiff;
+
+    @Mock
     private User user1;
     private Vertex user1Vertex;
 
@@ -87,7 +91,7 @@ public class WorkspaceRepositoryTest {
         when(workspaceToUserRelationship.getId()).thenReturn("workspaceToUserRelationshipId");
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(entityConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
-        workspaceRepository = new WorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository);
+        workspaceRepository = new WorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository, workspaceDiff);
 
         String user1Id = "USER_testUser1";
         when(user1.getUserId()).thenReturn(user1Id);
