@@ -36,7 +36,7 @@ define([
 
     function MapViewOpenLayers() {
 
-        var ol;
+        var ol, latlon, point;
 
         this.vertexService = new VertexService();
         this.mode = MODE_NORMAL;
@@ -47,6 +47,18 @@ define([
             contextMenuVertexSelector: '.contextmenuvertex',
             controlsSelector: '.controls'
         });
+
+        this.before('teardown', function() {
+            this.mapReady(function(map) {
+                map.featuresLayer.destroyFeatures();
+                this.clusterStrategy.deactivate();
+                this.clusterStrategy.destroy();
+                map.destroy();
+                map = null;
+                this.mapUnload();
+                this.select('mapSelector').empty().removeClass('olMap');
+            })
+        })
 
         this.after('initialize', function() {
             this.initialized = false;
@@ -544,7 +556,7 @@ define([
                         enableKinetic: true
                     }
                 }),
-                map = new ol.Map('map', { 
+                map = new ol.Map({ 
                     zoomDuration: 0,
                     numZoomLevels: 18,
                     theme: null,
@@ -630,10 +642,11 @@ define([
 
             map.addLayers([base, map.featuresLayer]);
 
-            latLon = latLon.bind(null, map.displayProjection, map.getProjectionObject());
-            point = point.bind(null, map.displayProjection, map.getProjectionObject());
+            latLon = calcLatLon.bind(null, map.displayProjection, map.getProjectionObject());
+            point = calcPoint.bind(null, map.displayProjection, map.getProjectionObject());
 
             map.zoomTo(2);
+            map.render(this.select('mapSelector').get(0))
 
             this.mapMarkReady(map);
         };
@@ -668,7 +681,7 @@ define([
             };
         };
 
-        function point(sourceProjection, destProjection, x, y) {
+        function calcPoint(sourceProjection, destProjection, x, y) {
             if (arguments.length === 3 && _.isArray(x) && x.length === 2) {
                 y = x[1];
                 x = x[0];
@@ -677,7 +690,7 @@ define([
             return new ol.Geometry.Point(y, x).transform(sourceProjection, destProjection);
         }
 
-        function latLon(sourceProjection, destProjection, lat, lon) {
+        function calcLatLon(sourceProjection, destProjection, lat, lon) {
             if (arguments.length === 3 && _.isArray(lat) && lat.length === 2) {
                 lon = lat[1];
                 lat = lat[0];
