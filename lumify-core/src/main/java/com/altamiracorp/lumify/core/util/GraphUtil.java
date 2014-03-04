@@ -114,12 +114,15 @@ public class GraphUtil {
             result.put(VISIBILITY_PROPERTY, property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
-            if (property.getMetadata().get(key) instanceof PropertyJustificationMetadata) {
-                result.put(key, ((PropertyJustificationMetadata) property.getMetadata().get(key)).toJson());
-            } else if (property.getMetadata().get(key) instanceof PropertySourceMetadata) {
-                result.put(key, ((PropertySourceMetadata) property.getMetadata().get(key)).toJson());
+            value = property.getMetadata().get(key);
+            if (key.equals(VISIBILITY_JSON_PROPERTY)) {
+                result.put(key, new JSONObject(value.toString()));
+            } else if (value instanceof PropertyJustificationMetadata) {
+                result.put(key, ((PropertyJustificationMetadata) value).toJson());
+            } else if (value instanceof PropertySourceMetadata) {
+                result.put(key, ((PropertySourceMetadata) value).toJson());
             } else {
-                result.put(key, property.getMetadata().get(key));
+                result.put(key, value);
             }
         }
 
