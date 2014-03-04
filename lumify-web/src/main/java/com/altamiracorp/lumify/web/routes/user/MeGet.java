@@ -27,6 +27,6 @@ public class MeGet extends BaseRequestHandler {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        respondWithJson(response, UserRepository.toJson(userVertex));
+        respondWithJson(response, UserRepository.toJson(userVertex, user));
     }
 }

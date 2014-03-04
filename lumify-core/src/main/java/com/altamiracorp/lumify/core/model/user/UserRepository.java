@@ -7,11 +7,11 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
-import com.altamiracorp.securegraph.Visibility;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,12 +109,24 @@ public class UserRepository {
         }
     }
 
-    public static JSONObject toJson(Vertex user) {
+    public static JSONObject toJson(Vertex userVertex, User user) {
+        JSONObject json = toJson(userVertex);
+
+        JSONArray authorizations = new JSONArray();
+        for (String a : user.getAuthorizations()) {
+            authorizations.put(a);
+        }
+        json.put("authorizations", authorizations);
+
+        return json;
+    }
+
+    public static JSONObject toJson(Vertex userVertex) {
         try {
             JSONObject json = new JSONObject();
-            json.put("id", user.getId().toString());
-            json.put("userName", USERNAME.getPropertyValue(user));
-            json.put("status", STATUS.getPropertyValue(user).toLowerCase());
+            json.put("id", userVertex.getId().toString());
+            json.put("userName", USERNAME.getPropertyValue(userVertex));
+            json.put("status", STATUS.getPropertyValue(userVertex).toLowerCase());
             json.put("userType", UserType.USER.toString());
             return json;
         } catch (JSONException e) {
