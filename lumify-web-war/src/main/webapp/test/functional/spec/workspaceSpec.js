@@ -19,6 +19,7 @@ describe('Workspace', function () {
             .waitForElementByCss('.new-workspace input')
             .type(title)
             .sendKeys(this.KEYS.Return)
+            .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 6"), utils.requestTimeout)
             .waitForElementByCss(
                 '.workspaces-list > li:nth-child(3)', 
                 this.asserters.textInclude(title), 
@@ -56,13 +57,14 @@ describe('Workspace', function () {
                 .should.eventually.exist
     })
 
-    it('Should be able to copy workspace', function() {
+    xit('Should be able to copy workspace', function() {
         return this.browser
             .waitForElementByCss('.workspaces-list > li:nth-child(2) .disclosure')
             .click()
             .waitForElementByCss('.workspace-form', this.asserters.isDisplayed, utils.requestTimeout)
             .waitForElementByCss('.workspace-form button.copy').should.eventually.exist
             .click()
+            .getValue().should.become('Copying')
             .waitForElementByCss('.workspace-form', this.asserters.isNotDisplayed, utils.requestTimeout)
             .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 6"), utils.requestTimeout).should.eventually.be.ok
             .waitForElementByCss(
@@ -108,7 +110,7 @@ describe('Workspace', function () {
             .waitForElementByCss('.workspace-form .share-form input')
             .type(utils.username)
             .waitForElementByCss('.share-form .dropdown-menu', this.asserters.isDisplayed, utils.requestTimeout)
-            .waitForElementByCss('.share-form .dropdown-menu > li', utils.requestTimeout)
+            .waitForElementByCss('.share-form .dropdown-menu > li:not(:empty)', utils.requestTimeout)
             .click()
             .waitForElementByCss('.user-row .permissions', this.asserters.textInclude('View'), utils.requestTimeout)
                 .should.eventually.exist
