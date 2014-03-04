@@ -15,11 +15,16 @@ public class RequestDebugFilter implements Filter {
     public static final String HEADER_DELAY = "Lumify-Request-Delay-Millis";
     public static final String HEADER_ERROR = "Lumify-Request-Error";
 
+    static {
+        if ("true".equals(System.getProperty(LUMIFY_REQUEST_DEBUG))) {
+            LOGGER.warn("Request debugging is enabled. Set -D%s=false to disable", LUMIFY_REQUEST_DEBUG);
+        }
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         if ("true".equals(System.getProperty(LUMIFY_REQUEST_DEBUG))) {
-            LOGGER.warn("Request debugging is enabled");
             if (processDebugCommands(request, response)) {
                 return;
             }

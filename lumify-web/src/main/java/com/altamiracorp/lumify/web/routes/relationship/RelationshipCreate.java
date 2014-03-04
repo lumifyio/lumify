@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -33,8 +32,8 @@ public class RelationshipCreate extends BaseRequestHandler {
             final Graph graph,
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
-            final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
+            final UserRepository userRepository,
             final Configuration configuration) {
         super(userRepository, configuration);
         this.graph = graph;
@@ -48,7 +47,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
-        final String visibilitySource = getOptionalParameter(request, "visibilitySource"); // TODO change this to required when the front end is complete
+        final String visibilitySource = getOptionalParameter(request, "visibilitySource");
 
         String workspaceId = getWorkspaceId(request);
 
@@ -58,10 +57,16 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, visibilitySource, workspaceId, visibilityTranslator, authorizations);
+        Visibility visibility;
+        if (visibilitySource != null) {
+            visibility = visibilityTranslator.toVisibility(visibilitySource);
+        } else {
+            visibility = new Visibility("");
+        }
+        Edge edge = graph.addEdge(sourceVertex, destVertex, predicateLabel, visibility, authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, new Visibility(""));
+        auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, visibility);
 
         graph.flush();
 

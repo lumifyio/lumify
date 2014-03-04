@@ -3,20 +3,22 @@ package com.altamiracorp.lumify.core.ingest;
 public class ArtifactDetectedObject {
     private String concept;
     private String id;
-    private long x1;
-    private long y1;
-    private long x2;
-    private long y2;
+    private double x1;
+    private double y1;
+    private double x2;
+    private double y2;
+    private String process;
 
-    public ArtifactDetectedObject(long x1, long y1, long x2, long y2, String concept) {
+    public ArtifactDetectedObject(double x1, double y1, double x2, double y2, String concept, String process) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.concept = concept;
+        this.process = process;
     }
 
-    public long getX1() {
+    public double getX1() {
         return x1;
     }
 
@@ -24,7 +26,7 @@ public class ArtifactDetectedObject {
         this.x1 = x1;
     }
 
-    public long getY1() {
+    public double getY1() {
         return y1;
     }
 
@@ -32,7 +34,7 @@ public class ArtifactDetectedObject {
         this.y1 = y1;
     }
 
-    public long getX2() {
+    public double getX2() {
         return x2;
     }
 
@@ -40,7 +42,7 @@ public class ArtifactDetectedObject {
         this.x2 = x2;
     }
 
-    public long getY2() {
+    public double getY2() {
         return y2;
     }
 
@@ -59,5 +61,9 @@ public class ArtifactDetectedObject {
     public String getId () { return id; }
 
     public void setId (String id) { this.id = id; }
+
+    public String getProcess () { return process; }
+
+    public void setProcess (String process) { this.process = process; }
 
 }

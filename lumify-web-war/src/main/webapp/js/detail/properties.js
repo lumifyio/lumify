@@ -260,7 +260,7 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties._conceptType) {
+            if (self.attr.data.properties._conceptType.value === 'relationship') {
                 self.relationshipService.deleteProperty(
                         data.property.name,
                         this.attr.data.properties.source.value,
@@ -281,15 +281,6 @@ define([
                     this.attr.data.id,
                     data.property)
                     .fail(this.requestFailure.bind(this))
-                    .done(function(vertexData) {
-                        self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { 
-                            vertices: [{
-                                id: vertexData.graphVertexId,
-                                properties: vertexData.properties
-                            }]
-                        });
-                    });
             }
         };
 
@@ -323,15 +314,6 @@ define([
                     data.property.justificationText,
                     data.property.sourceInfo)
                     .fail(this.requestFailure.bind(this))
-                    .done(function(vertexData) {
-                        self.displayProperties(vertexData.properties);
-                        self.trigger (document, "updateVertices", { 
-                            vertices: [{
-                                id: vertexData.graphVertexId,
-                                properties: vertexData.properties
-                            }]
-                        });
-                    });
             }
 
         };
@@ -422,7 +404,8 @@ define([
         keys.forEach(function (name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isRelationshipType = name === 'relationshipType' && properties._conceptType;
+                isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
+                isRelationshipType = name === 'relationshipType' && isEdge;
 
             if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
@@ -431,13 +414,23 @@ define([
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
                     value = properties[name];
+                    value._geoLocationDescription = properties._geoLocationDescription;
                 } else {
                     value = properties[name].value;
                 }
 
-                if (/^[^_]/.test(name) &&
+                if (// Ignore underscore leading property names
+                    /^[^_]/.test(name) &&
+
+                    // Showing the source and target for an edge is redundant (shown in title)
+                    (!isEdge || !_.contains(['source', 'target'], name)) &&
+
+                    // Bounding box not useful to show
                     name !== 'boundingBox' &&
+
+                    // Title is displayed above property list
                     name !== 'title') {
+
                     addProperty(name, displayName, value, properties[name]._visibility);
                 }
             } else if (isRelationshipType) {

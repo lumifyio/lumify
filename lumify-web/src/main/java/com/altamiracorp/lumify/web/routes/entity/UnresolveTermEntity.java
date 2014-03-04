@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -34,6 +35,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private final ModelSession modelSession;
     private final VisibilityTranslator visibilityTranslator;
     private final UserProvider userProvider;
+    private final OntologyRepository ontologyRepository;
 
     @Inject
     public UnresolveTermEntity(
@@ -44,7 +46,8 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             final ModelSession modelSession,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final UserProvider userProvider) {
+            final UserProvider userProvider,
+            final OntologyRepository ontologyRepository) {
         super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
@@ -52,6 +55,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         this.modelSession = modelSession;
         this.visibilityTranslator = visibilityTranslator;
         this.userProvider = userProvider;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -123,11 +127,12 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             Iterable<Edge> edges = artifactVertex.getEdges(resolvedVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
             Edge edge = edges.iterator().next();
             if (edge != null) {
+                String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
                 edgeId = edge.getId();
                 graph.removeEdge(edge, authorizations);
                 deleteEdge = true;
                 graph.flush();
-                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, LabelName.RAW_HAS_ENTITY.toString(), "", "", user, visibility);
+                auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, visibility);
             }
         }
 

@@ -24,11 +24,9 @@ define([
 
         this.after('initialize', function() {
             if (this.attr.sourceMetadata) {
-                this.toggleView(true, this.attr.sourceMetadata);
+                this.setValue(this.attr.sourceMetadata)
             } else {
-                this.toggleView(false, 
-                    this.attr.justificationMetadata && 
-                    this.attr.justificationMetadata.justificationText);
+                this.setValue(this.attr.justificationMetadata && this.attr.justificationMetadata.justificationText);
             }
 
             this.on('valuepasted', this.onValuePasted);
@@ -80,27 +78,35 @@ define([
             this.animate = true;
             this.toggleView(false);
             this.select('fieldSelector').focus();
-
-            var val = this.attr.value || '';
-            this.trigger('justificationchange', { justificationText:val, valid:$.trim(val).length > 0 });
+            this.trigger('justificationchange', { justificationText:'', valid:false });
         };
 
         this.setValue = function(value) {
-            var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
-            this.toggleView(true, value);
-            this.trigger('justificationchange', { sourceInfo:sourceInfo, valid:true });
+            if (_.isUndefined(value)) value = '';
+
+            if (_.isString(value)) {
+                this.toggleView(false, value);
+                this.trigger('justificationchange', { justificationText:value, valid:$.trim(value).length > 0 });
+            } else {
+                var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
+                this.toggleView(true, value);
+                this.trigger('justificationchange', { sourceInfo:sourceInfo, valid:true });
+            }
         };
 
         this.toggleView = function(referenceDisplay, value) {
             var self = this;
             
             if (referenceDisplay) {
+                this.select('fieldSelector').tooltip('destroy');
                 this.getVertexTitle(value).done(function() {
                     self.transitionHeight(templateRef(value));
                 });
             } else {
                 this.transitionHeight(template({value:value || ''}));
-                this.select('fieldSelector').tooltip();
+                this.select('fieldSelector').tooltip({ 
+                    container:'body' 
+                }).data('tooltip').tip().addClass('field-tooltip');
             }
         };
 

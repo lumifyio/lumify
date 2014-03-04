@@ -41,7 +41,8 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
     }
 
     public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object id, String concept,
-                                                  long x1, long y1, long x2, long y2, boolean resolved, Visibility visibility) {
+                                                  double x1, double y1, double x2, double y2, boolean resolved,
+                                                  String process, Visibility visibility) {
         if (id == null) {
             id = graph.getIdGenerator().nextId();
         }
@@ -55,6 +56,10 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
 
         if (resolved) {
             detectedObjectModel.getMetadata().setResolvedId(id, visibility);
+        }
+
+        if (process != null) {
+            detectedObjectModel.getMetadata().setProcess(process, visibility);
         }
         save(detectedObjectModel);
         return detectedObjectModel;
