@@ -785,7 +785,6 @@ define([
                     title = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
                 }
 
-                _.templateSettings.interpolate = /\{([\s\S]+?)\}/g;
                 this.$node.find('a').each(function() {
                     var $this = $(this),
                         template = $this.data('template');
@@ -1085,7 +1084,7 @@ define([
                     forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
                     promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
                 
-                if (forceSearch || promptBeforeAdding) {
+                if (count > 0 && (forceSearch || promptBeforeAdding)) {
                     require(['graph/popovers/loadRelatedPopover'], function(LoadRelatedPopover) {
                         LoadRelatedPopover.teardownAll();
                         LoadRelatedPopover.attachTo(self.$node, {
@@ -1219,7 +1218,6 @@ define([
                     var $this = $(this), command = $this.text();
                     $this.text(formatters.string.shortcut($this.text()));
                 });
-                self.bindContextMenuClickEvent();
 
                 Controls.attachTo(self.select('graphToolsSelector'));
 

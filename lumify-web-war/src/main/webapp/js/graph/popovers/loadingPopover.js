@@ -32,7 +32,6 @@ define([
 
         this.onCancel = function() {
             this.trigger('popovercancel');
-            this.teardown();
         }
     }
 });
