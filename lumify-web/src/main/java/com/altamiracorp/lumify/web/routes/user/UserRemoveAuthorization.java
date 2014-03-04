@@ -11,9 +11,9 @@ import com.google.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MeGet extends BaseRequestHandler {
+public class UserRemoveAuthorization extends BaseRequestHandler {
     @Inject
-    public MeGet(
+    public UserRemoveAuthorization(
             final UserRepository userRepository,
             final Configuration configuration) {
         super(userRepository, configuration);
@@ -21,12 +21,17 @@ public class MeGet extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String auth = getRequiredParameter(request, "auth");
+
         User user = getUser(request);
         Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
         if (userVertex == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+
+        getUserRepository().removeAuthorization(userVertex, auth);
+
         respondWithJson(response, getUserRepository().toJson(userVertex, user));
     }
 }

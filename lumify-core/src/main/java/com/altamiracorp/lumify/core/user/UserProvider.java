@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Vertex;
 
 public interface UserProvider {
@@ -8,5 +9,5 @@ public interface UserProvider {
 
     User getSystemUser();
 
-    ModelUserContext getModelUserContext(User user, String... additionalAuthorizations);
+    ModelUserContext getModelUserContext(Authorizations authorizations, String... additionalAuthorizations);
 }

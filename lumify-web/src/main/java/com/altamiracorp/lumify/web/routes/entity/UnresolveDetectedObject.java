@@ -66,7 +66,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(user, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);

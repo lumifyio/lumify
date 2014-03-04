@@ -12,15 +12,12 @@ import com.altamiracorp.lumify.web.routes.graph.*;
 import com.altamiracorp.lumify.web.routes.map.MapInitHandler;
 import com.altamiracorp.lumify.web.routes.map.MapMarkerImage;
 import com.altamiracorp.lumify.web.routes.map.MapTileHandler;
-import com.altamiracorp.lumify.web.routes.ontology.*;
+import com.altamiracorp.lumify.web.routes.ontology.Ontology;
 import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
 import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
-import com.altamiracorp.lumify.web.routes.user.Login;
-import com.altamiracorp.lumify.web.routes.user.Logout;
-import com.altamiracorp.lumify.web.routes.user.MeGet;
-import com.altamiracorp.lumify.web.routes.user.UserList;
+import com.altamiracorp.lumify.web.routes.user.*;
 import com.altamiracorp.lumify.web.routes.vertex.*;
 import com.altamiracorp.lumify.web.routes.workspace.*;
 import com.altamiracorp.miniweb.Handler;
@@ -110,6 +107,8 @@ public class Router extends HttpServlet {
 
             //app.get("/user/messages", authenticator, MessagesGet.class);
             app.get("/user/me", authenticator, MeGet.class);
+            app.post("/user/auth/add", authenticator, UserAddAuthorization.class);
+            app.post("/user/auth/remove", authenticator, UserRemoveAuthorization.class);
             app.get("/user", authenticator, UserList.class);
 
             app.get("/map/map-init.js", MapInitHandler.class);

@@ -49,7 +49,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
-        ModelUserContext modelUserContext = this.userProvider.getModelUserContext(user, workspaceId);
+        ModelUserContext modelUserContext = this.userProvider.getModelUserContext(authorizations, workspaceId);
 
         String graphVertexId = getAttributeString(request, "graphVertexId");
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
