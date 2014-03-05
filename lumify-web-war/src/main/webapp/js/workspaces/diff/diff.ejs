@@ -2,15 +2,30 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Type</th>
       <th>Message</th>
+      <th>Details</th>
+      <th><button class="btn btn-mini">Publish All</button></th>
     </tr>
   </thead>
   <tbody>
     <% diffs.forEach(function(diff) { %>
     <tr>
-      <td><%= diff.type %></td>
       <td><%= diff.message %></td>
+      <td><% 
+
+        switch(diff.type) {
+          case 'PropertyDiffItem':
+            if (diff.old && diff.new) {
+              %> <%= diff.old.value %> to <%= diff.new.value %> <%
+            } else if (diff.new) { 
+              %> <%= diff.new.value %> <%
+            }
+            %>
+            <%
+            break;
+        }
+      %></td>
+      <td class="actions"><button class="btn btn-mini">Publish</button></td>
     </tr>
     <% }); %>
   </tbody>
