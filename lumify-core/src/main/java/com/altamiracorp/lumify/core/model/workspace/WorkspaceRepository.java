@@ -113,10 +113,8 @@ public class WorkspaceRepository {
     }
 
     public Iterable<Workspace> findAll(User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING);
-        Iterable<Vertex> vertices = graph.query(authorizations)
-                .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), workspaceConceptId)
-                .vertices();
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, UserRepository.VISIBILITY_STRING);
+        Iterable<Vertex> vertices = graph.getVertex(user.getUserId(), authorizations).getVertices(Direction.IN, workspaceToUserRelationshipId, authorizations);
         return Workspace.toWorkspaceIterable(vertices, this, user);
     }
 
