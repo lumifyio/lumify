@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONArray;

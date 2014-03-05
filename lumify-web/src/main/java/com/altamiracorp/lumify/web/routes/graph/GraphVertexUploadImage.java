@@ -16,6 +16,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
