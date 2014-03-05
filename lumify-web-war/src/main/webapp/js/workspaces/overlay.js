@@ -134,7 +134,10 @@ define([
                         .text('!');
                 })
                 .done(function(diff) {
-                    var count = diff.diffs.length,
+                    var filteredDiffs = diff.diffs.filter(function(diff) {
+                            return !diff.name || /^[^_]/.test(diff.name);
+                        }), 
+                        count = filteredDiffs.length,
                         formattedCount = formatters.number.pretty(count); 
 
                     require(['workspaces/diff/diff'], function(Diff) {
@@ -142,7 +145,7 @@ define([
                             tip = popover && popover.tip();
 
                         if (tip && tip.is(':visible')) {
-                            self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: diff.diffs });
+                            self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: filteredDiffs });
                         } else {
                             badge
                                 .popover('destroy')
@@ -161,7 +164,7 @@ define([
 
                             Diff.teardownAll();
                             Diff.attachTo(tip.find('.popover-content'), {
-                                diffs: diff.diffs
+                                diffs: filteredDiffs
                             });
                         }
                     });
