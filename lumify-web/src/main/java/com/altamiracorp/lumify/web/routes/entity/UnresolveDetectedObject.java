@@ -94,7 +94,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             graph.removeEdge(edge, authorizations);
             String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
             LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, lumifyVisibility.getVisibility());
 

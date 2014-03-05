@@ -89,7 +89,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject result = new JSONObject();
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         // Unlinking the term with the vertex
