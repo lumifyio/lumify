@@ -12,7 +12,7 @@ define([
     function VisibilityDisplay() {
         this.after('initialize', function() {
             this.$node.html(displayTemplate({
-                value: this.attr.value || ''
+                value: (this.attr.value && this.attr.value.source) || ''
             }));
         });
     }

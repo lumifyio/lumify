@@ -431,7 +431,7 @@ define([
                     // Title is displayed above property list
                     name !== 'title') {
 
-                    addProperty(name, displayName, value, properties[name]._visibility);
+                    addProperty(name, displayName, value, properties[name]._visibilityJson);
                 }
             } else if (isRelationshipType) {
                 addProperty(name, 'relationship type', properties[name].value);
