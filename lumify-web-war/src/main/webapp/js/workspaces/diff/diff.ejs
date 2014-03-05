@@ -15,13 +15,12 @@
 
         switch(diff.type) {
           case 'PropertyDiffItem':
-            if (diff.old && diff.new) {
-              %> <%= diff.old.value %> to <%= diff.new.value %> <%
-            } else if (diff.new) { 
-              %> <%= diff.new.value %> <%
-            }
-            %>
-            <%
+            if (diff.old && diff.new) { %>  
+              <%= formatValue(diff.name, diff.new) %> 
+              <div style="text-decoration:line-through"><%= formatValue(diff.name, diff.old) %></div>  
+            <% } else if (diff.new) { %> 
+              <%= formatValue(diff.name, diff.new) %> 
+            <% } 
             break;
         }
       %></td>
