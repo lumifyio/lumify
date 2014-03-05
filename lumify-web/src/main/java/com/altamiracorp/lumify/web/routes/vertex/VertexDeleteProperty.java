@@ -45,7 +45,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
-        final String justificationText = getRequiredParameter(request, "justificationString");
+        final String justificationText = getOptionalParameter(request, "justificationString"); // TODO make justificationString required
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
@@ -65,7 +65,9 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         graph.flush();
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, new PropertyJustificationMetadata(justificationText));
+        if (justificationText != null) {
+            metadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, new PropertyJustificationMetadata(justificationText));
+        }
 
         auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, property.getValue(), null, "", "", metadata, user, lumifyVisibility.getVisibility());
 
