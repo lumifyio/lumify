@@ -17,8 +17,8 @@
 package com.altamiracorp.lumify.core.model.properties;
 
 import com.altamiracorp.securegraph.Element;
-import com.altamiracorp.securegraph.ElementMutation;
 import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
