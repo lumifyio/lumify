@@ -38,11 +38,8 @@ define([], function() {
             },
 
             function vertexProperties(json, updated) {
-                if (json.vertex && json.vertex.graphVertexId && json.properties) {
-                    var cache = this.updateCacheWithVertex({
-                        id: json.vertex.graphVertexId,
-                        properties: json.properties
-                    }, {
+                if (json.vertex && json.vertex.id && json.properties) {
+                    var cache = this.updateCacheWithVertex(json.vertex, {
                         deletedProperty: json.deletedProperty
                     });
                     updated.push(cache);
