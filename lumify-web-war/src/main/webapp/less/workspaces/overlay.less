@@ -11,17 +11,36 @@ margin: 0;
 white-space: no-wrap;
 cursor: default;
 z-index: @graph-zIndex;
-
+.opacity(0);
+.translate(-25px, 0);
+.transition(~"all ease-out 0.1s");
 .box-sizing(border-box);
 .disable-text-selection;
 
+&.visible {
+  .opacity(100);
+  .translate(0, 0);
+}
 
-.name {
-  margin: 0;
+
+h1 {
+  font-size: 95%;
+  margin:0;
+  padding:0;
+  line-height: 1.1em;
   color: #777;
-  font-weight: bold;
-  font-size: 90%;
-  line-height: 1em;
+}
+
+.user {
+  margin-right: 0.5em;
+  padding-right: 0.5em;
+  border-right:1px solid #ccc;
+  &:empty {
+    display: none;
+  }
+}
+.name {    
+  font-size: 95%;
 }
 
 .subtitle {
