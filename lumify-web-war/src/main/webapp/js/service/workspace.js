@@ -35,6 +35,12 @@ function(ServiceBase) {
         });
     };
 
+    WorkspaceService.prototype.diff = function() {
+        return this._ajaxGet({
+            url: 'workspace/diff'
+        })
+    };
+
     WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',
