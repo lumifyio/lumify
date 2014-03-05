@@ -131,7 +131,7 @@ define([
 
             var vertexProperty = this.attr.data.properties[propertyName],
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
-                visibilityValue = vertexProperty && vertexProperty._visibility,
+                visibilityValue = vertexProperty && vertexProperty._visibilityJson,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;

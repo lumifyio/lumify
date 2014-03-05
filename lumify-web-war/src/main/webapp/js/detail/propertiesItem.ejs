@@ -18,13 +18,13 @@
       </a>
     <% } %>
 
-    <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
+    <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
   </span>
 
 <% } else { %>
 
   <span class="value"><%= property !== undefined && property !== null ? property.value : '' %>
-    <span class="visibility" data-visibility="<%= _.isUndefined(property.visibility) ? '' : property.visibility %>"></span>
+    <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
   </span>
 
 <% } %>
