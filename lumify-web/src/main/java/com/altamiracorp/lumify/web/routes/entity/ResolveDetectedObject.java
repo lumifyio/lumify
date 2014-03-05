@@ -66,7 +66,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         Concept concept = ontologyRepository.getConceptById(conceptId);

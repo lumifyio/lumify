@@ -14,6 +14,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -73,7 +74,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJson(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementMutation<Vertex> createdVertexMutation;
         if (graphVertexId != null) {

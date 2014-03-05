@@ -20,8 +20,8 @@ import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperti
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
 
 public class GraphUtil {
-    private static final String VISIBILITY_PROPERTY = "_visibility";
-    private static final String VISIBILITY_JSON_PROPERTY = "_visibilityJson";
+    public static final String VISIBILITY_PROPERTY = "_visibility";
+    public static final String VISIBILITY_JSON_PROPERTY = "_visibilityJson";
 
     public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
@@ -159,7 +159,7 @@ public class GraphUtil {
         ElementMutation<T> elementMutation = element.prepareMutation();
 
         String visibilityJsonString = (String) propertyMetadata.get(VISIBILITY_JSON_PROPERTY);
-        JSONObject visibilityJson = updateVisibilityJson(visibilityJsonString, visibilitySource, workspaceId);
+        JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId);
         propertyMetadata.put(VISIBILITY_JSON_PROPERTY, visibilityJson.toString());
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
@@ -201,14 +201,14 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
-        JSONObject visibilityJson = updateVisibilityJson(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
                 .setProperty(VISIBILITY_JSON_PROPERTY, visibilityJson.toString(), lumifyVisibility.getVisibility())
                 .save();
     }
 
-    public static JSONObject updateVisibilityJson(String jsonString, String visibilitySource, String workspaceId) {
+    public static JSONObject updateVisibilitySourceAndAddWorkspaceId(String jsonString, String visibilitySource, String workspaceId) {
         JSONObject json;
         if (jsonString == null) {
             json = new JSONObject();
@@ -216,10 +216,27 @@ public class GraphUtil {
             json = new JSONObject(jsonString);
         }
 
-        json.put("source", visibilitySource);
+        json.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
 
-        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, "workspaces");
+        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
         JSONUtil.addToJSONArrayIfDoesNotExist(workspacesJsonArray, workspaceId);
+
+        return json;
+    }
+
+    public static JSONObject updateVisibilityJsonRemoveFromWorkspace(String jsonString, String workspaceId) {
+        JSONObject json;
+        if (jsonString == null) {
+            json = new JSONObject();
+        } else {
+            json = new JSONObject(jsonString);
+        }
+
+        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
+        JSONUtil.removeFromJSONArray(workspacesJsonArray, workspaceId);
+
+        JSONArray notWorkspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_NOT_WORKSPACES);
+        JSONUtil.addToJSONArrayIfDoesNotExist(notWorkspacesJsonArray, workspaceId);
 
         return json;
     }

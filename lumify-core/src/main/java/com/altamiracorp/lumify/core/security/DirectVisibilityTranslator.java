@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DirectVisibilityTranslator implements VisibilityTranslator {
+
     public void init(Map configuration) {
 
     }
@@ -18,12 +19,12 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
 
         List<String> all = new ArrayList<String>();
 
-        String source = visibilityJson.optString("source");
+        String source = visibilityJson.optString(JSON_SOURCE);
         if (source != null && source.trim().length() > 0) {
             all.add(source.trim());
         }
 
-        JSONArray workspaces = visibilityJson.optJSONArray("workspaces");
+        JSONArray workspaces = visibilityJson.optJSONArray(JSON_WORKSPACES);
         if (workspaces != null) {
             for (int i = 0; i < workspaces.length(); i++) {
                 String workspace = workspaces.getString(i);
