@@ -1,29 +1,61 @@
 
 define([
     'flight/lib/component',
-    'tpl!./diff'
-], function(defineComponent, template) {
+    'tpl!./diff',
+    'service/ontology',
+    'util/formatters'
+], function(defineComponent, template, OntologyService, formatters) {
     'use strict';
 
     return defineComponent(Diff);
 
     function Diff() {
 
+        var ontologyService = new OntologyService();
+
         this.defaultAttrs({
             publishSelector: 'button'
         })
 
         this.after('initialize', function() {
-            this.$node.html(template({diffs:this.attr.diffs}));
+            var self = this;
 
-            this.on('click', {
-                publishSelector: this.onPublish
-            })
-            this.on('diffsChanged', function(event, data) {
-                this.$node.html(template({
-                    diffs: data.diffs
-                }));
-            })
+            ontologyService.properties()
+                .done(function(properties) {
+                    var formatValue = function(name, change) {
+                        var value = change.value;
+                        switch (properties.byTitle[name].dataType) {
+                            case 'geoLocation':
+                                value = [change.latitude, change.longitude].join(', ')
+                                break;
+                            case 'date':
+                                value = formatters.date.dateString(value);
+                                break;
+                        }
+
+                        return value;
+                    };
+
+                    self.$node.html(template({
+                        diffs:self.attr.diffs,
+                        formatValue: formatValue
+                    }));
+
+                    self.on('click', {
+                        publishSelector: self.onPublish
+                    })
+                    self.on('diffsChanged', function(event, data) {
+                        var scroll = self.$node.find('.diffs-list'),
+                            previousScroll = scroll.scrollTop();
+
+                        self.$node.html(template({
+                            diffs: data.diffs,
+                            formatValue: formatValue
+                        }));
+
+                        self.$node.find('.diffs-list').scrollTop(previousScroll);
+                    })
+                });
         });
 
         this.onPublish = function() {
