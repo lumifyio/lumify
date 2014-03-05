@@ -1,0 +1,18 @@
+<div class="diffs-list">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% diffs.forEach(function(diff) { %>
+    <tr>
+      <td><%= diff.type %></td>
+      <td><%= diff.message %></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
+</div>

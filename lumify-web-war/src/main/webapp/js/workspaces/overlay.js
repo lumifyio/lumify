@@ -2,16 +2,20 @@
 define([
     'flight/lib/component',
     'tpl!./overlay',
-    'util/formatters'
-], function(defineComponent, template, formatters) {
+    'util/formatters',
+    'service/workspace'
+], function(defineComponent, template, formatters, WorkspaceService) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
     var MENUBAR_WIDTH = 30;
+    var UPDATE_WORKSPACE_DIFF_SECONDS = 5;
 
     return defineComponent(WorkspaceOverlay);
 
     function WorkspaceOverlay() {
+
+        var workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             userSelector: '.user',
@@ -24,6 +28,7 @@ define([
 
             this.userDeferred = $.Deferred();
             this.workspaceDeferred = $.Deferred();
+            this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
 
             $.when(this.userDeferred, this.workspaceDeferred).done(function() {
                 self.$node.show();
@@ -38,10 +43,19 @@ define([
             this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
             this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
             this.on(document, 'currentUserChanged', this.onCurrentUserChanged)
             this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded)
+            this.on(document, 'ajaxComplete', this.onAjaxComplete);
         });
+
+        this.onAjaxComplete = function(event, xhr, settings) {
+            // Automatically call diff after every POST
+            if (/post/i.test(settings.type)) {
+                this.updateDiffBadge();
+            }
+        };
 
         this.onCurrentUserChanged = function(event, data) {
             this.userDeferred.resolve();
@@ -57,11 +71,16 @@ define([
             this.select('subtitleSelector').html(isEditable === false ? 'read only' : subtitle);
         };
 
+        this.onSwitchWorkspace = function() {
+            this.$node.find('.badge').remove();
+        };
+
         this.onWorkspaceLoaded = function(event, data) {
             this.workspaceDeferred.resolve();
             this.setContent(data.title, data.isEditable, 'no changes');
             clearTimeout(this.updateTimer);
             this.updateWorkspaceTooltip(data);
+            this.updateDiffBadge();
         };
 
         this.onRelationshipsLoaded = function(event, data) {
@@ -97,6 +116,60 @@ define([
                 }.bind(this);
 
             setTimer();
+        };
+
+        this.updateDiffBadge = function() {
+            var self = this,
+                node = this.select('nameSelector'),
+                badge = this.$node.find('.badge');
+                
+            if (!badge.length) {
+                badge = $('<span class="badge"></span>').insertAfter(node)
+            }
+
+            workspaceService.diff()
+                .fail(function() {
+                    badge.removePrefixedClasses('badge-').addClass('badge-important')
+                        .attr('title', 'An error occured')
+                        .text('!');
+                })
+                .done(function(diff) {
+                    var count = diff.diffs.length,
+                        formattedCount = formatters.number.pretty(count); 
+
+                    require(['workspaces/diff/diff'], function(Diff) {
+                        var popover = badge.data('popover'),
+                            tip = popover && popover.tip();
+
+                        if (tip && tip.is(':visible')) {
+                            self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: diff.diffs });
+                        } else {
+                            badge
+                                .popover('destroy')
+                                .popover({placement:'top', content:'Loading...', title: 'Unpublished Changes'})
+
+                            popover = badge.data('popover');
+                            tip = popover.tip();
+
+                            tip.find('.arrow').css({
+                                left: badge.position().left,
+                                marginLeft: 0
+                            })
+
+                            // We fill in our own content
+                            popover.setContent = function() {}
+
+                            Diff.teardownAll();
+                            Diff.attachTo(tip.find('.popover-content'), {
+                                diffs: diff.diffs
+                            });
+                        }
+                    });
+
+                    badge.removePrefixedClasses('badge-').addClass('badge-info')
+                        .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
+                        .text(count > 0 ? formattedCount : '');
+                })
         };
 
         this.updateUserTooltip = function(data) {
