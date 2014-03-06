@@ -2,6 +2,8 @@
 define([], function() {
     'use strict';
 
+    var _ajaxRequests = {};
+
     function ServiceBase(options) {
         options = options || {};
 
@@ -18,9 +20,12 @@ define([], function() {
             jsonp: false
         };
 
-        this._ajaxRequests = {};
         this.options = $.extend({},defaults, options);
         return this; 
+    }
+
+    ServiceBase.prototype._ajaxRequests = function(url) {
+        return _ajaxRequests[url];
     }
 
     ServiceBase.prototype.getSocket = function () { };
@@ -42,8 +47,12 @@ define([], function() {
         options.dataType = options.dataType || this._resolveDataType();
         options.resolvedUrl = options.resolvedUrl || this._resolveUrl(options.url);
 
+        if (_ajaxRequests[options.url]) {
+            return _ajaxRequests[options.url];
+        }
+
         var deferred = $.Deferred();
-        this._ajaxRequests[options.url] = deferred;
+        _ajaxRequests[options.url] = deferred;
         return deferred;
         //return $.ajax(options);
     };
