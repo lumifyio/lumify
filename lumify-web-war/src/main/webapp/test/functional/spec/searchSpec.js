@@ -30,7 +30,10 @@ describe('Search', function () {
     })
 
     it('Should be able to search *', function() {
-        var browser = this.browser, Q = this.Q;
+        var self = this,
+            browser = this.browser, 
+            Q = this.Q,
+            expected = '?';
 
         return browser
           .waitForElementByCss('.menubar-pane .search a').should.eventually.exist
@@ -42,17 +45,23 @@ describe('Search', function () {
           .elementByCss('.search-results').getComputedCss('display').should.become('none')
           .then(function() {
               var concept = 'Raw',
-                  expected = '13',
                   el = browser.waitForElementByCss('.search-results-summary a[title=' + concept + '] .badge:not(:empty)');
 
               return Q.all([
-                  el.text().should.become(expected),
-                  el.getAttribute('title').should.become(expected),
+                  el.text().then(function(number) {
+                     expected = number;
+                     return browser;
+                  }),
                   el.click()
               ])
           })
           .elementByCss('.search-results').getComputedCss('display').should.become('block')
-          .waitFor(this.asserters.jsCondition("$('.search-results .vertex-item').length === " + expected) , utils.requestTimeout).should.eventually.be.ok
+          .then(function() {
+            return browser.waitFor(
+                self.asserters.jsCondition("$('.search-results .vertex-item').length === " + expected),
+                utils.requestTimeout
+            ).should.eventually.be.ok
+          })
     })
 
     it('Should be able to drag result to graph', function() {

@@ -2,11 +2,14 @@
 describeComponent('graph/graph', function(Graph) {
 
     var conceptDeferred,
-        defaultConcepts = {"id":"4","title":"rootConcept"};
+        defaultConcepts = {
+            entityConcept: {
+                id:4, title:'entityConcept', children:[]
+            }
+        }
 
     beforeEach(function() {
         setupComponent();
-        this.component.ontologyService.clearCaches();
         this.component.ontologyService.concepts = function() { 
             conceptDeferred = $.Deferred();
             conceptDeferred.resolve(defaultConcepts);
