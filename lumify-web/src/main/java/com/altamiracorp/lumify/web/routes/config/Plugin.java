@@ -39,11 +39,6 @@ public class Plugin extends BaseRequestHandler {
             pluginPath = request.getServletContext().getResource(DEFAULT_PLUGINS_DIR + "/" + pluginName).getPath();
         }
 
-        if (!new File(FilenameUtils.concat(pluginPath, pluginName + ".js")).exists()) {
-            LOGGER.error("Plugin {0} definition requires minimum {0}.js file", pluginName);
-            throw new RuntimeException("Missing Plugin JavaScript file");
-        }
-
         String uri = request.getRequestURI();
         String searchString = "/" + pluginName + "/";
         String pluginResourcePath = uri.substring(uri.indexOf(searchString) + searchString.length());
