@@ -214,8 +214,7 @@ define([
         return this.ontology()
                     .then(function(ontology) {
                         var relationship = _.findWhere(ontology.relationships, { displayName:relationshipLabel }),
-                            concept = ontology.conceptsById[relationship.id],
-                            propertyIds = concept && concept.properties || [],
+                            propertyIds = relationship.properties || [],
                             properties = _.map(propertyIds, function(pId) {
                                 return ontology.propertiesById[pId];
                             });

@@ -181,7 +181,7 @@ define([
                     }
 
                     // Sort section because title might be renamed
-                    var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser)
+                    var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser),
                         titleGetter = function() { return $(this).data('title'); },
                         lowerCase = function(s) { return s.toLowerCase(); },
                         titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
