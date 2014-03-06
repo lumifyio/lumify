@@ -40,7 +40,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
                                      "title":"Web",
                                      "graphVertexId":"80736",
                                      "start":110,
-                                     "_subType":"44",
+                                     "_conceptType":"44",
                                      "_rowKey":"Web\\x1FOpenNlpDictionary\\x1FPerson",
                                      "type":"TermMention",
                                      "end":113
@@ -185,7 +185,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
 
         });
 
-        it("should accept selections that don't encompass an inner span", function() {
+        it("should accept selections that encompass an inner span", function() {
 
             this.setupParentForSelection('offered by [Amazon <span class="entity subType-2">Web]</span> Services');
 
@@ -204,7 +204,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             // Don't preselect value based on inner span
             expect(this.$node.find('select').val()).to.match(/^(Loading\.\.\.)?$/)
 
-            expect(this.$node.find('.object-sign').val()).to.equal('Amazon Web');
+            expect(this.$node.find('.object-sign').val()).to.equal('Amazon W');
         });
 
     });
