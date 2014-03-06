@@ -280,7 +280,7 @@ define([
                 if (options.layout) {
                     require(['graph/layouts/' + options.layout.type], function(doLayout) {
                         customLayout.resolve(
-                            doLayout(cy, currentNodes, boundingBox, vertexIds, options.layout)
+                            doLayout(cy, currentNodes, boundingBox, vertexIds, cyIdMap, options.layout)
                         );
                     });
                 } else customLayout.resolve({});
@@ -313,8 +313,8 @@ define([
                                 y: vertex.workspace.dropPosition.y - offset.top
                             });
                             needsAdding = true;
-                        } else if (layoutPositions[vertexId(vertex)]) {
-                            cyNodeData.position = retina.pointsToPixels(layoutPositions[vertexId(vertex)]);
+                        } else if (layoutPositions[vertex.id]) {
+                            cyNodeData.position = retina.pointsToPixels(layoutPositions[vertex.id]);
                             needsUpdating = true;
                         } else {
 
