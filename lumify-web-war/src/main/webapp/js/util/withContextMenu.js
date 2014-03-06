@@ -6,17 +6,13 @@ define([], function() {
 
     function withContextMenu() {
 
-        this.defaultAttrs({
-            dropdownMenuAnchorSelector: '.dropdown-menu a'
-        })
-
         this.after('initialize', function() {
             this.bindContextMenuClickEvent();
         });
 
         this.bindContextMenuClickEvent = function() {
-            this.on('click', {
-                dropdownMenuAnchorSelector: this.onContextMenuClick
+            this.$node.find('.dropdown-menu a').off('click.bindCtxMenu');
+            this.$node.find('.dropdown-menu a').on('click.bindCtxMenu', this.onContextMenuClick.bind(this));
             })
         };
 
