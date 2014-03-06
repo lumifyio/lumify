@@ -48,7 +48,7 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+    reporters: ['mocha'],
 
 
     // web server port
@@ -91,6 +91,7 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-requirejs',
       'karma-coverage',
+      'karma-mocha-reporter',
       'karma-chrome-launcher',
       'karma-safari-launcher',
       'karma-firefox-launcher',

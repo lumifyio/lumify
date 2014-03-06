@@ -3,7 +3,6 @@ describeComponent('search/search', function(Search) {
 
     beforeEach(function() {
         setupComponent();
-        this.component.ontologyService.clearCaches();
     });
 
 

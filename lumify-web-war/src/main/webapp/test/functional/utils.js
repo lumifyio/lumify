@@ -2,15 +2,20 @@ var tagChaiAssertionError = function(err) {
     err.retriable = true;
     throw err;
 },
+baseUsername = 'selenium',
+browserNameInternal = 'unknown',
 utils = {
 
     url: 'https://localhost:8443',
-    username: 'selenium',
+
+    get username() { return baseUsername + '-' + utils.browserName; },
+    get usernameAlt() { return baseUsername + '-alt-' + utils.browserName; },
+    get browserName() { return browserNameInternal; },
     password: 'password',
 
     pageLoadTimeout:  10000, // For initial page display
     animationTimeout: 2000,  // For animations to finish
-    requestTimeout:   10000, // For things that require a server response
+    requestTimeout:   15000, // For things that require a server response
 
     animations: {
         menubarAnimationFinished:     "$('.menubar-pane').offset().left >= -1",
@@ -31,6 +36,10 @@ utils = {
                 .catch(function() {
                     console.log('Webserver is unreachable')
                     browser.quit()
+                })
+                .sessionCapabilities()
+                .then(function(c) {
+                    browserNameInternal = c.browserName;
                 })
                 .waitForElementByCss('#app:not(:empty),#login:not(:empty)', utils.pageLoadTimeout)
                     .should.eventually.exist
@@ -57,13 +66,14 @@ utils = {
 
         clickMenubarIcon: function(menubarCls) {
             return this.browser
-                    .waitForElementByCss('.menubar-pane .' + menubarCls)
+                    .waitForElementByCss('.menubar-pane .' + menubarCls + ' a')
                         .should.eventually.exist
                     // Click doesn't seem to work right in firefox
                     .moveTo()
                     .buttonDown()
                     .sleep(10)
                     .buttonUp()
+                    .sleep(10)
         },
 
         searchForText: function(query) {
@@ -75,16 +85,20 @@ utils = {
         },
 
         login: function(user, pass) {
+            var browser = this.browser;
+
             return this.browser
               .get(utils.url)
               .waitForApplicationLoad()
-              .execute(function(user, pass) {
-                  if ($('.login button').length) {
-                      $('.login .username').val(user);
-                      $('.login .password').val(pass);
-                      $('.login button').click();
-                  }
-              }, [user, pass])
+              .then(function() {
+                  return browser.execute(function(user, pass) {
+                      if ($('.login button').length) {
+                          $('.login .username').val(user);
+                          $('.login .password').val(pass);
+                          $('.login button').click();
+                      }
+                  }, [user || utils.username, pass || utils.password])
+              })
               .waitFor(this.asserters.jsCondition("$('#login').length === 0"), utils.pageLoadTimeout)
               .waitForElementByCss('.menubar-pane', utils.animationTimeout)
                 .should.eventually.exist
@@ -96,7 +110,6 @@ utils = {
 
     assertions: {
         includesText: function(text) {
-            console.log('checking for ', text)
             return this
                 .text().should.eventually.include(text)
                 .catch(tagChaiAssertionError);
@@ -122,7 +135,7 @@ utils = {
     login: function() {
         utils.initializeMethods.call(this, this.wd);
 
-        return this.browser.login(utils.username, utils.password)
+        return this.browser.login();
     },
 
     logout: function() {
