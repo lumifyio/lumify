@@ -11,7 +11,8 @@ define([], function() {
         });
 
         this.bindContextMenuClickEvent = function() {
-            this.$node.find('.dropdown-menu a').on('click', this.onContextMenuClick.bind(this));
+            this.$node.find('.dropdown-menu a').off('click.bindCtxMenu');
+            this.$node.find('.dropdown-menu a').on('click.bindCtxMenu', this.onContextMenuClick.bind(this));
         };
 
         this.onContextMenuClick = function(event) {

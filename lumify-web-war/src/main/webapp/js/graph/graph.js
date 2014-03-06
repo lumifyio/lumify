@@ -1256,6 +1256,7 @@ define([
                         free: self.graphFree.bind(self)
                     });
 
+                    self.bindContextMenuClickEvent();
 
                     self.on('pan', function(e, data) {
                         e.stopPropagation();
