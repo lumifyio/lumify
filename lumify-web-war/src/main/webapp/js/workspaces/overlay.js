@@ -26,6 +26,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            requestAnimationFrame(function() {
+                MENUBAR_WIDTH = $('.menubar-pane').width();
+            })
+
             this.userDeferred = $.Deferred();
             this.workspaceDeferred = $.Deferred();
             this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
@@ -154,13 +158,18 @@ define([
                             popover = badge.data('popover');
                             tip = popover.tip();
 
+                            var left = 10;
                             tip.find('.arrow').css({
-                                left: badge.position().left,
+                                left: parseInt(badge.position().left - (left / 2), 10) + 'px',
                                 marginLeft: 0
                             })
 
                             // We fill in our own content
                             popover.setContent = function() {}
+                            badge.on('shown', function() {
+                                var top = parseInt(tip.css('top'));
+                                tip.css({ top: (top - 10) + 'px'})
+                            })
 
                             Diff.teardownAll();
                             Diff.attachTo(tip.find('.popover-content'), {
