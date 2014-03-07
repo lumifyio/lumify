@@ -52,6 +52,8 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
                     'mocha-flight'
             ], function(sinonChai) {
 
+                chai.should();
+
                 // Use sinon as mocking framework
                 chai.use(sinonChai);
 
