@@ -111,26 +111,26 @@ module.exports = function(grunt) {
     },
 
     watch: {
+        options: {
+            dateFormat: function(time) {
+                grunt.log.ok('The watch finished in ' + time + 'ms. Waiting...');
+            },
+            nospawn: true,
+            atBegin: true
+        },
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
             tasks: ['less:development', 'notify:css'],
-            options: {
-                spawn: true
-            }
+            options: { livereload: true }
         },
         scripts: {
             files: ['Gruntfile.js', 'js/**/*.js', 'js/**/*.ejs'],
             tasks: ['requirejs:development', 'notify:js'],
-            options: {
-                spawn: true
-            }
+            options: { livereload: true }
         },
         lint: {
             files: ['Gruntfile.js', 'js/**/*.js'],
-            tasks: ['jshint:development'],
-            options: {
-                spawn: true
-            }
+            tasks: ['jshint:development']
         }
     },
 
