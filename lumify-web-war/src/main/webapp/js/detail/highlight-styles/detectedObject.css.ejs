@@ -1,0 +1,9 @@
+border:0;
+<% if (state === STATES.NORMAL || state === STATES.HOVER) { %>
+background: <%= colorjs(concept.color).setAlpha(1.0) %>;
+color: white;
+<% } else if (state == STATES.DIM) { %>
+background: <%= colorjs(concept.color).darkenByRatio(0.6).setAlpha(0.1) %>;
+color: <%= colorjs(concept.color).darkenByRatio(0.3).desaturateByRatio(0.5) %>;
+text-shadow: none;
+<% } %>

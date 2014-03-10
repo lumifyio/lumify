@@ -825,6 +825,8 @@ define([
                 return anchors.map(function(i, a) {
                     a = $(a);
                     var id = a.data('vertexId') || a.closest('li').data('vertexId');
+                    if (a.is('.facebox')) return;
+
                     if (!id) {
 
                         // Highlighted entities (legacy info)
@@ -844,6 +846,12 @@ define([
                             });
                             id = info.graphVertexId || info.id;
                         } 
+
+                        // Detected objects
+                        if (info && info.entityVertex) {
+                            self.updateCacheWithVertex(info.entityVertex);
+                            id = info.entityVertex.id;
+                        }
                         
                         if (!id) return console.error('No data-vertex-id attribute for draggable element found', a[0]);
                     }
