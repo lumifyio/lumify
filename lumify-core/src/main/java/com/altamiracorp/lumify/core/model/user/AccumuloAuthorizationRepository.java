@@ -30,13 +30,13 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public void addAuthorizationToGraph(final String auth) {
-        LOGGER.info("adding authorization to graph user %s", auth);
+        LOGGER.info("adding authorization [%s] for secure graph user", auth);
         synchronized (graph) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
                 @Override
                 public void run() {
-                    LOGGER.debug("got lock adding authorization to graph user %s", auth);
+                    LOGGER.debug("got lock to add authorization [%s] for secure graph user", auth);
                     if (graph instanceof AccumuloGraph) {
                         try {
                             AccumuloGraph accumuloGraph = (AccumuloGraph) graph;
