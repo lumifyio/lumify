@@ -28,7 +28,7 @@ describeComponent('detail/artifact/image/image', function() {
         })
     });
 
-    describe.only('image', function() {
+    describe('image', function() {
 
         it("should set image src", function() {
             var img = this.component.select('imageSelector');
