@@ -372,8 +372,9 @@ define([
 
                     require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
                         props.find('.visibility').each(function() {
+                            var visibility = $(this).data('visibility');
                             VisibilityDisplay.attachTo(this, {
-                                value: $(this).data('visibility')
+                                value: visibility.source
                             })
                         });
                         self.$node.html(props);
