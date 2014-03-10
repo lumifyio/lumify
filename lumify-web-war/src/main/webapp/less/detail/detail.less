@@ -111,21 +111,14 @@
   }
 
   .detected-object-tag {
-      background-color: #2d6987;
-
-      .label-info {
-        color: #fff;
-      }
-
-      .delete-tag {
-        padding: 1ex 0.9ex 1ex 1.3ex;
-        color: #eaeaea;
-        text-decoration: none;
-        cursor: pointer;
-        &:hover {
-          color: white;
-        }
-      }
+    a {
+      padding: 0.3em 0.7em;
+    }
+    .label-info {
+      color: #555;
+      background: rgba(0,0,0,0.1);
+      text-shadow: none;
+    }
   }
 
   .generic-draggable {
@@ -306,7 +299,8 @@
     .facebox {
       cursor: move;
       position: absolute;
-      .box-shadow(~"#2D6987 0px 0px 0px 1px, rgba(255,255,255,0.4) 0 0 0 2px, #2D6987 0px 0px 8px 5px");
+      opacity: 1;
+      .box-shadow(~"@{blue-color} 0px 0px 0px 1px, rgba(255,255,255,0.4) 0 0 0 2px, @{blue-color} 0px 0px 8px 5px");
 
       .ui-resizable-handle {
         background: none;

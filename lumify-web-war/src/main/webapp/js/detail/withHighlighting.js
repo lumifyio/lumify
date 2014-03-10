@@ -138,8 +138,10 @@ define([
             if (!style.styleApplied) {
 
                 this.ontologyService.concepts().done(function(concepts) {
-                    var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css';
-                    require([styleFile], function(tpl) {
+                    var styleFile = 'tpl!detail/highlight-styles/' + style.selector + '.css',
+                        detectedObjectStyleFile = 'tpl!detail/highlight-styles/detectedObject.css';
+
+                    require([styleFile, detectedObjectStyleFile], function(tpl, doTpl) {
                         function apply(concept) {
                             if (concept.color) {
                                 var STATES = {
@@ -149,8 +151,8 @@ define([
                                         TERM: 3
                                     },
                                     className = concept.className || 'entity.conceptType-' + concept.id,
-                                    definition = function(state) {
-                                        return tpl({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
+                                    definition = function(state, template) {
+                                        return (template || tpl)({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
                                     };
 
                                 // Dim 
@@ -161,7 +163,7 @@ define([
                                     '.highlight-' + style.selector + ' .drag-focus .' + className,
                                     definition(STATES.DIM)
                                 );
-
+                                
                                 stylesheet.addRule(
                                    '.highlight-' + style.selector + ' .' + className,
                                    definition(STATES.TERM)
@@ -175,11 +177,34 @@ define([
                                     definition(STATES.NORMAL)
                                 );
 
+
                                 // Drag-drop hover
                                 stylesheet.addRule(
                                     '.highlight-' + style.selector + ' .drop-hover.' + className,
                                     definition(STATES.HOVER)
                                 );
+
+
+                                // Detected objects
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .detected-object.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .detected-object.resolved.' + className,
+                                    definition(STATES.DIM, doTpl)
+                                );
+                                stylesheet.addRule(
+                                    //'.highlight-' + style.selector + ' .detected-object.' + className + ',' +
+                                    //'.highlight-' + style.selector + ' .detected-object.resolved.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .focused .detected-object.' + className + ',' +
+                                    '.highlight-' + style.selector + ' .focused .detected-object.resolved.' + className,
+                                    definition(STATES.NORMAL, doTpl)
+                                );
+                                /*
+                                stylesheet.addRule(
+                                    '.highlight-' + style.selector + ' .detected-object.' + className + '::hover' + ',' +
+                                    '.highlight-' + style.selector + ' .detected-object.resolved.' + className + '::hover',
+                                    definition(STATES.HOVER, doTpl)
+                                );
+                                */
 
                                 stylesheet.addRule('.concepticon-' + concept.id, 'background-image: url(' + concept.glyphIconHref + ')');
                             }

@@ -42,6 +42,7 @@ define([
             currentTranscriptSelector: '.currentTranscript',
             imagePreviewSelector: '.image-preview',
             detectedObjectSelector: '.detected-object',
+            detectedObjectTagSelector: '.detected-object-tag',
             artifactSelector: '.artifact-image',
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
@@ -61,10 +62,16 @@ define([
             this.on('videoTimeUpdate', this.onVideoTimeUpdate);
             this.on('DetectedObjectCoordsChange', this.onCoordsChanged);
             this.on('termCreated', this.onTeardownDropdowns);
+            this.on('dropdownClosed', this.onTeardownDropdowns);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.after('tearDownDropdowns', this.onTeardownDropdowns);
 
-            this.$node.on('mouseenter mouseleave', '.detected-object-tag', this.onDetectedObjectHover.bind(this));
+            this.$node.on('mouseenter.detectedObject mouseleave.detectedObject', 
+                          this.attr.detectedObjectTagSelector, 
+                          this.onDetectedObjectHover.bind(this));
+            this.before('teardown', function() {
+                self.$node.off('.detectedObject');
+            })
 
             this.loadArtifact();
         });
@@ -216,43 +223,54 @@ define([
                 $target = $(event.target),
                 info = $target.closest('.label-info').data('info');
 
-            $target.closest('.label-info').parent().addClass('focused');
-            info.existing = true
-            if (info.entityVertex) {
-                var result = $.extend(info,info.entityVertex);
-                delete result.entityVertex;
-                info = result;
-            }
-            this.trigger('DetectedObjectEdit', info);
+            this.$node.find('.focused').removeClass('focused')
             this.showForm(info, this.attr.data, $target);
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
+            $target.closest('.label-info').parent().addClass('focused');
         };
 
         this.onCoordsChanged = function(event, data) {
             var self = this,
-                vertex = appData.vertex(this.attr.data.id);
-            var detectedObject,
+                vertex = appData.vertex(this.attr.data.id),
+                detectedObject,
                 width = parseFloat(data.x2)-parseFloat(data.x1),
                 height = parseFloat(data.y2)-parseFloat(data.y1);
+
             if (vertex.detectedObjects) {
                 detectedObject = $.extend(true, {}, _.find(vertex.detectedObjects, function(obj) {
-                    return (obj && (obj.graphVertexId || obj._rowKey)) === data.id;
+                    if (obj.entityVertex) {
+                        return obj.entityVertex.id === data.id;
+                    }
+
+                    return obj._rowKey === data.id;
                 }));
             }
 
             if (width < 5 || height < 5) {
-                return TermForm.teardownAll();
+                this.$node.find('.underneath').teardownComponent(TermForm)
+                return;
             }
 
             detectedObject = detectedObject || {};
+            if (data.id === 'NEW') {
+                detectedObject.isNew = true;
+            }
             detectedObject.x1 = data.x1;
             detectedObject.y1 = data.y1;
             detectedObject.x2 = data.x2;
             detectedObject.y2 = data.y2;
             this.showForm(detectedObject, this.attr.data, this.$node);
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', detectedObject);
+            this.$node.find('.detected-object-labels .detected-object').each(function() {
+                if ($(this).data('info')._rowKey === data.id) {
+                    $(this).closest('span').addClass('focused')
+                }
+            });
         };
 
         this.onTeardownDropdowns = function() {
-            this.trigger('DetectedObjectDoneEditing');
+            this.$node.find('.detected-object-labels .focused').removeClass('focused')
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectDoneEditing');
         };
 
         this.onDetectedObjectHover = function(event) {
@@ -261,13 +279,8 @@ define([
                 badge = tag.find('.label-info'),
                 info = badge.data('info');
 
-            if (info.entityVertex) {
-                var result = $.extend(info,info.entityVertex);
-                delete info.entityVertex;
-                info = result;
-            }
-
             this.trigger(
+                this.select('imagePreviewSelector'),
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
                 info
             );
@@ -295,18 +308,17 @@ define([
         };
 
         this.showForm = function (dataInfo, artifactInfo, $target){
-            if ($('.detected-object-labels .underneath').length === 0) {
-                TermForm.teardownAll ();
-            }
+            this.$node.find('.underneath').teardownComponent(TermForm)
 
-            var root = $('<div class="underneath">').insertAfter($target.closest('.type-content').find('.detected-object-labels'));
-            var resolvedVertex =  { id: dataInfo.id, properties: dataInfo.properties } ;
+            var root = $('<div class="underneath">')
+                .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
+            var resolvedVertex =  dataInfo.entityVertex;
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,
                 dataInfo: dataInfo,
                 resolvedVertex: resolvedVertex,
-                existing: dataInfo.existing || resolvedVertex.id ? true : false,
+                existing: !!resolvedVertex,
                 detectedObject: true
             });
         };
