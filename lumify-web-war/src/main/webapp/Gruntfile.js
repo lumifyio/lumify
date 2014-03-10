@@ -115,8 +115,7 @@ module.exports = function(grunt) {
             dateFormat: function(time) {
                 grunt.log.ok('The watch finished in ' + time + 'ms. Waiting...');
             },
-            nospawn: true,
-            atBegin: true
+            spawn: true
         },
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
