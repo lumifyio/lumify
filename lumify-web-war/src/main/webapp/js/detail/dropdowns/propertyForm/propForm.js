@@ -140,6 +140,7 @@ define([
             }
 
             if (visibilityValue) {
+                visibilityValue = visibilityValue.source;
                 this.visibilitySource = { value:visibilityValue, valid:true };
             }
 
