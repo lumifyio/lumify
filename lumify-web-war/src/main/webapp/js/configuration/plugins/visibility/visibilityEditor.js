@@ -17,7 +17,7 @@ define([
 
         this.after('initialize', function() {
             this.$node.html(formTemplate({
-                value: (this.attr.value && this.attr.value.source) || ''
+                value: $.trim(_.isUndefined(this.attr.value) ? '' : this.attr.value)
             }));
 
             this.onChange = _.debounce(this.onChange.bind(this), 250);

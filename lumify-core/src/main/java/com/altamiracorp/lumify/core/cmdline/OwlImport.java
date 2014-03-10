@@ -101,6 +101,8 @@ public class OwlImport extends CommandLineBase {
                 }
             }
         }
+
+        ontologyRepository.clearCache();
     }
 
     private void importClassElement(Element classElem, User user) {

@@ -96,7 +96,6 @@ define(['service/ontology'], function(OntologyService) {
             it('should return properties by relationship label', function(done) {
                 this.service.propertiesByRelationshipLabel('has entity')
                     .done(function(properties) {
-                        debugger;
                         done();
                     })
             })
