@@ -6,10 +6,9 @@ define([
 
     var DEBUG_SHOW_GRID = false;
 
-
     return doLayout;
 
-    function doLayout(cy, currentNodes, boundingBox, vertexIds, layoutOptions) {
+    function doLayout(cy, currentNodes, boundingBox, vertexIds, cyIdMap, layoutOptions) {
 
 
         var layoutPositions = {},
@@ -67,7 +66,7 @@ define([
                     maxY = Math.floor((position.y - start.y + nodeSize.y / 2 + (nodeBoundingBox.h - nodeSize.y)) / cell.y),
                     x = Math.floor((position.x - start.x) / cell.x),
                     y = Math.floor((position.y - start.y) / cell.y),
-                    nodeId = this.id();
+                    nodeId = cyIdMap[this.id()];
 
                 previouslyPlacedMap[nodeId] = {x:x,y:y};
 
@@ -88,8 +87,8 @@ define([
 
             // Show grid overlay
             if (DEBUG_SHOW_GRID) {
-                require(['graph/layouts/pathDebugGrid'], function(d) {
-                    d.init(cy, cell);
+                require(['graph/layouts/pathDebugGrid'], function(init) {
+                    init(cy, cell);
                 });
             }
 

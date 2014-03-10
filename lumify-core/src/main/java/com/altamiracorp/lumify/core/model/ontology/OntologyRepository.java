@@ -3,6 +3,8 @@ package com.altamiracorp.lumify.core.model.ontology;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.TimingCallable;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
@@ -30,6 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class OntologyRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepository.class);
     public static final String VISIBILITY_STRING = "ontology";
     public static final LumifyVisibility DEFAULT_VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     private final Graph graph;
@@ -66,6 +69,7 @@ public class OntologyRepository {
     }
 
     public void clearCache() {
+        LOGGER.info("clearing ontology cache");
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
         this.conceptsCache.invalidateAll();
