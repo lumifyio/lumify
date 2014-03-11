@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
+import com.altamiracorp.lumify.core.model.workspace.diff.PropertyDiffType;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
@@ -129,6 +131,41 @@ public class GraphUtil {
         return result;
     }
 
+    public static PropertyDiffType[] getPropertyDiffTypes(List<Property> properties, String workspaceId) {
+        PropertyDiffType[] propertyDiffTypes = new PropertyDiffType[properties.size()];
+        for (int i = 0; i < properties.size(); i++) {
+            Property property = properties.get(0);
+            String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
+            if (visibilityJsonString == null) {
+                propertyDiffTypes[i] = PropertyDiffType.PUBLIC;
+                continue;
+            }
+            JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+            if (!JSONUtil.arrayConains(visibilityJson.optJSONArray(VisibilityTranslator.JSON_WORKSPACES), workspaceId)) {
+                propertyDiffTypes[i] = PropertyDiffType.PUBLIC;
+                continue;
+            }
+
+            propertyDiffTypes[i] = PropertyDiffType.PRIVATE;
+        }
+
+        for (int i = 0; i < properties.size(); i++) {
+            if (propertyDiffTypes[i] != PropertyDiffType.PRIVATE) {
+                continue;
+            }
+            for (int j = 0; j < properties.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (propertyDiffTypes[j] == PropertyDiffType.PUBLIC) {
+                    propertyDiffTypes[i] = PropertyDiffType.PUBLIC_CHANGED;
+                }
+            }
+        }
+
+        return propertyDiffTypes;
+    }
+
     public static class VisibilityAndElementMutation<T extends Element> {
         public final ElementMutation<T> elementMutation;
         public final LumifyVisibility visibility;
@@ -219,23 +256,6 @@ public class GraphUtil {
 
         JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
         JSONUtil.addToJSONArrayIfDoesNotExist(workspacesJsonArray, workspaceId);
-
-        return json;
-    }
-
-    public static JSONObject updateVisibilityJsonRemoveFromWorkspace(String jsonString, String workspaceId) {
-        JSONObject json;
-        if (jsonString == null) {
-            json = new JSONObject();
-        } else {
-            json = new JSONObject(jsonString);
-        }
-
-        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
-        JSONUtil.removeFromJSONArray(workspacesJsonArray, workspaceId);
-
-        JSONArray notWorkspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_NOT_WORKSPACES);
-        JSONUtil.addToJSONArrayIfDoesNotExist(notWorkspacesJsonArray, workspaceId);
 
         return json;
     }
