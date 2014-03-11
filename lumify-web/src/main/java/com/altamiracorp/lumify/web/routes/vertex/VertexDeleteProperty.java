@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.PropertyDiffType;
@@ -17,7 +18,6 @@ import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONObject;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,7 +71,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
                 continue;
             }
             if (property != null) {
-                throw new InvalidStateException("Found multiple non public properties.");
+                throw new LumifyException("Found multiple non public properties.");
             }
             property = properties.get(i);
         }

@@ -73,7 +73,7 @@ public class Router extends HttpServlet {
             app.get("/artifact/{graphVertexId}/video-preview", authenticator, ArtifactVideoPreviewImage.class);
             app.post("/artifact/import", authenticator, ArtifactImport.class);
 
-            app.post("/entity/relationships", authenticator, EntityRelationships.class);
+            app.get("/entity/relationships", authenticator, EntityRelationships.class);
             app.post("/entity/resolveTerm", authenticator, ResolveTermEntity.class);
             app.post("/entity/unresolveTerm", authenticator, UnresolveTermEntity.class);
             app.post("/entity/resolveDetectedObject", authenticator, ResolveDetectedObject.class);

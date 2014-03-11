@@ -148,6 +148,11 @@ public class WorkspaceRepository {
         });
     }
 
+    public List<WorkspaceEntity> findEntities(String workspaceId, User user) {
+        Workspace workspace = findById(workspaceId, user);
+        return findEntities(workspace, user);
+    }
+
     public List<WorkspaceEntity> findEntities(final Workspace workspace, User user) {
         if (!doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
