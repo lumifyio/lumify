@@ -35,6 +35,7 @@ define([], function() {
         };
 
         this.after('teardown', function() {
+            this.trigger('dropdownClosed');
             this.$node.closest('.text').removeClass('dropdown');
             this.$node.remove();
         });

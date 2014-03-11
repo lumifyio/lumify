@@ -23,6 +23,9 @@ module.exports = function(config) {
       // Templates
       {pattern: 'js/**/*.ejs', included: false},
 
+      // Images
+      {pattern: 'img/**/*.*', included: false},
+
       // Included libs
       'libs/jquery/jquery.js',
       'libs/jquery-ui/ui/jquery-ui.js',
@@ -87,6 +90,7 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: false,
 
+    /*
     plugins: [
       'karma-mocha',
       'karma-requirejs',
@@ -97,6 +101,7 @@ module.exports = function(config) {
       'karma-firefox-launcher',
       'karma-phantomjs-launcher'
     ]
+    */
   };
 
   var coverageType = 'html';

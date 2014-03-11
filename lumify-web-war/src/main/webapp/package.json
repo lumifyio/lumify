@@ -32,7 +32,8 @@
     "grunt-concurrent": "~0.4.3",
     "grunt-mocha-selenium": "git://github.com/jharwig/grunt-mocha-selenium",
     "grunt-karma": "~0.6.2",
-    "karma-mocha-reporter": "~0.2.2"
+    "karma-mocha-reporter": "~0.2.2",
+    "karma-osx-reporter": "0.0.4"
   },
   "scripts": {
     "test": "karma start --single-run"
