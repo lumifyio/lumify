@@ -47,6 +47,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         Set<String> limitConceptIds = new HashSet<String>();
 
@@ -69,7 +70,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         for (Vertex vertex : vertices) {
             if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
                 if (count < maxVerticesToReturn) {
-                    verticesJson.put(GraphUtil.toJson(vertex));
+                    verticesJson.put(GraphUtil.toJson(vertex, workspaceId));
                 }
                 count++;
             }

@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexSearch extends BaseRequestHandler {
     //TODO should we limit to 10000??
@@ -83,6 +82,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
+        String workspaceId = getWorkspaceId(request);
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -135,14 +135,14 @@ public class GraphVertexSearch extends BaseRequestHandler {
         int count = 0;
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
-                vertices.put(toJson(vertex));
+                vertices.put(GraphUtil.toJson(vertex, workspaceId));
                 Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(vertex.getId().toString(), modelUserContext).iterator();
                 JSONArray detectedObjects = new JSONArray();
                 while (detectedObjectModels.hasNext()) {
                     DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
                     JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
                     if (detectedObjectModel.getMetadata().getResolvedId() != null) {
-                        detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
+                        detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations), workspaceId));
                     }
                     detectedObjects.put(detectedObjectModelJson);
                 }

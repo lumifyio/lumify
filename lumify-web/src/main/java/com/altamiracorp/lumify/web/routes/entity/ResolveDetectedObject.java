@@ -26,7 +26,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,7 +110,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         resolvedVertex.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();
-        result.put("entityVertex", GraphUtil.toJson(resolvedVertex));
+        result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());

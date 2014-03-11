@@ -31,6 +31,7 @@ public class VertexRelationships extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         String graphVertexId = (String) request.getAttribute("graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
@@ -55,9 +56,9 @@ public class VertexRelationships extends BaseRequestHandler {
             }
 
             JSONObject relationshipJson = new JSONObject();
-            relationshipJson.put("relationship", toJson(edge));
+            relationshipJson.put("relationship", toJson(edge, workspaceId));
             Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
-            relationshipJson.put("vertex", toJson(otherVertex));
+            relationshipJson.put("vertex", toJson(otherVertex, workspaceId));
             relationshipsJson.put(relationshipJson);
         }
         json.put("totalReferences", totalReferences);

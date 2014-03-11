@@ -69,9 +69,9 @@ public class RelationshipCreate extends BaseRequestHandler {
         graph.flush();
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Statement created:\n" + toJson(edge).toString(2));
+            LOGGER.info("Statement created:\n" + toJson(edge, workspaceId).toString(2));
         }
 
-        respondWithJson(response, toJson(edge));
+        respondWithJson(response, toJson(edge, workspaceId));
     }
 }

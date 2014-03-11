@@ -103,14 +103,14 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             graph.flush();
         }
 
-        JSONObject artifactJson = GraphUtil.toJson(artifactVertex);
+        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
         Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(artifactId, modelUserContext).iterator();
         JSONArray detectedObjects = new JSONArray();
         while (detectedObjectModels.hasNext()) {
             DetectedObjectModel model = detectedObjectModels.next();
             JSONObject detectedObjectModelJson = model.toJson();
             if (model.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations)));
+                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
             }
             detectedObjects.put(detectedObjectModelJson);
         }
