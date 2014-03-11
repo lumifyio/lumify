@@ -84,6 +84,10 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         if (rowKey != null) {
             detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
             detectedObjectModel.getMetadata().setResolvedId(id, lumifyVisibility.getVisibility());
+            detectedObjectModel.getMetadata().setX1(Double.parseDouble(x1), lumifyVisibility.getVisibility());
+            detectedObjectModel.getMetadata().setX2(Double.parseDouble(x2), lumifyVisibility.getVisibility());
+            detectedObjectModel.getMetadata().setY1(Double.parseDouble(y1), lumifyVisibility.getVisibility());
+            detectedObjectModel.getMetadata().setY2(Double.parseDouble(y2), lumifyVisibility.getVisibility());
             detectedObjectRepository.save(detectedObjectModel);
         } else {
             detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility());

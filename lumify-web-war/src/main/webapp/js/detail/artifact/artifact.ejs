@@ -25,9 +25,7 @@
   <div class="currentTranscript"/>
 <% } %>
 <% if(vertex.concept.displayType == 'image') { %>
-  <div class="image-preview opens-dropdown">
-    <img class="target" src='<%= vertex.imageRawSrc %>' width="auto" height="300"/>
-  </div>
+  <div class="image-preview opens-dropdown"></div>
 <% } %>
 
 <div class='detected-object-labels'>
@@ -36,12 +34,12 @@
         var conceptType = object.entityVertex.properties._conceptType.value || object._conceptType;
         var title = object.entityVertex.properties.title.value || object.classiferConcept;
         var classes = 'label-info detected-object resolved entity conceptType-' + conceptType;%>
-        <span class="label detected-object-tag">
-            <a class="<%= classes %> opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= title %></a>
+        <span class="detected-object-tag">
+            <a class="<%= classes %> label opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= title %></a>
         </span>
     <%} else { %>
-    <span class="label detected-object-tag">
-        <a class="label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a>
+    <span class="detected-object-tag">
+        <a class="label label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a>
     </span>
   <% }}); %>
 </div>

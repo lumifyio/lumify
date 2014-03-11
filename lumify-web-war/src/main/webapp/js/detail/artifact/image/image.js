@@ -2,46 +2,39 @@
 define([
     'flight/lib/component',
     'tpl!./image',
-    'tpl!util/blur/blur-svg'
-], function(defineComponent, template, blur, Jcrop) {
+    'util/withAsyncQueue'
+], function(defineComponent, template, withAsyncQueue) {
     'use strict';
 
-    return defineComponent(ImageView);
+    return defineComponent(ImageView, withAsyncQueue);
 
     function ImageView() {
 
         this.defaultAttrs({
             imageSelector: 'img',
             boxSelector: '.facebox',
-            boxEditingSelector: '.facebox.editing',
-            svgPrefix: 'detail-pane'
+            boxEditingSelector: '.facebox.editing'
         });
 
         this.after('initialize', function() {
-            var html = template({ data: this.attr.data });
+            this.setupAsyncQueue('image');
 
-            this.$node.css({
-                backgroundImage: this.attr.src
-            }).html(html);
+            this.$node.html(template({ data: this.attr.data }));
 
             this.setupEditingFacebox();
 
-            this.$node.closest('.detail-pane').on('DetectedObjectEnter', this.onHover.bind(this));
-            this.$node.closest('.detail-pane').on('DetectedObjectLeave', this.onHoverLeave.bind(this));
-            this.$node.closest('.detail-pane').on('DetectedObjectEdit', this.onEdit.bind(this));
-            this.$node.closest('.detail-pane').on('DetectedObjectDoneEditing', this.onDoneEditing.bind(this));
-            this.before('teardown',function () {
-                this.$node.closest('.detail-pane').off('DetectedObjectEnter');
-                this.$node.closest('.detail-pane').off('DetectedObjectLeave');
-                this.$node.closest('.detail-pane').off('DetectedObjectDoneEditing');
-            });
+            this.on('DetectedObjectEnter', this.onHover);
+            this.on('DetectedObjectLeave', this.onHoverLeave);
+            this.on('DetectedObjectEdit', this.onEdit);
+            this.on('DetectedObjectDoneEditing', this.onDoneEditing);
         });
 
         this.setupEditingFacebox = function() {
             var self = this,
                 image = this.select('imageSelector'),
-                naturalWidth = image[0].naturalWidth,
-                naturalHeight = image[0].naturalHeight;
+                imageEl = image.get(0),
+                naturalWidth = imageEl.naturalWidth,
+                naturalHeight = imageEl.naturalHeight;
 
             if (naturalWidth === 0 || naturalHeight === 0) {
                 image.on('load', this.setupEditingFacebox.bind(this));
@@ -49,14 +42,37 @@ define([
             }
 
             this.on('click', function(event) {
+                if (self.preventClick) {
+                    self.preventClick = false;
+                    return;
+                }
                 var $target = $(event.target);
                 if ($target.closest('.facebox').length) return;
                 this.select('boxSelector').hide();
                 this.currentlyEditing = null;
             });
             this.on('mousedown', function(event) {
-                var $target = $(event.target);
-                if ($target.closest('.facebox').length) return;
+                var $target = $(event.target),
+                    facebox = $target.closest('.facebox')
+                
+                if (facebox.length) {
+                    var position = facebox.position(),
+                        width = facebox.width(),
+                        height = facebox.height();
+
+                    facebox.css({
+                        top: position.top + 'px',
+                        left: position.left + 'px',
+                        width: width + 'px',
+                        height: height + 'px'
+                    });
+                    $(document).on('mouseup.facebox', function(evt) {
+                        $(document).off('.facebox');
+                        convertToPercentageAndTrigger(evt, { element:facebox });
+                    });
+
+                    return;
+                }
 
                 event.stopPropagation();
                 event.preventDefault();
@@ -71,6 +87,7 @@ define([
                         width: 1,
                         height: 1
                     };
+
                 $(document).on('mousemove.facebox', function(evt) {
                         var currentPosition = {
                                 left: Math.min(offsetParentWidth, Math.max(0, evt.pageX - offsetParent.left)),
@@ -93,6 +110,7 @@ define([
                     .on('mouseup.facebox', function(evt) {
                         $(document).off('mouseup.facebox mousemove.facebox');
                         self.currentlyEditing = 'NEW';
+                        self.preventClick = true;
                         convertToPercentageAndTrigger(evt, { element:box });
                     });
 
@@ -107,12 +125,6 @@ define([
                     minHeight: 5,
                     start: function(event, ui) {
                         // Make fixed percentages during drag
-                        ui.element.css(
-                            $.extend({}, ui.element.position(), {
-                                width:ui.element.width(),
-                                height:ui.element.height()
-                            })
-                        );
                     },
                     stop: convertToPercentageAndTrigger
                 }).draggable({ 
@@ -120,6 +132,8 @@ define([
                     cursor: "move",
                     stop: convertToPercentageAndTrigger
                 });
+
+            this.imageMarkReady(imageEl);
 
             function convertToPercentageAndTrigger(event, ui) {
                 // Make percentages for fluid
@@ -150,30 +164,47 @@ define([
             }
         };
 
-        this.showFacebox = function(data, toEdit) {
-            var box = toEdit ? this.select('boxEditingSelector') :
-                        this.select('boxSelector').not('.editing');
-            var image = this.select('imageSelector');
+        this.showFacebox = function(data, opts) {
+            var self = this,
+                options = $.extend({ editing:false, viewing:false }, opts || {});
 
-            var width = image.width(),
-                height = image.height(),
-                aspectWidth = width / image[0].naturalWidth,
-                aspectHeight = height / image[0].naturalHeight,
-                w = (data.x2 - data.x1) * aspectWidth / width * 100,
-                h = (data.y2 - data.y1) * aspectHeight / height * 100,
-                x = data.x1 * aspectWidth / width * 100,
-                y = data.y1 * aspectHeight / height * 100;
-            box.css({
-                    width: w + '%',
-                    height: h + '%',
-                    left: x + '%',
-                    top: y + '%'
-                })
-                .show();
+            this.imageReady()
+                .done(function() {
+                    var box = (options.editing || options.viewing) ? 
+                            self.select('boxEditingSelector') :
+                            self.select('boxSelector').not('.editing'),
+                        image = self.select('imageSelector'),
+                        width = image.width(),
+                        height = image.height(),
+                        aspectWidth = width / image[0].naturalWidth,
+                        aspectHeight = height / image[0].naturalHeight,
+                        w = (data.x2 - data.x1) * aspectWidth / width * 100,
+                        h = (data.y2 - data.y1) * aspectHeight / height * 100,
+                        x = data.x1 * aspectWidth / width * 100,
+                        y = data.y1 * aspectHeight / height * 100;
+
+                    if (options.viewing) {
+                        box.resizable('disable').draggable('disable')
+                    } else if (options.editing) {
+                        box.resizable('enable').draggable('enable')
+                    }
+
+                    box.css({
+                            width: w + '%',
+                            height: h + '%',
+                            left: x + '%',
+                            top: y + '%'
+                        })
+                        .show();
+            });
         };
 
         this.showFaceboxForEdit = function(data) {
-            this.showFacebox(data, true);
+            this.showFacebox(data, { editing:true });
+        };
+
+        this.showFaceboxForView = function(data) {
+            this.showFacebox(data, { viewing:true });
         };
 
         this.onHover = function(event, data) {
@@ -187,15 +218,16 @@ define([
                 toHide = toHide.not('.editing');
             }
 
-            if (!this.currentlyEditing || data.id !== this.currentlyEditing){
-                toHide.hide();
-            }
+            toHide.hide();
         };
 
         this.onEdit = function(event, data) {
-            if (data.id) {
-                this.currentlyEditing = data.id;
-                this.showFacebox(data);
+            if (data.entityVertex) {
+                this.currentlyEditing = data.entityVertex.id;
+                this.showFaceboxForView(data);
+            } else if (data.isNew) {
+                this.currentlyEditing = 'NEW';
+                this.showFaceboxForEdit(data);
             } else {
                 this.currentlyEditing = data._rowKey;
                 this.showFaceboxForEdit(data);
