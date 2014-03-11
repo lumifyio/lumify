@@ -18,7 +18,6 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
         StringBuilder visibilityString = new StringBuilder();
 
         List<String> required = new ArrayList<String>();
-        List<String> notRequired = new ArrayList<String>();
 
         String source = visibilityJson.optString(JSON_SOURCE);
         if (source != null && source.trim().length() > 0) {
@@ -33,14 +32,6 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
             }
         }
 
-        JSONArray notWorkspaces = visibilityJson.optJSONArray(JSON_NOT_WORKSPACES);
-        if (notWorkspaces != null) {
-            for (int i = 0; i < notWorkspaces.length(); i++) {
-                String workspace = notWorkspaces.getString(i);
-                notRequired.add(workspace);
-            }
-        }
-
         for (String v : required) {
             if (visibilityString.length() > 0) {
                 visibilityString.append("&");
@@ -50,17 +41,6 @@ public class DirectVisibilityTranslator implements VisibilityTranslator {
                     .append(v)
                     .append(")");
         }
-
-        // TODO add when Accumulo supports '!'/'not'
-//        for (String v : notRequired) {
-//            if (visibilityString.length() > 0) {
-//                visibilityString.append("&");
-//            }
-//            visibilityString
-//                    .append("(!")
-//                    .append(v)
-//                    .append(")");
-//        }
 
         return new LumifyVisibility(visibilityString.toString());
     }
