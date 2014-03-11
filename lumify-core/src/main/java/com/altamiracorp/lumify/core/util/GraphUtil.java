@@ -134,7 +134,7 @@ public class GraphUtil {
     public static PropertyDiffType[] getPropertyDiffTypes(List<Property> properties, String workspaceId) {
         PropertyDiffType[] propertyDiffTypes = new PropertyDiffType[properties.size()];
         for (int i = 0; i < properties.size(); i++) {
-            Property property = properties.get(0);
+            Property property = properties.get(i);
             String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
             if (visibilityJsonString == null) {
                 propertyDiffTypes[i] = PropertyDiffType.PUBLIC;
