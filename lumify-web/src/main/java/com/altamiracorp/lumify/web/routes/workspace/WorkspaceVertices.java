@@ -6,32 +6,25 @@ import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
-import com.altamiracorp.lumify.core.util.LumifyLogger;
-import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
-
-public class WorkspaceRelationships extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceRelationships.class);
+public class WorkspaceVertices extends BaseRequestHandler {
     private final Graph graph;
     private final WorkspaceRepository workspaceRepository;
 
     @Inject
-    public WorkspaceRelationships(
+    public WorkspaceVertices(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
@@ -47,32 +40,20 @@ public class WorkspaceRelationships extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
 
-        long startTime = System.nanoTime();
-
-        JSONArray resultsJson = new JSONArray();
-
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
-        Iterable<Object> allIds = new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
+        Iterable<Object> vertexIds = new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
             @Override
             protected Object convert(WorkspaceEntity workspaceEntity) {
                 return workspaceEntity.getEntityVertexId();
             }
         };
 
-        List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(allIds, authorizations), authorizations));
-        for (Edge edge : edges) {
-            JSONObject rel = new JSONObject();
-            rel.put("from", edge.getVertexId(Direction.OUT));
-            rel.put("to", edge.getVertexId(Direction.IN));
-            rel.put("relationshipType", edge.getLabel());
-            rel.put("id", edge.getId());
-            rel.put("diffType", GraphUtil.getDiffType(edge, workspaceId).toString());
-            resultsJson.put(rel);
+        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
+        JSONArray results = new JSONArray();
+        for (Vertex v : graphVertices) {
+            results.put(GraphUtil.toJson(v, workspaceId));
         }
 
-        long endTime = System.nanoTime();
-        LOGGER.debug("Retrieved %d in %dms", edges.size(), (endTime - startTime) / 1000 / 1000);
-
-        respondWithJson(response, resultsJson);
+        respondWithJson(response, results);
     }
 }

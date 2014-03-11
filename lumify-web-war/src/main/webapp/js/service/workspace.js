@@ -26,6 +26,14 @@ function(ServiceBase) {
         });
     };
 
+    WorkspaceService.prototype.getVertices = function (workspaceId) {
+        return this._ajaxPost({
+            url: 'workspace/' + encodeURIComponent(workspaceId) + '/vertices',
+            data: {
+            }
+        });
+    };
+
     WorkspaceService.prototype.getRelationships = function (workspaceId) {
         return this._ajaxGet({
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/relationships',
