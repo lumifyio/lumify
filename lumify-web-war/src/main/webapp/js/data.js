@@ -265,12 +265,11 @@ define([
 
 
         this.refreshRelationships = function() {
-            var self = this,
-                ids = this.getIds();
+            var self = this;
 
             this.relationshipsUnload();
 
-            this.vertexService.getRelationships(ids)
+            this.vertexService.getRelationships()
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });

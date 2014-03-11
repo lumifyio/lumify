@@ -43,11 +43,10 @@ define(
             });
         };
 
-        VertexService.prototype.getRelationships = function (ids) {
-            return this._ajaxPost({
+        VertexService.prototype.getRelationships = function () {
+            return this._ajaxGet({
                 url: 'entity/relationships',
                 data: {
-                    ids: ids
                 }
             });
         };
