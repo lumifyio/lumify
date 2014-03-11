@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -54,12 +55,12 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         Property property = graphVertex.getProperty(propertyName);
 
-        String visibilityJsonString = (String) property.getMetadata().get(GraphUtil.VISIBILITY_JSON_PROPERTY);
+        String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJsonString, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         graphVertex.prepareMutation()
                 .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility())
-                .alterPropertyMetadata(property.getKey(), property.getName(), GraphUtil.VISIBILITY_JSON_PROPERTY, visibilityJson.toString())
+                .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString())
                 .save();
 
         graph.flush();

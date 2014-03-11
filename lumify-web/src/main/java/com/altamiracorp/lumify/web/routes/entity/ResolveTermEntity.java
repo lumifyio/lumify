@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -24,6 +25,9 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
@@ -83,9 +87,14 @@ public class ResolveTermEntity extends BaseRequestHandler {
             createdVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
         }
 
-        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), lumifyVisibility.getVisibility());
-        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, lumifyVisibility.getVisibility());
-        TITLE.setProperty(createdVertexMutation, title, lumifyVisibility.getVisibility());
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+
+        createdVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+
+        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
+        TITLE.setProperty(createdVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
         Vertex createdVertex = createdVertexMutation.save();
 
@@ -94,7 +103,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
         if (edge == null) {
-            graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+            edge = graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+            edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
             String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
             if (labelDisplayName == null) {
                 labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();

@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.util;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
@@ -20,8 +21,6 @@ import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperti
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
 
 public class GraphUtil {
-    public static final String VISIBILITY_PROPERTY = "_visibility";
-    public static final String VISIBILITY_JSON_PROPERTY = "_visibilityJson";
 
     public static JSONArray toJson(Iterable<? extends Element> elements) {
         JSONArray result = new JSONArray();
@@ -112,11 +111,11 @@ public class GraphUtil {
         }
 
         if (property.getVisibility() != null) {
-            result.put(VISIBILITY_PROPERTY, property.getVisibility().toString());
+            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
             value = property.getMetadata().get(key);
-            if (key.equals(VISIBILITY_JSON_PROPERTY)) {
+            if (key.equals(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString())) {
                 result.put(key, new JSONObject(value.toString()));
             } else if (value instanceof PropertyJustificationMetadata) {
                 result.put(key, ((PropertyJustificationMetadata) value).toJson());
@@ -158,9 +157,9 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        String visibilityJsonString = (String) propertyMetadata.get(VISIBILITY_JSON_PROPERTY);
+        String visibilityJsonString = (String) propertyMetadata.get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId);
-        propertyMetadata.put(VISIBILITY_JSON_PROPERTY, visibilityJson.toString());
+        propertyMetadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
@@ -204,7 +203,7 @@ public class GraphUtil {
         JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
-                .setProperty(VISIBILITY_JSON_PROPERTY, visibilityJson.toString(), lumifyVisibility.getVisibility())
+                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility())
                 .save();
     }
 
