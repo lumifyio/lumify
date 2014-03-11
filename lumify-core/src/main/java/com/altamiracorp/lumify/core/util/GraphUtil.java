@@ -48,6 +48,7 @@ public class GraphUtil {
             JSONObject json = new JSONObject();
             json.put("id", vertex.getId());
             json.put("properties", toJsonProperties(vertex.getProperties(), workspaceId));
+            json.put("diffType", getDiffType(vertex, workspaceId).toString());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -62,6 +63,7 @@ public class GraphUtil {
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
             json.put("properties", toJsonProperties(edge.getProperties(), workspaceId));
+            json.put("diffType", getDiffType(edge, workspaceId).toString());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -137,22 +139,32 @@ public class GraphUtil {
         return result;
     }
 
+    public static PropertyDiffType getDiffType(Element element, String workspaceId) {
+        String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
+        return getPropertyDiffTypeFromVisibilityJsonString(visibilityJsonString, workspaceId);
+    }
+
+    private static PropertyDiffType getPropertyDiffTypeFromVisibilityJsonString(String visibilityJsonString, String workspaceId) {
+        if (visibilityJsonString == null) {
+            return PropertyDiffType.PUBLIC;
+        }
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspacesJsonArray = visibilityJson.optJSONArray(VisibilityTranslator.JSON_WORKSPACES);
+        if (workspacesJsonArray == null) {
+            return PropertyDiffType.PUBLIC;
+        }
+        if (!JSONUtil.arrayConains(workspacesJsonArray, workspaceId)) {
+            return PropertyDiffType.PUBLIC;
+        }
+        return PropertyDiffType.PRIVATE;
+    }
+
     public static PropertyDiffType[] getPropertyDiffTypes(List<Property> properties, String workspaceId) {
         PropertyDiffType[] propertyDiffTypes = new PropertyDiffType[properties.size()];
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
             String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-            if (visibilityJsonString == null) {
-                propertyDiffTypes[i] = PropertyDiffType.PUBLIC;
-                continue;
-            }
-            JSONObject visibilityJson = new JSONObject(visibilityJsonString);
-            if (!JSONUtil.arrayConains(visibilityJson.optJSONArray(VisibilityTranslator.JSON_WORKSPACES), workspaceId)) {
-                propertyDiffTypes[i] = PropertyDiffType.PUBLIC;
-                continue;
-            }
-
-            propertyDiffTypes[i] = PropertyDiffType.PRIVATE;
+            propertyDiffTypes[i] = getPropertyDiffTypeFromVisibilityJsonString(visibilityJsonString, workspaceId);
         }
 
         for (int i = 0; i < properties.size(); i++) {
