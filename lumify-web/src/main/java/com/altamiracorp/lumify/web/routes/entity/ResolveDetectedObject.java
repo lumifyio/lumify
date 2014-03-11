@@ -10,12 +10,14 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
@@ -24,6 +26,9 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
@@ -84,6 +89,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility());
         }
 
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
             CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
@@ -95,10 +103,14 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         } else {
             resolvedVertex = graph.getVertex(id, authorizations);
         }
+
+        resolvedVertex.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex));
 
-        graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+        Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+        edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, lumifyVisibility.getVisibility());
