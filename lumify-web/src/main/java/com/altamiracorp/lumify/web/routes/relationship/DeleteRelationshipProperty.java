@@ -11,7 +11,10 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -48,6 +51,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
@@ -66,7 +70,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         for (Property p : edge.getProperties()) {
             properties.add(p);
         }
-        JSONObject resultsJson = GraphUtil.toJsonProperties(properties);
+        JSONObject resultsJson = GraphUtil.toJsonProperties(properties, workspaceId);
 
         respondWithJson(response, resultsJson);
     }

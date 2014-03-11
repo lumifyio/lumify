@@ -89,11 +89,11 @@ public class VertexDeleteProperty extends BaseRequestHandler {
 
         // TODO: broadcast property delete
 
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
         json.put("deletedProperty", propertyName);
-        json.put("vertex", GraphUtil.toJson(graphVertex));
+        json.put("vertex", GraphUtil.toJson(graphVertex, workspaceId));
         respondWithJson(response, json);
     }
 }

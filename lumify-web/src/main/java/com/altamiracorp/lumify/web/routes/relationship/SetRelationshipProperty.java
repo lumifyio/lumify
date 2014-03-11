@@ -16,7 +16,6 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -90,7 +89,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user, setPropertyResult.visibility.getVisibility());
 
-        JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties());
+        JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties(), workspaceId);
         respondWithJson(response, resultsJson);
     }
 }

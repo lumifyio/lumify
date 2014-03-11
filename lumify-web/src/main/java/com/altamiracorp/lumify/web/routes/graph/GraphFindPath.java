@@ -33,6 +33,7 @@ public class GraphFindPath extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         final String sourceGraphVertexId = getRequiredParameter(request, "sourceGraphVertexId");
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
@@ -55,7 +56,7 @@ public class GraphFindPath extends BaseRequestHandler {
 
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, authorizations);
         for (Path path : paths) {
-            JSONArray verticesJson = GraphUtil.toJson(graph.getVerticesInOrder(path, authorizations));
+            JSONArray verticesJson = GraphUtil.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId);
             pathResults.put(verticesJson);
         }
 

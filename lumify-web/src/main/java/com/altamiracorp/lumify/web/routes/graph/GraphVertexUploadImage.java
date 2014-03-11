@@ -82,6 +82,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         final Part file = files.get(0);
+        String workspaceId = getWorkspaceId(request);
 
         Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
@@ -118,7 +119,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 
-        respondWithJson(response, toJson(entityVertex));
+        respondWithJson(response, toJson(entityVertex, workspaceId));
     }
 
     private ElementBuilder<Vertex> convertToArtifact(final Part file, Authorizations authorizations) throws IOException {

@@ -45,9 +45,10 @@ public class VertexProperties extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
+        String workspaceId = getWorkspaceId(request);
 
         Iterable<Property> properties = graph.getVertex(graphVertexId, authorizations).getProperties();
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
 
         JSONObject json = new JSONObject();
         json.put("id", graphVertexId);
@@ -59,7 +60,7 @@ public class VertexProperties extends BaseRequestHandler {
             DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
             JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
             if (detectedObjectModel.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations)));
+                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations), workspaceId));
             }
             detectedObjects.put(detectedObjectModelJson);
         }

@@ -41,6 +41,7 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         Iterator<Vertex> vertexIterator = graph.query(authorizations).
                 has(GEO_LOCATION.getKey(), GeoCompare.WITHIN, new GeoCircle(latitude, longitude, radius)).
@@ -50,7 +51,7 @@ public class GraphGeoLocationSearch extends BaseRequestHandler {
         JSONObject results = new JSONObject();
         JSONArray vertices = new JSONArray();
         while (vertexIterator.hasNext()) {
-            vertices.put(GraphUtil.toJson(vertexIterator.next()));
+            vertices.put(GraphUtil.toJson(vertexIterator.next(), workspaceId));
         }
 
         results.put("vertices", vertices);

@@ -35,6 +35,7 @@ public class VertexMultiple extends BaseRequestHandler {
         String[] vertexStringIds = request.getParameterValues("vertexIds[]");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+        String workspaceId = getWorkspaceId(request);
 
         Iterable<Object> vertexIds = new ConvertingIterable<String, Object>(toIterable(vertexStringIds)) {
             @Override
@@ -46,7 +47,7 @@ public class VertexMultiple extends BaseRequestHandler {
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
         JSONArray results = new JSONArray();
         for (Vertex v : graphVertices) {
-            results.put(GraphUtil.toJson(v));
+            results.put(GraphUtil.toJson(v, workspaceId));
         }
 
         respondWithJson(response, results);

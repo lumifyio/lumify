@@ -21,46 +21,47 @@ import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class GraphUtil {
 
-    public static JSONArray toJson(Iterable<? extends Element> elements) {
+    public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
-            result.put(toJson(element));
+            result.put(toJson(element, workspaceId));
         }
         return result;
     }
 
-    public static JSONObject toJson(Element element) {
+    public static JSONObject toJson(Element element, String workspaceId) {
         if (element instanceof Vertex) {
-            return toJson((Vertex) element);
+            return toJsonVertex((Vertex) element, workspaceId);
         }
         if (element instanceof Edge) {
-            return toJson((Edge) element);
+            return toJsonEdge((Edge) element, workspaceId);
         }
         throw new RuntimeException("Unexpected element type: " + element.getClass().getName());
     }
 
-    public static JSONObject toJson(Vertex vertex) {
+    public static JSONObject toJsonVertex(Vertex vertex, String workspaceId) {
         try {
             JSONObject json = new JSONObject();
             json.put("id", vertex.getId());
-            json.put("properties", toJsonProperties(vertex.getProperties()));
+            json.put("properties", toJsonProperties(vertex.getProperties(), workspaceId));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static JSONObject toJson(Edge edge) {
+    public static JSONObject toJsonEdge(Edge edge, String workspaceId) {
         try {
             JSONObject json = new JSONObject();
             json.put("id", edge.getId());
             json.put("label", edge.getLabel());
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
-            json.put("properties", toJsonProperties(edge.getProperties()));
+            json.put("properties", toJsonProperties(edge.getProperties(), workspaceId));
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -82,13 +83,18 @@ public class GraphUtil {
         return result;
     }
 
-    public static JSONObject toJsonProperties(Iterable<Property> properties) {
+    public static JSONObject toJsonProperties(Iterable<Property> properties, String workspaceId) {
         JSONObject resultsJson = new JSONObject();
-        for (Property property : properties) {
+        List<Property> propertiesList = toList(properties);
+        PropertyDiffType[] propertyDiffTypes = getPropertyDiffTypes(propertiesList, workspaceId);
+        for (int i = 0; i < propertiesList.size(); i++) {
+            Property property = propertiesList.get(i);
             if (property.getValue() instanceof StreamingPropertyValue) {
                 continue;
             }
-            resultsJson.put(property.getName(), GraphUtil.toJsonProperty(property));
+            JSONObject propertyJson = GraphUtil.toJsonProperty(property);
+            propertyJson.put("diffType", propertyDiffTypes[i].toString());
+            resultsJson.put(property.getName(), propertyJson);
         }
         return resultsJson;
     }
@@ -150,11 +156,13 @@ public class GraphUtil {
         }
 
         for (int i = 0; i < properties.size(); i++) {
+            Property property = properties.get(i);
             if (propertyDiffTypes[i] != PropertyDiffType.PRIVATE) {
                 continue;
             }
             for (int j = 0; j < properties.size(); j++) {
-                if (i == j) {
+                Property p = properties.get(j);
+                if (i == j || !property.getName().equals(p.getName())) {
                     continue;
                 }
                 if (propertyDiffTypes[j] == PropertyDiffType.PUBLIC) {
