@@ -1,15 +1,14 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
-import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
+import com.altamiracorp.lumify.core.model.workspace.diff.PropertyDiffType;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -18,13 +17,16 @@ import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONObject;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class VertexDeleteProperty extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexDeleteProperty.class);
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final VisibilityTranslator visibilityTranslator;
@@ -46,35 +48,47 @@ public class VertexDeleteProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
-        final String justificationText = getOptionalParameter(request, "justificationString"); // TODO make justificationString required
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        Property property = graphVertex.getProperty(propertyName);
+        List<Property> properties = toList(graphVertex.getProperties(propertyName));
 
-        String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJsonString, workspaceId);
-        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        graphVertex.prepareMutation()
-                .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility())
-                .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString())
-                .save();
+        if (properties.size() == 0) {
+            LOGGER.warn("Could not find property: %s", propertyName);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            chain.next(request, response);
+            return;
+        }
+
+        PropertyDiffType[] propertyDiffTypes = GraphUtil.getPropertyDiffTypes(properties, workspaceId);
+
+        Property property = null;
+        for (int i = 0; i < propertyDiffTypes.length; i++) {
+            if (propertyDiffTypes[i] == PropertyDiffType.PUBLIC) {
+                continue;
+            }
+            if (property != null) {
+                throw new InvalidStateException("Found multiple non public properties.");
+            }
+            property = properties.get(i);
+        }
+
+        if (property == null) {
+            LOGGER.warn("Could not find non-public property: %s", propertyName);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            chain.next(request, response);
+            return;
+        }
+
+        graphVertex.removeProperty(property.getKey(), property.getName());
 
         graph.flush();
 
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        if (justificationText != null) {
-            metadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, new PropertyJustificationMetadata(justificationText));
-        }
-
-        auditRepository.auditEntityProperty(AuditAction.DELETE, graphVertex, propertyName, property.getValue(), null, "", "", metadata, user, lumifyVisibility.getVisibility());
-
         // TODO: broadcast property delete
 
-        Iterable<com.altamiracorp.securegraph.Property> properties = graphVertex.getProperties();
         JSONObject propertiesJson = GraphUtil.toJsonProperties(properties);
         JSONObject json = new JSONObject();
         json.put("properties", propertiesJson);
