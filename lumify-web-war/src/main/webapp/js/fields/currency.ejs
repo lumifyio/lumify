@@ -19,8 +19,8 @@
     </td>
 
     <td class="input-row">
-      <input placeholder="$" type="text" value="<%= value %>"></input>
-      <input placeholder="$" class="range-only" type="text"></input>
+      <input placeholder="$" type="text" pattern="[\d.,$]+" value="<%= value %>">
+      <input placeholder="$" class="range-only" pattern="[\d.,$]+" type="text">
     </td>
   </tr>
 </table>
