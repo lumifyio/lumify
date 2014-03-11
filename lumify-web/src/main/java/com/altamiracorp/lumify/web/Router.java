@@ -73,7 +73,6 @@ public class Router extends HttpServlet {
             app.get("/artifact/{graphVertexId}/video-preview", authenticator, ArtifactVideoPreviewImage.class);
             app.post("/artifact/import", authenticator, ArtifactImport.class);
 
-            app.get("/entity/relationships", authenticator, EntityRelationships.class);
             app.post("/entity/resolveTerm", authenticator, ResolveTermEntity.class);
             app.post("/entity/unresolveTerm", authenticator, UnresolveTermEntity.class);
             app.post("/entity/resolveDetectedObject", authenticator, ResolveDetectedObject.class);
@@ -100,6 +99,7 @@ public class Router extends HttpServlet {
             app.get("/workspace", authenticator, WorkspaceList.class);
             app.post("/workspace/new", authenticator, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, WorkspaceDiff.class);
+            app.get("/workspace/{workspaceId}/relationships", authenticator, WorkspaceRelationships.class);
             app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
             app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);
             app.delete("/workspace/{workspaceId}", authenticator, WorkspaceDelete.class);

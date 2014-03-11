@@ -269,7 +269,7 @@ define([
 
             this.relationshipsUnload();
 
-            this.vertexService.getRelationships()
+            this.workspaceService.getRelationships(this.workspaceId)
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });

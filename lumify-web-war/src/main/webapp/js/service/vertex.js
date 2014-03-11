@@ -43,14 +43,6 @@ define(
             });
         };
 
-        VertexService.prototype.getRelationships = function () {
-            return this._ajaxGet({
-                url: 'entity/relationships',
-                data: {
-                }
-            });
-        };
-
         VertexService.prototype.deleteEdge = function (sourceId, targetId, label, edgeId) {
             return this._ajaxPost({
                 url: '/vertex/removeRelationship',

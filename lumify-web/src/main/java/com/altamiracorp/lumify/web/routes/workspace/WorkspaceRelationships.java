@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.web.routes.entity;
+package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -24,13 +24,13 @@ import java.util.List;
 
 import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
 
-public class EntityRelationships extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(EntityRelationships.class);
+public class WorkspaceRelationships extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceRelationships.class);
     private final Graph graph;
     private final WorkspaceRepository workspaceRepository;
 
     @Inject
-    public EntityRelationships(
+    public WorkspaceRelationships(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
