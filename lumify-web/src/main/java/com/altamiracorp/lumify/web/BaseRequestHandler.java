@@ -122,11 +122,14 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getWorkspaceId(final HttpServletRequest request) {
-        String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
+        String workspaceId = getAttributeString(request, "workspaceId");
         if (workspaceId == null || workspaceId.trim().length() == 0) {
-            workspaceId = getOptionalParameter(request, "workspaceId");
+            workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
             if (workspaceId == null || workspaceId.trim().length() == 0) {
-                throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+                workspaceId = getOptionalParameter(request, "workspaceId");
+                if (workspaceId == null || workspaceId.trim().length() == 0) {
+                    throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+                }
             }
         }
         return workspaceId;
