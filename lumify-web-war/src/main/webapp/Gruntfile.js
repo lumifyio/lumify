@@ -117,6 +117,14 @@ module.exports = function(grunt) {
         }
     },
 
+    plato: {
+        src: {
+            files: {
+                'build/plato': ['js/**/*.js'],
+            }
+        },
+    },
+
     watch: {
         options: {
             dateFormat: function(time) {
@@ -194,6 +202,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-selenium');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks("grunt-jscs-checker");
+  grunt.loadNpmTasks('grunt-plato');
 
   grunt.registerTask('deps', 'Install Webapp Dependencies', ['bower:install', 'bower:prune', 'exec']);
 
