@@ -255,6 +255,7 @@ define([
                 this.throttledUpdatesByVertex = {};
 
                 this.workspaceService.save(this.workspaceId, updateJson).done(function(data) {
+                   self.trigger('refreshRelationships');
                    self.trigger('workspaceSaved', ws);
                    _.values(self.workspaceVertices).forEach(function(wv) {
                        delete wv.dropPosition;
@@ -371,7 +372,6 @@ define([
                         });
                     }
 
-                    self.trigger('refreshRelationships');
                     if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added });
                     if (added.length) {
                         ws.data.vertices = ws.data.vertices.concat(added);
