@@ -4,7 +4,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
-import com.altamiracorp.lumify.core.model.workspace.diff.PropertyDiffType;
+import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -63,11 +63,11 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             return;
         }
 
-        PropertyDiffType[] propertyDiffTypes = GraphUtil.getPropertyDiffTypes(properties, workspaceId);
+        SandboxStatus[] sandboxStatuses = GraphUtil.getPropertyDiffTypes(properties, workspaceId);
 
         Property property = null;
-        for (int i = 0; i < propertyDiffTypes.length; i++) {
-            if (propertyDiffTypes[i] == PropertyDiffType.PUBLIC) {
+        for (int i = 0; i < sandboxStatuses.length; i++) {
+            if (sandboxStatuses[i] == SandboxStatus.PUBLIC) {
                 continue;
             }
             if (property != null) {

@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.model.workspace.diff;
 
-public enum PropertyDiffType {
+public enum SandboxStatus {
     PUBLIC,
     PUBLIC_CHANGED,
     PRIVATE
