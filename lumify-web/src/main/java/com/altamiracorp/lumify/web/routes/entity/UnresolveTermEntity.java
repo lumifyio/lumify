@@ -99,7 +99,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
             termMention.getMetadata().setVertexId("", visibility);
 
-            TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, null);
+            TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
             result = offsetItem.toJson();
         }
 

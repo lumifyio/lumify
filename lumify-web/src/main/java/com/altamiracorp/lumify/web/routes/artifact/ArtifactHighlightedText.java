@@ -56,7 +56,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             highlightedText = "";
         } else {
             Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(artifactVertex.getId().toString(), user);
-            highlightedText = entityHighlighter.getHighlightedText(text, termMentions, authorizations);
+            highlightedText = entityHighlighter.getHighlightedText(text, termMentions);
         }
 
         response.setContentType("text/html");
