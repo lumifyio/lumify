@@ -2,7 +2,7 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
-import com.altamiracorp.lumify.core.model.workspace.diff.PropertyDiffType;
+import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -48,7 +48,7 @@ public class GraphUtil {
             JSONObject json = new JSONObject();
             json.put("id", vertex.getId());
             json.put("properties", toJsonProperties(vertex.getProperties(), workspaceId));
-            json.put("diffType", getDiffType(vertex, workspaceId).toString());
+            json.put("sandboxStatus", getDiffType(vertex, workspaceId).toString());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -63,7 +63,7 @@ public class GraphUtil {
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
             json.put("properties", toJsonProperties(edge.getProperties(), workspaceId));
-            json.put("diffType", getDiffType(edge, workspaceId).toString());
+            json.put("sandboxStatus", getDiffType(edge, workspaceId).toString());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -88,14 +88,14 @@ public class GraphUtil {
     public static JSONObject toJsonProperties(Iterable<Property> properties, String workspaceId) {
         JSONObject resultsJson = new JSONObject();
         List<Property> propertiesList = toList(properties);
-        PropertyDiffType[] propertyDiffTypes = getPropertyDiffTypes(propertiesList, workspaceId);
+        SandboxStatus[] sandboxStatuses = getPropertyDiffTypes(propertiesList, workspaceId);
         for (int i = 0; i < propertiesList.size(); i++) {
             Property property = propertiesList.get(i);
             if (property.getValue() instanceof StreamingPropertyValue) {
                 continue;
             }
             JSONObject propertyJson = GraphUtil.toJsonProperty(property);
-            propertyJson.put("diffType", propertyDiffTypes[i].toString());
+            propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
             resultsJson.put(property.getName(), propertyJson);
         }
         return resultsJson;
@@ -139,37 +139,37 @@ public class GraphUtil {
         return result;
     }
 
-    public static PropertyDiffType getDiffType(Element element, String workspaceId) {
+    public static SandboxStatus getDiffType(Element element, String workspaceId) {
         String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         return getPropertyDiffTypeFromVisibilityJsonString(visibilityJsonString, workspaceId);
     }
 
-    private static PropertyDiffType getPropertyDiffTypeFromVisibilityJsonString(String visibilityJsonString, String workspaceId) {
+    private static SandboxStatus getPropertyDiffTypeFromVisibilityJsonString(String visibilityJsonString, String workspaceId) {
         if (visibilityJsonString == null) {
-            return PropertyDiffType.PUBLIC;
+            return SandboxStatus.PUBLIC;
         }
         JSONObject visibilityJson = new JSONObject(visibilityJsonString);
         JSONArray workspacesJsonArray = visibilityJson.optJSONArray(VisibilityTranslator.JSON_WORKSPACES);
         if (workspacesJsonArray == null) {
-            return PropertyDiffType.PUBLIC;
+            return SandboxStatus.PUBLIC;
         }
         if (!JSONUtil.arrayConains(workspacesJsonArray, workspaceId)) {
-            return PropertyDiffType.PUBLIC;
+            return SandboxStatus.PUBLIC;
         }
-        return PropertyDiffType.PRIVATE;
+        return SandboxStatus.PRIVATE;
     }
 
-    public static PropertyDiffType[] getPropertyDiffTypes(List<Property> properties, String workspaceId) {
-        PropertyDiffType[] propertyDiffTypes = new PropertyDiffType[properties.size()];
+    public static SandboxStatus[] getPropertyDiffTypes(List<Property> properties, String workspaceId) {
+        SandboxStatus[] sandboxStatuses = new SandboxStatus[properties.size()];
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
             String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-            propertyDiffTypes[i] = getPropertyDiffTypeFromVisibilityJsonString(visibilityJsonString, workspaceId);
+            sandboxStatuses[i] = getPropertyDiffTypeFromVisibilityJsonString(visibilityJsonString, workspaceId);
         }
 
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
-            if (propertyDiffTypes[i] != PropertyDiffType.PRIVATE) {
+            if (sandboxStatuses[i] != SandboxStatus.PRIVATE) {
                 continue;
             }
             for (int j = 0; j < properties.size(); j++) {
@@ -177,13 +177,13 @@ public class GraphUtil {
                 if (i == j || !property.getName().equals(p.getName())) {
                     continue;
                 }
-                if (propertyDiffTypes[j] == PropertyDiffType.PUBLIC) {
-                    propertyDiffTypes[i] = PropertyDiffType.PUBLIC_CHANGED;
+                if (sandboxStatuses[j] == SandboxStatus.PUBLIC) {
+                    sandboxStatuses[i] = SandboxStatus.PUBLIC_CHANGED;
                 }
             }
         }
 
-        return propertyDiffTypes;
+        return sandboxStatuses;
     }
 
     public static class VisibilityAndElementMutation<T extends Element> {
