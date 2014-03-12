@@ -23,7 +23,6 @@ define([], function() {
                 $(this).attr('required', true)
             });
 
-
             if (this.attr.tooltip && this.$node.find('.input-prepend').length === 0) {
                 inputs.eq(0)
                     .tooltip($.extend({ container:'body' }, this.attr.tooltip))
