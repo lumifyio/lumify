@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.config.SandboxLevel;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
@@ -123,27 +122,20 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getWorkspaceId(final HttpServletRequest request) {
-        if (this.configuration.getSandboxLevel() == SandboxLevel.WORKSPACE) {
-            String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
+        String workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
+        if (workspaceId == null || workspaceId.trim().length() == 0) {
+            workspaceId = getOptionalParameter(request, "workspaceId");
             if (workspaceId == null || workspaceId.trim().length() == 0) {
-                workspaceId = getOptionalParameter(request, "workspaceId");
-                if (workspaceId == null || workspaceId.trim().length() == 0) {
-                    throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
-                }
+                throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
             }
-            return workspaceId;
         }
-        return null;
+        return workspaceId;
     }
 
     protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {
-        if (getConfiguration().getSandboxLevel() == SandboxLevel.WORKSPACE) {
-            String workspaceId = getWorkspaceId(request);
-            // TODO verify user has access to see this workspace
-            return getUserRepository().getAuthorizations(user, workspaceId);
-        } else {
-            return getUserRepository().getAuthorizations(user);
-        }
+        String workspaceId = getWorkspaceId(request);
+        // TODO verify user has access to see this workspace
+        return getUserRepository().getAuthorizations(user, workspaceId);
     }
 
     /**
