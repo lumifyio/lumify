@@ -51,9 +51,9 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.diff = function() {
+    WorkspaceService.prototype.diff = function(workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/diff'
+            url: 'workspace/' + encodeURIComponent(workspaceId) + '/diff'
         })
     };
 

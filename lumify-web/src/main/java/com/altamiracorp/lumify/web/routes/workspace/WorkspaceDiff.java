@@ -32,7 +32,6 @@ public class WorkspaceDiff extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         if (workspace == null) {

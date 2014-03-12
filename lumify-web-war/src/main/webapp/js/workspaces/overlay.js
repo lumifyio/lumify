@@ -3,8 +3,9 @@ define([
     'flight/lib/component',
     'tpl!./overlay',
     'util/formatters',
-    'service/workspace'
-], function(defineComponent, template, formatters, WorkspaceService) {
+    'service/workspace',
+    'data'
+], function(defineComponent, template, formatters, WorkspaceService, appData) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
@@ -131,7 +132,7 @@ define([
                 badge = $('<span class="badge"></span>').insertAfter(node)
             }
 
-            workspaceService.diff()
+            workspaceService.diff(appData.workspaceId)
                 .fail(function() {
                     badge.removePrefixedClasses('badge-').addClass('badge-important')
                         .attr('title', 'An error occured')
