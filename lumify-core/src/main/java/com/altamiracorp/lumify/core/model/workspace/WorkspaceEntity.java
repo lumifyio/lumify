@@ -1,5 +1,10 @@
 package com.altamiracorp.lumify.core.model.workspace;
 
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.util.ConvertingIterable;
+
 public class WorkspaceEntity {
     private final Object entityVertexId;
     private final int graphPositionX;
@@ -21,5 +26,19 @@ public class WorkspaceEntity {
 
     public int getGraphPositionY() {
         return graphPositionY;
+    }
+
+    public static Iterable<Vertex> toVertices(Graph graph, Iterable<WorkspaceEntity> workspaceEntities, Authorizations authorizations) {
+        Iterable<Object> vertexIds = toVertexIds(workspaceEntities);
+        return graph.getVertices(vertexIds, authorizations);
+    }
+
+    public static Iterable<Object> toVertexIds(Iterable<WorkspaceEntity> workspaceEntities) {
+        return new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
+            @Override
+            protected Object convert(WorkspaceEntity o) {
+                return o.getEntityVertexId();
+            }
+        };
     }
 }

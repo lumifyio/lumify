@@ -15,12 +15,14 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
+import com.altamiracorp.securegraph.util.VerticesToEdgeIdsIterable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.List;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static com.altamiracorp.securegraph.util.IterableUtils.toSet;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
@@ -172,6 +174,14 @@ public class WorkspaceRepository {
         });
     }
 
+    private Iterable<Edge> findEdges(final Workspace workspace, List<WorkspaceEntity> workspaceEntities, User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
+        Iterable<Vertex> vertices = WorkspaceEntity.toVertices(graph, workspaceEntities, authorizations);
+        Iterable<Object> edgeIds = toSet(new VerticesToEdgeIdsIterable(vertices, authorizations));
+        final Iterable<Edge> edges = graph.getEdges(edgeIds, authorizations);
+        return edges;
+    }
+
     public Workspace copy(Workspace workspace, User user) {
         Workspace newWorkspace = add("Copy of " + workspace.getTitle(), user);
 
@@ -308,6 +318,8 @@ public class WorkspaceRepository {
         }
 
         List<WorkspaceEntity> workspaceEntities = findEntities(workspace, user);
-        return workspaceDiff.diff(workspace, workspaceEntities, user);
+        List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
+
+        return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, user);
     }
 }

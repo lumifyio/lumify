@@ -66,7 +66,7 @@ public class WorkspaceRelationships extends BaseRequestHandler {
             rel.put("to", edge.getVertexId(Direction.IN));
             rel.put("relationshipType", edge.getLabel());
             rel.put("id", edge.getId());
-            rel.put("diffType", GraphUtil.getDiffType(edge, workspaceId).toString());
+            rel.put("diffType", GraphUtil.getSandboxStatus(edge, workspaceId).toString());
             resultsJson.put(rel);
         }
 
