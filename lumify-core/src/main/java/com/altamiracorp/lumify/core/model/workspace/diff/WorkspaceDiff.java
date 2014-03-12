@@ -46,8 +46,9 @@ public class WorkspaceDiff {
     private List<DiffItem> diff(Workspace workspace, Edge edge, Authorizations authorizations) {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
-        if (GraphUtil.getSandboxStatus(edge, workspace.getId()) != SandboxStatus.PUBLIC) {
-            result.add(new EdgeDiffItem(edge));
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getId());
+        if (sandboxStatus != SandboxStatus.PUBLIC) {
+            result.add(new EdgeDiffItem(edge, sandboxStatus));
         }
 
         diffProperties(workspace, edge, result);
@@ -59,8 +60,9 @@ public class WorkspaceDiff {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
         Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
-        if (GraphUtil.getSandboxStatus(entityVertex, workspace.getId()) != SandboxStatus.PUBLIC) {
-            result.add(new VertexDiffItem(entityVertex));
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getId());
+        if (sandboxStatus != SandboxStatus.PUBLIC) {
+            result.add(new VertexDiffItem(entityVertex, sandboxStatus));
         }
 
         diffProperties(workspace, entityVertex, result);
@@ -75,7 +77,7 @@ public class WorkspaceDiff {
             if (propertyStatuses[i] != SandboxStatus.PUBLIC) {
                 Property property = properties.get(i);
                 Property existingProperty = findExistingProperty(properties, property);
-                result.add(new PropertyDiffItem(element, property, existingProperty));
+                result.add(new PropertyDiffItem(element, property, existingProperty, propertyStatuses[i]));
             }
         }
     }

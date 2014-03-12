@@ -8,10 +8,12 @@ import java.util.List;
 public abstract class DiffItem {
     private final String type;
     private final String message;
+    private final SandboxStatus sandboxStatus;
 
-    protected DiffItem(String type, String message) {
+    protected DiffItem(String type, String message, SandboxStatus sandboxStatus) {
         this.type = type;
         this.message = message;
+        this.sandboxStatus = sandboxStatus;
     }
 
     public static JSONArray toJson(List<DiffItem> diffItems) {
@@ -26,6 +28,7 @@ public abstract class DiffItem {
         JSONObject json = new JSONObject();
         json.put("type", getType());
         json.put("message", getMessage());
+        json.put("sandboxStatus", sandboxStatus.toString());
         return json;
     }
 
