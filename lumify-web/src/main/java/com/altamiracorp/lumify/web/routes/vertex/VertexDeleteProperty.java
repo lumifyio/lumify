@@ -63,7 +63,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             return;
         }
 
-        SandboxStatus[] sandboxStatuses = GraphUtil.getPropertyDiffTypes(properties, workspaceId);
+        SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(properties, workspaceId);
 
         Property property = null;
         for (int i = 0; i < sandboxStatuses.length; i++) {
