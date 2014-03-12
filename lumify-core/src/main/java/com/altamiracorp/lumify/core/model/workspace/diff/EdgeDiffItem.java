@@ -7,8 +7,8 @@ import org.json.JSONObject;
 public class EdgeDiffItem extends DiffItem {
     private final Edge edge;
 
-    public EdgeDiffItem(Edge edge) {
-        super(EdgeDiffItem.class.getSimpleName(), getMessage(edge));
+    public EdgeDiffItem(Edge edge, SandboxStatus sandboxStatus) {
+        super(EdgeDiffItem.class.getSimpleName(), getMessage(edge), sandboxStatus);
         this.edge = edge;
     }
 

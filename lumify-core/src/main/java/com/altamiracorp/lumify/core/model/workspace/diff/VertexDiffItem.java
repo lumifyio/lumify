@@ -7,8 +7,8 @@ import org.json.JSONObject;
 public class VertexDiffItem extends DiffItem {
     private final Vertex vertex;
 
-    public VertexDiffItem(Vertex vertex) {
-        super(VertexDiffItem.class.getSimpleName(), getMessage(vertex));
+    public VertexDiffItem(Vertex vertex, SandboxStatus sandboxStatus) {
+        super(VertexDiffItem.class.getSimpleName(), getMessage(vertex), sandboxStatus);
         this.vertex = vertex;
     }
 
