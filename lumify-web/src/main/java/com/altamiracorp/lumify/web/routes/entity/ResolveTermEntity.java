@@ -123,7 +123,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         this.graph.flush();
 
-        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention, createdVertex);
+        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
         respondWithJson(response, offsetItem.toJson());
     }
 }
