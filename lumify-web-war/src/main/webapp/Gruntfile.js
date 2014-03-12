@@ -110,6 +110,13 @@ module.exports = function(grunt) {
         }
     },
 
+    jscs: {
+        src: "js/**/*.js",
+        options: {
+            config: ".jscs.json"
+        }
+    },
+
     watch: {
         options: {
             dateFormat: function(time) {
@@ -186,6 +193,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-mocha-selenium');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks("grunt-jscs-checker");
 
   grunt.registerTask('deps', 'Install Webapp Dependencies', ['bower:install', 'bower:prune', 'exec']);
 
