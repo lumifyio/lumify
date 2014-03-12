@@ -25,7 +25,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +89,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
 
-        createdVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+        createdVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
 
         ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
