@@ -8,19 +8,17 @@ public class VertexDiffItem extends DiffItem {
     private final Vertex vertex;
 
     public VertexDiffItem(Vertex vertex, SandboxStatus sandboxStatus) {
-        super(VertexDiffItem.class.getSimpleName(), getMessage(vertex), sandboxStatus);
+        super(VertexDiffItem.class.getSimpleName(), sandboxStatus);
         this.vertex = vertex;
-    }
-
-    private static String getMessage(Vertex vertex) {
-        String title = LumifyProperties.TITLE.getPropertyValue(vertex);
-        return "Entity " + title + " added";
     }
 
     @Override
     public JSONObject toJson() {
+        String title = LumifyProperties.TITLE.getPropertyValue(vertex);
+
         JSONObject json = super.toJson();
         json.put("vertexId", vertex.getId());
+        json.put("title", title);
         return json;
     }
 }

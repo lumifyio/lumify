@@ -8,18 +8,15 @@ public class EdgeDiffItem extends DiffItem {
     private final Edge edge;
 
     public EdgeDiffItem(Edge edge, SandboxStatus sandboxStatus) {
-        super(EdgeDiffItem.class.getSimpleName(), getMessage(edge), sandboxStatus);
+        super(EdgeDiffItem.class.getSimpleName(), sandboxStatus);
         this.edge = edge;
-    }
-
-    private static String getMessage(Edge edge) {
-        return "Edge added";
     }
 
     @Override
     public JSONObject toJson() {
         JSONObject json = super.toJson();
         json.put("edgeId", edge.getId());
+        json.put("label", edge.getLabel());
         json.put("outVertexId", edge.getVertexId(Direction.OUT));
         json.put("inVertexId", edge.getVertexId(Direction.IN));
         return json;
