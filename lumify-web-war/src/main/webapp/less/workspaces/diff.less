@@ -90,11 +90,19 @@
           padding: 0em 0.5em;
           margin: 0;
       }
-      .property-label {
+      .property-label, .edge-label {
         text-align: right;
         font-weight: bold;
       }
-      .property-value {
+      .edge-label {
+        position: relative;
+        &:after {
+          content: '\2192';
+          position: absolute;
+          margin-left: 2px;
+        }
+      }
+      .property-value, .edge-value {
         word-break: break-word;
       }
 
