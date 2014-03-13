@@ -490,6 +490,11 @@ define([
                 selectedIds = _.pluck(vertices, 'id'),
                 selected = _.groupBy(vertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
 
+            if (this.previousSelection && _.isEqual(this.previousSelection, selectedIds)) {
+                return;
+            }
+            this.previousSelection = selectedIds;
+
             selected.vertices = selected.vertices || [];
             selected.edges = selected.edges || [];
 
