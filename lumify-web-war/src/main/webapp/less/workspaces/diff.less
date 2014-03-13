@@ -19,9 +19,85 @@
     table {
       margin: 0;
 
-      tr .actions {
-        text-align: center;
+      tr td, tr th {
+        vertical-align: middle;
       }
+
+      tr.active {
+        td, th {
+          h1 {
+            color: white;
+          }
+          .action-type {
+            color: white;
+            background: darken(@blue-color, 10%);
+          }
+          background-color: @blue-color;
+        }
+      }
+
+      .header {
+          line-height: 2em;
+          font-size: 120%;
+      }
+
+      tr td {
+        padding-top: 0.4em;
+        padding-bottom: 0.2em;
+      }
+      tr.vertex-row {
+        background-color: #efefef;
+      }
+      tr.mark-publish {
+        .actions button {
+          .opacity(100);
+        }
+      }
+
+      td.actions {
+        width: 10px;
+        text-align: right;
+      }
+      tbody .actions button {
+        .opacity(30)
+      }
+      tbody tr:hover .actions button {
+        .opacity(100);
+      }
+
+      .img {
+        width: 1.5em;
+        height: 1.5em;
+        float: left;
+        .opacity(50);
+        margin-top: 0.5em;
+        margin-right: 1em;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      .vertex-label {
+        font-size: 120%;
+        padding: 0.2em 0.5em 0.4em 0.5em;
+        h1 {
+          line-height: 0.8em;
+          font-size: 90%;
+          padding: 0.3em 0 0;
+        }
+      }
+      .action-type {
+          font-size: 70%;
+          padding: 0em 0.5em;
+          margin: 0;
+      }
+      .property-label {
+        text-align: right;
+        font-weight: bold;
+      }
+      .property-value {
+        word-break: break-word;
+      }
+
       button {
         white-space: nowrap;
       }

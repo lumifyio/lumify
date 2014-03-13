@@ -10,7 +10,7 @@ define([
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
     var MENUBAR_WIDTH = 30;
-    var UPDATE_WORKSPACE_DIFF_SECONDS = 5;
+    var UPDATE_WORKSPACE_DIFF_SECONDS = 3;
 
     return defineComponent(WorkspaceOverlay);
 
@@ -151,6 +151,7 @@ define([
 
                         if (tip && tip.is(':visible')) {
                             self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: filteredDiffs });
+                            popover.show();
                         } else {
                             badge
                                 .popover('destroy')
