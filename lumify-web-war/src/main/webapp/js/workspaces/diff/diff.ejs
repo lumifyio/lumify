@@ -44,7 +44,7 @@
 
     <% diff.edges.forEach(function(edge) { %>
     <tr class="<%= edge.className %>" data-diff-id="<%= edge.id %>">
-      <td class="edge-label"><%= edge.displayLabel %></td>
+      <td class="edge-label"><div><%= edge.displayLabel %><span>&#8594;</span></div></td>
       <td class="edge-value"><%= edge.inVertex ? edge.inVertex.properties.title.value : edge.inVertexId %></td>
       <% include workspaces/diff/actions %>
     </tr>
