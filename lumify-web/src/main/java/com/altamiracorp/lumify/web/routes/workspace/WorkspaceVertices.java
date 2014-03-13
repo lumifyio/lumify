@@ -11,12 +11,13 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
+import com.altamiracorp.securegraph.util.LookAheadIterable;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 import java.util.List;
 
 public class WorkspaceVertices extends BaseRequestHandler {
@@ -40,11 +41,21 @@ public class WorkspaceVertices extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
 
-        List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
-        Iterable<Object> vertexIds = new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
+        final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
+        Iterable<Object> vertexIds = new LookAheadIterable<WorkspaceEntity, Object>() {
+            @Override
+            protected boolean isIncluded(WorkspaceEntity workspaceEntity, Object entityVertexId) {
+                return workspaceEntity.isVisible();
+            }
+
             @Override
             protected Object convert(WorkspaceEntity workspaceEntity) {
                 return workspaceEntity.getEntityVertexId();
+            }
+
+            @Override
+            protected Iterator<WorkspaceEntity> createIterator() {
+                return workspaceEntities.iterator();
             }
         };
 

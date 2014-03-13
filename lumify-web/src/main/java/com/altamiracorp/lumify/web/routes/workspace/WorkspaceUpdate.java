@@ -105,7 +105,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             JSONObject graphPosition = update.getJSONObject("graphPosition");
             int graphPositionX = graphPosition.getInt("x");
             int graphPositionY = graphPosition.getInt("y");
-            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, graphPositionX, graphPositionY, authUser);
+            workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPositionX, graphPositionY, authUser);
         }
     }
 }

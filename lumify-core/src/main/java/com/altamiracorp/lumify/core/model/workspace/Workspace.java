@@ -47,6 +47,9 @@ public class Workspace {
                 List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(this, user);
                 JSONObject entitiesJson = new JSONObject();
                 for (WorkspaceEntity workspaceEntity : workspaceEntities) {
+                    if (!workspaceEntity.isVisible()) {
+                        continue;
+                    }
                     JSONObject workspaceEntityJson = new JSONObject();
                     JSONObject graphPositionJson = new JSONObject();
                     graphPositionJson.put("x", workspaceEntity.getGraphPositionX());

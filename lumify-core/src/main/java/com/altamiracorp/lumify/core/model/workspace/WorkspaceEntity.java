@@ -7,11 +7,13 @@ import com.altamiracorp.securegraph.util.ConvertingIterable;
 
 public class WorkspaceEntity {
     private final Object entityVertexId;
+    private final boolean visible;
     private final int graphPositionX;
     private final int graphPositionY;
 
-    public WorkspaceEntity(Object entityVertexId, int graphPositionX, int graphPositionY) {
+    public WorkspaceEntity(Object entityVertexId, boolean visible, int graphPositionX, int graphPositionY) {
         this.entityVertexId = entityVertexId;
+        this.visible = visible;
         this.graphPositionX = graphPositionX;
         this.graphPositionY = graphPositionY;
     }
@@ -26,6 +28,10 @@ public class WorkspaceEntity {
 
     public int getGraphPositionY() {
         return graphPositionY;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 
     public static Iterable<Vertex> toVertices(Graph graph, Iterable<WorkspaceEntity> workspaceEntities, Authorizations authorizations) {

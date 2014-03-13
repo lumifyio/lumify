@@ -168,8 +168,9 @@ public class WorkspaceRepository {
 
                 int graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge, 0);
                 int graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge, 0);
+                boolean visible = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge, false);
 
-                return new WorkspaceEntity(entityVertexId, graphPositionX, graphPositionY);
+                return new WorkspaceEntity(entityVertexId, visible, graphPositionX, graphPositionY);
             }
         });
     }
@@ -187,7 +188,7 @@ public class WorkspaceRepository {
 
         List<WorkspaceEntity> entities = findEntities(workspace, user);
         for (WorkspaceEntity entity : entities) {
-            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
+            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
         }
 
         // TODO should we copy users?
@@ -208,12 +209,12 @@ public class WorkspaceRepository {
         }
         List<Edge> edges = toList(workspace.getVertex().getEdges(otherVertex, Direction.BOTH, authorizations));
         for (Edge edge : edges) {
-            graph.removeEdge(edge, authorizations);
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edge, false, VISIBILITY.getVisibility());
         }
         graph.flush();
     }
 
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, int graphPositionX, int graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, int graphPositionX, int graphPositionY, User user) {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
@@ -235,12 +236,14 @@ public class WorkspaceRepository {
                 ElementMutation<Edge> m = existingEdge.prepareMutation();
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(m, graphPositionX, VISIBILITY.getVisibility());
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(m, graphPositionY, VISIBILITY.getVisibility());
+                WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, visible, VISIBILITY.getVisibility());
                 m.save();
             }
         } else {
             EdgeBuilder edgeBuilder = graph.prepareEdge(workspace.getVertex(), otherVertex, workspaceToEntityRelationshipId, VISIBILITY.getVisibility(), authorizations);
             WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, VISIBILITY.getVisibility());
             WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPositionY, VISIBILITY.getVisibility());
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edgeBuilder, visible, VISIBILITY.getVisibility());
             edgeBuilder.save();
         }
         graph.flush();
