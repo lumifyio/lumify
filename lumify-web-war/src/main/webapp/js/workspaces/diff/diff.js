@@ -42,7 +42,6 @@ define([
                         };
 
                     var processDiffs = self.processDiffs(self.attr.diffs);
-                    console.log(processDiffs);
                     self.$node.html(template({
                         diffs: processDiffs,
                         formatValue: formatValue,
