@@ -25,11 +25,10 @@ public class LumifyLoggerFactory {
                     throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
                 }
                 DOMConfigurator.configure(log4jFile);
+                initialized = true;
 
                 LumifyLogger logger = LumifyLoggerFactory.getLogger(LumifyLoggerFactory.class);
                 logger.info("Using log4j.xml: %s", log4jFile);
-
-                initialized = true;
             }
         }
     }
