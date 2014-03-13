@@ -48,6 +48,13 @@ define([
                 'font-size': 20 * retina.devicePixelRatio
             })
 
+            .selector('edge.focus')
+            .css({
+                'line-color': '#a5e1ff',
+                'source-arrow-color': '#a5e1ff',
+                'target-arrow-color': '#a5e1ff'
+            })
+
             .selector('node.temp')
             .css({
                 'background-color': 'rgba(255,255,255,0.0)',

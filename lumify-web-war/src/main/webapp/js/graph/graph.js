@@ -599,52 +599,85 @@ define([
             }
         };
 
-        this.verticesForGraphIds = function(cy, vertexIds) {
+        this.verticesForGraphIds = function(cy, vertexIds, type) {
             var selector = vertexIds.map(function(vId) { 
                 return '#' + vertexId(vId); 
             }).join(',');
 
-            return cy.nodes(selector);
+            return cy[type || 'nodes'](selector);
         };
 
         this.onFocusVertices = function(e, data) {
             this.cytoscapeReady(function(cy) {
                 var vertexIds = data.vertexIds;
                 this.hoverDelay = _.delay(function() {
-                    var nodes = this.verticesForGraphIds(cy, vertexIds)
+                    var nodes = this.verticesForGraphIds(cy, vertexIds, 'nodes')
                             .css('borderWidth', 0)
                             .addClass('focus'),
-                        start = 5,
-                        end = 20;
+                        edges = this.verticesForGraphIds(cy, vertexIds, 'edges')
+                            .css('width', 1)
+                            .addClass('focus');
 
 
-                    function animate(borderWidth) {
-                        if (!nodes.hasClass('focus')) {
-                            nodes.css({
-                                borderWidth: 0,
-                                opacity: 1
-                            });
+                    function animate(elements, options) {
+                        if (!elements.hasClass('focus')) {
+                            elements.css(options.reset);
                             return;
                         }
 
-                        nodes.animate({
-                                css: { 
-                                    borderWidth: borderWidth,
-                                    // Opacity         1 -> .75
-                                    // borderWidth start -> end
-                                    opacity: 1 - ((borderWidth - start) / (end - start) * 0.25)
+                        if (_.isUndefined(options.animateValue)) {
+                            options.animateValue = options.end;
+                        }
+
+                        var css = {
+                                // Opacity         1 -> .75
+                                // borderWidth start -> end
+                                opacity: 1 - (
+                                    (options.animateValue - options.start) / 
+                                    (options.end - options.start) * 0.25
+                                )
+                            }, 
+                            elementsLength = elements.length;
+
+                        css[options.animateProperty] = options.animateValue;
+
+                        elements.animate({
+                            css: css 
+                        }, { 
+                            duration: 1200,
+                            easing: 'easeInOutCirc',
+                            complete: function() {
+                                if (--elementsLength === 0) {
+                                    options.animateValue = options.animateValue === options.start ? 
+                                        options.end : options.start;
+                                    animate(elements, options)
                                 }
-                            }, { 
-                                duration: 1200,
-                                easing: 'easeInOutCirc',
-                                complete: function() {
-                                    animate(borderWidth === start ? end : start);
-                                } 
-                            }
-                        );
+                            } 
+                        });
                     }
 
-                    animate(end);
+                    if (nodes.length) {
+                        animate(nodes, { 
+                            start: 5,
+                            end: 20,
+                            animateProperty: 'borderWidth',
+                            reset: { 
+                                borderWidth: 0,
+                                opacity: 1 
+                            } 
+                        });
+                    }
+                    if (edges.length) {
+                        animate(edges, { 
+                            start: 2,
+                            end: 8,
+                            animateProperty: 'width',
+                            reset: { 
+                                width: 1,
+                                opacity: 1 
+                            } 
+                        });
+                    }
                 }.bind(this), HOVER_FOCUS_DELAY_SECONDS * 1000);
             });
         };
@@ -652,7 +685,7 @@ define([
         this.onDefocusVertices = function(e, data) {
             clearTimeout(this.hoverDelay);
             this.cytoscapeReady(function(cy) {
-                cy.nodes('.focus').removeClass('focus').stop(true, true);
+                cy.elements('.focus').removeClass('focus').stop(true, true);
             });
         };
 
