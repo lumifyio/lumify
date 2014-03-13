@@ -234,6 +234,17 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   .input-block-level;
 }
 
+
+.btn-primary {
+  .transition(~"all ease-out 0.1s");
+  &.disabled, &[disabled] {
+    opacity: 0.6;
+    background: #aaa;
+    color: #efefef;
+    text-shadow: none;
+  }
+}
+
 .ui-draggable-dragging {
   .opacity(100);
   .scale(1.0);
