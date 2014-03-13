@@ -31,7 +31,7 @@ public class AdminDictionaryEntryDelete extends BaseRequestHandler {
         final String strRowKey = getAttributeString(request, "entryRowKey");
         User user = getUser(request);
 
-        dictionaryEntryRepository.delete(new DictionaryEntryRowKey(strRowKey), user.getModelUserContext());
+        dictionaryEntryRepository.delete(new DictionaryEntryRowKey(strRowKey));
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("success", true);

@@ -132,7 +132,7 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
             LOGGER.debug("ack (%s): %s", this.tableName, msgId.toString());
             this.totalProcessedCounter.inc();
             QueueItemRowKey rowKey = new QueueItemRowKey(msgId);
-            this.queueItemRepository.delete(rowKey, this.user.getModelUserContext());
+            this.queueItemRepository.delete(rowKey);
             this.workingSet.remove(rowKey.toString());
         } catch (Exception ex) {
             LOGGER.error("Could not ack (" + this.tableName + "): " + msgId, ex);
