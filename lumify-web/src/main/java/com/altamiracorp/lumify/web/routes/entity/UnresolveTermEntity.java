@@ -105,10 +105,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         String analyticProcess = termMention.getMetadata().getAnalyticProcess();
 
         if (analyticProcess == null) {
-            modelSession.deleteRow(termMention.getTableName(), termMentionRowKey, modelUserContext);
+            modelSession.deleteRow(termMention.getTableName(), termMentionRowKey);
         } else {
             termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
-            modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, modelUserContext);
+            modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName);
             termMention.getMetadata().setVertexId("", lumifyVisibility.getVisibility());
 
             TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);

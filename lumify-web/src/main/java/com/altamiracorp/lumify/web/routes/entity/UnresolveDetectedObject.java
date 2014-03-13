@@ -80,11 +80,11 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         String columnName = DetectedObjectMetadata.RESOLVED_ID;
 
         if (detectedObjectModel.getMetadata().getProcess() == null) {
-            modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectRowKey, user.getModelUserContext());
+            modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectRowKey);
             result.put("deleteTag", true);
         } else {
             detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
-            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, user.getModelUserContext());
+            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName);
             result = detectedObjectModel.toJson();
         }
 
