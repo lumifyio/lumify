@@ -20,6 +20,10 @@ To get live editing of less files in chrome:
 2. Configure a workspace in Chrome Web inspector and map a less file in sources tab to workspace file
 3. `src/main/webapp$ grunt watch` 
 
+## Get Help
+
+The best way to get help with Lumify is by asking questions on our [mailing list](https://groups.google.com/d/forum/lumify) or via our [Twitter account](https://twitter.com/lumifyio) if it's something short and sweet.
+
 ## License
 
 Copyright 2014 Altamira Technologies Corporation

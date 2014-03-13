@@ -16,13 +16,11 @@ import com.google.inject.Inject;
 import com.netflix.curator.framework.CuratorFramework;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.log4j.xml.DOMConfigurator;
 
-import java.io.File;
 import java.net.URI;
 
 public abstract class CommandLineBase {
-    protected LumifyLogger LOGGER;
+    protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(CommandLineBase.class);
     private String configLocation = Configuration.CONFIGURATION_LOCATION;
     private Configuration configuration;
     private boolean willExit = false;
@@ -35,8 +33,6 @@ public abstract class CommandLineBase {
     private Graph graph;
 
     public int run(String[] args) throws Exception {
-        ensureLoggerInitialized();
-
         final Thread mainThread = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -88,23 +84,6 @@ public abstract class CommandLineBase {
         if (graph != null) {
             graph.shutdown();
         }
-    }
-
-    protected void ensureLoggerInitialized() {
-        if (LOGGER == null) {
-            initLog4j();
-        }
-    }
-
-    private void initLog4j() {
-        String log4jFile = Configuration.CONFIGURATION_LOCATION + "log4j.xml";
-        if (!new File(log4jFile).exists()) {
-            throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
-        }
-
-        DOMConfigurator.configure(log4jFile);
-        LOGGER = LumifyLoggerFactory.getLogger(getClass());
-        LOGGER.info("Using log4j.xml: %s", log4jFile);
     }
 
     protected void printHelp(Options options) {
