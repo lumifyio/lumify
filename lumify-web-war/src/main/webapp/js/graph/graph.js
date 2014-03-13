@@ -615,7 +615,7 @@ define([
                             .css('borderWidth', 0)
                             .addClass('focus'),
                         edges = this.verticesForGraphIds(cy, vertexIds, 'edges')
-                            .css('width', 1)
+                            .css('width', 1.5 * retina.devicePixelRatio)
                             .addClass('focus');
 
 
@@ -658,8 +658,8 @@ define([
 
                     if (nodes.length) {
                         animate(nodes, { 
-                            start: 5,
-                            end: 20,
+                            start: 1 * retina.devicePixelRatio,
+                            end: 30 * retina.devicePixelRatio,
                             animateProperty: 'borderWidth',
                             reset: { 
                                 borderWidth: 0,
@@ -669,11 +669,11 @@ define([
                     }
                     if (edges.length) {
                         animate(edges, { 
-                            start: 2,
-                            end: 8,
+                            start: 1.5 * retina.devicePixelRatio,
+                            end: 4.5 * retina.devicePixelRatio,
                             animateProperty: 'width',
                             reset: { 
-                                width: 1,
+                                width: 1.5 * retina.devicePixelRatio,
                                 opacity: 1 
                             } 
                         });
