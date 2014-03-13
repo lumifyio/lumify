@@ -11,14 +11,10 @@ public class PropertyDiffItem extends DiffItem {
     private final Property existingProperty;
 
     public PropertyDiffItem(Element element, Property workspaceProperty, Property existingProperty, SandboxStatus sandboxStatus) {
-        super(PropertyDiffItem.class.getSimpleName(), getMessage(element, workspaceProperty), sandboxStatus);
+        super(PropertyDiffItem.class.getSimpleName(), sandboxStatus);
         this.element = element;
         this.workspaceProperty = workspaceProperty;
         this.existingProperty = existingProperty;
-    }
-
-    private static String getMessage(Element element, Property property) {
-        return "Property " + property.getName() + " changed on " + element.getId();
     }
 
     @Override
