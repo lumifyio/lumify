@@ -1,30 +1,56 @@
 <div class="diffs-list">
-<table class="table table-striped">
+<table class="table">
   <thead>
     <tr>
-      <th colspan="2">Unpublished Changes</th>
-      <th class="actions"><button class="btn btn-mini">Publish All</button></th>
+      <th colspan="4">
+        <!--div class="btn-group actions" style="float:right">
+          <button class="btn btn-mini">Publish All</button>
+          <button class="btn btn-mini">Undo All</button>
+        </div-->
+        <h1 class="header">Unpublished Changes</h1>
+      </th>
     </tr>
   </thead>
   <tbody>
-    <% diffs.forEach(function(diff) { %>
-    <tr>
-      <td><%= diff.message %></td>
-      <td><% 
 
-        switch(diff.type) {
-          case 'PropertyDiffItem':
-            if (diff.old && diff.new) { %>  
-              <%= formatValue(diff.name, diff.new) %> 
-              <div style="text-decoration:line-through"><%= formatValue(diff.name, diff.old) %></div>  
-            <% } else if (diff.new) { %> 
-              <%= formatValue(diff.name, diff.new) %> 
-            <% } 
-            break;
-        }
-      %></td>
-      <td class="actions"><button class="btn btn-mini">Publish</button></td>
+    <% diffs.forEach(function(diff) { %>
+    <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
+        <th class="vertex-label" colspan="3">
+          <div class="img" style="background-image:url(<%= diff.vertex.imageSrc %>)"></div>
+          <h1><%= diff.title %></h1>
+          <span class="label action-type"><%= diff.action.display %></span>
+        </th>
+        <% if (diff.action.type === 'create') { %>
+          <% include workspaces/diff/actions %>
+        <% } else { %>
+          <td>&nbsp;</td>
+        <% } %>
     </tr>
+
+    <% diff.properties.forEach(function(property) { %>
+    <tr class="<%= property.className %>" data-diff-id="<%= property.id %>">
+      <td>&nbsp;</td>
+      <td class="property-label"><%= formatLabel(property.name) %></td>
+      <td class="property-value"><% 
+        if (property.old && property.new) { %>  
+        <%= formatValue(property.name, property.new) %> 
+        <div style="text-decoration:line-through"><%= formatValue(property.name, property.old) %></div>  
+        <% } else if (property.new) { %> 
+        <%= formatValue(property.name, property.new) %> 
+        <% } %>
+      </td>
+      <% include workspaces/diff/actions %>
+    </tr>
+    <% }); %>
+
+    <% diff.edges.forEach(function(edge) { %>
+    <tr class="<%= edge.className %>" data-diff-id="<%= edge.id %>">
+      <td>&nbsp;</td>
+      <td class="property-label">&#8594;</td>
+      <td class="property-value"><%= edge.inVertex ? edge.inVertex.properties.title.value : edge.inVertexId %></td>
+      <% include workspaces/diff/actions %>
+    </tr>
+    <% }); %>
     <% }); %>
   </tbody>
 </table>
