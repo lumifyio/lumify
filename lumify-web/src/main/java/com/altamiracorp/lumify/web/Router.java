@@ -104,6 +104,7 @@ public class Router extends HttpServlet {
             app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
             app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);
             app.delete("/workspace/{workspaceId}", authenticator, WorkspaceDelete.class);
+            app.post("/workspace/publish", authenticator, WorkspacePublish.class);
 
             //app.get("/user/messages", authenticator, MessagesGet.class);
             app.get("/user/me", authenticator, MeGet.class);
