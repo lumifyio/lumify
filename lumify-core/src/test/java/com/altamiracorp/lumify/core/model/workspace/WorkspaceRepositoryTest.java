@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.id.QueueIdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
+import com.altamiracorp.securegraph.inmemory.InMemoryEdge;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;
 import com.altamiracorp.securegraph.search.DefaultSearchIndex;
@@ -24,6 +25,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
 import static org.junit.Assert.*;
@@ -266,7 +268,7 @@ public class WorkspaceRepositoryTest {
         when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(WorkspaceRepository.WORKSPACE_ID_PREFIX + workspaceId))).thenReturn(user2Authorizations);
 
         try {
-            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 100, user2);
+            workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 100, user2);
             fail("user2 should not have write access to workspace");
         } catch (LumifyAccessDeniedException ex) {
             assertEquals(user2, ex.getUser());
@@ -274,11 +276,11 @@ public class WorkspaceRepositoryTest {
         }
 
         idGenerator.push(workspaceId + "_to_" + entity1Vertex.getId());
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 100, 200, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 100, 200, user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), 200, 300, user1);
+        workspaceRepository.updateEntityOnWorkspace(workspace, entity1Vertex.getId(), true, 200, 300, user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
         assertEquals(startingEdgeCount + 2, graph.getAllEdges().size()); // +2 = the edges between workspaces, users, and entities
 
@@ -306,6 +308,15 @@ public class WorkspaceRepositoryTest {
 
         workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
         assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
-        assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edges between workspaces, users
+        Map<Object, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
+        assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users
+        boolean foundRemovedEdge = false;
+        for (InMemoryEdge edge : edgesAfterDelete.values()) {
+            if (edge.getLabel().equals(workspaceToEntityRelationship.getId())) {
+                assertEquals(false, WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge));
+                foundRemovedEdge = true;
+            }
+        }
+        assertTrue(foundRemovedEdge);
     }
 }

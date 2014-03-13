@@ -11,6 +11,8 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -39,6 +41,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final TermMentionRepository termMentionRepository;
+    private final WorkspaceRepository workspaceRepository;
 
     @Inject
     public ResolveTermEntity(
@@ -48,13 +51,15 @@ public class ResolveTermEntity extends BaseRequestHandler {
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final TermMentionRepository termMentionRepository) {
+            final TermMentionRepository termMentionRepository,
+            final WorkspaceRepository workspaceRepository) {
         super(userRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.termMentionRepository = termMentionRepository;
+        this.workspaceRepository = workspaceRepository;
     }
 
     @Override
@@ -67,9 +72,10 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
 
-        String workspaceId = getWorkspaceId(request);
-
         User user = getUser(request);
+        String workspaceId = getWorkspaceId(request);
+        Workspace workspace = workspaceRepository.findById(workspaceId, user);
+
         Authorizations authorizations = getAuthorizations(request, user);
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
@@ -98,6 +104,10 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Vertex createdVertex = createdVertexMutation.save();
 
         auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
+
+        this.graph.flush();
+
+        workspaceRepository.updateEntityOnWorkspace(workspace, createdVertex.getId(), false, 0, 0, user);
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));

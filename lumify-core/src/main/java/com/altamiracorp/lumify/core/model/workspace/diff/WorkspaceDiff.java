@@ -62,7 +62,7 @@ public class WorkspaceDiff {
         Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getId());
         if (sandboxStatus != SandboxStatus.PUBLIC) {
-            result.add(new VertexDiffItem(entityVertex, sandboxStatus));
+            result.add(new VertexDiffItem(entityVertex, sandboxStatus, workspaceEntity.isVisible()));
         }
 
         diffProperties(workspace, entityVertex, result);
