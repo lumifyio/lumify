@@ -4,6 +4,9 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -36,6 +39,7 @@ import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 public class WorkspacePublish extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceNew.class);
     private final TermMentionRepository termMentionRepository;
+    private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
     private final UserProvider userProvider;
     private final ModelSession modelSession;
@@ -46,12 +50,14 @@ public class WorkspacePublish extends BaseRequestHandler {
     public WorkspacePublish(final TermMentionRepository termMentionRepository,
                             final AuditRepository auditRepository,
                             final UserRepository userRepository,
+                            final DetectedObjectRepository detectedObjectRepository,
                             final Configuration configuration,
                             final Graph graph,
                             final ModelSession modelSession,
                             final VisibilityTranslator visibilityTranslator,
                             final UserProvider userProvider) {
         super(userRepository, configuration);
+        this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.graph = graph;
@@ -200,13 +206,26 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
-        TermMentionRowKey rowKey = new TermMentionRowKey((String)vertex.getPropertyValue("_rowKey", 0));
-        TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKey.getRowKey(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
-        if (termMentionModel == null) {
-            LOGGER.warn("No term mention found for vertex, %s", vertex.getId());
-        } else {
-            modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+        Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
+        while (rowKeys.hasNext()) {
+            Property rowKeyProperty = rowKeys.next();
+            if (rowKeyProperty.getMetadata().get("type").equals("term")) {
+                TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String)rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                if (termMentionModel == null) {
+                    LOGGER.warn("No term mention found for vertex, %s", vertex.getId());
+                } else {
+                    modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                }
+            } else {
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                if (detectedObjectModel == null) {
+                    LOGGER.warn("No term mention found for vertex, %s", vertex.getId());
+                } else {
+                    modelSession.alterAllColumnsVisibility(detectedObjectModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                }
+            }
         }
+        vertex.removeProperty("_rowKey");
     }
 
     private void publishProperty (Vertex vertex, String action, String key, String name) {
