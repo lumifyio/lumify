@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.core.util;
 
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,6 +38,14 @@ public class JSONUtil {
         int idx = arrayIndexOf(jsonArray, value);
         if (idx >= 0) {
             jsonArray.remove(idx);
+        }
+    }
+
+    public static void removeWorkspaceFromJSONArray (JSONArray jsonArray) {
+        for (int i = 0; i < jsonArray.length(); i++) {
+            if (jsonArray.get(i).toString().contains(WorkspaceRepository.VISIBILITY_STRING.toUpperCase())) {
+                jsonArray.remove(i);
+            }
         }
     }
 }
