@@ -57,6 +57,15 @@ function(ServiceBase) {
         })
     };
 
+    WorkspaceService.prototype.publish = function(changes) {
+        return this._ajaxPost({
+            url: 'workspace/publish',
+            data: {
+                publishData: JSON.stringify(changes)
+            }
+        })
+    };
+
     WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',

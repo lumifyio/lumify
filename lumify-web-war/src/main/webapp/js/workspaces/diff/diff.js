@@ -3,9 +3,10 @@ define([
     'flight/lib/component',
     'tpl!./diff',
     'service/ontology',
+    'service/workspace',
     'util/formatters',
     'data'
-], function(defineComponent, template, OntologyService, formatters, appData) {
+], function(defineComponent, template, OntologyService, WorkspaceService, formatters, appData) {
     'use strict';
 
     return defineComponent(Diff);
@@ -13,10 +14,12 @@ define([
     function Diff() {
 
         var ontologyService = new OntologyService();
+        var workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             buttonSelector: 'button',
-            rowSelector: 'tr'
+            headerButtonSelector: '.header button.publish-all',
+            rowSelector: 'tr',
         })
 
         this.after('initialize', function() {
@@ -63,8 +66,9 @@ define([
 
             self.on('click', {
                 buttonSelector: self.onButtonClick,
-                rowSelector: self.onRowClick
-            })
+                headerButtonSelector: self.onPublish,
+                rowSelector: self.onRowClick,
+            });
             self.on('diffsChanged', function(event, data) {
                 var scroll = self.$node.find('.diffs-list'),
                     previousScroll = scroll.scrollTop(),
@@ -274,6 +278,76 @@ define([
             */
         };
 
+        this.onPublish = function(event) {
+            var self = this,
+                diffsToPublish = this.$node.find('.mark-publish').map(function() {
+                    var diff = self.diffsById[$(this).data('diffId')];
+                    switch (diff.type) {
+                        case 'PropertyDiffItem': return {
+                            type: 'property',
+                            vertexId: diff.elementId,
+                            key: diff.key,
+                            name: diff.name,
+                            action: 'update',
+                            status: diff.sandboxStatus
+                        };
+
+                        case 'VertexDiffItem': return {
+                            type: 'vertex',
+                            vertexId: diff.vertexId,
+                            action: 'create', // TODO: ever delete?
+                            status: diff.sandboxStatus
+                        };
+
+                        case 'EdgeDiffItem': return {
+                            type: 'relationship',
+                            edgeId: diff.edgeId,
+                            sourceId: diff.outVertexId,
+                            destId: diff.inVertexId,
+                            action: 'create',
+                            status: diff.sandboxStatus
+                        };
+                    }
+                    console.error('Unknown diff type', diff);
+                }).toArray();
+
+            var button = $(event.target)
+                .addClass('loading')
+                .attr('disabled', true);
+
+            workspaceService.publish(diffsToPublish)
+                .always(function() {
+                    button.removeAttr('disabled').removeClass('loading');
+                })
+                .fail(function(xhr, status, errorText) {
+                    var error = $('<div>')
+                        .addClass('alert alert-error')
+                        .html(
+                            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                            'An error occured during publishing.<br>Reason: ' + errorText
+                        )
+                        .insertAfter(button);
+
+                    _.delay(error.remove.bind(error), 5000)
+                })
+                .done(function(response) {
+                    var failures = response.failures,
+                        success = response.success;
+
+                    self.updateHeader();
+
+                    if (failures && failures.length) {
+                        self.$node.find('.header .alert').remove();
+                        var error = $('<div>')
+                            .addClass('alert alert-error')
+                            .html(
+                                '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                                '<ul><li>' + _.pluck(failures, 'error_msg').join('</li><li>') + '</li></ul>'
+                            )
+                            .insertAfter(button);
+                    }
+                });
+        };
 
         this.onMarkUndo = function(event, data) {
             var diff = data.diffId;
@@ -292,6 +366,19 @@ define([
             }
         };
 
+        this.updateHeader = function() {
+            var markedAsPublish = this.$node.find('.mark-publish').length,
+                markedAsUndo = this.$node.find('.mark-undo').length,
+                buttonHtml = '<button class="btn btn-small">'
+
+            this.$node.find('.header')
+                .html(
+                    markedAsPublish ? $(buttonHtml).addClass('publish-all btn-success').text('Publish ' + formatters.string.plural(markedAsPublish, 'change')) :
+                    markedAsUndo ? $(buttonHtml).addClass('undo-all btn-warning').text('Undo ' + formatters.string.plural(markedAsUndo, 'change')) : 
+                    'Unpublished Changes'
+                );
+        }
+
         this.onMarkPublish = function(event, data) {
             var self = this,
                 diffId = data.diffId,
@@ -309,16 +396,7 @@ define([
                     .siblings('button.undo').removeClass('btn-warning');
             });
 
-            var markedAsPublish = this.$node.find('.mark-publish').length,
-                markedAsUndo = this.$node.find('.mark-undo').length,
-                buttonHtml = '<button class="btn btn-small">'
-
-            this.$node.find('.header')
-                .html(
-                    markedAsPublish ? $(buttonHtml).addClass('btn-success').text('Publish ' + formatters.string.plural(markedAsPublish, 'change')) :
-                    markedAsUndo ? $(buttonHtml).addClass('btn-warning').text('Undo ' + formatters.string.plural(markedAsUndo, 'change')) : 
-                    'Unpublished Changes'
-                );
+            this.updateHeader();
 
             switch(diff.type) {
                 case 'VertexDiffItem': 
