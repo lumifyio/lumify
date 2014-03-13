@@ -152,7 +152,7 @@ define([
                                 diff.id = vertexId + diff.name;
                                 addDiffDependency(diff.elementId, diff);
 
-                                if (diff.name === 'title') {
+                                if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
                                     outputItem.title = diff['new'].value;
                                 } else {
                                     diff.className = self.classNameForVertex(diff.id);

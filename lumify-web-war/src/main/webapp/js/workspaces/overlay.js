@@ -148,10 +148,19 @@ define([
                         .text('!');
                 })
                 .done(function(diff) {
-                    var filteredDiffs = diff.diffs.filter(function(diff) {
-                            return !diff.name || /^[^_]/.test(diff.name);
+                    var vertexDiffsById = _.indexBy(diff.diffs, function(diff) {
+                            return diff.vertexId;    
+                        }),
+                        countOfTitleChanges = 0,
+                        filteredDiffs = _.filter(diff.diffs, function(diff) {
+                            if (diff.type !== 'PropertyDiffItem') return true;
+                            if (/^[_]/.test(diff.name)) return false;
+                            if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
+                                countOfTitleChanges++;
+                            }
+                            return true;
                         }), 
-                        count = filteredDiffs.length,
+                        count = filteredDiffs.length - countOfTitleChanges,
                         formattedCount = formatters.number.pretty(count); 
 
                     self.currentDiffIds =_.uniq(filteredDiffs.map(function(diff) {
