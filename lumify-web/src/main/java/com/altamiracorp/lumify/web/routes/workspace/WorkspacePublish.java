@@ -91,6 +91,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(msg);
                     data.put("error_msg", msg);
                     failures.put(data);
+                    publishData.remove(i);
                     continue;
                 }
                 publishVertex(vertex, action, authorizations, user);
@@ -117,6 +118,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
+                    publishData.remove(i);
                     continue;
                 }
 
@@ -126,6 +128,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
+                    publishData.remove(i);
                     continue;
                 }
                 publishEdge (edge, action, authorizations);
@@ -152,6 +155,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
+                    publishData.remove(i);
                     continue;
                 }
 
@@ -160,6 +164,8 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
+                    publishData.remove(i);
+                    continue;
                 }
 
                 publishProperty(vertex, action, data.getString("key"), data.getString("name"));
