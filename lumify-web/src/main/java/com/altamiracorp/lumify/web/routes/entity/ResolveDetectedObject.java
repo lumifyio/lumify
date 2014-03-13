@@ -62,8 +62,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String title = getRequiredParameter(request, "title");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
-        final String rowKey = getOptionalParameter(request, "rowKey");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
+        String rowKey = getOptionalParameter(request, "rowKey");
         String x1 = getRequiredParameter(request, "x1"), x2 = getRequiredParameter(request, "x2"),
                 y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
 
@@ -90,6 +90,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             detectedObjectRepository.save(detectedObjectModel);
         } else {
             detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility());
+            rowKey = detectedObjectModel.getRowKey().getRowKey();
         }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
@@ -107,6 +108,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertex = graph.getVertex(id, authorizations);
         }
 
+        resolvedVertex.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
         resolvedVertex.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();

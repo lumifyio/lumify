@@ -21,6 +21,7 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.id.IdGenerator;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -97,10 +98,11 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         createdVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
 
-        ROW_KEY.setProperty(createdVertexMutation, termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
         TITLE.setProperty(createdVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
+        metadata.put("type", "term");
+        createdVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = createdVertexMutation.save();
 
         auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
