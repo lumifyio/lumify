@@ -78,7 +78,6 @@ public class OwlImport extends CommandLineBase {
     }
 
     public void importFile(File inFile, User user) throws ParserConfigurationException, SAXException, IOException {
-        ensureLoggerInitialized();
         inDir = inFile.getParentFile();
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
