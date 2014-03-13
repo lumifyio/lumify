@@ -22,74 +22,82 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            ontologyService.properties()
-                .done(function(properties) {
-                    var formatLabel = function(name) {
-                            return properties.byTitle[name].displayName;
-                        },
-                        formatValue = function(name, change) {
-                            var value = change.value;
-                            switch (properties.byTitle[name].dataType) {
-                                case 'geoLocation':
-                                    value = [change.latitude, change.longitude].join(', ')
-                                    break;
-                                case 'date':
-                                    value = formatters.date.dateString(value);
-                                    break;
-                            }
-
-                            return value;
-                        };
-
-                    self.processDiffs(self.attr.diffs).done(function(processDiffs) {
-                        console.log(processDiffs);
-                        self.$node.html(template({
-                            diffs: processDiffs,
-                            formatValue: formatValue,
-                            formatLabel: formatLabel
-                        }));
-                    });
-
-                    // DEBUG: $('.workspace-overlay .badge').popover('show')
-
-                    self.on('click', {
-                        buttonSelector: self.onButtonClick,
-                        rowSelector: self.onRowClick
-                    })
-                    self.on('diffsChanged', function(event, data) {
-                        var scroll = self.$node.find('.diffs-list'),
-                            previousScroll = scroll.scrollTop(),
-                            previousPublished = self.$node.find('.mark-publish').map(function() {
-                                return '.' + self.classNameForVertex($(this).data('diffId'));
-                            }).toArray(),
-                            previousSelection  = self.$node.find('.active').map(function() {
-                                return $(this).data('vertexId')
-                            }).toArray(),
-                            header = this.$node.find('.header').html();
-
-                        self.processDiffs(data.diffs).done(function(processDiffs) {
-                            self.$node.html(template({
-                                diffs: processDiffs,
-                                formatValue: formatValue,
-                                formatLabel: formatLabel
-                            }));
-                        });
-
-                        self.selectVertices(previousSelection);
-                        self.$node.find(previousPublished.join(',')).each(function() {
-                            $(this).addClass('mark-publish')
-                                .find('.publish').addClass('btn-success')
-                        });
-                        self.$node.find('.header').html(header);
-                        self.$node.find('.diffs-list').scrollTop(previousScroll);
-                    })
-                    //self.on('mouseenter', { rowSelector: this.onRowHover });
-                    //self.on('mouseleave', { rowSelector: this.onRowHover });
-                    self.on('markPublishDiffItem', self.onMarkPublish);
-                    self.on('markUndoDiffItem', self.onMarkUndo);
-                    self.on(document, 'objectsSelected', self.onObjectsSelected);
-                });
+            $.when(
+                ontologyService.properties(),
+                ontologyService.relationships()
+            ).done(function(properties, relationships) {
+                self.ontologyProperties = properties;
+                self.ontologyRelationships = relationships;
+                self.setup();
+            })
         });
+
+        this.setup = function() {
+            var self = this,
+                formatLabel = function(name) {
+                    return self.ontologyProperties.byTitle[name].displayName;
+                },
+                formatValue = function(name, change) {
+                    var value = change.value;
+                    switch (self.ontologyProperties.byTitle[name].dataType) {
+                        case 'geoLocation':
+                            value = [change.latitude, change.longitude].join(', ')
+                            break;
+                        case 'date':
+                            value = formatters.date.dateString(value);
+                            break;
+                    }
+
+                    return value;
+                };
+
+            self.processDiffs(self.attr.diffs).done(function(processDiffs) {
+                self.$node.html(template({
+                    diffs: processDiffs,
+                    formatValue: formatValue,
+                    formatLabel: formatLabel
+                }));
+            });
+
+            // DEBUG: $('.workspace-overlay .badge').popover('show')
+
+            self.on('click', {
+                buttonSelector: self.onButtonClick,
+                rowSelector: self.onRowClick
+            })
+            self.on('diffsChanged', function(event, data) {
+                var scroll = self.$node.find('.diffs-list'),
+                    previousScroll = scroll.scrollTop(),
+                    previousPublished = self.$node.find('.mark-publish').map(function() {
+                        return '.' + self.classNameForVertex($(this).data('diffId'));
+                    }).toArray(),
+                    previousSelection  = self.$node.find('.active').map(function() {
+                        return $(this).data('vertexId')
+                    }).toArray(),
+                    header = this.$node.find('.header').html();
+
+                self.processDiffs(data.diffs).done(function(processDiffs) {
+                    self.$node.html(template({
+                        diffs: processDiffs,
+                        formatValue: formatValue,
+                        formatLabel: formatLabel
+                    }));
+                });
+
+                self.selectVertices(previousSelection);
+                self.$node.find(previousPublished.join(',')).each(function() {
+                    $(this).addClass('mark-publish')
+                        .find('.publish').addClass('btn-success')
+                });
+                self.$node.find('.header').html(header);
+                self.$node.find('.diffs-list').scrollTop(previousScroll);
+            })
+            //self.on('mouseenter', { rowSelector: this.onRowHover });
+            //self.on('mouseleave', { rowSelector: this.onRowHover });
+            self.on('markPublishDiffItem', self.onMarkPublish);
+            self.on('markUndoDiffItem', self.onMarkUndo);
+            self.on(document, 'objectsSelected', self.onObjectsSelected);
+        };
 
         this.onRowHover = function(event) {
             console.log(event.type, event.target)
@@ -157,6 +165,7 @@ define([
                                 diff.id = diff.edgeId;
                                 diff.inVertex = appData.vertex(diff.inVertexId);
                                 diff.className = self.classNameForVertex(diff.edgeId);
+                                diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                 addDiffDependency(diff.inVertexId, diff);
                                 addDiffDependency(diff.outVertexId, diff);
                                 outputItem.edges.push(diff);
