@@ -2,7 +2,7 @@
 <table class="table">
   <thead>
     <tr>
-      <th colspan="4">
+      <th colspan="3">
         <!--div class="btn-group actions" style="float:right">
           <button class="btn btn-mini">Publish All</button>
           <button class="btn btn-mini">Undo All</button>
@@ -15,8 +15,8 @@
 
     <% diffs.forEach(function(diff) { %>
     <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
-        <th class="vertex-label" colspan="3">
-          <div class="img" style="background-image:url(<%= diff.vertex.imageSrc %>)"></div>
+        <th class="vertex-label" colspan="2">
+          <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= diff.vertex.imageSrc %>)"<% } %>></div>
           <h1><%= diff.title %></h1>
           <span class="label action-type"><%= diff.action.display %></span>
         </th>
@@ -29,7 +29,6 @@
 
     <% diff.properties.forEach(function(property) { %>
     <tr class="<%= property.className %>" data-diff-id="<%= property.id %>">
-      <td>&nbsp;</td>
       <td class="property-label"><%= formatLabel(property.name) %></td>
       <td class="property-value"><% 
         if (property.old && property.new) { %>  
@@ -45,8 +44,7 @@
 
     <% diff.edges.forEach(function(edge) { %>
     <tr class="<%= edge.className %>" data-diff-id="<%= edge.id %>">
-      <td>&nbsp;</td>
-      <td class="property-label">&#8594;</td>
+      <td class="property-label"><%= edge.label %> &#8594;</td>
       <td class="property-value"><%= edge.inVertex ? edge.inVertex.properties.title.value : edge.inVertexId %></td>
       <% include workspaces/diff/actions %>
     </tr>

@@ -63,7 +63,29 @@ define([
             var self = this,
                 deferred = null;
 
-            if (_.isString(vertex) || _.isNumber(vertex)) {
+            if (_.isArray(vertex)) {
+                var vertices = [], toRequest = [];
+                vertex.forEach(function(v) {
+                    var cachedVertex = self.vertex(v);
+                    if (cachedVertex) {
+                        vertices.push(cachedVertex);
+                    } else {
+                        toRequest.push(v);
+                    }
+                })
+                deferred = $.Deferred();
+
+                if (toRequest.length) {
+                    this.vertexService.getMultiple(toRequest)
+                        .done(function(requestedVertices) {
+                            deferred.resolve(vertices.concat(requestedVertices));
+                        })
+                } else {
+                    deferred.resolve(vertices);
+                }
+
+                return deferred;
+            } else if (_.isString(vertex) || _.isNumber(vertex)) {
                 deferred = this.vertexService.getVertexProperties(vertex);
             } else {
                 deferred = this.vertexService.getVertexProperties(vertex.id);
