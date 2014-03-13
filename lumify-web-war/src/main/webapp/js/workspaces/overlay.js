@@ -123,13 +123,22 @@ define([
             setTimer();
         };
 
+        this.onDiffBadgeMouse = function(event) {
+            this.trigger(
+                event.type === 'mouseenter' ?  'focusVertices' : 'defocusVertices',
+                { vertexIds: this.currentDiffIds || [] }
+            );
+        };
+
         this.updateDiffBadge = function() {
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
                 
             if (!badge.length) {
-                badge = $('<span class="badge"></span>').insertAfter(node)
+                badge = $('<span class="badge"></span>')
+                    .insertAfter(node)
+                    .on('mouseenter mouseleave', this.onDiffBadgeMouse.bind(this))
             }
 
             workspaceService.diff(appData.workspaceId)
@@ -144,6 +153,10 @@ define([
                         }), 
                         count = filteredDiffs.length,
                         formattedCount = formatters.number.pretty(count); 
+
+                    self.currentDiffIds =_.uniq(filteredDiffs.map(function(diff) {
+                        return diff.vertexId || diff.elementId || diff.edgeId;
+                    }));
 
                     require(['workspaces/diff/diff'], function(Diff) {
                         var popover = badge.data('popover'),
