@@ -77,7 +77,7 @@ define([
         };
 
         this.onSwitchWorkspace = function() {
-            this.$node.find('.badge').remove();
+            this.$node.find('.badge').popover('destroy').remove();
         };
 
         this.onWorkspaceLoaded = function(event, data) {
