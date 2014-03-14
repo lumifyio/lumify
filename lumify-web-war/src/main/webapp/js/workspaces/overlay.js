@@ -69,7 +69,38 @@ define([
 
         this.onGraphPaddingUpdated = function(event, data) {
             this.$node.css('left', data.padding.l + MENUBAR_WIDTH);
+
+            var width = $(window).width(),
+                height = $(window).height(),
+                popover = this.$node.find('.popover'),
+                paddingH = 100,
+                paddingV = 75,
+                popoverCss = {
+                    maxWidth: (width - MENUBAR_WIDTH - (data.padding.l + data.padding.r) - paddingH),
+                    maxHeight: (height - (data.padding.t + data.padding.b) - paddingV)
+                };
+
+            this.popoverCss = popoverCss;
+            if (popover.length) {
+                this.updatePopoverSize(popover);
+            }
         };
+
+        this.updatePopoverSize = function(tip) {
+            var css = {};
+            if (tip.width() > this.popoverCss.maxWidth) {
+                css.width = this.popoverCss.maxWidth + 'px';
+            }
+            if (tip.height() > this.popoverCss.maxHeight) {
+                css.height = this.popoverCss.maxHeight + 'px';
+            }
+
+            tip.resizable('option', 'maxWidth', this.popoverCss.maxWidth);
+            tip.resizable('option', 'maxHeight', this.popoverCss.maxHeight);
+            if (_.keys(css).length) {
+                tip.css(css);
+            }
+        }
 
         this.setContent = function(title, isEditable, subtitle) {
             this.select('nameSelector').text(title);
@@ -177,22 +208,35 @@ define([
                         } else {
                             badge
                                 .popover('destroy')
-                                .popover({placement:'top', content:'Loading...', title: 'Unpublished Changes'})
+                                .popover({placement:'top', content:'Loading...', title: 'Unpublished Changes'});
 
                             popover = badge.data('popover');
                             tip = popover.tip();
 
                             var left = 10;
-                            tip.find('.arrow').css({
-                                left: parseInt(badge.position().left - (left / 2), 10) + 'px',
-                                marginLeft: 0
-                            })
+                            tip.css({
+                                    width: '400px',
+                                    height: '250px'
+                                })
+                                .resizable({
+                                    handles: "n, e, ne",
+                                    maxWidth: self.popoverCss.maxWidth,
+                                    maxHeight: self.popoverCss.maxHeight
+                                })
+                                .find('.arrow').css({
+                                    left: parseInt(badge.position().left - (left / 2) + 1, 10) + 'px',
+                                    marginLeft: 0
+                                })
 
                             // We fill in our own content
                             popover.setContent = function() {}
                             badge.on('shown', function() {
-                                var top = parseInt(tip.css('top'));
-                                tip.css({ top: (top - 10) + 'px'})
+                                var css = {
+                                    top: (parseInt(tip.css('top')) - 10) + 'px'
+                                };
+                                tip.css({top:top});
+
+                                self.updatePopoverSize(tip);
                             })
 
                             Diff.teardownAll();

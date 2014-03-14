@@ -193,7 +193,8 @@ define([
         var resizeTimeout;
         this.setupWindowResizeTrigger = function() {
             var self = this;
-            this.on(window, 'resize', function() {
+            this.on(window, 'resize', function(event) {
+                if (event.target !== window) return;
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(function() {
                     self.trigger(document, 'windowResize');
