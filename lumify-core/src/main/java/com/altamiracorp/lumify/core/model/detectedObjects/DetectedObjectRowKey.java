@@ -19,17 +19,9 @@ public class DetectedObjectRowKey extends RowKey {
                 + StringUtils.leftPad(id.toString(), RowKeyHelper.OFFSET_WIDTH, '0');
     }
 
-    public String getVertexId() {
+    public String getArtifactId() {
         String[] keyElements = this.toString().split(":");
-        int elementsToGet = keyElements.length - 2;
-        String result = "";
-        for (int i = 0; i < elementsToGet; i++) {
-            if (i != 0) {
-                result += ":";
-            }
-            result += keyElements[i];
-        }
-        return result;
+        return keyElements[keyElements.length - 2];
     }
 
     public String getId() {

@@ -17,6 +17,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.routes.workspace.WorkspaceHelper;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.IterableUtils;
@@ -36,6 +37,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final UserProvider userProvider;
     private final OntologyRepository ontologyRepository;
+    private final WorkspaceHelper workspaceHelper;
 
     @Inject
     public UnresolveDetectedObject(
@@ -47,7 +49,8 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
             final UserProvider userProvider,
-            final OntologyRepository ontologyRepository) {
+            final OntologyRepository ontologyRepository,
+            final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
@@ -56,6 +59,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.userProvider = userProvider;
         this.ontologyRepository = ontologyRepository;
+        this.workspaceHelper = workspaceHelper;
     }
 
     @Override
@@ -68,54 +72,16 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
-        DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);
         Object resolvedId = detectedObjectModel.getMetadata().getResolvedId();
 
-        Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
 
-        JSONObject result = new JSONObject();
-        String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
-        String columnName = DetectedObjectMetadata.RESOLVED_ID;
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        if (detectedObjectModel.getMetadata().getProcess() == null) {
-            modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectRowKey);
-            result.put("deleteTag", true);
-        } else {
-            detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
-            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName);
-            result = detectedObjectModel.toJson();
-        }
-
-        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(resolvedVertex, Direction.BOTH, authorizations);
-        if (IterableUtils.count(edgeIds) == 1) {
-            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
-            graph.removeEdge(edge, authorizations);
-            String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
-
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
-            LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, resolvedVertex, label, "", "", user, lumifyVisibility.getVisibility());
-
-            result.put("deleteEdge", true);
-            result.put("edgeId", edge.getId());
-            graph.flush();
-        }
-
-        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
-        Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(artifactId, modelUserContext).iterator();
-        JSONArray detectedObjects = new JSONArray();
-        while (detectedObjectModels.hasNext()) {
-            DetectedObjectModel model = detectedObjectModels.next();
-            JSONObject detectedObjectModelJson = model.toJson();
-            if (model.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
-            }
-            detectedObjects.put(detectedObjectModelJson);
-        }
-        artifactJson.put("detectedObjects", detectedObjects);
-        result.put("artifactVertex", artifactJson);
+        JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel, lumifyVisibility,
+                workspaceId, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);
     }
