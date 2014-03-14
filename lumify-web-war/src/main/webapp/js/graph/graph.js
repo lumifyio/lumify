@@ -1032,26 +1032,35 @@ define([
                 if (relationshipData.relationships) {
                     var relationshipEdges = [];
                     relationshipData.relationships.forEach(function(relationship) {
-                        relationshipEdges.push ({
-                            group: "edges",
-                            data: {
-                                id: vertexId(relationship.id),
-                                source: vertexId(relationship.from),
-                                target: vertexId(relationship.to),
-                                vertex: {
-                                    id: relationship.id,
-                                    properties: {
-                                        _conceptType: 'relationship',
-                                        source: relationship.from,
-                                        target: relationship.to,
-                                        relationshipType: relationship.relationshipType
+                        var sourceNode = cy.getElementById(vertexId(relationship.from)),
+                            destNode = cy.getElementById(vertexId(relationship.to));
+
+                        if (sourceNode.length && destNode.length) {
+                            relationshipEdges.push ({
+                                group: "edges",
+                                data: {
+                                    id: vertexId(relationship.id),
+                                    source: sourceNode.id(),
+                                    target: destNode.id(),
+                                    vertex: {
+                                        id: relationship.id,
+                                        properties: {
+                                            _conceptType: 'relationship',
+                                            source: relationship.from,
+                                            target: relationship.to,
+                                            relationshipType: relationship.relationshipType
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     });
                     // Hide edges when zooming if more than threshold
-                    cy.add(relationshipEdges);
+                    if (relationshipEdges.length) {
+                        cy.edges().remove();
+                        cy.add(relationshipEdges);
+                    }
+
                     this.updateEdgeOptions(cy);
                 }
             });
