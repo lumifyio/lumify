@@ -34,6 +34,25 @@ h1 {
   line-height: 1.1em;
   margin-left: 5px;
   cursor: pointer;
+  &.flash {
+
+    .pop-diff-badge-keyframe() {
+        0%, 100% {
+          .scale(1);
+        }
+        20%,50% {
+          .scale(1.4);
+          background-color: #f89406;
+        }
+    }
+    @-webkit-keyframes pop-diff-badge {.pop-diff-badge-keyframe;}
+    @-moz-keyframes pop-diff-badge {.pop-diff-badge-keyframe;}
+    @-ms-keyframes pop-diff-badge {.pop-diff-badge-keyframe;}
+    @-o-keyframes pop-diff-badge {.pop-diff-badge-keyframe;}
+    @keyframes pop-diff-badge {.pop-diff-badge-keyframe;}
+
+    .keyframe-animation(pop-diff-badge, 2s, 1);
+  }
 }
 @import "diff";
 
