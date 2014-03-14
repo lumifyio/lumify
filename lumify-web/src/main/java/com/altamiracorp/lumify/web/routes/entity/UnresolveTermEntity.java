@@ -1,10 +1,7 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
-import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -32,33 +29,24 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UnresolveTermEntity.class);
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
-    private final AuditRepository auditRepository;
-    private final ModelSession modelSession;
     private final VisibilityTranslator visibilityTranslator;
     private final UserProvider userProvider;
-    private final OntologyRepository ontologyRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
     public UnresolveTermEntity(
             final TermMentionRepository termMentionRepository,
             final Graph graph,
-            final AuditRepository auditRepository,
             final UserRepository userRepository,
-            final ModelSession modelSession,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
             final UserProvider userProvider,
-            final OntologyRepository ontologyRepository,
             final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
-        this.auditRepository = auditRepository;
-        this.modelSession = modelSession;
         this.visibilityTranslator = visibilityTranslator;
         this.userProvider = userProvider;
-        this.ontologyRepository = ontologyRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
