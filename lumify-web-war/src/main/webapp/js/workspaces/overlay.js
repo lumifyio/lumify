@@ -202,9 +202,16 @@ define([
                         }
                     });
 
+                    var previousCount = badge.text();
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
                         .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
+                    if (previousCount && formattedCount && formattedCount != previousCount) {
+                        badge.removeClass('flash');
+                        requestAnimationFrame(function() {
+                            badge.addClass('flash');
+                        })
+                    }
                 })
         };
 

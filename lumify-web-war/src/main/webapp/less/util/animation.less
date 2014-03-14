@@ -56,6 +56,13 @@
   .animation-fill-mode(both);
 }
 
+.keyframe-animation(@name, @duration:1s, @iteration:1, @fill:both) {
+  .animation-duration(@duration);
+  .animation-iteration-count(@iteration);
+  .animation-name(@name);
+  .animation-fill-mode(both);
+}
+
 .animation-play-state(@state) {
   -webkit-animation-play-state: @state;
   animation-play-state: @state;
