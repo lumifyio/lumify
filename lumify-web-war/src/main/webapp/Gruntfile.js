@@ -113,7 +113,7 @@ module.exports = function(grunt) {
     watch: {
         options: {
             dateFormat: function(time) {
-                grunt.log.ok('The watch finished in ' + time + 'ms. Waiting...');
+                grunt.log.ok('The watch finished in ' + (time/1000).toFixed(2) + 's. Waiting...');
             },
             spawn: true
         },
