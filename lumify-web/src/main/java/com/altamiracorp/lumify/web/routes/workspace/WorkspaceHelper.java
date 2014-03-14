@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectMetadata;
@@ -12,11 +11,9 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
-import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -28,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+import java.util.List;
 
 @Singleton
 public class WorkspaceHelper {
@@ -40,12 +38,12 @@ public class WorkspaceHelper {
     private final Graph graph;
 
     @Inject
-    public WorkspaceHelper (final ModelSession modelSession,
-                            final TermMentionRepository termMentionRepository,
-                            final AuditRepository auditRepository,
-                            final OntologyRepository ontologyRepository,
-                            final DetectedObjectRepository detectedObjectRepository,
-                            final Graph graph) {
+    public WorkspaceHelper(final ModelSession modelSession,
+                           final TermMentionRepository termMentionRepository,
+                           final AuditRepository auditRepository,
+                           final OntologyRepository ontologyRepository,
+                           final DetectedObjectRepository detectedObjectRepository,
+                           final Graph graph) {
         this.modelSession = modelSession;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
@@ -59,7 +57,6 @@ public class WorkspaceHelper {
         JSONObject result = new JSONObject();
         if (termMention == null) {
             LOGGER.warn("invalid term mention row");
-            result.put("failure", true);
         } else {
             Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
             // Clean up term mentions if system analytics wasn't performed on term
@@ -93,14 +90,16 @@ public class WorkspaceHelper {
             }
             if (termCount == 1) {
                 Iterable<Edge> edges = artifactVertex.getEdges(vertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
-                Edge edge = edges.iterator().next();
-                if (edge != null) {
-                    String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
-                    edgeId = edge.getId();
-                    graph.removeEdge(edge, authorizations);
-                    deleteEdge = true;
-                    graph.flush();
-                    auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, visibility.getVisibility());
+                if (edges.iterator().hasNext()) {
+                    Edge edge = edges.iterator().next();
+                    if (edge != null) {
+                        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+                        edgeId = edge.getId();
+                        graph.removeEdge(edge, authorizations);
+                        deleteEdge = true;
+                        graph.flush();
+                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, visibility.getVisibility());
+                    }
                 }
             }
 
@@ -112,10 +111,10 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject unresolveDetectedObject (Vertex vertex, DetectedObjectModel detectedObjectModel,
-                                               LumifyVisibility visibility, String workspaceId,
-                                               ModelUserContext modelUserContext, User user,
-                                               Authorizations authorizations) {
+    public JSONObject unresolveDetectedObject(Vertex vertex, DetectedObjectModel detectedObjectModel,
+                                              LumifyVisibility visibility, String workspaceId,
+                                              ModelUserContext modelUserContext, User user,
+                                              Authorizations authorizations) {
         JSONObject result = new JSONObject();
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
         String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
@@ -158,5 +157,33 @@ public class WorkspaceHelper {
         artifactJson.put("detectedObjects", detectedObjects);
         result.put("artifactVertex", artifactJson);
         return result;
+    }
+
+    public JSONObject deleteProperty (Vertex vertex, List<Property> properties, Property property, String workspaceId) {
+        vertex.removeProperty(property.getKey(), property.getName());
+
+        graph.flush();
+
+        // TODO: broadcast property delete
+        JSONObject json = new JSONObject();
+        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
+        json.put("properties", propertiesJson);
+        json.put("deletedProperty", property.getName());
+        json.put("vertex", GraphUtil.toJson(vertex, workspaceId));
+        return json;
+    }
+
+    public JSONObject deleteEdge (Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
+        graph.removeEdge(edge, authorizations);
+
+        String displayName = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+        // TODO: replace "" when we implement commenting on ui
+        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user, new LumifyVisibility().getVisibility());
+
+        graph.flush();
+
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("success", true);
+        return resultJson;
     }
 }
