@@ -1,16 +1,28 @@
 
 .popover {
-  max-width: 450px;
+  min-width: 300px;
+  min-height: 200px;
+  max-width: none;
+  max-height: none;
+  top: auto !important;
   left: 10px !important;
+  bottom: 55px !important;
+  position: absolute;
+
   .popover-content {
-    padding: 1px;
-    font-size: 95%;
-    font-weight: normal;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
 
     .diffs-list {
-      width: 400px;
-      max-height: 300px;
-      overflow: auto;
+      font-size: 95%;
+      font-weight: normal;
       margin: 0;
       padding: 0;    
     }
