@@ -53,7 +53,30 @@ define([
             this.on(document, 'currentUserChanged', this.onCurrentUserChanged)
             this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded)
             this.on(document, 'ajaxComplete', this.onAjaxComplete);
+            this.on(document, 'showDiffPanel', this.showDiffPanel);
+            this.on(document, 'escape', this.closeDiffPanel);
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: ['Graph', 'Map'],
+                shortcuts: {
+                    'alt-d':  { fire:'showDiffPanel', desc:'Show unpublished changes' }
+                }
+            });
         });
+
+        this.showDiffPanel = function() {
+            var badge = this.$node.find('.badge');
+            if (badge.is(':visible')) {
+                badge.popover('show');
+            }
+        };
+
+        this.closeDiffPanel = function() {
+            var badge = this.$node.find('.badge');
+            if (badge.is(':visible')) {
+                badge.popover('hide');
+            }
+        };
 
         this.onAjaxComplete = function(event, xhr, settings) {
             // Automatically call diff after every POST
