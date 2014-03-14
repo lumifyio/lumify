@@ -72,11 +72,6 @@ public class WorkspacePublish extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
-        /*
-            [ { type: "vertex", vertexId:"vertexid", action: "create or delete", status: "PUBLIC..."},
-            { type:"property", vertexId: "vertexid", key: "key", name: "name", action: "update", status: "PUBLIC..."},
-            { type:"relationship", edgeId:"edgeId", sourceId: "sourceId", destId: "destId", action:"create", status: "PUBLIC..."}]
-         */
 
         JSONArray failures = new JSONArray();
         for (int i = 0; i < publishData.length(); i ++ ) {
