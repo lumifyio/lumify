@@ -5,6 +5,9 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectMetadata;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
@@ -14,11 +17,14 @@ import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -30,6 +36,7 @@ public class WorkspaceHelper {
     private final TermMentionRepository termMentionRepository;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
+    private final DetectedObjectRepository detectedObjectRepository;
     private final Graph graph;
 
     @Inject
@@ -37,15 +44,18 @@ public class WorkspaceHelper {
                             final TermMentionRepository termMentionRepository,
                             final AuditRepository auditRepository,
                             final OntologyRepository ontologyRepository,
+                            final DetectedObjectRepository detectedObjectRepository,
                             final Graph graph) {
         this.modelSession = modelSession;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
+        this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, LumifyVisibility visibility, ModelUserContext modelUserContext, User user, Authorizations authorizations) {
+    public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, LumifyVisibility visibility,
+                                    ModelUserContext modelUserContext, User user, Authorizations authorizations) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
             LOGGER.warn("invalid term mention row");
@@ -99,6 +109,54 @@ public class WorkspaceHelper {
                 result.put("edgeId", edgeId);
             }
         }
+        return result;
+    }
+
+    public JSONObject unresolveDetectedObject (Vertex vertex, DetectedObjectModel detectedObjectModel,
+                                               LumifyVisibility visibility, String workspaceId,
+                                               ModelUserContext modelUserContext, User user,
+                                               Authorizations authorizations) {
+        JSONObject result = new JSONObject();
+        Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
+        String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
+        String columnName = DetectedObjectMetadata.RESOLVED_ID;
+
+        if (detectedObjectModel.getMetadata().getProcess() == null) {
+            modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+            result.put("deleteTag", true);
+        } else {
+            detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
+            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName);
+            result = detectedObjectModel.toJson();
+        }
+
+        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(vertex, Direction.BOTH, authorizations);
+        if (IterableUtils.count(edgeIds) == 1) {
+            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
+            graph.removeEdge(edge, authorizations);
+            String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+
+            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, visibility.getVisibility());
+
+            result.put("deleteEdge", true);
+            result.put("edgeId", edge.getId());
+            graph.flush();
+        }
+
+        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
+        Iterator<DetectedObjectModel> detectedObjectModels =
+                detectedObjectRepository.findByGraphVertexId(artifactVertex.getId().toString(), modelUserContext).iterator();
+        JSONArray detectedObjects = new JSONArray();
+        while (detectedObjectModels.hasNext()) {
+            DetectedObjectModel model = detectedObjectModels.next();
+            JSONObject detectedObjectModelJson = model.toJson();
+            if (model.getMetadata().getResolvedId() != null) {
+                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
+            }
+            detectedObjects.put(detectedObjectModelJson);
+        }
+        artifactJson.put("detectedObjects", detectedObjects);
+        result.put("artifactVertex", artifactJson);
         return result;
     }
 }
