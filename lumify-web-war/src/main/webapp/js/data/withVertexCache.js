@@ -107,7 +107,7 @@ define([
             if (!cache.properties) cache.properties = {};
             if (!cache.workspace) cache.workspace = {};
 
-            cache.properties = vertex.properties;
+            cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
 
             if (!cache.properties.source || !cache.properties.source.value) {
