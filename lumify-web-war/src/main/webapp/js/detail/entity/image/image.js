@@ -59,6 +59,7 @@ define([
 
         this.updateImageBackground = function(src) {
             this.$node
+                .addClass('accepts-file')
                 .css({ backgroundImage: 'url("' + this.srcForGlyphIconUrl(src || this.attr.data.imageSrc) + '")' })
                 .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
         };
@@ -118,6 +119,7 @@ define([
             // TODO: move to vertexService
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/graph/vertex/' + this.attr.data.id + '/uploadImage');
+            xhr.setRequestHeader('Lumify-Workspace-Id', appData.workspaceId);
             xhr.onload = function(event) {
                 if (xhr.status === 200) {
                     var result = JSON.parse(xhr.responseText);
