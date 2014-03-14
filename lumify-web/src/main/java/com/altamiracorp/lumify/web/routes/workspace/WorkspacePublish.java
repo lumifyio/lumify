@@ -74,9 +74,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
 
         JSONArray failures = new JSONArray();
-        for (int i = 0; i < publishData.length(); i ++ ) {
+        for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String)data.get("type");
+            String type = (String) data.get("type");
             String action = data.getString("action");
             if (type.equals("vertex")) {
                 checkNotNull(data.getString("vertexId"));
@@ -101,9 +101,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
         graph.flush();
 
-        for (int i = 0; i < publishData.length(); i ++ ) {
+        for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String)data.get("type");
+            String type = (String) data.get("type");
             String action = data.getString("action");
             if (type.equals("relationship")) {
                 Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
@@ -132,15 +132,15 @@ public class WorkspacePublish extends BaseRequestHandler {
                     publishData.remove(i);
                     continue;
                 }
-                publishEdge (edge, action, authorizations);
+                publishEdge(edge, action, authorizations);
                 publishData.remove(i);
             }
         }
         graph.flush();
 
-        for (int i = 0; i < publishData.length(); i ++ ){
+        for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String)data.get("type");
+            String type = (String) data.get("type");
             String action = data.getString("action");
             if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -161,7 +161,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 }
 
                 if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish a modification of a property on a private vertex: " +  vertex.getId().toString();
+                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
@@ -180,12 +180,12 @@ public class WorkspacePublish extends BaseRequestHandler {
         respondWithJson(response, resultJson);
     }
 
-    private void publishVertex (Vertex vertex, String action, Authorizations authorizations, User user) throws IOException {
+    private void publishVertex(Vertex vertex, String action, Authorizations authorizations, User user) throws IOException {
         if (action.equals("delete")) {
             graph.removeVertex(vertex, authorizations);
             return;
         }
-        String visibilityJsonString = (String)vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
+        String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
@@ -193,7 +193,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterator properties = vertex.getProperties().iterator();
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
         while (properties.hasNext()) {
-            Property property = (Property)properties.next();
+            Property property = (Property) properties.next();
             if (property.getName().contains("_") || property.getName().equals("title")) {
                 vertexElementMutation.alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility());
             }
@@ -204,26 +204,22 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
-            if (rowKeyProperty.getMetadata().get("type").equals("term")) {
-                TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String)rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
-                if (termMentionModel == null) {
-                    LOGGER.warn("No term mention found for vertex, %s", vertex.getId());
-                } else {
-                    modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-                }
-            } else {
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+            if (termMentionModel == null) {
                 DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
-                    LOGGER.warn("No term mention found for vertex, %s", vertex.getId());
+                    LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
                     modelSession.alterAllColumnsVisibility(detectedObjectModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
                 }
+            } else {
+                modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
         vertex.removeProperty("_rowKey");
     }
 
-    private void publishProperty (Vertex vertex, String action, String key, String name) {
+    private void publishProperty(Vertex vertex, String action, String key, String name) {
         if (action.equals("delete")) {
             vertex.removeProperty(key, name);
             return;
@@ -238,12 +234,12 @@ public class WorkspacePublish extends BaseRequestHandler {
                 .save();
     }
 
-    private void publishEdge (Edge edge, String action, Authorizations authorizations) {
+    private void publishEdge(Edge edge, String action, Authorizations authorizations) {
         if (action.equals("delete")) {
             graph.removeEdge(edge, authorizations);
             return;
         }
-        String visibilityJsonString = (String)edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
+        String visibilityJsonString = (String) edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
@@ -251,7 +247,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterator properties = edge.getProperties().iterator();
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
         while (properties.hasNext()) {
-            Property property = (Property)properties.next();
+            Property property = (Property) properties.next();
             if (property.getName().contains("_") || property.getName().equals("title")) {
                 edgeExistingElementMutation
                         .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility());

@@ -101,7 +101,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
         TITLE.setProperty(createdVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-        metadata.put("type", "term");
         createdVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = createdVertexMutation.save();
 
