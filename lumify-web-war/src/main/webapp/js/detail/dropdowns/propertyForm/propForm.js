@@ -132,6 +132,7 @@ define([
             var vertexProperty = this.attr.data.properties[propertyName],
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty._visibilityJson,
+                sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
             this.currentValue = previousValue;
@@ -144,7 +145,12 @@ define([
                 this.visibilitySource = { value:visibilityValue, valid:true };
             }
 
-            this.select('deleteButtonSelector').toggle(!!isExistingProperty);
+            this.select('deleteButtonSelector')
+                .text(
+                    sandboxStatus === 'PRIVATE' ?  'Delete' :
+                    sandboxStatus === 'PUBLIC_CHANGED' ?  'Undo' : ''
+                )
+                .toggle(!!isExistingProperty && sandboxStatus !== 'PUBLIC');
 
             var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
             if (isExistingProperty) button.removeAttr('disabled');
