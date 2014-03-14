@@ -74,6 +74,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
 
         JSONArray failures = new JSONArray();
+        boolean success = false;
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
             String type = (String) data.get("type");
@@ -96,6 +97,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 publishVertex(vertex, action, authorizations, user);
+                success = true;
                 publishData.remove(i);
             }
         }
@@ -133,6 +135,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 publishEdge(edge, action, authorizations);
+                success = true;
                 publishData.remove(i);
             }
         }
@@ -170,13 +173,14 @@ public class WorkspacePublish extends BaseRequestHandler {
                 }
 
                 publishProperty(vertex, action, data.getString("key"), data.getString("name"));
+                success = true;
             } else {
                 throw new RuntimeException(type + " type is not supported for publishing");
             }
         }
         JSONObject resultJson = new JSONObject();
         resultJson.put("failures", failures);
-        resultJson.put("success", true);
+        resultJson.put("success", success);
         respondWithJson(response, resultJson);
     }
 
