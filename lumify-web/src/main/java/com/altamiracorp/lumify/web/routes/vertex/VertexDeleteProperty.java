@@ -2,22 +2,20 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
-import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.routes.workspace.WorkspaceHelper;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,20 +26,17 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 public class VertexDeleteProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexDeleteProperty.class);
     private final Graph graph;
-    private final AuditRepository auditRepository;
-    private final VisibilityTranslator visibilityTranslator;
+    private final WorkspaceHelper workspaceHelper;
 
     @Inject
     public VertexDeleteProperty(
             final Graph graph,
-            final AuditRepository auditRepository,
+            final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,
-            final Configuration configuration,
-            final VisibilityTranslator visibilityTranslator) {
+            final Configuration configuration) {
         super(userRepository, configuration);
         this.graph = graph;
-        this.auditRepository = auditRepository;
-        this.visibilityTranslator = visibilityTranslator;
+        this.workspaceHelper = workspaceHelper;
     }
 
     @Override
@@ -83,17 +78,6 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             return;
         }
 
-        graphVertex.removeProperty(property.getKey(), property.getName());
-
-        graph.flush();
-
-        // TODO: broadcast property delete
-
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
-        JSONObject json = new JSONObject();
-        json.put("properties", propertiesJson);
-        json.put("deletedProperty", propertyName);
-        json.put("vertex", GraphUtil.toJson(graphVertex, workspaceId));
-        respondWithJson(response, json);
+        respondWithJson(response, workspaceHelper.deleteProperty(graphVertex, properties, property, workspaceId));
     }
 }
