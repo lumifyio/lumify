@@ -37,7 +37,7 @@ import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
 public class WorkspacePublish extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceNew.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspacePublish.class);
     private final TermMentionRepository termMentionRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
