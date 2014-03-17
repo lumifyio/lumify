@@ -98,14 +98,23 @@ module.exports = function(grunt) {
     },
 
     jshint: {
+        options: {
+            browser: true,
+            '-W033': true, // Semicolons
+            '-W040': true, // Ignore Strict violations from flight idioms
+        },
         development: {
+            files: {
+                src: ['js/**/*.js']
+            }
+        },
+        ci: {
             files: {
                 src: ['js/**/*.js']
             },
             options: {
-                browser: true,
-                '-W033': true, // Semicolons
-                '-W040': true, // Ignore Strict violations from flight idioms
+                reporter: 'checkstyle',
+                reporterOutput: 'build/jshint-checkstyle.xml'
             }
         }
     },
@@ -115,11 +124,19 @@ module.exports = function(grunt) {
             config: ".jscs.json"
         },
         all: { src: "js/**/*.js" },
-        passing: { src: "js/lumify.js" }
+        passing: { src: "js/lumify.js" },
+        ci: {
+            src: "js/**/*.js",
+            options: {
+                force: true,
+                reporter: "checkstyle",
+                reporterOutput: "build/jscs-checkstyle.xml"
+            }
+        }
     },
 
     plato: {
-        src: {
+        ci: {
             files: {
                 'build/plato': ['js/**/*.js'],
             }
@@ -180,7 +197,6 @@ module.exports = function(grunt) {
             useChaining: true,
             ignoreLeaks: false
         },
-        safari:  { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'safari' } },
         firefox: { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'firefox' } },
         chrome:  { src: ['test/functional/spec/**/*.js' ], options: { browserName: 'chrome' } }
     },
@@ -189,7 +205,8 @@ module.exports = function(grunt) {
         unit: {
             configFile: 'karma.conf.js',
             runnerPort: 9999,
-            singleRun: true
+            singleRun: true,
+            //browsers: ['PhantomJS']
         }
     }
   });
@@ -219,7 +236,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', ['mochaSelenium:firefox']);
   grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['test:functional:chrome', 'test:functional:firefox']);
   grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', ['karma']);
-  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', ['jshint', 'jscs:passing', 'plato']);
+  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', ['jshint:ci', 'plato:ci', 'jscs:ci']);
   grunt.registerTask('test', 'Run unit and functional tests', ['concurrent:tests'])
 
   grunt.registerTask('watch:style', function() {
