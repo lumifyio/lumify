@@ -23,10 +23,10 @@ define([
         });
 
         this.after('initialize', function() {
-            if (this.attr.sourceMetadata) {
-                this.setValue(this.attr.sourceMetadata)
+            if (this.attr._sourceMetadata) {
+                this.setValue(this.attr._sourceMetadata)
             } else {
-                this.setValue(this.attr.justificationMetadata && this.attr.justificationMetadata.justificationText);
+                this.setValue(this.attr._justificationMetadata && this.attr._justificationMetadata.justificationText);
             }
 
             this.on('valuepasted', this.onValuePasted);

@@ -17,6 +17,7 @@ import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +53,15 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String destGraphVertexId = getRequiredParameter(request, "destGraphVertexId");
         final String predicateLabel = getRequiredParameter(request, "predicateLabel");
         final String visibilitySource = getOptionalParameter(request, "visibilitySource");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+
+        final JSONObject sourceJson;
+        if (sourceInfo != null) {
+            sourceJson = new JSONObject(sourceInfo);
+        } else {
+            sourceJson = new JSONObject();
+        }
 
         String workspaceId = getWorkspaceId(request);
 
@@ -61,7 +71,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, visibilitySource, workspaceId, visibilityTranslator, authorizations);
+        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, justificationText, sourceJson, visibilitySource, workspaceId, visibilityTranslator, authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, edge.getVisibility());

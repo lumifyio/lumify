@@ -247,7 +247,7 @@ define([
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
                 iconUrl =  '/map/marker/' + conceptType + '/image?scale=' + (retina.devicePixelRatio > 1 ? '2' : '1');
 
-            if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
+            if (!geoLocation || !geoLocation.value.latitude || !geoLocation.value.longitude) return;
 
             if (heading) iconUrl += '&heading=' + heading;
             if (selected) iconUrl += '&selected';
@@ -262,7 +262,7 @@ define([
 
             if (!feature) {
                 feature = new ol.Feature.Vector(
-                    point(geoLocation.latitude, geoLocation.longitude),
+                    point(geoLocation.value.latitude, geoLocation.value.longitude),
                     { vertex: vertex },
                     {
                         graphic: true,
@@ -280,7 +280,7 @@ define([
                 if (feature.style.externalGraphic !== iconUrl) {
                     feature.style.externalGraphic = iconUrl;
                 }
-                feature.move(latLon(geoLocation.latitude, geoLocation.longitude));
+                feature.move(latLon(geoLocation.value.latitude, geoLocation.value.longitude));
                 // TODO: update heading
             }
 
