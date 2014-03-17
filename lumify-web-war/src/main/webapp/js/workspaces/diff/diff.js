@@ -63,7 +63,7 @@ define([
                 self.updateHeader();
             });
 
-             $('.workspace-overlay .badge').popover('show')
+            // DEBUG $('.workspace-overlay .badge').popover('show')
 
             self.on('click', {
                 buttonSelector: self.onButtonClick,
