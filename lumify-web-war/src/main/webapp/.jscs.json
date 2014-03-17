@@ -16,8 +16,7 @@
         "do",
         "switch",
         "return",
-        "try",
-        "catch"
+        "try"
     ],
     "requireParenthesesAroundIIFE": true,
     "requireSpacesInFunctionExpression": {
