@@ -55,17 +55,6 @@ define(
             });
         };
 
-        VertexService.prototype.getVertexToVertexRelationshipDetails = function (source, target, id) {
-            return this._ajaxGet({
-                url: 'vertex/relationship',
-                data: {
-                    source: source,
-                    target: target,
-                    id: id
-                }
-            });
-        };
-
         VertexService.prototype.findPath = function (data) {
             return this._ajaxGet({
                 url: 'graph/findPath',

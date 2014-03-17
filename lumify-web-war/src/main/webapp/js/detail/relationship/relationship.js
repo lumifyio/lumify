@@ -54,11 +54,7 @@ define([
                 data = this.attr.data;
             $.when(
                 self.handleCancelling(self.ontologyService.relationships()),
-                self.handleCancelling(self.vertexService.getVertexToVertexRelationshipDetails(
-                    data.properties.source,
-                    data.properties.target,
-                    data.id
-                ))
+                self.handleCancelling(relationshipService.getRelationshipDetails(data.id))
             ).done(function(ontologyRelationships, relationshipData) {
                 self.$node.html(template({
                     auditsButton: self.auditsButton(),
@@ -73,9 +69,9 @@ define([
                         value: properties[key]
                     };
                 });
-                relationshipData[0].properties.forEach(function(prop) {
-                    properties[prop.key] =  {
-                        value:prop
+                Object.keys(relationshipData[0].properties).forEach(function(propKey) {
+                    properties[propKey] =  {
+                        value:relationshipData[0].properties[propKey]
                     };
                 });
 
