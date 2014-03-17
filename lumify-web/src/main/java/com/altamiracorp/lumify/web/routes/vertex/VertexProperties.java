@@ -12,7 +12,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,12 +47,8 @@ public class VertexProperties extends BaseRequestHandler {
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
         String workspaceId = getWorkspaceId(request);
 
-        Iterable<Property> properties = graph.getVertex(graphVertexId, authorizations).getProperties();
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
-
-        JSONObject json = new JSONObject();
-        json.put("id", graphVertexId);
-        json.put("properties", propertiesJson);
+        Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        JSONObject json = GraphUtil.toJson(vertex, workspaceId);
 
         Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(graphVertexId, modelUserContext).iterator();
         JSONArray detectedObjects = new JSONArray();
