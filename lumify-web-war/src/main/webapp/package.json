@@ -20,7 +20,6 @@
     "karma-jasmine": "0.1.0",
     "karma-mocha": "0.1.0",
     "karma-phantomjs-launcher": "0.1.0",
-    "karma-safari-launcher": "0.1.0",
     "karma-requirejs": "0.1.0",
     "karma-script-launcher": "0.1.0",
     "jshint": "~2.3.0",
