@@ -56,13 +56,6 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
-        final JSONObject sourceJson;
-        if (sourceInfo != null) {
-            sourceJson = new JSONObject(sourceInfo);
-        } else {
-            sourceJson = new JSONObject();
-        }
-
         String workspaceId = getWorkspaceId(request);
 
         User user = getUser(request);
@@ -71,7 +64,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
 
-        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, justificationText, sourceJson, visibilitySource, workspaceId, visibilityTranslator, authorizations);
+        Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, justificationText, sourceInfo, visibilitySource, workspaceId, visibilityTranslator, authorizations);
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "", user, edge.getVisibility());

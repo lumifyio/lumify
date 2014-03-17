@@ -21,7 +21,6 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.id.IdGenerator;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.ROW_KEY;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
@@ -72,6 +70,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
         String workspaceId = getWorkspaceId(request);
@@ -86,25 +86,27 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        ElementMutation<Vertex> createdVertexMutation;
+        ElementMutation<Vertex> vertexMutation;
         if (graphVertexId != null) {
-            createdVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+            vertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
         } else {
-            createdVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
+            vertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
         }
+
+        GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
 
-        createdVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        vertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
 
-        CONCEPT_TYPE.setProperty(createdVertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
-        TITLE.setProperty(createdVertexMutation, title, metadata, lumifyVisibility.getVisibility());
+        CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
+        TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-        createdVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
-        Vertex createdVertex = createdVertexMutation.save();
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        Vertex createdVertex = vertexMutation.save();
 
-        auditRepository.auditVertexElementMutation(createdVertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
 
         this.graph.flush();
 

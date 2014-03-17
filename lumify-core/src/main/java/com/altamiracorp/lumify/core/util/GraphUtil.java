@@ -291,7 +291,7 @@ public class GraphUtil {
             Vertex destVertex,
             String predicateLabel,
             String justificationText,
-            JSONObject sourceObject,
+            String sourceInfo,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
@@ -301,15 +301,26 @@ public class GraphUtil {
         ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
                 .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
 
-        if (justificationText != null) {
-            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
-            edgeBuilder.setProperty(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata.toJson().toString(), lumifyVisibility.getVisibility());
-        } else if (sourceObject.length() > 0) {
-            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
-            edgeBuilder.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
-        }
+        addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
 
         return edgeBuilder.save();
+    }
+
+    public static <T extends Element> void addJustificationToMutation(ElementMutation<T> mutation, String justificationText, String sourceInfo, LumifyVisibility lumifyVisibility) {
+        final JSONObject sourceJson;
+        if (sourceInfo != null) {
+            sourceJson = new JSONObject(sourceInfo);
+        } else {
+            sourceJson = new JSONObject();
+        }
+
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            mutation.setProperty(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+        } else if (sourceJson.length() > 0) {
+            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceJson);
+            mutation.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+        }
     }
 
     public static JSONObject updateVisibilitySourceAndAddWorkspaceId(String jsonString, String visibilitySource, String workspaceId) {
