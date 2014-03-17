@@ -2,16 +2,21 @@
 // Debug retina/non-retina by changing to 1/2
 // window.devicePixelRatio = 1;
 
-window.requestAnimationFrame = 
-    typeof window === 'undefined' ? 
-    function(){} : 
-    ( window.requestAnimationFrame || 
-      window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.msRequestAnimationFrame || function(callback) { setTimeout(callback, 1000/60); } );
+window.requestAnimationFrame =
+    typeof window === 'undefined' ?
+    function() { } :
+    (
+        window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+            setTimeout(callback, 1000 / 60);
+        }
+    );
 
 require([
-    'jquery', 
+    'jquery',
     'jqueryui',
     'bootstrap',
     'es5shim',
@@ -22,7 +27,7 @@ require([
     'flight/lib/advice',
     'flight/lib/logger',
     'flight/lib/debug',
-    
+
      // Make underscore available everywhere
     'underscore',
 
@@ -35,7 +40,19 @@ require([
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses'
 ],
-function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advice, withLogging, debug, _, Visibility, UserService) {
+function(jQuery,
+         jQueryui,
+         bootstrap,
+         es5shim,
+         es5sham,
+         compose,
+         registry,
+         advice,
+         withLogging,
+         debug,
+         _,
+         Visibility,
+         UserService) {
     'use strict';
 
     configureApplication();
@@ -53,7 +70,7 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
         _.templateSettings.interpolate = /\{([\s\S]+?)\}/g;
 
         // Default datepicker options
-        $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+        $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
         $.fn.datepicker.defaults.autoclose = true;
 
         Visibility.attachTo(document);
@@ -90,13 +107,11 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
                 attachApplication(true);
             });
 
-
         function attachApplication(loginRequired) {
             $('html')
                 .toggleClass('fullscreenApp', mainApp)
                 .toggleClass('fullscreenDetails', popoutDetails)
             window.isFullscreenDetails = popoutDetails;
-            
 
             if (loginRequired) {
                 require(['login'], function(Login) {
@@ -158,5 +173,3 @@ function(jQuery, jQueryui, bootstrap, es5shim, es5sham, compose, registry, advic
         }
     }
 });
-
-

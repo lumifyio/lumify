@@ -111,10 +111,11 @@ module.exports = function(grunt) {
     },
 
     jscs: {
-        src: "js/**/*.js",
         options: {
             config: ".jscs.json"
-        }
+        },
+        all: { src: "js/**/*.js" },
+        passing: { src: "js/lumify.js" }
     },
 
     plato: {
@@ -130,7 +131,8 @@ module.exports = function(grunt) {
             dateFormat: function(time) {
                 grunt.log.ok('The watch finished in ' + (time/1000).toFixed(2) + 's. Waiting...');
             },
-            spawn: true
+            spawn: false,
+            interrupt: true
         },
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
@@ -138,13 +140,14 @@ module.exports = function(grunt) {
             options: { livereload: true }
         },
         scripts: {
-            files: ['Gruntfile.js', 'js/**/*.js', 'js/**/*.ejs'],
+            files: ['js/**/*.js', 'js/**/*.ejs'],
             tasks: ['requirejs:development', 'notify:js'],
             options: { livereload: true }
         },
         lint: {
-            files: ['Gruntfile.js', 'js/**/*.js'],
-            tasks: ['jshint:development']
+            files: ['js/**/*.js'],
+            tasks: ['jshint:development'],
+            options: { atBegin: true }
         }
     },
 
@@ -191,6 +194,11 @@ module.exports = function(grunt) {
     }
   });
 
+  // on watch events configure jshint:all to only run on changed file
+  grunt.event.on('watch', function(action, filepath) {
+      grunt.config('jshint.development.src', filepath);
+  });
+
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-concurrent');
@@ -211,8 +219,21 @@ module.exports = function(grunt) {
   grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', ['mochaSelenium:firefox']);
   grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['test:functional:chrome', 'test:functional:firefox']);
   grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', ['karma']);
-  grunt.registerTask('test:lint', 'Run JavaScript Lint Tests', ['jshint']);
+  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', ['jshint', 'jscs:passing', 'plato']);
   grunt.registerTask('test', 'Run unit and functional tests', ['concurrent:tests'])
+
+  grunt.registerTask('watch:style', function() {
+      var config = {
+          options: { interrupt: true },
+          jscs: {
+              files: [ 'js/lumify.js' ],
+              tasks: ['jscs:passing']
+          }
+      };
+
+      grunt.config('watch', config);
+      grunt.task.run('watch');
+  });
 
   grunt.registerTask('development', 'Build js/less for development', ['less:development', 'requirejs:development']);
   grunt.registerTask('production', 'Build js/less for production', ['less:production', 'requirejs:production']);
