@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
@@ -76,6 +77,14 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+
+        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
+        if (sandboxStatus == SandboxStatus.PUBLIC) {
+            LOGGER.warn("Can not unresolve a public entity");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            chain.next(request, response);
+            return;
+        }
 
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
