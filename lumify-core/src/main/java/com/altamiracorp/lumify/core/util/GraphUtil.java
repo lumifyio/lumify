@@ -45,10 +45,7 @@ public class GraphUtil {
 
     public static JSONObject toJsonVertex(Vertex vertex, String workspaceId) {
         try {
-            JSONObject json = new JSONObject();
-            json.put("id", vertex.getId());
-            json.put("properties", toJsonProperties(vertex.getProperties(), workspaceId));
-            json.put("sandboxStatus", getSandboxStatus(vertex, workspaceId).toString());
+            JSONObject json = toJsonElement(vertex, workspaceId);
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -57,17 +54,30 @@ public class GraphUtil {
 
     public static JSONObject toJsonEdge(Edge edge, String workspaceId) {
         try {
-            JSONObject json = new JSONObject();
-            json.put("id", edge.getId());
+            JSONObject json = toJsonElement(edge, workspaceId);
             json.put("label", edge.getLabel());
             json.put("sourceVertexId", edge.getVertexId(Direction.OUT));
             json.put("destVertexId", edge.getVertexId(Direction.IN));
-            json.put("properties", toJsonProperties(edge.getProperties(), workspaceId));
-            json.put("sandboxStatus", getSandboxStatus(edge, workspaceId).toString());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static JSONObject toJsonElement(Element element, String workspaceId) {
+        JSONObject json = new JSONObject();
+        json.put("id", element.getId());
+        json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
+        json.put("sandboxStatus", getSandboxStatus(element, workspaceId).toString());
+        if (element.getVisibility() != null) {
+            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), element.getVisibility().toString());
+        }
+        String visibilityJson = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
+        if (visibilityJson != null && visibilityJson.length() > 0) {
+            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), new JSONObject(visibilityJson));
+        }
+
+        return json;
     }
 
     public static Double[] parseLatLong(Object val) {
