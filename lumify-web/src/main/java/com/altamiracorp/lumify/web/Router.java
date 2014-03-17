@@ -7,7 +7,10 @@ import com.altamiracorp.lumify.web.routes.artifact.*;
 import com.altamiracorp.lumify.web.routes.audit.VertexAudit;
 import com.altamiracorp.lumify.web.routes.config.Configuration;
 import com.altamiracorp.lumify.web.routes.config.Plugin;
-import com.altamiracorp.lumify.web.routes.entity.*;
+import com.altamiracorp.lumify.web.routes.entity.ResolveDetectedObject;
+import com.altamiracorp.lumify.web.routes.entity.ResolveTermEntity;
+import com.altamiracorp.lumify.web.routes.entity.UnresolveDetectedObject;
+import com.altamiracorp.lumify.web.routes.entity.UnresolveTermEntity;
 import com.altamiracorp.lumify.web.routes.graph.*;
 import com.altamiracorp.lumify.web.routes.map.MapInitHandler;
 import com.altamiracorp.lumify.web.routes.map.MapMarkerImage;
@@ -15,6 +18,7 @@ import com.altamiracorp.lumify.web.routes.map.MapTileHandler;
 import com.altamiracorp.lumify.web.routes.ontology.Ontology;
 import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
+import com.altamiracorp.lumify.web.routes.relationship.RelationshipProperties;
 import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
 import com.altamiracorp.lumify.web.routes.user.*;
@@ -82,13 +86,13 @@ public class Router extends HttpServlet {
             app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
             app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
             app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
-            app.get("/vertex/relationship", authenticator, VertexToVertexRelationship.class);
             app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
             app.post("/vertex/multiple", authenticator, VertexMultiple.class);
 
             app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
             app.post("/relationship/property/delete", authenticator, DeleteRelationshipProperty.class);
             app.post("/relationship/create", authenticator, RelationshipCreate.class);
+            app.get("/relationship/{graphEdgeId}/properties", authenticator, RelationshipProperties.class);
 
             app.get("/graph/findPath", authenticator, GraphFindPath.class);
             app.get("/graph/{graphVertexId}/relatedVertices", authenticator, GraphRelatedVertices.class);

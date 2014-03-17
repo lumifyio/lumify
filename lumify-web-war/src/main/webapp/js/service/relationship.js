@@ -48,6 +48,14 @@ define(
             });
         };
 
+        RelationshipService.prototype.getRelationshipDetails = function (id) {
+            return this._ajaxGet({
+                url: 'relationship/' + encodeURIComponent(id) + '/properties',
+                data: {
+                }
+            });
+        };
+
         return RelationshipService;
     });
 
