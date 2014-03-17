@@ -76,10 +76,21 @@ define([
                 return;
             }
 
-            var self = this;
-            var userClickedPlayButton = $(event.target).is('.scrubbing-play-button'),
+            var self = this,
+                userClickedPlayButton = $(event.target).is('.scrubbing-play-button'),
                 players = videojs.players,
-                video = $(videoTemplate(this.attr));
+                video = $(videoTemplate(
+                    _.tap(this.attr, function(attrs) {
+                        var url = attrs.rawUrl;
+                        if (~url.indexOf('?')) {
+                            url += '&';
+                        } else {
+                            url += '?';
+                        }
+                        url += 'playback=true';
+                        attrs.url = url;
+                    })
+                ));
 
             this.$node.html(video);
             Object.keys(players).forEach(function(player) {
