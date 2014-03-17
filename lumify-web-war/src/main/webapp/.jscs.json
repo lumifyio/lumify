@@ -4,9 +4,7 @@
         "while",
         "do",
         "try",
-        "catch",
-        "case",
-        "default"
+        "catch"
     ],
     "requireSpaceAfterKeywords": [
         "if",
@@ -131,7 +129,6 @@
     "disallowMultipleLineBreaks": true,
     "validateLineBreaks": "LF",
     "validateQuoteMarks": { "mark": "'", "escape": true },
-    "disallowTrailingWhitespace": true,
     "disallowKeywordsOnNewLine": ["else"],
     "requireLineFeedAtFileEnd": true,
     "maximumLineLength": 120,

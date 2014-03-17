@@ -13,12 +13,12 @@ define([
 
     function Diff() {
 
-        var ontologyService = new OntologyService();
-        var workspaceService = new WorkspaceService();
+        var ontologyService = new OntologyService(),
+            workspaceService = new WorkspaceService();
 
         this.defaultAttrs({
             buttonSelector: 'button',
-            headerButtonSelector: '.header button.publish-all',
+            headerButtonSelector: '.header button',
             rowSelector: 'tr',
         })
 
@@ -60,41 +60,49 @@ define([
                     formatValue: formatValue,
                     formatLabel: formatLabel
                 }));
+                self.updateHeader();
             });
 
-            // DEBUG: $('.workspace-overlay .badge').popover('show')
+             $('.workspace-overlay .badge').popover('show')
 
             self.on('click', {
                 buttonSelector: self.onButtonClick,
-                headerButtonSelector: self.onPublish,
+                headerButtonSelector: self.onApplyAll,
                 rowSelector: self.onRowClick,
             });
             self.on('diffsChanged', function(event, data) {
-                var scroll = self.$node.find('.diffs-list'),
-                    previousScroll = scroll.scrollTop(),
-                    previousPublished = self.$node.find('.mark-publish').map(function() {
-                        return '.' + self.classNameForVertex($(this).data('diffId'));
-                    }).toArray(),
-                    previousSelection  = self.$node.find('.active').map(function() {
-                        return $(this).data('vertexId')
-                    }).toArray(),
-                    header = this.$node.find('.header').html();
-
                 self.processDiffs(data.diffs).done(function(processDiffs) {
+
+                    var scroll = self.$node.find('.diffs-list'),
+                        previousScroll = scroll.scrollTop(),
+                        previousPublished = self.$node.find('.mark-publish').map(function() {
+                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                        }).toArray(),
+                        previousUndo = self.$node.find('.mark-undo').map(function() {
+                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                        }).toArray(),
+                        previousSelection  = _.compact(self.$node.find('.active').map(function() {
+                            return $(this).data('diffId');
+                        }).toArray());
+
                     self.$node.html(template({
                         diffs: processDiffs,
                         formatValue: formatValue,
                         formatLabel: formatLabel
                     }));
-                });
 
-                self.selectVertices(previousSelection);
-                self.$node.find(previousPublished.join(',')).each(function() {
-                    $(this).addClass('mark-publish')
-                        .find('.publish').addClass('btn-success')
+                    self.selectVertices(previousSelection);
+                    self.$node.find(previousPublished.join(',')).each(function() {
+                        $(this).addClass('mark-publish')
+                            .find('.publish').addClass('btn-success')
+                    });
+                    self.$node.find(previousUndo.join(',')).each(function() {
+                        $(this).addClass('mark-undo')
+                            .find('.undo').addClass('btn-danger')
+                    });
+                    self.updateHeader();
+                    self.$node.find('.diffs-list').scrollTop(previousScroll);
                 });
-                self.$node.find('.header').html(header);
-                self.$node.find('.diffs-list').scrollTop(previousScroll);
             })
             //self.on('mouseenter', { rowSelector: this.onRowHover });
             //self.on('mouseleave', { rowSelector: this.onRowHover });
@@ -124,13 +132,14 @@ define([
                 self.diffsForVertexId = {};
                 self.diffsById = {};
                 self.diffDependencies = {};
+                self.undoDiffDependencies = {};
 
                 _.keys(groupedByVertex).forEach(function(vertexId) {
                     var diffs = groupedByVertex[vertexId],
                         actionTypes = {
-                            CREATE: { type:'create', display:'New' },
-                            UPDATE: { type:'update', display:'Existing' },
-                            DELETE: { type:'delete', display:'Deleted' }
+                            CREATE: { type: 'create', display: 'New' },
+                            UPDATE: { type: 'update', display: 'Existing' },
+                            DELETE: { type: 'delete', display: 'Deleted' }
                         },
                         outputItem = {
                             id: '',
@@ -193,13 +202,17 @@ define([
                 return output;
             });
 
-
             function addDiffDependency(id, diff) {
                 if (!self.diffDependencies[id]) {
                     self.diffDependencies[id] = [];
                 }
-
                 self.diffDependencies[id].push(diff.id);
+
+                // Undo dependencies are inverse
+                if (!self.undoDiffDependencies[diff.id]) {
+                    self.undoDiffDependencies[diff.id] = [];
+                }
+                self.undoDiffDependencies[diff.id].push(id);
             }
         }
 
@@ -222,14 +235,11 @@ define([
         };
 
         this.onObjectsSelected = function(event, data) {
-            var self = this;
+            var self = this,
+                toSelect = data && data.vertices.concat(data.edges || []) || [];
 
-            if (data && data.vertices) {
-                this.$node.find('.active').removeClass('active');
-                this.selectVertices(data.vertices);
-            } else if (data && data.edges) {
-                // TODO
-            }
+            this.$node.find('.active').removeClass('active');
+            this.selectVertices(toSelect);
         };
 
         this.selectVertices = function(vertices) {
@@ -262,27 +272,23 @@ define([
                 'mark' + ($target.hasClass('publish') ? 'Publish' : 'Undo') + 'DiffItem',
                 { 
                     diffId: $row.data('diffId'),
-                    state: !($target.hasClass('btn-success') || $target.hasClass('btn-warning'))
+                    state: !($target.hasClass('btn-success') || $target.hasClass('btn-danger'))
                 }
             );
-
-            /*
-            if ($target.closest('thead').length) {
-                var allButtons = $target.closest('table').find('td button');
-                if ($target.hasClass(cls)) {
-                    allButtons.removeClass(cls);
-                } else {
-                    allButtons.addClass(cls);
-                }
-            }
-            */
         };
 
-        this.onPublish = function(event) {
+        this.onApplyAll = function(event) {
             var self = this,
-                diffsToPublish = this.$node.find('.mark-publish').map(function() {
+                button = $(event.target).addClass('loading').attr('disabled', true),
+                otherButton = button.siblings('button').attr('disabled', true),
+                bothButtons = button.add(otherButton),
+                header = this.$node.find('.header'),
+                type = button.hasClass('publish-all') ? 'publish' : 'undo',
+                diffsToSend = this.$node.find('.mark-' + type).map(function() {
                     var diff = self.diffsById[$(this).data('diffId')];
+
                     switch (diff.type) {
+
                         case 'PropertyDiffItem': return {
                             type: 'property',
                             vertexId: diff.elementId,
@@ -311,22 +317,18 @@ define([
                     console.error('Unknown diff type', diff);
                 }).toArray();
 
-            var button = $(event.target)
-                .addClass('loading')
-                .attr('disabled', true);
-
-            workspaceService.publish(diffsToPublish)
+            workspaceService[type](diffsToSend)
                 .always(function() {
-                    button.removeAttr('disabled').removeClass('loading');
+                    bothButtons.removeAttr('disabled').removeClass('loading');
                 })
                 .fail(function(xhr, status, errorText) {
                     var error = $('<div>')
                         .addClass('alert alert-error')
                         .html(
                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                            'An error occured during publishing.<br>Reason: ' + errorText
+                            'An error occured during ' + type + '.<br>Reason: ' + errorText
                         )
-                        .insertAfter(button);
+                        .appendTo(header);
 
                     _.delay(error.remove.bind(error), 5000)
                 })
@@ -344,67 +346,104 @@ define([
                                 '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                                 '<ul><li>' + _.pluck(failures, 'error_msg').join('</li><li>') + '</li></ul>'
                             )
-                            .insertAfter(button);
+                            .appendTo(header);
                     }
                 });
-        };
-
-        this.onMarkUndo = function(event, data) {
-            var diff = data.diffId;
-
-            switch(diff.type) {
-                case 'VertexDiffItem': 
-
-                    break;
-                case 'PropertyDiffItem':
-
-                    break;
-                case 'EdgeDiffItem':
-
-                    break;
-                default: console.warn('Unknown diff item type', diff.type)
-            }
         };
 
         this.updateHeader = function() {
             var markedAsPublish = this.$node.find('.mark-publish').length,
                 markedAsUndo = this.$node.find('.mark-undo').length,
-                buttonHtml = '<button class="btn btn-small">'
+                header = this.$node.find('.header span'),
+                publish = this.$node.find('.publish-all'),
+                undo = this.$node.find('.undo-all');
 
-            this.$node.find('.header')
-                .html(
-                    markedAsPublish ? $(buttonHtml).addClass('publish-all btn-success').text('Publish ' + formatters.string.plural(markedAsPublish, 'change')) :
-                    markedAsUndo ? $(buttonHtml).addClass('undo-all btn-warning').text('Undo ' + formatters.string.plural(markedAsUndo, 'change')) : 
-                    'Unpublished Changes'
-                );
+            header.toggle(markedAsPublish === 0 && markedAsUndo === 0);
+
+            publish.toggle(markedAsPublish > 0)
+                   .text('Publish ' + formatters.string.plural(markedAsPublish, 'change'));
+            
+            undo.toggle(markedAsUndo > 0)
+                .text('Undo ' + formatters.string.plural(markedAsUndo, 'change'));
         }
 
-        this.onMarkPublish = function(event, data) {
+        this.onMarkUndo = function(event, data) {
             var self = this,
                 diffId = data.diffId,
                 diff = this.diffsById[diffId],
+                deps = this.diffDependencies[diffId] || [],
                 state = data.state,
-                stateBasedClassFunction = state ? 'addClass' : 'removeClass';
+                stateBasedClassFunction = state ? 'addClass' : 'removeClass',
+                inverseStateBasedClassFunction = !state ? 'addClass' : 'removeClass';
 
             if (!diff) {
                 return;
             }
 
             this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
-                $(this)[stateBasedClassFunction]('mark-publish')
-                    .find('button.publish')[stateBasedClassFunction]('btn-success')
-                    .siblings('button.undo').removeClass('btn-warning');
+                $(this)
+                    .removePrefixedClasses('mark-')
+                    [stateBasedClassFunction]('mark-undo')
+                    .find('button.undo')[stateBasedClassFunction]('btn-danger')
+                    .siblings('button.publish').removeClass('btn-success');
             });
 
             this.updateHeader();
 
-            switch(diff.type) {
-                case 'VertexDiffItem': 
+            switch (diff.type) {
+                case 'VertexDiffItem':
+
+                    deps.forEach(function(diffId) {
+                        self.trigger('markUndoDiffItem', { diffId: diffId, state: state });
+                    })
+                    
+                    break;
+
+                case 'PropertyDiffItem':
+
+                    //self.trigger('markUndoDiffItem', { diffId: diffId, state: false });
+
+                    break;
+
+                case 'EdgeDiffItem':
+
+                    break;
+
+                default: console.warn('Unknown diff item type', diff.type)
+            }
+        };
+
+        this.onMarkPublish = function(event, data) {
+            var self = this,
+                diffId = data.diffId,
+                diff = this.diffsById[diffId],
+                state = data.state,
+                stateBasedClassFunction = state ? 'addClass' : 'removeClass',
+                inverseStateBasedClassFunction = !state ? 'addClass' : 'removeClass';
+
+            if (!diff) {
+                return;
+            }
+
+            this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
+                $(this)
+                    .removePrefixedClasses('mark-')
+                    [stateBasedClassFunction]('mark-publish')
+                    .find('button.publish')[stateBasedClassFunction]('btn-success')
+                    .siblings('button.undo').removeClass('btn-danger');
+            });
+
+            this.updateHeader();
+
+            switch (diff.type) {
+
+                case 'VertexDiffItem':
+
                     if (!state) {
                         // Unpublish all dependents
                         var deps = this.diffDependencies[diff.id];
                         deps.forEach(function(diffId) {
-                            self.trigger('markPublishDiffItem', { diffId: diffId, state:false });
+                            self.trigger('markPublishDiffItem', { diffId: diffId, state: false });
                         });
                     }
 
@@ -415,7 +454,7 @@ define([
                     if (state) {
                         var vertexDiff = this.diffsForVertexId[diff.elementId];
                         if (vertexDiff) {
-                            this.trigger('markPublishDiffItem', { diffId: diff.elementId, state:true })
+                            this.trigger('markPublishDiffItem', { diffId: diff.elementId, state: true })
                         }
                     }
 
@@ -428,10 +467,10 @@ define([
                             outVertexDiff = this.diffsForVertexId[diff.outVertexId];
 
                         if (inVertexDiff) {
-                            this.trigger('markPublishDiffItem', { diffId: diff.inVertexId, state:true });
+                            this.trigger('markPublishDiffItem', { diffId: diff.inVertexId, state: true });
                         }
                         if (outVertexDiff) {
-                            this.trigger('markPublishDiffItem', { diffId: diff.outVertexId, state:true });
+                            this.trigger('markPublishDiffItem', { diffId: diff.outVertexId, state: true });
                         }
                     }
 
@@ -442,4 +481,3 @@ define([
         };
     }
 });
-

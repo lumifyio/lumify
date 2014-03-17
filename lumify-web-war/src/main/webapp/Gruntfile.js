@@ -124,7 +124,12 @@ module.exports = function(grunt) {
             config: ".jscs.json"
         },
         all: { src: "js/**/*.js" },
-        passing: { src: "js/lumify.js" },
+        passing: { 
+            src: [
+                "js/lumify.js",
+                "js/workspaces/diff/*.js"
+            ]
+        },
         ci: {
             src: "js/**/*.js",
             options: {
@@ -163,8 +168,7 @@ module.exports = function(grunt) {
         },
         lint: {
             files: ['js/**/*.js'],
-            tasks: ['jshint:development'],
-            options: { atBegin: true }
+            tasks: ['jshint:development']
         }
     },
 
@@ -243,7 +247,7 @@ module.exports = function(grunt) {
       var config = {
           options: { interrupt: true },
           jscs: {
-              files: [ 'js/lumify.js' ],
+              files: [ 'js/**/*.js' ],
               tasks: ['jscs:passing']
           }
       };
