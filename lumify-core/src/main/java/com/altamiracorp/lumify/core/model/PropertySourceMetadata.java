@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class PropertySourceMetadata implements Serializable{
     private static final long serialVersionUID = 1L;
-    public static final String PROPERTY_SOURCE_METADATA = "sourceMetadata";
+    public static final String PROPERTY_SOURCE_METADATA = "_sourceMetadata";
     public final int startOffset;
     public final int endOffset;
     public final String vertexId;

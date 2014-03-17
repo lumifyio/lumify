@@ -114,39 +114,49 @@ public class GraphUtil {
     public static JSONObject toJsonProperty(Property property) {
         JSONObject result = new JSONObject();
 
-        Object value = property.getValue();
-        if (value instanceof Text) {
-            result.put("value", ((Text) value).getText());
-        } else if (value instanceof Date) {
-            result.put("value", ((Date) value).getTime());
-        } else if (value instanceof GeoPoint) {
-            GeoPoint geoPoint = (GeoPoint) property.getValue();
-            result.put("latitude", geoPoint.getLatitude());
-            result.put("longitude", geoPoint.getLongitude());
-            if (geoPoint.getAltitude() != null) {
-                result.put("altitude", geoPoint.getAltitude());
-            }
-        } else {
-            result.put("value", value);
-        }
+        result.put("value", toJsonValue(property.getValue()));
 
         if (property.getVisibility() != null) {
             result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
-            value = property.getMetadata().get(key);
-            if (key.equals(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString())) {
-                result.put(key, new JSONObject(value.toString()));
-            } else if (value instanceof PropertyJustificationMetadata) {
-                result.put(key, ((PropertyJustificationMetadata) value).toJson());
-            } else if (value instanceof PropertySourceMetadata) {
-                result.put(key, ((PropertySourceMetadata) value).toJson());
-            } else {
-                result.put(key, value);
-            }
+            Object value = property.getMetadata().get(key);
+            result.put(key, toJsonValue(value));
         }
 
         return result;
+    }
+
+    private static Object toJsonValue(Object value) {
+        if (value instanceof GeoPoint) {
+            GeoPoint geoPoint = (GeoPoint) value;
+            JSONObject result = new JSONObject();
+            result.put("latitude", geoPoint.getLatitude());
+            result.put("longitude", geoPoint.getLongitude());
+            if (geoPoint.getAltitude() != null) {
+                result.put("altitude", geoPoint.getAltitude());
+            }
+            return result;
+        } else if (value instanceof Text) {
+            return ((Text) value).getText();
+        } else if (value instanceof Date) {
+            return ((Date) value).getTime();
+        } else if (value instanceof PropertyJustificationMetadata) {
+            return ((PropertyJustificationMetadata) value).toJson();
+        } else if (value instanceof PropertySourceMetadata) {
+            return ((PropertySourceMetadata) value).toJson();
+        } else if (value instanceof String) {
+            try {
+                String valueString = (String) value;
+                valueString = valueString.trim();
+                if (valueString.startsWith("{") && valueString.endsWith("}")) {
+                    return new JSONObject(valueString);
+                }
+            } catch (Exception ex) {
+                // ignore this exception it just mean the string wasn't really json
+            }
+        }
+        return value;
     }
 
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
@@ -250,11 +260,7 @@ public class GraphUtil {
             }
             propertyMetadata.put(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata);
         } else if (sourceObject.length() > 0) {
-            int startOffset = sourceObject.getInt("startOffset");
-            int endOffset = sourceObject.getInt("endOffset");
-            String vertexId = sourceObject.getString("vertexId");
-            String snippet = sourceObject.getString("snippet");
-            PropertySourceMetadata sourceMetadata = new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
             if (propertyMetadata.containsKey(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION)) {
                 propertyMetadata.remove(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION);
             }
@@ -271,20 +277,39 @@ public class GraphUtil {
         return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
     }
 
+    private static PropertySourceMetadata createPropertySourceMetadata(JSONObject sourceObject) {
+        int startOffset = sourceObject.getInt("startOffset");
+        int endOffset = sourceObject.getInt("endOffset");
+        String vertexId = sourceObject.getString("vertexId");
+        String snippet = sourceObject.getString("snippet");
+        return new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+    }
+
     public static Edge addEdge(
             Graph graph,
             Vertex sourceVertex,
             Vertex destVertex,
             String predicateLabel,
+            String justificationText,
+            JSONObject sourceObject,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             Authorizations authorizations) {
         JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        return graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
-                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility())
-                .save();
+        ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
+                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+
+        if (justificationText != null) {
+            PropertyJustificationMetadata propertyJustificationMetadata = new PropertyJustificationMetadata(justificationText);
+            edgeBuilder.setProperty(PropertyJustificationMetadata.PROPERTY_JUSTIFICATION, propertyJustificationMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+        } else if (sourceObject.length() > 0) {
+            PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceObject);
+            edgeBuilder.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
+        }
+
+        return edgeBuilder.save();
     }
 
     public static JSONObject updateVisibilitySourceAndAddWorkspaceId(String jsonString, String visibilitySource, String workspaceId) {

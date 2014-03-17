@@ -7,10 +7,10 @@
     <% if (popout) { %>
       <span>
     <% } else { %>
-      <a href="#" class="map-coordinates" data-latitude="<%= property.value.latitude %>" data-longitude="<%= property.value.longitude %>">
+      <a href="#" class="map-coordinates" data-latitude="<%= property.value.value.latitude %>" data-longitude="<%= property.value.value.longitude %>">
     <% } %>
 
-    <%= (property.value._geoLocationDescription && property.value._geoLocationDescription.value) || (property.value.latitude + ', ' + property.value.longitude) %>
+    <%= (property.value._geoLocationDescription && property.value._geoLocationDescription.value) || (property.value.value.latitude + ', ' + property.value.value.longitude) %>
 
     <% if (popout) { %>
       </span>

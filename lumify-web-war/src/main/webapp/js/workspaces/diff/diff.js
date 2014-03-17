@@ -44,7 +44,7 @@ define([
                     var value = change.value;
                     switch (self.ontologyProperties.byTitle[name].dataType) {
                         case 'geoLocation':
-                            value = [change.latitude, change.longitude].join(', ')
+                            value = [change.value.latitude, change.value.longitude].join(', ');
                             break;
                         case 'date':
                             value = formatters.date.dateString(value);

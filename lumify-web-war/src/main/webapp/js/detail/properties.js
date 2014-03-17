@@ -167,7 +167,7 @@ define([
             switch (dataType) {
                 case 'date': return formatters.date.dateString(v);
                 case 'number': return formatters.number.pretty(v);
-                case 'geoLocation': 
+                case 'geoLocation':
                     var geo = formatters.geoLocation.parse(v);
                     return geo ? (geo.latitude + ',' + geo.longitude) : v;
                 default:
