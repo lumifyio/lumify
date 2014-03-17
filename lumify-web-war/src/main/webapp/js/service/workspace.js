@@ -66,6 +66,15 @@ function(ServiceBase) {
         })
     };
 
+    WorkspaceService.prototype.undo = function(changes) {
+        return this._ajaxPost({
+            url: 'workspace/undo',
+            data: {
+                undoData: JSON.stringify(changes)
+            }
+        })
+    };
+
     WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',
