@@ -63,9 +63,13 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
         String rowKey = getOptionalParameter(request, "rowKey");
-        String x1 = getRequiredParameter(request, "x1"), x2 = getRequiredParameter(request, "x2"),
-                y1 = getRequiredParameter(request, "y1"), y2 = getRequiredParameter(request, "y2");
+        String x1 = getRequiredParameter(request, "x1");
+        String x2 = getRequiredParameter(request, "x2");
+        String y1 = getRequiredParameter(request, "y1");
+        String y2 = getRequiredParameter(request, "y2");
 
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
@@ -75,7 +79,6 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        Vertex resolvedVertex;
         ElementMutation<Vertex> resolvedVertexMutation;
         DetectedObjectModel detectedObjectModel;
         Object id = graphVertexId != null && !graphVertexId.equals("") ? graphVertexId : graph.getIdGenerator().nextId();
@@ -100,16 +103,16 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
             CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
-
-            resolvedVertex = resolvedVertexMutation.save();
-            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-
         } else {
-            resolvedVertex = graph.getVertex(id, authorizations);
+            resolvedVertexMutation = graph.getVertex(id, authorizations).prepareMutation();
         }
 
-        resolvedVertex.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
-        resolvedVertex.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+        GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
+
+        resolvedVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
+        resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+        Vertex resolvedVertex = resolvedVertexMutation.save();
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
