@@ -16,10 +16,7 @@ import com.altamiracorp.lumify.web.routes.map.MapInitHandler;
 import com.altamiracorp.lumify.web.routes.map.MapMarkerImage;
 import com.altamiracorp.lumify.web.routes.map.MapTileHandler;
 import com.altamiracorp.lumify.web.routes.ontology.Ontology;
-import com.altamiracorp.lumify.web.routes.relationship.DeleteRelationshipProperty;
-import com.altamiracorp.lumify.web.routes.relationship.RelationshipCreate;
-import com.altamiracorp.lumify.web.routes.relationship.RelationshipProperties;
-import com.altamiracorp.lumify.web.routes.relationship.SetRelationshipProperty;
+import com.altamiracorp.lumify.web.routes.relationship.*;
 import com.altamiracorp.lumify.web.routes.resource.ResourceGet;
 import com.altamiracorp.lumify.web.routes.user.*;
 import com.altamiracorp.lumify.web.routes.vertex.*;
@@ -84,6 +81,7 @@ public class Router extends HttpServlet {
 
             app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
             app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
+            app.post("/vertex/{graphVertexId}/visibility/set", authenticator, VertexSetVisibility.class);
             app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
             app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
             app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
@@ -93,6 +91,7 @@ public class Router extends HttpServlet {
             app.post("/relationship/property/delete", authenticator, DeleteRelationshipProperty.class);
             app.post("/relationship/create", authenticator, RelationshipCreate.class);
             app.get("/relationship/{graphEdgeId}/properties", authenticator, RelationshipProperties.class);
+            app.post("/relationship/{graphEdgeId}/visibility/set", authenticator, RelationshipSetVisibility.class);
 
             app.get("/graph/findPath", authenticator, GraphFindPath.class);
             app.get("/graph/{graphVertexId}/relatedVertices", authenticator, GraphRelatedVertices.class);

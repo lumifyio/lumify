@@ -206,6 +206,19 @@ public class GraphUtil {
         }
     }
 
+    public static void updateVisibilitySource(Graph graph, VisibilityTranslator visibilityTranslator, Element element, String visibilitySource, String workspaceId) {
+        String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
+        JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId);
+
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        element.prepareMutation()
+                .alterElementVisibility(lumifyVisibility.getVisibility())
+                .alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), lumifyVisibility.getVisibility())
+                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility())
+                .save();
+    }
+
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
             T element,
             String propertyName,
