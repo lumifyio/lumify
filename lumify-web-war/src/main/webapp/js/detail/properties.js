@@ -354,23 +354,23 @@ define([
 
             this.ontologyService.properties()
                 .done(function(ontologyProperties) {
-                    self.ontologyProperties = ontologyProperties;
-                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties);
+                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties),
+                        popoutEnabled = false,
+                        iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
 
-                    var iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
+                    self.ontologyProperties = ontologyProperties;
 
                     if (iconProperty) {
                         self.trigger(self.select('glyphIconSelector'), 'iconUpdated', { src: iconProperty.value });
                     }
-                    var popoutEnabled = false;
 
                     if ($('#app').hasClass('fullscreen-details')) {
                         popoutEnabled = true;
                     }
 
-                    var props = $(propertiesTemplate({properties:filtered, popout: popoutEnabled}));
-
                     require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
+                        var props = $(propertiesTemplate({properties:filtered, popout: popoutEnabled}));
+
                         props.find('.visibility').each(function() {
                             var visibility = $(this).data('visibility');
                             VisibilityDisplay.attachTo(this, {
@@ -396,6 +396,8 @@ define([
         }
 
         var keys = Object.keys(properties).sort(function(a,b) {
+            if (a === '_visibilityJson') return -1;
+            if (b === '_visibilityJson') return 1;
             if (a === 'startDate' && b === 'endDate') return -1;
             if (b === 'startDate' && a === 'endDate') return 1;
 
@@ -434,8 +436,13 @@ define([
 
                     addProperty(name, displayName, value, properties[name]._visibilityJson);
                 }
+            } else if (name === '_visibilityJson') {
+                var value = properties[name].value,
+                    source = (value && value.value && value.value.source) || 
+                        (value && value.source) || "";
+                addProperty(name, 'Visibility', source);
             } else if (isRelationshipType) {
-                addProperty(name, 'relationship type', properties[name].value);
+                addProperty(name, 'Relationship type', properties[name].value);
             }
         });
         return displayProperties;
