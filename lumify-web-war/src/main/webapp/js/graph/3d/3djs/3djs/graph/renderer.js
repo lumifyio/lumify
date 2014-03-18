@@ -357,8 +357,6 @@ define([
         this._pickingScene.add(this._pickingParticleSystem);
 
 
-        //this.graph.calculateEdges();
-
         var edges = this.graph.edges,
             edgesLength = edges.length,
             geometry = new THREE.Geometry();
