@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.routes.workspace;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
@@ -169,7 +170,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
 
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"));
+                publishProperty(vertex, action, data.getString("key"), data.getString("name"), user);
                 success = true;
             } else {
                 throw new RuntimeException(type + " type is not supported for publishing");
@@ -202,6 +203,8 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
+        auditRepository.auditVertexElementMutation(vertexElementMutation, vertex, "", user, true, lumifyVisibility.getVisibility());
+
         Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
@@ -220,7 +223,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertex.removeProperty("_rowKey");
     }
 
-    private void publishProperty(Vertex vertex, String action, String key, String name) {
+    private void publishProperty(Vertex vertex, String action, String key, String name, User user) {
         if (action.equals("delete")) {
             vertex.removeProperty(key, name);
             return;
@@ -229,10 +232,14 @@ public class WorkspacePublish extends BaseRequestHandler {
         String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        vertex.prepareMutation()
+
+        ExistingElementMutation <Vertex> vertexMutation = vertex.prepareMutation();
+        auditRepository.auditVertexElementMutation(vertexMutation, vertex, "", user, true, lumifyVisibility.getVisibility());
+        vertexMutation
                 .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility())
                 .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString())
                 .save();
+
     }
 
     private void publishEdge(Edge edge, String action, Authorizations authorizations) {

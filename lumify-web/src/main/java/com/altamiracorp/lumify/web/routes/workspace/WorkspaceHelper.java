@@ -54,7 +54,7 @@ public class WorkspaceHelper {
 
     public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations,
-                                    String isPublished) {
+                                    boolean isPublished) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
             LOGGER.warn("invalid term mention row");
@@ -116,7 +116,7 @@ public class WorkspaceHelper {
     public JSONObject unresolveDetectedObject(Vertex vertex, DetectedObjectModel detectedObjectModel,
                                               LumifyVisibility visibility, String workspaceId,
                                               ModelUserContext modelUserContext, User user,
-                                              Authorizations authorizations, String isPublished) {
+                                              Authorizations authorizations, boolean isPublished) {
         JSONObject result = new JSONObject();
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
         String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
@@ -176,7 +176,7 @@ public class WorkspaceHelper {
     }
 
     public JSONObject deleteEdge (Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations,
-                                  String isPublished) {
+                                  boolean isPublished) {
         graph.removeEdge(edge, authorizations);
 
         String displayName = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
