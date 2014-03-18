@@ -98,11 +98,12 @@ public class WorkspaceHelper {
                         edgeId = edge.getId();
                         graph.removeEdge(edge, authorizations);
                         deleteEdge = true;
-                        graph.flush();
                         auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, isPublished, visibility.getVisibility());
                     }
                 }
             }
+
+            graph.flush();
 
             if (deleteEdge) {
                 result.put("deleteEdge", deleteEdge);
