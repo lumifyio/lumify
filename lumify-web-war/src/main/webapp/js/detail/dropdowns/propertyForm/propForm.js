@@ -210,6 +210,7 @@ define([
                         Visibility.attachTo(visibility, {
                             value: source || ''
                         });
+                        visibility.find('input').focus();
                         self.settingVisibility = true;
                         self.visibilitySource = { value: source, valid: true };
 
