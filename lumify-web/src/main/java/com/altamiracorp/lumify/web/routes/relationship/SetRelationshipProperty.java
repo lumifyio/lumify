@@ -83,11 +83,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         }
         Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
-        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(edge, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
+        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(edge, propertyName, value, visibilitySource,
+                workspaceId, this.visibilityTranslator, justificationText, sourceJson);
         setPropertyResult.elementMutation.save();
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "", user, setPropertyResult.visibility.getVisibility());
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, edge, "", "",
+                user, null, setPropertyResult.visibility.getVisibility());
 
         JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties(), workspaceId);
         respondWithJson(response, resultsJson);

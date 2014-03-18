@@ -58,6 +58,6 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
             return;
         }
 
-        respondWithJson(response, workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations));
+        respondWithJson(response, workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations, null));
     }
 }
