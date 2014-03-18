@@ -49,20 +49,14 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
     <!-- http://lumify.io#geoLocation -->
-
-    <rdfs:Datatype rdf:about="&lumify;geoLocation"/>
-    
-
+    <rdfs:Datatype rdf:about="&lumify;geolocation"/>
 
     <!-- http://lumify.io#image -->
-
     <rdfs:Datatype rdf:about="&lumify;image"/>
-    
 
+    <!-- http://lumify.io#currency -->
+    <rdfs:Datatype rdf:about="&lumify;currency"/>
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////

@@ -150,6 +150,16 @@ public class OntologyRepository {
         }
     }
 
+    public Relationship getRelationshipById(String relationshipId) {
+        Vertex relationshipVertex = graph.getVertex(relationshipId, getAuthorizations());
+        if (relationshipVertex == null) {
+            return null;
+        }
+        String from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
+        String to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
+        return new Relationship(relationshipVertex, from, to);
+    }
+
     public Relationship getRelationship(String propertyName) {
         try {
             Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
@@ -308,25 +318,8 @@ public class OntologyRepository {
         return parent;
     }
 
-    public List<OntologyProperty> getPropertiesByRelationship(String relationshipLabel) {
-        Vertex relationshipVertex = getRelationshipVertexId(relationshipLabel);
-        if (relationshipVertex == null) {
-            throw new RuntimeException("Could not find relationship: " + relationshipLabel);
-        }
-        return getPropertiesByVertex(relationshipVertex);
-    }
-
-    private Vertex getRelationshipVertexId(String relationshipLabel) {
-        try {
-            return Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
-                    .has(DISPLAY_NAME.getKey(), relationshipLabel)
-                    .vertices());
-        } catch (NoSuchElementException nsee) {
-            throw new IllegalStateException(String.format("Could not find \"%s\" vertex", relationshipLabel), nsee);
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException(String.format("Too many \"%s\" vertices", relationshipLabel), iae);
-        }
+    public List<OntologyProperty> getPropertiesByRelationship(Relationship relationship) {
+        return getPropertiesByVertex(relationship.getVertex());
     }
 
     public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
@@ -374,15 +367,15 @@ public class OntologyRepository {
         return property;
     }
 
-    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipName, String displayName) {
-        Relationship relationship = getRelationship(relationshipName);
+    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipId, String displayName) {
+        Relationship relationship = getRelationshipById(relationshipId);
         if (relationship != null) {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(relationshipId, VISIBILITY.getVisibility(), getAuthorizations());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
-        ONTOLOGY_TITLE.setProperty(builder, relationshipName, VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, relationshipId, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save();
 

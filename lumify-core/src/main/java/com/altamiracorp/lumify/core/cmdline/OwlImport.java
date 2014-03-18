@@ -1,10 +1,7 @@
 package com.altamiracorp.lumify.core.cmdline;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.model.ontology.Concept;
-import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyType;
+import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
@@ -89,10 +86,12 @@ public class OwlImport extends CommandLineBase {
 
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         Reader inFileReader = new FileReader(inFile);
-        OWLOntologyDocumentSource source = new ReaderDocumentSource(inFileReader, documentIRI);
-        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration()
-                .addIgnoredImport(IRI.create("http://lumify.io"));
-        OWLOntology o = m.loadOntologyFromOntologyDocument(source, config);
+        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
+
+        loadBaseOntology(m, config);
+
+        OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
+        OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
 
         for (OWLClass ontologyClass : o.getClassesInSignature()) {
             importOntologyClass(o, ontologyClass);
@@ -101,13 +100,26 @@ public class OwlImport extends CommandLineBase {
         for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
             importDataProperty(o, dataTypeProperty);
         }
-// TODO
-//        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
-//            importObjectProperty(o, objectProperty);
-//        }
+
+        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
+            importObjectProperty(o, objectProperty);
+        }
 
         graph.flush();
         ontologyRepository.clearCache();
+    }
+
+    private void loadBaseOntology(OWLOntologyManager m, OWLOntologyLoaderConfiguration config) throws OWLOntologyCreationException, IOException {
+        InputStream lumifyBaseOntologyIn = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
+        checkNotNull(lumifyBaseOntologyIn, "Could not load base ontology file");
+        try {
+            Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
+            IRI lumifyBaseOntologyIRI = IRI.create("http://lumify.io");
+            OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
+            m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
+        } finally {
+            lumifyBaseOntologyIn.close();
+        }
     }
 
     private Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass) throws IOException {
@@ -171,6 +183,9 @@ public class OwlImport extends CommandLineBase {
         String propertyId = dataTypeProperty.getIRI().toString();
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
+        if (propertyType == null) {
+            throw new LumifyException("Could not get property type on data property " + propertyId);
+        }
 
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
@@ -183,8 +198,58 @@ public class OwlImport extends CommandLineBase {
         }
     }
 
+    private Relationship importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
+        String uri = objectProperty.getIRI().toString();
+        String label = getLabel(o, objectProperty);
+        LOGGER.info("Importing ontology object property " + uri + " (label: " + label + ")");
+
+        Concept domain = getDomainConcept(o, objectProperty);
+        Concept range = getRangeConcept(o, objectProperty);
+
+        return ontologyRepository.getOrCreateRelationshipType(domain, range, uri, label);
+    }
+
+    private Concept getRangeConcept(OWLOntology o, OWLObjectProperty objectProperty) {
+        String uri = objectProperty.getIRI().toString();
+        if (objectProperty.getRanges(o).size() != 1) {
+            throw new LumifyException("Invalid number of range properties on " + uri);
+        }
+
+        for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
+            OWLClass rangeClass = rangeClassExpr.asOWLClass();
+            String rangeClassUri = rangeClass.getIRI().toString();
+            Concept ontologyClass = ontologyRepository.getConceptById(rangeClassUri);
+            checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
+            return ontologyClass;
+        }
+        throw new LumifyException("Invalid number of range properties on " + uri);
+    }
+
+    private Concept getDomainConcept(OWLOntology o, OWLObjectProperty objectProperty) {
+        String uri = objectProperty.getIRI().toString();
+        if (objectProperty.getRanges(o).size() != 1) {
+            throw new LumifyException("Invalid number of domain properties on " + uri);
+        }
+
+        for (OWLClassExpression rangeClassExpr : objectProperty.getDomains(o)) {
+            OWLClass rangeClass = rangeClassExpr.asOWLClass();
+            String rangeClassUri = rangeClass.getIRI().toString();
+            Concept ontologyClass = ontologyRepository.getConceptById(rangeClassUri);
+            checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
+            return ontologyClass;
+        }
+        throw new LumifyException("Invalid number of domain properties on " + uri);
+    }
+
     private PropertyType getPropertyType(OWLOntology o, OWLDataProperty dataTypeProperty) {
-        for (OWLDataRange range : dataTypeProperty.getRanges(o)) {
+        Set<OWLDataRange> ranges = dataTypeProperty.getRanges(o);
+        if (ranges.size() == 0) {
+            return null;
+        }
+        if (ranges.size() > 1) {
+            throw new LumifyException("Unexpected number of ranges on data property " + dataTypeProperty.getIRI().toString());
+        }
+        for (OWLDataRange range : ranges) {
             if (range instanceof OWLDatatype) {
                 OWLDatatype datatype = (OWLDatatype) range;
                 return getPropertyType(datatype.getIRI().toString());
@@ -199,6 +264,12 @@ public class OwlImport extends CommandLineBase {
         }
         if ("http://www.w3.org/2001/XMLSchema#dateTime".equals(iri)) {
             return PropertyType.DATE;
+        }
+        if ("http://lumify.io#geolocation".equals(iri)) {
+            return PropertyType.GEO_LOCATION;
+        }
+        if ("http://lumify.io#currency".equals(iri)) {
+            return PropertyType.CURRENCY;
         }
         throw new LumifyException("Unhandled property type " + iri);
     }
