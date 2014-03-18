@@ -3,7 +3,8 @@ package com.altamiracorp.lumify.core.model.audit;
 public enum  AuditAction {
     UPDATE("update"),
     DELETE("delete"),
-    CREATE("create");
+    CREATE("create"),
+    PUBLISH("publish");
 
     private final String action;
 

@@ -106,7 +106,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = vertexMutation.save();
 
-        auditRepository.auditVertexElementMutation(vertexMutation, createdVertex, "", user, false, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
 
         this.graph.flush();
 
@@ -119,7 +119,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
 
             // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, false, lumifyVisibility.getVisibility());
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);

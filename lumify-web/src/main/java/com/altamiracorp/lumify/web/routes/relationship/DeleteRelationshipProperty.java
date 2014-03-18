@@ -63,7 +63,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, property.getDisplayName(),
-                oldValue, edge, "", "", user, false, lumifyVisibility.getVisibility());
+                oldValue, null,  edge, "", "", user, lumifyVisibility.getVisibility());
         edge.removeProperty(propertyName);
         graph.flush();
 

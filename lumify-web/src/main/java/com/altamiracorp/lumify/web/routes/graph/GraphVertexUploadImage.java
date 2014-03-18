@@ -101,18 +101,18 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, lumifyVisibility.getVisibility());
         Vertex artifactVertex = artifactBuilder.save();
 
-        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user, false, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
         // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
         entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), lumifyVisibility.getVisibility());
-        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user, false, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations).iterator();
         if (!existingEdges.hasNext()) {
             Edge edge = graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
-            auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, false, lumifyVisibility.getVisibility());
+            auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
