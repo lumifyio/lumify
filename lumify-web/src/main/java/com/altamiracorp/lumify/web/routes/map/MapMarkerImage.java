@@ -61,7 +61,7 @@ public class MapMarkerImage extends BaseRequestHandler {
 
             Concept concept = ontologyRepository.getConceptById(typeStr);
             if (concept == null) {
-                concept = ontologyRepository.getConceptByName(typeStr);
+                concept = ontologyRepository.getConceptById(typeStr);
             }
 
             boolean isMapGlyphIcon = false;

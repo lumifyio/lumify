@@ -1,36 +1,27 @@
 package com.altamiracorp.lumify.core.cmdline;
 
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.MAP_GLYPH_ICON;
-
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
+import org.semanticweb.owlapi.io.ReaderDocumentSource;
+import org.semanticweb.owlapi.model.*;
+
+import java.io.*;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class OwlImport extends CommandLineBase {
     public static final String NS_XML_URI = "http://www.w3.org/XML/1998/namespace";
@@ -39,6 +30,7 @@ public class OwlImport extends CommandLineBase {
     private Graph graph;
     private String inFileName;
     private File inDir;
+    private String documentIRIString;
 
     public static void main(String[] args) throws Exception {
         int res = new OwlImport().run(args);
@@ -61,6 +53,15 @@ public class OwlImport extends CommandLineBase {
                         .create("i")
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt("iri")
+                        .withDescription("The document IRI (URI used for prefixing concepts)")
+                        .hasArg(true)
+                        .withArgName("uri")
+                        .create()
+        );
+
         return options;
     }
 
@@ -68,196 +69,166 @@ public class OwlImport extends CommandLineBase {
     protected void processOptions(CommandLine cmd) throws Exception {
         super.processOptions(cmd);
         this.inFileName = cmd.getOptionValue("in");
+        if (cmd.hasOption("iri")) {
+            this.documentIRIString = cmd.getOptionValue("iri");
+        } else {
+            this.documentIRIString = new File(this.inFileName).toURI().toString();
+        }
     }
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
-        File inFile = new File(inFileName);
-        importFile(inFile, getUser());
+        File inFile = new File(this.inFileName);
+        IRI documentIRI = IRI.create(this.documentIRIString);
+        importFile(inFile, documentIRI, getUser());
         return 0;
     }
 
-    public void importFile(File inFile, User user) throws ParserConfigurationException, SAXException, IOException {
+    public void importFile(File inFile, IRI documentIRI, User user) throws OWLOntologyCreationException, IOException {
         inDir = inFile.getParentFile();
 
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        dbFactory.setNamespaceAware(true);
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(inFile);
+        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
+        Reader inFileReader = new FileReader(inFile);
+        OWLOntologyDocumentSource source = new ReaderDocumentSource(inFileReader, documentIRI);
+        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration()
+                .addIgnoredImport(IRI.create("http://lumify.io"));
+        OWLOntology o = m.loadOntologyFromOntologyDocument(source, config);
 
-        Element rootElem = doc.getDocumentElement();
-        NodeList rootElemChildNodes = rootElem.getChildNodes();
-        for (int i = 0; i < rootElemChildNodes.getLength(); i++) {
-            Node child = rootElemChildNodes.item(i);
-            if (child instanceof Element) {
-                Element childElem = (Element) child;
-                if (childElem.getNamespaceURI().equals("http://www.w3.org/2002/07/owl#") && childElem.getLocalName().equals("Class")) {
-                    importClassElement(childElem, user);
-                } else if (childElem.getNamespaceURI().equals("http://www.w3.org/2002/07/owl#") && childElem.getLocalName().equals("DatatypeProperty")) {
-                    importDatatypePropertyElement(childElem, user);
-                } else if (childElem.getNamespaceURI().equals("http://www.w3.org/2002/07/owl#") && childElem.getLocalName().equals("ObjectProperty")) {
-                    importObjectPropertyElement(childElem, user);
-                }
-            }
+        for (OWLClass ontologyClass : o.getClassesInSignature()) {
+            importOntologyClass(o, ontologyClass);
         }
 
+        for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
+            importDataProperty(o, dataTypeProperty);
+        }
+// TODO
+//        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
+//            importObjectProperty(o, objectProperty);
+//        }
+
+        graph.flush();
         ontologyRepository.clearCache();
     }
 
-    private void importClassElement(Element classElem, User user) {
-        String about = getName(classElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "about"));
-        Element labelElem = getEnglishLanguageLabel(classElem);
-        String labelText = labelElem.getTextContent().trim();
-        Element subClassOf = getSingleChildElement(classElem, "http://www.w3.org/2000/01/rdf-schema#", "subClassOf");
-        String subClassOfResource = subClassOf.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
-        List<Element> propertyElems = getChildElements(classElem, "http://altamiracorp.com/ontology#", "property");
+    private Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass) throws IOException {
+        String uri = ontologyClass.getIRI().toString();
 
-        String parentName = getName(subClassOfResource);
+        String label = getLabel(o, ontologyClass);
+        LOGGER.info("Importing ontology class " + uri + " (label: " + label + ")");
 
-        LOGGER.info("importClassElement: about: " + about + ", labelText: " + labelText + ", parentName: " + parentName);
-        Concept parent = ontologyRepository.getConceptByName(parentName);
-        if (parent == null) {
-            throw new RuntimeException("Could not find parent " + parentName + " for " + about);
+        Concept parent = getParentConcept(o, ontologyClass);
+        Concept result = ontologyRepository.getOrCreateConcept(parent, uri, label);
+
+        String color = getColor(o, ontologyClass);
+        if (color != null) {
+            OntologyLumifyProperties.COLOR.setProperty(result.getVertex(), color, OntologyRepository.VISIBILITY.getVisibility());
         }
-        Concept concept = ontologyRepository.getOrCreateConcept(parent, about, labelText);
 
-        for (Element propertyElem : propertyElems) {
-            String propertyName = propertyElem.getAttributeNS("http://altamiracorp.com/ontology#", "name");
-            Object propertyValue = propertyElem.getTextContent().trim();
-            LOGGER.info("  " + propertyName + " = " + propertyValue);
-            if (propertyName.equals("glyphIconFileName")) {
-                propertyName = GLYPH_ICON.getKey();
-                propertyValue = importGlyphIconFile(propertyValue.toString(), user);
-            } else if (propertyName.equals("mapGlyphIconFileName")) {
-                propertyName = MAP_GLYPH_ICON.getKey();
-                propertyValue = importGlyphIconFile(propertyValue.toString(), user);
+        String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
+        if (glyphIconFileName != null) {
+            File iconFile = new File(inDir, glyphIconFileName);
+            if (!iconFile.exists()) {
+                throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
-            concept.setProperty(propertyName, propertyValue, OntologyRepository.DEFAULT_VISIBILITY.getVisibility());
-        }
-        graph.flush();
-    }
-
-    private Element getEnglishLanguageLabel(Element elem) {
-        List<Element> childElems = getChildElements(elem, "http://www.w3.org/2000/01/rdf-schema#", "label");
-        for (Element childElem : childElems) {
-            String attr = childElem.getAttributeNS(NS_XML_URI, "lang");
-            if (attr.equals("en")) {
-                return childElem;
+            InputStream iconFileIn = new FileInputStream(iconFile);
+            try {
+                StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
+                value.searchIndex(false);
+                value.store(true);
+                LumifyProperties.GLYPH_ICON.setProperty(result.getVertex(), value, OntologyRepository.VISIBILITY.getVisibility());
+            } finally {
+                iconFileIn.close();
             }
         }
-        throw new RuntimeException("Could not find english label on element " + elem.getTagName());
+
+        return result;
     }
 
-    private StreamingPropertyValue importGlyphIconFile(String fileName, User user) {
-        File f = new File(inDir, fileName);
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(f.getAbsoluteFile());
-            if (!fileName.endsWith(".png")) {
-                throw new RuntimeException("Unhandled content type: " + fileName);
+    private Concept getParentConcept(OWLOntology o, OWLClass ontologyClass) throws IOException {
+        Set<OWLClassExpression> superClasses = ontologyClass.getSuperClasses(o);
+        if (superClasses.size() == 0) {
+            return ontologyRepository.getEntityConcept();
+        } else if (superClasses.size() == 1) {
+            OWLClassExpression superClassExpr = superClasses.iterator().next();
+            OWLClass superClass = superClassExpr.asOWLClass();
+            String superClassUri = superClass.getIRI().toString();
+            Concept parent = ontologyRepository.getConceptById(superClassUri);
+            if (parent != null) {
+                return parent;
             }
 
-            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-            IOUtils.copy(in, imgOut);
+            parent = importOntologyClass(o, superClass);
+            if (parent == null) {
+                throw new LumifyException("Could not find or create parent: " + superClass);
+            }
+            return parent;
+        } else {
+            throw new LumifyException("Unhandled multiple super classes. Found " + superClasses.size() + ", expected 0 or 1.");
+        }
+    }
 
-            byte[] rawImg = imgOut.toByteArray();
+    private void importDataProperty(OWLOntology o, OWLDataProperty dataTypeProperty) {
+        String propertyId = dataTypeProperty.getIRI().toString();
+        String propertyDisplayName = getLabel(o, dataTypeProperty);
+        PropertyType propertyType = getPropertyType(o, dataTypeProperty);
 
-            StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
-            raw.searchIndex(false);
-            return raw;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("Could not import file: " + fileName, e);
-        } catch (IOException e) {
-            throw new RuntimeException("invalid stream for glyph icon");
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("Could not import file: " + fileName, e);
-                }
+        for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
+            OWLClass domainClass = domainClassExpr.asOWLClass();
+            String domainClassUri = domainClass.getIRI().toString();
+            Concept domainConcept = ontologyRepository.getConceptById(domainClassUri);
+            checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
+
+            LOGGER.info("Adding data property " + propertyId + " to class " + domainConcept.getId());
+            ontologyRepository.addPropertyTo(domainConcept.getVertex(), propertyId, propertyDisplayName, propertyType);
+        }
+    }
+
+    private PropertyType getPropertyType(OWLOntology o, OWLDataProperty dataTypeProperty) {
+        for (OWLDataRange range : dataTypeProperty.getRanges(o)) {
+            if (range instanceof OWLDatatype) {
+                OWLDatatype datatype = (OWLDatatype) range;
+                return getPropertyType(datatype.getIRI().toString());
             }
         }
+        throw new LumifyException("Could not find range on data property " + dataTypeProperty.getIRI().toString());
     }
 
-    private void importDatatypePropertyElement(Element datatypePropertyElem, User user) {
-        String about = datatypePropertyElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "about");
-        Element labelElem = getEnglishLanguageLabel(datatypePropertyElem);
-        String labelText = labelElem.getTextContent().trim();
-        Element domainElem = getSingleChildElement(datatypePropertyElem, "http://www.w3.org/2000/01/rdf-schema#", "domain");
-        String domainResource = domainElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
-        Element rangeElem = getSingleChildElement(datatypePropertyElem, "http://www.w3.org/2000/01/rdf-schema#", "range");
-        String rangeResource = rangeElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
-
-        String domainResourceName = getName(domainResource);
-        String rangeResourceName = getName(rangeResource);
-
-        LOGGER.info("importDatatypePropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        Vertex domain = ontologyRepository.getGraphVertexByTitle(domainResourceName);
-        if (domain == null) {
-            throw new RuntimeException("Could not find domain: " + domainResourceName);
+    private PropertyType getPropertyType(String iri) {
+        if ("http://www.w3.org/2001/XMLSchema#string".equals(iri)) {
+            return PropertyType.STRING;
         }
-        PropertyType propertyType = PropertyType.convert(rangeResourceName);
-        graph.flush();
-
-        ontologyRepository.addPropertyTo(domain, about, labelText, propertyType);
-    }
-
-    private void importObjectPropertyElement(Element objectPropertyElem, User user) {
-        String about = objectPropertyElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "about");
-        Element labelElem = getEnglishLanguageLabel(objectPropertyElem);
-        String labelText = labelElem.getTextContent().trim();
-        Element domainElem = getSingleChildElement(objectPropertyElem, "http://www.w3.org/2000/01/rdf-schema#", "domain");
-        String domainResource = domainElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
-        Element rangeElem = getSingleChildElement(objectPropertyElem, "http://www.w3.org/2000/01/rdf-schema#", "range");
-        String rangeResource = rangeElem.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "resource");
-
-        String domainResourceName = getName(domainResource);
-        String rangeResourceName = getName(rangeResource);
-
-        LOGGER.info("importObjectPropertyElement: about: " + about + ", labelText: " + labelText + ", domainResourceName: " + domainResourceName + ", rangeResourceName: " + rangeResourceName);
-        Concept domain = ontologyRepository.getConceptByName(domainResourceName);
-        Concept range = ontologyRepository.getConceptByName(rangeResourceName);
-
-        ontologyRepository.getOrCreateRelationshipType(domain, range, about, labelText);
-    }
-
-    private Element getSingleChildElement(Element elem, String ns, String localName) {
-        List<Element> childElems = getChildElements(elem, ns, localName);
-        if (childElems.size() == 0) {
-            return null;
+        if ("http://www.w3.org/2001/XMLSchema#dateTime".equals(iri)) {
+            return PropertyType.DATE;
         }
-        if (childElems.size() > 1) {
-            throw new RuntimeException("More than one child found with " + ns + ":" + localName + " on element " + elem.getTagName());
-        }
-        return childElems.get(0);
+        throw new LumifyException("Unhandled property type " + iri);
     }
 
-    private List<Element> getChildElements(Element elem, String ns, String localName) {
-        List<Element> childElems = new ArrayList<Element>();
-        NodeList children = elem.getElementsByTagNameNS(ns, localName);
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            if (child instanceof Element) {
-                if (child.getLocalName().equals(localName)) {
-                    childElems.add((Element) child);
-                }
+    private String getLabel(OWLOntology o, OWLEntity owlEntity) {
+        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
+            if (annotation.getProperty().isLabel()) {
+                OWLLiteral value = (OWLLiteral) annotation.getValue();
+                return value.getLiteral();
             }
         }
-        return childElems;
+        return null;
     }
 
-    private String getName(String s) {
-        if (s.startsWith("#")) {
-            return s.substring("#".length());
-        }
+    private String getColor(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#color");
+    }
 
-        int lastSlash = s.lastIndexOf('/');
-        if (lastSlash > 0) {
-            return s.substring(lastSlash + 1);
-        }
+    private String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#glyphIconFileName");
+    }
 
-        return s;
+    private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
+            if (annotation.getProperty().getIRI().toString().equals(uri)) {
+                OWLLiteral value = (OWLLiteral) annotation.getValue();
+                return value.getLiteral();
+            }
+        }
+        return null;
     }
 
     @Inject

@@ -74,7 +74,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user, visibility)
                 .setAction(auditAction, visibility)
-                .setType(OntologyRepository.TYPE_ENTITY, visibility)
+                .setType(OntologyRepository.ENTITY_CONCEPT_IRI, visibility)
                 .setComment(comment, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
@@ -259,7 +259,7 @@ public class AuditRepository extends Repository<Audit> {
         audit.getAuditCommon()
                 .setUser(user, visibility)
                 .setAction(action, visibility)
-                .setType(OntologyRepository.TYPE_ENTITY, visibility)
+                .setType(OntologyRepository.ENTITY_CONCEPT_IRI, visibility)
                 .setComment(comment, visibility)
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
@@ -268,7 +268,7 @@ public class AuditRepository extends Repository<Audit> {
 
         audit.getAuditEntity()
                 .setTitle(entityTitle, visibility)
-                .setType(OntologyRepository.TYPE_ENTITY, visibility)
+                .setType(OntologyRepository.ENTITY_CONCEPT_IRI, visibility)
                 .setSubtype(entitySubtype, visibility)
                 .setID(entityID.toString(), visibility);
         return audit;

@@ -62,33 +62,33 @@ public class BaseOntologyTest {
 
     @Test
     public void testIsOntologyDefinedTrue() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenReturn(rootConcept);
+        when(ontologyRepository.getConceptById(ontologyRepository.ROOT_CONCEPT_IRI.toString())).thenReturn(rootConcept);
         boolean result = baseOntology.isOntologyDefined(user);
         assertEquals(true, result);
     }
 
     @Test
     public void testIsOntologyDefinedFalse() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenReturn(null);
+        when(ontologyRepository.getConceptById(ontologyRepository.ROOT_CONCEPT_IRI.toString())).thenReturn(null);
         boolean result = baseOntology.isOntologyDefined(user);
         assertEquals(false, result);
     }
 
     @Test(expected = RuntimeException.class)
     public void testIsOntologyDefinedException() {
-        when(ontologyRepository.getConceptByName(ontologyRepository.TYPE_ENTITY.toString())).thenThrow(new RuntimeException("test", new Throwable("testing exception")));
+        when(ontologyRepository.getConceptById(ontologyRepository.ROOT_CONCEPT_IRI.toString())).thenThrow(new RuntimeException("test", new Throwable("testing exception")));
         baseOntology.isOntologyDefined(user);
     }
 
     @Test
     public void testIsOntologyDefinedExceptionWithFalse() {
-        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenThrow(new RuntimeException("ontologyTitle", new Throwable("testing exception")));
+        when(ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI)).thenThrow(new RuntimeException("ontologyTitle", new Throwable("testing exception")));
         assertFalse(baseOntology.isOntologyDefined(user));
     }
 
     @Test
     public void testInitializeWhenUndefined() {
-        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenReturn(null);
+        when(ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI)).thenReturn(null);
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq("rootConcept"), eq("rootConcept"))).thenReturn(rootConcept);
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"))).thenReturn(entityConcept);
 
@@ -97,7 +97,7 @@ public class BaseOntologyTest {
 
     @Test
     public void testInitializeWhenDefined() {
-        when(ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY)).thenReturn(rootConcept);
+        when(ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI)).thenReturn(rootConcept);
         baseOntology.initialize(user);
     }
 }

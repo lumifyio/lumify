@@ -238,7 +238,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private void updateMutationWithArtifactExtractedInfo(ElementMutation<Vertex> artifact, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
         LumifyVisibility lumifyVisibility = new LumifyVisibility();
 
-        Concept concept = ontologyRepository.getConceptByName(artifactExtractedInfo.getConceptType());
+        Concept concept = ontologyRepository.getConceptById(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
         CONCEPT_TYPE.setProperty(artifact, concept.getId(), lumifyVisibility.getVisibility());
 

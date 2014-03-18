@@ -93,7 +93,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
-        String conceptId = ontologyRepository.getConceptByName(DisplayType.IMAGE.toString()).getId();
+        String conceptId = ontologyRepository.getConceptById(DisplayType.IMAGE.toString()).getId();
         DISPLAY_TYPE.setProperty(artifactBuilder, DisplayType.IMAGE.toString(), lumifyVisibility.getVisibility());
         CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, lumifyVisibility.getVisibility());
         TITLE.setProperty(artifactBuilder, String.format("Image of %s", TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());

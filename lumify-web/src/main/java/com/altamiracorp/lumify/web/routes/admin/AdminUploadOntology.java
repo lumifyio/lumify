@@ -14,12 +14,12 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.xml.sax.SAXException;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,15 +51,18 @@ public class AdminUploadOntology extends BaseRequestHandler {
         File tempFile = File.createTempFile("ontologyUpload", ".bin");
         writeToTempFile(file, tempFile);
 
+        // TODO get document IRI from user
+        IRI documentIRI = IRI.create(tempFile.toURI().toString());
+
         User user = getUser(request);
-        writePackage(tempFile, user);
+        writePackage(tempFile, documentIRI, user);
 
         tempFile.delete();
 
         respondWithPlaintext(response, "OK");
     }
 
-    private void writePackage(File file, User user) throws ZipException, IOException, SAXException, ParserConfigurationException {
+    private void writePackage(File file, IRI documentIRI, User user) throws ZipException, OWLOntologyCreationException, IOException {
         ZipFile zipped = new ZipFile(file);
         if (zipped.isValidZipFile()) {
             File tempDir = Files.createTempDir();
@@ -68,12 +71,12 @@ public class AdminUploadOntology extends BaseRequestHandler {
                 zipped.extractAll(tempDir.getAbsolutePath());
 
                 File owlFile = findOwlFile(tempDir);
-                owlImport.importFile(owlFile, user);
+                owlImport.importFile(owlFile, documentIRI, user);
             } finally {
                 FileUtils.deleteDirectory(tempDir);
             }
         } else {
-            owlImport.importFile(file, user);
+            owlImport.importFile(file, documentIRI, user);
         }
     }
 

@@ -34,13 +34,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepository.class);
     public static final String VISIBILITY_STRING = "ontology";
-    public static final LumifyVisibility DEFAULT_VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
+    public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     private final Graph graph;
-    public static final String ROOT_CONCEPT_NAME = "rootConcept";
+    public static final String ROOT_CONCEPT_IRI = "http://lumify.io#root";
+    public static final String ENTITY_CONCEPT_IRI = "http://www.w3.org/2002/07/owl#Thing";
     public static final String TYPE_RELATIONSHIP = "relationship";
     public static final String TYPE_CONCEPT = "concept";
     public static final String TYPE_PROPERTY = "property";
-    public static final String TYPE_ENTITY = "entity";
     private Authorizations authorizations;
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
@@ -203,17 +203,11 @@ public class OntologyRepository {
     }
 
     public Concept getRootConcept() {
-        try {
-            Vertex rootVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(CONCEPT_TYPE.getKey(), TYPE_CONCEPT)
-                    .has(ONTOLOGY_TITLE.getKey(), OntologyRepository.ROOT_CONCEPT_NAME)
-                    .vertices());
-            return new Concept(rootVertex);
-        } catch (NoSuchElementException nsee) {
-            throw new IllegalStateException(String.format("Could not find \"%s\" concept.", ROOT_CONCEPT_NAME), nsee);
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException(String.format("Too many \"%s\" concepts.", ROOT_CONCEPT_NAME), iae);
-        }
+        return getConceptById(OntologyRepository.ROOT_CONCEPT_IRI);
+    }
+
+    public Concept getEntityConcept() {
+        return getConceptById(OntologyRepository.ENTITY_CONCEPT_IRI);
     }
 
     public List<Concept> getChildConcepts(Concept concept) {
@@ -242,28 +236,9 @@ public class OntologyRepository {
         return concepts;
     }
 
-    public Concept getConceptById(Object conceptVertexId) {
+    public Concept getConceptById(String conceptVertexId) {
         Vertex conceptVertex = graph.getVertex(conceptVertexId, getAuthorizations());
         return conceptVertex != null ? new Concept(conceptVertex) : null;
-    }
-
-    public Concept getConceptByName(String title) {
-        Concept concept = conceptsCache.getIfPresent(title);
-        if (concept != null) {
-            return concept;
-        }
-
-        Vertex vertex = findOntologyConceptByTitle(title);
-        if (vertex == null) {
-            return null;
-        }
-        concept = new Concept(vertex);
-        conceptsCache.put(title, concept);
-        return concept;
-    }
-
-    public Vertex getGraphVertexByTitle(String title) {
-        return findVertexByOntologyTitle(title);
     }
 
     private List<OntologyProperty> getPropertiesByVertex(Vertex vertex) {
@@ -354,16 +329,16 @@ public class OntologyRepository {
         }
     }
 
-    public Concept getOrCreateConcept(Concept parent, String conceptName, String displayName) {
-        Concept concept = getConceptByName(conceptName);
+    public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
+        Concept concept = getConceptById(conceptIRI);
         if (concept != null) {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
-        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, DEFAULT_VISIBILITY.getVisibility());
-        ONTOLOGY_TITLE.setProperty(builder, conceptName, DEFAULT_VISIBILITY.getVisibility());
-        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility(), getAuthorizations());
+        CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
+        DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex vertex = builder.save();
 
         concept = new Concept(vertex);
@@ -385,13 +360,13 @@ public class OntologyRepository {
         if (matchingEdges.hasNext()) {
             return;
         }
-        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
+        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
     }
 
-    public OntologyProperty addPropertyTo(Vertex vertex, String propertyName, String displayName, PropertyType dataType) {
+    public OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType) {
         checkNotNull(vertex, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyName, dataType, displayName);
-        checkNotNull(property, "Could not find property: " + propertyName);
+        OntologyProperty property = getOrCreatePropertyType(propertyId, dataType, displayName);
+        checkNotNull(property, "Could not find property: " + propertyId);
 
         findOrAddEdge(vertex, property.getVertex(), LabelName.HAS_PROPERTY.toString());
 
@@ -405,10 +380,10 @@ public class OntologyRepository {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
-        CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, DEFAULT_VISIBILITY.getVisibility());
-        ONTOLOGY_TITLE.setProperty(builder, relationshipName, DEFAULT_VISIBILITY.getVisibility());
-        DISPLAY_NAME.setProperty(builder, displayName, DEFAULT_VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
+        CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, relationshipName, VISIBILITY.getVisibility());
+        DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save();
 
         findOrAddEdge(from.getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
@@ -436,12 +411,12 @@ public class OntologyRepository {
     public OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
-            VertexBuilder builder = graph.prepareVertex(DEFAULT_VISIBILITY.getVisibility(), getAuthorizations());
-            CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, DEFAULT_VISIBILITY.getVisibility());
-            ONTOLOGY_TITLE.setProperty(builder, propertyName, DEFAULT_VISIBILITY.getVisibility());
-            DATA_TYPE.setProperty(builder, dataType.toString(), DEFAULT_VISIBILITY.getVisibility());
+            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
+            CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
+            ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
+            DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             if (displayName != null && !displayName.trim().isEmpty()) {
-                DISPLAY_NAME.setProperty(builder, displayName.trim(), DEFAULT_VISIBILITY.getVisibility());
+                DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }
             typeProperty = new OntologyProperty(builder.save());
             graph.flush();
@@ -456,19 +431,6 @@ public class OntologyRepository {
             throw new IllegalStateException(String.format("Unexpected number of parents for concept %s",
                     TITLE.getPropertyValue(conceptVertex)), iae);
         }
-    }
-
-    private Vertex findOntologyConceptByTitle(String title) {
-        return Iterables.getFirst(graph.query(getAuthorizations())
-                .has(ONTOLOGY_TITLE.getKey(), title)
-                .has(CONCEPT_TYPE.getKey(), OntologyRepository.TYPE_CONCEPT)
-                .vertices(), null);
-    }
-
-    private Vertex findVertexByOntologyTitle(String title) {
-        return Iterables.getFirst(graph.query(getAuthorizations())
-                .has(ONTOLOGY_TITLE.getKey(), title)
-                .vertices(), null);
     }
 
     public Authorizations getAuthorizations() {

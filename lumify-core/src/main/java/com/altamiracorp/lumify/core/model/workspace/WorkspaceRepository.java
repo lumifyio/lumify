@@ -56,15 +56,15 @@ public class WorkspaceRepository {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
-        Concept entityConcept = ontologyRepository.getConceptByName(OntologyRepository.TYPE_ENTITY);
+        Concept rootConcept = ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI);
 
         Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_NAME, "workspace");
         workspaceConceptId = workspaceConcept.getId();
 
-        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, entityConcept, WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME, "workspace to entity");
+        Relationship workspaceToEntityRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, rootConcept, WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME, "workspace to entity");
         workspaceToEntityRelationshipId = workspaceToEntityRelationship.getId();
 
-        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, entityConcept, WORKSPACE_TO_USER_RELATIONSHIP_NAME, "workspace to user");
+        Relationship workspaceToUserRelationship = ontologyRepository.getOrCreateRelationshipType(workspaceConcept, rootConcept, WORKSPACE_TO_USER_RELATIONSHIP_NAME, "workspace to user");
         workspaceToUserRelationshipId = workspaceToUserRelationship.getId();
     }
 
