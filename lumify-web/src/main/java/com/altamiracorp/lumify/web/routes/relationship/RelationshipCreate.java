@@ -68,7 +68,7 @@ public class RelationshipCreate extends BaseRequestHandler {
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, relationshipDisplayName, "", "",
-                user, null, edge.getVisibility());
+                user, false, edge.getVisibility());
 
         graph.flush();
 

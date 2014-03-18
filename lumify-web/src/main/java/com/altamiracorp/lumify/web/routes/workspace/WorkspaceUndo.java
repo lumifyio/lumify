@@ -114,7 +114,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations, null));
+                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations, false));
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -158,11 +158,11 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
                     modelSession.alterAllColumnsVisibility(detectedObjectModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations, null));
+                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations, false));
                 }
             } else {
                 modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations, null));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations, false));
             }
         }
 

@@ -106,7 +106,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();
-            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, null,
+            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, false,
                     lumifyVisibility.getVisibility());
 
         } else {
@@ -118,7 +118,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         resolvedVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
         resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
         resolvedVertex = resolvedVertexMutation.save();
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, null, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, false, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
@@ -127,7 +127,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, null,
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, false,
                 lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
