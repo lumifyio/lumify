@@ -25,6 +25,15 @@ define(
             });
         };
 
+        VertexService.prototype.setVisibility = function (vertexId, visibilitySource) {
+            return this._ajaxPost({
+                url: 'vertex/' + encodeURIComponent(vertexId) + '/visibility/set',
+                data: {
+                    visibilitySource: visibilitySource
+                }
+            });
+        };
+
         VertexService.prototype.deleteProperty = function (vertexId, propertyName) {
             return this._ajaxPost({
                 url: 'vertex/' + encodeURIComponent(vertexId) + '/property/delete',

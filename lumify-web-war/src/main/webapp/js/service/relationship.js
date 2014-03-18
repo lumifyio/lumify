@@ -29,6 +29,15 @@ define(
             });
         };
 
+        RelationshipService.prototype.setVisibility = function (edgeId, visibilitySource) {
+            return this._ajaxPost({
+                url: 'relationship/' + encodeURIComponent(edgeId) + '/visibility/set',
+                data: {
+                    visibilitySource: visibilitySource
+                }
+            });
+        };
+
         RelationshipService.prototype.deleteProperty = function (propertyName, sourceId, destId, edgeId) {
             return this._ajaxPost({
                 url: 'relationship/property/delete',

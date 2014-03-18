@@ -269,10 +269,6 @@ define([
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
                     self.displayProperties(properties);
-                    self.trigger('updateRelationships', [{
-                        id: self.attr.data.id,
-                        properties: properties
-                    }]);
                 });
 
             } else {
@@ -284,9 +280,24 @@ define([
         };
 
         this.onAddProperty = function(event, data) {
-            var self = this;
-            if (self.attr.data.properties._conceptType.value === 'relationship') {
-                self.relationshipService.setProperty(
+            var self = this,
+                isEdge = this.attr.data.properties._conceptType.value === 'relationship',
+                done = isEdge ? function(edge) {
+                    var properties = $.extend({}, self.attr.data.properties, edge.properties);
+                    self.displayProperties(properties);
+                } : function() { };
+
+            if (data.property.name === '_visibilityJson') {
+
+                this[isEdge ? 'relationshipService' : 'vertexService'].setVisibility(
+                        this.attr.data.id,
+                        data.property.visibilitySource)
+                    .fail(this.requestFailure.bind(this))
+                    .done(done);
+
+            } else if (isEdge) {
+
+                this.relationshipService.setProperty(
                         data.property.name,
                         data.property.value,
                         data.property.visibilitySource,
@@ -295,34 +306,26 @@ define([
                         this.attr.data.properties.source.value,
                         this.attr.data.properties.target.value,
                         this.attr.data.id)
-                .fail(this.requestFailure.bind(this))
-                .done(function(newProperties) {
-                    var properties = $.extend({}, self.attr.data.properties, newProperties);
-                    self.displayProperties(properties);
-                    self.trigger('updateRelationships', [{
-                        id: self.attr.data.id,
-                        properties: properties
-                    }]);
-                });
-            } else {
-                self.vertexService.setProperty(
-                    this.attr.data.id,
-                    data.property.name,
-                    data.property.value,
-                    data.property.visibilitySource,
-                    data.property.justificationText,
-                    data.property.sourceInfo)
                     .fail(this.requestFailure.bind(this))
+                    .done(done);
+
+            } else {
+
+                this.vertexService.setProperty(
+                        this.attr.data.id,
+                        data.property.name,
+                        data.property.value,
+                        data.property.visibilitySource,
+                        data.property.justificationText,
+                        data.property.sourceInfo)
+                    .fail(this.requestFailure.bind(this))
+                    .done(done);
             }
 
         };
         
-        this.requestFailure = function(err) {
-            if (err.status == 400) {
-                console.error('Validation error');
-                return this.trigger(this.$node.find('.underneath'), 'addPropertyError', {});
-            }
-            return 0;
+        this.requestFailure = function(request, message, error) {
+            this.trigger(this.$node.find('.underneath'), 'addPropertyError', { error: error });
         };
 
         this.onAddNewPropertiesClicked = function(evt) {
@@ -435,10 +438,13 @@ define([
                     addProperty(name, displayName, value, properties[name]._visibilityJson);
                 }
             } else if (name === '_visibilityJson') {
-                var value = properties[name].value,
-                    source = (value && value.value && value.value.source) || 
-                        (value && value.source) || '';
-                addProperty(name, 'Visibility', source);
+                value = properties[name].value;
+
+                var source = (value && value.value && value.value.source) || (value && value.source) || '';
+
+                if (source) {
+                    addProperty(name, 'Visibility', source);
+                }
             } else if (isRelationshipType) {
                 addProperty(name, 'Relationship type', properties[name].value);
             }
