@@ -46,7 +46,6 @@
     "disallowEmptyBlocks": true,
     "disallowSpacesInsideParentheses": true,
     "disallowQuotedKeysInObjects": "allButReserved",
-    "disallowDanglingUnderscores": true,
     "disallowSpaceAfterObjectKeys": true,
     "requireCommaBeforeLineBreak": true,
     "requireOperatorBeforeLineBreak": [

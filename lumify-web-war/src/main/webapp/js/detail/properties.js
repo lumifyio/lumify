@@ -12,7 +12,7 @@ define([
     'tpl!./audit-list',
     'data',
     'sf'
-], function (
+], function(
     defineComponent,
     OntologyService,
     VertexService,
@@ -53,7 +53,7 @@ define([
             auditEntitySelector: '.resolved'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
@@ -70,7 +70,7 @@ define([
                 .off('.properties')
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
 
-            this.$node.html(propertiesTemplate({properties:null}));
+            this.$node.html(propertiesTemplate({properties: null}));
             this.displayProperties(this.attr.data.properties);
         });
 
@@ -96,10 +96,10 @@ define([
                     vertex = appData.vertex(vertexId);
                 if (!vertex) {
                     appData.refresh(vertexId).done(function(v) {
-                        self.trigger('selectObjects', { vertices:[v] });
+                        self.trigger('selectObjects', { vertices: [v] });
                     });
                 } else {
-                    this.trigger('selectObjects', { vertices:[vertex] });
+                    this.trigger('selectObjects', { vertices: [vertex] });
                 }
             }
         };
@@ -115,7 +115,7 @@ define([
         this.onAuditUserClicked = function(event) {
             var userId = $(event.target).data('userId');
             if (userId) {
-                this.trigger('startChat', { userId:userId });
+                this.trigger('startChat', { userId: userId });
             }
         };
 
@@ -182,7 +182,6 @@ define([
                 auditsByProperty = _.groupBy(audits, function(a) { 
                     return a.propertyAudit.propertyName; 
                 });
-
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
                 var propLi = self.$node.find('.property-' + propertyName);
@@ -284,7 +283,7 @@ define([
             }
         };
 
-        this.onAddProperty = function (event, data) {
+        this.onAddProperty = function(event, data) {
             var self = this;
             if (self.attr.data.properties._conceptType.value === 'relationship') {
                 self.relationshipService.setProperty(
@@ -326,7 +325,7 @@ define([
             return 0;
         };
 
-        this.onAddNewPropertiesClicked = function (evt) {
+        this.onAddNewPropertiesClicked = function(evt) {
             var root = $('<div class="underneath">').insertAfter(evt.target);
 
             PropertyForm.teardownAll();
@@ -336,12 +335,11 @@ define([
             });
         };
 
-
-        this.onPropertyChange = function (propertyChangeData) {
+        this.onPropertyChange = function(propertyChangeData) {
             if (propertyChangeData.id != this.attr.data.id) {
                 return;
             }
-            if(propertyChangeData.propertyName == 'title') {
+            if (propertyChangeData.propertyName == 'title') {
                 this.select('titleSelector').html(propertyChangeData.value);
             }
             this.select('propertiesSelector')
@@ -349,7 +347,7 @@ define([
                 .html(propertyChangeData.value);
         };
 
-        this.displayProperties = function (properties){
+        this.displayProperties = function(properties) {
             var self = this;
 
             this.ontologyService.properties()
@@ -369,7 +367,7 @@ define([
                     }
 
                     require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
-                        var props = $(propertiesTemplate({properties:filtered, popout: popoutEnabled}));
+                        var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
 
                         props.find('.visibility').each(function() {
                             var visibility = $(this).data('visibility');
@@ -389,7 +387,7 @@ define([
 
         if ($.isArray(properties)) {
             var o = {};
-            properties.forEach(function (p) {
+            properties.forEach(function(p) {
                 o[p.key] = p.value;
             });
             properties = o;
@@ -404,7 +402,7 @@ define([
             return a < b ? -1 : a > b ? 1 : 0;
         });
 
-        keys.forEach(function (name) {
+        keys.forEach(function(name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
                 isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
@@ -439,7 +437,7 @@ define([
             } else if (name === '_visibilityJson') {
                 var value = properties[name].value,
                     source = (value && value.value && value.value.source) || 
-                        (value && value.source) || "";
+                        (value && value.source) || '';
                 addProperty(name, 'Visibility', source);
             } else if (isRelationshipType) {
                 addProperty(name, 'Relationship type', properties[name].value);
@@ -457,4 +455,3 @@ define([
         }
     }
 });
-
