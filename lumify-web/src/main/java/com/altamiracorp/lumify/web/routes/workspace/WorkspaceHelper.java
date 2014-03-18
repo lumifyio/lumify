@@ -98,7 +98,7 @@ public class WorkspaceHelper {
                         edgeId = edge.getId();
                         graph.removeEdge(edge, authorizations);
                         deleteEdge = true;
-                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, isPublished, visibility.getVisibility());
+                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, isPublished, visibility.getVisibility());
                     }
                 }
             }
@@ -137,7 +137,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, authorizations);
             String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
 
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, isPublished, visibility.getVisibility());
+            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, isPublished, visibility.getVisibility());
 
             result.put("deleteEdge", true);
             result.put("edgeId", edge.getId());
@@ -161,7 +161,7 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject deleteProperty (Vertex vertex, List<Property> properties, Property property, String workspaceId) {
+    public JSONObject deleteProperty(Vertex vertex, List<Property> properties, Property property, String workspaceId) {
         vertex.removeProperty(property.getKey(), property.getName());
 
         graph.flush();
@@ -175,13 +175,12 @@ public class WorkspaceHelper {
         return json;
     }
 
-    public JSONObject deleteEdge (Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations,
-                                  boolean isPublished) {
+    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations,
+                                 boolean isPublished) {
         graph.removeEdge(edge, authorizations);
 
-        String displayName = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user,isPublished, new LumifyVisibility().getVisibility());
+        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, isPublished, new LumifyVisibility().getVisibility());
 
         graph.flush();
 

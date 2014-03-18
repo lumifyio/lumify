@@ -111,11 +111,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations).iterator();
         if (!existingEdges.hasNext()) {
-            graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
+            Edge edge = graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
+            auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, false, lumifyVisibility.getVisibility());
         }
-        String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
-        // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user, false, lumifyVisibility.getVisibility());
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 

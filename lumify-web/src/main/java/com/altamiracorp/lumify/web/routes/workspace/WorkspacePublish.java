@@ -133,6 +133,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
                 publishEdge(edge, action, authorizations);
+                auditRepository.auditRelationship(AuditAction.UPDATE, sourceVertex, destVertex, edge, "", "", user, true, edge.getVisibility());
                 success = true;
                 publishData.remove(i);
             }
