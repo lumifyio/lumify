@@ -93,7 +93,6 @@ public class WorkspaceHelper {
                 if (edges.iterator().hasNext()) {
                     Edge edge = edges.iterator().next();
                     if (edge != null) {
-                        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
                         edgeId = edge.getId();
                         graph.removeEdge(edge, authorizations);
                         deleteEdge = true;
@@ -134,7 +133,6 @@ public class WorkspaceHelper {
         if (IterableUtils.count(edgeIds) == 1) {
             Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
             graph.removeEdge(edge, authorizations);
-            String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
 
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
 
