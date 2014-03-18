@@ -106,8 +106,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();
-            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, false,
-                    lumifyVisibility.getVisibility());
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         } else {
             resolvedVertexMutation = graph.getVertex(id, authorizations).prepareMutation();
@@ -118,7 +117,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         resolvedVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
         resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
         resolvedVertex = resolvedVertexMutation.save();
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, false, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
@@ -126,8 +125,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, false,
-                lumifyVisibility.getVisibility());
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
 

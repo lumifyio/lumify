@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -82,7 +83,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
-        auditRepository.auditVertexElementMutation(setPropertyResult.elementMutation, graphVertex, "", user, false, setPropertyResult.visibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
         graphVertex = setPropertyResult.elementMutation.save();
         graph.flush();
 

@@ -76,7 +76,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel, lumifyVisibility,
-                workspaceId, modelUserContext, user, authorizations, false);
+                workspaceId, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);
     }

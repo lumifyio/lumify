@@ -158,11 +158,11 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
                     modelSession.alterAllColumnsVisibility(detectedObjectModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations, false));
+                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations));
                 }
             } else {
                 modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations, false));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
 

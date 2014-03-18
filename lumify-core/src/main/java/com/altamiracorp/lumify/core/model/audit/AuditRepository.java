@@ -62,16 +62,15 @@ public class AuditRepository extends Repository<Audit> {
         return auditBuilder.getTableName();
     }
 
-    public Audit auditVertexCreate(Object vertexId, String process, String comment, User user, boolean isPublished, Visibility visibility) {
-        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT, isPublished, visibility);
+    public Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility) {
+        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT,  visibility);
     }
 
-    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, boolean isPublished, Visibility visibility) {
+    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
         checkNotNull(process, "process cannot be null");
-        checkNotNull(isPublished, "isPublished cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(vertexId));
         visibility = orVisibility(visibility);
@@ -82,8 +81,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setComment(comment, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         if (process.length() > 0) {
             audit.getAuditCommon().setProcess(process, visibility);
@@ -95,7 +93,7 @@ public class AuditRepository extends Repository<Audit> {
 
     public Audit auditEntityProperty(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
                                      String process, String comment, Map<String, Object> metadata, User user,
-                                     boolean isPublished, Visibility visibility) {
+                                     Visibility visibility) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(id, "id cannot be null");
         checkNotNull(propertyName, "propertyName cannot be null");
@@ -103,7 +101,6 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(process, "process cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
-        checkNotNull(isPublished, "isPublished cannot be null");
 
         Audit audit = new Audit(AuditRowKey.build(id));
         visibility = orVisibility(visibility);
@@ -116,8 +113,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         if (oldValue != null) {
             if (oldValue instanceof GeoPoint) {
@@ -148,7 +144,7 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     public List<Audit> auditRelationship(AuditAction action, Vertex sourceVertex, Vertex destVertex, Edge edge, String process,
-                                         String comment, User user, boolean isPublished, Visibility visibility) {
+                                         String comment, User user, Visibility visibility) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(sourceVertex, "sourceVertex cannot be null");
         checkNotNull(destVertex, "destVertex cannot be null");
@@ -156,7 +152,6 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(process, "process cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
-        checkNotNull(isPublished, "isPublished cannot be null");
 
         Audit auditSourceDest = new Audit(AuditRowKey.build(sourceVertex.getId(), destVertex.getId()));
         Audit auditDestSource = new Audit(AuditRowKey.build(destVertex.getId(), sourceVertex.getId()));
@@ -165,9 +160,8 @@ public class AuditRepository extends Repository<Audit> {
 
         List<Audit> audits = new ArrayList<Audit>();
         String displayLabel = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
-        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, isPublished, visibility));
-        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, displayLabel, process, comment, user, isPublished, visibility));
-
+        audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
+        audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
         auditEdge.getAuditCommon()
                 .setUser(user, visibility)
                 .setAction(action, visibility)
@@ -176,8 +170,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         auditEdge.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)
@@ -195,8 +188,8 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyName,
-                                                 Object oldValue, Edge edge, String process, String comment, User user,
-                                                 boolean isPublished, Visibility visibility) {
+                                                 Object oldValue, Object newValue, Edge edge, String process, String comment, User user,
+                                                 Visibility visibility) {
         checkNotNull(action, "action cannot be null");
         checkNotNull(sourceId, "sourceId cannot be null");
         checkNotNull(sourceId.length() > 0, "sourceId cannot be empty");
@@ -204,12 +197,10 @@ public class AuditRepository extends Repository<Audit> {
         checkNotNull(destId.length() > 0, "destId cannot be empty");
         checkNotNull(propertyName, "propertyName cannot be null");
         checkNotNull(propertyName.length() > 0, "propertyName cannot be empty");
-        checkNotNull(oldValue, "oldValue cannot be null");
         checkNotNull(edge, "edge cannot be null");
         checkNotNull(process, "process cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
-        checkNotNull(isPublished, "isPublished cannot be null");
 
         Audit auditSourceDest = new Audit(AuditRowKey.build(sourceId, destId));
         Audit auditDestSource = new Audit(AuditRowKey.build(destId, sourceId));
@@ -224,8 +215,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         auditDestSource.getAuditCommon()
                 .setUser(user, visibility)
@@ -235,8 +225,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         auditEdge.getAuditCommon()
                 .setUser(user, visibility)
@@ -246,10 +235,9 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
-        if (!oldValue.equals("")) {
+        if (oldValue != null && !oldValue.equals("")) {
             auditDestSource.getAuditProperty().setPreviousValue(oldValue, visibility);
             auditSourceDest.getAuditProperty().setPreviousValue(oldValue, visibility);
             auditEdge.getAuditProperty().setPreviousValue(oldValue, visibility);
@@ -260,9 +248,9 @@ public class AuditRepository extends Repository<Audit> {
             auditEdge.getAuditProperty().setNewValue("", visibility);
         } else {
             // TODO handle multi-valued properties
-            auditDestSource.getAuditProperty().setNewValue(edge.getPropertyValue(propertyName, 0), visibility);
-            auditSourceDest.getAuditProperty().setNewValue(edge.getPropertyValue(propertyName, 0), visibility);
-            auditEdge.getAuditProperty().setNewValue(edge.getPropertyValue(propertyName, 0), visibility);
+            auditDestSource.getAuditProperty().setNewValue(newValue, visibility);
+            auditSourceDest.getAuditProperty().setNewValue(newValue, visibility);
+            auditEdge.getAuditProperty().setNewValue(newValue, visibility);
         }
         auditDestSource.getAuditProperty().setPropertyName(propertyName, visibility);
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
@@ -274,7 +262,7 @@ public class AuditRepository extends Repository<Audit> {
     }
 
     private Audit auditRelationshipHelper(Audit audit, AuditAction action, Vertex sourceVertex, Vertex destVertex,
-                                          String label, String process, String comment, User user, boolean isPublished,
+                                          String label, String process, String comment, User user,
                                           Visibility visibility) {
         visibility = orVisibility(visibility);
         audit.getAuditCommon()
@@ -285,8 +273,7 @@ public class AuditRepository extends Repository<Audit> {
                 .setProcess(process, visibility)
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
-                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility)
-                .setPublished(String.valueOf(isPublished), visibility);
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)
@@ -299,8 +286,8 @@ public class AuditRepository extends Repository<Audit> {
         return audit;
     }
 
-    public void auditVertexElementMutation(ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process,
-                                           User user, boolean isPublished, Visibility visibility) {
+    public void auditVertexElementMutation(AuditAction action, ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process,
+                                           User user, Visibility visibility) {
         if (vertexElementMutation instanceof ExistingElementMutation) {
             Vertex oldVertex = (Vertex) ((ExistingElementMutation) vertexElementMutation).getElement();
             for (Property property : vertexElementMutation.getProperties()) {
@@ -308,19 +295,45 @@ public class AuditRepository extends Repository<Audit> {
                 Object oldPropertyValue = oldVertex.getPropertyValue(property.getName());
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditEntityProperty(AuditAction.UPDATE, oldVertex.getId(), property.getName(), oldPropertyValue,
-                            newPropertyValue, process, "", property.getMetadata(), user, isPublished, visibility);
+                if (!newPropertyValue.equals(oldPropertyValue) || !oldVertex.getVisibility().getVisibilityString().equals(property.getVisibility().getVisibilityString())) {
+                    auditEntityProperty(action, oldVertex.getId(), property.getName(), oldPropertyValue,
+                            newPropertyValue, process, "", property.getMetadata(), user, visibility);
                 }
             }
         } else {
-            auditVertexCreate(vertex.getId(), process, "", user, isPublished, visibility);
+            auditVertexCreate(vertex.getId(), process, "", user, visibility);
             for (Property property : vertexElementMutation.getProperties()) {
                 // TODO handle multi-valued properties
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditEntityProperty(AuditAction.UPDATE, vertex.getId(), property.getName(), null, newPropertyValue, process, "",
-                        property.getMetadata(), user, isPublished, visibility);
+                auditEntityProperty(action, vertex.getId(), property.getName(), null, newPropertyValue, process, "",
+                        property.getMetadata(), user, visibility);
+            }
+        }
+    }
+
+    public void auditEdgeElementMutation(AuditAction action, ElementMutation<Edge> edgeElementMutation, Edge edge, Vertex sourceVertex, Vertex destVertex, String process,
+                                           User user, Visibility visibility) {
+        if (edgeElementMutation instanceof ExistingElementMutation) {
+            Edge oldEdge = (Edge) ((ExistingElementMutation) edgeElementMutation).getElement();
+            for (Property property : edgeElementMutation.getProperties()) {
+                // TODO handle multi-valued properties
+                Object oldPropertyValue = oldEdge.getPropertyValue(property.getName());
+                Object newPropertyValue = property.getValue();
+                checkNotNull(newPropertyValue, "new property value cannot be null");
+                if (!newPropertyValue.equals(oldPropertyValue)) {
+                    auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(),
+                            property.getName(), oldPropertyValue, newPropertyValue, edge, process, "", user, visibility);
+                }
+            }
+        } else {
+            auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, edge, process, "", user, visibility);
+            for (Property property : edgeElementMutation.getProperties()) {
+                // TODO handle multi-valued properties
+                Object newPropertyValue = property.getValue();
+                checkNotNull(newPropertyValue, "new property value cannot be null");
+                auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(),
+                        property.getName(), null, newPropertyValue, edge, process, "", user, visibility);
             }
         }
     }

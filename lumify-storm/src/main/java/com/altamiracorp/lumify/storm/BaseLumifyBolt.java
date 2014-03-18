@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.BaseArtifactProcessor;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -225,9 +226,9 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         Vertex vertex = null;
         if (!(vertexMutation instanceof ExistingElementMutation)) {
             vertex = vertexMutation.save();
-            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, false, new Visibility(""));
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, new Visibility(""));
         } else {
-            auditRepository.auditVertexElementMutation(vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, false, new Visibility(""));
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, artifactExtractedInfo.getProcess(), user, new Visibility(""));
             vertex = vertexMutation.save();
         }
         graph.flush();
