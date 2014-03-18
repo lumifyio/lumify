@@ -99,10 +99,16 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
 
+        Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
             CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
+
+            resolvedVertex = resolvedVertexMutation.save();
+            auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, null,
+                    lumifyVisibility.getVisibility());
+
         } else {
             resolvedVertexMutation = graph.getVertex(id, authorizations).prepareMutation();
         }
@@ -111,8 +117,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         resolvedVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
         resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
-        Vertex resolvedVertex = resolvedVertexMutation.save();
-        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
+        resolvedVertex = resolvedVertexMutation.save();
+        auditRepository.auditVertexElementMutation(resolvedVertexMutation, resolvedVertex, "", user, null, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();
         result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
@@ -121,7 +127,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, labelDisplayName, "", "", user, null,
+                lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
 

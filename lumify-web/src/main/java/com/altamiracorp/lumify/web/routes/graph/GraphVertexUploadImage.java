@@ -101,11 +101,11 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, lumifyVisibility.getVisibility());
         Vertex artifactVertex = artifactBuilder.save();
 
-        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(artifactBuilder, artifactVertex, "", user, null, lumifyVisibility.getVisibility());
 
         // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
         entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), lumifyVisibility.getVisibility());
-        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(entityVertexMutation, entityVertex, "", user, null, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
@@ -115,7 +115,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
         String labelDisplay = ontologyRepository.getDisplayNameForLabel(LabelName.ENTITY_HAS_IMAGE_RAW.toString());
         // TODO: replace second "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, labelDisplay, "", "", user, null, lumifyVisibility.getVisibility());
 
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
 

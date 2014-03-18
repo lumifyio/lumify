@@ -20,12 +20,13 @@ public class AuditCommon extends ColumnFamily {
     public static final String UNIX_BUILD_TIME = "unixBuildTime";
     public static final String VERSION = "version";
     public static final String SCM_BUILD_NUMBER = "scmBuildNumber";
+    public static final String PUBLISHED = "published";
 
     public AuditCommon() {
         super(NAME);
     }
 
-    public String getActorType () {
+    public String getActorType() {
         return Value.toString(get(ACTOR_TYPE));
     }
 
@@ -122,6 +123,15 @@ public class AuditCommon extends ColumnFamily {
         return this;
     }
 
+    public String getPublished() {
+        return Value.toString(get(PUBLISHED));
+    }
+
+    public AuditCommon setPublished(String published, Visibility visibility) {
+        set(PUBLISHED, published, visibility.getVisibilityString());
+        return this;
+    }
+
     @Override
     public JSONObject toJson() {
         try {
@@ -136,6 +146,7 @@ public class AuditCommon extends ColumnFamily {
             json.put("unixBuildTime", getUnixBuildTime());
             json.put("version", getVersion());
             json.put("scmBuildNumber", getScmBuildNumber());
+            json.put("published", getPublished());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
