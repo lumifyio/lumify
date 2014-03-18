@@ -87,6 +87,7 @@ public class OwlImport extends CommandLineBase {
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         Reader inFileReader = new FileReader(inFile);
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
+        config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
 
         loadBaseOntology(m, config);
 
