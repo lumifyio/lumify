@@ -130,6 +130,8 @@ module.exports = function(grunt) {
         passing: { 
             src: [
                 "js/lumify.js",
+                "js/detail/properties.js",
+                "js/detail/dropdowns/propertyForm/propForm.js",
                 "js/workspaces/diff/*.js"
             ]
         },

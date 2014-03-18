@@ -5,7 +5,7 @@ define([
     'service/ontology',
     'fields/selection/selection',
     'data'
-], function (
+], function(
     defineComponent,
     withDropdown,
     template,
@@ -36,7 +36,7 @@ define([
             visibilityInputSelector: '.visibility input'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             var self = this,
                 vertex = this.attr.data;
 
@@ -67,10 +67,10 @@ define([
             (vertex.properties._conceptType.value != 'relationship' ?
                 self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
                 self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
-            ).done(function (properties) {
+            ).done(function(properties) {
                 var propertiesList = [];
 
-                properties.list.forEach(function (property) {
+                properties.list.forEach(function(property) {
                     if (property.title.charAt(0) !== '_' && property.title !== 'boundingBox') {
                         var data = {
                             title: property.title,
@@ -142,7 +142,7 @@ define([
 
             if (visibilityValue) {
                 visibilityValue = visibilityValue.source;
-                this.visibilitySource = { value:visibilityValue, valid:true };
+                this.visibilitySource = { value: visibilityValue, valid: true };
             }
 
             this.select('deleteButtonSelector')
@@ -153,8 +153,11 @@ define([
                 .toggle(!!isExistingProperty && sandboxStatus !== 'PUBLIC');
 
             var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
-            if (isExistingProperty) button.removeAttr('disabled');
-            else button.attr('disabled', true);
+            if (isExistingProperty) {
+                button.removeAttr('disabled');
+            } else {
+                button.attr('disabled', true);
+            }
 
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
@@ -233,7 +236,7 @@ define([
                 });
         };
 
-        this.onPropertyInvalid = function (event, data) {
+        this.onPropertyInvalid = function(event, data) {
             event.stopPropagation();
 
             this.propertyInvalid = true;
@@ -252,7 +255,7 @@ define([
             }
         }
 
-        this.onPropertyChange = function (event, data) {
+        this.onPropertyChange = function(event, data) {
             this.propertyInvalid = false;
             this.checkValid();
 
@@ -266,7 +269,7 @@ define([
             }
         };
 
-        this.onAddPropertyError = function (event) {
+        this.onAddPropertyError = function(event) {
             this.$node.find('input').addClass('validation-error');
             _.defer(this.clearLoading.bind(this));
         };
@@ -284,7 +287,7 @@ define([
             });
         };
 
-        this.onSave = function (evt) {
+        this.onSave = function(evt) {
             if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
