@@ -15,16 +15,12 @@ import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.type.GeoPoint;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -90,33 +86,10 @@ public class VertexSetProperty extends BaseRequestHandler {
         graphVertex = setPropertyResult.elementMutation.save();
         graph.flush();
 
-        Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, toJson(graphVertex));
+        JSONObject result = GraphUtil.toJson(graphVertex, workspaceId);
 
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(graphVertex.getProperties(), workspaceId);
-        JSONObject json = new JSONObject();
-        json.put("properties", propertiesJson);
+        Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
 
-        if (toJson(graphVertex) != null) {
-            json.put("vertex", toJson(graphVertex));
-        }
-
-        respondWithJson(response, json);
-    }
-
-    private JSONObject toJson(Vertex vertex) {
-        JSONObject obj = new JSONObject();
-        obj.put("graphVertexId", vertex.getId());
-        for (Property property : vertex.getProperties()) {
-            if (GEO_LOCATION.getKey().equals(property.getName())) {
-                JSONObject geo = new JSONObject();
-                GeoPoint geoPoint = (GeoPoint) property.getValue();
-                geo.put("latitude", geoPoint.getLatitude());
-                geo.put("longitude", geoPoint.getLongitude());
-                obj.put(property.getName(), geo);
-            } else {
-                obj.put(property.getName(), property.getValue()); // TODO handle mutivalued properties
-            }
-        }
-        return obj;
+        respondWithJson(response, result);
     }
 }
