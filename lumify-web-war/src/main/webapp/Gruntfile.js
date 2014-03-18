@@ -131,7 +131,7 @@ module.exports = function(grunt) {
             ]
         },
         ci: {
-            src: "js/**/*.js",
+            src: ["js/**/*.js", "!js/**/three-plugins/*.js"],
             options: {
                 force: true,
                 reporter: "checkstyle",
