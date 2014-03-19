@@ -30,37 +30,6 @@ define(['./node'], function( Node ) {
         return this;
     };
 
-    Graph.prototype.calculateEdges = function( ) {
-
-        var nodes = this.nodes,
-            len = nodes.length,
-            edges = this.edges,
-            edgeSet = {};
-
-        for (var i = 0; i < len; i++) {
-
-            var node = nodes[i],
-                connections = node.connections,
-                connLength = connections.length;
-
-            for (var c = 0; c < connLength; c++) {
-
-                var destNode = connections[c],
-                    key = [node.id, destNode.id].sort().join('|');
-
-                if ( ! edgeSet[key] ) {
-
-                    var edge = {
-                        source: node,
-                        target: destNode
-                    };
-                    edgeSet[key] = edge;
-                    edges.push(edge);
-                }
-            }
-        }
-    };
-
     Graph.prototype.removeNode = function( nodeId ) {
         var node = this.nodeSet[nodeId];
 

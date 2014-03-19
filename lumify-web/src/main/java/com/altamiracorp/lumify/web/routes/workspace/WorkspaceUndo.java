@@ -4,12 +4,12 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
@@ -35,9 +35,9 @@ import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUndo.class);
-    private final AuditRepository auditRepository;
     private final TermMentionRepository termMentionRepository;
     private final DetectedObjectRepository detectedObjectRepository;
+    private final UserRepository userRepository;
     private final Graph graph;
     private final ModelSession modelSession;
     private final VisibilityTranslator visibilityTranslator;
@@ -45,8 +45,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
-    public WorkspaceUndo(final AuditRepository auditRepository,
-                         final TermMentionRepository termMentionRepository,
+    public WorkspaceUndo(final TermMentionRepository termMentionRepository,
                          final DetectedObjectRepository detectedObjectRepository,
                          final Configuration configuration,
                          final Graph graph,
@@ -56,7 +55,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
                          final UserRepository userRepository,
                          final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
-        this.auditRepository = auditRepository;
         this.termMentionRepository = termMentionRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
@@ -64,6 +62,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.userProvider = userProvider;
         this.workspaceHelper = workspaceHelper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -115,7 +114,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations));
+                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations, false));
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -166,6 +165,14 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
+
+        Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
+        Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
+        Iterator <Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
+        while (workspaceToVertex.hasNext()) {
+            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
+        }
+
         graph.removeVertex(vertex, authorizations);
         graph.flush();
         return unresolved;

@@ -93,15 +93,15 @@ public class WorkspaceHelper {
                 if (edges.iterator().hasNext()) {
                     Edge edge = edges.iterator().next();
                     if (edge != null) {
-                        String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
                         edgeId = edge.getId();
                         graph.removeEdge(edge, authorizations);
                         deleteEdge = true;
-                        graph.flush();
-                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, visibility.getVisibility());
+                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
                     }
                 }
             }
+
+            graph.flush();
 
             if (deleteEdge) {
                 result.put("deleteEdge", deleteEdge);
@@ -133,9 +133,8 @@ public class WorkspaceHelper {
         if (IterableUtils.count(edgeIds) == 1) {
             Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
             graph.removeEdge(edge, authorizations);
-            String label = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
 
-            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, label, "", "", user, visibility.getVisibility());
+            auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
 
             result.put("deleteEdge", true);
             result.put("edgeId", edge.getId());
@@ -159,7 +158,7 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject deleteProperty (Vertex vertex, List<Property> properties, Property property, String workspaceId) {
+    public JSONObject deleteProperty(Vertex vertex, List<Property> properties, Property property, String workspaceId) {
         vertex.removeProperty(property.getKey(), property.getName());
 
         graph.flush();
@@ -173,12 +172,12 @@ public class WorkspaceHelper {
         return json;
     }
 
-    public JSONObject deleteEdge (Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
+    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations,
+                                 boolean isPublished) {
         graph.removeEdge(edge, authorizations);
 
-        String displayName = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, displayName, "", "", user, new LumifyVisibility().getVisibility());
+        auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());
 
         graph.flush();
 

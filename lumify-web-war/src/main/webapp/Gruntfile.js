@@ -99,13 +99,14 @@ module.exports = function(grunt) {
 
     jshint: {
         options: {
-            browser: true,
-            '-W033': true, // Semicolons
-            '-W040': true, // Ignore Strict violations from flight idioms
+            jshintrc: true
         },
         development: {
             files: {
                 src: ['js/**/*.js']
+            },
+            options: {
+                reporter: require('jshint-stylish')
             }
         },
         ci: {
@@ -123,15 +124,19 @@ module.exports = function(grunt) {
         options: {
             config: ".jscs.json"
         },
-        all: { src: "js/**/*.js" },
+        all: { 
+            src: ["js/**/*.js", "!js/**/three-plugins/*.js"],
+        },
         passing: { 
             src: [
                 "js/lumify.js",
+                "js/detail/properties.js",
+                "js/detail/dropdowns/propertyForm/propForm.js",
                 "js/workspaces/diff/*.js"
             ]
         },
         ci: {
-            src: "js/**/*.js",
+            src: ["js/**/*.js", "!js/**/three-plugins/*.js"],
             options: {
                 force: true,
                 reporter: "checkstyle",
@@ -144,6 +149,13 @@ module.exports = function(grunt) {
         ci: {
             files: {
                 'build/plato': ['js/**/*.js'],
+            },
+            options: {
+                jshint: {
+                    "browser": true,
+                    "-W033": true,
+                    "-W040": true
+                }
             }
         },
     },

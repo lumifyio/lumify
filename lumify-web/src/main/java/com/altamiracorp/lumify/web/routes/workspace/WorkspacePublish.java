@@ -2,7 +2,10 @@ package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.audit.Audit;
+import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
@@ -131,7 +134,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     publishData.remove(i);
                     continue;
                 }
-                publishEdge(edge, action, authorizations);
+                publishEdge(edge, sourceVertex, destVertex, action, user, authorizations);
                 success = true;
                 publishData.remove(i);
             }
@@ -169,7 +172,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
 
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"));
+                publishProperty(vertex, action, data.getString("key"), data.getString("name"), user);
                 success = true;
             } else {
                 throw new RuntimeException(type + " type is not supported for publishing");
@@ -197,15 +200,24 @@ public class WorkspacePublish extends BaseRequestHandler {
             Property property = (Property) properties.next();
             if (property.getName().contains("_") || property.getName().equals("title")) {
                 vertexElementMutation.alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility());
+                auditRepository.auditEntityProperty(AuditAction.PUBLISH, vertex.getId(), property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
             }
         }
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
+        ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+
+        Iterator<Audit> rows = auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser).iterator();
+        while (rows.hasNext()) {
+            Audit row = rows.next();
+            modelSession.alterAllColumnsVisibility(row, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+        }
+
         Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
             if (termMentionModel == null) {
                 DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
@@ -220,7 +232,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertex.removeProperty("_rowKey");
     }
 
-    private void publishProperty(Vertex vertex, String action, String key, String name) {
+    private void publishProperty(Vertex vertex, String action, String key, String name, User user) {
         if (action.equals("delete")) {
             vertex.removeProperty(key, name);
             return;
@@ -229,13 +241,18 @@ public class WorkspacePublish extends BaseRequestHandler {
         String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        vertex.prepareMutation()
+
+        ExistingElementMutation <Vertex> vertexMutation = vertex.prepareMutation();
+        vertexMutation
                 .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility())
-                .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString())
-                .save();
+                .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+
+        auditRepository.auditEntityProperty(AuditAction.PUBLISH, vertex.getId(), property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
+
+        vertexMutation.save();
     }
 
-    private void publishEdge(Edge edge, String action, Authorizations authorizations) {
+    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String action, User user, Authorizations authorizations) {
         if (action.equals("delete")) {
             graph.removeEdge(edge, authorizations);
             return;
@@ -255,6 +272,16 @@ public class WorkspacePublish extends BaseRequestHandler {
             }
         }
         edgeExistingElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-        edgeExistingElementMutation.save();
+        auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());
+        edge = edgeExistingElementMutation.save();
+
+        auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
+
+        ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        Iterator<Audit> rows = auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser).iterator();
+        while (rows.hasNext()) {
+            Audit row = rows.next();
+            modelSession.alterAllColumnsVisibility(row, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+        }
     }
 }

@@ -106,7 +106,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = vertexMutation.save();
 
-        auditRepository.auditVertexElementMutation(vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
+        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
 
         this.graph.flush();
 
@@ -117,13 +117,9 @@ public class ResolveTermEntity extends BaseRequestHandler {
         if (edge == null) {
             edge = graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
             edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-            String labelDisplayName = ontologyRepository.getDisplayNameForLabel(LabelName.RAW_HAS_ENTITY.toString());
-            if (labelDisplayName == null) {
-                labelDisplayName = LabelName.RAW_HAS_ENTITY.toString();
-            }
 
             // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, labelDisplayName, "", "", user, lumifyVisibility.getVisibility());
+            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);

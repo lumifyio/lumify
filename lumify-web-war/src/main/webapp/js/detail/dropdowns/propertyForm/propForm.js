@@ -4,14 +4,16 @@ define([
     'tpl!./propForm',
     'service/ontology',
     'fields/selection/selection',
-    'data'
-], function (
+    'data',
+    'tpl!util/alert'
+], function(
     defineComponent,
     withDropdown,
     template,
     OntologyService,
     FieldSelection,
-    appData
+    appData,
+    alertTemplate
 ) {
     'use strict';
 
@@ -36,7 +38,7 @@ define([
             visibilityInputSelector: '.visibility input'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             var self = this,
                 vertex = this.attr.data;
 
@@ -67,11 +69,14 @@ define([
             (vertex.properties._conceptType.value != 'relationship' ?
                 self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
                 self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
-            ).done(function (properties) {
-                var propertiesList = [];
+            ).done(function(properties) {
+                var propertiesList = [{
+                    title: '_visibilityJson',
+                    displayName: 'Visibility'
+                }];
 
-                properties.list.forEach(function (property) {
-                    if (property.title.charAt(0) !== '_' && property.title !== 'boundingBox') {
+                properties.list.forEach(function(property) {
+                    if (/^[^_]/.test(property.title) && property.title !== 'boundingBox') {
                         var data = {
                             title: property.title,
                             displayName: property.displayName
@@ -82,6 +87,8 @@ define([
                 
                 propertiesList.sort(function(pa, pb) {
                     var a = pa.title, b = pb.title;
+                    if (a === '_visibilityJson') return -1;
+                    if (b === '_visibilityJson') return 1;
                     if (a === 'startDate' && b === 'endDate') return -1;
                     if (b === 'startDate' && a === 'endDate') return 1;
                     if (a === b) return 0;
@@ -123,7 +130,7 @@ define([
                 justification = self.select('justificationSelector');
 
             this.currentProperty = property;
-            this.$node.find('input').removeClass('validation-error');
+            this.$node.find('.errors').hide();
 
             config.teardownAllComponents();
             visibility.teardownAllComponents();
@@ -142,7 +149,7 @@ define([
 
             if (visibilityValue) {
                 visibilityValue = visibilityValue.source;
-                this.visibilitySource = { value:visibilityValue, valid:true };
+                this.visibilitySource = { value: visibilityValue, valid: true };
             }
 
             this.select('deleteButtonSelector')
@@ -150,11 +157,18 @@ define([
                     sandboxStatus === 'PRIVATE' ?  'Delete' :
                     sandboxStatus === 'PUBLIC_CHANGED' ?  'Undo' : ''
                 )
-                .toggle(!!isExistingProperty && sandboxStatus !== 'PUBLIC');
+                .toggle(
+                    (!!isExistingProperty) && 
+                    sandboxStatus !== 'PUBLIC' &&
+                    propertyName !== '_visibilityJson'
+                );
 
             var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
-            if (isExistingProperty) button.removeAttr('disabled');
-            else button.attr('disabled', true);
+            if (isExistingProperty) {
+                button.removeAttr('disabled');
+            } else {
+                button.attr('disabled', true);
+            }
 
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
@@ -182,6 +196,23 @@ define([
                         Visibility.attachTo(visibility, {
                             value: visibilityValue || ''
                         });
+
+                        self.settingVisibility = false;
+                        self.checkValid();
+                    });
+                } else if (propertyName === '_visibilityJson') {
+                    require([
+                        'configuration/plugins/visibility/visibilityEditor'
+                    ], function(Visibility) {
+                        var val = vertexProperty && vertexProperty.value,
+                            source = (val && val.source) || (val && val.value && val.value.source);
+
+                        Visibility.attachTo(visibility, {
+                            value: source || ''
+                        });
+                        visibility.find('input').focus();
+                        self.settingVisibility = true;
+                        self.visibilitySource = { value: source, valid: true };
 
                         self.checkValid();
                     });
@@ -233,7 +264,7 @@ define([
                 });
         };
 
-        this.onPropertyInvalid = function (event, data) {
+        this.onPropertyInvalid = function(event, data) {
             event.stopPropagation();
 
             this.propertyInvalid = true;
@@ -241,9 +272,13 @@ define([
         };
 
         this.checkValid = function() {
-            this.valid = !this.propertyInvalid && 
-                (this.visibilitySource && this.visibilitySource.valid) &&
-                (this.justification && this.justification.valid);
+            if (this.settingVisibility) {
+                this.valid = this.visibilitySource && this.visibilitySource.valid;
+            } else {
+                this.valid = !this.propertyInvalid && 
+                    (this.visibilitySource && this.visibilitySource.valid) &&
+                    (this.justification && this.justification.valid);
+            }
 
             if (this.valid) {
                 this.select('saveButtonSelector').removeAttr('disabled');
@@ -252,7 +287,7 @@ define([
             }
         }
 
-        this.onPropertyChange = function (event, data) {
+        this.onPropertyChange = function(event, data) {
             this.propertyInvalid = false;
             this.checkValid();
 
@@ -266,8 +301,12 @@ define([
             }
         };
 
-        this.onAddPropertyError = function (event) {
-            this.$node.find('input').addClass('validation-error');
+        this.onAddPropertyError = function(event, data) {
+            this.$node.find('.errors').html(
+                alertTemplate({
+                    error: (data.error || 'Unknown error') 
+                })
+            ).show();
             _.defer(this.clearLoading.bind(this));
         };
 
@@ -284,18 +323,21 @@ define([
             });
         };
 
-        this.onSave = function (evt) {
+        this.onSave = function(evt) {
             if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
                 propertyName = this.currentProperty.title,
                 value = this.currentValue,
-                justification = _.pick(this.justification, 'sourceInfo', 'justificationText');
+                justification = _.pick(this.justification || {}, 'sourceInfo', 'justificationText');
 
             _.defer(this.buttonLoading.bind(this, this.attr.saveButtonSelector));
 
-            this.$node.find('input').removeClass('validation-error');
-            if (propertyName.length && ((_.isString(value) && value.length) || value)) {
+            this.$node.find('.errors').hide();
+            if (propertyName.length && 
+                (this.settingVisibility || 
+                 (((_.isString(value) && value.length) || value)))) {
+
                 this.trigger('addProperty', {
                     property: $.extend({
                             name: propertyName,

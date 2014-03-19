@@ -12,7 +12,7 @@ define([
     'tpl!./audit-list',
     'data',
     'sf'
-], function (
+], function(
     defineComponent,
     OntologyService,
     VertexService,
@@ -53,7 +53,7 @@ define([
             auditEntitySelector: '.resolved'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
@@ -70,7 +70,7 @@ define([
                 .off('.properties')
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
 
-            this.$node.html(propertiesTemplate({properties:null}));
+            this.$node.html(propertiesTemplate({properties: null}));
             this.displayProperties(this.attr.data.properties);
         });
 
@@ -96,10 +96,10 @@ define([
                     vertex = appData.vertex(vertexId);
                 if (!vertex) {
                     appData.refresh(vertexId).done(function(v) {
-                        self.trigger('selectObjects', { vertices:[v] });
+                        self.trigger('selectObjects', { vertices: [v] });
                     });
                 } else {
-                    this.trigger('selectObjects', { vertices:[vertex] });
+                    this.trigger('selectObjects', { vertices: [vertex] });
                 }
             }
         };
@@ -115,7 +115,7 @@ define([
         this.onAuditUserClicked = function(event) {
             var userId = $(event.target).data('userId');
             if (userId) {
-                this.trigger('startChat', { userId:userId });
+                this.trigger('startChat', { userId: userId });
             }
         };
 
@@ -182,7 +182,6 @@ define([
                 auditsByProperty = _.groupBy(audits, function(a) { 
                     return a.propertyAudit.propertyName; 
                 });
-
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
                 var propLi = self.$node.find('.property-' + propertyName);
@@ -270,10 +269,6 @@ define([
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
                     self.displayProperties(properties);
-                    self.trigger('updateRelationships', [{
-                        id: self.attr.data.id,
-                        properties: properties
-                    }]);
                 });
 
             } else {
@@ -284,10 +279,25 @@ define([
             }
         };
 
-        this.onAddProperty = function (event, data) {
-            var self = this;
-            if (self.attr.data.properties._conceptType.value === 'relationship') {
-                self.relationshipService.setProperty(
+        this.onAddProperty = function(event, data) {
+            var self = this,
+                isEdge = this.attr.data.properties._conceptType.value === 'relationship',
+                done = isEdge ? function(edge) {
+                    var properties = $.extend({}, self.attr.data.properties, edge.properties);
+                    self.displayProperties(properties);
+                } : function() { };
+
+            if (data.property.name === '_visibilityJson') {
+
+                this[isEdge ? 'relationshipService' : 'vertexService'].setVisibility(
+                        this.attr.data.id,
+                        data.property.visibilitySource)
+                    .fail(this.requestFailure.bind(this))
+                    .done(done);
+
+            } else if (isEdge) {
+
+                this.relationshipService.setProperty(
                         data.property.name,
                         data.property.value,
                         data.property.visibilitySource,
@@ -296,37 +306,29 @@ define([
                         this.attr.data.properties.source.value,
                         this.attr.data.properties.target.value,
                         this.attr.data.id)
-                .fail(this.requestFailure.bind(this))
-                .done(function(newProperties) {
-                    var properties = $.extend({}, self.attr.data.properties, newProperties);
-                    self.displayProperties(properties);
-                    self.trigger('updateRelationships', [{
-                        id: self.attr.data.id,
-                        properties: properties
-                    }]);
-                });
-            } else {
-                self.vertexService.setProperty(
-                    this.attr.data.id,
-                    data.property.name,
-                    data.property.value,
-                    data.property.visibilitySource,
-                    data.property.justificationText,
-                    data.property.sourceInfo)
                     .fail(this.requestFailure.bind(this))
+                    .done(done);
+
+            } else {
+
+                this.vertexService.setProperty(
+                        this.attr.data.id,
+                        data.property.name,
+                        data.property.value,
+                        data.property.visibilitySource,
+                        data.property.justificationText,
+                        data.property.sourceInfo)
+                    .fail(this.requestFailure.bind(this))
+                    .done(done);
             }
 
         };
         
-        this.requestFailure = function(err) {
-            if (err.status == 400) {
-                console.error('Validation error');
-                return this.trigger(this.$node.find('.underneath'), 'addPropertyError', {});
-            }
-            return 0;
+        this.requestFailure = function(request, message, error) {
+            this.trigger(this.$node.find('.underneath'), 'addPropertyError', { error: error });
         };
 
-        this.onAddNewPropertiesClicked = function (evt) {
+        this.onAddNewPropertiesClicked = function(evt) {
             var root = $('<div class="underneath">').insertAfter(evt.target);
 
             PropertyForm.teardownAll();
@@ -336,12 +338,11 @@ define([
             });
         };
 
-
-        this.onPropertyChange = function (propertyChangeData) {
+        this.onPropertyChange = function(propertyChangeData) {
             if (propertyChangeData.id != this.attr.data.id) {
                 return;
             }
-            if(propertyChangeData.propertyName == 'title') {
+            if (propertyChangeData.propertyName == 'title') {
                 this.select('titleSelector').html(propertyChangeData.value);
             }
             this.select('propertiesSelector')
@@ -349,28 +350,28 @@ define([
                 .html(propertyChangeData.value);
         };
 
-        this.displayProperties = function (properties){
+        this.displayProperties = function(properties) {
             var self = this;
 
             this.ontologyService.properties()
                 .done(function(ontologyProperties) {
-                    self.ontologyProperties = ontologyProperties;
-                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties);
+                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties),
+                        popoutEnabled = false,
+                        iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
 
-                    var iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
+                    self.ontologyProperties = ontologyProperties;
 
                     if (iconProperty) {
                         self.trigger(self.select('glyphIconSelector'), 'iconUpdated', { src: iconProperty.value });
                     }
-                    var popoutEnabled = false;
 
                     if ($('#app').hasClass('fullscreen-details')) {
                         popoutEnabled = true;
                     }
 
-                    var props = $(propertiesTemplate({properties:filtered, popout: popoutEnabled}));
-
                     require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
+                        var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
+
                         props.find('.visibility').each(function() {
                             var visibility = $(this).data('visibility');
                             VisibilityDisplay.attachTo(this, {
@@ -389,20 +390,22 @@ define([
 
         if ($.isArray(properties)) {
             var o = {};
-            properties.forEach(function (p) {
+            properties.forEach(function(p) {
                 o[p.key] = p.value;
             });
             properties = o;
         }
 
         var keys = Object.keys(properties).sort(function(a,b) {
+            if (a === '_visibilityJson') return -1;
+            if (b === '_visibilityJson') return 1;
             if (a === 'startDate' && b === 'endDate') return -1;
             if (b === 'startDate' && a === 'endDate') return 1;
 
             return a < b ? -1 : a > b ? 1 : 0;
         });
 
-        keys.forEach(function (name) {
+        keys.forEach(function(name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
                 isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
@@ -434,8 +437,16 @@ define([
 
                     addProperty(name, displayName, value, properties[name]._visibilityJson);
                 }
+            } else if (name === '_visibilityJson') {
+                value = properties[name].value;
+
+                var source = (value && value.value && value.value.source) || (value && value.source) || '';
+
+                if (source) {
+                    addProperty(name, 'Visibility', source);
+                }
             } else if (isRelationshipType) {
-                addProperty(name, 'relationship type', properties[name].value);
+                addProperty(name, 'Relationship type', properties[name].value);
             }
         });
         return displayProperties;
@@ -450,4 +461,3 @@ define([
         }
     }
 });
-
