@@ -103,7 +103,7 @@ module.exports = function(grunt) {
         },
         development: {
             files: {
-                src: ['js/**/*.js']
+                src: ['js/**/*\.js']
             },
             options: {
                 reporter: require('jshint-stylish')
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
         },
         ci: {
             files: {
-                src: ['js/**/*.js']
+                src: ['js/**/*\.js']
             },
             options: {
                 reporter: 'checkstyle',
