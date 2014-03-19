@@ -266,6 +266,9 @@ public class OwlImport extends CommandLineBase {
         if ("http://www.w3.org/2001/XMLSchema#dateTime".equals(iri)) {
             return PropertyType.DATE;
         }
+        if ("http://www.w3.org/2001/XMLSchema#int".equals(iri)) {
+            return PropertyType.DOUBLE;
+        }
         if ("http://lumify.io#geolocation".equals(iri)) {
             return PropertyType.GEO_LOCATION;
         }
