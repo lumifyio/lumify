@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.entity;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
@@ -91,7 +90,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(resolvedVertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, graphVertexId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, modelUserContext, user, authorizations);
 

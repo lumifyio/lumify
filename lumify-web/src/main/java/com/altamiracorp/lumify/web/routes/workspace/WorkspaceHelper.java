@@ -61,10 +61,6 @@ public class WorkspaceHelper {
             LOGGER.warn("invalid term mention row");
         } else {
             Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
-            // Clean up term mentions if system analytics wasn't performed on term
-            String columnFamilyName = termMention.getMetadata().getColumnFamilyName();
-            String columnName = termMention.getMetadata().VERTEX_ID;
-            String analyticProcess = termMention.getMetadata().getAnalyticProcess();
 
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
@@ -92,17 +88,7 @@ public class WorkspaceHelper {
                 }
             }
 
-            if (analyticProcess == null) {
-                modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
-            } else {
-                Column column = termMention.get(columnFamilyName).getColumn(columnName);
-                column.setDirty(true);
-                modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, column.getVisibility());
-                termMention.getMetadata().setVertexId("", visibility.getVisibility());
-
-                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
-                result = offsetItem.toJson();
-            }
+            modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
 
             graph.flush();
 

@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
@@ -144,7 +143,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, workspaceId, LumifyVisibility.VISIBILITY_STRING);
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
@@ -159,17 +157,15 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
                     unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations));
-                    modelSession.alterColumnsVisibility(detectedObjectModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
                 }
             } else {
                 unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
-                modelSession.alterColumnsVisibility(termMentionModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        Iterator <Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
+        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
         while (workspaceToVertex.hasNext()) {
             graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
         }
