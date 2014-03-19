@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.Column;
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
@@ -13,7 +12,6 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
-import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;

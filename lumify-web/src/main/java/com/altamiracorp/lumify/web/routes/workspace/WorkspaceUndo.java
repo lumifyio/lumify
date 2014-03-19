@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
@@ -38,7 +37,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private final DetectedObjectRepository detectedObjectRepository;
     private final UserRepository userRepository;
     private final Graph graph;
-    private final ModelSession modelSession;
     private final VisibilityTranslator visibilityTranslator;
     private final UserProvider userProvider;
     private final WorkspaceHelper workspaceHelper;
@@ -48,7 +46,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
                          final DetectedObjectRepository detectedObjectRepository,
                          final Configuration configuration,
                          final Graph graph,
-                         final ModelSession modelSession,
                          final VisibilityTranslator visibilityTranslator,
                          final UserProvider userProvider,
                          final UserRepository userRepository,
@@ -57,7 +54,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.termMentionRepository = termMentionRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
-        this.modelSession = modelSession;
         this.visibilityTranslator = visibilityTranslator;
         this.userProvider = userProvider;
         this.workspaceHelper = workspaceHelper;
