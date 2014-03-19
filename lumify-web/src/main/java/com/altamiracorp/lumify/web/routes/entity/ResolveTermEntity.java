@@ -79,7 +79,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         Authorizations authorizations = getAuthorizations(request, user);
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
+        Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
 
@@ -88,9 +89,9 @@ public class ResolveTermEntity extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         if (graphVertexId != null) {
-            vertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+            vertexMutation = graph.getVertex(id, authorizations).prepareMutation();
         } else {
-            vertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
+            vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
         }
 
         GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
