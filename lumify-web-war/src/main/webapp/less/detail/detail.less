@@ -428,6 +428,18 @@
     .relationships {
       padding-bottom: 1em;
 
+      .entity {
+        border-bottom-width:0;
+        &:hover {
+          border-bottom-width: 1px;
+        }
+      }
+
+      .rel-arrow {
+        color: #999;
+        text-shadow: 0 1px 0 white;
+      }
+
       ul li { margin: 0 1em 0 0; }
       ul li.nav-header { margin: 1.5em 0 0 0; padding:0; }
       .nav-list { padding-top: 0; }
