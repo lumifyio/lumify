@@ -22,54 +22,16 @@ import com.altamiracorp.securegraph.TextIndexHint;
  * LumifyProperties specific to Raw entities (e.g. documents, images, video, etc.).
  */
 public class RawLumifyProperties {
-    /**
-     * The publication date.
-     */
-    public static final DateLumifyProperty PUBLISHED_DATE = new DateLumifyProperty("publishedDate");
+    public static final DateLumifyProperty PUBLISHED_DATE = new DateLumifyProperty("http://lumify.io#publishedDate");
+    public static final DateLumifyProperty CREATE_DATE = new DateLumifyProperty("http://lumify.io#createDate");
+    public static final TextLumifyProperty FILE_NAME = TextLumifyProperty.all("http://lumify.io#fileName");
+    public static final TextLumifyProperty FILE_NAME_EXTENSION = new TextLumifyProperty("http://lumify.io#fileNameExtension", TextIndexHint.EXACT_MATCH);
+    public static final TextLumifyProperty MIME_TYPE = TextLumifyProperty.all("http://lumify.io#mimeType");
+    public static final TextLumifyProperty AUTHOR = TextLumifyProperty.all("http://lumify.io#author");
+    public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
+    public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
+    public static final TextLumifyProperty MAPPING_JSON = new TextLumifyProperty("http://lumify.io#mappingJson", TextIndexHint.NONE);
 
-    /**
-     * The creation date.
-     */
-    public static final DateLumifyProperty CREATE_DATE = new DateLumifyProperty("_createDate");
-
-    /**
-     * The filename property.
-     */
-    public static final TextLumifyProperty FILE_NAME = TextLumifyProperty.all("_fileName");
-
-    /**
-     * The filename extension property.
-     */
-    public static final TextLumifyProperty FILE_NAME_EXTENSION = new TextLumifyProperty("_fileNameExtension", TextIndexHint.EXACT_MATCH);
-
-    /**
-     * The mime type.
-     */
-    public static final TextLumifyProperty MIME_TYPE = TextLumifyProperty.all("_mimeType");
-
-    /**
-     * The author property.
-     */
-    public static final TextLumifyProperty AUTHOR = TextLumifyProperty.all("author");
-
-    /**
-     * The raw property.
-     */
-    public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("_raw");
-
-    /**
-     * The text property.
-     */
-    public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("_text");
-
-    /**
-     * The mapping JSON property.
-     */
-    public static final TextLumifyProperty MAPPING_JSON = new TextLumifyProperty("_mappingJson", TextIndexHint.NONE);
-
-    /**
-     * Utility class constructor.
-     */
     private RawLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
     }
