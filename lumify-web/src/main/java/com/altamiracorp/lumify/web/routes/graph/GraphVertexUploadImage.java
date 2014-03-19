@@ -36,8 +36,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 

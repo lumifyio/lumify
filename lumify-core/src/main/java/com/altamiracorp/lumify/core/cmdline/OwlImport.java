@@ -55,6 +55,7 @@ public class OwlImport extends CommandLineBase {
                 OptionBuilder
                         .withLongOpt("iri")
                         .withDescription("The document IRI (URI used for prefixing concepts)")
+                        .isRequired()
                         .hasArg(true)
                         .withArgName("uri")
                         .create()
@@ -67,11 +68,7 @@ public class OwlImport extends CommandLineBase {
     protected void processOptions(CommandLine cmd) throws Exception {
         super.processOptions(cmd);
         this.inFileName = cmd.getOptionValue("in");
-        if (cmd.hasOption("iri")) {
-            this.documentIRIString = cmd.getOptionValue("iri");
-        } else {
-            this.documentIRIString = new File(this.inFileName).toURI().toString();
-        }
+        this.documentIRIString = cmd.getOptionValue("iri");
     }
 
     @Override
@@ -93,20 +90,29 @@ public class OwlImport extends CommandLineBase {
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
         config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
 
-        loadOntologyFiles(m, config);
+        loadOntologyFiles(m, config, documentIRI);
 
         OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
         OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
 
         for (OWLClass ontologyClass : o.getClassesInSignature()) {
+            if (!o.isDeclared(ontologyClass, false)) {
+                continue;
+            }
             importOntologyClass(o, ontologyClass);
         }
 
         for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
+            if (!o.isDeclared(dataTypeProperty, false)) {
+                continue;
+            }
             importDataProperty(o, dataTypeProperty);
         }
 
         for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
+            if (!o.isDeclared(objectProperty, false)) {
+                continue;
+            }
             importObjectProperty(o, objectProperty);
         }
 
@@ -116,14 +122,17 @@ public class OwlImport extends CommandLineBase {
         ontologyRepository.clearCache();
     }
 
-    private void loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config) throws OWLOntologyCreationException, IOException {
+    private void loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws OWLOntologyCreationException, IOException {
         Iterable<Property> ontologyFiles = ontologyRepository.getOntologyFiles();
         for (Property ontologyFile : ontologyFiles) {
+            IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
+            if (excludedIRI.equals(lumifyBaseOntologyIRI)) {
+                continue;
+            }
             InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
             try {
                 Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
                 LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
-                IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
                 OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
                 m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
             } finally {
@@ -134,8 +143,12 @@ public class OwlImport extends CommandLineBase {
 
     private Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass) throws IOException {
         String uri = ontologyClass.getIRI().toString();
+        if ("http://www.w3.org/2002/07/owl#Thing".equals(uri)) {
+            return ontologyRepository.getEntityConcept();
+        }
 
         String label = getLabel(o, ontologyClass);
+        checkNotNull(label, "label cannot be null or empty: " + uri);
         LOGGER.info("Importing ontology class " + uri + " (label: " + label + ")");
 
         Concept parent = getParentConcept(o, ontologyClass);
@@ -211,6 +224,7 @@ public class OwlImport extends CommandLineBase {
     private Relationship importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
+        checkNotNull(label, "label cannot be null or empty for " + uri);
         LOGGER.info("Importing ontology object property " + uri + " (label: " + label + ")");
 
         Concept domain = getDomainConcept(o, objectProperty);
