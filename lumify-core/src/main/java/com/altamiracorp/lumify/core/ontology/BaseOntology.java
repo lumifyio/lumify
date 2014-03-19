@@ -35,19 +35,14 @@ public class BaseOntology {
     }
 
     public void defineOntology(User user) {
-        // concept properties
-        ontologyRepository.getOrCreatePropertyType(PropertyType.IMAGE.toString(), PropertyType.IMAGE, "Geo Location");
-        ontologyRepository.getOrCreatePropertyType(PropertyType.GEO_LOCATION.toString(), PropertyType.GEO_LOCATION, "Geo Location");
-        graph.flush();
-
         Concept rootConcept = ontologyRepository.getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
         graph.flush();
 
         Concept entityConcept = ontologyRepository.getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
-        ontologyRepository.addPropertyTo(entityConcept.getVertex(), GLYPH_ICON.getKey(), "glyph icon", PropertyType.IMAGE);
-        ontologyRepository.addPropertyTo(entityConcept.getVertex(), MAP_GLYPH_ICON.getKey(), "map glyph icon", PropertyType.IMAGE);
-        ontologyRepository.addPropertyTo(entityConcept.getVertex(), CONCEPT_TYPE.getKey(), "Type", PropertyType.STRING);
-        ontologyRepository.addPropertyTo(entityConcept.getVertex(), TITLE.getKey(), "Title", PropertyType.STRING);
+        ontologyRepository.addPropertyTo(entityConcept.getVertex(), GLYPH_ICON.getKey(), "glyph icon", PropertyType.IMAGE, false);
+        ontologyRepository.addPropertyTo(entityConcept.getVertex(), MAP_GLYPH_ICON.getKey(), "map glyph icon", PropertyType.IMAGE, false);
+        ontologyRepository.addPropertyTo(entityConcept.getVertex(), CONCEPT_TYPE.getKey(), "Type", PropertyType.STRING, false);
+        ontologyRepository.addPropertyTo(entityConcept.getVertex(), TITLE.getKey(), "Title", PropertyType.STRING, true);
         graph.flush();
 
         InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");

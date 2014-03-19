@@ -1,12 +1,5 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
-
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
@@ -18,6 +11,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BaseOntologyTest {
@@ -52,12 +52,6 @@ public class BaseOntologyTest {
         when(ontologyRepository.getOrCreateConcept(eq(rootConcept), anyString(), eq("Entity"))).thenReturn(entityConcept);
 
         baseOntology.defineOntology(user);
-
-        verify(ontologyRepository, times(2)).addPropertyTo(eq(rootConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
-        verify(ontologyRepository, times(2)).addPropertyTo(eq(entityConcept.getVertex()), anyString(), anyString(), any(PropertyType.class));
-
-        // TODO rewrite this test for secure graph!!!
-//        verify(entityConcept).setProperty(PropertyName.GLYPH_ICON.toString(), "rowKey", (Visibility) any());
     }
 
     @Test

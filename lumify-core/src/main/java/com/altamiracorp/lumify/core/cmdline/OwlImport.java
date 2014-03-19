@@ -211,6 +211,7 @@ public class OwlImport extends CommandLineBase {
         String propertyId = dataTypeProperty.getIRI().toString();
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
+        boolean userVisible = getUserVisible(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyId);
         }
@@ -222,7 +223,7 @@ public class OwlImport extends CommandLineBase {
             checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
 
             LOGGER.info("Adding data property " + propertyId + " to class " + domainConcept.getId());
-            ontologyRepository.addPropertyTo(domainConcept.getVertex(), propertyId, propertyDisplayName, propertyType);
+            ontologyRepository.addPropertyTo(domainConcept.getVertex(), propertyId, propertyDisplayName, propertyType, userVisible);
         }
     }
 
@@ -322,6 +323,14 @@ public class OwlImport extends CommandLineBase {
 
     private String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#displayType");
+    }
+
+    private boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#userVisible");
+        if (val == null) {
+            return true;
+        }
+        return Boolean.parseBoolean(val);
     }
 
     private String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {

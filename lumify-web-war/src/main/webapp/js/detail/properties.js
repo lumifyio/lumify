@@ -357,7 +357,7 @@ define([
                 .done(function(ontologyProperties) {
                     var filtered = filterPropertiesForDisplay(properties, ontologyProperties),
                         popoutEnabled = false,
-                        iconProperty = _.findWhere(filtered, { key: '_glyphIcon' });
+                        iconProperty = _.findWhere(filtered, { key: 'http://lumify.io#glyphIcon' });
 
                     self.ontologyProperties = ontologyProperties;
 

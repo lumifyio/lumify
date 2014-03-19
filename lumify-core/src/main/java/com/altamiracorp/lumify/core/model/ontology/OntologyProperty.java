@@ -13,9 +13,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DATA_TYPE;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 
 public class OntologyProperty {
@@ -49,6 +47,10 @@ public class OntologyProperty {
         return DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
+    public boolean getUserVisible() {
+        return USER_VISIBLE.getPropertyValue(vertex);
+    }
+
     public PropertyType getDataType() {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }
@@ -72,6 +74,7 @@ public class OntologyProperty {
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
             json.put("displayType", getDisplayType());
+            json.put("userVisible", getUserVisible());
             json.put("dataType", getDataType().toString());
             return json;
         } catch (JSONException e) {

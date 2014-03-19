@@ -36,39 +36,13 @@ import com.altamiracorp.securegraph.TextIndexHint;
  * General LumifyProperty instances that apply across Ontology and data vertices.
  */
 public class LumifyProperties {
-    /**
-     * The display name property.
-     */
     public static final TextLumifyProperty DISPLAY_NAME = TextLumifyProperty.all("http://lumify.io#displayName");
-
-    /**
-     * The process property.
-     */
-    public static final TextLumifyProperty PROCESS = TextLumifyProperty.all("http://lumify.io#_process");
-
-    /**
-     * The row key property.
-     */
-    public static final TextLumifyProperty ROW_KEY = new TextLumifyProperty("http://lumify.io#_rowKey", TextIndexHint.EXACT_MATCH);
-
-    /**
-     * The glyph icon property.
-     */
-    public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#_glyphIcon");
-
-    /**
-     * The map glyph icon property.
-     */
-    public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#_mapGlyphIcon");
-
-    /**
-     * The title property.
-     */
+    public static final TextLumifyProperty PROCESS = TextLumifyProperty.all("http://lumify.io#process");
+    public static final TextLumifyProperty ROW_KEY = new TextLumifyProperty("http://lumify.io#rowKey", TextIndexHint.EXACT_MATCH);
+    public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
+    public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
     public static final TextLumifyProperty TITLE = TextLumifyProperty.all("http://lumify.io#title");
 
-    /**
-     * Utility class constructor.
-     */
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
     }

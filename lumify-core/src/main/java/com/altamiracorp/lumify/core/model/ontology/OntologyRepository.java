@@ -376,9 +376,9 @@ public class OntologyRepository {
         fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
     }
 
-    public OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType) {
+    public OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType, boolean userVisible) {
         checkNotNull(vertex, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyId, dataType, displayName);
+        OntologyProperty property = getOrCreatePropertyType(propertyId, dataType, displayName, userVisible);
         checkNotNull(property, "Could not find property: " + propertyId);
 
         findOrAddEdge(vertex, property.getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -421,13 +421,14 @@ public class OntologyRepository {
         }
     }
 
-    public OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName) {
+    public OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
             VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
+            USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }

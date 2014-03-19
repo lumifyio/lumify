@@ -41,6 +41,9 @@
     <!-- http://lumify.io#displayType -->
     <owl:AnnotationProperty rdf:about="&lumify;displayType"/>
 
+    <!-- http://lumify.io#userVisible -->
+    <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -71,7 +74,7 @@
 
     <!-- http://lumify.io#_conceptType -->
 
-    <owl:DatatypeProperty rdf:about="&lumify;_conceptType">
+    <owl:DatatypeProperty rdf:about="&lumify;conceptType">
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
@@ -80,7 +83,7 @@
 
     <!-- http://lumify.io#_glyphIcon -->
 
-    <owl:DatatypeProperty rdf:about="&lumify;_glyphIcon">
+    <owl:DatatypeProperty rdf:about="&lumify;glyphIcon">
         <rdfs:range rdf:resource="&lumify;image"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
@@ -89,7 +92,7 @@
 
     <!-- http://lumify.io#_mapGlyphIcon -->
 
-    <owl:DatatypeProperty rdf:about="&lumify;_mapGlyphIcon">
+    <owl:DatatypeProperty rdf:about="&lumify;mapGlyphIcon">
         <rdfs:range rdf:resource="&lumify;image"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>

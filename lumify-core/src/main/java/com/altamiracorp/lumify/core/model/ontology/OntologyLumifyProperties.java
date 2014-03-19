@@ -30,6 +30,7 @@
 
 package com.altamiracorp.lumify.core.model.ontology;
 
+import com.altamiracorp.lumify.core.model.properties.BooleanLumifyProperty;
 import com.altamiracorp.lumify.core.model.properties.TextLumifyProperty;
 import com.altamiracorp.securegraph.TextIndexHint;
 
@@ -40,6 +41,8 @@ public final class OntologyLumifyProperties {
     public static final TextLumifyProperty CONCEPT_TYPE = new TextLumifyProperty("http://lumify.io#conceptType", TextIndexHint.EXACT_MATCH);
 
     public static final TextLumifyProperty DATA_TYPE = new TextLumifyProperty("http://lumify.io#dataType", TextIndexHint.EXACT_MATCH);
+
+    public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
 
     public static final TextLumifyProperty ONTOLOGY_TITLE = new TextLumifyProperty("http://lumify.io#ontologyTitle", TextIndexHint.EXACT_MATCH);
 
