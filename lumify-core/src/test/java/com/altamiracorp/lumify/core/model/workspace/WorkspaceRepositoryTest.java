@@ -170,7 +170,7 @@ public class WorkspaceRepositoryTest {
         when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(UserRepository.VISIBILITY_STRING))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING));
         when(userRepository.getAuthorizations(eq(user2), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING));
         when(userRepository.getAuthorizations(eq(user2), eq(UserRepository.VISIBILITY_STRING), eq(WorkspaceRepository.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING));
-        when(userRepository.getAuthorizations(eq(user2), eq(UserRepository.VISIBILITY_STRING), eq(lumifyVisibility.getVisibility().getVisibilityString()), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING));
+        when(userRepository.getAuthorizations(eq(user2), eq(UserRepository.VISIBILITY_STRING), eq(LumifyVisibility.VISIBILITY_STRING), eq(workspace3.getId()))).thenReturn(new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, UserRepository.VISIBILITY_STRING));
         when(user2.getUserId()).thenReturn("USER_testUser2");
 
         List<Workspace> user1Workspaces = toList(workspaceRepository.findAll(user1));
