@@ -1,5 +1,7 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.bigtable.model.Column;
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
@@ -64,17 +66,6 @@ public class WorkspaceHelper {
             String columnName = termMention.getMetadata().VERTEX_ID;
             String analyticProcess = termMention.getMetadata().getAnalyticProcess();
 
-            if (analyticProcess == null) {
-                modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
-            } else {
-                termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
-                modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName);
-                termMention.getMetadata().setVertexId("", visibility.getVisibility());
-
-                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
-                result = offsetItem.toJson();
-            }
-
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
             boolean deleteEdge = false;
@@ -101,6 +92,19 @@ public class WorkspaceHelper {
                 }
             }
 
+            if (analyticProcess == null) {
+                modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
+            } else {
+                Column column = termMention.get(columnFamilyName).getColumn(columnName);
+                column.setDirty(true);
+                modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName, column.getVisibility());
+                termMention.getMetadata().setVertexId("", visibility.getVisibility());
+
+                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
+                result = offsetItem.toJson();
+                result = offsetItem.toJson();
+            }
+
             graph.flush();
 
             if (deleteEdge) {
@@ -124,8 +128,9 @@ public class WorkspaceHelper {
             modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
             result.put("deleteTag", true);
         } else {
-            detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
-            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName);
+            Column column = detectedObjectModel.get(columnFamilyName).getColumn(columnName);
+            column.setDirty(true);
+            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, column.getVisibility());
             result = detectedObjectModel.toJson();
         }
 
