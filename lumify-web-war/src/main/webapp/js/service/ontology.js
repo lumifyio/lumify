@@ -37,7 +37,7 @@ define([
         return this.ontology()
                     .then(function(ontology) {
                         return {
-                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {title:'entity'})),
+                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {id: 'http://www.w3.org/2002/07/owl#Thing'})),
                             byId: ontology.conceptsById, 
                             byTitle: _.chain(ontology.concepts)
                                 .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
