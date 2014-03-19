@@ -242,7 +242,7 @@ define([
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
                 geoLocation = vertex.properties.geoLocation,
-                conceptType = vertex.properties._conceptType.value,
+                conceptType = vertex.properties['http://lumify.io#conceptType'].value,
                 heading = vertex.properties.heading && vertex.properties.heading.value,
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
                 iconUrl =  '/map/marker/' + conceptType + '/image?scale=' + (retina.devicePixelRatio > 1 ? '2' : '1');

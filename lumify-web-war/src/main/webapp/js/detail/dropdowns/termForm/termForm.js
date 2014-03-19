@@ -39,7 +39,7 @@ define([
             var info = $(this.attr.mentionNode).removeClass('focused').data('info');
 
             if (info) {
-                this.updateConceptLabel(info._conceptType || '');
+                this.updateConceptLabel(info['http://lumify.io#conceptType'] || '');
             }
 
             // Remove extra textNodes
@@ -99,7 +99,7 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                var conceptType = (info && ((info._conceptType && info._conceptType.value) || info._conceptType || info.properties._conceptType.value)) || '';
+                var conceptType = (info && ((info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) || info['http://lumify.io#conceptType'] || info.properties['http://lumify.io#conceptType'].value)) || '';
                 this.updateConceptSelect(conceptType).show();
 
                 if (this.unresolve){
@@ -252,7 +252,7 @@ define([
                         $tag = $focused.find('.label-info');
 
                         $tag.text(resolvedVertex.properties.title.value).removeAttr('data-info').data('info', result).removePrefixedClasses('conceptType-');
-                        $tag.addClass('resolved entity label conceptType-' + resolvedVertex.properties._conceptType.value);
+                        $tag.addClass('resolved entity label conceptType-' + resolvedVertex.properties['http://lumify.io#conceptType'].value);
 
                     } else {
                         // Temporarily creating a new tag to show on ui prior to backend update
@@ -424,7 +424,7 @@ define([
 
             if (!vertex && info && !conceptId) {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var concept = self.conceptForConceptType(info._conceptType, allConcepts);
+                    var concept = self.conceptForConceptType(info['http://lumify.io#conceptType'], allConcepts);
                     if (concept) {
                         updateCss(concept.glyphIconHref);
                     }
@@ -433,7 +433,7 @@ define([
                 updateCss(vertex && vertex.properties._glyphIcon.value);
             } else {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = (vertex && vertex._conceptType.value) || conceptId;
+                    var conceptType = (vertex && vertex['http://lumify.io#conceptType'].value) || conceptId;
                     if (conceptType) {
                         var concept = self.conceptForConceptType(conceptType, allConcepts);
                         if (concept) {
@@ -514,7 +514,7 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (vertexInfo && (vertexInfo._conceptType || (vertexInfo.properties && vertexInfo.properties._conceptType.value))) || ''
+                    selectedConceptId: (vertexInfo && (vertexInfo['http://lumify.io#conceptType'] || (vertexInfo.properties && vertexInfo.properties['http://lumify.io#conceptType'].value))) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -661,7 +661,7 @@ define([
                                 item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title.value]),
                             icon = '',
                             concept = _.find(self.allConcepts, function(c) {
-                                return item.properties && c.id === item.properties._conceptType.value;
+                                return item.properties && c.id === item.properties['http://lumify.io#conceptType'].value;
                             });
 
                         if (item.properties) {

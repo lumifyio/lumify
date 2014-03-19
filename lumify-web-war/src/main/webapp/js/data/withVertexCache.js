@@ -124,10 +124,10 @@ define([
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            cache.concept = this.cachedConcepts.byId[cache.properties._conceptType.value || cache.properties._conceptType]
+            cache.concept = this.cachedConcepts.byId[cache.properties['http://lumify.io#conceptType'].value || cache.properties['http://lumify.io#conceptType']]
             if (cache.concept) {
                 setPreviewsForVertex(cache, this.workspaceId);
-            } else console.error('Unable to attach concept to vertex', cache.properties._conceptType);
+            } else console.error('Unable to attach concept to vertex', cache.properties['http://lumify.io#conceptType']);
 
             cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
             return cache;

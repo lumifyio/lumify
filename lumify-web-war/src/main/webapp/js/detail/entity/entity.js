@@ -138,7 +138,7 @@ define([
                     r.relationshipInfo = {
                         id: r.relationship.id,
                         properties: $.extend({}, r.relationship.properties, {
-                            _conceptType: 'relationship',
+                            'http://lumify.io#conceptType': 'relationship',
                             id: r.relationship.id,
                             relationshipType: r.relationship.label,
                             source: r.relationship.sourceVertexId,

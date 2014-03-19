@@ -397,7 +397,7 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', '_conceptType', '_glyphIcon', 'title'));
+            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', 'http://lumify.io#conceptType', '_glyphIcon', 'title'));
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
 
@@ -1045,7 +1045,7 @@ define([
                                     vertex: {
                                         id: relationship.id,
                                         properties: {
-                                            _conceptType: 'relationship',
+                                            'http://lumify.io#conceptType': 'relationship',
                                             source: relationship.from,
                                             target: relationship.to,
                                             relationshipType: relationship.relationshipType

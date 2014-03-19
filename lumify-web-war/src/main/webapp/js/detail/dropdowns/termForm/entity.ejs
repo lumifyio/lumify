@@ -1,6 +1,6 @@
 <% if (item.properties) { %>
   
-  <div class="existing gId-<%= item.id %> <%= iconSrc ? 'has_preview' : '' %> conceptType-<%= item.properties._conceptType.value %>">
+  <div class="existing gId-<%= item.id %> <%= iconSrc ? 'has_preview' : '' %> conceptType-<%= item.properties['http://lumify.io#conceptType'].value %>">
 
     <% if (iconSrc) { %>
       <div class="preview" style="background-image:url(<%= iconSrc %>)" />

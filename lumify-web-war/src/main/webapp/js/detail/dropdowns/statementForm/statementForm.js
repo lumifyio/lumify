@@ -87,7 +87,7 @@ define([
                 }
             });
 
-            applyToElement.addClass('concepticon-' + el.data('info')._conceptType);
+            applyToElement.addClass('concepticon-' + el.data('info')['http://lumify.io#conceptType']);
         };
 
         this.onSelection = function (e) {
@@ -143,8 +143,8 @@ define([
 
         this.getRelationshipLabels = function () {
             var self = this;
-            var sourceConceptTypeId = this.attr.sourceTerm.data('info')._conceptType;
-            var destConceptTypeId = this.attr.destTerm.data('info')._conceptType;
+            var sourceConceptTypeId = this.attr.sourceTerm.data('info')['http://lumify.io#conceptType'];
+            var destConceptTypeId = this.attr.destTerm.data('info')['http://lumify.io#conceptType'];
             self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (relationships) {
                 self.displayRelationships(relationships);
             });

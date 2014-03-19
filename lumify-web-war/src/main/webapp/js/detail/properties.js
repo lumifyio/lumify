@@ -230,14 +230,14 @@ define([
                 var type = audit[direction + 'Type'];
 
                 info = {
-                    _conceptType: audit[direction + 'Type'],
+                    'http://lumify.io#conceptType': audit[direction + 'Type'],
                     title: audit[direction + 'Title'],
                     graphVertexId: audit[direction + 'Id']
                 };
             } else {
                 info = {
                     _type: audit.type,
-                    _conceptType: audit.subType,
+                    'http://lumify.io#conceptType': audit.subType,
                     title: audit.title,
                     graphVertexId: audit.id
                 };
@@ -259,7 +259,7 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties._conceptType.value === 'relationship') {
+            if (self.attr.data.properties['http://lumify.io#conceptType'].value === 'relationship') {
                 self.relationshipService.deleteProperty(
                         data.property.name,
                         this.attr.data.properties.source.value,
@@ -281,7 +281,7 @@ define([
 
         this.onAddProperty = function(event, data) {
             var self = this,
-                isEdge = this.attr.data.properties._conceptType.value === 'relationship',
+                isEdge = this.attr.data.properties['http://lumify.io#conceptType'].value === 'relationship',
                 done = isEdge ? function(edge) {
                     var properties = $.extend({}, self.attr.data.properties, edge.properties);
                     self.displayProperties(properties);
@@ -408,7 +408,7 @@ define([
         keys.forEach(function(name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
+                isEdge = properties['http://lumify.io#conceptType'] && properties['http://lumify.io#conceptType'].value === 'relationship',
                 isRelationshipType = name === 'relationshipType' && isEdge;
 
             if (ontologyProperty) {

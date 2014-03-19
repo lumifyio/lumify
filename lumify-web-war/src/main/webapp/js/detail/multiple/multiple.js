@@ -39,7 +39,7 @@ define([
         this.after('initialize', function () {
             var self = this,
                 vertices = this.attr.data.filter(function (v) {
-                    return !v.properties._conceptType || v.properties._conceptType != 'relationship';
+                    return !v.properties['http://lumify.io#conceptType'] || v.properties['http://lumify.io#conceptType'] != 'relationship';
                 }),
                 ids = _.pluck(vertices, 'id');
 
@@ -201,7 +201,7 @@ define([
             });
 
             function shouldDisplay(propertyName) {
-                if (propertyName == '_conceptType') {
+                if (propertyName == 'http://lumify.io#conceptType') {
                     return true;
                 } else if (/^[_]/.test(propertyName)) {
                     return false;
@@ -232,7 +232,7 @@ define([
 
             function getPropertyValueDisplay(concepts, properties, propertyName, propertyValue) {
                 var propertyValueDisplay = propertyValue;
-                if (propertyName == '_conceptType' && concepts.byId[propertyValue]) {
+                if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
                     propertyValueDisplay = concepts.byId[propertyValue].title;
                 } else if (properties.byTitle[propertyName]) {
                     switch (properties.byTitle[propertyName].dataType) {

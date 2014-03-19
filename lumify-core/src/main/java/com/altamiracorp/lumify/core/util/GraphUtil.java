@@ -111,9 +111,6 @@ public class GraphUtil {
             resultsJson.put(property.getName(), propertyJson);
 
             // TODO remove me and fix JavaScript to use full name
-            if (OntologyLumifyProperties.CONCEPT_TYPE.getKey().equals(property.getName())) {
-                resultsJson.put("_conceptType", propertyJson);
-            }
             if (OntologyLumifyProperties.DISPLAY_TYPE.getKey().equals(property.getName())) {
                 resultsJson.put("_displayType", propertyJson);
             }

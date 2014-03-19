@@ -92,7 +92,7 @@ define([
                 if ($.isArray(this.attr.data)) {
                     ids = _.map(
                             _.reject(this.attr.data, function(v) { 
-                                return v._conceptType === 'relationship';
+                                return v['http://lumify.io#conceptType'] === 'relationship';
                             }), function(v) {
                                 return v.id || v.graphVertexId;
                             });
@@ -157,10 +157,10 @@ define([
 
             if (vertex.concept.displayType === 'document' || vertex.concept.displayType === 'image' || vertex.concept.displayType === 'video') {
                 cls.push('artifact entity resolved');
-                if (props._conceptType) cls.push(props._conceptType.value);
+                if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
             } else {
                 cls.push('entity resolved');
-                if (props._conceptType) cls.push('conceptType-' + props._conceptType.value);
+                if (props['http://lumify.io#conceptType']) cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
             }
             cls.push('gId-' + (vertex.id || props.graphNodeId));
 

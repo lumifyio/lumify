@@ -66,8 +66,8 @@ define([
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
 
-            (vertex.properties._conceptType.value != 'relationship' ?
-                self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
+            (vertex.properties['http://lumify.io#conceptType'].value != 'relationship' ?
+                self.attr.service.propertiesByConceptId(vertex.properties['http://lumify.io#conceptType'].value) :
                 self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
             ).done(function(properties) {
                 var propertiesList = [{

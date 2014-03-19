@@ -31,7 +31,7 @@
 <div class='detected-object-labels'>
   <% (vertex.detectedObjects).forEach(function(object) {
     if (object.entityVertex) {
-        var conceptType = object.entityVertex.properties._conceptType.value || object._conceptType;
+        var conceptType = object.entityVertex.properties['http://lumify.io#conceptType'].value || object['http://lumify.io#conceptType'];
         var title = object.entityVertex.properties.title.value || object.classiferConcept;
         var classes = 'label-info detected-object resolved entity conceptType-' + conceptType;%>
         <span class="detected-object-tag">
