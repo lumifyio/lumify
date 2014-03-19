@@ -189,6 +189,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             graph.removeVertex(vertex, authorizations);
             return;
         }
+        String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
@@ -211,7 +212,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterator<Audit> rows = auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser).iterator();
         while (rows.hasNext()) {
             Audit row = rows.next();
-            modelSession.alterAllColumnsVisibility(row, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+            modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
 
         Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
@@ -223,10 +224,10 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
-                    modelSession.alterAllColumnsVisibility(detectedObjectModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                    modelSession.alterColumnsVisibility(detectedObjectModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
                 }
             } else {
-                modelSession.alterAllColumnsVisibility(termMentionModel, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                modelSession.alterColumnsVisibility(termMentionModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
         vertex.removeProperty("_rowKey");
@@ -263,6 +264,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Edge> edgeExistingElementMutation = edge.prepareMutation();
         Iterator properties = edge.getProperties().iterator();
+        String originalEdgeVisibility = edge.getVisibility().getVisibilityString();
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
         while (properties.hasNext()) {
             Property property = (Property) properties.next();
@@ -281,7 +283,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterator<Audit> rows = auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser).iterator();
         while (rows.hasNext()) {
             Audit row = rows.next();
-            modelSession.alterAllColumnsVisibility(row, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+            modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
     }
 }

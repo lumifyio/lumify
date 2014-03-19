@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.util;
 
-import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +15,7 @@ public class JSONUtil {
     }
 
     public static void addToJSONArrayIfDoesNotExist(JSONArray jsonArray, Object value) {
-        if (!arrayConains(jsonArray, value)) {
+        if (!arrayContains(jsonArray, value)) {
             jsonArray.put(value);
         }
     }
@@ -30,7 +29,7 @@ public class JSONUtil {
         return -1;
     }
 
-    public static boolean arrayConains(JSONArray jsonArray, Object value) {
+    public static boolean arrayContains(JSONArray jsonArray, Object value) {
         return arrayIndexOf(jsonArray, value) != -1;
     }
 
@@ -41,7 +40,7 @@ public class JSONUtil {
         }
     }
 
-    public static void removeWorkspaceFromJSONArray (JSONArray jsonArray) {
+    public static void removeWorkspacesFromJSONArray(JSONArray jsonArray) {
         for (int i = 0; i < jsonArray.length(); i++) {
             if (jsonArray.get(i).toString().contains(WorkspaceRepository.VISIBILITY_STRING.toUpperCase())) {
                 jsonArray.remove(i);

@@ -102,7 +102,6 @@ public class WorkspaceHelper {
 
                 TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
                 result = offsetItem.toJson();
-                result = offsetItem.toJson();
             }
 
             graph.flush();
