@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.TimingCallable;
 import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.altamiracorp.securegraph.util.FilterIterable;
 import com.google.common.cache.Cache;
@@ -18,7 +19,12 @@ import com.google.inject.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticweb.owlapi.model.IRI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +80,38 @@ public class OntologyRepository {
         this.allPropertiesCache.invalidateAll();
         this.conceptsCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();
+    }
+
+    public void storeOntologyFile(File file, IRI documentIRI) throws IOException {
+        InputStream in = new FileInputStream(file);
+        try {
+            storeOntologyFile(in, documentIRI);
+        } finally {
+            in.close();
+        }
+    }
+
+    public void storeOntologyFile(InputStream in, IRI documentIRI) {
+        StreamingPropertyValue value = new StreamingPropertyValue(in, byte[].class);
+        value.searchIndex(false);
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        Vertex rootConceptVertex = getRootConcept().getVertex();
+        metadata.put("index", toList(rootConceptVertex.getProperties("ontologyFile")).size());
+        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility());
+        graph.flush();
+    }
+
+    public Iterable<Property> getOntologyFiles() {
+        List<Property> ontologyFiles = toList(getRootConcept().getVertex().getProperties("ontologyFile"));
+        Collections.sort(ontologyFiles, new Comparator<Property>() {
+            @Override
+            public int compare(Property ontologyFile1, Property ontologyFile2) {
+                Integer index1 = (Integer) ontologyFile1.getMetadata().get("index");
+                Integer index2 = (Integer) ontologyFile2.getMetadata().get("index");
+                return index1.compareTo(index2);
+            }
+        });
+        return ontologyFiles;
     }
 
     public Iterable<Relationship> getRelationshipLabels() {
@@ -158,24 +196,6 @@ public class OntologyRepository {
         String from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
         String to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
         return new Relationship(relationshipVertex, from, to);
-    }
-
-    public Relationship getRelationship(String propertyName) {
-        try {
-            Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
-                    .has(ONTOLOGY_TITLE.getKey(), propertyName)
-                    .vertices(), null);
-            Relationship relationship = null;
-            if (relVertex != null) {
-                String from = single(relVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
-                String to = single(relVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
-                relationship = new Relationship(relVertex, from, to);
-            }
-            return relationship;
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException(String.format("Too many \"%s\" relationshipVertices.", propertyName), iae);
-        }
     }
 
     public Iterable<Concept> getConcepts() {

@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.ontology;
 
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
@@ -10,6 +11,7 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
+import org.semanticweb.owlapi.model.IRI;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -61,9 +63,19 @@ public class BaseOntology {
             GLYPH_ICON.setProperty(entityConcept.getVertex(), raw, OntologyRepository.VISIBILITY.getVisibility());
             graph.flush();
         } catch (IOException e) {
-            throw new RuntimeException("invalid stream for glyph icon");
+            throw new LumifyException("invalid stream for glyph icon");
         }
 
+        InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
+        try {
+            ontologyRepository.storeOntologyFile(baseOwlFile, IRI.create("http://lumify.io"));
+        } finally {
+            try {
+                baseOwlFile.close();
+            } catch (IOException ex) {
+                throw new LumifyException("Could not close file", ex);
+            }
+        }
     }
 
     public boolean isOntologyDefined(User user) {

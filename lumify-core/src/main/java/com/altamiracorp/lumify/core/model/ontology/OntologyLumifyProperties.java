@@ -37,29 +37,16 @@ import com.altamiracorp.securegraph.TextIndexHint;
  * LumifyProperty values used for storage of Ontology concepts.
  */
 public final class OntologyLumifyProperties {
-    /**
-     * The Concept Type property.
-     */
-    public static final TextLumifyProperty CONCEPT_TYPE = new TextLumifyProperty("_conceptType", TextIndexHint.EXACT_MATCH);
+    public static final TextLumifyProperty CONCEPT_TYPE = new TextLumifyProperty("http://lumify.io#conceptType", TextIndexHint.EXACT_MATCH);
 
-    /**
-     * The Data Type property.
-     */
-    public static final TextLumifyProperty DATA_TYPE = new TextLumifyProperty("_dataType", TextIndexHint.EXACT_MATCH);
+    public static final TextLumifyProperty DATA_TYPE = new TextLumifyProperty("http://lumify.io#dataType", TextIndexHint.EXACT_MATCH);
 
-    /**
-     * The Ontology Title property.
-     */
-    public static final TextLumifyProperty ONTOLOGY_TITLE = new TextLumifyProperty("ontologyTitle", TextIndexHint.EXACT_MATCH);
+    public static final TextLumifyProperty ONTOLOGY_TITLE = new TextLumifyProperty("http://lumify.io#ontologyTitle", TextIndexHint.EXACT_MATCH);
 
-    /**
-     * The Color property.
-     */
-    public static final TextLumifyProperty COLOR = new TextLumifyProperty("_color", TextIndexHint.NONE);
+    public static final TextLumifyProperty DISPLAY_TYPE = new TextLumifyProperty("http://lumify.io#displayType", TextIndexHint.EXACT_MATCH);
 
-    /**
-     * Utility class. No construction allowed.
-     */
+    public static final TextLumifyProperty COLOR = new TextLumifyProperty("http://lumify.io#color", TextIndexHint.NONE);
+
     private OntologyLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
     }

@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.COLOR;
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
 
 public class Concept {

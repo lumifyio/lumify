@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -82,6 +83,9 @@ public class OwlImport extends CommandLineBase {
     }
 
     public void importFile(File inFile, IRI documentIRI, User user) throws OWLOntologyCreationException, IOException {
+        if (!inFile.exists()) {
+            throw new LumifyException("File " + inFile + " does not exist");
+        }
         inDir = inFile.getParentFile();
 
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
@@ -89,7 +93,7 @@ public class OwlImport extends CommandLineBase {
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
         config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
 
-        loadBaseOntology(m, config);
+        loadOntologyFiles(m, config);
 
         OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
         OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
@@ -106,20 +110,25 @@ public class OwlImport extends CommandLineBase {
             importObjectProperty(o, objectProperty);
         }
 
+        ontologyRepository.storeOntologyFile(inFile, documentIRI);
+
         graph.flush();
         ontologyRepository.clearCache();
     }
 
-    private void loadBaseOntology(OWLOntologyManager m, OWLOntologyLoaderConfiguration config) throws OWLOntologyCreationException, IOException {
-        InputStream lumifyBaseOntologyIn = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
-        checkNotNull(lumifyBaseOntologyIn, "Could not load base ontology file");
-        try {
-            Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
-            IRI lumifyBaseOntologyIRI = IRI.create("http://lumify.io");
-            OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
-            m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
-        } finally {
-            lumifyBaseOntologyIn.close();
+    private void loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config) throws OWLOntologyCreationException, IOException {
+        Iterable<Property> ontologyFiles = ontologyRepository.getOntologyFiles();
+        for (Property ontologyFile : ontologyFiles) {
+            InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
+            try {
+                Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
+                LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
+                IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
+                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
+                m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
+            } finally {
+                lumifyBaseOntologyIn.close();
+            }
         }
     }
 

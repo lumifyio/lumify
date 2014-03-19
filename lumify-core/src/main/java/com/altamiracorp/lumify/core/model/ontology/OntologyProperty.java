@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DATA_TYPE;
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_TYPE;
 
 public class OntologyProperty {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
