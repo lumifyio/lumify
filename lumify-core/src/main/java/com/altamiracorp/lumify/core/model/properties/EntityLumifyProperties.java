@@ -22,24 +22,10 @@ import com.altamiracorp.securegraph.type.GeoPoint;
  * LumifyProperties that apply to both raw and resolved entities stored in the Lumify system.
  */
 public class EntityLumifyProperties {
-    /**
-     * The geo location of the entity.
-     */
-    public static final IdentityLumifyProperty<GeoPoint> GEO_LOCATION = new IdentityLumifyProperty<GeoPoint>("geoLocation");
+    public static final IdentityLumifyProperty<GeoPoint> GEO_LOCATION = new IdentityLumifyProperty<GeoPoint>("http://lumify.io#geolocation");
+    public static final TextLumifyProperty GEO_LOCATION_DESCRIPTION = TextLumifyProperty.all("http://lumify.io#geoLocationDescription");
+    public static final TextLumifyProperty SOURCE = TextLumifyProperty.all("http://lumify.io#source");
 
-    /**
-     * The geo location description.
-     */
-    public static final TextLumifyProperty GEO_LOCATION_DESCRIPTION = TextLumifyProperty.all("_geoLocationDescription");
-
-    /**
-     * The ingest source of the entity.
-     */
-    public static final TextLumifyProperty SOURCE = TextLumifyProperty.all("_source");
-
-    /**
-     * Utility class consructor.
-     */
     private EntityLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
     }
