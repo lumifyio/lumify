@@ -1,0 +1,603 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:atc="http://altamiracorp.com/ontology#">
+    <owl:Ontology rdf:about="">
+        <owl:versionInfo xml:lang="en">Version 3.8</owl:versionInfo>
+    </owl:Ontology>
+    
+<!-- Concept: Raw -->
+    <owl:Class rdf:about="raw">
+        <rdfs:label xml:lang="en">Raw</rdfs:label>
+        <atc:property atc:name="_color">rgb(28, 137, 28)</atc:property>
+        <atc:property atc:name="glyphIconFileName">artifact.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    
+<!-- Concept: Document -->
+    <owl:Class rdf:about="document">
+        <rdfs:label xml:lang="en">Document</rdfs:label>
+        <atc:property atc:name="_color">rgb(28, 137, 28)</atc:property>
+        <atc:property atc:name="glyphIconFileName">artifact.png</atc:property>
+        <atc:property atc:name="displayType">document</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/raw"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="publishedDate">
+        <rdfs:label xml:lang="en">published date</rdfs:label>
+        <rdfs:domain rdf:resource="#document"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#document"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    
+<!-- Concept: Image -->
+	<owl:Class rdf:about="image">
+        <rdfs:label xml:lang="en">Image</rdfs:label>
+        <atc:property atc:name="_color">rgb(176, 87, 53)</atc:property>
+        <atc:property atc:name="glyphIconFileName">artifact.png</atc:property>
+        <atc:property atc:name="displayType">image</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/raw"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#image"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="publishedDate">
+        <rdfs:label xml:lang="en">published date</rdfs:label>
+        <rdfs:domain rdf:resource="#image"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    
+<!-- Concept: Video --> 
+	<owl:Class rdf:about="video">
+        <rdfs:label xml:lang="en">Video</rdfs:label>
+        <atc:property atc:name="_color">rgb(149, 138, 218)</atc:property>
+        <atc:property atc:name="glyphIconFileName">artifact.png</atc:property>
+        <atc:property atc:name="displayType">video</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/raw"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#video"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="publishedDate">
+        <rdfs:label xml:lang="en">published date</rdfs:label>
+        <rdfs:domain rdf:resource="#video"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    
+<!-- Concept: person -->
+    
+    <owl:Class rdf:about="person">
+        <rdfs:label xml:lang="en">Person</rdfs:label>
+        <atc:property atc:name="_color">rgb(28, 137, 28)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_003_user@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="birthDate">
+        <rdfs:label xml:lang="en">birth date</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="gender">
+        <rdfs:label xml:lang="en">gender</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="alias">
+        <rdfs:label xml:lang="en">alias</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    
+    
+<!-- Concept: contact -->
+
+    <owl:Class rdf:about="contact">
+        <rdfs:label xml:lang="en">Contact Information</rdfs:label>
+        <atc:property atc:name="_color">rgb(225, 128, 0)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_088_address_book@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="creationDate">
+        <rdfs:label xml:lang="en">creationDate</rdfs:label>
+        <rdfs:domain rdf:resource="#contact"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#contact"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+
+<!-- Concept: phone number -->
+
+    <owl:Class rdf:about="phoneNumber">
+        <rdfs:label xml:lang="en">Phone Number</rdfs:label>
+        <atc:property atc:name="_color">rgb(225, 225, 24)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_139_phone@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/contact"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="creationDate">
+        <rdfs:label xml:lang="en">creationDate</rdfs:label>
+        <rdfs:domain rdf:resource="#phoneNumber"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+
+
+<!-- Concept: email address -->
+
+    <owl:Class rdf:about="emailAddress">
+        <rdfs:label xml:lang="en">Email Address</rdfs:label>
+        <atc:property atc:name="_color">rgb(203, 130, 4)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_010_envelope@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/contact"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="creationDate">
+        <rdfs:label xml:lang="en">creationDate</rdfs:label>
+        <rdfs:domain rdf:resource="#emailAddress"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+
+
+<!-- Concept: organization -->
+    
+    <owl:Class rdf:about="organization">
+        <rdfs:label xml:lang="en">Organization</rdfs:label>
+        <atc:property atc:name="_color">rgb(137, 39, 26)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_043_group@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="formationDate">
+        <rdfs:label xml:lang="en">formation date</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="abbreviation">
+        <rdfs:label xml:lang="en">abbreviation</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+        
+<!-- Concept: company -->
+    
+    <owl:Class rdf:about="company">
+        <rdfs:label xml:lang="en">Company</rdfs:label>
+        <atc:property atc:name="_color">rgb(210, 52, 32)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_263_bank@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="#organization"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="netIncome">
+        <rdfs:label xml:lang="en">net income</rdfs:label>
+        <rdfs:domain rdf:resource="#company"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/currency"/>
+    </owl:DatatypeProperty> 
+ 
+<!-- Concept: event -->
+
+    <owl:Class rdf:about="event">
+        <rdfs:label xml:lang="en">Event</rdfs:label>
+        <atc:property atc:name="_color">rgb(23, 30, 239)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_045_calendar@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="date">
+        <rdfs:label xml:lang="en">date</rdfs:label>
+        <rdfs:domain rdf:resource="#event"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/date"/>
+    </owl:DatatypeProperty>
+	<owl:DatatypeProperty rdf:about="geoLocation">
+	    <rdfs:label xml:lang="en">geoLocation</rdfs:label>
+	    <rdfs:domain rdf:resource="#event"/>
+	    <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+	</owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#event"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+    
+    
+<!-- Concept: location -->
+
+    <owl:Class rdf:about="location">
+        <rdfs:label xml:lang="en">Location</rdfs:label>
+        <atc:property atc:name="_color">rgb(160, 7, 206)</atc:property>
+        <atc:property atc:name="glyphIconFileName">pin@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/entity"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="geoLocation">
+        <rdfs:label xml:lang="en">geo location</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+    </owl:DatatypeProperty>
+        <owl:DatatypeProperty rdf:about="source">
+        <rdfs:label xml:lang="en">source</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/string"/>
+    </owl:DatatypeProperty>
+
+<!-- Concept: country -->
+
+    <owl:Class rdf:about="country">
+        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <atc:property atc:name="_color">rgb(112, 0, 112)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_266_flag@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/location"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="geoLocation">
+        <rdfs:label xml:lang="en">geo location</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+    </owl:DatatypeProperty>  
+    
+<!-- Concept: state -->
+
+    <owl:Class rdf:about="state">
+        <rdfs:label xml:lang="en">State</rdfs:label>
+        <atc:property atc:name="_color">rgb(153, 0, 153)</atc:property>
+        <atc:property atc:name="glyphIconFileName">state.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/location"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="geoLocation">
+        <rdfs:label xml:lang="en">geo location</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+    </owl:DatatypeProperty>
+    
+<!-- Concept: city -->
+
+    <owl:Class rdf:about="city">
+        <rdfs:label xml:lang="en">City</rdfs:label>
+        <atc:property atc:name="_color">rgb(191, 13, 191)</atc:property>
+        <atc:property atc:name="glyphIconFileName">city.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/location"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="geoLocation">
+        <rdfs:label xml:lang="en">geo location</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+    </owl:DatatypeProperty>
+    
+<!-- Concept: address -->
+
+    <owl:Class rdf:about="address">
+        <rdfs:label xml:lang="en">Address</rdfs:label>
+        <atc:property atc:name="_color">rgb(219, 63, 219)</atc:property>
+        <atc:property atc:name="glyphIconFileName">glyphicons_020_home@2x.png</atc:property>
+        <rdfs:subClassOf rdf:resource="http://altamiracorp.com/ontology/location"/>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="geoLocation">
+        <rdfs:label xml:lang="en">geo location</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="http://altamiracorp.com/datatype/geoLocation"/>
+    </owl:DatatypeProperty>
+
+<!-- relationships -->
+ 	<owl:ObjectProperty rdf:about="rawHasEntity">
+        <rdfs:label xml:lang="en">has entity</rdfs:label>
+        <rdfs:domain rdf:resource="#raw"/>
+        <rdfs:range rdf:resource="#entity"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="rawContainsImageOfEntity">
+    	<rdfs:label xml:lang="en">contains image of</rdfs:label>
+        <rdfs:domain rdf:resource="#raw"/>
+        <rdfs:range rdf:resource="#entity"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="entityHasImageRaw">
+    	<rdfs:label xml:lang="en">has image</rdfs:label>
+        <rdfs:domain rdf:resource="#entity"/>
+        <rdfs:range rdf:resource="#raw"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personKnowsPerson">
+        <rdfs:label xml:lang="en">knows</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personWorksAtCompany">
+        <rdfs:label xml:lang="en">works at</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#company"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personLivesAtLocation">
+        <rdfs:label xml:lang="en">lives at</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasEmailAddress">
+        <rdfs:label xml:lang="en">has email address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#emailAddress"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasPhoneNumber">
+        <rdfs:label xml:lang="en">has phone number</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasFaxNumber">
+        <rdfs:label xml:lang="en">has fax number</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+        <owl:ObjectProperty rdf:about="organizationHasFaxNumber">
+        <rdfs:label xml:lang="en">has fax number</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHeadquarteredAtLocation">
+        <rdfs:label xml:lang="en">headquartered at</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasOfficeAtLocation">
+        <rdfs:label xml:lang="en">has office at</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="organizationHasOfficeInLocation">
+        <rdfs:label xml:lang="en">has office in</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasEmailAddress">
+        <rdfs:label xml:lang="en">has email address</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#emailAddress"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasPhoneNumber">
+        <rdfs:label xml:lang="en">has phone number</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasContactInformation">
+        <rdfs:label xml:lang="en">has contact information</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#contact"/>
+    </owl:ObjectProperty>    
+    <owl:ObjectProperty rdf:about="personHasContactInformation">
+        <rdfs:label xml:lang="en">has contact information</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#contact"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasKeyLeader">
+        <rdfs:label xml:lang="en">has key leader</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="eventHappenedInLocation">
+	    <rdfs:label xml:lang="en">happened in</rdfs:label>
+	    <rdfs:domain rdf:resource="#event"/>
+	    <rdfs:range rdf:resource="#location"/>
+	</owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="personHasSiblingPerson">
+        <rdfs:label xml:lang="en">has sibling</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="personHasGrandparentPerson">
+        <rdfs:label xml:lang="en">has grandparent</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasParentPerson">
+        <rdfs:label xml:lang="en">has parent</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasChildPerson">
+        <rdfs:label xml:lang="en">has child</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personGrandchildPerson">
+        <rdfs:label xml:lang="en">has grandchild</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasCousinPerson">
+        <rdfs:label xml:lang="en">has cousin</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasInLawPerson">
+        <rdfs:label xml:lang="en">has in-law</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasAuntPerson">
+        <rdfs:label xml:lang="en">has aunt</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasUnclePerson">
+        <rdfs:label xml:lang="en">has uncle</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasNiecePerson">
+        <rdfs:label xml:lang="en">has niece</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasNephewPerson">
+        <rdfs:label xml:lang="en">has nephew</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasFriendPerson">
+        <rdfs:label xml:lang="en">has friend</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasCoworkerPerson">
+        <rdfs:label xml:lang="en">has coworker</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personLivesWithPerson">
+        <rdfs:label xml:lang="en">lives with</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasHomeAddressLocation">
+        <rdfs:label xml:lang="en">has home address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasWorkAddressLocation">
+        <rdfs:label xml:lang="en">has work address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personIsFromLocation">
+        <rdfs:label xml:lang="en">is from</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasCitizenshipInCountry">
+        <rdfs:label xml:lang="en">has citizenship in</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#country"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasVisitedLocation">
+        <rdfs:label xml:lang="en">has home address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasLivedLocation">
+        <rdfs:label xml:lang="en">has lived in</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personOwnsLocation">
+        <rdfs:label xml:lang="en">owns</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="locationHasLeaderPerson">
+        <rdfs:label xml:lang="en">has leader</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personIsMemberOfOrganization">
+        <rdfs:label xml:lang="en">is member of</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personIsEmployedByOrganizaton">
+        <rdfs:label xml:lang="en">is employed by</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personSupportsOrganization">
+        <rdfs:label xml:lang="en">supports</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personIsLeaderOfOrganization">
+        <rdfs:label xml:lang="en">is leader of</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasLeaderPerson">
+        <rdfs:label xml:lang="en">has leader</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationHasEmployeePerson">
+        <rdfs:label xml:lang="en">has employee</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+	<owl:ObjectProperty rdf:about="eventPlannedByOrganization">
+	    <rdfs:label xml:lang="en">planned by</rdfs:label>
+	    <rdfs:domain rdf:resource="#organization"/>
+	    <rdfs:range rdf:resource="#event"/>
+	</owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="eventWasPlannedByOrganization">
+        <rdfs:label xml:lang="en">is planned by</rdfs:label>
+        <rdfs:domain rdf:resource="#event"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasHomeEmailAddress">
+        <rdfs:label xml:lang="en">has home address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#emailAddress"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasWorkEmailAddress">
+        <rdfs:label xml:lang="en">has work address</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#emailAddress"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasHomePhoneNumber">
+        <rdfs:label xml:lang="en">has home phone number</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="personHasWorkPhoneNumber">
+        <rdfs:label xml:lang="en">has work phone number</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#phoneNumber"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="eventWasPlannedByPerson">
+        <rdfs:label xml:lang="en">is planned by</rdfs:label>
+        <rdfs:domain rdf:resource="#event"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="locationIsInLocation">
+        <rdfs:label xml:lang="en">is in</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="locationIsAtLocation">
+        <rdfs:label xml:lang="en">is at</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="locationIsCaptialOfLocation">
+        <rdfs:label xml:lang="en">is capital of</rdfs:label>
+        <rdfs:domain rdf:resource="#location"/>
+        <rdfs:range rdf:resource="#location"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="rawHasSourcePerson">
+        <rdfs:label xml:lang="en">has author</rdfs:label>
+        <rdfs:domain rdf:resource="#raw"/>
+        <rdfs:range rdf:resource="#person"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="rawHasSourceOrganization">
+        <rdfs:label xml:lang="en">has author</rdfs:label>
+        <rdfs:domain rdf:resource="#raw"/>
+        <rdfs:range rdf:resource="#organization"/>
+    </owl:ObjectProperty>
+        <owl:ObjectProperty rdf:about="personAuthoredRaw">
+        <rdfs:label xml:lang="en">authored</rdfs:label>
+        <rdfs:domain rdf:resource="#person"/>
+        <rdfs:range rdf:resource="#raw"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationAuthoredRaw">
+        <rdfs:label xml:lang="en">authored</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#raw"/>
+    </owl:ObjectProperty>
+    <owl:ObjectProperty rdf:about="organizationPublishedRaw">
+        <rdfs:label xml:lang="en">published</rdfs:label>
+        <rdfs:domain rdf:resource="#organization"/>
+        <rdfs:range rdf:resource="#raw"/>
+    </owl:ObjectProperty>
+                 
+</rdf:RDF>
