@@ -173,7 +173,7 @@ public class GraphUtil {
         if (workspacesJsonArray == null) {
             return SandboxStatus.PUBLIC;
         }
-        if (!JSONUtil.arrayConains(workspacesJsonArray, workspaceId)) {
+        if (!JSONUtil.arrayContains(workspacesJsonArray, workspaceId)) {
             return SandboxStatus.PUBLIC;
         }
         return SandboxStatus.PRIVATE;
@@ -339,6 +339,20 @@ public class GraphUtil {
         return json;
     }
 
+    public static JSONObject updateVisibilityJsonRemoveFromWorkspace(String jsonString, String workspaceId) {
+        JSONObject json;
+        if (jsonString == null) {
+            json = new JSONObject();
+        } else {
+            json = new JSONObject(jsonString);
+        }
+
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
+        JSONUtil.removeFromJSONArray(workspaceJsonArray, workspaceId);
+
+        return json;
+    }
+
     public static JSONObject updateVisibilityJsonRemoveFromAllWorkspace(String jsonString) {
         JSONObject json;
         if (jsonString == null) {
@@ -348,7 +362,7 @@ public class GraphUtil {
         }
 
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
-        JSONUtil.removeWorkspaceFromJSONArray(workspaceJsonArray);
+        JSONUtil.removeWorkspacesFromJSONArray(workspaceJsonArray);
 
         return json;
     }
