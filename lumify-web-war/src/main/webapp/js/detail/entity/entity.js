@@ -157,21 +157,10 @@ define([
                     return 'references';
                 }
 
-                // Group all that are relations from this vertex (not dest)
-                if (r.relationship.sourceVertexId === vertex.id) {
-                    return r.displayLabel;
-                }
-
-                // Collect all relationships that are destined here
-                // into section
-                return 'inverse';
+                return r.displayLabel;
             });
             var sortedKeys = Object.keys(groupedByType);
             sortedKeys.sort(function(a,b) {
-                // If in inverse group, sort by the type
-                if (a === b && a === 'inverse') {
-                    return a.displayLabel === b.displayLabel ? 0 : a.displayLabel < b.displayLabel ? -1 : 1;
-                }
 
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
@@ -179,7 +168,7 @@ define([
                 }
 
                 // Specifies the special group sort order
-                var groups = { inverse:1, references:2 };
+                var groups = { references:1 };
                 if (groups[a] && groups[b]) {
                     return defaultSort(groups[a], groups[b]);
                 } else if (groups[a]) {
