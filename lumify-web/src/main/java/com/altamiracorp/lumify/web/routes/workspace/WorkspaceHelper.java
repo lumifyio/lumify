@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
@@ -11,7 +12,6 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
-import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -59,21 +59,6 @@ public class WorkspaceHelper {
             LOGGER.warn("invalid term mention row");
         } else {
             Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
-            // Clean up term mentions if system analytics wasn't performed on term
-            String columnFamilyName = termMention.getMetadata().getColumnFamilyName();
-            String columnName = termMention.getMetadata().VERTEX_ID;
-            String analyticProcess = termMention.getMetadata().getAnalyticProcess();
-
-            if (analyticProcess == null) {
-                modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
-            } else {
-                termMention.get(columnFamilyName).getColumn(columnName).setDirty(true);
-                modelSession.deleteColumn(termMention, termMention.getTableName(), columnFamilyName, columnName);
-                termMention.getMetadata().setVertexId("", visibility.getVisibility());
-
-                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
-                result = offsetItem.toJson();
-            }
 
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
@@ -101,6 +86,8 @@ public class WorkspaceHelper {
                 }
             }
 
+            modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
+
             graph.flush();
 
             if (deleteEdge) {
@@ -124,8 +111,9 @@ public class WorkspaceHelper {
             modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
             result.put("deleteTag", true);
         } else {
-            detectedObjectModel.get(columnFamilyName).getColumn(columnName).setDirty(true);
-            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName);
+            Column column = detectedObjectModel.get(columnFamilyName).getColumn(columnName);
+            column.setDirty(true);
+            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, column.getVisibility());
             result = detectedObjectModel.toJson();
         }
 

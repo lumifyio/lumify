@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -86,10 +87,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             return;
         }
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(resolvedVertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd);
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, graphVertexId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, lumifyVisibility, modelUserContext, user, authorizations);
 
