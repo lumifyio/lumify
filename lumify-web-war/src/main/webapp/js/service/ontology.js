@@ -4,6 +4,8 @@ define([
     'use strict';
 
 
+    var PARENT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing';
+
     function OntologyService() {
         ServiceBase.call(this);
 
@@ -37,7 +39,7 @@ define([
         return this.ontology()
                     .then(function(ontology) {
                         return {
-                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {id: 'http://www.w3.org/2002/07/owl#Thing'})),
+                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})),
                             byId: ontology.conceptsById, 
                             byTitle: _.chain(ontology.concepts)
                                 .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
@@ -65,7 +67,7 @@ define([
 
             while (parentConceptId) {
                 currentParentConcept = conceptsById[parentConceptId];
-                if (currentParentConcept.title === 'entity') {
+                if (currentParentConcept.id === PARENT_CONCEPT) {
                     return true;
                 }
                 parentConceptId = currentParentConcept.parentConcept;
@@ -81,7 +83,7 @@ define([
 
             while (parentConceptId) {
                 currentParentConcept = conceptsById[parentConceptId];
-                if (currentParentConcept.title === 'entity') break;
+                if (currentParentConcept.id === PARENT_CONCEPT) break;
                 parents.push(currentParentConcept);
                 parentConceptId = currentParentConcept.parentConcept;
             }

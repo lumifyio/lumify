@@ -55,7 +55,7 @@ define([
         this.onEntitySearchResultsForConcept = function($searchResultsSummary, concept, entities, count, parentPropertyListElements) {
             var self = this,
                 resultsCount = count,
-                badge = this.updateCountBadgeForConcept('concept-' + concept.id, resultsCount),
+                badge = this.updateCountBadgeForConcept(concept.id, resultsCount),
                 li = badge.closest('li').toggle(resultsCount > 0);
 
             parentPropertyListElements = parentPropertyListElements || $();
@@ -97,12 +97,25 @@ define([
             return false;
         };
 
+        var conceptToClassMap = {}, classNameToConceptMap = {}, clsIndex = 0;
+        this.classSafeConceptId = function(conceptId) {
+            if (conceptToClassMap[conceptId]) {
+                return conceptToClassMap[conceptId];
+            }
+
+            conceptToClassMap[conceptId] = 'cId' + (clsIndex++);
+            classNameToConceptMap[conceptToClassMap[conceptId]] = conceptId;
+
+            return conceptToClassMap[conceptId];
+        };
+
         this.getConceptChildrenHtml = function(concept, indent) {
             var self = this,
                 html = "";
             (concept.children || []).forEach(function(concept) {
                 html += conceptItemTemplate({
                     concept: concept,
+                    classSafeConceptId: self.classSafeConceptId(concept.id),
                     indent: indent
                 });
                 if(concept.children && concept.children.length > 0) {
@@ -113,7 +126,7 @@ define([
         };
 
         this.updateCountBadgeForConcept = function(conceptId, count) {
-            return this.$node.find('.' + conceptId + ' .badge')
+            return this.$node.find('.' + this.classSafeConceptId(conceptId) + ' .badge')
                 .removeClass('loading')
                 .data('count', count)
                 .attr('title', formatters.number.pretty(count))
