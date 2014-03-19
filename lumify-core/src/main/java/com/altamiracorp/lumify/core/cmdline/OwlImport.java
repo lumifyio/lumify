@@ -159,6 +159,11 @@ public class OwlImport extends CommandLineBase {
             OntologyLumifyProperties.COLOR.setProperty(result.getVertex(), color, OntologyRepository.VISIBILITY.getVisibility());
         }
 
+        String displayType = getDisplayType(o, ontologyClass);
+        if (displayType != null) {
+            OntologyLumifyProperties.DISPLAY_TYPE.setProperty(result.getVertex(), displayType, OntologyRepository.VISIBILITY.getVisibility());
+        }
+
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
@@ -313,6 +318,10 @@ public class OwlImport extends CommandLineBase {
 
     private String getColor(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#color");
+    }
+
+    private String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#displayType");
     }
 
     private String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {

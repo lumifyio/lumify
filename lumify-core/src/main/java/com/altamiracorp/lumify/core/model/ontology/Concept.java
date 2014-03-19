@@ -9,10 +9,9 @@ import org.json.JSONObject;
 
 import java.util.Collection;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.COLOR;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
 
 public class Concept {
 
@@ -65,7 +64,9 @@ public class Concept {
             result.put("id", getId());
             result.put("title", getTitle());
             result.put("displayName", getDisplayName());
-            result.put("displayType", getDisplayType());
+            if (getDisplayType() != null) {
+                result.put("displayType", getDisplayType());
+            }
             if (this.parentConceptVertex != null) {
                 result.put("parentConcept", this.parentConceptVertex.getId().toString());
             }

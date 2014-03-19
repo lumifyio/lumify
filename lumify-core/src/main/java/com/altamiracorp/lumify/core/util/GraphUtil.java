@@ -2,6 +2,8 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
+import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
@@ -107,6 +109,17 @@ public class GraphUtil {
             JSONObject propertyJson = GraphUtil.toJsonProperty(property);
             propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
             resultsJson.put(property.getName(), propertyJson);
+
+            // TODO remove me and fix JavaScript to use full name
+            if (OntologyLumifyProperties.CONCEPT_TYPE.getKey().equals(property.getName())) {
+                resultsJson.put("_conceptType", propertyJson);
+            }
+            if (OntologyLumifyProperties.DISPLAY_TYPE.getKey().equals(property.getName())) {
+                resultsJson.put("_displayType", propertyJson);
+            }
+            if (LumifyProperties.TITLE.getKey().equals(property.getName())) {
+                resultsJson.put("title", propertyJson);
+            }
         }
         return resultsJson;
     }
