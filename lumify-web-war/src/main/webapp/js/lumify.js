@@ -83,7 +83,11 @@ function(jQuery,
      * Switch between lumify and lumify-fullscreen-details based on url hash
      */
     function loadApplicationTypeBasedOnUrlHash(e) {
-        var ids = graphVertexIdsToOpen(),
+        var toOpen = graphVertexIdsToOpen(),
+
+            ids = toOpen && toOpen.ids,
+
+            workspaceId = toOpen && toOpen.workspaceId,
 
             // Is this the popoout details app? ids passed to hash?
             popoutDetails = !!(ids && ids.length),
@@ -123,7 +127,8 @@ function(jQuery,
                 require(['appFullscreenDetails'], function(PopoutDetailsApp) {
                     PopoutDetailsApp.teardownAll();
                     PopoutDetailsApp.attachTo('#app', {
-                        graphVertexIds: ids
+                        graphVertexIds: ids,
+                        workspaceId: workspaceId
                     });
                 });
             } else {
@@ -147,13 +152,13 @@ function(jQuery,
     }
 
     function isPopoutUrl(url) {
-        var ids = graphVertexIdsToOpen(url)
+        var toOpen = graphVertexIdsToOpen(url)
 
-        return !!(ids && ids.length);
+        return toOpen && toOpen.ids && toOpen.ids.length;
     }
 
     function graphVertexIdsToOpen(url) {
-        // http://...#v=1,2,3
+        // http://...#v=1,2,3&w=[workspaceid]
 
         var h = location.hash;
 
@@ -166,10 +171,24 @@ function(jQuery,
 
         if (!h || h.length === 0) return;
 
-        var m = h.match(/^#?v=(.+)$/);
+        var m = h.match(/^#?v=(.+?)(?:&w=(.+))?$/);
 
-        if (m && m.length === 2 && m[1].length) {
-            return m[1].split(',');
+        if (m && m.length === 3) {
+            var vertexIds = [],
+                workspaceId = null;
+
+            if (m[1]) {
+                vertexIds = decodeURIComponent(m[1]).split(',');
+            }
+
+            if (m[2]) {
+                workspaceId = decodeURIComponent(m[2]);
+            }
+
+            return {
+                ids: vertexIds,
+                workspaceId: workspaceId
+            };
         }
     }
 });

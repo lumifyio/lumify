@@ -564,6 +564,8 @@ define([
         };
 
         this.loadActiveWorkspace = function() {
+            window.workspaceId = this.workspaceId;
+
             var self = this;
             return self.workspaceService.list()
                 .done(function(data) {
@@ -626,7 +628,7 @@ define([
             var self = this,
                 workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
 
-            self.workspaceId = workspaceId;
+            window.workspaceId = self.workspaceId = workspaceId;
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
