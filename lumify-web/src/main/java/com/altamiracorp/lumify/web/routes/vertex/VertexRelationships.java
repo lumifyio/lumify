@@ -44,7 +44,7 @@ public class VertexRelationships extends BaseRequestHandler {
         JSONArray relationshipsJson = new JSONArray();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
-            if (edge.getLabel().equals("rawHasEntity")) {
+            if (edge.getLabel().equals("http://lumify.io/dev#rawHasEntity")) {
                 totalReferences++;
                 if (referencesAdded >= size) continue;
                 if (skipped < offset) {

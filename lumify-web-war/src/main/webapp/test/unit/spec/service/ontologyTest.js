@@ -137,7 +137,6 @@ define(['service/ontology'], function(OntologyService) {
             })
 
             shouldHaveRelationship('person', 'location', 'personLivesAtLocation')
-            shouldHaveRelationship('person', 'contact', 'personHasContactInformation')
             shouldHaveRelationship('person', 'country', 'personHasCitizenshipInCountry')
             shouldNotHaveRelationship('person', 'location', 'personHasCitizenshipInCountry')
 
@@ -154,6 +153,10 @@ define(['service/ontology'], function(OntologyService) {
             shouldNotHaveRelationship('location', 'person', 'personLivesAtLocation')
 
             function shouldHaveRelationship(sourceName, destName, title, negate) {
+                sourceName = 'http://lumify.io/dev#' + sourceName;
+                destName = 'http://lumify.io/dev#' + destName;
+                title = 'http://lumify.io/dev#' + title;
+
                 it('should' + (negate ? ' NOT' : '') + ' have ' + title + ' relationship from ' + sourceName + '->' + destName, function(done) {
                     var service = this.service;
 
@@ -195,13 +198,15 @@ define(['service/ontology'], function(OntologyService) {
             })
 
             it('should return properties by relationship label', function(done) {
-                this.service.propertiesByRelationshipLabel('has entity')
+                this.service.propertiesByRelationshipLabel('Has Entity')
                     .done(function(properties) {
                         done();
                     })
             })
 
             function shouldHaveProperties(name, expectedProperties, negate) {
+                name = 'http://lumify.io/dev#' + name;
+
                 it('should have concept ' + name + ' that has properties ' + expectedProperties.join(','), function(done) {
                     var service = this.service;
 
@@ -211,6 +216,7 @@ define(['service/ontology'], function(OntologyService) {
                         service.propertiesByConceptId(conceptId)
                             .done(function(properties) {
                                 expectedProperties.forEach(function(expectedProperty) {
+                                    expectedProperty = 'http://lumify.io/dev#' + expectedProperty;
                                     if (negate) expect(properties.byTitle[expectedProperty]).to.be.undefined
                                     else expect(properties.byTitle[expectedProperty]).to.exist
                                 })
@@ -633,6 +639,7 @@ define(['service/ontology'], function(OntologyService) {
         }, {
             "id": "http://lumify.io/dev#person",
             "title": "http://lumify.io/dev#person",
+            "glyphIconHref": "/resource/http%3A%2F%2Flumify.io%2Fdev%23person",
             "pluralDisplayName": "Persons",
             "properties": ["092f8c86b90c432684e88f3c4894ccfb", "a57ef79775474f7ebf4149d3357d72a2", "d2f1949dfd9e4162ad92c7eeb2a22f3c"],
             "parentConcept": "http://www.w3.org/2002/07/owl#Thing",

@@ -153,7 +153,7 @@ define([
 
                 // Has Entity are collected into references (no matter
                 // relationship direction
-                if (r.relationship.label === 'rawHasEntity') {
+                if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
                     return 'references';
                 }
 
