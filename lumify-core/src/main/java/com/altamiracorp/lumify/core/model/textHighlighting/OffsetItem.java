@@ -39,7 +39,6 @@ public abstract class OffsetItem implements Comparable {
 
     public List<String> getCssClasses() {
         ArrayList<String> classes = new ArrayList<String>();
-        classes.add(getType());
         if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
             classes.add("resolved");
         }
