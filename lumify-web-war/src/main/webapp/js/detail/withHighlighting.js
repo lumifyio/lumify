@@ -359,55 +359,69 @@ define([
             var self = this,
                 words = this.select('draggablesSelector');
 
-            // Filter list to those in visible scroll area
-            words
-                .withinScrollable(this.$node.closest('.content'))
-                .draggable({
-                    helper:'clone',
-                    revert: 'invalid',
-                    revertDuration: 250,
-                    // scroll:true (default) requests position:relative on
-                    // detail-pane .content, but that breaks dragging from
-                    // detail-pane to graph.
-                    scroll: false,
-                    zIndex: 100,
-                    distance: 10,
-                    cursorAt: { left: -10, top: -10 },
-                    start: function() {
-                        $(this)
-                            .parents('.text').addClass('drag-focus');
-                    },
-                    stop: function() {
-                        $(this)
-                            .parents('.text').removeClass('drag-focus');
-                    }
-                })
-                .droppable({
-                    activeClass: 'drop-target',
-                    hoverClass: 'drop-hover',
-                    tolerance: 'pointer',
-                    accept: function(el) {
-                        var item = $(el),
-                            isEntity = item.is('.entity');
+            this.ontologyService.concepts()
+                .done(function(concepts) {
 
-                        return isEntity;
-                    },
-                    drop: function(event, ui) {
-                        var destTerm = $(this);
-                        var form;
+                    // Filter list to those in visible scroll area
+                    words
+                        .withinScrollable(self.$node.closest('.content'))
+                        .each(function() {
+                            var $this = $(this),
+                                info = $this.data('info'),
+                                type = info && info['http://lumify.io#conceptType'],
+                                concept = type && concepts.byId[type];
 
-                        if (destTerm.hasClass('opens-dropdown')) {
-                            form = $('<div class="underneath"/>').insertAfter (destTerm.closest('.detected-object-labels'));
-                        } else {
-                            form = $('<div class="underneath"/>').insertAfter(destTerm);
-                        }
-                        self.tearDownDropdowns();
+                            if (concept) {
+                                $this.removePrefixedClasses('conceptId-').addClass(concept.className)
+                            }
+                        })
+                        .draggable({
+                            helper:'clone',
+                            revert: 'invalid',
+                            revertDuration: 250,
+                            // scroll:true (default) requests position:relative on
+                            // detail-pane .content, but that breaks dragging from
+                            // detail-pane to graph.
+                            scroll: false,
+                            zIndex: 100,
+                            distance: 10,
+                            cursorAt: { left: -10, top: -10 },
+                            start: function() {
+                                $(this)
+                                    .parents('.text').addClass('drag-focus');
+                            },
+                            stop: function() {
+                                $(this)
+                                    .parents('.text').removeClass('drag-focus');
+                            }
+                        })
+                        .droppable({
+                            activeClass: 'drop-target',
+                            hoverClass: 'drop-hover',
+                            tolerance: 'pointer',
+                            accept: function(el) {
+                                var item = $(el),
+                                    isEntity = item.is('.entity');
 
-                        StatementForm.attachTo(form, {
-                            sourceTerm: ui.draggable,
-                            destTerm: destTerm
+                                return isEntity;
+                            },
+                            drop: function(event, ui) {
+                                var destTerm = $(this);
+                                var form;
+
+                                if (destTerm.hasClass('opens-dropdown')) {
+                                    form = $('<div class="underneath"/>').insertAfter (destTerm.closest('.detected-object-labels'));
+                                } else {
+                                    form = $('<div class="underneath"/>').insertAfter(destTerm);
+                                }
+                                self.tearDownDropdowns();
+
+                                StatementForm.attachTo(form, {
+                                    sourceTerm: ui.draggable,
+                                    destTerm: destTerm
+                                });
+                            }
                         });
-                    }
                 });
         };
 
