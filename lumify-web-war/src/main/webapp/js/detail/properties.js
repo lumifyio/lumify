@@ -50,7 +50,8 @@ define([
             auditShowAllSelector: '.audit-list button',
             auditDateSelector: '.audit-date',
             auditUserSelector: '.audit-user',
-            auditEntitySelector: '.resolved'
+            auditEntitySelector: '.resolved',
+            propertiesInfoSelector: 'button.info'
         });
 
         this.after('initialize', function() {
@@ -59,7 +60,7 @@ define([
                 auditDateSelector: this.onAuditDateClicked,
                 auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
-                auditEntitySelector: this.onEntitySelected
+                auditEntitySelector: this.onEntitySelected,
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
@@ -369,7 +370,10 @@ define([
                         popoutEnabled = true;
                     }
 
-                    require(['configuration/plugins/visibility/visibilityDisplay'], function(VisibilityDisplay) {
+                    require([
+                        'configuration/plugins/visibility/visibilityDisplay',
+                        'detail/propertyInfo'
+                    ], function(VisibilityDisplay, PropertyInfo) {
                         var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
 
                         props.find('.visibility').each(function() {
@@ -378,7 +382,38 @@ define([
                                 value: visibility.source
                             })
                         });
+
                         self.$node.html(props);
+
+                        var infos = self.$node.find('.info');
+
+                        infos.each(function() {
+                            var $this = $(this);
+
+                            $this.popover('destroy');
+                            $this.popover({
+                                trigger: 'click',
+                                placement: 'top',
+                                content: 'Loading...',
+                                //delay: { show: 100, hide: 1000 }
+                            });
+
+                            $this.on('shown', function() {
+                                infos.not($this).popover('hide');
+                            });
+
+                            var popover = $this.data('popover'),
+                                tip = popover.tip();
+
+                            popover.setContent = function() {
+                                var $tip = this.tip()
+                                $tip.removeClass('fade in top bottom left right')
+                            };
+                            PropertyInfo.teardownAll();
+                            PropertyInfo.attachTo(tip.find('.popover-content'), { 
+                                property: $this.data('property')
+                            })
+                        })
                     });
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
@@ -435,7 +470,7 @@ define([
                     // Title is displayed above property list
                     name !== 'title') {
 
-                    addProperty(name, displayName, value, properties[name]._visibilityJson);
+                    addProperty(properties[name], name, displayName, value, properties[name]._visibilityJson);
                 }
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;
@@ -443,20 +478,21 @@ define([
                 var source = (value && value.value && value.value.source) || (value && value.source) || '';
 
                 if (source) {
-                    addProperty(name, 'Visibility', source);
+                    addProperty(properties[name], name, 'Visibility', source);
                 }
             } else if (isRelationshipType) {
-                addProperty(name, 'Relationship type', properties[name].value);
+                addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }
         });
         return displayProperties;
 
-        function addProperty(name, displayName, value, visibility) {
+        function addProperty(property, name, displayName, value, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
                 displayName: displayName || name,
-                visibility: visibility
+                visibility: visibility,
+                property: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
             });
         }
     }

@@ -1,32 +1,37 @@
-<li class="property property-<%= property.key %>">
-<strong><%= property.displayName %></strong>
-<% if (property.key === 'geoLocation' && property.value) { %>
+<tr clas="property property-<%= property.key %>">
 
-  <span class="value">
+  <td class="property-name"><strong><%= property.displayName %></strong></td>
 
-    <% if (popout) { %>
-      <span>
+  <td class="property-value">
+
+    <% if (property.key === 'http://lumify.io#geolocation' && property.value) { %>
+
+      <% if (popout) { %>
+        <span>
+      <% } else { %>
+        <a href="#" class="map-coordinates" data-latitude="<%= property.value.value.latitude %>" data-longitude="<%= property.value.value.longitude %>">
+      <% } %>
+
+      <%= (property.value._geoLocationDescription && property.value._geoLocationDescription.value) || (property.value.value.latitude + ', ' + property.value.value.longitude) %>
+
+      <% if (popout) { %>
+        </span>
+      <% } else { %>
+        </a>
+      <% } %>
+
+      <button data-property="<%= JSON.stringify(property.property) %>" class="info"></button>
+
+      <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
+
     <% } else { %>
-      <a href="#" class="map-coordinates" data-latitude="<%= property.value.value.latitude %>" data-longitude="<%= property.value.value.longitude %>">
+
+      <%= property !== undefined && property !== null ? property.value : '' %>
+      <button data-property="<%= JSON.stringify(property.property) %>" class="info"></button>
+      <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
+
     <% } %>
 
-    <%= (property.value['http://lumify.io#geoLocationDescription'] && property.value['http://lumify.io#geoLocationDescription'].value) || (property.value.value.latitude + ', ' + property.value.value.longitude) %>
 
-    <% if (popout) { %>
-      </span>
-    <% } else { %>
-      </a>
-    <% } %>
-
-    <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
-  </span>
-
-<% } else { %>
-
-  <span class="value"><%= property !== undefined && property !== null ? property.value : '' %>
-    <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
-  </span>
-
-<% } %>
-
-</li>
+  </td>
+</tr>

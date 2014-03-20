@@ -1,0 +1,103 @@
+
+.properties {
+
+  margin: 0;
+  padding: 0;
+  .property-name {    
+      color: #999;
+      padding: 0.25em 0 0.25em 1em;
+      text-align: right;
+      text-shadow: 0 1px 0 white;
+      text-transform: uppercase;
+      white-space: nowrap;    
+
+      strong {
+        font-size: 80%;
+      }
+  }
+
+  .property-value {
+    width: 75%;   
+    padding: 0.25em 1em 0.25em 0.5em;
+
+    .visibility {
+      display:block;
+      color: #666; 
+      font-style: italic;
+      font-size: 90%;
+      margin-bottom: 0.5em;
+      &:empty { display: none; }
+    }
+
+    button.info {
+      border: 0;
+      background-color: transparent;
+      background-image: url(../img/glyphicons/glyphicons_195_circle_info@2x.png);
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-left: 0.25em;
+      .opacity(30);
+      &:hover {
+        .opacity(100);
+      }
+    }
+
+    .popover-content {
+      table {
+        margin: 0 0 0.5em 0;
+        font-size: 85%;
+      }
+
+      .property-name {
+        padding-left: 0;
+        font-weight: bold;
+        text-align: left; // Remove when more then 1
+      }
+
+      .property-justification {
+        text-align: left;
+      }
+
+      .selection {
+        background: rgba(0, 136, 204, 0.2);
+      }
+
+      button {
+        float: right;
+        display: block;
+        width: 45%;
+        margin-bottom: 1em;
+        &.btn-danger {
+          float: left;
+        }
+      }
+    }
+  }
+
+  td {
+    border-top: 0;
+    padding:0;
+  }
+
+  td.buttons {
+    & > button {
+      margin: 1em;
+      margin-bottom: 0;
+      .opacity(50);
+      &:hover { .opacity(100); }
+    }
+    padding: 0;
+  }
+
+  .underneath {
+    margin: 1em 0;
+    padding: 0;
+    .form {
+      margin: 0;
+      padding: 1em;
+    }
+  }
+}
