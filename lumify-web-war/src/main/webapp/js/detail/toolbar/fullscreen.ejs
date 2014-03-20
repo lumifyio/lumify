@@ -1,12 +1,23 @@
 
-<% if (!window.isFullscreenDetails) { %>
+<% if (!window.isFullscreenDetails) { 
 
-<a class="btn btn-small fullscreen-single" href="/#v=<%= vertexIds.join(',') %>" target="_blank"><i class="icon-fullscreen"></i></a>
+var url = '/#v=',
+    ids = encodeURIComponent(vertexIds.join(',')),
+    workspace = window.workspaceId;
+url += ids;
+console.log('workspaceId', window.workspaceId)
+if (workspace) {
+  url += '&w=';
+  url += encodeURIComponent(workspace);
+}
+%>
+
+<a class="btn btn-small fullscreen-single" href="<%= url %>" target="_blank"><i class="icon-fullscreen"></i></a>
 <div style="display:none" class="fullscreen-multi btn-group">
   <a class="btn btn-small dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-fullscreen"></i> <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
-    <li><a class="" href="/#v=<%= vertexIds.join(',') %>" target="_blank">New Window</a></li>
+    <li><a class="" href="<%= url %>" target="_blank">New Window</a></li>
     <li class="divider"/>
   </ul>
 </div>

@@ -33,6 +33,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            if (this.attr.workspaceId) {
+                appData.workspaceId = this.attr.workspaceId;
+            }
+
             this.$node.html(template({}));
             this.updateTitle();
 
