@@ -1,15 +1,16 @@
 <div class="entity_audit_events"/>
 <% if (properties) { %>
-  <ul class="nav nav-list">
-
+  <table class="table">
     <% properties.forEach(function(property) { %>
       <% include detail/propertiesItem %>
     <% }); %>
 
-    <li class="buttons">
-      <button class="add-new-properties btn btn-mini btn-default">Add Property</button>
-    </li>
-  </ul>
+    <tr>
+      <td colspan="2" class="buttons">
+        <button class="add-new-properties btn btn-mini btn-default">Add Property</button>
+      </td>
+    </tr>
+  </table>
 <% } else { %>
   <div class="nav-header">Properties<span class="badge loading"/></div>
 <% } %>

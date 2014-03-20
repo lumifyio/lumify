@@ -366,48 +366,10 @@
     float: right;
   }
 
-  .nav-list {
-    margin: 0 -1em;
-    padding-top: 1em;
-    clear: both;
-
-    li.property {
-      strong {    
-        text-transform: uppercase;
-        font-size: 11px;
-        line-height: 21px;
-        margin-right: 5px;
-        color: #999;
-        text-shadow: 0 1px 0 white;
-        display:block;
-        float:left;
-      }
-      .value {   
-        display:inline-block; 
-      }
-      .visibility {
-        display:block;
-        color: #666; 
-        font-style: italic;
-        font-size: 90%;
-        margin-bottom: 0.5em;
-        &:empty { display: none; }
-      }
-    }
-
-    li.buttons {
-      margin-bottom: 1.5em;
-      text-align: left;
-      & > button {
-        .opacity(50);
-        &:hover { .opacity(100); }
-      }
-    }
-  }
-
   .relationships .resolved {
     font-weight: normal;
   }
+
   .properties, .relationships {
     .nav-list {
       margin: 0;
@@ -417,6 +379,8 @@
       cursor: pointer;
     }
   }
+
+  @import "properties";
 
   .artifact-header {
     margin: 0 -1em;
