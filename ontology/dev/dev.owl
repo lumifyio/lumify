@@ -611,6 +611,8 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#person">
         <rdfs:label xml:lang="en">Person</rdfs:label>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
 
