@@ -36,11 +36,13 @@ define([
     };
 
     OntologyService.prototype.concepts = function () {
+        var clsIndex = 0, conceptToClassMap = {}, classToConceptMap = {};
         return this.ontology()
                     .then(function(ontology) {
                         return {
                             entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})),
                             byId: ontology.conceptsById, 
+                            byClassName: _.indexBy(ontology.concepts, 'className'),
                             byTitle: _.chain(ontology.concepts)
                                 .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
                                 .map(addFlattenedTitles.bind(null, ontology.conceptsById))
@@ -52,8 +54,25 @@ define([
         function buildTree(concepts, root) {
             var groupedByParent = _.groupBy(concepts, 'parentConcept'),
                 findChildrenForNode = function(node) {
+                    node.className = 'conceptId-' + (clsIndex++);
                     node.children = groupedByParent[node.id] || [];
-                    node.children.forEach(findChildrenForNode);
+                    node.children.forEach(function(child) {
+                        if (!child.glyphIconHref) {
+                            child.glyphIconHref = node.glyphIconHref;
+                        }
+                        if (!child.displayType) {
+                            child.displayType = node.displayType;
+                        }
+                        if (!child.color) {
+                            if (node.color) {
+                                child.color = node.color;
+                            } else {
+                                console.warn('No color specified in concept hierarchy for conceptType:', child.id);
+                                child.color = 'rgb(0, 0, 0)';
+                            }
+                        }
+                        findChildrenForNode(child);
+                    });
                 }
 
             findChildrenForNode(root);
@@ -92,8 +111,6 @@ define([
             var leadingSlashIfNeeded = parents.length ? '/' : '';
 
             return $.extend({}, concept, {
-                flattenedTitle: _.pluck(parents, 'title').join('/') + 
-                                leadingSlashIfNeeded + concept.title,
                 flattenedDisplayName: _.pluck(parents, 'displayName').join('/') + 
                                 leadingSlashIfNeeded + concept.displayName
             });

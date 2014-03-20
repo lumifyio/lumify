@@ -443,7 +443,8 @@ define([
         keys.forEach(function(name) {
             var displayName, value,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isEdge = properties['http://lumify.io#conceptType'] && properties['http://lumify.io#conceptType'].value === 'relationship',
+                isEdge = properties['http://lumify.io#conceptType'] && 
+                    properties['http://lumify.io#conceptType'].value === 'relationship',
                 isRelationshipType = name === 'relationshipType' && isEdge;
 
             if (ontologyProperty) {
@@ -453,7 +454,8 @@ define([
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
                     value = properties[name];
-                    value['http://lumify.io#geoLocationDescription'] = properties['http://lumify.io#geoLocationDescription'];
+                    value['http://lumify.io#geoLocationDescription'] = 
+                        properties['http://lumify.io#geoLocationDescription'];
                 } else {
                     value = properties[name].value;
                 }

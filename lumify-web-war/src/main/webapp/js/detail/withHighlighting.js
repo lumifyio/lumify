@@ -150,10 +150,14 @@ define([
                                         DIM: 2,
                                         TERM: 3
                                     },
-                                    className = concept.className || 'entity.conceptType-' + concept.id,
+                                    className = concept.rawClassName || (concept.className && ('entity.' + concept.className)),
                                     definition = function(state, template) {
                                         return (template || tpl)({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
                                     };
+
+                                if (!className) {
+                                    return;
+                                }
 
                                 // Dim 
                                 // (when dropdown is opened and it wasn't this entity)
@@ -206,7 +210,7 @@ define([
                                 );
                                 */
 
-                                stylesheet.addRule('.concepticon-' + concept.id, 'background-image: url(' + concept.glyphIconHref + ')');
+                                stylesheet.addRule('.concepticon-' + (concept.className || concept.rawClassName), 'background-image: url(' + concept.glyphIconHref + ')');
                             }
                             if (concept.children) {
                                 concept.children.forEach(apply);
@@ -216,8 +220,7 @@ define([
 
                         // Artifacts
                         apply({
-                            id: 'artifact',
-                            className: 'artifact',
+                            rawClassName: 'artifact',
                             color: 'rgb(255,0,0)',
                             glyphIconHref: '/img/glyphicons/glyphicons_036_file@2x.png'
                         });

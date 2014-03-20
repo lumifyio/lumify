@@ -64,7 +64,7 @@ public class TermMentionOffsetItem extends OffsetItem {
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
             if (getConceptGraphVertexId() != null) {
-                infoJson.put("_conceptType", getConceptGraphVertexId());
+                infoJson.put("http://lumify.io#conceptType", getConceptGraphVertexId());
             }
             return infoJson;
         } catch (JSONException e) {
@@ -78,9 +78,6 @@ public class TermMentionOffsetItem extends OffsetItem {
         classes.add("entity");
         if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
             classes.add("resolved");
-        }
-        if (getConceptGraphVertexId() != null) {
-            classes.add("conceptType-" + getConceptGraphVertexId());
         }
         return classes;
     }

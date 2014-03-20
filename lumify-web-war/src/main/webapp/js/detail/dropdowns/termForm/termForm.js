@@ -99,7 +99,12 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                var conceptType = (info && ((info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) || info['http://lumify.io#conceptType'] || info.properties['http://lumify.io#conceptType'].value)) || '';
+                var conceptType = (info && (
+                    (info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) ||
+                    info['http://lumify.io#conceptType'] || 
+                    (info.properties && info.properties['http://lumify.io#conceptType'] && info.properties['http://lumify.io#conceptType'].value)
+                )) || '';
+
                 this.updateConceptSelect(conceptType).show();
 
                 if (this.unresolve){
@@ -251,8 +256,9 @@ define([
                     if ($focused.length !== 0) {
                         $tag = $focused.find('.label-info');
 
-                        $tag.text(resolvedVertex.properties.title.value).removeAttr('data-info').data('info', result).removePrefixedClasses('conceptType-');
-                        $tag.addClass('resolved entity label conceptType-' + resolvedVertex.properties['http://lumify.io#conceptType'].value);
+                        $tag.text(resolvedVertex.properties.title.value)
+                            .removeAttr('data-info').data('info', result)
+                        $tag.addClass('resolved entity label');
 
                     } else {
                         // Temporarily creating a new tag to show on ui prior to backend update
@@ -272,16 +278,13 @@ define([
 
                         $allDetectedObjectLabels.each(function(){
                             if(parseFloat($(this).data("info").x1) > data.x1){
-                                $tag.removePrefixedClasses('conceptType-')
-                                    .addClass('conceptType-' + parameters.conceptId)
-                                    .parent().insertBefore($(this).parent())
+                                $tag.parent().insertBefore($(this).parent())
                                 added = true;
                                 return false;
                             }
                         });
 
                         if (!added){
-                            $tag.addClass('conceptType-' + parameters.conceptId);
                             $allDetectedObjects.append($parentSpan);
                         }
                         $tag.data('info', result)
@@ -340,13 +343,6 @@ define([
             if (this.allConcepts && this.allConcepts.length) {
 
                 vertex = $(vertex || this.promoted || this.attr.mentionNode);
-                var classPrefix = 'conceptType-',
-                    labels = this.allConcepts.map(function(c) {
-                        return classPrefix + c.id;
-                    });
-
-                vertex.removeClass(labels.join(' '))
-                    .addClass(classPrefix + conceptId);
                 this.updateResolveImageIcon(null, conceptId);
             }
         };
@@ -429,22 +425,9 @@ define([
                         updateCss(concept.glyphIconHref);
                     }
                 });
-            } else if (vertex && vertex.properties._glyphIcon) {
-                updateCss(vertex && vertex.properties._glyphIcon.value);
-            } else {
-                self.deferredConcepts.done(function(allConcepts) {
-                    var conceptType = (vertex && vertex['http://lumify.io#conceptType'].value) || conceptId;
-                    if (conceptType) {
-                        var concept = self.conceptForConceptType(conceptType, allConcepts);
-                        if (concept) {
-                            updateCss(concept.glyphIconHref);
-                            return;
-                        }
-                    }
-
-                    updateCss();
-                });
-            }
+            } else if (vertex) {
+                updateCss(vertex.imageSrc);
+            } else updateCss();
 
             function updateCss(src) {
                 var preview = self.$node.find('.resolve-wrapper > .preview');

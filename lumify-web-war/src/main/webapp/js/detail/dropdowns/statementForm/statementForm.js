@@ -87,7 +87,12 @@ define([
                 }
             });
 
-            applyToElement.addClass('concepticon-' + el.data('info')['http://lumify.io#conceptType']);
+            this.ontologyService.concepts().done(function(concepts) {
+                var concept = concepts.byId[el.data('info')['http://lumify.io#conceptType']];
+                if (concept) {
+                    applyToElement.addClass('concepticon-' + concept.className);
+                }
+            })
         };
 
         this.onSelection = function (e) {
