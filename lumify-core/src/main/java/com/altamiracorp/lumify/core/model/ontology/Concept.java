@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import org.atteo.evo.inflector.English;
@@ -7,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.*;
@@ -74,7 +77,7 @@ public class Concept {
                 result.put("pluralDisplayName", English.plural(getDisplayName()));
             }
             if (hasGlyphIconResource()) {
-                result.put("glyphIconHref", "/resource/" + getId());
+                result.put("glyphIconHref", "/resource/" + URLEncoder.encode(getId(), "utf8"));
             }
             if (getColor() != null) {
                 result.put("color", getColor());
@@ -88,7 +91,9 @@ public class Concept {
             }
             return result;
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new LumifyException("could not create json", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new LumifyException("bad encoding", e);
         }
     }
 
