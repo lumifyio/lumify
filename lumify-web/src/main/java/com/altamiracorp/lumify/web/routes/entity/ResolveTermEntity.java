@@ -18,6 +18,8 @@ import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -35,6 +37,7 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TIT
 import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
 public class ResolveTermEntity extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveTermEntity.class);
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
@@ -78,6 +81,13 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
         Authorizations authorizations = getAuthorizations(request, user);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "not a valid visibility");
+            chain.next(request, response);
+            return;
+        }
 
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
