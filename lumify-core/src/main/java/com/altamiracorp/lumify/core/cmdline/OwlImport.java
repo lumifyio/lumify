@@ -5,7 +5,6 @@ import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -90,7 +89,7 @@ public class OwlImport extends CommandLineBase {
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
         config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
 
-        loadOntologyFiles(m, config, documentIRI);
+        ontologyRepository.loadOntologyFiles(m, config, documentIRI);
 
         OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
         OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
@@ -120,25 +119,6 @@ public class OwlImport extends CommandLineBase {
 
         graph.flush();
         ontologyRepository.clearCache();
-    }
-
-    private void loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws OWLOntologyCreationException, IOException {
-        Iterable<Property> ontologyFiles = ontologyRepository.getOntologyFiles();
-        for (Property ontologyFile : ontologyFiles) {
-            IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
-            if (excludedIRI.equals(lumifyBaseOntologyIRI)) {
-                continue;
-            }
-            InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
-            try {
-                Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
-                LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
-                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
-                m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
-            } finally {
-                lumifyBaseOntologyIn.close();
-            }
-        }
     }
 
     private Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass) throws IOException {

@@ -19,12 +19,11 @@ import com.google.inject.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
+import org.semanticweb.owlapi.io.ReaderDocumentSource;
+import org.semanticweb.owlapi.model.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -99,6 +98,28 @@ public class OntologyRepository {
         metadata.put("index", toList(rootConceptVertex.getProperties("ontologyFile")).size());
         rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility());
         graph.flush();
+    }
+
+    public List<OWLOntology> loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws OWLOntologyCreationException, IOException {
+        List<OWLOntology> loadedOntologies = new ArrayList<OWLOntology>();
+        Iterable<Property> ontologyFiles = getOntologyFiles();
+        for (Property ontologyFile : ontologyFiles) {
+            IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
+            if (excludedIRI != null && excludedIRI.equals(lumifyBaseOntologyIRI)) {
+                continue;
+            }
+            InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
+            try {
+                Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
+                LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
+                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
+                OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
+                loadedOntologies.add(o);
+            } finally {
+                lumifyBaseOntologyIn.close();
+            }
+        }
+        return loadedOntologies;
     }
 
     public Iterable<Property> getOntologyFiles() {
