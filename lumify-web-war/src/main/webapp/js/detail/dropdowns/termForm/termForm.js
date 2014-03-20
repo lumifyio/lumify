@@ -127,7 +127,9 @@ define([
 
             if (newGraphVertexId) {
                 this.vertexService.getVertexProperties(newGraphVertexId)
-                    .done(this.updateResolveImageIcon.bind(this));
+                    .done(function() {
+                        self.updateResolveImageIcon();
+                    });
             } else this.updateResolveImageIcon();
 
         };
