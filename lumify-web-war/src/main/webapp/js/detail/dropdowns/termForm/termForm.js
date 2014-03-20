@@ -336,6 +336,7 @@ define([
         this.updateConceptLabel = function(conceptId, vertex) {
             if (conceptId === '') {
                 this.select('actionButtonSelector').attr('disabled', true);
+                this.updateResolveImageIcon();
                 return;
             }
             this.select('actionButtonSelector').removeAttr('disabled');
@@ -418,14 +419,17 @@ define([
                 $.extend(vertex, {}, vertex.properties);
             }
 
-            if (!vertex && info && !conceptId) {
+            if (!vertex && (info || conceptId)) {
                 self.deferredConcepts.done(function(allConcepts) {
-                    var concept = self.conceptForConceptType(info['http://lumify.io#conceptType'], allConcepts);
+                    var type = info ? 
+                            info['http://lumify.io#conceptType'] : conceptId,
+                        concept = self.conceptForConceptType(type, allConcepts);
+
                     if (concept) {
                         updateCss(concept.glyphIconHref);
                     }
                 });
-            } else if (vertex) {
+            } else if (vertex && !conceptId) {
                 updateCss(vertex.imageSrc);
             } else updateCss();
 
@@ -439,7 +443,7 @@ define([
                         preview.css('background-image', url);
                     }
                 } else {
-                    preview.css('backgroundImage', ' ').addClass('icon-unknown');
+                    preview.css({backgroundImage:''}).addClass('icon-unknown');
                 }
             }
         };
