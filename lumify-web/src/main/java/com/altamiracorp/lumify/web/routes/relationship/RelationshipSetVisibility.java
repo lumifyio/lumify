@@ -13,6 +13,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -47,6 +48,13 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         Edge graphEdge = graph.getEdge(graphEdgeId, authorizations);
         if (graphEdge == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "not a valid visibility");
+            chain.next(request, response);
             return;
         }
 
