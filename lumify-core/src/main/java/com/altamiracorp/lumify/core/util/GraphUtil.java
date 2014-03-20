@@ -229,10 +229,11 @@ public class GraphUtil {
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
+        element.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+
         element.prepareMutation()
                 .alterElementVisibility(lumifyVisibility.getVisibility())
                 .alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), lumifyVisibility.getVisibility())
-                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility())
                 .save();
     }
 

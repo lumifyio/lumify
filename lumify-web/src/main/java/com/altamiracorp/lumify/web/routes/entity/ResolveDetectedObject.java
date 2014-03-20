@@ -14,12 +14,11 @@ import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -33,6 +32,7 @@ import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperti
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 
 public class ResolveDetectedObject extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveDetectedObject.class);
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
@@ -74,6 +74,14 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "not a valid visibility");
+            chain.next(request, response);
+            return;
+        }
+
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
