@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
 
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
@@ -214,6 +213,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             graph.removeVertex(vertex, authorizations);
             return;
         }
+
+        LOGGER.debug("publishing vertex %s", vertex.getId().toString());
         String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = new JSONObject(visibilityJsonString);
@@ -286,6 +287,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             return false;
         }
 
+        LOGGER.debug("publishing property %s:%s", property.getKey(), property.getName());
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
@@ -302,6 +304,8 @@ public class WorkspacePublish extends BaseRequestHandler {
             graph.removeEdge(edge, authorizations);
             return;
         }
+
+        LOGGER.debug("publishing edge %s", edge.getId().toString());
         String visibilityJsonString = (String) edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = new JSONObject(visibilityJsonString);
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
@@ -327,9 +331,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
         ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
-        Iterator<Audit> rows = auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser).iterator();
-        while (rows.hasNext()) {
-            Audit row = rows.next();
+        for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
     }
