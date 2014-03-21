@@ -114,6 +114,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     publishData.remove(i);
                 }
             } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
                 failures.put(data);
             }
@@ -158,6 +159,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     publishData.remove(i);
                 }
             } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
                 failures.put(data);
             }
@@ -203,6 +205,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     throw new LumifyException(type + " type is not supported for publishing");
                 }
             } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
                 failures.put(data);
             }
