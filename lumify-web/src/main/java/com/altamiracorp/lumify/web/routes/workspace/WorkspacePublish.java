@@ -74,6 +74,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
 
+        LOGGER.debug("publishing\n%s", publishData.toString(2));
         JSONArray failures = new JSONArray();
         publishVertices(publishData, failures, workspaceId, user, authorizations);
         publishEdges(publishData, failures, workspaceId, user, authorizations);
