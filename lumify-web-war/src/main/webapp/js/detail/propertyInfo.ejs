@@ -2,7 +2,7 @@
   <!-- SWITCH TO RIGHT ALIGNED WHEN MOREtr><td>Authored</td></tr-->
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value"><%= property.metadata.sandboxStatus %></td>
+    <td class="property-value"><%= property.metadata.sandboxStatus || 'Unknown' %></td>
   </tr>
   <% var j = property.metadata._justificationMetadata,
          s = property.metadata._sourceMetadata;

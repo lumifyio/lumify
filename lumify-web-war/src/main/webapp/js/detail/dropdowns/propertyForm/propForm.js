@@ -124,6 +124,10 @@ define([
             this.select('configurationSelector').teardownAllComponents();
             this.select('visibilitySelector').teardownAllComponents();
             this.select('justificationSelector').teardownAllComponents();
+
+            if (this.$node.closest('.buttons').length === 0) {
+                this.$node.closest('tr').remove();
+            }
         });
 
         this.onPaste = function(event) {

@@ -23,7 +23,7 @@ define([], function() {
             node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
                 var oe = e.originalEvent || e;
 
-                if (oe.target === node && e.propertyName === 'height') {
+                if (oe.target === self.node && oe.propertyName === 'height') {
                     node.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
                     node.css({
                         transition: 'none',
