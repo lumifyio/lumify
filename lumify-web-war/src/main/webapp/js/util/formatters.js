@@ -168,7 +168,7 @@ define(['sf'], function() {
                 return dateInUTC;
             },
             dateString: function(millisStr) {
-                return sf("{0:yyyy/MM/dd}", FORMATTERS.date.utc(millisStr));
+                return sf("{0:yyyy-MM-dd}", FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
