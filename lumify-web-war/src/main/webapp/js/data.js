@@ -285,10 +285,10 @@ define([
             var self = this,
                 edge = data.edges[0];
             this.vertexService.deleteEdge(
-                edge.properties.vertex.properties.source,
-                edge.properties.vertex.properties.target,
-                edge.properties.vertex.properties.relationshipType,
-                edge.properties.vertex.id).done(function() {
+                edge.properties.source,
+                edge.properties.target,
+                edge.properties.relationshipType,
+                edge.id).done(function() {
                     if (_.findWhere(self.selectedEdges, { id:edge.id })) {
                         self.trigger('selectObjects');
                     }
