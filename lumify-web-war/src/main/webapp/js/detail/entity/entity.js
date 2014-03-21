@@ -232,7 +232,9 @@ define([
                 evt.stopPropagation();
             } else if ($target.is('.relationship')) {
                 var info = $target.data('info');
-                this.trigger('selectObjects', { vertices:[info] });
+                if (info) {
+                    this.trigger('selectObjects', { vertices:[info] });
+                }
                 evt.stopPropagation();
             }
         };
