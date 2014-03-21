@@ -178,6 +178,8 @@ public class WorkspacePublish extends BaseRequestHandler {
                 throw new RuntimeException(type + " type is not supported for publishing");
             }
         }
+        graph.flush();
+
         JSONObject resultJson = new JSONObject();
         resultJson.put("failures", failures);
         resultJson.put("success", success);
