@@ -9,8 +9,9 @@ define([
     'tpl!./entity',
     'service/vertex',
     'service/ontology',
+    'tpl!util/alert',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService) {
+], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService, alertTemplate) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown);
@@ -189,6 +190,13 @@ define([
 
             if (!this.unresolve) {
                 this.vertexService.resolveTerm(parameters)
+                    .fail (function (error) {
+                        self.$node.find('.errors').html(
+                            alertTemplate({
+                                error: (error.statusText || 'Unknown error')
+                            })).show();
+                        _.defer(self.clearLoading.bind(self));
+                    })
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -236,12 +244,18 @@ define([
             } else {
                 self.resolveDetectedObject (parameters);
             }
-
         }
 
         this.resolveDetectedObject = function (parameters) {
             var self = this;
             this.vertexService.resolveDetectedObject(parameters)
+                .fail (function (error) {
+                    self.$node.find('.errors').html(
+                        alertTemplate({
+                            error: (error.statusText || 'Unknown error')
+                        })).show();
+                    _.defer(self.clearLoading.bind(self));
+                })
                 .done(function(data) {
                     var resolvedVertex = data.entityVertex;
                     var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
