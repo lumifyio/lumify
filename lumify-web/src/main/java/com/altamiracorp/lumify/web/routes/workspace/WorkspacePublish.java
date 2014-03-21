@@ -93,26 +93,25 @@ public class WorkspacePublish extends BaseRequestHandler {
             try {
                 String type = (String) data.get("type");
                 String action = data.getString("action");
-                if (type.equals("vertex")) {
-                    checkNotNull(data.getString("vertexId"));
-                    Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                    checkNotNull(vertex);
-                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                        String msg;
-                        if (action.equals("delete")) {
-                            msg = "Cannot delete a public vertex";
-                        } else {
-                            msg = "Vertex is already public";
-                        }
-                        LOGGER.warn(msg);
-                        data.put("error_msg", msg);
-                        failures.put(data);
-                        publishData.remove(i);
-                        continue;
-                    }
-                    publishVertex(vertex, action, authorizations, workspaceId, user);
-                    publishData.remove(i);
+                if (!type.equals("vertex")) {
+                    continue;
                 }
+                checkNotNull(data.getString("vertexId"));
+                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+                checkNotNull(vertex);
+                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                    String msg;
+                    if (action.equals("delete")) {
+                        msg = "Cannot delete a public vertex";
+                    } else {
+                        msg = "Vertex is already public";
+                    }
+                    LOGGER.warn(msg);
+                    data.put("error_msg", msg);
+                    failures.put(data);
+                    continue;
+                }
+                publishVertex(vertex, action, authorizations, workspaceId, user);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
@@ -128,36 +127,34 @@ public class WorkspacePublish extends BaseRequestHandler {
             try {
                 String type = (String) data.get("type");
                 String action = data.getString("action");
-                if (type.equals("relationship")) {
-                    Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
-                    Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
-                    Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
-                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                        String error_msg;
-                        if (action.equals("delete")) {
-                            error_msg = "Cannot delete a public edge";
-                        } else {
-                            error_msg = "Edge is already public";
-                        }
-                        LOGGER.warn(error_msg);
-                        data.put("error_msg", error_msg);
-                        failures.put(data);
-                        publishData.remove(i);
-                        continue;
-                    }
-
-                    if (sourceVertex != null && destVertex != null && GraphUtil.getSandboxStatus(sourceVertex, workspaceId) != SandboxStatus.PUBLIC &&
-                            GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
-                        String error_msg = "Cannot publish edge, " + edge.getId().toString() + ", because either source and/or dest vertex are not public";
-                        LOGGER.warn(error_msg);
-                        data.put("error_msg", error_msg);
-                        failures.put(data);
-                        publishData.remove(i);
-                        continue;
-                    }
-                    publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
-                    publishData.remove(i);
+                if (!type.equals("relationship")) {
+                    continue;
                 }
+                Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
+                Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
+                Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
+                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                    String error_msg;
+                    if (action.equals("delete")) {
+                        error_msg = "Cannot delete a public edge";
+                    } else {
+                        error_msg = "Edge is already public";
+                    }
+                    LOGGER.warn(error_msg);
+                    data.put("error_msg", error_msg);
+                    failures.put(data);
+                    continue;
+                }
+
+                if (sourceVertex != null && destVertex != null && GraphUtil.getSandboxStatus(sourceVertex, workspaceId) != SandboxStatus.PUBLIC &&
+                        GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
+                    String error_msg = "Cannot publish edge, " + edge.getId().toString() + ", because either source and/or dest vertex are not public";
+                    LOGGER.warn(error_msg);
+                    data.put("error_msg", error_msg);
+                    failures.put(data);
+                    continue;
+                }
+                publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
@@ -173,37 +170,34 @@ public class WorkspacePublish extends BaseRequestHandler {
             try {
                 String type = (String) data.get("type");
                 String action = data.getString("action");
-                if (type.equals("property")) {
-                    checkNotNull(data.getString("vertexId"));
-                    Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                    checkNotNull(vertex);
-                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                        String error_msg;
-                        if (action.equals("delete")) {
-                            error_msg = "Cannot delete a public property";
-                        } else {
-                            error_msg = "Property is already public";
-                        }
-                        LOGGER.warn(error_msg);
-                        data.put("error_msg", error_msg);
-                        failures.put(data);
-                        publishData.remove(i);
-                        continue;
-                    }
-
-                    if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                        String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
-                        LOGGER.warn(error_msg);
-                        data.put("error_msg", error_msg);
-                        failures.put(data);
-                        publishData.remove(i);
-                        continue;
-                    }
-
-                    publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
-                } else {
-                    throw new LumifyException(type + " type is not supported for publishing");
+                if (!type.equals("property")) {
+                    continue;
                 }
+                checkNotNull(data.getString("vertexId"));
+                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+                checkNotNull(vertex);
+                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                    String error_msg;
+                    if (action.equals("delete")) {
+                        error_msg = "Cannot delete a public property";
+                    } else {
+                        error_msg = "Property is already public";
+                    }
+                    LOGGER.warn(error_msg);
+                    data.put("error_msg", error_msg);
+                    failures.put(data);
+                    continue;
+                }
+
+                if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
+                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
+                    LOGGER.warn(error_msg);
+                    data.put("error_msg", error_msg);
+                    failures.put(data);
+                    continue;
+                }
+
+                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
