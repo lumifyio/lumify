@@ -76,116 +76,137 @@ public class WorkspacePublish extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
 
         JSONArray failures = new JSONArray();
-        boolean success = false;
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("vertex")) {
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                checkNotNull(vertex);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String msg;
-                    if (action.equals("delete")) {
-                        msg = "Cannot delete a public vertex";
-                    } else {
-                        msg = "Vertex is already public";
-                    }
-                    LOGGER.warn(msg);
-                    data.put("error_msg", msg);
-                    failures.put(data);
-                    publishData.remove(i);
-                    continue;
-                }
-                publishVertex(vertex, action, authorizations, workspaceId, user);
-                success = true;
-                publishData.remove(i);
-            }
-        }
-        graph.flush();
-
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("relationship")) {
-                Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
-                Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
-                Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String error_msg;
-                    if (action.equals("delete")) {
-                        error_msg = "Cannot delete a public edge";
-                    } else {
-                        error_msg = "Edge is already public";
-                    }
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    publishData.remove(i);
-                    continue;
-                }
-
-                if (sourceVertex != null && destVertex != null && GraphUtil.getSandboxStatus(sourceVertex, workspaceId) != SandboxStatus.PUBLIC &&
-                        GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish edge, " + edge.getId().toString() + ", because either source and/or dest vertex are not public";
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    publishData.remove(i);
-                    continue;
-                }
-                publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
-                success = true;
-                publishData.remove(i);
-            }
-        }
-        graph.flush();
-
-        for (int i = 0; i < publishData.length(); i++) {
-            JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("property")) {
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
-                checkNotNull(vertex);
-                if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
-                    String error_msg;
-                    if (action.equals("delete")) {
-                        error_msg = "Cannot delete a public property";
-                    } else {
-                        error_msg = "Property is already public";
-                    }
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    publishData.remove(i);
-                    continue;
-                }
-
-                if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
-                    String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
-                    LOGGER.warn(error_msg);
-                    data.put("error_msg", error_msg);
-                    failures.put(data);
-                    publishData.remove(i);
-                    continue;
-                }
-
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
-                success = true;
-            } else {
-                throw new RuntimeException(type + " type is not supported for publishing");
-            }
-        }
-        graph.flush();
+        publishVertices(publishData, failures, workspaceId, user, authorizations);
+        publishEdges(publishData, failures, workspaceId, user, authorizations);
+        publishProperties(publishData, failures, workspaceId, user, authorizations);
 
         JSONObject resultJson = new JSONObject();
         resultJson.put("failures", failures);
-        resultJson.put("success", success);
+        resultJson.put("success", failures.length() == 0);
         respondWithJson(response, resultJson);
+    }
+
+    private void publishVertices(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        for (int i = 0; i < publishData.length(); i++) {
+            JSONObject data = publishData.getJSONObject(i);
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (type.equals("vertex")) {
+                    checkNotNull(data.getString("vertexId"));
+                    Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+                    checkNotNull(vertex);
+                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                        String msg;
+                        if (action.equals("delete")) {
+                            msg = "Cannot delete a public vertex";
+                        } else {
+                            msg = "Vertex is already public";
+                        }
+                        LOGGER.warn(msg);
+                        data.put("error_msg", msg);
+                        failures.put(data);
+                        publishData.remove(i);
+                        continue;
+                    }
+                    publishVertex(vertex, action, authorizations, workspaceId, user);
+                    publishData.remove(i);
+                }
+            } catch (Exception ex) {
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
+            }
+        }
+        graph.flush();
+    }
+
+    private void publishEdges(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        for (int i = 0; i < publishData.length(); i++) {
+            JSONObject data = publishData.getJSONObject(i);
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (type.equals("relationship")) {
+                    Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
+                    Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
+                    Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
+                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                        String error_msg;
+                        if (action.equals("delete")) {
+                            error_msg = "Cannot delete a public edge";
+                        } else {
+                            error_msg = "Edge is already public";
+                        }
+                        LOGGER.warn(error_msg);
+                        data.put("error_msg", error_msg);
+                        failures.put(data);
+                        publishData.remove(i);
+                        continue;
+                    }
+
+                    if (sourceVertex != null && destVertex != null && GraphUtil.getSandboxStatus(sourceVertex, workspaceId) != SandboxStatus.PUBLIC &&
+                            GraphUtil.getSandboxStatus(destVertex, workspaceId) != SandboxStatus.PUBLIC) {
+                        String error_msg = "Cannot publish edge, " + edge.getId().toString() + ", because either source and/or dest vertex are not public";
+                        LOGGER.warn(error_msg);
+                        data.put("error_msg", error_msg);
+                        failures.put(data);
+                        publishData.remove(i);
+                        continue;
+                    }
+                    publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
+                    publishData.remove(i);
+                }
+            } catch (Exception ex) {
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
+            }
+        }
+        graph.flush();
+    }
+
+    private void publishProperties(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
+        for (int i = 0; i < publishData.length(); i++) {
+            JSONObject data = publishData.getJSONObject(i);
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (type.equals("property")) {
+                    checkNotNull(data.getString("vertexId"));
+                    Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+                    checkNotNull(vertex);
+                    if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
+                        String error_msg;
+                        if (action.equals("delete")) {
+                            error_msg = "Cannot delete a public property";
+                        } else {
+                            error_msg = "Property is already public";
+                        }
+                        LOGGER.warn(error_msg);
+                        data.put("error_msg", error_msg);
+                        failures.put(data);
+                        publishData.remove(i);
+                        continue;
+                    }
+
+                    if (GraphUtil.getSandboxStatus(vertex, workspaceId) != SandboxStatus.PUBLIC) {
+                        String error_msg = "Cannot publish a modification of a property on a private vertex: " + vertex.getId().toString();
+                        LOGGER.warn(error_msg);
+                        data.put("error_msg", error_msg);
+                        failures.put(data);
+                        publishData.remove(i);
+                        continue;
+                    }
+
+                    publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
+                } else {
+                    throw new LumifyException(type + " type is not supported for publishing");
+                }
+            } catch (Exception ex) {
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
+            }
+        }
+        graph.flush();
     }
 
     private void publishVertex(Vertex vertex, String action, Authorizations authorizations, String workspaceId, User user) throws IOException {
@@ -195,7 +216,13 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
         String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
+        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+            throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
+        }
+
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
         vertex.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
@@ -276,8 +303,14 @@ public class WorkspacePublish extends BaseRequestHandler {
             return;
         }
         String visibilityJsonString = (String) edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
+        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+            throw new LumifyException(String.format("edge with id '%s' is not local to workspace '%s'", edge.getId(), workspaceId));
+        }
+
         edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Edge> edgeExistingElementMutation = edge.prepareMutation();
         String originalEdgeVisibility = edge.getVisibility().getVisibilityString();
