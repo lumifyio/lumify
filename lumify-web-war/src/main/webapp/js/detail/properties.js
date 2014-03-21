@@ -409,33 +409,39 @@ define([
                         var infos = self.$node.find('.info');
 
                         infos.each(function() {
-                            var $this = $(this);
+                            var $this = $(this),
+                                property = $this.data('property'),
+                                ontologyProperty = ontologyProperties.byTitle[property.key];
 
-                            $this.popover('destroy');
-                            $this.popover({
-                                trigger: 'click',
-                                placement: 'top',
-                                content: 'Loading...',
-                                //delay: { show: 100, hide: 1000 }
-                            });
+                            if (property.key === '_visibilityJson' || ontologyProperty) {
+                                $this.popover('destroy');
+                                $this.popover({
+                                    trigger: 'click',
+                                    placement: 'top',
+                                    content: 'Loading...',
+                                    //delay: { show: 100, hide: 1000 }
+                                });
 
-                            $this.on('shown', function() {
-                                infos.not($this).popover('hide');
-                            });
+                                $this.on('shown', function() {
+                                    infos.not($this).popover('hide');
+                                });
 
-                            var popover = $this.data('popover'),
-                                tip = popover.tip(),
-                                content = tip.find('.popover-content');
+                                var popover = $this.data('popover'),
+                                    tip = popover.tip(),
+                                    content = tip.find('.popover-content');
 
-                            popover.setContent = function() {
-                                var $tip = this.tip()
-                                $tip.removeClass('fade in top bottom left right')
-                            };
+                                popover.setContent = function() {
+                                    var $tip = this.tip()
+                                    $tip.removeClass('fade in top bottom left right')
+                                };
 
-                            content.teardownAllComponents();
-                            PropertyInfo.attachTo(content, { 
-                                property: $this.data('property')
-                            })
+                                content.teardownAllComponents();
+                                PropertyInfo.attachTo(content, { 
+                                    property: $this.data('property')
+                                })
+                            } else {
+                                $this.remove();
+                            }
                         })
                     });
                 });
