@@ -16,6 +16,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -67,6 +68,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "not a valid visibility");
+            chain.next(request, response);
+            return;
+        }
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
