@@ -38,6 +38,12 @@ define([
             visibilityInputSelector: '.visibility input'
         });
 
+        this.before('initialize', function(n, c) {
+            if (c.property) {
+                c.manualOpen = true;
+            }
+        })
+
         this.after('initialize', function() {
             var self = this,
                 vertex = this.attr.data;
@@ -61,45 +67,57 @@ define([
             this.on('paste', {
                 configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
             });
-            this.$node.html(template({}));
+            this.$node.html(template({
+                property: this.attr.property
+            }));
 
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
 
-            (vertex.properties._conceptType.value != 'relationship' ?
-                self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
-                self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
-            ).done(function(properties) {
-                var propertiesList = [{
-                    title: '_visibilityJson',
-                    displayName: 'Visibility'
-                }];
 
-                properties.list.forEach(function(property) {
-                    if (/^[^_]/.test(property.title) && property.title !== 'boundingBox') {
-                        var data = {
-                            title: property.title,
-                            displayName: property.displayName
-                        };
-                        propertiesList.push(data);
+            if (this.attr.property) {
+                this.trigger('propertyselected', {
+                    property: {
+                        displayName: this.attr.property.displayName,
+                        title: this.attr.property.key
                     }
                 });
-                
-                propertiesList.sort(function(pa, pb) {
-                    var a = pa.title, b = pb.title;
-                    if (a === '_visibilityJson') return -1;
-                    if (b === '_visibilityJson') return 1;
-                    if (a === 'startDate' && b === 'endDate') return -1;
-                    if (b === 'startDate' && a === 'endDate') return 1;
-                    if (a === b) return 0;
-                    return a < b ? -1 : 1;
-                });
+            } else {
+                (vertex.properties._conceptType.value != 'relationship' ?
+                    self.attr.service.propertiesByConceptId(vertex.properties._conceptType.value) :
+                    self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
+                ).done(function(properties) {
+                    var propertiesList = [{
+                        title: '_visibilityJson',
+                        displayName: 'Visibility'
+                    }];
 
-                FieldSelection.attachTo(self.select('propertyListSelector'), {
-                    properties: propertiesList,
-                    placeholder: 'Select Property'
+                    properties.list.forEach(function(property) {
+                        if (/^[^_]/.test(property.title) && property.title !== 'boundingBox') {
+                            var data = {
+                                title: property.title,
+                                displayName: property.displayName
+                            };
+                            propertiesList.push(data);
+                        }
+                    });
+                    
+                    propertiesList.sort(function(pa, pb) {
+                        var a = pa.title, b = pb.title;
+                        if (a === '_visibilityJson') return -1;
+                        if (b === '_visibilityJson') return 1;
+                        if (a === 'startDate' && b === 'endDate') return -1;
+                        if (b === 'startDate' && a === 'endDate') return 1;
+                        if (a === b) return 0;
+                        return a < b ? -1 : 1;
+                    });
+
+                    FieldSelection.attachTo(self.select('propertyListSelector'), {
+                        properties: propertiesList,
+                        placeholder: 'Select Property'
+                    });
                 });
-            });
+            }
         });
 
         this.after('teardown', function() {
@@ -199,6 +217,7 @@ define([
 
                         self.settingVisibility = false;
                         self.checkValid();
+                        self.manualOpen();
                     });
                 } else if (propertyName === '_visibilityJson') {
                     require([
@@ -215,6 +234,7 @@ define([
                         self.visibilitySource = { value: source, valid: true };
 
                         self.checkValid();
+                        self.manualOpen();
                     });
                 } else console.warn('Property ' + propertyName + ' not found in ontology');
             });
