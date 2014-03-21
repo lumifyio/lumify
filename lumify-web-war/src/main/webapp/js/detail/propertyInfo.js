@@ -28,7 +28,9 @@ define([
         })
 
         this.onEdit = function() {
-            //this.trigger('editProperty')
+            this.trigger('editProperty', {
+                property: this.attr.property
+            });
         };
 
         this.onDelete = function() {

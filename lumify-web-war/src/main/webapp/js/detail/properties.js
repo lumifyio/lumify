@@ -64,6 +64,7 @@ define([
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
+            this.on('editProperty', this.onEditProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
             this.$node
@@ -330,12 +331,32 @@ define([
         };
 
         this.onAddNewPropertiesClicked = function(evt) {
-            var root = $('<div class="underneath">').insertAfter(evt.target);
+            this.trigger('editProperty');
+        };
+
+        this.onEditProperty = function(evt, data) {
+            var button = this.select('addNewPropertiesSelector'),
+                root = $('<div class="underneath">'),
+                property = data && data.property,
+                propertyRow = property && this.$node.find('.property-' + property.key);
+
+            this.$node.find('button.info').popover('hide');
+
+            if (propertyRow && propertyRow.length) {
+                root.appendTo(
+                    $('<tr><td colspan=2></td></tr>')
+                        .insertAfter(propertyRow)
+                        .find('td')
+                );
+            } else {
+                root.insertAfter(button);
+            }
 
             PropertyForm.teardownAll();
             PropertyForm.attachTo(root, {
                 service: this.ontologyService,
-                data: this.attr.data
+                data: this.attr.data,
+                property: property
             });
         };
 
@@ -403,14 +424,16 @@ define([
                             });
 
                             var popover = $this.data('popover'),
-                                tip = popover.tip();
+                                tip = popover.tip(),
+                                content = tip.find('.popover-content');
 
                             popover.setContent = function() {
                                 var $tip = this.tip()
                                 $tip.removeClass('fade in top bottom left right')
                             };
-                            PropertyInfo.teardownAll();
-                            PropertyInfo.attachTo(tip.find('.popover-content'), { 
+
+                            content.teardownAllComponents();
+                            PropertyInfo.attachTo(content, { 
                                 property: $this.data('property')
                             })
                         })
@@ -492,7 +515,7 @@ define([
                 value: value,
                 displayName: displayName || name,
                 visibility: visibility,
-                property: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
+                metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
             });
         }
     }

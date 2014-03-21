@@ -222,7 +222,8 @@ define([
         this.onPaneClicked = function(evt) {
             var $target = $(evt.target);
 
-            if (!$target.is('.add-new-properties') && $target.parents('.underneath').length === 0) {
+            if (!$target.is('.add-new-properties,button') && 
+                $target.parents('.underneath').length === 0) {
                 PropertyForm.teardownAll();
             }
 

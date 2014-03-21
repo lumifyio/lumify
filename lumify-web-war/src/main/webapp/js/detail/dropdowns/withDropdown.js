@@ -20,15 +20,19 @@ define([], function() {
                 return _.defer(this.open.bind(this));
             }
 
-            node.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
-                node.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
-                node.css({
-                    transition: 'none',
-                    height: 'auto',
-                    width: '100%',
-                    overflow: 'visible'
-                });
-                self.trigger('opened');
+            node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                var oe = e.originalEvent || e;
+
+                if (oe.target === self.node && oe.propertyName === 'height') {
+                    node.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                    node.css({
+                        transition: 'none',
+                        height: 'auto',
+                        width: '100%',
+                        overflow: 'visible'
+                    });
+                    self.trigger('opened');
+                }
             });
             var form = node.find('.form');
             node.css({ height:form.outerHeight(true) + 'px' });
@@ -49,13 +53,21 @@ define([], function() {
             this.$node.find('.btn:disabled').removeClass('loading').removeAttr('disabled');
         };
 
+        this.manualOpen = function() {
+            if (this.attr.manualOpen) {
+                _.defer(this.open.bind(this));
+                this.attr.manualOpen = false;
+            }
+        }
 
         this.after('initialize', function() {
             this.$node.closest('.text').addClass('dropdown');
             this.on('click', {
                 canceButtonSelector: this.teardown
             });
-            _.defer(this.open.bind(this));
+            if (!this.attr.manualOpen) {
+                _.defer(this.open.bind(this));
+            }
         });
     }
 

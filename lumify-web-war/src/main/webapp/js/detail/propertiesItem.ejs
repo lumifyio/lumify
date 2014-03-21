@@ -1,4 +1,4 @@
-<tr clas="property property-<%= property.key %>">
+<tr class="property property-<%= property.key %>">
 
   <td class="property-name"><strong><%= property.displayName %></strong></td>
 
@@ -20,14 +20,14 @@
         </a>
       <% } %>
 
-      <button data-property="<%= JSON.stringify(property.property) %>" class="info"></button>
+      <button data-property="<%= JSON.stringify(property) %>" class="info"></button>
 
       <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
 
     <% } else { %>
 
       <%= property !== undefined && property !== null ? property.value : '' %>
-      <button data-property="<%= JSON.stringify(property.property) %>" class="info"></button>
+      <button data-property="<%= JSON.stringify(property) %>" class="info"></button>
       <span class="visibility" data-visibility="<%= JSON.stringify(_.isUndefined(property.visibility) ? '' : property.visibility) %>"></span>
 
     <% } %>

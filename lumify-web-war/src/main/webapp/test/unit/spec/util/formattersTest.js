@@ -80,11 +80,11 @@ define(['util/formatters'], function(f) {
                 var day = String(now.getDate());
                 if (day.length === 1) day = '0' + day;
 
-                f.date.dateString(now.getTime()).should.equal(now.getFullYear() + '/' + month + '/' + day);
+                f.date.dateString(now.getTime()).should.equal(now.getFullYear() + '-' + month + '-' + day);
 
-                f.date.dateString('' + now.getTime()).should.equal(now.getFullYear() + '/' + month + '/' + day);
+                f.date.dateString('' + now.getTime()).should.equal(now.getFullYear() + '-' + month + '-' + day);
 
-                f.date.dateString(now).should.equal(now.getFullYear() + '/' + month + '/' + day);
+                f.date.dateString(now).should.equal(now.getFullYear() + '-' + month + '-' + day);
             })
 
             shouldBeRelative({seconds:30}, 'moments ago')
