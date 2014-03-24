@@ -16,7 +16,7 @@ define([
         });
 
         this.after('initialize', function() {
-            this.$node.html(videoTemplate(
+            this.$node.html(audioTemplate(
                 _.tap(this.attr, function(attrs) {
                     var url = attrs.rawUrl;
                     if (~url.indexOf('?')) {
