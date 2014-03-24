@@ -1,5 +1,5 @@
-<% if (value.length) { %>
-  <%= value %>
-<% } else { %>
+<% if (_.isUndefined(value) || value === '') { %>
   <i>public</i>
+<% } else { %>
+  <%= value %>
 <% } %>

@@ -11,9 +11,9 @@ describeComponent('configuration/plugins/visibility/visibilityDisplay', function
         expect(this.component.$node.html()).to.contain(VALUE);
     })
 
-    it('Should be blank if no value specified', function() {
+    it('Should be public if no value specified', function() {
         setupComponent({ value: undefined })
-        expect($.trim(this.component.$node.html())).to.equal('');
+        expect($.trim(this.component.$node.html())).to.equal('<i>public</i>');
     })
 
     it('Should still display falsy value', function() {
