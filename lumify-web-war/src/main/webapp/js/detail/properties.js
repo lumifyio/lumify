@@ -473,6 +473,14 @@ define([
             properties = o;
         }
 
+        if (!('_visibilityJson' in properties)) {
+            properties._visibilityJson = {
+                value: {
+                    source: ''
+                }
+            };
+        }
+
         var keys = Object.keys(properties).sort(function(a,b) {
             if (a === '_visibilityJson') return -1;
             if (b === '_visibilityJson') return 1;
@@ -519,9 +527,7 @@ define([
 
                 var source = (value && value.value && value.value.source) || (value && value.source) || '';
 
-                if (source) {
-                    addProperty(properties[name], name, 'Visibility', source);
-                }
+                addProperty(properties[name], name, 'Visibility', source);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }
