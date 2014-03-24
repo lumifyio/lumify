@@ -70,7 +70,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "not a valid visibility");
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;
         }
