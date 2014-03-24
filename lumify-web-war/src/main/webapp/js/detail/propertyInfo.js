@@ -26,10 +26,10 @@ define([
                 editButtonSelector: this.onEdit
             })
 
-            this.on('addPropertyError', this.onAddPropertyError);
+            this.on('propertyerror', this.onPropertyError);
         })
 
-        this.onAddPropertyError = function(event, data) {
+        this.onPropertyError = function(event, data) {
             var button = this.select('deleteButtonSelector').removeClass('loading'),
                 text = button.text();
 

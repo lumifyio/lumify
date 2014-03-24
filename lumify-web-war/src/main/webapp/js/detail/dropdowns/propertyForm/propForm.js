@@ -57,7 +57,7 @@ define([
                 visibilityInputSelector: this.onKeyup
             });
 
-            this.on('addPropertyError', this.onAddPropertyError);
+            this.on('propertyerror', this.onPropertyError);
             this.on('propertychange', this.onPropertyChange);
             this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('propertyselected', this.onPropertySelected);
@@ -73,7 +73,6 @@ define([
 
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
-
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
@@ -325,10 +324,12 @@ define([
             }
         };
 
-        this.onAddPropertyError = function(event, data) {
+        this.onPropertyError = function(event, data) {
+            var messages = this.markFieldErrors(data.error);
+
             this.$node.find('.errors').html(
                 alertTemplate({
-                    error: (data.error || 'Unknown error') 
+                    error: messages
                 })
             ).show();
             _.defer(this.clearLoading.bind(this));

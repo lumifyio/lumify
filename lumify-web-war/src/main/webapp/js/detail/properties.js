@@ -339,7 +339,12 @@ define([
                 message = arguments[2];
                 error = arguments[3];
             }
-            this.trigger(target, 'addPropertyError', { error: error });
+
+            try {
+                error = JSON.parse(error);
+            } catch(e) { }
+
+            this.trigger(target, 'propertyerror', { error: error });
         };
 
         this.onAddNewPropertiesClicked = function(evt) {
