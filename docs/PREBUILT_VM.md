@@ -12,7 +12,9 @@ The following system requirements must be available/installed for pre-built virt
 ## Getting Started
 
 1. Set up a Host-Only network in your Virtual Machine software called vboxnet0 and configure the ip address to be 192.168.33.1
-2. Download the [Pre-built VM](http://bits.lumify.io/vm/lumify-opensource-2014-02-06.ova)
+2. Download a Pre-built VM:
+  - [32-bit .ova](http://bits.lumify.io/vm/lumify-demo-opensource-20140321-32bit.ova)
+  - [64-bit .ova](http://bits.lumify.io/vm/lumify-demo-opensource-20140321-64bit.ova)
 3. Import the .ova file into your preferred vm application
 4. Start the VM
 5. Browse to ```https://localhost:8443```
