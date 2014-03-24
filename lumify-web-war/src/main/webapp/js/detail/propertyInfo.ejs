@@ -26,5 +26,12 @@
 
 
 </table>
-<!--button disabled class="btn btn-danger btn-small">Delete</button-->
-<button class="btn btn-default btn-small">Edit</button>
+<% 
+  var publicChanged = property.metadata.sandboxStatus === 'PUBLIC_CHANGED';
+  var private = property.metadata.sandboxStatus === 'PRIVATE';
+  if (publicChanged) { %>
+<button class="btn btn-danger btn-small">Undo</button>
+<% } else if (private) { %>
+<button class="btn btn-danger btn-small">Delete</button>
+<% } %>
+<button class="btn btn-default btn-small <%= (publicChanged || private) ? '' : 'noDelete' %>">Edit</button>

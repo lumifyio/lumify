@@ -282,7 +282,7 @@ define([
                 this.vertexService.deleteProperty(
                     this.attr.data.id,
                     data.property)
-                    .fail(this.requestFailure.bind(this))
+                    .fail(this.requestFailure.bind(this, event.target))
             }
         };
 
@@ -332,7 +332,14 @@ define([
         };
         
         this.requestFailure = function(request, message, error) {
-            this.trigger(this.$node.find('.underneath'), 'addPropertyError', { error: error });
+            var target = this.$node.find('.underneath');
+            if (_.isElement(request)) {
+                target = request;
+                request = arguments[1];
+                message = arguments[2];
+                error = arguments[3];
+            }
+            this.trigger(target, 'addPropertyError', { error: error });
         };
 
         this.onAddNewPropertiesClicked = function(evt) {

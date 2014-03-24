@@ -71,10 +71,15 @@
       }
 
       button {
-        //float: right;
-        //width: 45%;
-        width: 100%;
+        margin-bottom: 1em;
+        float: right;
+        width: 45%;
         display: block;
+        &.noDelete {
+          float: none;
+          width: 100%;
+          margin-bottom: 0;
+        }
         &.btn-danger {
           float: left;
         }
