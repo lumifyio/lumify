@@ -186,8 +186,12 @@ define([
                 });
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
+                if ((/^_/).test(propertyName)) {
+                    return;
+                }
+
                 var propLi = self.$node.find('.property-' + propertyName);
-                if (!propLi.length && !(/^_/).test(propertyName)) {
+                if (!propLi.length) {
                     var property = self.ontologyProperties.byTitle[propertyName],
                         value;
 
