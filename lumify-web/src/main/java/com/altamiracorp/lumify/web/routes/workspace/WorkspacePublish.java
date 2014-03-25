@@ -229,7 +229,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
-            publishProperty(vertexElementMutation, property, workspaceId, user);
+            if (property.getName().startsWith("_") || property.getName().equals("title")) {
+                publishProperty(vertexElementMutation, property, workspaceId, user);
+            }
         }
 
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());

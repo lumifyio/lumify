@@ -31,19 +31,23 @@ public class WorkspaceDiff {
 
         List<DiffItem> result = new ArrayList<DiffItem>();
         for (WorkspaceEntity workspaceEntity : workspaceEntities) {
-            List<DiffItem> entityDiffs = diff(workspace, workspaceEntity, authorizations);
-            result.addAll(entityDiffs);
+            List<DiffItem> entityDiffs = diffWorkspaceEntity(workspace, workspaceEntity, authorizations);
+            if (entityDiffs != null) {
+                result.addAll(entityDiffs);
+            }
         }
 
         for (Edge workspaceEdge : workspaceEdges) {
-            List<DiffItem> entityDiffs = diff(workspace, workspaceEdge, authorizations);
-            result.addAll(entityDiffs);
+            List<DiffItem> entityDiffs = diffEdge(workspace, workspaceEdge, authorizations);
+            if (entityDiffs != null) {
+                result.addAll(entityDiffs);
+            }
         }
 
         return result;
     }
 
-    private List<DiffItem> diff(Workspace workspace, Edge edge, Authorizations authorizations) {
+    private List<DiffItem> diffEdge(Workspace workspace, Edge edge, Authorizations authorizations) {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getId());
@@ -56,10 +60,16 @@ public class WorkspaceDiff {
         return result;
     }
 
-    public List<DiffItem> diff(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
+    public List<DiffItem> diffWorkspaceEntity(Workspace workspace, WorkspaceEntity workspaceEntity, Authorizations authorizations) {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
         Vertex entityVertex = this.graph.getVertex(workspaceEntity.getEntityVertexId(), authorizations);
+
+        // vertex can be null if the user doesn't have access to the entity
+        if (entityVertex == null) {
+            return null;
+        }
+
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(entityVertex, workspace.getId());
         if (sandboxStatus != SandboxStatus.PUBLIC) {
             result.add(new VertexDiffItem(entityVertex, sandboxStatus, workspaceEntity.isVisible()));

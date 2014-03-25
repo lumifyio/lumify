@@ -10,7 +10,7 @@ public class LumifyVisibility {
         this.visibility = new Visibility("");
     }
 
-    public LumifyVisibility (String visibility) {
+    public LumifyVisibility(String visibility) {
         if (visibility == null || visibility.length() == 0) {
             this.visibility = new Visibility("");
         } else {
@@ -20,5 +20,10 @@ public class LumifyVisibility {
 
     public Visibility getVisibility() {
         return visibility;
+    }
+
+    @Override
+    public String toString() {
+        return getVisibility().toString();
     }
 }

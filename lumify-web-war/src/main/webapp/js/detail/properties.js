@@ -154,6 +154,7 @@ define([
                         auditsEl.show();                        
 
                         self.trigger('updateDraggables');
+                        self.updateVisibility();
                     });
             } else {
                 auditsEl.hide();
@@ -175,8 +176,6 @@ define([
                 default:
                     return v;
             }
-            
-            //audit.toValue = sf("{0:yyyy/MM/dd}", new Date(audit.toValue + " 00:00"));
         };
 
         this.updatePropertyAudits = function(audits) {
@@ -186,8 +185,12 @@ define([
                 });
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
+                if ((/^_/).test(propertyName) && propertyName !== '_visibilityJson') {
+                    return;
+                }
+
                 var propLi = self.$node.find('.property-' + propertyName);
-                if (!propLi.length && !(/^_/).test(propertyName)) {
+                if (!propLi.length) {
                     var property = self.ontologyProperties.byTitle[propertyName],
                         value;
 
@@ -453,24 +456,27 @@ define([
                         popoutEnabled = true;
                     }
 
-                    require([
-                        'configuration/plugins/visibility/visibilityDisplay'
-                    ], function(VisibilityDisplay) {
-                        var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
-
-                        props.find('.visibility').each(function() {
-                            var visibility = $(this).data('visibility');
-                            VisibilityDisplay.attachTo(this, {
-                                value: visibility.source
-                            })
-                        });
-
-                        self.$node.html(props);
-
-                        self.updatePopovers();
-                    });
+                    var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
+                    self.$node.html(props);
+                    self.updateVisibility();
+                    self.updatePopovers();
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
+        };
+
+        this.updateVisibility = function() {
+            var self = this;
+
+            require([
+                'configuration/plugins/visibility/visibilityDisplay'
+            ], function(VisibilityDisplay) {
+                self.$node.find('.visibility').each(function() {
+                    var visibility = $(this).data('visibility');
+                    VisibilityDisplay.attachTo(this, {
+                        value: visibility.source
+                    })
+                });
+            });
         };
     }
 
@@ -539,9 +545,7 @@ define([
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;
 
-                var source = (value && value.value && value.value.source) || (value && value.source) || '';
-
-                addProperty(properties[name], name, 'Visibility', source);
+                addProperty(properties[name], name, 'Visibility', value);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }

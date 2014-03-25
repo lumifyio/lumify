@@ -378,7 +378,7 @@ define([
 
             if (this.$node.closest('.visible').length === 0) {
                 return;
-            } else {
+            } else if (!this.preventShake) {
                 animate();
             }
         };
@@ -648,7 +648,13 @@ define([
             map.zoomTo(2);
             map.render(this.select('mapSelector').get(0))
 
+            // Prevent map shake on initialize while catching up with vertexAdd
+            // events
+            this.preventShake = true;
             this.mapMarkReady(map);
+            this.mapReady().done(function() {
+                self.preventShake = false;
+            });
         };
 
         this.featureStyle = function() {

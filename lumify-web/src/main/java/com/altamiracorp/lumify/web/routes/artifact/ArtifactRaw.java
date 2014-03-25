@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web.routes.artifact;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -74,6 +75,10 @@ public class ArtifactRaw extends BaseRequestHandler {
         }
 
         String fileName = FILE_NAME.getPropertyValue(artifactVertex);
+        if (fileName == null) {
+            fileName = LumifyProperties.TITLE.getPropertyValue(artifactVertex);
+        }
+
         if (playback) {
             handlePartialPlayback(request, response, artifactVertex, fileName, user);
         } else {

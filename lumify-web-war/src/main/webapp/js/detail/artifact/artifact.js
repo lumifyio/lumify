@@ -146,9 +146,14 @@ define([
         };
 
         this.handleVertexLoaded = function(vertex) {
-            var self = this;
-            this.videoTranscript = vertex.videoTranscript;
-            this.videoDuration = vertex.videoDuration;
+            var self = this,
+                properties = vertex && vertex.properties;
+
+            if (properties) {
+                this.videoTranscript = ('_videoTranscript' in properties) ? properties._videoTranscript.value : {};
+                this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
+            }
+
             if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
                 vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
                     var aX = a.x1, bX = b.x1;
