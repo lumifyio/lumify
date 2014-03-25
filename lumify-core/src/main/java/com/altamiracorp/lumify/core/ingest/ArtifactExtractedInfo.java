@@ -301,17 +301,6 @@ public class ArtifactExtractedInfo {
         properties.put(AUDIO_HDFS_PATH, audioHdfsPath);
     }
 
-    /**
-     * Builder pattern for audioHdfsPath.
-     *
-     * @param audioHdfsPath the audioHdfsPath
-     * @return this
-     */
-    public ArtifactExtractedInfo audioHdfsPath(final String audioHdfsPath) {
-        setAudioHdfsPath(audioHdfsPath);
-        return this;
-    }
-
     public String getAudioHdfsPath() {
         return (String) properties.get(AUDIO_HDFS_PATH);
     }

@@ -40,6 +40,10 @@ public class ArtifactRaw extends BaseRequestHandler {
             VIDEO_TYPE_MP4,
             VIDEO_TYPE_WEBM
     )));
+    private static final Set<String> VALID_AUDIO_TYPES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
+            AUDIO_TYPE_MP4,
+            AUDIO_TYPE_OGG
+    )));
 
     private final Graph graph;
 
@@ -55,7 +59,7 @@ public class ArtifactRaw extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         boolean download = getOptionalParameter(request, "download") != null;
-        boolean videoPlayback = getOptionalParameter(request, "playback") != null;
+        boolean playback = getOptionalParameter(request, "playback") != null;
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
@@ -70,7 +74,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         }
 
         String fileName = FILE_NAME.getPropertyValue(artifactVertex);
-        if (videoPlayback) {
+        if (playback) {
             handlePartialPlayback(request, response, artifactVertex, fileName, user);
         } else {
             String mimeType = getMimeType(artifactVertex);
@@ -100,10 +104,10 @@ public class ArtifactRaw extends BaseRequestHandler {
     }
 
     private void handlePartialPlayback(HttpServletRequest request, HttpServletResponse response, Vertex artifactVertex, String fileName, User user) throws IOException {
-        String videoType = getRequiredParameter(request, "type");
+        String type = getRequiredParameter(request, "type");
 
         InputStream in;
-        Long totalLength;
+        Long totalLength = null;
         long partialStart = 0;
         Long partialEnd = null;
         String range = request.getHeader("Range");
@@ -122,23 +126,31 @@ public class ArtifactRaw extends BaseRequestHandler {
             }
         }
 
-        if (VALID_VIDEO_TYPES.contains(videoType)) {
-            response.setContentType(videoType);
+        if (VALID_VIDEO_TYPES.contains(type) || VALID_AUDIO_TYPES.contains(type)) {
+            response.setContentType(type);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-            StreamingLumifyProperty videoProperty = getVideoProperty(videoType);
-            IdentityLumifyProperty<Long> videoSizeProperty = getVideoSizeProperty(videoType);
+            StreamingLumifyProperty mediaProperty;
+            IdentityLumifyProperty<Long> mediaSizeProperty = null;
 
-            StreamingPropertyValue videoPropertyValue = videoProperty.getPropertyValue(artifactVertex);
-            checkNotNull(videoPropertyValue, String.format("Could not find video property %s on artifact %s", videoProperty.getKey(),
+            if (VALID_VIDEO_TYPES.contains(type)) {
+                mediaProperty = getVideoProperty(type);
+                mediaSizeProperty = getVideoSizeProperty(type);
+            } else {
+                mediaProperty = getAudioProperty(type);
+                mediaSizeProperty = getAudioSizeProperty(type);
+            }
+
+            StreamingPropertyValue videoPropertyValue = mediaProperty.getPropertyValue(artifactVertex);
+            checkNotNull(videoPropertyValue, String.format("Could not find video property %s on artifact %s", mediaProperty.getKey(),
                     artifactVertex.getId()));
             in = videoPropertyValue.getInputStream();
 
-            totalLength = videoSizeProperty.getPropertyValue(artifactVertex);
-            checkNotNull(totalLength, String.format("Could not find total video size %s on vertex %s", videoSizeProperty.getKey(),
+            totalLength = mediaSizeProperty.getPropertyValue(artifactVertex);
+            checkNotNull(totalLength, String.format("Could not find total video size %s on vertex %s", mediaSizeProperty.getKey(),
                     artifactVertex.getId()));
         } else {
-            throw new RuntimeException("Invalid video type: " + videoType);
+            throw new RuntimeException("Invalid video type: " + type);
         }
 
         if (partialEnd == null) {
