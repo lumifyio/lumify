@@ -186,22 +186,46 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
 
     public static void broadcastPropertyChange(String graphVertexId, String propertyName, Object value, JSONObject vertexJson) {
         try {
-            JSONObject propertyJson = new JSONObject();
-            propertyJson.put("graphVertexId", graphVertexId);
-            propertyJson.put("propertyName", propertyName);
-            propertyJson.put("value", value.toString());
-
-            JSONArray propertiesJson = new JSONArray();
-            propertiesJson.put(propertyJson);
-
             JSONObject dataJson = new JSONObject();
-            dataJson.put("properties", propertiesJson);
+            if (value != null) {
+                JSONObject propertyJson = new JSONObject();
+                propertyJson.put("graphVertexId", graphVertexId);
+                propertyJson.put("propertyName", propertyName);
+                propertyJson.put("value", value.toString());
+
+                JSONArray propertiesJson = new JSONArray();
+                propertiesJson.put(propertyJson);
+
+                dataJson.put("properties", propertiesJson);
+            }
             if (vertexJson != null) {
-                dataJson.put("vertex", vertexJson);
+                if (value == null) {
+                    dataJson = vertexJson;
+                } else {
+                    dataJson.put("vertex", vertexJson);
+                }
             }
 
             JSONObject json = new JSONObject();
             json.put("type", "propertiesChange");
+            json.put("data", dataJson);
+            if (broadcaster != null) {
+                broadcaster.broadcast(json.toString());
+            }
+        } catch (JSONException ex) {
+            throw new RuntimeException("Could not create json", ex);
+        }
+    }
+
+    public static void broadcastEdgeDeletion (String edgeId) {
+        try {
+            JSONObject dataJson = new JSONObject();
+            if (edgeId != null) {
+                dataJson.put("edgeId", edgeId);
+            }
+
+            JSONObject json = new JSONObject();
+            json.put("type", "edgeDeletion");
             json.put("data", dataJson);
             if (broadcaster != null) {
                 broadcaster.broadcast(json.toString());

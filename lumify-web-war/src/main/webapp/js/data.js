@@ -162,8 +162,13 @@ define([
             var self = this;
             switch (message.type) {
                 case 'propertiesChange':
-                    //FIXME: need this?
-                    //self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    break;
+                case 'edgeDeletion':
+                    if (_.findWhere(self.selectedEdges, { id:message.data.edgeId })) {
+                        self.trigger('selectObjects');
+                    }
+                    self.trigger('edgesDeleted', { edgeId:message.data.edgeId});
                     break;
             }
         };

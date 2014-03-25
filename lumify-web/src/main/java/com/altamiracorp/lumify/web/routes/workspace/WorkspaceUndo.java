@@ -110,7 +110,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations, false));
+                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations));
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -127,7 +127,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
                 Property property = vertex.getProperty(data.getString("key"), data.getString("name"));
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("property", workspaceHelper.deleteProperty(vertex, toList(vertex.getProperties(data.getString("name"))), property, workspaceId));
+                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId));
                 successArray.put(responseResult);
             }
         }
