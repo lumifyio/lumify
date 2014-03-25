@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
+import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONArray;
@@ -216,18 +217,18 @@ public class GraphUtil {
         }
     }
 
-    public static void updateVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
+    public static void updateElementVisibilitySource(Graph graph, VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
         String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
         JSONObject visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJsonString, visibilitySource);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        element.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-
-        element.prepareMutation()
-                .alterElementVisibility(lumifyVisibility.getVisibility())
-                .alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), lumifyVisibility.getVisibility())
-                .save();
+        ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
+        if (element.getProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()) != null) {
+            m.alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), lumifyVisibility.getVisibility());
+        }
+        m.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        m.save();
     }
 
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
@@ -324,7 +325,7 @@ public class GraphUtil {
         }
     }
 
-    public static JSONObject updateVisibilitySource (String jsonString, String visibilitySource) {
+    public static JSONObject updateVisibilitySource(String jsonString, String visibilitySource) {
         JSONObject json;
         if (jsonString == null) {
             json = new JSONObject();
