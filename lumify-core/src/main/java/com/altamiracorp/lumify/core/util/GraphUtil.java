@@ -129,6 +129,10 @@ public class GraphUtil {
     }
 
     private static Object toJsonValue(Object value) {
+        if (value instanceof Text) {
+            value = ((Text) value).getText();
+        }
+
         if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
             JSONObject result = new JSONObject();
@@ -138,8 +142,6 @@ public class GraphUtil {
                 result.put("altitude", geoPoint.getAltitude());
             }
             return result;
-        } else if (value instanceof Text) {
-            return ((Text) value).getText();
         } else if (value instanceof Date) {
             return ((Date) value).getTime();
         } else if (value instanceof PropertyJustificationMetadata) {
