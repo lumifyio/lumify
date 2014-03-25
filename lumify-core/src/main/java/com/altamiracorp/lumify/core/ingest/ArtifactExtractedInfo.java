@@ -355,17 +355,6 @@ public class ArtifactExtractedInfo {
         set(VIDEO_DURATION, videoDuration);
     }
 
-    /**
-     * Builder pattern for videoDuration property.
-     *
-     * @param videoDuration the videoDuration
-     * @return this
-     */
-    public ArtifactExtractedInfo videoDuration(final long videoDuration) {
-        setVideoDuration(videoDuration);
-        return this;
-    }
-
     public long getVideoDuration() {
         return (Long) properties.get(VIDEO_DURATION);
     }

@@ -81,6 +81,15 @@ public class VideoTranscript implements Serializable {
         return result.toString();
     }
 
+    public long getDuration() {
+        if (getEntries().size() > 0) {
+            long start = getEntries().get(0).getTime().getStart();
+            long end = getEntries().get(getEntries().size() - 1).getTime().getEnd();
+            return end - start;
+        }
+        return 0;
+    }
+
     public static class TimedText implements Comparable<TimedText>, Serializable {
         private Time time;
         private String text;
@@ -157,6 +166,10 @@ public class VideoTranscript implements Serializable {
         private Long start;
         private Long end;
 
+        /**
+         * @param start time in milliseconds
+         * @param end   time in milliseconds
+         */
         public Time(Long start, Long end) {
             this.start = start;
             this.end = end;
