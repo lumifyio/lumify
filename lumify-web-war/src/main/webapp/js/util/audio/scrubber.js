@@ -31,13 +31,13 @@ define([
 
             var player = this.select('audioSelector');
 
-            player.on('timeupdate', this.onTimeUpdate.bind(this, player));
+            player.on('timeupdate', this.onTimeUpdate.bind(this, player[0]));
         });
 
         this.onTimeUpdate = function(player, event) {
             this.trigger('playerTimeUpdate', {
-                currentTime: player.currentTime(),
-                duration: player.duration()
+                currentTime: player.currentTime,
+                duration: player.duration
             });
         }
     }
