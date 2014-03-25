@@ -602,6 +602,7 @@ define([
 
         this.onSwitchWorkspace = function(evt, data) {
             if (data.workspaceId != this.workspaceId) {
+                this.trigger('selectObjects');
                 this.loadWorkspace(data.workspaceId);
             }
         };
@@ -644,42 +645,44 @@ define([
             self.relationshipsUnload();
 
 
-            $.when(
-                self.socketSubscribeReady(),
-                self.getWorkspace(workspaceId),
-                self.workspaceService.getVertices(workspaceId)
-            ).done(function(socket, workspace, vertexResponse) {
+            self.socketSubscribeReady()
+                .done(function() {
+                    $.when(
+                        self.getWorkspace(workspaceId),
+                        self.workspaceService.getVertices(workspaceId)
+                    ).done(function(workspace, vertexResponse) {
 
-                _.each(_.values(self.cachedVertices), resetWorkspace);
-                self.workspaceVertices = {};
+                        _.each(_.values(self.cachedVertices), resetWorkspace);
+                        self.workspaceVertices = {};
 
-                var serverVertices = vertexResponse[0];
-                var vertices = serverVertices.map(function(vertex) {
-                    var workspaceData = workspace.entities[vertex.id];
-                    delete workspaceData.dropPosition;
+                        var serverVertices = vertexResponse[0];
+                        var vertices = serverVertices.map(function(vertex) {
+                            var workspaceData = workspace.entities[vertex.id];
+                            delete workspaceData.dropPosition;
 
-                    var cache = self.updateCacheWithVertex(vertex);
-                    cache.properties._refreshedFromServer = true;
-                    cache.workspace = workspaceData || {};
-                    cache.workspace.selected = false;
-                    self.workspaceVertices[vertex.id] = cache.workspace;
+                            var cache = self.updateCacheWithVertex(vertex);
+                            cache.properties._refreshedFromServer = true;
+                            cache.workspace = workspaceData || {};
+                            cache.workspace.selected = false;
+                            self.workspaceVertices[vertex.id] = cache.workspace;
 
-                    workspace.data.verticesById[vertex.id] = cache;
-                    return cache;
+                            workspace.data.verticesById[vertex.id] = cache;
+                            return cache;
+                        });
+
+                        workspace.data.vertices = vertices.sort(function(a, b) { 
+                            if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
+                            return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
+                        });
+                        workspace.data.verticesById = _.indexBy(vertices, 'id');
+
+                        undoManager.reset();
+
+                        self.refreshRelationships();
+                        self.workspaceMarkReady(workspace);
+                        self.trigger('workspaceLoaded', freeze(workspace));
+                    });
                 });
-
-                workspace.data.vertices = vertices.sort(function(a, b) { 
-                    if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
-                    return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
-                });
-                workspace.data.verticesById = _.indexBy(vertices, 'id');
-
-                undoManager.reset();
-
-                self.refreshRelationships();
-                self.workspaceMarkReady(workspace);
-                self.trigger('workspaceLoaded', freeze(workspace));
-            });
         };
 
         this.getWorkspace = function(id) {
