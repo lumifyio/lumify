@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
+import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -52,7 +53,7 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, LumifyVisibility visibility,
+    public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
@@ -87,6 +88,11 @@ public class WorkspaceHelper {
             }
 
             modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
+
+            if (analyzedTermMention != null) {
+                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(analyzedTermMention);
+                result = offsetItem.toJson();
+            }
 
             graph.flush();
 
