@@ -73,6 +73,12 @@ define([
             self.on('diffsChanged', function(event, data) {
                 self.processDiffs(data.diffs).done(function(processDiffs) {
 
+                    if (self.$node.closest('.popover:visible').length &&
+                        self.$node.find('.header .alert').length) {
+                        // Don't update diff panel if errors are showing
+                        return;
+                    }
+
                     var scroll = self.$node.find('.diffs-list'),
                         previousScroll = scroll.scrollTop(),
                         previousPublished = self.$node.find('.mark-publish').map(function() {
@@ -337,9 +343,9 @@ define([
                         success = response.success;
 
                     self.updateHeader();
+                    self.$node.find('.header .alert').remove();
 
                     if (failures && failures.length) {
-                        self.$node.find('.header .alert').remove();
                         var error = $('<div>')
                             .addClass('alert alert-error')
                             .html(

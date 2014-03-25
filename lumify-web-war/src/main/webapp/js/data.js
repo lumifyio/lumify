@@ -54,6 +54,10 @@ define([
         return Object.freeze(obj);
     }
 
+    function resetWorkspace(vertex) {
+        vertex.workspace = {};
+    }
+
     function Data() {
 
         this.workspaceService = new WorkspaceService();
@@ -639,20 +643,42 @@ define([
             self.workspaceUnload();
             self.relationshipsUnload();
 
-            self.socketSubscribeReady(function() {
-                self.getWorkspace(workspaceId).done(function(workspace) {
-                    self.loadWorkspaceVertices(workspace).done(function(vertices) {
-                        vertices.forEach(function(v) { delete v.dropPosition; });
-                        workspace.data.vertices = vertices.sort(function(a,b) { 
-                            if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
-                            return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
-                        });
-                        workspace.data.verticesById = _.indexBy(vertices, 'id');
 
-                        self.workspaceMarkReady(workspace);
-                        self.trigger('workspaceLoaded', freeze(workspace));
-                    });
+            $.when(
+                self.socketSubscribeReady(),
+                self.getWorkspace(workspaceId),
+                self.workspaceService.getVertices(workspaceId)
+            ).done(function(socket, workspace, vertexResponse) {
+
+                _.each(_.values(self.cachedVertices), resetWorkspace);
+                self.workspaceVertices = {};
+
+                var serverVertices = vertexResponse[0];
+                var vertices = serverVertices.map(function(vertex) {
+                    var workspaceData = workspace.entities[vertex.id];
+                    delete workspaceData.dropPosition;
+
+                    var cache = self.updateCacheWithVertex(vertex);
+                    cache.properties._refreshedFromServer = true;
+                    cache.workspace = workspaceData || {};
+                    cache.workspace.selected = false;
+                    self.workspaceVertices[vertex.id] = cache.workspace;
+
+                    workspace.data.verticesById[vertex.id] = cache;
+                    return cache;
                 });
+
+                workspace.data.vertices = vertices.sort(function(a, b) { 
+                    if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
+                    return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
+                });
+                workspace.data.verticesById = _.indexBy(vertices, 'id');
+
+                undoManager.reset();
+
+                self.refreshRelationships();
+                self.workspaceMarkReady(workspace);
+                self.trigger('workspaceLoaded', freeze(workspace));
             });
         };
 
@@ -684,46 +710,6 @@ define([
                     return workspace;
                 });
         };
-
-        this.loadWorkspaceVertices = function(workspace) {
-            var self = this,
-                deferred = $.Deferred(),
-                ids = _.keys(workspace.entities);
-
-            _.each(_.values(self.cachedVertices), function(v) {
-                v.workspace = {};
-            });
-            self.workspaceVertices = {};
-            if (ids.length) {
-                self.vertexService.getMultiple(ids).done(function(serverVertices) {
-
-                    var vertices = serverVertices.map(function(vertex) {
-                        var workspaceData = workspace.entities[vertex.id];
-                        delete workspaceData.dropPosition;
-
-                        var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer = true;
-                        cache.workspace = workspaceData || {};
-                        cache.workspace.selected = false;
-                        self.workspaceVertices[vertex.id] = cache.workspace;
-
-                        workspace.data.verticesById[vertex.id] = cache;
-                        return cache;
-                    });
-                    workspace.data.vertices = vertices;
-
-                    undoManager.reset();
-
-                    self.refreshRelationships();
-                    deferred.resolve(vertices);
-                });
-            } else {
-                deferred.resolve([]);
-            }
-
-            return deferred;
-        };
-
 
         this.getIds = function () {
             return Object.keys(this.workspaceVertices);
