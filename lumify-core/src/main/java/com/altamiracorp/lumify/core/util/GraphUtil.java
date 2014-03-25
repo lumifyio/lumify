@@ -244,6 +244,9 @@ public class GraphUtil {
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
+            if (oldProperty.getName().equals(propertyName) && oldProperty.getValue().equals(value)) {
+                element.removeProperty(propertyName);
+            }
         } else {
             propertyMetadata = new HashMap<String, Object>();
         }
