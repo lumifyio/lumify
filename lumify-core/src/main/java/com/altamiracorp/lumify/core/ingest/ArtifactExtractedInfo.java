@@ -31,6 +31,7 @@ public class ArtifactExtractedInfo {
     private static final String CONCEPT_TYPE = "conceptType";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
+    private static final String FILE_NAME = "fileName";
     private static final String URL = "url";
     private static final String SOURCE = "source";
     private static final String AUTHOR = "author";
@@ -439,23 +440,20 @@ public class ArtifactExtractedInfo {
         return this;
     }
 
+    public String getFileName() {
+        return (String) properties.get(FILE_NAME);
+    }
+
+    public void setFileName(String fileName) {
+        set(FILE_NAME, fileName);
+    }
+
     public String getFileExtension() {
         return (String) properties.get(FILE_EXTENSION);
     }
 
     public void setFileExtension(String extension) {
         set(FILE_EXTENSION, extension);
-    }
-
-    /**
-     * Builder pattern for the fileExtension property.
-     *
-     * @param extension the extension
-     * @return this
-     */
-    public ArtifactExtractedInfo fileExtension(final String extension) {
-        setFileExtension(extension);
-        return this;
     }
 
     public String getUrl() {

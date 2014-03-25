@@ -290,6 +290,10 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             TITLE.setProperty(artifact, artifactExtractedInfo.getTitle(), lumifyVisibility.getVisibility());
         }
 
+        if (artifactExtractedInfo.getFileName() != null) {
+            FILE_NAME.setProperty(artifact, artifactExtractedInfo.getFileName(), lumifyVisibility.getVisibility());
+        }
+
         if (artifactExtractedInfo.getFileExtension() != null) {
             FILE_NAME_EXTENSION.setProperty(artifact, artifactExtractedInfo.getFileExtension(), lumifyVisibility.getVisibility());
         }
