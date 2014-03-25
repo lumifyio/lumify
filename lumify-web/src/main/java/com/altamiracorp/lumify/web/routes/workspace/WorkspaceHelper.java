@@ -174,6 +174,8 @@ public class WorkspaceHelper {
     public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
 
+        Messaging.broadcastEdgeDeletion(edge.getId().toString());
+
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());
 

@@ -217,6 +217,24 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
+    public static void broadcastEdgeDeletion (String edgeId) {
+        try {
+            JSONObject dataJson = new JSONObject();
+            if (edgeId != null) {
+                dataJson.put("edgeId", edgeId);
+            }
+
+            JSONObject json = new JSONObject();
+            json.put("type", "edgeDeletion");
+            json.put("data", dataJson);
+            if (broadcaster != null) {
+                broadcaster.broadcast(json.toString());
+            }
+        } catch (JSONException ex) {
+            throw new RuntimeException("Could not create json", ex);
+        }
+    }
+
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
