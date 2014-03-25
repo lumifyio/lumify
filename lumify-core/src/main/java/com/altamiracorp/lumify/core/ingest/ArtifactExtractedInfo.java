@@ -2,16 +2,12 @@ package com.altamiracorp.lumify.core.ingest;
 
 import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
 import com.google.common.collect.Lists;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class ArtifactExtractedInfo {
     private static final String ROW_KEY = "rowKey";
@@ -22,6 +18,8 @@ public class ArtifactExtractedInfo {
     private static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
     private static final String RAW = "raw";
     private static final String MP4_HDFS_PATH = "mp4HdfsPath";
+    private static final String AUDIO_OGG_HDFS_PATH = "oggHdfsPath";
+    private static final String AUDIO_MP4_HDFS_PATH = "audioMp4HdfsPath";
     private static final String WEBM_HDFS_PATH = "webmHdfsPath";
     private static final String DETECTED_OBJECTS = "detectedObjects";
     private static final String VIDEO_TRANSCRIPT = "videoTranscript";
@@ -264,6 +262,22 @@ public class ArtifactExtractedInfo {
         return (String) properties.get(MP4_HDFS_PATH);
     }
 
+    public void setAudioMp4HdfsFilePath(String oggHdfsFilePath) {
+        properties.put(AUDIO_MP4_HDFS_PATH, oggHdfsFilePath);
+    }
+
+    public String getAudioMp4HdfsFilePath() {
+        return (String) properties.get(AUDIO_MP4_HDFS_PATH);
+    }
+
+    public void setAudioOggHdfsFilePath(String oggHdfsFilePath) {
+        properties.put(AUDIO_OGG_HDFS_PATH, oggHdfsFilePath);
+    }
+
+    public String getAudioOggHdfsFilePath() {
+        return (String) properties.get(AUDIO_OGG_HDFS_PATH);
+    }
+
     public void setWebMHdfsFilePath(String webMHdfsFilePath) {
         properties.put(WEBM_HDFS_PATH, webMHdfsFilePath);
     }
@@ -285,17 +299,6 @@ public class ArtifactExtractedInfo {
 
     public void setAudioHdfsPath(String audioHdfsPath) {
         properties.put(AUDIO_HDFS_PATH, audioHdfsPath);
-    }
-
-    /**
-     * Builder pattern for audioHdfsPath.
-     *
-     * @param audioHdfsPath the audioHdfsPath
-     * @return this
-     */
-    public ArtifactExtractedInfo audioHdfsPath(final String audioHdfsPath) {
-        setAudioHdfsPath(audioHdfsPath);
-        return this;
     }
 
     public String getAudioHdfsPath() {
@@ -350,17 +353,6 @@ public class ArtifactExtractedInfo {
 
     public void setVideoDuration(long videoDuration) {
         set(VIDEO_DURATION, videoDuration);
-    }
-
-    /**
-     * Builder pattern for videoDuration property.
-     *
-     * @param videoDuration the videoDuration
-     * @return this
-     */
-    public ArtifactExtractedInfo videoDuration(final long videoDuration) {
-        setVideoDuration(videoDuration);
-        return this;
     }
 
     public long getVideoDuration() {

@@ -2,11 +2,11 @@
   <!-- SWITCH TO RIGHT ALIGNED WHEN MOREtr><td>Authored</td></tr-->
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value"><%= property.sandboxStatus %></td>
+    <td class="property-value"><%= property.metadata.sandboxStatus || 'Unknown' %></td>
   </tr>
-  <% if (property._justificationMetadata || property._sourceMetadata) { 
-     var j = property._justificationMetadata,
-         s = property._sourceMetadata; %>
+  <% var j = property.metadata._justificationMetadata,
+         s = property.metadata._sourceMetadata;
+     if (j || s) {  %>
 
     <tr>
       <td class="property-name property-justification" colspan="2">Justification</td>
@@ -26,5 +26,12 @@
 
 
 </table>
-<button disabled class="btn btn-danger btn-small">Delete</button>
-<button disabled class="btn btn-default btn-small">Edit</button>
+<% 
+  var publicChanged = property.metadata.sandboxStatus === 'PUBLIC_CHANGED';
+  var private = property.metadata.sandboxStatus === 'PRIVATE';
+  if (publicChanged) { %>
+<button class="btn btn-danger btn-small">Undo</button>
+<% } else if (private) { %>
+<button class="btn btn-danger btn-small">Delete</button>
+<% } %>
+<button class="btn btn-default btn-small <%= (publicChanged || private) ? '' : 'noDelete' %>">Edit</button>

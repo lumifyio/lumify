@@ -17,6 +17,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -66,6 +67,13 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Authorizations authorizations = getAuthorizations(request, user);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            chain.next(request, response);
+            return;
+        }
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {

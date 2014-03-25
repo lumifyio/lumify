@@ -239,6 +239,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private void updateMutationWithArtifactExtractedInfo(ElementMutation<Vertex> artifact, ArtifactExtractedInfo artifactExtractedInfo) throws Exception {
         LumifyVisibility lumifyVisibility = new LumifyVisibility();
 
+        checkNotNull(artifactExtractedInfo.getConceptType(), "concept type cannot be null");
         Concept concept = ontologyRepository.getConceptById(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
         CONCEPT_TYPE.setProperty(artifact, concept.getId(), lumifyVisibility.getVisibility());
@@ -328,6 +329,21 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             spv.searchIndex(false);
             AUDIO.setProperty(artifact, spv, lumifyVisibility.getVisibility());
         }
+
+        if (artifactExtractedInfo.getAudioMp4HdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioMp4HdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            getAudioProperty(AUDIO_TYPE_MP4).setProperty(artifact, spv, lumifyVisibility.getVisibility());
+            getAudioSizeProperty(AUDIO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getAudioMp4HdfsFilePath()), lumifyVisibility.getVisibility());
+        }
+        if (artifactExtractedInfo.getAudioOggHdfsFilePath() != null) {
+            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioOggHdfsFilePath()), byte[].class);
+            spv.searchIndex(false);
+            getAudioProperty(AUDIO_TYPE_OGG).setProperty(artifact, spv, lumifyVisibility.getVisibility());
+            getAudioSizeProperty(AUDIO_TYPE_OGG).setProperty(artifact, getFileSize(artifactExtractedInfo.getAudioOggHdfsFilePath()),
+                    lumifyVisibility.getVisibility());
+        }
+
         if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getPosterFrameHdfsPath()), byte[].class);
             spv.searchIndex(false);

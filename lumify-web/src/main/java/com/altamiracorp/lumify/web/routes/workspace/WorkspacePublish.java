@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -19,6 +20,7 @@ import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JSONUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -32,7 +34,6 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
 
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
@@ -73,13 +74,28 @@ public class WorkspacePublish extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
 
+        LOGGER.debug("publishing\n%s", publishData.toString(2));
         JSONArray failures = new JSONArray();
-        boolean success = false;
+        publishVertices(publishData, failures, workspaceId, user, authorizations);
+        publishEdges(publishData, failures, workspaceId, user, authorizations);
+        publishProperties(publishData, failures, workspaceId, user, authorizations);
+
+        JSONObject resultJson = new JSONObject();
+        resultJson.put("failures", failures);
+        resultJson.put("success", failures.length() == 0);
+        LOGGER.debug("publishing results\n%s", resultJson.toString(2));
+        respondWithJson(response, resultJson);
+    }
+
+    private void publishVertices(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("vertex")) {
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (!type.equals("vertex")) {
+                    continue;
+                }
                 checkNotNull(data.getString("vertexId"));
                 Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
                 checkNotNull(vertex);
@@ -93,21 +109,27 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(msg);
                     data.put("error_msg", msg);
                     failures.put(data);
-                    publishData.remove(i);
                     continue;
                 }
-                publishVertex(vertex, action, authorizations, user);
-                success = true;
-                publishData.remove(i);
+                publishVertex(vertex, action, authorizations, workspaceId, user);
+            } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
             }
         }
         graph.flush();
+    }
 
+    private void publishEdges(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("relationship")) {
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (!type.equals("relationship")) {
+                    continue;
+                }
                 Edge edge = graph.getEdge(data.getString("edgeId"), authorizations);
                 Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
                 Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
@@ -121,7 +143,6 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
-                    publishData.remove(i);
                     continue;
                 }
 
@@ -131,21 +152,27 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
-                    publishData.remove(i);
                     continue;
                 }
-                publishEdge(edge, sourceVertex, destVertex, action, user, authorizations);
-                success = true;
-                publishData.remove(i);
+                publishEdge(edge, sourceVertex, destVertex, action, workspaceId, user, authorizations);
+            } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
             }
         }
         graph.flush();
+    }
 
+    private void publishProperties(JSONArray publishData, JSONArray failures, String workspaceId, User user, Authorizations authorizations) {
         for (int i = 0; i < publishData.length(); i++) {
             JSONObject data = publishData.getJSONObject(i);
-            String type = (String) data.get("type");
-            String action = data.getString("action");
-            if (type.equals("property")) {
+            try {
+                String type = (String) data.get("type");
+                String action = data.getString("action");
+                if (!type.equals("property")) {
+                    continue;
+                }
                 checkNotNull(data.getString("vertexId"));
                 Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
                 checkNotNull(vertex);
@@ -159,7 +186,6 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
-                    publishData.remove(i);
                     continue;
                 }
 
@@ -168,56 +194,54 @@ public class WorkspacePublish extends BaseRequestHandler {
                     LOGGER.warn(error_msg);
                     data.put("error_msg", error_msg);
                     failures.put(data);
-                    publishData.remove(i);
                     continue;
                 }
 
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"), user);
-                success = true;
-            } else {
-                throw new RuntimeException(type + " type is not supported for publishing");
+                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
+            } catch (Exception ex) {
+                LOGGER.error("Error publishing %s", data.toString(2), ex);
+                data.put("error_msg", ex.getMessage());
+                failures.put(data);
             }
         }
-        JSONObject resultJson = new JSONObject();
-        resultJson.put("failures", failures);
-        resultJson.put("success", success);
-        respondWithJson(response, resultJson);
+        graph.flush();
     }
 
-    private void publishVertex(Vertex vertex, String action, Authorizations authorizations, User user) throws IOException {
+    private void publishVertex(Vertex vertex, String action, Authorizations authorizations, String workspaceId, User user) throws IOException {
         if (action.equals("delete")) {
             graph.removeVertex(vertex, authorizations);
             return;
         }
+
+        LOGGER.debug("publishing vertex %s(%s)", vertex.getId().toString(), vertex.getVisibility().toString());
         String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
+        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+            throw new LumifyException(String.format("vertex with id '%s' is not local to workspace '%s'", vertex.getId(), workspaceId));
+        }
+
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
         vertex.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        Iterator properties = vertex.getProperties().iterator();
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
-        while (properties.hasNext()) {
-            Property property = (Property) properties.next();
-            if (property.getName().contains("_") || property.getName().equals("title")) {
-                vertexElementMutation.alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility());
-                auditRepository.auditEntityProperty(AuditAction.PUBLISH, vertex.getId(), property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
-            }
+
+        for (Property property : vertex.getProperties()) {
+            publishProperty(vertexElementMutation, property, workspaceId, user);
         }
+
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
         ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
 
-        Iterator<Audit> rows = auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser).iterator();
-        while (rows.hasNext()) {
-            Audit row = rows.next();
+        for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
 
-        Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
-        while (rowKeys.hasNext()) {
-            Property rowKeyProperty = rowKeys.next();
+        for (Property rowKeyProperty : vertex.getProperties("_rowKey")) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
             if (termMentionModel == null) {
                 DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
@@ -230,49 +254,75 @@ public class WorkspacePublish extends BaseRequestHandler {
                 modelSession.alterColumnsVisibility(termMentionModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
-        vertex.removeProperty("_rowKey");
     }
 
-    private void publishProperty(Vertex vertex, String action, String key, String name, User user) {
+    private void publishProperty(Element element, String action, String key, String name, String workspaceId, User user) {
         if (action.equals("delete")) {
-            vertex.removeProperty(key, name);
+            element.removeProperty(key, name);
             return;
         }
-        Property property = vertex.getProperty(key, name);
-        String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
-        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-
-        ExistingElementMutation <Vertex> vertexMutation = vertex.prepareMutation();
-        vertexMutation
-                .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility())
-                .alterPropertyMetadata(property.getKey(), property.getName(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
-
-        auditRepository.auditEntityProperty(AuditAction.PUBLISH, vertex.getId(), property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
-
-        vertexMutation.save();
+        ExistingElementMutation elementMutation = element.prepareMutation();
+        Iterable<Property> properties = element.getProperties(name);
+        for (Property property : properties) {
+            if (!property.getKey().equals(key)) {
+                continue;
+            }
+            if (publishProperty(elementMutation, property, workspaceId, user)) {
+                elementMutation.save();
+                return;
+            }
+        }
+        throw new LumifyException(String.format("no property with key '%s' and name '%s' found on workspace '%s'", key, name, workspaceId));
     }
 
-    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String action, User user, Authorizations authorizations) {
+    private boolean publishProperty(ExistingElementMutation elementMutation, Property property, String workspaceId, User user) {
+        String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
+        if (visibilityJsonString == null) {
+            return false;
+        }
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
+        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+            return false;
+        }
+
+        LOGGER.debug("publishing property %s:%s(%s)", property.getKey(), property.getName(), property.getVisibility().toString());
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        elementMutation
+                .alterPropertyVisibility(property, lumifyVisibility.getVisibility())
+                .alterPropertyMetadata(property, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+
+        auditRepository.auditEntityProperty(AuditAction.PUBLISH, elementMutation.getElement().getId(), property.getName(), property.getValue(), property.getValue(), "", "", property.getMetadata(), user, lumifyVisibility.getVisibility());
+        return true;
+    }
+
+    private void publishEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String action, String workspaceId, User user, Authorizations authorizations) {
         if (action.equals("delete")) {
             graph.removeEdge(edge, authorizations);
             return;
         }
+
+        LOGGER.debug("publishing edge %s(%s)", edge.getId().toString(), edge.getVisibility().toString());
         String visibilityJsonString = (String) edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
+        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
+        JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
+        if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
+            throw new LumifyException(String.format("edge with id '%s' is not local to workspace '%s'", edge.getId(), workspaceId));
+        }
+
         edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Edge> edgeExistingElementMutation = edge.prepareMutation();
-        Iterator properties = edge.getProperties().iterator();
         String originalEdgeVisibility = edge.getVisibility().getVisibilityString();
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
-        while (properties.hasNext()) {
-            Property property = (Property) properties.next();
-            if (property.getName().contains("_") || property.getName().equals("title")) {
-                edgeExistingElementMutation
-                        .alterPropertyVisibility(property.getKey(), property.getName(), lumifyVisibility.getVisibility());
-            }
+
+        for (Property property : edge.getProperties()) {
+            publishProperty(edgeExistingElementMutation, property, workspaceId, user);
         }
+
         edgeExistingElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());
         edge = edgeExistingElementMutation.save();
@@ -280,9 +330,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
         ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
-        Iterator<Audit> rows = auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser).iterator();
-        while (rows.hasNext()) {
-            Audit row = rows.next();
+        for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
     }

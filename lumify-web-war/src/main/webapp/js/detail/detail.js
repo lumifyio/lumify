@@ -69,7 +69,7 @@ define([
                 if (type === 'relationship') {
                     moduleName = type;
                 } else {
-                    moduleName = (((type != 'document' && type != 'image' && type != 'video') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+                    moduleName = (((type != 'document' && type != 'image' && type != 'video' && type != 'audio') ? 'entity' : 'artifact') || 'entity').toLowerCase();
                 }
                 moduleData = vertex;
             } else {

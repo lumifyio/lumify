@@ -9,8 +9,9 @@ define([
     'tpl!./entity',
     'service/vertex',
     'service/ontology',
+    'tpl!util/alert',
     'util/jquery.removePrefixedClasses'
-], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService) {
+], function(defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService, alertTemplate) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown);
@@ -196,6 +197,7 @@ define([
 
             if (!this.unresolve) {
                 this.vertexService.resolveTerm(parameters)
+                    .fail(this.requestFailure.bind(this))
                     .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
@@ -206,6 +208,7 @@ define([
                     });
             } else {
                 this.vertexService.unresolveTerm(parameters)
+                    .fail(this.requestFailure.bind(this))
                     .done(function(data) {
                         self.highlightTerm(data);
 
@@ -218,6 +221,16 @@ define([
                         _.defer(self.teardown.bind(self));
                     });
             }
+        };
+
+        this.requestFailure = function(request, message, error) {
+            var messages = this.markFieldErrors(error);
+
+            this.$node.find('.errors').html(
+                alertTemplate({
+                    error: messages
+            })).show();
+            _.defer(this.clearLoading.bind(this));
         };
 
         this.detectedObjectModification = function (event){
@@ -243,12 +256,12 @@ define([
             } else {
                 self.resolveDetectedObject (parameters);
             }
-
         }
 
         this.resolveDetectedObject = function (parameters) {
             var self = this;
             this.vertexService.resolveDetectedObject(parameters)
+                .fail(this.requestFailure.bind(this))
                 .done(function(data) {
                     var resolvedVertex = data.entityVertex;
                     var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
@@ -303,25 +316,27 @@ define([
 
         this.unresolveDetectedObject = function (parameters) {
             var self = this;
-            this.vertexService.unresolveDetectedObject(parameters).done(function(data) {
-                var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
-                var $tag = $focused.find('.label-info');
+            this.vertexService.unresolveDetectedObject(parameters)
+                .fail(this.requestFailure.bind(this))
+                .done(function(data) {
+                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
+                    var $tag = $focused.find('.label-info');
 
-                if (data.deleteTag) {
-                    $focused.remove();
-                } else {
-                    $tag.text(data.classifierConcept).removeAttr('data-info').data('info', data).removeClass();
-                    $tag.addClass('label-info label detected-object opens-dropdown');
-                }
+                    if (data.deleteTag) {
+                        $focused.remove();
+                    } else {
+                        $tag.text(data.classifierConcept).removeAttr('data-info').data('info', data).removeClass();
+                        $tag.addClass('label-info label detected-object opens-dropdown');
+                    }
 
-                if (data.deleteEdge) {
-                    self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
-                }
+                    if (data.deleteEdge) {
+                        self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
+                    }
 
-                self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });
-                self.trigger(document, 'refreshRelationships');
-                _.defer(self.teardown.bind(self));
-            });
+                    self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });
+                    self.trigger(document, 'refreshRelationships');
+                    _.defer(self.teardown.bind(self));
+                });
         };
 
         this.onConceptChanged = function(event) {

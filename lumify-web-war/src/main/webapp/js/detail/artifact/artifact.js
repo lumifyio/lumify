@@ -2,6 +2,7 @@
 define([
     'flight/lib/component',
     'util/video/scrubber',
+    'util/audio/scrubber',
     './image/image',
     '../withTypeContent',
     '../withHighlighting',
@@ -17,6 +18,7 @@ define([
 ], function(
     defineComponent,
     VideoScrubber,
+    AudioScrubber,
     Image,
     withTypeContent, withHighlighting,
     TermForm,
@@ -39,6 +41,7 @@ define([
 
         this.defaultAttrs({
             previewSelector: '.preview',
+            audioPreviewSelector: '.audio-preview',
             currentTranscriptSelector: '.currentTranscript',
             imagePreviewSelector: '.image-preview',
             detectedObjectSelector: '.detected-object',
@@ -59,7 +62,7 @@ define([
                 textSelector: this.onCopyText
             });
             this.on('scrubberFrameChange', this.onScrubberFrameChange);
-            this.on('videoTimeUpdate', this.onVideoTimeUpdate);
+            this.on('playerTimeUpdate', this.onPlayerTimeUpdate);
             this.on('DetectedObjectCoordsChange', this.onCoordsChanged);
             this.on('termCreated', this.onTeardownDropdowns);
             this.on('dropdownClosed', this.onTeardownDropdowns);
@@ -176,7 +179,7 @@ define([
             });
         };
 
-        this.onVideoTimeUpdate = function(evt, data) {
+        this.onPlayerTimeUpdate = function(evt, data) {
             var time = data.currentTime * 1000;
             this.updateCurrentTranscript(time);
         };
@@ -284,6 +287,12 @@ define([
                 event.type === 'mouseenter' ? 'DetectedObjectEnter' : 'DetectedObjectLeave',
                 info
             );
+        };
+
+        this.audioSetup = function(vertex) {
+            AudioScrubber.attachTo(this.select('audioPreviewSelector'), {
+                rawUrl: vertex.imageRawSrc
+            })
         };
 
         this.videoSetup = function(vertex) {

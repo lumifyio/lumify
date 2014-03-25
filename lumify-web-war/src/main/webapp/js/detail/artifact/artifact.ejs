@@ -22,10 +22,14 @@
 
 <% if(vertex.concept.displayType == 'video') { %>
   <div class="preview"/>
-  <div class="currentTranscript"/>
+  <div class="currentTranscript"></div>
 <% } %>
 <% if(vertex.concept.displayType == 'image') { %>
   <div class="image-preview opens-dropdown"></div>
+<% } %>
+<% if(vertex.concept.displayType == 'audio') { %>
+  <div class="audio-preview"></div>
+  <div class="currentTranscript"></div>
 <% } %>
 
 <div class='detected-object-labels'>

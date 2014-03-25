@@ -223,9 +223,9 @@ public class GraphUtil {
         }
     }
 
-    public static void updateVisibilitySource(Graph graph, VisibilityTranslator visibilityTranslator, Element element, String visibilitySource, String workspaceId) {
+    public static void updateVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
         String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId);
+        JSONObject visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJsonString, visibilitySource);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
@@ -329,6 +329,18 @@ public class GraphUtil {
             PropertySourceMetadata sourceMetadata = createPropertySourceMetadata(sourceJson);
             mutation.setProperty(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata.toJson().toString(), lumifyVisibility.getVisibility());
         }
+    }
+
+    public static JSONObject updateVisibilitySource (String jsonString, String visibilitySource) {
+        JSONObject json;
+        if (jsonString == null) {
+            json = new JSONObject();
+        } else {
+            json = new JSONObject(jsonString);
+        }
+
+        json.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
+        return json;
     }
 
     public static JSONObject updateVisibilitySourceAndAddWorkspaceId(String jsonString, String visibilitySource, String workspaceId) {

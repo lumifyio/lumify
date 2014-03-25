@@ -537,18 +537,15 @@ define([
 
         this.onContextMenuDeleteEdge = function () {
             var menu = this.select('edgeContextMenuSelector'),
-                edge = {
-                    id: menu.data('edge').id,
-                    properties: menu.data('edge')
-                };
+                edge = menu.data('edge').vertex;
 
             this.trigger('deleteEdges', { edges:[edge] });
         };
 
         this.onEdgesDeleted = function (event, data) {
             this.cytoscapeReady(function (cy) {
-                cy.remove('#' + this.vertexId(data.edgeId));
-                this.updateEdgeOptions(cy);
+                var edge = cy.getElementById(this.vertexId(data.edgeId));
+                edge.remove();
             });
         };
 

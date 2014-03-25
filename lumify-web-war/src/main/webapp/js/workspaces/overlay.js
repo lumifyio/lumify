@@ -273,11 +273,14 @@ define([
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
                         .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
-                    if (previousCount && formattedCount && formattedCount != previousCount) {
+                    if (formattedCount && formattedCount != previousCount) {
                         badge.removeClass('flash');
                         requestAnimationFrame(function() {
                             badge.addClass('flash');
                         })
+                    }
+                    if (count === 0) {
+                        badge.popover('destroy');
                     }
                 })
         };

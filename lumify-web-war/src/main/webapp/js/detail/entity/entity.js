@@ -222,7 +222,8 @@ define([
         this.onPaneClicked = function(evt) {
             var $target = $(evt.target);
 
-            if (!$target.is('.add-new-properties') && $target.parents('.underneath').length === 0) {
+            if (!$target.is('.add-new-properties,button') && 
+                $target.parents('.underneath').length === 0) {
                 PropertyForm.teardownAll();
             }
 
@@ -232,7 +233,9 @@ define([
                 evt.stopPropagation();
             } else if ($target.is('.relationship')) {
                 var info = $target.data('info');
-                this.trigger('selectObjects', { vertices:[info] });
+                if (info) {
+                    this.trigger('selectObjects', { vertices:[info] });
+                }
                 evt.stopPropagation();
             }
         };

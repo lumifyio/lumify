@@ -22,33 +22,25 @@ import java.util.Map;
  * LumifyProperties for media files (video, images, etc.).
  */
 public class MediaLumifyProperties {
-    /**
-     * The MP4 Video type.
-     */
     public static final String VIDEO_TYPE_MP4 = "video/mp4";
-
-    /**
-     * The WebM Video type.
-     */
     public static final String VIDEO_TYPE_WEBM = "video/webm";
+    public static final String AUDIO_TYPE_MP4 = "audio/mp4";
+    public static final String AUDIO_TYPE_OGG = "audio/ogg";
 
-    /**
-     * The video property format.
-     */
+    private static final String AUDIO_KEY_FORMAT = "_audio-%s";
     private static final String VIDEO_KEY_FORMAT = "_video-%s";
 
-    /**
-     * The video size property format.
-     */
     private static final String VIDEO_SIZE_KEY_FORMAT = "_videoSize-%s";
+    private static final String AUDIO_SIZE_KEY_FORMAT = "_audioSize-%s";
 
-    /**
-     * The map of video types to video properties.
-     */
+    private static final Map<String, IdentityLumifyProperty<Long>> VIDEO_SIZE_PROPERTY_CACHE = new HashMap<String, IdentityLumifyProperty<Long>>();
     private static final Map<String, StreamingLumifyProperty> VIDEO_PROPERTY_CACHE = new HashMap<String, StreamingLumifyProperty>();
+    private static final Map<String, IdentityLumifyProperty<Long>> AUDIO_SIZE_PROPERTY_CACHE = new HashMap<String, IdentityLumifyProperty<Long>>();
+    private static final Map<String, StreamingLumifyProperty> AUDIO_PROPERTY_CACHE = new HashMap<String, StreamingLumifyProperty>();
 
     /**
      * Get the video property for the requested video type.
+     *
      * @param videoType the type of video (e.g. video/mp4)
      * @return a LumifyProperty for setting/retrieving the requested video property
      */
@@ -62,13 +54,23 @@ public class MediaLumifyProperties {
     }
 
     /**
-     * The map of video types to video size properties.
+     * Get the audio property for the requested audio type.
+     *
+     * @param audioType the type of video (e.g. audio/ogg)
+     * @return a LumifyProperty for setting/retrieving the requested audio property
      */
-    private static final Map<String, IdentityLumifyProperty<Long>> VIDEO_SIZE_PROPERTY_CACHE =
-            new HashMap<String, IdentityLumifyProperty<Long>>();
+    public static synchronized StreamingLumifyProperty getAudioProperty(final String audioType) {
+        StreamingLumifyProperty prop = AUDIO_PROPERTY_CACHE.get(audioType);
+        if (prop == null) {
+            prop = new StreamingLumifyProperty(String.format(AUDIO_KEY_FORMAT, audioType));
+            AUDIO_PROPERTY_CACHE.put(audioType, prop);
+        }
+        return prop;
+    }
 
     /**
      * Get the video size property for the requested video type.
+     *
      * @param videoType the type of video (e.g. video/mp4)
      * @return a LumifyProperty for setting/retrieving the requested video size property
      */
@@ -77,6 +79,15 @@ public class MediaLumifyProperties {
         if (prop == null) {
             prop = new IdentityLumifyProperty<Long>(String.format(VIDEO_SIZE_KEY_FORMAT, videoType));
             VIDEO_SIZE_PROPERTY_CACHE.put(videoType, prop);
+        }
+        return prop;
+    }
+
+    public static synchronized IdentityLumifyProperty<Long> getAudioSizeProperty(final String audioType) {
+        IdentityLumifyProperty<Long> prop = AUDIO_SIZE_PROPERTY_CACHE.get(audioType);
+        if (prop == null) {
+            prop = new IdentityLumifyProperty<Long>(String.format(AUDIO_SIZE_KEY_FORMAT, audioType));
+            AUDIO_SIZE_PROPERTY_CACHE.put(audioType, prop);
         }
         return prop;
     }

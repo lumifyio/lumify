@@ -64,6 +64,7 @@ define([
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
+            this.on('editProperty', this.onEditProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
             this.$node
@@ -207,21 +208,26 @@ define([
                             property: {
                                 key: property.title,
                                 displayName: property.displayName,
-                                value: value || 'deleted'
+                                value: value || 'deleted',
+                                metadata: {}
                             },
                             popout: false
                         })
-                    ).addClass('audit-only-property').insertBefore(self.$node.find('ul .buttons'));
+                    ).addClass('audit-only-property').prependTo(self.$node.find('table tbody'));
                 }
-                propLi.append(auditsListTemplate({
-                    audits: auditsByProperty[propertyName],
-                    formatters: formatters,
-                    formatValue: self.formatValue.bind(self),
-                    currentVertexId: self.attr.data.id,
-                    createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
-                    MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
-                }));
+                propLi.after('<tr><td colspan=2></td></tr>')
+                    .next('tr').find('td')
+                    .append(auditsListTemplate({
+                        audits: auditsByProperty[propertyName],
+                        formatters: formatters,
+                        formatValue: self.formatValue.bind(self),
+                        currentVertexId: self.attr.data.id,
+                        createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
+                        MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
+                    }));
             });
+
+            this.updatePopovers();
         };
 
         this.createInfoJsonFromAudit = function(audit, direction) {
@@ -276,7 +282,7 @@ define([
                 this.vertexService.deleteProperty(
                     this.attr.data.id,
                     data.property)
-                    .fail(this.requestFailure.bind(this))
+                    .fail(this.requestFailure.bind(this, event.target))
             }
         };
 
@@ -326,16 +332,48 @@ define([
         };
         
         this.requestFailure = function(request, message, error) {
-            this.trigger(this.$node.find('.underneath'), 'addPropertyError', { error: error });
+            var target = this.$node.find('.underneath');
+            if (_.isElement(request)) {
+                target = request;
+                request = arguments[1];
+                message = arguments[2];
+                error = arguments[3];
+            }
+
+            try {
+                error = JSON.parse(error);
+            } catch(e) { }
+
+            this.trigger(target, 'propertyerror', { error: error });
         };
 
         this.onAddNewPropertiesClicked = function(evt) {
-            var root = $('<div class="underneath">').insertAfter(evt.target);
+            this.trigger('editProperty');
+        };
+
+        this.onEditProperty = function(evt, data) {
+            var button = this.select('addNewPropertiesSelector'),
+                root = $('<div class="underneath">'),
+                property = data && data.property,
+                propertyRow = property && this.$node.find('.property-' + property.key);
+
+            this.$node.find('button.info').popover('hide');
+
+            if (propertyRow && propertyRow.length) {
+                root.appendTo(
+                    $('<tr><td colspan=2></td></tr>')
+                        .insertAfter(propertyRow)
+                        .find('td')
+                );
+            } else {
+                root.insertAfter(button);
+            }
 
             PropertyForm.teardownAll();
             PropertyForm.attachTo(root, {
                 service: this.ontologyService,
-                data: this.attr.data
+                data: this.attr.data,
+                property: property
             });
         };
 
@@ -350,6 +388,51 @@ define([
                 .find('.property-' + propertyChangeData.propertyName + ' .value')
                 .html(propertyChangeData.value);
         };
+
+        this.updatePopovers = function() {
+            var self = this;
+
+            require(['detail/propertyInfo'], function(PropertyInfo) {
+
+                var infos = self.$node.find('.info');
+
+                infos.each(function() {
+                    var $this = $(this),
+                    property = $this.data('property'),
+                    ontologyProperty = self.ontologyProperties.byTitle[property.key];
+
+                    if (property.key === '_visibilityJson' || ontologyProperty) {
+                        $this.popover('destroy');
+                        $this.popover({
+                            trigger: 'click',
+                            placement: 'top',
+                            content: 'Loading...',
+                            //delay: { show: 100, hide: 1000 }
+                        });
+
+                        $this.on('shown', function() {
+                            infos.not($this).popover('hide');
+                        });
+
+                        var popover = $this.data('popover'),
+                        tip = popover.tip(),
+                        content = tip.find('.popover-content');
+
+                        popover.setContent = function() {
+                            var $tip = this.tip()
+                            $tip.removeClass('fade in top bottom left right')
+                        };
+
+                        content.teardownAllComponents();
+                        PropertyInfo.attachTo(content, { 
+                            property: $this.data('property')
+                        })
+                    } else {
+                        $this.remove();
+                    }
+                })
+            })
+        }
 
         this.displayProperties = function(properties) {
             var self = this;
@@ -371,9 +454,8 @@ define([
                     }
 
                     require([
-                        'configuration/plugins/visibility/visibilityDisplay',
-                        'detail/propertyInfo'
-                    ], function(VisibilityDisplay, PropertyInfo) {
+                        'configuration/plugins/visibility/visibilityDisplay'
+                    ], function(VisibilityDisplay) {
                         var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
 
                         props.find('.visibility').each(function() {
@@ -385,35 +467,7 @@ define([
 
                         self.$node.html(props);
 
-                        var infos = self.$node.find('.info');
-
-                        infos.each(function() {
-                            var $this = $(this);
-
-                            $this.popover('destroy');
-                            $this.popover({
-                                trigger: 'click',
-                                placement: 'top',
-                                content: 'Loading...',
-                                //delay: { show: 100, hide: 1000 }
-                            });
-
-                            $this.on('shown', function() {
-                                infos.not($this).popover('hide');
-                            });
-
-                            var popover = $this.data('popover'),
-                                tip = popover.tip();
-
-                            popover.setContent = function() {
-                                var $tip = this.tip()
-                                $tip.removeClass('fade in top bottom left right')
-                            };
-                            PropertyInfo.teardownAll();
-                            PropertyInfo.attachTo(tip.find('.popover-content'), { 
-                                property: $this.data('property')
-                            })
-                        })
+                        self.updatePopovers();
                     });
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
@@ -429,6 +483,14 @@ define([
                 o[p.key] = p.value;
             });
             properties = o;
+        }
+
+        if (!('_visibilityJson' in properties)) {
+            properties._visibilityJson = {
+                value: {
+                    source: ''
+                }
+            };
         }
 
         var keys = Object.keys(properties).sort(function(a,b) {
@@ -479,9 +541,7 @@ define([
 
                 var source = (value && value.value && value.value.source) || (value && value.source) || '';
 
-                if (source) {
-                    addProperty(properties[name], name, 'Visibility', source);
-                }
+                addProperty(properties[name], name, 'Visibility', source);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }
@@ -494,7 +554,7 @@ define([
                 value: value,
                 displayName: displayName || name,
                 visibility: visibility,
-                property: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
+                metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
             });
         }
     }

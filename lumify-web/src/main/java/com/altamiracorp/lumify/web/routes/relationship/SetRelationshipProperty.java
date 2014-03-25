@@ -12,10 +12,12 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -68,6 +70,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
 
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            chain.next(request, response);
+            return;
+        }
+
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {
             throw new RuntimeException("Could not find property: " + propertyName);
@@ -87,11 +96,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
                 workspaceId, this.visibilityTranslator, justificationText, sourceJson);
         setPropertyResult.elementMutation.save();
 
+
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
         JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties(), workspaceId);
+        Messaging.broadcastPropertyChange(edgeId, propertyName, value, resultsJson);
         respondWithJson(response, resultsJson);
     }
 }
