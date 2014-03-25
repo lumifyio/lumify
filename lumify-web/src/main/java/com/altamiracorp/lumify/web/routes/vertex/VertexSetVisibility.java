@@ -60,7 +60,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
         }
         LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId().toString(), visibilitySource);
 
-        GraphUtil.updateVisibilitySource(this.graph, visibilityTranslator, graphVertex, visibilitySource, workspaceId);
+        GraphUtil.updateVisibilitySource(visibilityTranslator, graphVertex, GraphUtil.getSandboxStatus(graphVertex, workspaceId), visibilitySource, workspaceId);
 
         this.graph.flush();
 
