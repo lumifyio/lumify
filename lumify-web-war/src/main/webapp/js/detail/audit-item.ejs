@@ -13,7 +13,13 @@
                 data-date-relative="<%= relativeDate %>"
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
-       <span class="audit-to"><%= to %></span>
+       <span class="audit-to">
+         <% if (to && audit.propertyAudit.propertyName === '_visibilityJson') { %>
+           <span class="visibility" data-visibility="<%= to %>"></span>
+         <% } else { %>
+           <%= to %>
+         <% } %>
+        </span>
     <% } else if (audit.entityAudit && audit.entityAudit.title) { %>
 
        <span class="audit-subtitle">
