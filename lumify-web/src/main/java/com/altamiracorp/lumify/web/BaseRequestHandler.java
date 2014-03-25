@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Represents the base behavior that a {@link Handler} must support
@@ -22,6 +24,9 @@ import java.io.IOException;
 public abstract class BaseRequestHandler implements Handler {
 
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+
+    protected static final ResourceBundle STRINGS = ResourceBundle.getBundle("MessageBundle", Locale.getDefault());
+
     private UserRepository userRepository;
     private Configuration configuration;
 
@@ -139,6 +144,19 @@ public abstract class BaseRequestHandler implements Handler {
         String workspaceId = getWorkspaceId(request);
         // TODO verify user has access to see this workspace
         return getUserRepository().getAuthorizations(user, workspaceId);
+    }
+
+    /**
+     * Send a Bad Request response with JSON object mapping field error messages
+     *
+     * @param response
+     * @param parameterName
+     * @param errorMessage
+     */
+    protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage) throws IOException {
+        JSONObject error = new JSONObject();
+        error.put(parameterName, errorMessage);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, error.toString());
     }
 
     /**

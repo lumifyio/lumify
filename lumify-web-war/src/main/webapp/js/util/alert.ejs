@@ -14,5 +14,16 @@
     <strong><%= type %></strong>
   <% } %>
 
+
+  <% if (_.isArray(info) && info.length > 1) { %>
+    <ul>
+    <% info.forEach(function(error) { %>
+      <li><%= error %></li>
+    <% }); %>
+    </ul>
+  <% } else if (_.isArray(info)) { %>
+  <%= info[0] %>
+  <% } else { %>
   <%= info %>
+  <% } %>
 </div>

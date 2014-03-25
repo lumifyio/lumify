@@ -282,7 +282,7 @@ define([
                 this.vertexService.deleteProperty(
                     this.attr.data.id,
                     data.property)
-                    .fail(this.requestFailure.bind(this))
+                    .fail(this.requestFailure.bind(this, event.target))
             }
         };
 
@@ -332,7 +332,19 @@ define([
         };
         
         this.requestFailure = function(request, message, error) {
-            this.trigger(this.$node.find('.underneath'), 'addPropertyError', { error: error });
+            var target = this.$node.find('.underneath');
+            if (_.isElement(request)) {
+                target = request;
+                request = arguments[1];
+                message = arguments[2];
+                error = arguments[3];
+            }
+
+            try {
+                error = JSON.parse(error);
+            } catch(e) { }
+
+            this.trigger(target, 'propertyerror', { error: error });
         };
 
         this.onAddNewPropertiesClicked = function(evt) {
@@ -473,6 +485,14 @@ define([
             properties = o;
         }
 
+        if (!('_visibilityJson' in properties)) {
+            properties._visibilityJson = {
+                value: {
+                    source: ''
+                }
+            };
+        }
+
         var keys = Object.keys(properties).sort(function(a,b) {
             if (a === '_visibilityJson') return -1;
             if (b === '_visibilityJson') return 1;
@@ -519,9 +539,7 @@ define([
 
                 var source = (value && value.value && value.value.source) || (value && value.source) || '';
 
-                if (source) {
-                    addProperty(properties[name], name, 'Visibility', source);
-                }
+                addProperty(properties[name], name, 'Visibility', source);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }

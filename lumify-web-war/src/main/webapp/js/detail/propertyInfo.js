@@ -25,7 +25,19 @@ define([
                 deleteButtonSelector: this.onDelete,
                 editButtonSelector: this.onEdit
             })
+
+            this.on('propertyerror', this.onPropertyError);
         })
+
+        this.onPropertyError = function(event, data) {
+            var button = this.select('deleteButtonSelector').removeClass('loading'),
+                text = button.text();
+
+            button.text(data.error || 'Unknown Error')
+            _.delay(function() {
+                button.text(text).removeAttr('disabled');
+            }, 3000)
+        };
 
         this.onEdit = function() {
             this.trigger('editProperty', {
@@ -33,8 +45,11 @@ define([
             });
         };
 
-        this.onDelete = function() {
-            //this.trigger('deleteProperty');
+        this.onDelete = function(e) {
+            var button = this.select('deleteButtonSelector').addClass('loading').attr('disabled', true);
+            this.trigger('deleteProperty', {
+                property: this.attr.property.key
+            });
         };
     }
 
