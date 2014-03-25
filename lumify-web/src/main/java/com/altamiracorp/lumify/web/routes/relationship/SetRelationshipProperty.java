@@ -12,6 +12,7 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
@@ -95,11 +96,13 @@ public class SetRelationshipProperty extends BaseRequestHandler {
                 workspaceId, this.visibilityTranslator, justificationText, sourceJson);
         setPropertyResult.elementMutation.save();
 
+
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
         JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties(), workspaceId);
+        Messaging.broadcastPropertyChange(edgeId, propertyName, value, resultsJson);
         respondWithJson(response, resultsJson);
     }
 }

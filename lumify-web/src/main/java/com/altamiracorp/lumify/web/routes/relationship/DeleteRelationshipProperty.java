@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
@@ -72,7 +73,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
             properties.add(p);
         }
         JSONObject resultsJson = GraphUtil.toJsonProperties(properties, workspaceId);
-
+        Messaging.broadcastPropertyChange(edgeId, propertyName, null, resultsJson);
         respondWithJson(response, resultsJson);
     }
 }

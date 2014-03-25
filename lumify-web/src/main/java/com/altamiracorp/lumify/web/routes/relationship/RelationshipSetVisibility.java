@@ -2,12 +2,14 @@ package com.altamiracorp.lumify.web.routes.relationship;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
@@ -64,6 +66,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         JSONObject json = GraphUtil.toJson(graphEdge, workspaceId);
+        Messaging.broadcastPropertyChange(graphEdgeId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilitySource, json);
         respondWithJson(response, json);
     }
 }

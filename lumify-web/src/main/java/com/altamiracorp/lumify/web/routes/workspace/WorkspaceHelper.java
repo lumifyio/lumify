@@ -18,6 +18,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 @Singleton
 public class WorkspaceHelper {
@@ -152,22 +155,23 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject deleteProperty(Vertex vertex, List<Property> properties, Property property, String workspaceId) {
+    public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId) {
         vertex.removeProperty(property.getKey(), property.getName());
 
         graph.flush();
 
-        // TODO: broadcast property delete
+        List <Property> properties = toList(vertex.getProperties(property.getName()));
         JSONObject json = new JSONObject();
         JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
         json.put("properties", propertiesJson);
         json.put("deletedProperty", property.getName());
         json.put("vertex", GraphUtil.toJson(vertex, workspaceId));
+
+        Messaging.broadcastPropertyChange(vertex.getId().toString(), vertex.getId().toString(), null, json);
         return json;
     }
 
-    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations,
-                                 boolean isPublished) {
+    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
 
         // TODO: replace "" when we implement commenting on ui

@@ -162,8 +162,7 @@ define([
             var self = this;
             switch (message.type) {
                 case 'propertiesChange':
-                    //FIXME: need this?
-                    //self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    self.trigger('updateVertices', { vertices:[message.data.vertex]});
                     break;
             }
         };

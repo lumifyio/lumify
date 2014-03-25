@@ -186,18 +186,24 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
 
     public static void broadcastPropertyChange(String graphVertexId, String propertyName, Object value, JSONObject vertexJson) {
         try {
-            JSONObject propertyJson = new JSONObject();
-            propertyJson.put("graphVertexId", graphVertexId);
-            propertyJson.put("propertyName", propertyName);
-            propertyJson.put("value", value.toString());
-
-            JSONArray propertiesJson = new JSONArray();
-            propertiesJson.put(propertyJson);
-
             JSONObject dataJson = new JSONObject();
-            dataJson.put("properties", propertiesJson);
+            if (value != null) {
+                JSONObject propertyJson = new JSONObject();
+                propertyJson.put("graphVertexId", graphVertexId);
+                propertyJson.put("propertyName", propertyName);
+                propertyJson.put("value", value.toString());
+
+                JSONArray propertiesJson = new JSONArray();
+                propertiesJson.put(propertyJson);
+
+                dataJson.put("properties", propertiesJson);
+            }
             if (vertexJson != null) {
-                dataJson.put("vertex", vertexJson);
+                if (value == null) {
+                    dataJson = vertexJson;
+                } else {
+                    dataJson.put("vertex", vertexJson);
+                }
             }
 
             JSONObject json = new JSONObject();
