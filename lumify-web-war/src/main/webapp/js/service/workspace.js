@@ -27,10 +27,8 @@ function(ServiceBase) {
     };
 
     WorkspaceService.prototype.getVertices = function (workspaceId) {
-        return this._ajaxPost({
+        return this._ajaxGet({
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/vertices',
-            data: {
-            }
         });
     };
 
