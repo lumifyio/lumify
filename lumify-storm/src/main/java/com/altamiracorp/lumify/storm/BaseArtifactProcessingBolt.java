@@ -104,7 +104,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         artifactExtractedInfo.setFileExtension(FilenameUtils.getExtension(fileMetadata.getFileName()));
         artifactExtractedInfo.setMimeType(fileMetadata.getMimeType());
         rawSize = in.available();
-        if(rawSize <= ArtifactExtractedInfo.MAX_SIZE_OF_INLINE_FILE) {
+        if (rawSize <= ArtifactExtractedInfo.MAX_SIZE_OF_INLINE_FILE) {
             in = new ByteArrayInputStream(IOUtils.toByteArray(in));
         }
 
@@ -121,6 +121,14 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
             String newTextPath = moveTempMp4File(artifactExtractedInfo.getMp4HdfsFilePath(), artifactExtractedInfo.getRowKey());
             artifactExtractedInfo.setMp4HdfsFilePath(newTextPath);
+        }
+        if (artifactExtractedInfo.getAudioOggHdfsFilePath() != null) {
+            String newTextPath = moveTempAudioOggFile(artifactExtractedInfo.getAudioOggHdfsFilePath(), artifactExtractedInfo.getRowKey());
+            artifactExtractedInfo.setAudioOggHdfsFilePath(newTextPath);
+        }
+        if (artifactExtractedInfo.getAudioMp4HdfsFilePath() != null) {
+            String newTextPath = moveTempAudioMp4File(artifactExtractedInfo.getAudioMp4HdfsFilePath(), artifactExtractedInfo.getRowKey());
+            artifactExtractedInfo.setAudioMp4HdfsFilePath(newTextPath);
         }
         if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
             String newTextPath = moveTempWebMFile(artifactExtractedInfo.getWebMHdfsFilePath(), artifactExtractedInfo.getRowKey());
@@ -145,7 +153,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         }
 
         if (artifactExtractedInfo.getDetectedObjects() != null) {
-            saveDetectedObjects (graphVertex.getId(), artifactExtractedInfo.getDetectedObjects());
+            saveDetectedObjects(graphVertex.getId(), artifactExtractedInfo.getDetectedObjects());
         }
 
         if (archiveTempDir != null) {
@@ -179,13 +187,13 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         getHdfsFileSystem().delete(new Path(videoFrame.getHdfsPath()), false);
     }
 
-    private void saveDetectedObjects (Object artifactVertexId, List<ArtifactDetectedObject> detectedObjects) {
+    private void saveDetectedObjects(Object artifactVertexId, List<ArtifactDetectedObject> detectedObjects) {
         for (ArtifactDetectedObject detectedObject : detectedObjects) {
             saveDetectedObject(artifactVertexId, detectedObject);
         }
     }
 
-    private void saveDetectedObject (Object artifactVertexId, ArtifactDetectedObject detectedObject) {
+    private void saveDetectedObject(Object artifactVertexId, ArtifactDetectedObject detectedObject) {
         detectedObjectRepository.saveDetectedObject(artifactVertexId, detectedObject.getId(), detectedObject.getConcept(),
                 detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(), false, detectedObject.getProcess(), new LumifyVisibility().getVisibility());
     }
@@ -279,6 +287,14 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
         return moveTempFile("/lumify/artifacts/video/mp4/", fileName, rowKey);
     }
 
+    protected String moveTempAudioOggFile(String fileName, String rowKey) throws IOException {
+        return moveTempFile("/lumify/artifacts/audio/ogg/", fileName, rowKey);
+    }
+
+    protected String moveTempAudioMp4File(String fileName, String rowKey) throws IOException {
+        return moveTempFile("/lumify/artifacts/audio/mp4/", fileName, rowKey);
+    }
+
     protected String moveTempPosterFrameFile(String fileName, String rowKey) throws IOException {
         return moveTempFile("/lumify/artifacts/video/posterFrame/", fileName, rowKey);
     }
@@ -311,5 +327,7 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
     }
 
     @Inject
-    public void setDetectedObjectRepository(DetectedObjectRepository detectedObjectRepository) { this.detectedObjectRepository = detectedObjectRepository; }
+    public void setDetectedObjectRepository(DetectedObjectRepository detectedObjectRepository) {
+        this.detectedObjectRepository = detectedObjectRepository;
+    }
 }
