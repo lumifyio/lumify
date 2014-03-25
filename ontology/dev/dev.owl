@@ -657,6 +657,15 @@
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
         <lumify:displayType xml:lang="en">video</lumify:displayType>
     </owl:Class>
+
+    <!-- http://lumify.io/dev#audio -->
+
+    <owl:Class rdf:about="http://lumify.io/dev#audio">
+        <rdfs:label xml:lang="en">Audio</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/dev#raw"/>
+        <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
+        <lumify:displayType xml:lang="en">audio</lumify:displayType>
+    </owl:Class>
 </rdf:RDF>
 
 
