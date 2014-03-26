@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -20,8 +21,10 @@ import com.altamiracorp.securegraph.DateOnly;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.query.Compare;
+import com.altamiracorp.securegraph.query.GeoCompare;
 import com.altamiracorp.securegraph.query.Query;
 import com.altamiracorp.securegraph.query.TextPredicate;
+import com.altamiracorp.securegraph.type.GeoCircle;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -175,11 +178,11 @@ public class GraphVertexSearch extends BaseRequestHandler {
     private void updateQueryWithFilter(Query graphQuery, JSONObject obj) throws ParseException {
         String predicateString = obj.optString("predicate");
         JSONArray values = obj.getJSONArray("values");
-        String propertyDataType = obj.optString("propertyDataType");
+        PropertyType propertyDataType = PropertyType.convert(obj.optString("propertyDataType"));
         String propertyName = obj.getString("propertyName");
         Object value0 = jsonValueToObject(values, propertyDataType, 0);
 
-        if ("string".equals(propertyDataType) && (predicateString == null || "".equals(predicateString))) {
+        if (PropertyType.STRING.equals(propertyDataType) && (predicateString == null || "".equals(predicateString))) {
             graphQuery.has(propertyName, TextPredicate.CONTAINS, value0);
         } else if ("<".equals(predicateString)) {
             graphQuery.has(propertyName, Compare.LESS_THAN, value0);
@@ -190,15 +193,18 @@ public class GraphVertexSearch extends BaseRequestHandler {
             graphQuery.has(propertyName, Compare.LESS_THAN_EQUAL, jsonValueToObject(values, propertyDataType, 1));
         } else if ("=".equals(predicateString) || "equal".equals(predicateString)) {
             graphQuery.has(propertyName, Compare.EQUAL, value0);
+        } else if (PropertyType.GEO_LOCATION.equals(propertyDataType)) {
+            GeoCircle circle = new GeoCircle(values.getDouble(0), values.getDouble(1), values.getDouble(2));
+            graphQuery.has(propertyName, GeoCompare.WITHIN, circle);
         } else {
             throw new LumifyException("unhandled query\n" + obj.toString(2));
         }
     }
 
-    private Object jsonValueToObject(JSONArray values, String propertyDataType, int index) throws ParseException {
-        if ("date".equals(propertyDataType)) {
+    private Object jsonValueToObject(JSONArray values, PropertyType propertyDataType, int index) throws ParseException {
+        if (PropertyType.DATE.equals(propertyDataType)) {
             return new DateOnly(DATE_FORMAT.parse(values.getString(index)));
-        } else if ("string".equals(propertyDataType)) {
+        } else if (PropertyType.STRING.equals(propertyDataType)) {
             return values.getString(index);
         } else {
             return values.getDouble(index);
