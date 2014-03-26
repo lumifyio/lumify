@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Authorizations;

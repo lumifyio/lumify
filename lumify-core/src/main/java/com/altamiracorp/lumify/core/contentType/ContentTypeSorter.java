@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest;
+package com.altamiracorp.lumify.core.contentType;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 

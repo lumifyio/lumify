@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.PausableTimerContext;

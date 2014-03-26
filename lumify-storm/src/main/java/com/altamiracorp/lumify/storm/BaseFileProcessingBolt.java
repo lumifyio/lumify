@@ -21,7 +21,7 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TIT
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.contentType.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;

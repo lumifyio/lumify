@@ -18,7 +18,7 @@ package com.altamiracorp.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.contentType.ContentTypeExtractor;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;

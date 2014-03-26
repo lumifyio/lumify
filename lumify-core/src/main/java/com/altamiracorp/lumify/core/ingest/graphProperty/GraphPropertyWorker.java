@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.storm;
+package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
@@ -10,7 +10,7 @@ public abstract class GraphPropertyWorker {
 
     }
 
-    public abstract GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data);
+    public abstract GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
     public abstract boolean isHandled(Vertex vertex, Property property);
 }

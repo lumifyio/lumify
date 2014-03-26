@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -109,6 +110,8 @@ public class Import extends CommandLineBase {
             VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility, getAuthorizations());
             RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, visibility);
             LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, visibility);
+            RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), visibility);
+            RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), visibility);
             vertex = vertexBuilder.save();
             graph.flush();
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());

@@ -9,6 +9,10 @@ import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyThreadedWrapper;
+import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
+import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -167,10 +171,13 @@ public class GraphPropertyBolt extends BaseRichBolt {
         } else {
             safeExecuteNonStreamingProperty(interestedWorkerWrappers, workData);
         }
+
+        this.graph.flush();
+
         LOGGER.debug("Completed work on %s:%s", property.getKey(), property.getName());
     }
 
-    private void safeExecuteNonStreamingProperty(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers, GraphPropertyWorkData workData) {
+    private void safeExecuteNonStreamingProperty(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers, GraphPropertyWorkData workData) throws Exception {
         for (GraphPropertyThreadedWrapper interestedWorkerWrapper : interestedWorkerWrappers) {
             interestedWorkerWrapper.getWorker().execute(null, workData);
         }

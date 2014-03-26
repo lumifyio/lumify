@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.contentTypeExtraction;
+package com.altamiracorp.lumify.core.contentType;
 
 import java.io.InputStream;
 import java.util.Map;
