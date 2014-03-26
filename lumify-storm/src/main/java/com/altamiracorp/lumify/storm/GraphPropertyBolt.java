@@ -14,6 +14,7 @@ import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.user.UserProvider;
@@ -28,8 +29,10 @@ import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -185,11 +188,51 @@ public class GraphPropertyBolt extends BaseRichBolt {
 
     private void safeExecuteStreamingPropertyValue(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers, GraphPropertyWorkData workData, StreamingPropertyValue streamingPropertyValue) throws Exception {
         String[] workerNames = graphPropertyThreadedWrapperToNames(interestedWorkerWrappers);
-        TeeInputStream teeInputStream = new TeeInputStream(streamingPropertyValue.getInputStream(), workerNames);
-        for (int i = 0; i < interestedWorkerWrappers.size(); i++) {
-            interestedWorkerWrappers.get(i).enqueueWork(teeInputStream.getTees()[i], workData);
+        InputStream in = streamingPropertyValue.getInputStream();
+        File tempFile = null;
+        try {
+            boolean requiresLocalFile = isLocalFileRequired(interestedWorkerWrappers);
+            if (requiresLocalFile) {
+                tempFile = copyToTempFile(in, workData);
+                in = new FileInputStream(tempFile);
+            }
+
+            TeeInputStream teeInputStream = new TeeInputStream(in, workerNames);
+            for (int i = 0; i < interestedWorkerWrappers.size(); i++) {
+                interestedWorkerWrappers.get(i).enqueueWork(teeInputStream.getTees()[i], workData);
+            }
+            teeInputStream.loopUntilTeesAreClosed();
+        } finally {
+            if (tempFile != null) {
+                tempFile.delete();
+            }
         }
-        teeInputStream.loopUntilTeesAreClosed();
+    }
+
+    private File copyToTempFile(InputStream in, GraphPropertyWorkData workData) throws IOException {
+        String fileExt = RawLumifyProperties.FILE_NAME_EXTENSION.getPropertyValue(workData.getVertex());
+        if (fileExt == null) {
+            fileExt = "data";
+        }
+        File tempFile = File.createTempFile("graphPropertyBolt", fileExt);
+        workData.setLocalFile(tempFile);
+        OutputStream tempFileOut = new FileOutputStream(tempFile);
+        try {
+            IOUtils.copy(in, tempFileOut);
+        } finally {
+            in.close();
+            tempFileOut.close();
+        }
+        return tempFile;
+    }
+
+    private boolean isLocalFileRequired(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers) {
+        for (GraphPropertyThreadedWrapper worker : interestedWorkerWrappers) {
+            if (worker.getWorker().isLocalFileRequired()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String[] graphPropertyThreadedWrapperToNames(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers) {

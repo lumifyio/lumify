@@ -13,4 +13,8 @@ public abstract class GraphPropertyWorker {
     public abstract GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
     public abstract boolean isHandled(Vertex vertex, Property property);
+
+    public boolean isLocalFileRequired() {
+        return false;
+    }
 }
