@@ -202,7 +202,7 @@ define([
                         var results = {},
                             sortVerticesIntoResults = function(v) {
                                 var props = v.properties,
-                                    conceptType = props['http://lumify.io#conceptType'].value,
+                                    conceptType = props['http://lumify.io#conceptType'] ? props['http://lumify.io#conceptType'].value : '',
                                     addToSearchResults = function(conceptType) {
                                         if (!results[conceptType]) results[conceptType] = [];
 

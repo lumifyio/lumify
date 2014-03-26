@@ -109,6 +109,7 @@ public class Import extends CommandLineBase {
             Visibility visibility = new Visibility("");
             VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility, getAuthorizations());
             RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, visibility);
+            LumifyProperties.TITLE.setProperty(vertexBuilder, f.getName(), visibility);
             LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, visibility);
             RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), visibility);
             RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), visibility);
