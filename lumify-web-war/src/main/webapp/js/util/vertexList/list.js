@@ -33,18 +33,21 @@ define([
             };
         };
 
+        this.vertexIdToClassName = function(id) {
+            var className = this.classNameLookup[id] = (this.classNameLookup[id] || ('vId' + (++this.classNameIndex)));
+            return className;
+        };
+
         this.classNameMapForVertices = function(vertices) {
             var self = this,
                 classNamesForVertex = {};
 
             vertices.forEach(function(v) {
 
-                // Check if this vertex is in the graph/map
-                self.classNameLookup[v.id] = (self.classNameLookup[v.id] || ('vId' + (++self.classNameIndex)));
+                var className = self.vertexIdToClassName(v.id),
+                    classes = [className],
+                    vertexState = self.stateForVertex(v);
 
-                var classes = [self.classNameLookup[v.id]];
-
-                var vertexState = self.stateForVertex(v);
                 if ( vertexState.inGraph ) classes.push('graph-displayed');
                 if ( vertexState.inMap ) classes.push('map-displayed');
 
@@ -313,7 +316,7 @@ define([
         // in search results
         this.toggleItemIcons = function(id, data) {
             this.$node
-                .find('li.' + this.classNameLookup[id])
+                .find('li.' + this.vertexIdToClassName(id))
                 .toggleClass('graph-displayed', data.inGraph)
                 .toggleClass('map-displayed', data.inMap);
         };
@@ -328,7 +331,7 @@ define([
             var self = this;
             (data.vertices || []).forEach(function(vertex) {
                 self.toggleItemIcons(vertex.id, self.stateForVertex(vertex));
-                var currentAnchor = self.$node.find('li.' + self.classNameLookup[vertex.id]).children('a'),
+                var currentAnchor = self.$node.find('li.' + self.vertexIdToClassName(vertex.id)).children('a'),
                     newAnchor = $(vertexTemplate({
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
@@ -362,10 +365,12 @@ define([
 
             var self = this,
                 ids = _.chain(data.vertices)
-                    .map(function(v) { return '.' + self.classNameLookup[v.id]; })
+                    .map(function(v) { 
+                        return '.' + self.vertexIdToClassName(v.id); 
+                    })
                     .value().join(',');
 
-            $(ids).addClass('active');
+            $(ids, this.node).addClass('active');
         };
     }
 });
