@@ -44,7 +44,7 @@ public abstract class WorkQueueRepository {
         JSONObject data = new JSONObject();
         data.put("graphVertexId", graphVertexId);
         data.put("propertyKey", propertyKey);
-        data.put("propertyName", propertyKey);
+        data.put("propertyName", propertyName);
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
     }
 
