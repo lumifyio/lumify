@@ -30,7 +30,7 @@ Lumify utilizes [Accumulo](https://accumulo.apache.org/) as our backend database
 with various other data which will be further explained in future blog
 posts. Essentially every C.R.U.D action is a separate row in our
 Accumulo table that is specifically for audit data. While designing the
-data model for this table, we wanted to generate the row keys in such a way that would optimize retrival of audit
+data model for this table, we wanted to generate the row keys in such a way that would optimize retrieval of audit
 records for a specific vertex. Our row key is a combination of the vertex
 ids, which are unique to every vertex, and a timestamp of when the action
 was performed. This allows for a fast prefix scan in Accumulo. Each row contains a column family that we named "*common*"
