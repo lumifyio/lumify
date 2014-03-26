@@ -37,5 +37,6 @@
 	<modules>
 		<module>lumify-useradd</module>
 		<module>lumify-version-inspector</module>
-	</modules>
+        <module>lumify-import</module>
+    </modules>
 </project>

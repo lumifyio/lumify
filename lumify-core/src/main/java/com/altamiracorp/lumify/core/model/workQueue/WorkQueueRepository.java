@@ -20,6 +20,7 @@ public abstract class WorkQueueRepository {
     public static final String TEXT_QUEUE_NAME = "text";
     public static final String PROCESSED_VIDEO_QUEUE_NAME = "processedVideo";
     public static final String DOCUMENT_QUEUE_NAME = "document";
+    public static final String GRAPH_PROPERTY_QUEUE_NAME = "graphProperty";
 
     public void pushText(final String artifactGraphVertexId) {
         checkNotNull(artifactGraphVertexId);
@@ -34,6 +35,17 @@ public abstract class WorkQueueRepository {
     public void pushUserImageQueue(final String graphVertexId) {
         checkNotNull(graphVertexId);
         writeToQueue(USER_IMAGE_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, graphVertexId));
+    }
+
+    public void pushGraphPropertyQueue(final Object graphVertexId, final String propertyKey, final String propertyName) {
+        checkNotNull(graphVertexId);
+        checkNotNull(propertyKey);
+        checkNotNull(propertyName);
+        JSONObject data = new JSONObject();
+        data.put("graphVertexId", graphVertexId);
+        data.put("propertyKey", propertyKey);
+        data.put("propertyName", propertyKey);
+        pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
     }
 
     private void writeToQueue(final String queueName, FlushFlag flushFlag, final Map<String, String> content) {
