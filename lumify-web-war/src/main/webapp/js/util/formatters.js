@@ -99,6 +99,22 @@ define(['sf'], function() {
                         longitude: longitude
                     };
                 }
+            },
+            pretty: function(geo) {
+
+                if (_.isString(geo)) {
+
+                    var parsed = FORMATTERS.geoLocation.parse(geo);
+                    if (parsed) {
+                        return FORMATTERS.geoLocation.pretty(parsed);
+                    } else {
+                        return geo;
+                    }
+                }
+
+                if (geo && geo.latitude && geo.longitude) {
+                    return geo.latitude.toFixed(3) + ', ' + geo.longitude.toFixed(3);
+                }
             }
         },
         object: {

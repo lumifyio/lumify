@@ -3,8 +3,9 @@ define([
     'flight/lib/component',
     'tpl!./date',
     './withPropertyField',
-    'util/formatters'
-], function(defineComponent, template, withPropertyField, formatters) {
+    'util/formatters',
+    'chrono'
+], function(defineComponent, template, withPropertyField, formatters, chrono) {
     'use strict';
 
     return defineComponent(DateField, withPropertyField);
@@ -32,16 +33,37 @@ define([
             this.updateRangeVisibility();
 
             this.on('change keyup', {
-                inputSelector: function() {
+                    inputSelector: function() {
+                        this.updateRangeVisibility();
 
-                    this.updateRangeVisibility();
+                        this.filterUpdated(
+                            this.getValues(),
+                            this.select('predicateSelector').val()
+                        );
+                    }
+                });
 
-                    this.filterUpdated(
-                        this.getValues(),
-                        this.select('predicateSelector').val()
-                    );
-                }
-            });
+            this.$node.find('input').on('paste', function(event) {
+                var self = $(this);
+
+                self.datepicker('hide');
+                self[0].select();
+                
+                _.delay(function() {
+                    var pasted = self.val();
+
+                    if (pasted) {
+                        var date = chrono.parseDate(pasted) 
+                        if (date) {
+                            debugger;
+                            self.val(formatters.date.dateString(date));
+                            self.datepicker('setDate', date)
+                            self.datepicker('update');
+                            self.blur();
+                        }
+                    }
+                }, 500)
+            })
         });
 
         this.isValid = function() {

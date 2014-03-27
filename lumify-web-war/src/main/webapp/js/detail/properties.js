@@ -415,6 +415,16 @@ define([
 
                         $this.on('shown', function() {
                             infos.not($this).popover('hide');
+                            $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
+                                var $target = $(event.target);
+
+                                if (!$target.is($this) && 
+                                    $target.closest('.popover').length === 0) {
+
+                                    $this.popover('hide');
+                                    $(document).off('.propertyInfo');
+                                }
+                            });
                         });
 
                         var popover = $this.data('popover'),
@@ -509,7 +519,9 @@ define([
         });
 
         keys.forEach(function(name) {
-            var displayName, value,
+            var displayName, 
+                value,
+                stringValue,
                 ontologyProperty = ontologyProperties.byTitle[name],
                 isEdge = properties['http://lumify.io#conceptType'] && 
                     properties['http://lumify.io#conceptType'].value === 'relationship',
@@ -522,8 +534,13 @@ define([
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
                     value = properties[name];
-                    value['http://lumify.io#geoLocationDescription'] = 
-                        properties['http://lumify.io#geoLocationDescription'];
+                    value['http://lumify.io#geoLocationDescription'] = properties['http://lumify.io#geoLocationDescription'];
+                    if (value && value['http://lumify.io#geoLocationDescription'] && value['http://lumify.io#geoLocationDescription'].value) {
+                        stringValue = value['http://lumify.io#geoLocationDescription'].value;
+                    }
+                    if (!stringValue) {
+                        stringValue = formatters.geoLocation.pretty(value && value.value)
+                    }
                 } else {
                     value = properties[name].value;
                 }
@@ -540,22 +557,26 @@ define([
                     // Title is displayed above property list
                     name !== 'title') {
 
-                    addProperty(properties[name], name, displayName, value, properties[name]._visibilityJson);
+                    addProperty(properties[name], name, displayName, value, stringValue, properties[name]._visibilityJson);
                 }
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;
 
-                addProperty(properties[name], name, 'Visibility', value);
+                // TODO: call plugin
+                stringValue = (value && value.value && value.value.source) || 'public';
+
+                addProperty(properties[name], name, 'Visibility', value, stringValue);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }
         });
         return displayProperties;
 
-        function addProperty(property, name, displayName, value, visibility) {
+        function addProperty(property, name, displayName, value, stringValue, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
+                stringValue: _.isUndefined(stringValue) ? value : stringValue,
                 displayName: displayName || name,
                 visibility: visibility,
                 metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
