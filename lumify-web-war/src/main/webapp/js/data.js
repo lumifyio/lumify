@@ -23,12 +23,12 @@ define([
 
     var WORKSPACE_SAVE_DELAY = 1500,
         RELOAD_RELATIONSHIPS_DELAY = 250,
-        ADD_VERTICES_DELAY = 100;
+        ADD_VERTICES_DELAY = 100,
+        DataComponent = defineComponent(Data, withAsyncQueue, withVertexCache, withAjaxFilters);
 
     return initializeData();
 
     function initializeData() {
-        var DataComponent = defineComponent(Data, withAsyncQueue, withVertexCache, withAjaxFilters);
         DataComponent.attachTo(document);
 
         var instanceInfo = _.find(registry.findInstanceInfoByNode(document), function(info) {
@@ -71,6 +71,11 @@ define([
             droppableSelector: 'body'
         });
 
+        this.after('teardown', function() {
+            _.delay(function() {
+                DataComponent.teardownAll();
+            });
+        });
 
         this.after('initialize', function() {
             var self = this;
