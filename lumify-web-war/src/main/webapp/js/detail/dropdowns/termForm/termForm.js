@@ -576,23 +576,7 @@ define([
 
 
             self.ontologyService.properties().done(function(ontologyProperties) {
-                var field = input.typeahead({
-                    items: 50,
-                    source: function(query, callback) {
-
-                        if (self.lastQuery && query !== self.lastQuery) {
-                            self.reset();
-                        }
-
-                        if (!self.sourceCache) self.sourceCache = {};
-                        else if (self.sourceCache[query]) {
-                            self.sourceCache[query](callback);
-                            return;
-                        }
-
-                        self.lastQuery = query;
-                        var instance = this;
-
+                var debouncedQuery = _.debounce(function(instance, query, callback) {
                         self.runQuery(query).done(function(entities) {
                             var all = _.map(entities, function(e) {
                                 return $.extend({
@@ -624,6 +608,23 @@ define([
 
                             self.sourceCache[query](callback);
                         });
+                    }, 500),
+                    field = input.typeahead({
+                    items: 50,
+                    source: function(query, callback) {
+
+                        if (self.lastQuery && query !== self.lastQuery) {
+                            self.reset();
+                        }
+
+                        if (!self.sourceCache) self.sourceCache = {};
+                        else if (self.sourceCache[query]) {
+                            self.sourceCache[query](callback);
+                            return;
+                        }
+
+                        self.lastQuery = query;
+                        debouncedQuery(this, query, callback);
                     },
                     matcher: function(item) {
                         if (item === createNewText) return true;
