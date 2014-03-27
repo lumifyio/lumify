@@ -248,6 +248,8 @@ define([
         this.logout = function() {
             var self = this;
 
+            this.trigger('willLogout');
+
             new UserService().logout()
                 .fail(function() {
                     require(['login'], function(Login) {
