@@ -23,6 +23,7 @@ import java.util.Map;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GraphUtil {
 
@@ -35,6 +36,7 @@ public class GraphUtil {
     }
 
     public static JSONObject toJson(Element element, String workspaceId) {
+        checkNotNull(element, "element cannot be null");
         if (element instanceof Vertex) {
             return toJsonVertex((Vertex) element, workspaceId);
         }
