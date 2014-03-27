@@ -88,7 +88,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
         if (entityVertex == null) {
             LOGGER.warn("Could not find associated entity vertex for id: %s", graphVertexId);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 

@@ -49,7 +49,7 @@ public class VertexProperties extends BaseRequestHandler {
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
         JSONObject json = GraphUtil.toJson(vertex, workspaceId);

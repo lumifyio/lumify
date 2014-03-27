@@ -53,8 +53,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
 
         if (properties.size() == 0) {
             LOGGER.warn("Could not find property: %s", propertyName);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 

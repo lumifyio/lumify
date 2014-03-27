@@ -168,6 +168,14 @@ public abstract class BaseRequestHandler implements Handler {
         return getUserRepository().getAuthorizations(user, workspaceId);
     }
 
+    protected void respondWithNotFound(final HttpServletResponse response) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    protected void respondWithNotFound(final HttpServletResponse response, String message) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
+    }
+
     /**
      * Send a Bad Request response with JSON object mapping field error messages
      *

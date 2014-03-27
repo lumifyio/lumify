@@ -69,8 +69,7 @@ public class ArtifactRaw extends BaseRequestHandler {
 
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 
@@ -93,8 +92,7 @@ public class ArtifactRaw extends BaseRequestHandler {
             StreamingPropertyValue rawValue = RAW.getPropertyValue(artifactVertex);
             if (rawValue == null) {
                 LOGGER.warn("Could not find raw on artifact: %s", artifactVertex.getId().toString());
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                chain.next(request, response);
+                respondWithNotFound(response);
                 return;
             }
             InputStream in = rawValue.getInputStream();

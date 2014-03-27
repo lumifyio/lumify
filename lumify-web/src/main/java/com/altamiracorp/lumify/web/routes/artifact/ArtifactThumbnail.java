@@ -52,8 +52,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 
@@ -84,8 +83,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         LOGGER.info("Cache miss for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
         StreamingPropertyValue rawPropertyValue = RAW.getPropertyValue(artifactVertex);
         if (rawPropertyValue == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 

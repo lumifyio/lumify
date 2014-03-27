@@ -36,7 +36,7 @@ public class WorkspaceById extends BaseRequestHandler {
         final Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
         if (workspace == null) {
             LOGGER.warn("Could not find workspace: %s", workspaceId);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
             request.getSession().setAttribute("activeWorkspace", workspaceId);

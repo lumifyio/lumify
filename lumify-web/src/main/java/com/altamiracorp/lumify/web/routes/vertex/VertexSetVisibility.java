@@ -48,7 +48,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         if (graphVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 
