@@ -111,6 +111,7 @@ define([
             this.on('clipboardPaste', this.onClipboardPaste);
             this.on('clipboardCut', this.onClipboardCut);
             this.on('deleteEdges', this.onDeleteEdges);
+            this.on('willLogout', this.willLogout);
 
             // Workspaces
             this.on('saveWorkspace', this.onSaveWorkspace);
@@ -498,7 +499,9 @@ define([
                 selectedIds = _.pluck(vertices, 'id'),
                 selected = _.groupBy(vertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
 
-            if (this.previousSelection && _.isEqual(this.previousSelection, selectedIds)) {
+            if (_.isArray(this.previousSelection) && 
+                _.isArray(selectedIds) &&
+                _.isEqual(this.previousSelection, selectedIds)) {
                 return;
             }
             this.previousSelection = selectedIds;
@@ -572,6 +575,10 @@ define([
             });
         };
 
+        this.willLogout = function() {
+            this.previousSelection = null;
+        };
+
         this.loadActiveWorkspace = function() {
             window.workspaceId = this.workspaceId;
 
@@ -643,7 +650,6 @@ define([
             // Queue up any requests to modify workspace
             self.workspaceUnload();
             self.relationshipsUnload();
-
 
             self.socketSubscribeReady()
                 .done(function() {
