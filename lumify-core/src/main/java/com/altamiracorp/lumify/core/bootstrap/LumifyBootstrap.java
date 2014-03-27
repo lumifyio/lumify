@@ -132,7 +132,7 @@ public class LumifyBootstrap extends AbstractModule {
                 .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
                 .in(Scopes.SINGLETON);
         bind(MimeTypeMapper.class)
-                .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.CONTENT_TYPE_EXTRACTOR, false))
+                .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.MIME_TYPE_MAPPER, false))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

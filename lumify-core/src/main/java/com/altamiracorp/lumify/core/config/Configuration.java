@@ -29,7 +29,7 @@ public final class Configuration {
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
     public static final String WORK_QUEUE_REPOSITORY = "work-queue-repository";
-    public static final String CONTENT_TYPE_EXTRACTOR = "content-type-extractor";
+    public static final String MIME_TYPE_MAPPER = "mime-type-mapper";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String MODEL_USER = "model.username";
