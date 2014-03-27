@@ -509,7 +509,9 @@ define([
         });
 
         keys.forEach(function(name) {
-            var displayName, value,
+            var displayName, 
+                value,
+                stringValue,
                 ontologyProperty = ontologyProperties.byTitle[name],
                 isEdge = properties._conceptType && properties._conceptType.value === 'relationship',
                 isRelationshipType = name === 'relationshipType' && isEdge;
@@ -522,6 +524,12 @@ define([
                 } else if (ontologyProperty.dataType === 'geoLocation') {
                     value = properties[name];
                     value._geoLocationDescription = properties._geoLocationDescription;
+                    if (value && value._geoLocationDescription && value._geoLocationDescription.value) {
+                        stringValue = value._geoLocationDescription.value;
+                    }
+                    if (!stringValue) {
+                        stringValue = formatters.geoLocation.pretty(value && value.value)
+                    }
                 } else {
                     value = properties[name].value;
                 }
@@ -538,22 +546,26 @@ define([
                     // Title is displayed above property list
                     name !== 'title') {
 
-                    addProperty(properties[name], name, displayName, value, properties[name]._visibilityJson);
+                    addProperty(properties[name], name, displayName, value, stringValue, properties[name]._visibilityJson);
                 }
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;
 
-                addProperty(properties[name], name, 'Visibility', value);
+                // TODO: call plugin
+                stringValue = (value && value.value && value.value.source) || 'public';
+
+                addProperty(properties[name], name, 'Visibility', value, stringValue);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
             }
         });
         return displayProperties;
 
-        function addProperty(property, name, displayName, value, visibility) {
+        function addProperty(property, name, displayName, value, stringValue, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
+                stringValue: _.isUndefined(stringValue) ? value : stringValue,
                 displayName: displayName || name,
                 visibility: visibility,
                 metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
