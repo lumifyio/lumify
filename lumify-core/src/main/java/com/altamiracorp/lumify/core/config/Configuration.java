@@ -2,18 +2,11 @@ package com.altamiracorp.lumify.core.config;
 
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.ConfigurationMap;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,18 +25,15 @@ public final class Configuration {
     public static final String MIME_TYPE_MAPPER = "mime-type-mapper";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
-    public static final String MODEL_USER = "model.username";
-    public static final String MODEL_PASSWORD = "model.password";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String AUTHENTICATION_PROVIDER = "authentication.provider";
     public static final String MAP_PROVIDER = "map.provider";
     public static final String MAP_ACCESS_KEY = "map.apiKey";
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
-    public static final String OBJECT_DETECTOR = "object.detector";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
 
-    private org.apache.commons.configuration.Configuration config;
+    private Map<String, String> config = new HashMap<String, String>();
 
 
     /**
@@ -56,24 +46,11 @@ public final class Configuration {
      */
     private static final int UNKNOWN_INT = -999;
 
-    public Configuration() {
-        this.config = new PropertiesConfiguration();
-        ((PropertiesConfiguration) this.config).setDelimiterParsingDisabled(true);
-    }
-
     public Configuration(final Map<?, ?> config) {
-        this();
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
                 set(entry.getKey().toString(), entry.getValue());
             }
-        }
-    }
-
-    private Configuration(org.apache.commons.configuration.Configuration config) {
-        this.config = config;
-        if (this.config instanceof AbstractConfiguration) {
-            ((AbstractConfiguration) this.config).setDelimiterParsingDisabled(true);
         }
     }
 
@@ -82,15 +59,18 @@ public final class Configuration {
     }
 
     public String get(String propertyKey, String defaultValue) {
-        return config.getString(propertyKey, defaultValue);
+        if (config.containsKey(propertyKey)) {
+            return config.get(propertyKey);
+        }
+        return defaultValue;
     }
 
     public Integer getInt(String propertyKey) {
-        return config.getInt(propertyKey, UNKNOWN_INT);
+        return Integer.parseInt(get(propertyKey, Integer.toString(UNKNOWN_INT)));
     }
 
     public Class getClass(String propertyKey, String defaultClassName) throws ClassNotFoundException {
-        String className = config.getString(propertyKey, defaultClassName);
+        String className = get(propertyKey, defaultClassName);
         if (className == null) {
             return null;
         }
@@ -101,23 +81,35 @@ public final class Configuration {
         return getClass(propertyKey, null);
     }
 
-    public Configuration getSubset(String keyPrefix) {
-        org.apache.commons.configuration.Configuration subset = config.subset(keyPrefix);
-        return new Configuration(subset);
+    public Map<String, String> getSubset(String keyPrefix) {
+        Map<String, String> subset = new HashMap<String, String>();
+        for (Map.Entry<String, String> entry : this.config.entrySet()) {
+            if (!entry.getKey().startsWith(keyPrefix + ".") && !entry.getKey().equals(keyPrefix)) {
+                continue;
+            }
+            String newKey = entry.getKey().substring(keyPrefix.length());
+            if (newKey.startsWith(".")) {
+                newKey = newKey.substring(1);
+            }
+            subset.put(newKey, entry.getValue());
+        }
+        return subset;
     }
 
     public Map toMap() {
-        return new ConfigurationMap(config);
+        return this.config;
     }
 
     public Iterable<String> getKeys() {
-        //convenience method to easily get keys
-        ConfigurationMap map = new ConfigurationMap(config);
-        return map.keySet();
+        return this.config.keySet();
     }
 
     public void set(String propertyKey, Object value) {
-        config.setProperty(propertyKey, value);
+        if (value == null) {
+            config.remove(propertyKey);
+        } else {
+            config.put(propertyKey, value.toString());
+        }
     }
 
     public static Configuration loadConfigurationFile() {
@@ -137,9 +129,6 @@ public final class Configuration {
             throw new RuntimeException("Could not find config directory: " + configDirectory);
         }
 
-        PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
-        propertiesConfiguration.setDelimiterParsingDisabled(true);
-
         File[] files = configDirectoryFile.listFiles();
         if (files == null) {
             throw new RuntimeException("Could not parse directory name: " + configDirectory);
@@ -150,40 +139,52 @@ public final class Configuration {
                 return o1.getName().compareTo(o2.getName());
             }
         });
+        Map<String, String> properties = new HashMap<String, String>();
         for (File f : files) {
             if (!f.getAbsolutePath().endsWith(".properties")) {
                 continue;
             }
             try {
-                processFile(f.getAbsolutePath(), propertiesConfiguration);
+                Map<String, String> fileProperties = loadFile(f.getAbsolutePath());
+                for (Map.Entry<String, String> filePropertyEntry : fileProperties.entrySet()) {
+                    properties.put(filePropertyEntry.getKey(), filePropertyEntry.getValue());
+                }
             } catch (IOException ex) {
                 throw new RuntimeException("Could not load config file: " + f.getAbsolutePath(), ex);
             }
         }
 
-        return new Configuration(propertiesConfiguration);
+        return new Configuration(properties);
     }
 
-    private static void processFile(final String fileName, final PropertiesConfiguration propertiesConfiguration) throws IOException {
+    private static Map<String, String> loadFile(final String fileName) throws IOException {
+        Map<String, String> results = new HashMap<String, String>();
         LOGGER.info("Loading config file: %s", fileName);
         FileInputStream in = new FileInputStream(fileName);
         try {
-            propertiesConfiguration.load(in);
-        } catch (ConfigurationException e) {
-            LOGGER.info("Could not find file to load: ", fileName);
+            Properties properties = new Properties();
+            properties.load(in);
+            for (Map.Entry<Object, Object> prop : properties.entrySet()) {
+                String key = prop.getKey().toString();
+                String value = prop.getValue().toString();
+                results.put(key, value);
+            }
+        } catch (Exception e) {
+            LOGGER.info("Could not load configuration file: %s", fileName);
         } finally {
             in.close();
         }
+        return results;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        Iterator<String> keys = config.getKeys();
+        Iterator<String> keys = getKeys().iterator();
         String key;
         while (keys.hasNext()) {
             key = keys.next();
-            sb.append(key).append(": ").append(config.getString(key)).append("\n");
+            sb.append(key).append(": ").append(get(key)).append("\n");
         }
 
         return sb.toString();
