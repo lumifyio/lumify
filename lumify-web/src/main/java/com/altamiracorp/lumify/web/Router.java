@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.routes.admin.*;
@@ -53,7 +54,7 @@ public class Router extends HttpServlet {
             AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
             Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-            app.get("/index.html", new StaticFileHandler(config));
+            app.get("/", new StaticFileHandler(config, "/index.html"));
             app.post("/login", Login.class);
             app.post("/logout", Logout.class);
 
@@ -126,6 +127,8 @@ public class Router extends HttpServlet {
             app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
             app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
             app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
+
+            app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));
         } catch (Exception ex) {
             LOGGER.error("Failed to initialize Router", ex);
             throw new RuntimeException("Failed to initialize " + getClass().getName(), ex);
