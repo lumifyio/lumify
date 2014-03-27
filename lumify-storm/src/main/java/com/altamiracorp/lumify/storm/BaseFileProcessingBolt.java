@@ -21,7 +21,7 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TIT
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.contentTypeExtraction.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.contentType.MimeTypeMapper;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
@@ -49,7 +49,7 @@ import org.json.JSONObject;
 public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseFileProcessingBolt.class);
 
-    private ContentTypeExtractor contentTypeExtractor;
+    private MimeTypeMapper mimeTypeMapper;
 
     protected FileMetadata getFileMetadata(Tuple input) throws Exception {
         String fileName = input.getString(0);
@@ -105,9 +105,9 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
 
     protected String getMimeType(String fileName) throws Exception {
         String mimeType = null;
-        if (contentTypeExtractor != null) {
+        if (mimeTypeMapper != null) {
             InputStream in = openFile(fileName);
-            mimeType = contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
+            mimeType = mimeTypeMapper.guessMimeType(in, FilenameUtils.getExtension(fileName));
         }
         return mimeType;
     }
@@ -145,12 +145,12 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         return tempDir;
     }
 
-    protected ContentTypeExtractor getContentTypeExtractor() {
-        return contentTypeExtractor;
+    protected MimeTypeMapper getMimeTypeMapper() {
+        return mimeTypeMapper;
     }
 
     @Inject(optional = true)
-    public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
-        this.contentTypeExtractor = contentTypeExtractor;
+    public void setMimeTypeMapper(@Nullable MimeTypeMapper mimeTypeMapper) {
+        this.mimeTypeMapper = mimeTypeMapper;
     }
 }

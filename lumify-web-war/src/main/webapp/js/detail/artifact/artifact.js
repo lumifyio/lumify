@@ -44,6 +44,7 @@ define([
             audioPreviewSelector: '.audio-preview',
             currentTranscriptSelector: '.currentTranscript',
             imagePreviewSelector: '.image-preview',
+            detectedObjectLabelsSelector: '.detected-object-labels',
             detectedObjectSelector: '.detected-object',
             detectedObjectTagSelector: '.detected-object-tag',
             artifactSelector: '.artifact-image',
@@ -154,18 +155,19 @@ define([
                 this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
             }
 
-            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
-                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
-                    var aX = a.x1, bX = b.x1;
-                    return aX - bX;
-                });
-            }
-
             this.$node.html(template({
                 vertex: vertex,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton()
             }));
+
+            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
+                this.select('detectedObjectLabelsSelector').show();
+                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
+                    var aX = a.x1, bX = b.x1;
+                    return aX - bX;
+                });
+            }
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
@@ -269,6 +271,7 @@ define([
             detectedObject.y2 = data.y2;
             this.showForm(detectedObject, this.attr.data, this.$node);
             this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', detectedObject);
+            this.select('detectedObjectLabelsSelector').show();
             this.$node.find('.detected-object-labels .detected-object').each(function() {
                 if ($(this).data('info')._rowKey === data.id) {
                     $(this).closest('span').addClass('focused')
