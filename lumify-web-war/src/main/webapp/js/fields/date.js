@@ -55,7 +55,6 @@ define([
                     if (pasted) {
                         var date = chrono.parseDate(pasted) 
                         if (date) {
-                            debugger;
                             self.val(formatters.date.dateString(date));
                             self.datepicker('setDate', date)
                             self.datepicker('update');
