@@ -13,20 +13,19 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.google.inject.Inject;
 import com.google.inject.internal.util.$Nullable;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.InputStream;
 
 public class ContentTypeGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ContentTypeGraphPropertyWorker.class);
-    private ContentTypeExtractor contentTypeExtractor;
+    private MimeTypeMapper mimeTypeMapper;
     private WorkQueueRepository workQueueRepository;
     private Graph graph;
 
     @Override
     public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         String fileName = RawLumifyProperties.FILE_NAME.getPropertyValue(data.getVertex());
-        String mimeType = contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
+        String mimeType = mimeTypeMapper.guessMimeType(in, fileName);
         if (mimeType == null) {
             return new GraphPropertyWorkResult();
         }
@@ -44,7 +43,7 @@ public class ContentTypeGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public boolean isHandled(Vertex vertex, Property property) {
-        if (this.contentTypeExtractor == null) {
+        if (this.mimeTypeMapper == null) {
             LOGGER.error("No ContentTypeExtractor defined.");
             return false;
         }
@@ -70,8 +69,8 @@ public class ContentTypeGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     @Inject
-    public void setContentTypeExtractor(@$Nullable ContentTypeExtractor contentTypeExtractor) {
-        this.contentTypeExtractor = contentTypeExtractor;
+    public void setMimeTypeMapper(@$Nullable MimeTypeMapper mimeTypeMapper) {
+        this.mimeTypeMapper = mimeTypeMapper;
     }
 
     @Inject

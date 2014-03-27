@@ -16,12 +16,8 @@
 
 package com.altamiracorp.lumify.storm;
 
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.contentType.ContentTypeExtractor;
+import com.altamiracorp.lumify.core.contentType.MimeTypeMapper;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
@@ -29,13 +25,6 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.annotation.Nullable;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -43,13 +32,20 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
+import javax.annotation.Nullable;
+import java.io.*;
+
+import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
+import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
+import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
+
 /**
  * Base class for bolts that process files from HDFS.
  */
 public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseFileProcessingBolt.class);
 
-    private ContentTypeExtractor contentTypeExtractor;
+    private MimeTypeMapper mimeTypeMapper;
 
     protected FileMetadata getFileMetadata(Tuple input) throws Exception {
         String fileName = input.getString(0);
@@ -105,9 +101,9 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
 
     protected String getMimeType(String fileName) throws Exception {
         String mimeType = null;
-        if (contentTypeExtractor != null) {
+        if (mimeTypeMapper != null) {
             InputStream in = openFile(fileName);
-            mimeType = contentTypeExtractor.extract(in, FilenameUtils.getExtension(fileName));
+            mimeType = mimeTypeMapper.guessMimeType(in, FilenameUtils.getExtension(fileName));
         }
         return mimeType;
     }
@@ -145,12 +141,12 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         return tempDir;
     }
 
-    protected ContentTypeExtractor getContentTypeExtractor() {
-        return contentTypeExtractor;
+    protected MimeTypeMapper getMimeTypeMapper() {
+        return mimeTypeMapper;
     }
 
     @Inject(optional = true)
-    public void setContentTypeExtractor(@Nullable ContentTypeExtractor contentTypeExtractor) {
-        this.contentTypeExtractor = contentTypeExtractor;
+    public void setMimeTypeMapper(@Nullable MimeTypeMapper mimeTypeMapper) {
+        this.mimeTypeMapper = mimeTypeMapper;
     }
 }
