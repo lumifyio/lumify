@@ -14,7 +14,7 @@
     <% properties.forEach(function(property) {
         if (property.key !== 'title') { %>
           <div class="property property-<%= property.key %>">
-            <strong><%= property.displayName %></strong><span class="value"><%= property.value %></span>
+            <strong><%= property.displayName %></strong><span class="value"><%= property.stringValue %></span>
           </div>
     <%  }
       }); %>
