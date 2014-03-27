@@ -53,7 +53,7 @@ public class Router extends HttpServlet {
             AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
             Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-            app.get("/index.html", new StaticFileHandler(config));
+            app.get("/", new StaticFileHandler(config, "/index.html"));
             app.post("/login", Login.class);
             app.post("/logout", Logout.class);
 
