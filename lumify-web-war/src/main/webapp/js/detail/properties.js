@@ -415,6 +415,16 @@ define([
 
                         $this.on('shown', function() {
                             infos.not($this).popover('hide');
+                            $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
+                                var $target = $(event.target);
+
+                                if (!$target.is($this) && 
+                                    $target.closest('.popover').length === 0) {
+
+                                    $this.popover('hide');
+                                    $(document).off('.propertyInfo');
+                                }
+                            });
                         });
 
                         var popover = $this.data('popover'),
