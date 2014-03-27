@@ -30,7 +30,6 @@ public class RawLumifyProperties {
     public static final TextLumifyProperty AUTHOR = TextLumifyProperty.all("http://lumify.io#author");
     public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
-    public static final StreamingLumifyProperty MAPPING_JSON = new StreamingLumifyProperty("http://lumify.io#mappingJson");
 
     private RawLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
