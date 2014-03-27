@@ -118,20 +118,19 @@ public class ArtifactRaw extends BaseRequestHandler {
         String range = request.getHeader("Range");
 
         if (range != null) {
+            response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+
             Matcher m = RANGE_PATTERN.matcher(range);
             if (m.matches()) {
                 partialStart = Long.parseLong(m.group(1));
                 if (m.group(2).length() > 0) {
                     partialEnd = Long.parseLong(m.group(2));
                 }
-                if (partialEnd == null) {
-                    partialEnd = partialStart + 100000 - 1;
-                }
-                response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
             }
         }
 
         if (VALID_VIDEO_TYPES.contains(type) || VALID_AUDIO_TYPES.contains(type)) {
+            response.setCharacterEncoding(null);
             response.setContentType(type);
             response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
@@ -164,13 +163,17 @@ public class ArtifactRaw extends BaseRequestHandler {
 
         // Ensure that the last byte position is less than the instance-length
         partialEnd = Math.min(partialEnd, totalLength - 1);
+        long partialLength = totalLength;
 
-        long partialLength = partialEnd - partialStart + 1;
-        response.addHeader("Content-Length", "" + partialLength);
-        response.addHeader("Content-Range", "bytes " + partialStart + "-" + partialEnd + "/" + totalLength);
-        if (partialStart > 0) {
-            in.skip(partialStart);
+        if (range != null) {
+            partialLength = partialEnd - partialStart + 1;
+            response.addHeader("Content-Range", "bytes " + partialStart + "-" + partialEnd + "/" + totalLength);
+            if (partialStart > 0) {
+                in.skip(partialStart);
+            }
         }
+
+        response.addHeader("Content-Length", "" + partialLength);
 
         OutputStream out = response.getOutputStream();
         copy(in, out, partialLength);
