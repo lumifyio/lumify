@@ -17,10 +17,6 @@ public class ArtifactExtractedInfo {
     private static final String TEXT_HDFS_PATH = "textHdfsPath";
     private static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
     private static final String RAW = "raw";
-    private static final String MP4_HDFS_PATH = "mp4HdfsPath";
-    private static final String AUDIO_OGG_HDFS_PATH = "oggHdfsPath";
-    private static final String AUDIO_MP4_HDFS_PATH = "audioMp4HdfsPath";
-    private static final String WEBM_HDFS_PATH = "webmHdfsPath";
     private static final String DETECTED_OBJECTS = "detectedObjects";
     private static final String VIDEO_TRANSCRIPT = "videoTranscript";
     private static final String AUDIO_HDFS_PATH = "audioHdfsPath";
@@ -240,60 +236,6 @@ public class ArtifactExtractedInfo {
 
     public byte[] getRaw() {
         return (byte[]) properties.get(RAW);
-    }
-
-    public void setMp4HdfsFilePath(String mp4HdfsFilePath) {
-        properties.put(MP4_HDFS_PATH, mp4HdfsFilePath);
-    }
-
-    /**
-     * Builder pattern for mp4HdfsFilePath property.
-     *
-     * @param mp4HdfsFilePath the mp4HdfsFilePath
-     * @return this
-     */
-    public ArtifactExtractedInfo mp4HdfsFilePath(final String mp4HdfsFilePath) {
-        setMp4HdfsFilePath(mp4HdfsFilePath);
-        return this;
-    }
-
-    public String getMp4HdfsFilePath() {
-        return (String) properties.get(MP4_HDFS_PATH);
-    }
-
-    public void setAudioMp4HdfsFilePath(String oggHdfsFilePath) {
-        properties.put(AUDIO_MP4_HDFS_PATH, oggHdfsFilePath);
-    }
-
-    public String getAudioMp4HdfsFilePath() {
-        return (String) properties.get(AUDIO_MP4_HDFS_PATH);
-    }
-
-    public void setAudioOggHdfsFilePath(String oggHdfsFilePath) {
-        properties.put(AUDIO_OGG_HDFS_PATH, oggHdfsFilePath);
-    }
-
-    public String getAudioOggHdfsFilePath() {
-        return (String) properties.get(AUDIO_OGG_HDFS_PATH);
-    }
-
-    public void setWebMHdfsFilePath(String webMHdfsFilePath) {
-        properties.put(WEBM_HDFS_PATH, webMHdfsFilePath);
-    }
-
-    /**
-     * Builder pattern for webMHdfsFilePath property.
-     *
-     * @param webMHdfsFilePath the webMHdfsFilePath
-     * @return this
-     */
-    public ArtifactExtractedInfo webMHdfsFilePath(final String webMHdfsFilePath) {
-        setWebMHdfsFilePath(webMHdfsFilePath);
-        return this;
-    }
-
-    public String getWebMHdfsFilePath() {
-        return (String) properties.get(WEBM_HDFS_PATH);
     }
 
     public void setAudioHdfsPath(String audioHdfsPath) {

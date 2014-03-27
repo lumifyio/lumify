@@ -1,3 +1,5 @@
 com.altamiracorp.lumify.core.contentType.MimeTypeGraphPropertyWorker
 com.altamiracorp.lumify.core.ingest.audio.AudioMp4EncodingWorker
 com.altamiracorp.lumify.core.ingest.audio.AudioOggEncodingWorker
+com.altamiracorp.lumify.core.ingest.video.VideoMp4EncodingWorker
+com.altamiracorp.lumify.core.ingest.video.VideoWebMEncodingWorker

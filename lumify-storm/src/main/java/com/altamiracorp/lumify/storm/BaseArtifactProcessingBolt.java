@@ -120,22 +120,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             artifactExtractedInfo.setRaw(IOUtils.toByteArray(in));
         }
 
-        if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
-            String newTextPath = moveTempMp4File(artifactExtractedInfo.getMp4HdfsFilePath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setMp4HdfsFilePath(newTextPath);
-        }
-        if (artifactExtractedInfo.getAudioOggHdfsFilePath() != null) {
-            String newTextPath = moveTempAudioOggFile(artifactExtractedInfo.getAudioOggHdfsFilePath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setAudioOggHdfsFilePath(newTextPath);
-        }
-        if (artifactExtractedInfo.getAudioMp4HdfsFilePath() != null) {
-            String newTextPath = moveTempAudioMp4File(artifactExtractedInfo.getAudioMp4HdfsFilePath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setAudioMp4HdfsFilePath(newTextPath);
-        }
-        if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
-            String newTextPath = moveTempWebMFile(artifactExtractedInfo.getWebMHdfsFilePath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setWebMHdfsFilePath(newTextPath);
-        }
         if (artifactExtractedInfo.getAudioHdfsPath() != null) {
             String newTextPath = moveTempAudioFile(artifactExtractedInfo.getAudioHdfsPath(), artifactExtractedInfo.getRowKey());
             artifactExtractedInfo.setAudioHdfsPath(newTextPath);

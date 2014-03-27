@@ -306,37 +306,10 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             AUTHOR.setProperty(artifact, author.trim(), lumifyVisibility.getVisibility());
         }
 
-        if (artifactExtractedInfo.getMp4HdfsFilePath() != null) {
-            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getMp4HdfsFilePath()), byte[].class);
-            spv.searchIndex(false);
-            getVideoProperty(VIDEO_TYPE_MP4).setProperty(artifact, spv, lumifyVisibility.getVisibility());
-            getVideoSizeProperty(VIDEO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getMp4HdfsFilePath()), lumifyVisibility.getVisibility());
-        }
-        if (artifactExtractedInfo.getWebMHdfsFilePath() != null) {
-            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getWebMHdfsFilePath()), byte[].class);
-            spv.searchIndex(false);
-            getVideoProperty(VIDEO_TYPE_WEBM).setProperty(artifact, spv, lumifyVisibility.getVisibility());
-            getVideoSizeProperty(VIDEO_TYPE_WEBM).setProperty(artifact, getFileSize(artifactExtractedInfo.getWebMHdfsFilePath()),
-                    lumifyVisibility.getVisibility());
-        }
         if (artifactExtractedInfo.getAudioHdfsPath() != null) {
             StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioHdfsPath()), byte[].class);
             spv.searchIndex(false);
             AUDIO.setProperty(artifact, spv, lumifyVisibility.getVisibility());
-        }
-
-        if (artifactExtractedInfo.getAudioMp4HdfsFilePath() != null) {
-            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioMp4HdfsFilePath()), byte[].class);
-            spv.searchIndex(false);
-            getAudioProperty(AUDIO_TYPE_MP4).setProperty(artifact, spv, lumifyVisibility.getVisibility());
-            getAudioSizeProperty(AUDIO_TYPE_MP4).setProperty(artifact, getFileSize(artifactExtractedInfo.getAudioMp4HdfsFilePath()), lumifyVisibility.getVisibility());
-        }
-        if (artifactExtractedInfo.getAudioOggHdfsFilePath() != null) {
-            StreamingPropertyValue spv = new StreamingPropertyValue(openFile(artifactExtractedInfo.getAudioOggHdfsFilePath()), byte[].class);
-            spv.searchIndex(false);
-            getAudioProperty(AUDIO_TYPE_OGG).setProperty(artifact, spv, lumifyVisibility.getVisibility());
-            getAudioSizeProperty(AUDIO_TYPE_OGG).setProperty(artifact, getFileSize(artifactExtractedInfo.getAudioOggHdfsFilePath()),
-                    lumifyVisibility.getVisibility());
         }
 
         if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
