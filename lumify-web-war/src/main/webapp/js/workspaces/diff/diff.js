@@ -258,14 +258,14 @@ define([
 
         this.onRowClick = function(event) {
             var $target = $(event.target).not('button').closest('tr'),
-                vertexId = $target.data('vertexId'),
-                vertex = vertexId && appData.vertex(vertexId);
+                vertexRow = $target.is('.vertex-row') ? $target : $target.prev('.vertex-row'),
+                vertexId = vertexRow.data('vertexId'),
+                vertex = vertexId && appData.vertex(vertexId),
+                alreadySelected = vertexRow.is('.active');
 
-            if (vertex) {
-                this.trigger('selectObjects', {
-                    vertices: [vertex]
-                });
-            }
+            this.trigger('selectObjects', {
+                vertices: (!alreadySelected && vertex) ? [vertex] : []
+            });
         };
 
         this.onButtonClick = function(event) {
