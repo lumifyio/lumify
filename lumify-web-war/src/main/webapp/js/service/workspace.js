@@ -32,11 +32,15 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getRelationships = function (workspaceId) {
+    WorkspaceService.prototype.getRelationships = function (workspaceId, additionalIds) {
+        var data = {};
+        if (additionalIds && additionalIds.length) {
+            data.ids = additionalIds;
+        }
+
         return this._ajaxGet({
             url: 'workspace/' + encodeURIComponent(workspaceId) + '/relationships',
-            data: {
-            }
+            data: data
         });
     };
 

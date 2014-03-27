@@ -80,6 +80,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.newlyAddedIds = [];
             this.setupAsyncQueue('workspace');
             this.setupAsyncQueue('relationships');
             this.setupAsyncQueue('socketSubscribe');
@@ -241,6 +242,10 @@ define([
                 },
                 uniqueVertices = function(v) { return v.vertexId; };
 
+            if (data.adding) {
+                this.newlyAddedIds = this.newlyAddedIds.concat(_.pluck(data.entityUpdates, 'id'));
+            }
+
             _.keys(data).forEach(function(key) {
                 if (_.isArray(data[key])) {
                     data[key].forEach(function(vertex) {
@@ -252,6 +257,7 @@ define([
                 }
             });
 
+            this.refreshRelationships();
             this.onSaveWorkspaceInternal();
         };
 
@@ -270,11 +276,12 @@ define([
                 this.throttledUpdatesByVertex = {};
 
                 this.workspaceService.save(this.workspaceId, updateJson).done(function(data) {
-                   self.trigger('refreshRelationships');
-                   self.trigger('workspaceSaved', ws);
-                   _.values(self.workspaceVertices).forEach(function(wv) {
-                       delete wv.dropPosition;
-                   });
+                    self.newlyAddedIds.length = 0;
+                    self.trigger('refreshRelationships');
+                    self.trigger('workspaceSaved', ws);
+                    _.values(self.workspaceVertices).forEach(function(wv) {
+                        delete wv.dropPosition;
+                    });
                 });
             });
         };
@@ -285,7 +292,7 @@ define([
 
             this.relationshipsUnload();
 
-            this.workspaceService.getRelationships(this.workspaceId)
+            this.workspaceService.getRelationships(this.workspaceId, this.newlyAddedIds)
                 .done(function(relationships) {
                     self.relationshipsMarkReady(relationships);
                     self.trigger('relationshipsLoaded', { relationships: relationships });
@@ -387,7 +394,7 @@ define([
                         });
                     }
 
-                    if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added });
+                    if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added, adding:true });
                     if (added.length) {
                         ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
@@ -654,6 +661,7 @@ define([
 
             // Queue up any requests to modify workspace
             self.workspaceUnload();
+            self.newlyAddedIds.length = 0;
             self.relationshipsUnload();
 
             self.socketSubscribeReady()
