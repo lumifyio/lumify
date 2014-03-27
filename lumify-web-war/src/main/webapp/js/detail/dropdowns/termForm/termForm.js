@@ -27,6 +27,7 @@ define([
             buttonDivSelector: '.buttons',
             objectSignSelector: '.object-sign',
             graphVertexSelector: '.graphVertexId',
+            visibilitySelector: '.visibility',
             conceptSelector: 'select',
             helpSelector: '.help',
             addNewPropertiesSelector: '.none'
@@ -82,6 +83,7 @@ define([
         this.reset = function() {
             this.currentGraphVertexId = null;
             this.select('helpSelector').show();
+            this.select('visibilitySelector').hide();
             this.select('conceptSelector').attr('disabled', true).hide();
             this.select('actionButtonSelector').hide();
             this.updateResolveImageIcon();
@@ -113,6 +115,7 @@ define([
                         .show();
                 }
                 this.select('helpSelector').hide();
+                this.select('visibilitySelector').show();
 
                 require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                     Visibility.attachTo(self.$node.find('.visibility'), {
