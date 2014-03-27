@@ -25,6 +25,7 @@ import java.util.Iterator;
 public class Import extends CommandLineBase {
     private static final String CMD_OPT_DATADIR = "datadir";
     private static final String CMD_OPT_QUEUE_DUPLICATES = "queuedups";
+    private static final String MAPPING_JSON_FILE_NAME_SUFFIX = ".mapping.json";
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
 
@@ -74,6 +75,9 @@ public class Import extends CommandLineBase {
                 if (f.getName().startsWith(".") || f.length() == 0) {
                     continue;
                 }
+                if (f.getName().endsWith(MAPPING_JSON_FILE_NAME_SUFFIX)) {
+                    continue;
+                }
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 if (importFile(f, queueDuplicates)) {
@@ -101,6 +105,12 @@ public class Import extends CommandLineBase {
             return false;
         }
 
+        FileInputStream mappingJsonInputStream = null;
+        File mappingJsonFile = new File(f.getParentFile(), f.getName() + MAPPING_JSON_FILE_NAME_SUFFIX);
+        if (mappingJsonFile.exists()) {
+            mappingJsonInputStream = new FileInputStream(mappingJsonFile);
+        }
+
         FileInputStream fileInputStream = new FileInputStream(f);
         try {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
@@ -113,6 +123,13 @@ public class Import extends CommandLineBase {
             LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, visibility);
             RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), visibility);
             RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), visibility);
+
+            if (mappingJsonInputStream != null) {
+                StreamingPropertyValue mappingJsonValue = new StreamingPropertyValue(mappingJsonInputStream, byte[].class);
+                mappingJsonValue.searchIndex(false);
+                RawLumifyProperties.MAPPING_JSON.setProperty(vertexBuilder, mappingJsonValue, visibility);
+            }
+
             vertex = vertexBuilder.save();
             graph.flush();
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
@@ -120,6 +137,9 @@ public class Import extends CommandLineBase {
             return true;
         } finally {
             fileInputStream.close();
+            if (mappingJsonInputStream != null) {
+                mappingJsonInputStream.close();
+            }
         }
     }
 

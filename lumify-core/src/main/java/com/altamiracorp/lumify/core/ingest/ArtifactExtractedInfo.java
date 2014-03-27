@@ -27,7 +27,6 @@ public class ArtifactExtractedInfo {
     private static final String POSTER_FRAME_HDFS_PATH = "posterFrameHdfsPath";
     private static final String VIDEO_DURATION = "videoDuration";
     private static final String VIDEO_FRAMES = "videoFrames";
-    private static final String MAPPING_JSON = "mappingJson";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String FILE_NAME = "fileName";
@@ -380,25 +379,6 @@ public class ArtifactExtractedInfo {
         // ensure internal video frames are not externally mutable
         List<VideoFrame> frames = (List<VideoFrame>) properties.get(VIDEO_FRAMES);
         return frames != null ? Collections.unmodifiableList(frames) : null;
-    }
-
-    public void setMappingJson(final String mappingJson) {
-        set(MAPPING_JSON, mappingJson);
-    }
-
-    /**
-     * Builder pattern for the mappingJson property.
-     *
-     * @param mappingJson the mappingJson
-     * @return this
-     */
-    public ArtifactExtractedInfo mappingJson(final String mappingJson) {
-        setMappingJson(mappingJson);
-        return this;
-    }
-
-    public String getMappingJson() {
-        return (String) properties.get(MAPPING_JSON);
     }
 
     public String getMimeType() {

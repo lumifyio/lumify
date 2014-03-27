@@ -277,10 +277,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
             TEXT.setProperty(artifact, textStreamingPropertyValue, lumifyVisibility.getVisibility());
         }
 
-        if (artifactExtractedInfo.getMappingJson() != null) {
-            MAPPING_JSON.setProperty(artifact, artifactExtractedInfo.getMappingJson(), lumifyVisibility.getVisibility());
-        }
-
         if (artifactExtractedInfo.getTitle() != null) {
             TITLE.setProperty(artifact, artifactExtractedInfo.getTitle(), lumifyVisibility.getVisibility());
         }
