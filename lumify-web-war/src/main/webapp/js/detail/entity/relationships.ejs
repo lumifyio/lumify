@@ -1,7 +1,3 @@
-<% if (sortedKeys.length == 0) { %>
-    <span>There are no relationships to display</span>
-<% } %>
-
 <ul class="nav nav-list">
 <% sortedKeys.forEach(function(type) { %>
     <% if (type === 'references') return;
