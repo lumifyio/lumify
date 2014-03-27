@@ -43,6 +43,9 @@
           h1 {
             color: white;
           }
+          .img {
+            .opacity(100);
+          }
           .action-type {
             color: white;
             background: darken(@blue-color, 10%);
@@ -92,19 +95,25 @@
       }
 
       .img {
-        width: 1.5em;
-        height: 1.5em;
-        float: left;
-        .opacity(50);
-        margin-top: 0.5em;
         background-position: center;
-        background-size: contain;
         background-repeat: no-repeat;
+        background-size: contain;
+        box-sizing: border-box;
+        height: 17px;
+        left: 5px;
+        margin: -9px 0 0 0;
+        padding: 0;
+        position: absolute;
+        top: 50%;
+        width: 1.5em;
+        .opacity(50);
       }
       .vertex-label {
         font-size: 120%;
         padding: 0.2em 0.5em 0.4em 0.5em;
+        position: relative;
         h1 {
+          color: #555;
           line-height: 1.2em;
           font-size: 90%;
           padding: 0.3em 0 0 30px;
