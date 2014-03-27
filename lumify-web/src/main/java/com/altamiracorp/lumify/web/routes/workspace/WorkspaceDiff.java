@@ -35,7 +35,7 @@ public class WorkspaceDiff extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         if (workspace == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 

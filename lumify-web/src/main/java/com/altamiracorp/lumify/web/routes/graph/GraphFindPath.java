@@ -41,13 +41,13 @@ public class GraphFindPath extends BaseRequestHandler {
 
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
         if (sourceVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Source vertex not found");
+            respondWithNotFound(response, "Source vertex not found");
             return;
         }
 
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         if (destVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Destination vertex not found");
+            respondWithNotFound(response, "Destination vertex not found");
             return;
         }
 

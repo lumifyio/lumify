@@ -37,7 +37,7 @@ public class ResourceGet extends BaseRequestHandler {
         StreamingPropertyValue spv = GLYPH_ICON.getPropertyValue(concept.getVertex());
 
         if (spv == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 

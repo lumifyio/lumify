@@ -51,7 +51,7 @@ public class Plugin extends BaseRequestHandler {
             response.setContentType("text/html");
         } else {
             LOGGER.error("Only js,ejs,css,html files served from plugin");
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 
@@ -62,7 +62,7 @@ public class Plugin extends BaseRequestHandler {
             response.setCharacterEncoding("UTF-8");
             FileUtils.copyFile(file, response.getOutputStream());
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
         }
     }
 }

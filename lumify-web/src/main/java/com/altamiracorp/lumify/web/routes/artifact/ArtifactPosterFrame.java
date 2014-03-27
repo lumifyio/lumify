@@ -51,8 +51,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
 
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 
@@ -76,8 +75,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
         StreamingPropertyValue rawPosterFrameValue = RAW_POSTER_FRAME.getPropertyValue(artifactVertex);
         if (rawPosterFrameValue == null) {
             LOGGER.warn("Could not find raw poster from for artifact: %s", artifactVertex.getId().toString());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
         InputStream in = rawPosterFrameValue.getInputStream();

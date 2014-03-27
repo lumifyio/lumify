@@ -48,6 +48,10 @@ public class VertexProperties extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        if (vertex == null) {
+            respondWithNotFound(response);
+            return;
+        }
         JSONObject json = GraphUtil.toJson(vertex, workspaceId);
 
         Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(graphVertexId, modelUserContext).iterator();

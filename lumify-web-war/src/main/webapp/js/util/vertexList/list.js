@@ -331,7 +331,8 @@ define([
             var self = this;
             (data.vertices || []).forEach(function(vertex) {
                 self.toggleItemIcons(vertex.id, self.stateForVertex(vertex));
-                var currentAnchor = self.$node.find('li.' + self.vertexIdToClassName(vertex.id)).children('a'),
+                var li = self.$node.find('li.' + self.vertexIdToClassName(vertex.id)),
+                    currentAnchor = li.children('a'),
                     newAnchor = $(vertexTemplate({
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
@@ -347,10 +348,13 @@ define([
 
                     var newHtml = newAnchor.html();
                     if (currentAnchor.length && newHtml !== currentHtml) {
+                        li.data('previewLoaded', null);
                         currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', showImageSrc);
                     }
                 }
             });
+
+            this.loadVisibleResultPreviews();
         };
 
         this.onVerticesDeleted = function(event, data) {

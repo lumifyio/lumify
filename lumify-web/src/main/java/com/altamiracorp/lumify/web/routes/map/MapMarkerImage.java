@@ -71,7 +71,7 @@ public class MapMarkerImage extends BaseRequestHandler {
             } else {
                 glyphIcon = getGlyphIcon(concept, user);
                 if (glyphIcon == null) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    respondWithNotFound(response);
                     return;
                 }
             }

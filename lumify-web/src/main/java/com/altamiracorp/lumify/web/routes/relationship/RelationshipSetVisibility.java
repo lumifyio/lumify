@@ -48,7 +48,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         Edge graphEdge = graph.getEdge(graphEdgeId, authorizations);
         if (graphEdge == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 
