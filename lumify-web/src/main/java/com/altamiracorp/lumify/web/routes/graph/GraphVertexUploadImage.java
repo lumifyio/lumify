@@ -3,14 +3,16 @@ package com.altamiracorp.lumify.web.routes.graph;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.ontology.ConceptType;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
@@ -34,14 +36,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.DISPLAY_TYPE;
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
@@ -95,18 +89,15 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
-        String conceptId = ontologyRepository.getConceptById(ConceptType.IMAGE.toString()).getId();
-        DISPLAY_TYPE.setProperty(artifactBuilder, ConceptType.IMAGE.toString(), lumifyVisibility.getVisibility());
-        CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, lumifyVisibility.getVisibility());
-        TITLE.setProperty(artifactBuilder, String.format("Image of %s", TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());
-        SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, lumifyVisibility.getVisibility());
+        LumifyProperties.TITLE.setProperty(artifactBuilder, String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());
+        EntityLumifyProperties.SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, lumifyVisibility.getVisibility());
         LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, lumifyVisibility.getVisibility());
         Vertex artifactVertex = artifactBuilder.save();
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
         // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
-        entityVertexMutation.setProperty(GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), lumifyVisibility.getVisibility());
+        entityVertexMutation.setProperty(LumifyProperties.GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
         graph.flush();
@@ -117,9 +108,11 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
+        graph.flush();
         workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex.getId(), ElementMutation.DEFAULT_KEY, RawLumifyProperties.RAW.getKey());
 
-        respondWithJson(response, toJson(entityVertex, workspaceId));
+        respondWithJson(response, GraphUtil.toJson(entityVertex, workspaceId));
     }
 
     private ElementBuilder<Vertex> convertToArtifact(final Part file, Authorizations authorizations) throws IOException {
@@ -142,11 +135,11 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.store(true);
 
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
-        CREATE_DATE.setProperty(vertexBuilder, new Date(), lumifyVisibility.getVisibility());
-        FILE_NAME.setProperty(vertexBuilder, fileName, lumifyVisibility.getVisibility());
-        FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), lumifyVisibility.getVisibility());
-        MIME_TYPE.setProperty(vertexBuilder, mimeType, lumifyVisibility.getVisibility());
-        RAW.setProperty(vertexBuilder, rawValue, lumifyVisibility.getVisibility());
+        RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), lumifyVisibility.getVisibility());
+        RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, fileName, lumifyVisibility.getVisibility());
+        RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), lumifyVisibility.getVisibility());
+        RawLumifyProperties.MIME_TYPE.setProperty(vertexBuilder, mimeType, lumifyVisibility.getVisibility());
+        RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, lumifyVisibility.getVisibility());
         return vertexBuilder;
     }
 }

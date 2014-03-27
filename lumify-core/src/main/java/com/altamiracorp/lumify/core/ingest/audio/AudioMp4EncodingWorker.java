@@ -3,13 +3,8 @@ package com.altamiracorp.lumify.core.ingest.audio;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import com.altamiracorp.lumify.core.model.ontology.Concept;
-import com.altamiracorp.lumify.core.model.ontology.ConceptType;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
-import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.ProcessRunner;
-import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
@@ -20,16 +15,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class AudioMp4EncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = AudioMp4EncodingWorker.class.getName();
     private ProcessRunner processRunner;
-    private OntologyRepository ontologyRepository;
-    private Graph graph;
-    private WorkQueueRepository workQueueRepository;
 
     @Override
     public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
@@ -56,14 +46,10 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
                 getAudioProperty(AUDIO_TYPE_MP4).addPropertyValue(m, PROPERTY_KEY, spv, data.getProperty().getVisibility());
                 getAudioSizeProperty(AUDIO_TYPE_MP4).addPropertyValue(m, PROPERTY_KEY, mp4File.length(), data.getProperty().getVisibility());
 
-                Concept concept = ontologyRepository.getConceptById(ConceptType.AUDIO.toString());
-                checkNotNull(concept, "Could not find concept " + ConceptType.AUDIO.toString());
-                CONCEPT_TYPE.setProperty(m, concept.getId(), data.getVertex().getVisibility());
-
                 m.save();
-                graph.flush();
-                workQueueRepository.pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioProperty(AUDIO_TYPE_MP4).getKey());
-                workQueueRepository.pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioSizeProperty(AUDIO_TYPE_MP4).getKey());
+                getGraph().flush();
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioProperty(AUDIO_TYPE_MP4).getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioSizeProperty(AUDIO_TYPE_MP4).getKey());
             } finally {
                 mp4FileIn.close();
             }
@@ -90,21 +76,6 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
     @Override
     public boolean isLocalFileRequired() {
         return true;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
-        this.workQueueRepository = workQueueRepository;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 
     @Inject

@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.ontology;
+package com.altamiracorp.lumify.ontology.dev;
 
 public enum ConceptType {
     IMAGE("http://lumify.io/dev#image"),

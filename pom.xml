@@ -44,6 +44,7 @@
         <module>lumify-web-server</module>
         <module>lumify-web-war</module>
         <module>lumify-tools</module>
+        <module>lumify-ontology-dev</module>
     </modules>
     
     <repositories>

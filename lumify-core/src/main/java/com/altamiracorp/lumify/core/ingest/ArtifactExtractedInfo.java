@@ -28,7 +28,6 @@ public class ArtifactExtractedInfo {
     private static final String VIDEO_DURATION = "videoDuration";
     private static final String VIDEO_FRAMES = "videoFrames";
     private static final String MAPPING_JSON = "mappingJson";
-    private static final String CONCEPT_TYPE = "conceptType";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String FILE_NAME = "fileName";
@@ -400,25 +399,6 @@ public class ArtifactExtractedInfo {
 
     public String getMappingJson() {
         return (String) properties.get(MAPPING_JSON);
-    }
-
-    public String getConceptType() {
-        return (String) properties.get(CONCEPT_TYPE);
-    }
-
-    public void setConceptType(String conceptType) {
-        set(CONCEPT_TYPE, conceptType);
-    }
-
-    /**
-     * Builder pattern for the conceptType property.
-     *
-     * @param conceptType the concept type
-     * @return this
-     */
-    public ArtifactExtractedInfo conceptType(final String conceptType) {
-        setConceptType(conceptType);
-        return this;
     }
 
     public String getMimeType() {
