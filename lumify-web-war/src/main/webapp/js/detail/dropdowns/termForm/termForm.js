@@ -474,7 +474,7 @@ define([
                         preview.css('background-image', url);
                     }
                 } else {
-                    preview.css('backgroundImage', ' ').addClass('icon-unknown');
+                    preview.css({backgroundImage:''}).addClass('icon-unknown');
                 }
             }
         };
