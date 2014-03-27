@@ -28,7 +28,6 @@ import com.google.inject.Inject;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -103,7 +102,7 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
         String mimeType = null;
         if (mimeTypeMapper != null) {
             InputStream in = openFile(fileName);
-            mimeType = mimeTypeMapper.guessMimeType(in, FilenameUtils.getExtension(fileName));
+            mimeType = mimeTypeMapper.guessMimeType(in, fileName);
         }
         return mimeType;
     }
