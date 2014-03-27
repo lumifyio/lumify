@@ -32,7 +32,7 @@
   <div class="currentTranscript"></div>
 <% } %>
 
-<div class='detected-object-labels'>
+<div class='detected-object-labels' style="display:none">
   <% (vertex.detectedObjects).forEach(function(object) {
     if (object.entityVertex) {
         var conceptType = object.entityVertex.properties._conceptType.value || object._conceptType;
