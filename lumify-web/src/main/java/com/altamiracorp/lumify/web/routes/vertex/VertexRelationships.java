@@ -38,12 +38,22 @@ public class VertexRelationships extends BaseRequestHandler {
         long size = getOptionalParameterLong(request, "size", 25);
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        if (vertex == null) {
+            respondWithNotFound(response);
+            return;
+        }
+
         Iterable<Edge> edges = vertex.getEdges(Direction.BOTH, authorizations);
 
         JSONObject json = new JSONObject();
         JSONArray relationshipsJson = new JSONArray();
         long referencesAdded = 0, skipped = 0, totalReferences = 0;
         for (Edge edge : edges) {
+            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
+            if (otherVertex == null) { // user doesn't have access to other side of edge
+                continue;
+            }
+
             if (edge.getLabel().equals("http://lumify.io/dev#rawHasEntity")) {
                 totalReferences++;
                 if (referencesAdded >= size) continue;
@@ -57,7 +67,6 @@ public class VertexRelationships extends BaseRequestHandler {
 
             JSONObject relationshipJson = new JSONObject();
             relationshipJson.put("relationship", toJson(edge, workspaceId));
-            Vertex otherVertex = edge.getOtherVertex(vertex.getId(), authorizations);
             relationshipJson.put("vertex", toJson(otherVertex, workspaceId));
             relationshipsJson.put(relationshipJson);
         }

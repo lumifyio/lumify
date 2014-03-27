@@ -54,7 +54,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 

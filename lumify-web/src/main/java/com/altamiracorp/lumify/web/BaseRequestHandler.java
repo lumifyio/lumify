@@ -107,6 +107,28 @@ public abstract class BaseRequestHandler implements Handler {
         return getParameter(request, parameterName, true);
     }
 
+    protected String[] getOptionalParameterAsStringArray(final HttpServletRequest request, final String parameterName) {
+        Preconditions.checkNotNull(request, "The provided request was invalid");
+
+        return getParameterValues(request, parameterName, true);
+    }
+
+    protected String[] getParameterValues(final HttpServletRequest request, final String parameterName, final boolean optional) {
+        final String[] paramValues = request.getParameterValues(parameterName);
+
+        if (paramValues == null) {
+            if (!optional) {
+                throw new RuntimeException(String.format("Parameter: '%s' is required in the request", parameterName));
+            }
+            return null;
+        }
+
+        for (int i = 0; i < paramValues.length; i++) {
+            paramValues[i] = UrlUtils.urlDecode(paramValues[i]);
+        }
+
+        return paramValues;
+    }
 
     private String getParameter(final HttpServletRequest request, final String parameterName, final boolean optional) {
         final String paramValue = request.getParameter(parameterName);
@@ -144,6 +166,14 @@ public abstract class BaseRequestHandler implements Handler {
         String workspaceId = getWorkspaceId(request);
         // TODO verify user has access to see this workspace
         return getUserRepository().getAuthorizations(user, workspaceId);
+    }
+
+    protected void respondWithNotFound(final HttpServletResponse response) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    protected void respondWithNotFound(final HttpServletResponse response, String message) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
     }
 
     /**

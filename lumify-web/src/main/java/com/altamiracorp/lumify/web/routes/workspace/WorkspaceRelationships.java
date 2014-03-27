@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
@@ -43,6 +44,11 @@ public class WorkspaceRelationships extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String[] additionalIds = getOptionalParameterAsStringArray(request, "ids[]"); // additional graph vertex ids to search for
+        if (additionalIds == null) {
+            additionalIds = new String[0];
+        }
+
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
@@ -52,12 +58,13 @@ public class WorkspaceRelationships extends BaseRequestHandler {
         JSONArray resultsJson = new JSONArray();
 
         List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
-        Iterable<Object> allIds = new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
+        List<Object> allIds = toList(new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
             @Override
             protected Object convert(WorkspaceEntity workspaceEntity) {
                 return workspaceEntity.getEntityVertexId();
             }
-        };
+        });
+        Collections.addAll(allIds, additionalIds);
 
         List<Edge> edges = toList(graph.getEdges(graph.findRelatedEdges(allIds, authorizations), authorizations));
         for (Edge edge : edges) {

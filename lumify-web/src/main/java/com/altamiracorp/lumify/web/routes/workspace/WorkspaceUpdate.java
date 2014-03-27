@@ -39,7 +39,7 @@ public class WorkspaceUpdate extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
         if (workspace == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
 

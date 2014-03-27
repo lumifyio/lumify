@@ -38,7 +38,7 @@ public class WorkspaceDelete extends BaseRequestHandler {
             LOGGER.info("Deleting workspace with id: %s", workspaceId);
             Workspace workspace = workspaceRepository.findById(workspaceId, user);
             if (workspace == null) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                respondWithNotFound(response);
                 return;
             }
             workspaceRepository.delete(workspace, user);

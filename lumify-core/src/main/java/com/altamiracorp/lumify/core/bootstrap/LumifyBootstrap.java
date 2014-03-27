@@ -132,7 +132,7 @@ public class LumifyBootstrap extends AbstractModule {
                 .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
                 .in(Scopes.SINGLETON);
         bind(MimeTypeMapper.class)
-                .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.CONTENT_TYPE_EXTRACTOR, false))
+                .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.MIME_TYPE_MAPPER, false))
                 .in(Scopes.SINGLETON);
 
         injectProviders();
@@ -141,7 +141,7 @@ public class LumifyBootstrap extends AbstractModule {
     private Provider<? extends Graph> getGraphProvider(Configuration configuration, String configurationPrefix) {
         // TODO change to use com.altamiracorp.securegraph.GraphFactory
         String graphClassName = configuration.get(configurationPrefix);
-        final Map configurationSubset = configuration.getSubset(configurationPrefix).toMap();
+        final Map<String, String> configurationSubset = configuration.getSubset(configurationPrefix);
 
         final Class<?> graphClass;
         try {

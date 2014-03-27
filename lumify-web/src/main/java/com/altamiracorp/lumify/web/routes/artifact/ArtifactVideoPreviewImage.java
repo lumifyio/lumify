@@ -48,8 +48,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
 
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         if (artifactVertex == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
 
@@ -76,8 +75,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
 
         StreamingPropertyValue videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
         if (videoPreviewImageValue == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            chain.next(request, response);
+            respondWithNotFound(response);
             return;
         }
         InputStream in = videoPreviewImageValue.getInputStream();

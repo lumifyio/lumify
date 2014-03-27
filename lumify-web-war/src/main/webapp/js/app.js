@@ -65,6 +65,8 @@ define([
                 Graph3D.teardownAll();
             }
 
+            data.teardown();
+
             this.$node.empty();
         });
 

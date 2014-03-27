@@ -21,7 +21,9 @@
         <th class="vertex-label" colspan="2">
           <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= diff.vertex.imageSrc %>)"<% } %>></div>
           <h1><%= diff.title %></h1>
+          <% if (diff.action.type !== 'update') { %>
           <span class="label action-type"><%= diff.action.display %></span>
+          <% } %>
         </th>
         <% if (diff.action.type === 'create') { %>
           <% include workspaces/diff/actions %>

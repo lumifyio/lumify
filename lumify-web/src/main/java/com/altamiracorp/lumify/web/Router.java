@@ -103,6 +103,7 @@ public class Router extends HttpServlet {
             app.post("/workspace/new", authenticator, WorkspaceNew.class);
             app.get("/workspace/{workspaceId}/diff", authenticator, WorkspaceDiff.class);
             app.get("/workspace/{workspaceId}/relationships", authenticator, WorkspaceRelationships.class);
+            app.post("/workspace/{workspaceId}/relationships", authenticator, WorkspaceRelationships.class);
             app.get("/workspace/{workspaceId}/vertices", authenticator, WorkspaceVertices.class);
             app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
             app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);

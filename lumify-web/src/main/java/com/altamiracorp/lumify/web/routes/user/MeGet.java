@@ -24,7 +24,7 @@ public class MeGet extends BaseRequestHandler {
         User user = getUser(request);
         Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
         if (userVertex == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            respondWithNotFound(response);
             return;
         }
         respondWithJson(response, getUserRepository().toJson(userVertex, user));
