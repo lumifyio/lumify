@@ -254,33 +254,31 @@ define([
             this.cytoscapeReady(function(cy) {
                 var container = $(cy.container()),
                     currentNodes = cy.nodes(),
-                    boundingBox = currentNodes.boundingBox(),
-                    validBox = isFinite(boundingBox.x1),
-                    zoom = cy.zoom(),
+                    rawBoundingBox = currentNodes.boundingBox(),
+                    availableSpaceBox = retina.pixelsToPoints({
+                        x: isFinite(rawBoundingBox.x1) ? rawBoundingBox.x1 : 0,
+                        y: isFinite(rawBoundingBox.y2) ? rawBoundingBox.y2 : 0,
+                        w: isFinite(rawBoundingBox.w) ? rawBoundingBox.w : 0
+                    }),
                     xInc = GRID_LAYOUT_X_INCREMENT,
                     yInc = GRID_LAYOUT_Y_INCREMENT,
-                    nextAvailablePosition = retina.pixelsToPoints({ 
-                        x: validBox ? (boundingBox.x1/* + xInc*/) : 0,
-                        y: validBox ? (boundingBox.y2/* + yInc*/) : 0
-                    });
+                    nextAvailablePosition = _.pick(availableSpaceBox, 'x', 'y');
 
                 if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
                 nextAvailablePosition.y += yInc;
 
-                var maxWidth = validBox ? retina.pixelsToPoints({ x:boundingBox.w, y:boundingBox.h}).x : 0,
-                    startX = nextAvailablePosition.x;
 
-                maxWidth = Math.max(maxWidth, xInc * 10);
-
-                var vertexIds = _.pluck(vertices, 'id'),
+                var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
+                    startX = nextAvailablePosition.x,
+                    vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(cyIdMap[n.id()]) >= 0; }), 
                     customLayout = $.Deferred();
 
                 if (options.layout) {
                     require(['graph/layouts/' + options.layout.type], function(doLayout) {
                         customLayout.resolve(
-                            doLayout(cy, currentNodes, boundingBox, vertexIds, cyIdMap, options.layout)
+                            doLayout(cy, currentNodes, rawBoundingBox, vertexIds, cyIdMap, options.layout)
                         );
                     });
                 } else customLayout.resolve({});
@@ -337,8 +335,7 @@ define([
                         if (needsAdding || needsUpdating) {
                             (needsAdding ? addedVertices : updatedVertices).push({
                                 id: vertex.id,
-                                workspace: {
-                                }
+                                workspace: {}
                             });
                         }
 
@@ -347,7 +344,7 @@ define([
 
                     cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
-                        v.workspace.graphPosition = cy.getElementById(vertexId(v)).position();
+                        v.workspace.graphPosition = retina.pixelsToPoints(cy.getElementById(vertexId(v)).position());
                     });
 
 
@@ -482,7 +479,7 @@ define([
                             position: cyToNode.position() 
                         }, 
                         { 
-                            duration: 700,
+                            duration: 500,
                             easing: 'easeOutBack',
                             complete: function() {
                                 cyFromNode.remove(); 

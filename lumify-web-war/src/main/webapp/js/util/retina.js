@@ -5,6 +5,7 @@ define([], function() {
     function Retina() {
 
         var self = this,
+            properties = 'x y z w h'.split(' '),
             zoomSvg,
             getZoomRatio = function() {
                 if (!zoomSvg) {
@@ -37,6 +38,8 @@ define([], function() {
         this.onRatioChange = function() {
             updateRatio(getRatio());
         };
+
+
         this.pixelsToPoints = function(position) {
             if(!position) {
                 return {
@@ -44,11 +47,17 @@ define([], function() {
                     y: 0
                 };
             }
-            return {
-                x: position.x / self.devicePixelRatio,
-                y: position.y / self.devicePixelRatio
-            };
+
+            var obj = {};
+            properties.forEach(function(propertyName) {
+                if (propertyName in position) {
+                    obj[propertyName] = position[propertyName] / self.devicePixelRatio;
+                }
+            })
+
+            return obj;
         };
+
         this.pointsToPixels = function(position) {
             if(!position) {
                 return {
@@ -56,10 +65,15 @@ define([], function() {
                     y: 0
                 };
             }
-            return {
-                x: position.x * self.devicePixelRatio,
-                y: position.y * self.devicePixelRatio
-            };
+
+            var obj = {};
+            properties.forEach(function(propertyName) {
+                if (propertyName in position) {
+                    obj[propertyName] = position[propertyName] * self.devicePixelRatio;
+                }
+            })
+
+            return obj;
         };
 
         observeRatioChanges(this.onRatioChange.bind(this));
