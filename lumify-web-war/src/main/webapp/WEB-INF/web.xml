@@ -79,6 +79,7 @@
     <filter>
         <filter-name>debug</filter-name>
         <filter-class>com.altamiracorp.lumify.web.RequestDebugFilter</filter-class>
+        <async-supported>true</async-supported>
     </filter>
 
     <filter-mapping>
