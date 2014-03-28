@@ -8,10 +8,13 @@ define([], function() {
         
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
             /^user/,
+            /^configuration$/,
             /^workspace$/,
             /^workspace\/[^\/]+$/,
             /^workspace\/[^\/]+\/diff/,
             /^workspace\/[^\/]+\/relationships/,
+            /^workspace\/[^\/]+\/update/,
+            /^vertex\/[^\/]+\/relationships/,
         ],
 
         // Custom converters for routes that are more complicated than above,
@@ -56,6 +59,7 @@ define([], function() {
                             updated.push(cache);
                         });
                     });
+                    return true;
                 }
             },
 
@@ -126,20 +130,27 @@ define([], function() {
                             });
 
                         if (!converterFound) {
+                            var keypathFound = false;
+
                             VERTICES_RESPONSE_KEYPATHS.forEach(function(paths) {
                                 var val = json,
-                                    components = paths.split('.');
+                                    components = paths.indexOf('.') === -1 ? [paths] : paths.split('.');
 
                                 while (val && components.length) {
                                     val = val[components.shift()];
                                 }
 
+                                if (val && _.isArray(val) && val.length === 0) {
+                                    keypathFound = true;
+                                }
+
                                 // Found vertices
                                 if (val && self.resemblesVertices(val)) {
+                                    keypathFound = true;
                                     val.forEach(function(v) {
                                         updated.push( $.extend(true, v, self.updateCacheWithVertex(v)) );
                                     });
-                                } else {
+                                } else if (!keypathFound) {
                                     // Might be an error if we didn't match and
                                     // getting vertices without updating cache
                                     // and applying patches
