@@ -82,6 +82,7 @@ public class Router extends HttpServlet {
 
             app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
             app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
+            app.get("/vertex/{graphVertexId}/property/{propertyName}/{propertyKey}/termMentions", authenticator, VertexGetPropertyTermMentions.class);
             app.get("/vertex/{graphVertexId}/property/{propertyName}/{propertyKey}", authenticator, VertexGetPropertyValue.class);
             app.post("/vertex/{graphVertexId}/visibility/set", authenticator, VertexSetVisibility.class);
             app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
