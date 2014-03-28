@@ -25,6 +25,7 @@ import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.DefaultUserProvider;
@@ -133,6 +134,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(MimeTypeMapper.class)
                 .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.MIME_TYPE_MAPPER, false))
+                .in(Scopes.SINGLETON);
+        bind(UserRepository.class)
+                .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

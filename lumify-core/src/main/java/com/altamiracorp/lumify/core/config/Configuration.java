@@ -32,6 +32,7 @@ public final class Configuration {
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
+    public static final String USER_REPOSITORY = "user-repository";
 
     private Map<String, String> config = new HashMap<String, String>();
 

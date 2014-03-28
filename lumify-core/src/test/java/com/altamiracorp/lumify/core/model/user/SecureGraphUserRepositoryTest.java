@@ -22,9 +22,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserRepositoryTest {
-    private Graph graph;
-
+public class SecureGraphUserRepositoryTest {
     @Mock
     private OntologyRepository ontologyRepository;
 
@@ -32,25 +30,26 @@ public class UserRepositoryTest {
     private Concept userConcept;
 
     private AuthorizationRepository authorizationRepository;
-    private UserRepository userRepository;
+    private SecureGraphUserRepository secureGraphUserRepository;
 
     @Before
     public void setup() {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
-        graph = new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING.toString());
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
         when(userConcept.getId()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
-        userRepository = new UserRepository(graph, ontologyRepository, authorizationRepository);
+        secureGraphUserRepository = new SecureGraphUserRepository();
+        secureGraphUserRepository.setGraph(new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())));
+        secureGraphUserRepository.setAuthorizationRepository(authorizationRepository);
     }
 
     @Test
     public void testAddUser() {
-        userRepository.addUser("testUser", "testPassword", new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("testUser", "testPassword", new String[]{"auth1", "auth2"});
 
-        Vertex userVertex = userRepository.findByUserName("testUser");
+        Vertex userVertex = secureGraphUserRepository.findByUserName("testUser");
         assertEquals("testUser", UserLumifyProperties.USERNAME.getPropertyValue(userVertex));
     }
 }

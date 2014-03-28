@@ -174,7 +174,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
 
             JSONObject json = new JSONObject();
             json.put("type", "userStatusChange");
-            json.put("data", UserRepository.toJson(user));
+            json.put("data", userRepository.toJson(user));
             resource.getBroadcaster().broadcast(json.toString());
         } catch (Exception ex) {
             LOGGER.error("Could not update status", ex);

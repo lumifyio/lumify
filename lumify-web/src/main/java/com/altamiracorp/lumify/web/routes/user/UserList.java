@@ -35,7 +35,7 @@ public class UserList extends BaseRequestHandler {
     private JSONArray getJson(Iterable<Vertex> users) throws JSONException {
         JSONArray usersJson = new JSONArray();
         for (Vertex user : users) {
-            usersJson.put(UserRepository.toJson(user));
+            usersJson.put(getUserRepository().toJson(user));
         }
         return usersJson;
     }
