@@ -171,16 +171,20 @@ define([
                                 break;
 
                             case 'PropertyDiffItem':
-                                diff.id = vertexId + diff.name;
-                                addDiffDependency(diff.elementId, diff);
 
-                                if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
-                                    outputItem.title = diff['new'].value;
-                                } else {
-                                    diff.className = formatters.className.to(diff.id);
-                                    outputItem.properties.push(diff)
+                                var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
+                                if (ontologyProperty && ontologyProperty.userVisible) {
+                                    diff.id = vertexId + diff.name;
+                                    addDiffDependency(diff.elementId, diff);
+
+                                    if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
+                                        outputItem.title = diff['new'].value;
+                                    } else {
+                                        diff.className = formatters.className.to(diff.id);
+                                        outputItem.properties.push(diff)
+                                    }
+                                    self.diffsById[diff.id] = diff;
                                 }
-                                self.diffsById[diff.id] = diff;
                                 break;
 
                             case 'EdgeDiffItem':
