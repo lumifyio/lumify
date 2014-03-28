@@ -1,18 +1,17 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectMetadata;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -23,7 +22,6 @@ import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -37,7 +35,7 @@ public class WorkspaceHelper {
     private final ModelSession modelSession;
     private final TermMentionRepository termMentionRepository;
     private final AuditRepository auditRepository;
-    private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final Graph graph;
 
@@ -45,13 +43,13 @@ public class WorkspaceHelper {
     public WorkspaceHelper(final ModelSession modelSession,
                            final TermMentionRepository termMentionRepository,
                            final AuditRepository auditRepository,
-                           final OntologyRepository ontologyRepository,
+                           final UserRepository userRepository,
                            final DetectedObjectRepository detectedObjectRepository,
                            final Graph graph) {
         this.modelSession = modelSession;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
-        this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
     }
@@ -108,22 +106,20 @@ public class WorkspaceHelper {
     }
 
     public JSONObject unresolveDetectedObject(Vertex vertex, DetectedObjectModel detectedObjectModel,
+                                              DetectedObjectModel analyzedDetectedObject,
                                               LumifyVisibility visibility, String workspaceId,
                                               ModelUserContext modelUserContext, User user,
                                               Authorizations authorizations) {
         JSONObject result = new JSONObject();
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-        String columnFamilyName = detectedObjectModel.getMetadata().getColumnFamilyName();
-        String columnName = DetectedObjectMetadata.RESOLVED_ID;
 
-        if (detectedObjectModel.getMetadata().getProcess() == null) {
-            modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+        modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+        modelSession.flush();
+
+        if (analyzedDetectedObject == null) {
             result.put("deleteTag", true);
         } else {
-            Column column = detectedObjectModel.get(columnFamilyName).getColumn(columnName);
-            column.setDirty(true);
-            modelSession.deleteColumn(detectedObjectModel, detectedObjectModel.getTableName(), columnFamilyName, columnName, column.getVisibility());
-            result = detectedObjectModel.toJson();
+            result.put("detectedObject", analyzedDetectedObject.toJson());
         }
 
         Iterable<Object> edgeIds = artifactVertex.getEdgeIds(vertex, Direction.BOTH, authorizations);
@@ -138,19 +134,15 @@ public class WorkspaceHelper {
             graph.flush();
         }
 
-        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
-        Iterator<DetectedObjectModel> detectedObjectModels =
-                detectedObjectRepository.findByGraphVertexId(artifactVertex.getId().toString(), modelUserContext).iterator();
-        JSONArray detectedObjects = new JSONArray();
-        while (detectedObjectModels.hasNext()) {
-            DetectedObjectModel model = detectedObjectModels.next();
-            JSONObject detectedObjectModelJson = model.toJson();
-            if (model.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
-            }
-            detectedObjects.put(detectedObjectModelJson);
+        Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
+        Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
+        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
+        while (workspaceToVertex.hasNext()) {
+            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
         }
-        artifactJson.put("detectedObjects", detectedObjects);
+
+        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
+        artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
         result.put("artifactVertex", artifactJson);
         return result;
     }
@@ -160,7 +152,7 @@ public class WorkspaceHelper {
 
         graph.flush();
 
-        List <Property> properties = toList(vertex.getProperties(property.getName()));
+        List<Property> properties = toList(vertex.getProperties(property.getName()));
         JSONObject json = new JSONObject();
         JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
         json.put("properties", propertiesJson);
