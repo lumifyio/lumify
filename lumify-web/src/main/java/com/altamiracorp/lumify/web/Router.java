@@ -102,7 +102,7 @@ public class Router extends HttpServlet {
             app.get("/graph/vertex/geoLocationSearch", authenticator, GraphGeoLocationSearch.class);
             app.post("/graph/vertex/uploadImage", authenticator, GraphVertexUploadImage.class);
 
-            app.get("/workspace", authenticator, WorkspaceList.class);
+            app.get("/workspaces", authenticator, WorkspaceList.class);
             app.post("/workspace/new", authenticator, WorkspaceNew.class);
             app.get("/workspace/diff", authenticator, WorkspaceDiff.class);
             app.get("/workspace/relationships", authenticator, WorkspaceRelationships.class);

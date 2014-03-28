@@ -16,7 +16,7 @@ function(ServiceBase) {
 
     WorkspaceService.prototype.list = function() {
         return this._ajaxGet({
-            url: 'workspace'
+            url: 'workspaces'
         });
     };
 
