@@ -63,24 +63,16 @@ define([
                 random: { padding: 10 },
                 arbor: { friction: 0.6, repulsion: 5000 * retina.devicePixelRatio, targetFps: 60, stiffness: 300 }
             },
-            vertexIdIndex = 0,
-            vertexIdMap = {},
-            cyIdMap = {},
-            vertexId = function(v) {
-                var vId = _.isString(v) ? v : v.id,
-                    cyId = vertexIdMap[vId];
-                        
-                if (!cyId) {
-                    cyId = vertexIdMap[vId] = ('vid' + (vertexIdIndex++));
-                }
-
-                cyIdMap[cyId] = vId;
-                return cyId;
+            fromCyId = function(cyId) {
+                return formatters.className.from(cyId);
+            },
+            toCyId = function(v) {
+                var vId = _.isString(v) ? v : v.id;
+                return formatters.className.to(vId);
             };
 
-        this.vertexId = vertexId;
-        this.cyIdMap = cyIdMap;
-        this.vertexIdMap = vertexIdMap;
+        this.toCyId = toCyId;
+        this.fromCyId = fromCyId;
 
         this.defaultAttrs({
             cytoscapeContainerSelector: '.cytoscape-container',
@@ -120,7 +112,7 @@ define([
                 if (data.start) {
                     idToCyNode = {};
                     data.vertices.forEach(function(v) {
-                        idToCyNode[v.id] = cy.getElementById(vertexId(v));
+                        idToCyNode[v.id] = cy.getElementById(toCyId(v));
                     });
 
                     // Sort existing nodes to end, except leave the first
@@ -140,7 +132,7 @@ define([
                 }
 
                 vertices.forEach(function(vertex, i) {
-                    var tempId = 'NEW-' + vertexId(vertex),
+                    var tempId = 'NEW-' + toCyId(vertex),
                         node = cy.getElementById(tempId);
 
                     if (node.length) {
@@ -188,7 +180,7 @@ define([
                     position;
 
                 vertices.forEach(function(vertex, i) {
-                    var node = cy.getElementById('NEW-' + vertexId(vertex));
+                    var node = cy.getElementById('NEW-' + toCyId(vertex));
                     if (node.length === 0) return;
                     if (i === 0) position = node.position();
                     if (node.hasClass('existing')) {
@@ -254,33 +246,31 @@ define([
             this.cytoscapeReady(function(cy) {
                 var container = $(cy.container()),
                     currentNodes = cy.nodes(),
-                    boundingBox = currentNodes.boundingBox(),
-                    validBox = isFinite(boundingBox.x1),
-                    zoom = cy.zoom(),
+                    rawBoundingBox = currentNodes.boundingBox(),
+                    availableSpaceBox = retina.pixelsToPoints({
+                        x: isFinite(rawBoundingBox.x1) ? rawBoundingBox.x1 : 0,
+                        y: isFinite(rawBoundingBox.y2) ? rawBoundingBox.y2 : 0,
+                        w: isFinite(rawBoundingBox.w) ? rawBoundingBox.w : 0
+                    }),
                     xInc = GRID_LAYOUT_X_INCREMENT,
                     yInc = GRID_LAYOUT_Y_INCREMENT,
-                    nextAvailablePosition = retina.pixelsToPoints({ 
-                        x: validBox ? (boundingBox.x1/* + xInc*/) : 0,
-                        y: validBox ? (boundingBox.y2/* + yInc*/) : 0
-                    });
+                    nextAvailablePosition = _.pick(availableSpaceBox, 'x', 'y');
 
                 if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
                 nextAvailablePosition.y += yInc;
 
-                var maxWidth = validBox ? retina.pixelsToPoints({ x:boundingBox.w, y:boundingBox.h}).x : 0,
-                    startX = nextAvailablePosition.x;
 
-                maxWidth = Math.max(maxWidth, xInc * 10);
-
-                var vertexIds = _.pluck(vertices, 'id'),
-                    existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(cyIdMap[n.id()]) >= 0; }), 
+                var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
+                    startX = nextAvailablePosition.x,
+                    vertexIds = _.pluck(vertices, 'id'),
+                    existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(fromCyId(n.id())) >= 0; }), 
                     customLayout = $.Deferred();
 
                 if (options.layout) {
                     require(['graph/layouts/' + options.layout.type], function(doLayout) {
                         customLayout.resolve(
-                            doLayout(cy, currentNodes, boundingBox, vertexIds, cyIdMap, options.layout)
+                            doLayout(cy, currentNodes, rawBoundingBox, vertexIds, options.layout)
                         );
                     });
                 } else customLayout.resolve({});
@@ -294,7 +284,7 @@ define([
                             group: 'nodes',
                             classes: self.classesForVertex(vertex),
                             data: {
-                                id: vertexId(vertex),
+                                id: toCyId(vertex),
                             },
                             grabbable: self.isWorkspaceEditable,
                             selected: !!vertex.workspace.selected
@@ -337,8 +327,7 @@ define([
                         if (needsAdding || needsUpdating) {
                             (needsAdding ? addedVertices : updatedVertices).push({
                                 id: vertex.id,
-                                workspace: {
-                                }
+                                workspace: {}
                             });
                         }
 
@@ -347,7 +336,7 @@ define([
 
                     cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
-                        v.workspace.graphPosition = cy.getElementById(vertexId(v)).position();
+                        v.workspace.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
                     });
 
 
@@ -409,7 +398,7 @@ define([
 
                 if (data.vertices.length) {
                     cy.$( 
-                        data.vertices.map(function(v) { return '#' + vertexId(v); }).join(',')
+                        data.vertices.map(function(v) { return '#' + toCyId(v); }).join(',')
                     ).remove();
 
                     this.setWorkspaceDirty();
@@ -433,7 +422,7 @@ define([
                 if (vertices.length || edges.length) {
                     cy.$( 
                         vertices.concat(edges).map(function(v) {
-                            return '#' + vertexId(v);
+                            return '#' + toCyId(v);
                         }).join(',')
                     ).select();
                 }
@@ -449,7 +438,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 data.vertices
                     .forEach(function(updatedVertex) {
-                        var cyNode = cy.nodes().filter('#' + vertexId(updatedVertex));
+                        var cyNode = cy.nodes().filter('#' + toCyId(updatedVertex));
                         if (cyNode.length) {
                             if (updatedVertex.workspace.graphPosition) {
                                 cyNode.position( retina.pointsToPixels(updatedVertex.workspace.graphPosition) );
@@ -482,7 +471,7 @@ define([
                             position: cyToNode.position() 
                         }, 
                         { 
-                            duration: 700,
+                            duration: 500,
                             easing: 'easeOutBack',
                             complete: function() {
                                 cyFromNode.remove(); 
@@ -544,7 +533,7 @@ define([
 
         this.onEdgesDeleted = function (event, data) {
             this.cytoscapeReady(function (cy) {
-                var edge = cy.getElementById(this.vertexId(data.edgeId));
+                var edge = cy.getElementById(this.toCyId(data.edgeId));
                 edge.remove();
             });
         };
@@ -598,7 +587,7 @@ define([
 
         this.verticesForGraphIds = function(cy, vertexIds, type) {
             var selector = vertexIds.map(function(vId) { 
-                return '#' + vertexId(vId); 
+                return '#' + toCyId(vId); 
             }).join(',');
 
             return cy[type || 'nodes'](selector);
@@ -698,7 +687,7 @@ define([
                                 .pluck('id')
                                 .value(),
                         end = colorjs('#0088cc').shiftHue(i * (360 / paths.length)).toCSSHex(),
-                        lastNode = cy.getElementById(vertexId(sourceId)),
+                        lastNode = cy.getElementById(toCyId(sourceId)),
                         count = 0,
                         existingOrNewEdgeBetween = function(node1, node2, count) {
                             var edge = node1.edgesWith(node2);
@@ -721,7 +710,7 @@ define([
                         };
 
                     vertexIds.forEach(function(vId, i) {
-                        var thisNode = cy.getElementById(vertexId(vId));
+                        var thisNode = cy.getElementById(toCyId(vId));
                         if (thisNode.length && !thisNode.removed()) {
                             existingOrNewEdgeBetween(lastNode, thisNode, count);
                             lastNode = thisNode;
@@ -729,7 +718,7 @@ define([
                         } else count++;
                     });
 
-                    existingOrNewEdgeBetween(lastNode, cy.getElementById(vertexId(targetId)), count);
+                    existingOrNewEdgeBetween(lastNode, cy.getElementById(toCyId(targetId)), count);
                 });
             });
         };
@@ -774,7 +763,7 @@ define([
                         }
                         var updates = $.map(cy.nodes(), function(vertex) {
                             return {
-                                id: cyIdMap[vertex.id()],
+                                id: fromCyId(vertex.id()),
                                 workspace: {
                                     graphPosition: retina.pixelsToPoints(vertex.position())
                                 }
@@ -829,7 +818,7 @@ define([
 
                 menu = this.select ('vertexContextMenuSelector');
                 menu.data("currentVertexRowKey",event.cyTarget.data('_rowKey'));
-                menu.data("currentVertexGraphVertexId", cyIdMap[event.cyTarget.id()]);
+                menu.data("currentVertexGraphVertexId", fromCyId(event.cyTarget.id()));
                 menu.data("currentVertexPositionX", event.cyTarget.position ('x'));
                 menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
                 menu.data("title", event.cyTarget.data('title').value);
@@ -870,7 +859,7 @@ define([
 
             nodes.each(function(index, cyNode) {
                 if (!cyNode.hasClass('temp') && !cyNode.hasClass('path-edge')) {
-                    vertices.push(appData.vertex(cyIdMap[cyNode.id()]));
+                    vertices.push(appData.vertex(fromCyId(cyNode.id())));
                 }
             });
 
@@ -954,7 +943,7 @@ define([
             var graphMovedVerticesData = {
                 vertices: $.map(vertices, function(vertex) {
                     return {
-                        id: cyIdMap[vertex.id()],
+                        id: fromCyId(vertex.id()),
                         workspace: {
                             graphPosition: vertex.data('targetPosition')
                         }
@@ -1029,14 +1018,14 @@ define([
                 if (relationshipData.relationships) {
                     var relationshipEdges = [];
                     relationshipData.relationships.forEach(function(relationship) {
-                        var sourceNode = cy.getElementById(vertexId(relationship.from)),
-                            destNode = cy.getElementById(vertexId(relationship.to));
+                        var sourceNode = cy.getElementById(toCyId(relationship.from)),
+                            destNode = cy.getElementById(toCyId(relationship.to));
 
                         if (sourceNode.length && destNode.length) {
                             relationshipEdges.push ({
                                 group: "edges",
                                 data: {
-                                    id: vertexId(relationship.id),
+                                    id: toCyId(relationship.id),
                                     source: sourceNode.id(),
                                     target: destNode.id(),
                                     vertex: {
@@ -1088,7 +1077,7 @@ define([
                         self.cytoscapeReady().done(function(cy) {
                             LoadingPopover.attachTo(self.$node, {
                                 cy: cy,
-                                cyNode: cy.getElementById(vertexId(vId)),
+                                cyNode: cy.getElementById(toCyId(vId)),
                                 message: 'Loading Related...'
                             });
                         });
@@ -1131,7 +1120,7 @@ define([
                             forceSearch: forceSearch,
                             count: count,
                             cy: cy,
-                            cyNode: cy.getElementById(vertexId(vId)),
+                            cyNode: cy.getElementById(toCyId(vId)),
                             relatedToVertexId: vId,
                             vertices: vertices
                         });
@@ -1177,7 +1166,7 @@ define([
             this.cytoscapeReady(function(cy) {
                 var selected = cy.nodes().filter(':selected');
                 if (selected.length) {
-                    this.trigger(document, 'searchByRelatedEntity', { vertexId : cyIdMap[selected.id()] });
+                    this.trigger(document, 'searchByRelatedEntity', { vertexId : fromCyId(selected.id()) });
                 }
             });
         }

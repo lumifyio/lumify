@@ -54,17 +54,7 @@ public class VertexProperties extends BaseRequestHandler {
         }
         JSONObject json = GraphUtil.toJson(vertex, workspaceId);
 
-        Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(graphVertexId, modelUserContext).iterator();
-        JSONArray detectedObjects = new JSONArray();
-        while (detectedObjectModels.hasNext()) {
-            DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
-            JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
-            if (detectedObjectModel.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations), workspaceId));
-            }
-            detectedObjects.put(detectedObjectModelJson);
-        }
-        json.put("detectedObjects", detectedObjects);
+        json.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
 
         respondWithJson(response, json);
     }

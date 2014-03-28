@@ -69,7 +69,7 @@ define(
 
         UserService.prototype.getCurrentUsers = function() {
             return this._ajaxGet({
-                url: '/user'
+                url: 'user'
             });
         };
 

@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
@@ -153,7 +153,12 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
-                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations));
+                    DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey((String) rowKeyProperty.getValue());
+                    DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
+                            (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
+                                    detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
+                    DetectedObjectModel analyzedDetectedModel = new DetectedObjectModel(analyzedDetectedObjectRK);
+                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations));
                 }
             } else {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey((String) rowKeyProperty.getValue());

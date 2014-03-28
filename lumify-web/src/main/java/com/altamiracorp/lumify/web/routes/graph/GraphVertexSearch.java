@@ -139,17 +139,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
                 vertices.put(GraphUtil.toJson(vertex, workspaceId));
-                Iterator<DetectedObjectModel> detectedObjectModels = detectedObjectRepository.findByGraphVertexId(vertex.getId().toString(), modelUserContext).iterator();
-                JSONArray detectedObjects = new JSONArray();
-                while (detectedObjectModels.hasNext()) {
-                    DetectedObjectModel detectedObjectModel = detectedObjectModels.next();
-                    JSONObject detectedObjectModelJson = detectedObjectModel.toJson();
-                    if (detectedObjectModel.getMetadata().getResolvedId() != null) {
-                        detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations), workspaceId));
-                    }
-                    detectedObjects.put(detectedObjectModelJson);
-                }
-                vertices.getJSONObject(count).put("detectedObjects", detectedObjects);
+                vertices.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
                 count++;
             }
             String type = CONCEPT_TYPE.getPropertyValue(vertex);

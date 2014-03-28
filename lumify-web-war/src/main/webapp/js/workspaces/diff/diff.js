@@ -82,10 +82,10 @@ define([
                     var scroll = self.$node.find('.diffs-list'),
                         previousScroll = scroll.scrollTop(),
                         previousPublished = self.$node.find('.mark-publish').map(function() {
-                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                            return '.' + formatters.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousUndo = self.$node.find('.mark-undo').map(function() {
-                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                            return '.' + formatters.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousSelection  = _.compact(self.$node.find('.active').map(function() {
                             return $(this).data('diffId');
@@ -154,7 +154,7 @@ define([
                             properties: [],
                             edges: [],
                             action: {},
-                            className: self.classNameForVertex(vertexId),
+                            className: formatters.className.to(vertexId),
                             vertex: appData.vertex(vertexId)
                         };
 
@@ -162,28 +162,35 @@ define([
                         switch(diff.type) {
                             case 'VertexDiffItem': 
                                 diff.id = outputItem.id = vertexId;
+                                if (outputItem.vertex) {
+                                    outputItem.title = outputItem.vertex.properties.title.value;
+                                }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
                                 self.diffsById[vertexId] = diff;
                                 break;
 
                             case 'PropertyDiffItem':
-                                diff.id = vertexId + diff.name;
-                                addDiffDependency(diff.elementId, diff);
 
-                                if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
-                                    outputItem.title = diff['new'].value;
-                                } else {
-                                    diff.className = self.classNameForVertex(diff.id);
-                                    outputItem.properties.push(diff)
+                                var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
+                                if (ontologyProperty && ontologyProperty.userVisible) {
+                                    diff.id = vertexId + diff.name;
+                                    addDiffDependency(diff.elementId, diff);
+
+                                    if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
+                                        outputItem.title = diff['new'].value;
+                                    } else {
+                                        diff.className = formatters.className.to(diff.id);
+                                        outputItem.properties.push(diff)
+                                    }
+                                    self.diffsById[diff.id] = diff;
                                 }
-                                self.diffsById[diff.id] = diff;
                                 break;
 
                             case 'EdgeDiffItem':
                                 diff.id = diff.edgeId;
                                 diff.inVertex = appData.vertex(diff.inVertexId);
-                                diff.className = self.classNameForVertex(diff.edgeId);
+                                diff.className = formatters.className.to(diff.edgeId);
                                 diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                 addDiffDependency(diff.inVertexId, diff);
                                 addDiffDependency(diff.outVertexId, diff);
@@ -222,24 +229,6 @@ define([
             }
         }
 
-        var classNameIndex = 0, 
-            vertexIdMap = {}, clsIdMap = {};
-        this.classNameForVertex = function(vertexId) {
-            if (clsIdMap[vertexId]) {
-                return clsIdMap[vertexId];
-            }
-
-            var clsName = 'vId-' + classNameIndex++;
-
-            vertexIdMap[clsName] = vertexId;
-            clsIdMap[vertexId] = clsName;
-
-            return clsName;
-        };
-        this.vertexIdForClassName = function(clsName) {
-            return vertexIdMap[clsName];
-        };
-
         this.onObjectsSelected = function(event, data) {
             var self = this,
                 toSelect = data && data.vertices.concat(data.edges || []) || [];
@@ -251,14 +240,14 @@ define([
         this.selectVertices = function(vertices) {
             var self = this,
                 cls = vertices.map(function(vertex) {
-                    return '.' + self.classNameForVertex(_.isString(vertex) ? vertex : vertex.id);
+                    return '.' + formatters.className.to(_.isString(vertex) ? vertex : vertex.id);
                 });
             this.$node.find(cls.join(',')).addClass('active')
         };
 
         this.onRowClick = function(event) {
             var $target = $(event.target).not('button').closest('tr'),
-                vertexRow = $target.is('.vertex-row') ? $target : $target.prev('.vertex-row'),
+                vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
                 vertexId = vertexRow.data('vertexId'),
                 vertex = vertexId && appData.vertex(vertexId),
                 alreadySelected = vertexRow.is('.active');
@@ -386,7 +375,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
+            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-undo')
@@ -431,7 +420,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
+            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-publish')

@@ -145,17 +145,29 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getAttributeString(final HttpServletRequest request, final String name) {
-        return (String) request.getAttribute(name);
+        String attr = (String) request.getAttribute(name);
+        if (attr != null) {
+            return attr;
+        }
+        return getRequiredParameter(request, name);
     }
 
     protected String getWorkspaceId(final HttpServletRequest request) {
-        String workspaceId = getAttributeString(request, "workspaceId");
+        String workspaceId = getWorkspaceIdOrDefault(request);
+        if (workspaceId == null || workspaceId.trim().length() == 0) {
+            throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+        }
+        return workspaceId;
+    }
+
+    protected String getWorkspaceIdOrDefault(final HttpServletRequest request) {
+        String workspaceId = (String) request.getAttribute("workspaceId");
         if (workspaceId == null || workspaceId.trim().length() == 0) {
             workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
             if (workspaceId == null || workspaceId.trim().length() == 0) {
                 workspaceId = getOptionalParameter(request, "workspaceId");
                 if (workspaceId == null || workspaceId.trim().length() == 0) {
-                    throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+                    return null;
                 }
             }
         }
@@ -163,9 +175,13 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {
-        String workspaceId = getWorkspaceId(request);
-        // TODO verify user has access to see this workspace
-        return getUserRepository().getAuthorizations(user, workspaceId);
+        String workspaceId = getWorkspaceIdOrDefault(request);
+        if (workspaceId != null) {
+            // TODO verify user has access to see this workspace
+            return getUserRepository().getAuthorizations(user, workspaceId);
+        }
+
+        return getUserRepository().getAuthorizations(user);
     }
 
     protected void respondWithNotFound(final HttpServletResponse response) throws IOException {

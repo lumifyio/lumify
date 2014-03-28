@@ -9,6 +9,8 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -38,6 +40,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final VisibilityTranslator visibilityTranslator;
+    private final WorkspaceRepository workspaceRepository;
 
     @Inject
     public ResolveDetectedObject(
@@ -47,13 +50,15 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final DetectedObjectRepository detectedObjectRepository,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final WorkspaceRepository workspaceRepository) {
         super(userRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.workspaceRepository = workspaceRepository;
     }
 
     @Override
@@ -65,14 +70,14 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        String rowKey = getOptionalParameter(request, "rowKey");
         String x1 = getRequiredParameter(request, "x1");
         String x2 = getRequiredParameter(request, "x2");
         String y1 = getRequiredParameter(request, "y1");
         String y2 = getRequiredParameter(request, "y2");
 
-        String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
+        String workspaceId = getWorkspaceId(request);
+        Workspace workspace = workspaceRepository.findById(workspaceId, user);
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
@@ -88,28 +93,13 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptById(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation;
-        DetectedObjectModel detectedObjectModel;
-        Object id = graphVertexId != null && !graphVertexId.equals("") ? graphVertexId : graph.getIdGenerator().nextId();
-
-        if (rowKey != null) {
-            detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, user.getModelUserContext());
-            detectedObjectModel.getMetadata().setResolvedId(id, lumifyVisibility.getVisibility());
-            detectedObjectModel.getMetadata().setX1(Double.parseDouble(x1), lumifyVisibility.getVisibility());
-            detectedObjectModel.getMetadata().setX2(Double.parseDouble(x2), lumifyVisibility.getVisibility());
-            detectedObjectModel.getMetadata().setY1(Double.parseDouble(y1), lumifyVisibility.getVisibility());
-            detectedObjectModel.getMetadata().setY2(Double.parseDouble(y2), lumifyVisibility.getVisibility());
-            detectedObjectRepository.save(detectedObjectModel);
-        } else {
-            detectedObjectModel = detectedObjectRepository.saveDetectedObject(artifactId, id, conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2), Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility());
-            rowKey = detectedObjectModel.getRowKey().getRowKey();
-        }
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
-            resolvedVertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
+            resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
             CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
 
@@ -117,14 +107,21 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         } else {
-            resolvedVertexMutation = graph.getVertex(id, authorizations).prepareMutation();
+            resolvedVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
         }
 
         GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
-        resolvedVertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", rowKey, metadata, lumifyVisibility.getVisibility());
-        resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), visibilitySource, metadata, lumifyVisibility.getVisibility());
+        resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         resolvedVertex = resolvedVertexMutation.save();
+
+        graph.flush();
+
+        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
+                (artifactId, resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
+                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
+                        user.getModelUserContext());
+
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         JSONObject result = detectedObjectModel.toJson();

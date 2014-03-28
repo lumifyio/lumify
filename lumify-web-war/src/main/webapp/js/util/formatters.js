@@ -2,7 +2,10 @@
 define(['sf'], function() {
     'use strict';
 
-    var isMac = checkIfMac(),
+    var classNameIndex = 0,
+        toClassNameMap = {},
+        fromClassNameMap = {},
+        isMac = checkIfMac(),
         isFirefox = ~navigator.userAgent.indexOf('Firefox'),
         keyboardMappings = {
             metaIcons: {
@@ -86,6 +89,23 @@ define(['sf'], function() {
                 } else if (number >= 1000) {
                     return (decimalAdjust('round', number/1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
+            }
+        },
+        className: {
+            from: function(className) {
+                var original = fromClassNameMap[className];
+                if (!original) {
+                    console.error('Never created a class for ', original);
+                }
+                return original;
+            },
+            to: function(string) {
+                var className = toClassNameMap[string];
+                if (!className) {
+                    className = toClassNameMap[string] = 'id' + (classNameIndex++);
+                }
+                fromClassNameMap[className] = string;
+                return className;
             }
         },
         geoLocation: {

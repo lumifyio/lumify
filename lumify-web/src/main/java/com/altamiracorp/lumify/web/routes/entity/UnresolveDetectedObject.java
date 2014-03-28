@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
@@ -60,6 +61,11 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
 
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);
+        DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
+        DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
+                (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
+                        detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
+        DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.toString(), modelUserContext);
         Object resolvedId = detectedObjectModel.getMetadata().getResolvedId();
 
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
@@ -75,7 +81,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel, lumifyVisibility,
+        JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility,
                 workspaceId, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);

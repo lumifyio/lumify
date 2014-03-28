@@ -14,14 +14,6 @@
 
     <name>Lumify: Base Web Server</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>lumify-jetty-server</module>
         <module>lumify-tomcat-server</module>

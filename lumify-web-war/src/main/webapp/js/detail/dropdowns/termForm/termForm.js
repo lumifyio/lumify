@@ -328,7 +328,7 @@ define([
                     if (data.deleteTag) {
                         $focused.remove();
                     } else {
-                        $tag.text(data.classifierConcept).removeAttr('data-info').data('info', data).removeClass();
+                        $tag.text(data.detectedObject.classifierConcept).removeAttr('data-info').data('info', data.detectedObject).removeClass();
                         $tag.addClass('label-info label detected-object opens-dropdown');
                     }
 

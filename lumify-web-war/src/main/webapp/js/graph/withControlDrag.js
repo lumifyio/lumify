@@ -42,7 +42,7 @@ define([], function() {
                     if (state > STATE_NONE) return;
                     if (controlKeyPressed && event.cyTarget !== cy) {
                         self.trigger('startVertexConnection', {
-                            sourceId: self.cyIdMap[event.cyTarget.id()]
+                            sourceId: self.fromCyId(event.cyTarget.id())
                         });
                     }
                 };
@@ -109,7 +109,7 @@ define([], function() {
             this.ignoreCySelectionEvents = true;
 
             this.cytoscapeReady(function(cy) {
-                startControlDragTarget = cy.getElementById(this.vertexId(data.sourceId));
+                startControlDragTarget = cy.getElementById(this.toCyId(data.sourceId));
                 cy.nodes().lock();
                 cy.on('mousemove', this.mouseDragHandler);
             });
@@ -143,8 +143,8 @@ define([], function() {
                         cy: cy,
                         cyNode: target,
                         edge: edge,
-                        sourceVertexId: self.cyIdMap[edge.data('source')],
-                        targetVertexId: self.cyIdMap[edge.data('target')],
+                        sourceVertexId: self.fromCyId(edge.data('source')),
+                        targetVertexId: self.fromCyId(edge.data('target')),
                         connectionData: connectionData
                     });
                 });
