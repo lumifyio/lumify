@@ -4,15 +4,8 @@ import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.webapp.WebAppContext;
 
-public class Server extends CommandLineBase {
+public abstract class WebServer extends CommandLineBase {
     private static final String PORT_OPTION_VALUE = "port";
     private static final String HTTPS_PORT_OPTION_VALUE = "httpsPort";
     private static final String KEY_STORE_PATH_OPTION_VALUE = "keyStorePath";
@@ -24,15 +17,20 @@ public class Server extends CommandLineBase {
     private String keyStorePath;
     private String keyStorePassword;
 
-    public static void main(String[] args) throws Exception {
-        int res = new Server().run(args);
-        if (res != 0) {
-            System.exit(res);
-        }
+    public int getHttpPort() {
+        return httpPort;
     }
 
-    public Server() {
-        initFramework = false;
+    public int getHttpsPort() {
+        return httpsPort;
+    }
+
+    public String getKeyStorePath() {
+        return keyStorePath;
+    }
+
+    public String getKeyStorePassword() {
+        return keyStorePassword;
     }
 
     @Override
@@ -98,37 +96,5 @@ public class Server extends CommandLineBase {
         } else {
             httpsPort = Integer.parseInt(securePort);
         }
-    }
-
-    @Override
-    protected int run(CommandLine cmd) throws Exception {
-        SelectChannelConnector httpConnector = new SelectChannelConnector();
-        httpConnector.setPort(httpPort);
-        httpConnector.setConfidentialPort(httpsPort);
-
-
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStorePath(keyStorePath);
-        sslContextFactory.setKeyStorePassword(keyStorePassword);
-        sslContextFactory.setTrustStore(keyStorePath);
-        sslContextFactory.setTrustStorePassword(keyStorePassword);
-        SslSelectChannelConnector httpsConnector = new SslSelectChannelConnector(sslContextFactory);
-        httpsConnector.setPort(httpsPort);
-
-        WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
-        webAppContext.setWar("./lumify-web-war/src/main/webapp/");
-
-        ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[]{webAppContext});
-
-        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
-        server.setConnectors(new Connector[]{httpConnector, httpsConnector});
-        server.setHandler(contexts);
-
-        server.start();
-        server.join();
-
-        return 0;
     }
 }

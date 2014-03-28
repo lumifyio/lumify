@@ -65,7 +65,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
 
     private void ensureInitialized(AtmosphereResource resource) {
         if (userRepository == null) {
-            Injector injector = (Injector) resource.getRequest().getServletContext().getAttribute(Injector.class.getName());
+            Injector injector = (Injector) resource.getAtmosphereConfig().getServletContext().getAttribute(Injector.class.getName());
             injector.injectMembers(this);
         }
     }
