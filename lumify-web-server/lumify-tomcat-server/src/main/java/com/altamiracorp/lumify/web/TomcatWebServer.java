@@ -40,7 +40,7 @@ public class TomcatWebServer extends WebServer {
         Connector defaultConnector = tomcat.getConnector();
         defaultConnector.setRedirectPort(super.getHttpsPort());
 
-        tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+        tomcat.addWebapp("/lumify", new File(webappDirLocation).getAbsolutePath());
         System.out.println("configuring app with basedir: " + new File("./" + webappDirLocation).getAbsolutePath());
 
         tomcat.start();
