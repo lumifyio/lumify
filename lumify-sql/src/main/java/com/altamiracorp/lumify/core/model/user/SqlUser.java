@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="SQL_USER")
 public class SqlUser implements User {
+    private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
     private String currentWorkspace;
     private int id;

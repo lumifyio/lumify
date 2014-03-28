@@ -51,7 +51,7 @@ public class SecureGraphUserRepository extends UserRepository {
             return null;
         }
 
-        String[] authorizations = Iterables.toArray(UserLumifyProperties.getAuthorizations(user), String.class);
+        String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
 
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", USERNAME.getPropertyValue(user), AUTHORIZATIONS.getPropertyValue(user));
@@ -112,7 +112,7 @@ public class SecureGraphUserRepository extends UserRepository {
     public void setPassword(User user, String password) {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
-        Vertex userVertex = ((SecureGraphUser)user).getUser();
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         PASSWORD_SALT.setProperty(userVertex, salt, VISIBILITY.getVisibility());
         PASSWORD_HASH.setProperty(userVertex, passwordHash, VISIBILITY.getVisibility());
         graph.flush();
@@ -121,7 +121,7 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public boolean isPasswordValid(User user, String password) {
         try {
-            Vertex userVertex = ((SecureGraphUser)user).getUser();
+            Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
             return UserPasswordUtil.validatePassword(password, PASSWORD_SALT.getPropertyValue(userVertex), PASSWORD_HASH.getPropertyValue(userVertex));
         } catch (Exception ex) {
             throw new RuntimeException("error validating password", ex);
@@ -131,7 +131,7 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public User setCurrentWorkspace(String userId, String workspaceId) {
         User user = findById(userId);
-        Vertex userVertex = ((SecureGraphUser)user).getUser();
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
@@ -143,7 +143,7 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public User setStatus(String userId, UserStatus status) {
         User user = findById(userId);
-        Vertex userVertex = ((SecureGraphUser)user).getUser();
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
@@ -154,8 +154,8 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public void addAuthorization(User user, String auth) {
-        Vertex userVertex = ((SecureGraphUser)user).getUser();
-        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        Set<String> authorizations = getAuthorizations(userVertex);
         if (authorizations.contains(auth)) {
             return;
         }
@@ -170,8 +170,8 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public void removeAuthorization(User user, String auth) {
-        Vertex userVertex = ((SecureGraphUser)user).getUser();
-        Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        Set<String> authorizations = getAuthorizations(userVertex);
         if (!authorizations.contains(auth)) {
             return;
         }
@@ -183,10 +183,31 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        SecureGraphUser secureGraphUser = (SecureGraphUser) user;
-        Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(secureGraphUser.getUser());
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        Set<String> authorizationsSet = getAuthorizations(userVertex);
         Collections.addAll(authorizationsSet, additionalAuthorizations);
         return authorizationRepository.createAuthorizations(authorizationsSet);
+    }
+
+    public static Set<String> getAuthorizations(Vertex userVertex) {
+        String authorizationsString = AUTHORIZATIONS.getPropertyValue(userVertex);
+        if (authorizationsString == null) {
+            return new HashSet<String>();
+        }
+        String[] authorizationsArray = authorizationsString.split(",");
+        if (authorizationsArray.length == 1 && authorizationsArray[0].length() == 0) {
+            authorizationsArray = new String[0];
+        }
+        HashSet<String> authorizations = new HashSet<String>();
+        for (String s : authorizationsArray) {
+            // Accumulo doesn't like zero length strings. they shouldn't be in the auth string to begin with but this just protects from that happening.
+            if (s.trim().length() == 0) {
+                continue;
+            }
+
+            authorizations.add(s);
+        }
+        return authorizations;
     }
 
     @Inject

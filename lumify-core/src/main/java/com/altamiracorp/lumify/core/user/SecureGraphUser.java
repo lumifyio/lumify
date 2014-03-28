@@ -38,9 +38,7 @@ public class SecureGraphUser implements User {
         return UserType.USER;
     }
 
-    public Vertex getUser() {
-        return user;
-    }
+    public Vertex getUser () { return user; }
 
     @Override
     public UserStatus getUserStatus() {

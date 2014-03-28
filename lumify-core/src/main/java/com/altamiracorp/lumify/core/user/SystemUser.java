@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
 
 public class SystemUser implements User {
+    private static final long serialVersionUID = 1L;
     private static final String SYSTEM_USERNAME = "system";
     private ModelUserContext modelUserContext;
 

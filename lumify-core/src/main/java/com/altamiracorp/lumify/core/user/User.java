@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.user.UserType;
 import java.io.Serializable;
 
 public interface User extends Serializable {
-
     public String getUserId();
 
     public ModelUserContext getModelUserContext();
