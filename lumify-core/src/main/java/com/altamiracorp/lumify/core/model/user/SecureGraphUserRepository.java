@@ -28,7 +28,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public void init (Map config) {
-s        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
