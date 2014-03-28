@@ -1,12 +1,17 @@
 package com.altamiracorp.lumify.core.model.user;
 
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.user.SecureGraphUser;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
+import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +25,7 @@ import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperti
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 
 public class SecureGraphUserRepository extends UserRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphUserRepository.class);
     private Graph graph;
     private String userConceptId;
     private com.altamiracorp.securegraph.Authorizations authorizations;
@@ -27,7 +33,7 @@ public class SecureGraphUserRepository extends UserRepository {
     private OntologyRepository ontologyRepository;
 
     @Override
-    public void init (Map config) {
+    public void init(Map config) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
@@ -40,29 +46,46 @@ public class SecureGraphUserRepository extends UserRepository {
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
+    private SecureGraphUser createFromVertex(Vertex user) {
+        if (user == null) {
+            return null;
+        }
+
+        String[] authorizations = Iterables.toArray(UserLumifyProperties.getAuthorizations(user), String.class);
+        ModelUserContext modelUserContext = getModelUserContext(authorizations);
+
+        LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", USERNAME.getPropertyValue(user), AUTHORIZATIONS.getPropertyValue(user));
+        return new SecureGraphUser(user, modelUserContext);
+    }
+
     @Override
-    public Vertex findByUserName(String username) {
-        return Iterables.getFirst(graph.query(authorizations)
+    public User findByUserName(String username) {
+        return createFromVertex(Iterables.getFirst(graph.query(authorizations)
                 .has(USERNAME.getKey(), username)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
-                .vertices(), null);
+                .vertices(), null));
     }
 
     @Override
-    public Iterable<Vertex> findAll() {
-        return graph.query(authorizations)
+    public Iterable<User> findAll() {
+        return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
-                .vertices();
+                .vertices()) {
+            @Override
+            protected User convert(Vertex vertex) {
+                return createFromVertex(vertex);
+            }
+        };
     }
 
     @Override
-    public Vertex findById(String userId) {
-        return graph.getVertex(userId, authorizations);
+    public User findById(String userId) {
+        return createFromVertex(graph.getVertex(userId, authorizations));
     }
 
     @Override
-    public Vertex addUser(String username, String password, String[] userAuthorizations) {
-        Vertex existingUser = findByUserName(username);
+    public User addUser(String username, String password, String[] userAuthorizations) {
+        User existingUser = findByUserName(username);
         if (existingUser != null) {
             throw new RuntimeException("");
         }
@@ -80,53 +103,58 @@ public class SecureGraphUserRepository extends UserRepository {
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
-        Vertex user = userBuilder.save();
+        User user = createFromVertex(userBuilder.save());
         graph.flush();
         return user;
     }
 
     @Override
-    public void setPassword(Vertex user, String password) {
+    public void setPassword(User user, String password) {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
-        PASSWORD_SALT.setProperty(user, salt, VISIBILITY.getVisibility());
-        PASSWORD_HASH.setProperty(user, passwordHash, VISIBILITY.getVisibility());
+        Vertex userVertex = ((SecureGraphUser)user).getUser();
+        PASSWORD_SALT.setProperty(userVertex, salt, VISIBILITY.getVisibility());
+        PASSWORD_HASH.setProperty(userVertex, passwordHash, VISIBILITY.getVisibility());
         graph.flush();
     }
 
     @Override
-    public boolean isPasswordValid(Vertex user, String password) {
+    public boolean isPasswordValid(User user, String password) {
         try {
-            return UserPasswordUtil.validatePassword(password, PASSWORD_SALT.getPropertyValue(user), PASSWORD_HASH.getPropertyValue(user));
+            Vertex userVertex = ((SecureGraphUser)user).getUser();
+            return UserPasswordUtil.validatePassword(password, PASSWORD_SALT.getPropertyValue(userVertex), PASSWORD_HASH.getPropertyValue(userVertex));
         } catch (Exception ex) {
             throw new RuntimeException("error validating password", ex);
         }
     }
 
     @Override
-    public Vertex setCurrentWorkspace(String userId, String workspaceId) {
-        Vertex user = findById(userId);
+    public User setCurrentWorkspace(String userId, String workspaceId) {
+        User user = findById(userId);
+        Vertex userVertex = ((SecureGraphUser)user).getUser();
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        CURRENT_WORKSPACE.setProperty(user, workspaceId, VISIBILITY.getVisibility());
+        CURRENT_WORKSPACE.setProperty(userVertex, workspaceId, VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }
 
     @Override
-    public Vertex setStatus(String userId, UserStatus status) {
-        Vertex user = findById(userId);
+    public User setStatus(String userId, UserStatus status) {
+        User user = findById(userId);
+        Vertex userVertex = ((SecureGraphUser)user).getUser();
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        STATUS.setProperty(user, status.toString(), VISIBILITY.getVisibility());
+        STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }
 
     @Override
-    public void addAuthorization(Vertex userVertex, String auth) {
+    public void addAuthorization(User user, String auth) {
+        Vertex userVertex = ((SecureGraphUser)user).getUser();
         Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
         if (authorizations.contains(auth)) {
             return;
@@ -141,7 +169,8 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public void removeAuthorization(Vertex userVertex, String auth) {
+    public void removeAuthorization(User user, String auth) {
+        Vertex userVertex = ((SecureGraphUser)user).getUser();
         Set<String> authorizations = UserLumifyProperties.getAuthorizations(userVertex);
         if (!authorizations.contains(auth)) {
             return;
@@ -154,18 +183,24 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        Vertex userVertex = findById(user.getUserId());
-        Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(userVertex);
+        SecureGraphUser secureGraphUser = (SecureGraphUser) user;
+        Set<String> authorizationsSet = UserLumifyProperties.getAuthorizations(secureGraphUser.getUser());
         Collections.addAll(authorizationsSet, additionalAuthorizations);
         return authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
     @Inject
-    public void setGraph (Graph graph) { this.graph = graph; }
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
 
     @Inject
-    public void setOntologyRepository (OntologyRepository ontologyRepository) { this.ontologyRepository = ontologyRepository; }
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
 
     @Inject
-    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) { this.authorizationRepository = authorizationRepository; }
+    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
 }

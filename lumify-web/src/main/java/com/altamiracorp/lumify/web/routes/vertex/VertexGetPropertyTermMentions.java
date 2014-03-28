@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class VertexGetPropertyTermMentions extends BaseRequestHandler {
     private final Graph graph;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final TermMentionRepository termMentionRepository;
 
     @Inject
@@ -31,11 +30,10 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
             Graph graph,
             UserRepository userRepository,
             Configuration configuration,
-            UserProvider userProvider,
             TermMentionRepository termMentionRepository) {
         super(userRepository, configuration);
         this.graph = graph;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
         this.termMentionRepository = termMentionRepository;
     }
 
@@ -72,9 +70,9 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
         String workspaceId = getWorkspaceIdOrDefault(request);
         ModelUserContext modelUserContext;
         if (workspaceId == null) {
-            modelUserContext = this.userProvider.getModelUserContext(authorizations);
+            modelUserContext = userRepository.getModelUserContext(authorizations);
         } else {
-            modelUserContext = this.userProvider.getModelUserContext(authorizations, workspaceId);
+            modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
         }
         return modelUserContext;
     }

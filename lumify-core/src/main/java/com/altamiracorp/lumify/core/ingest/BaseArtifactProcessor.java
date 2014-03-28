@@ -22,12 +22,11 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 
@@ -114,12 +113,6 @@ public abstract class BaseArtifactProcessor {
 
     public UserRepository getUserRepository() {
         return userRepository;
-    }
-
-    @Inject
-    public final void setUser(final UserProvider userProvider) {
-        this.user = userProvider.getSystemUser();
-        this.authorizations = this.userRepository.getAuthorizations(this.user);
     }
 
     public ElementMutation<Vertex> findOrPrepareArtifactVertex(String rowKey, Authorizations authorizations) {

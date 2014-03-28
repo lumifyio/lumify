@@ -24,14 +24,13 @@ public class UserAddAuthorization extends BaseRequestHandler {
         String auth = getRequiredParameter(request, "auth");
 
         User user = getUser(request);
-        Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
-        if (userVertex == null) {
+        if (user == null) {
             respondWithNotFound(response);
             return;
         }
 
-        getUserRepository().addAuthorization(userVertex, auth);
+        getUserRepository().addAuthorization(user, auth);
 
-        respondWithJson(response, getUserRepository().toJson(userVertex, user));
+        respondWithJson(response, getUserRepository().toJsonWithAuths(user));
     }
 }

@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -19,24 +18,23 @@ import javax.servlet.http.HttpServletResponse;
 public class VertexAudit extends BaseRequestHandler {
 
     private final AuditRepository auditRepository;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
 
     @Inject
     public VertexAudit(
             final AuditRepository auditRepository,
             final UserRepository userRepository,
-            final UserProvider userProvider,
             final Configuration configuration) {
         super(userRepository, configuration);
         this.auditRepository = auditRepository;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(getAuthorizations(request, user), getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(getAuthorizations(request, user), getWorkspaceId(request));
         Iterable<Audit> rows = auditRepository.findByRowStartsWith(graphVertexId, modelUserContext);
 
         JSONObject results = new JSONObject();

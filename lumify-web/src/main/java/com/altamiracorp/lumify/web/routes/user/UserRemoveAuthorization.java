@@ -24,14 +24,13 @@ public class UserRemoveAuthorization extends BaseRequestHandler {
         String auth = getRequiredParameter(request, "auth");
 
         User user = getUser(request);
-        Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
-        if (userVertex == null) {
+        if (user == null) {
             respondWithNotFound(response);
             return;
         }
 
-        getUserRepository().removeAuthorization(userVertex, auth);
+        getUserRepository().removeAuthorization(user, auth);
 
-        respondWithJson(response, getUserRepository().toJson(userVertex, user));
+        respondWithJson(response, getUserRepository().toJsonWithAuths(user));
     }
 }

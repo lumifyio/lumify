@@ -4,7 +4,7 @@ import com.altamiracorp.lumify.core.FrameworkUtils;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.user.UserProvider;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
@@ -23,7 +23,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     private static LumifyLogger LOGGER;
     public static final String APP_CONFIG_LOCATION = "application.config.location";
     public static final String APP_LOG4J_LOCATION = "application.config.log4j.location";
-    private UserProvider userProvider;
+    private UserRepository userRepository;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -42,7 +42,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
                 // Store the injector in the context for a servlet to access later
                 context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
 
-                FrameworkUtils.initializeFramework(InjectHelper.getInjector(), this.userProvider.getSystemUser());
+                FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
 
                 LOGGER.warn("JavaScript / Less modifications will not be reflected on server. Run `grunt watch` from webapp directory in development");
             } else {
@@ -85,7 +85,7 @@ public final class ApplicationBootstrap implements ServletContextListener {
     }
 
     @Inject
-    public void setUserProvider(UserProvider userProvider) {
-        this.userProvider = userProvider;
+    public void setUserRepository(UserRepository userProvider) {
+        this.userRepository = userProvider;
     }
 }

@@ -1,47 +1,24 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String username;
-    private String userId;
-    private String currentWorkspace;
-    private ModelUserContext modelUserContext;
-    private UserType userType;
+public interface User extends Serializable {
 
-    public User(String userId, String username, String currentWorkspace, ModelUserContext modelUserContext, UserType userType) {
-        this.userId = userId;
-        this.username = username;
-        this.currentWorkspace = currentWorkspace;
-        this.modelUserContext = modelUserContext;
-        this.userType = userType;
-    }
+    public String getUserId();
 
-    public String getUserId() {
-        return userId;
-    }
+    public ModelUserContext getModelUserContext();
 
-    public ModelUserContext getModelUserContext() {
-        return modelUserContext;
-    }
+    public String getUserName();
 
-    public String getUsername() {
-        return username;
-    }
+    public String getCurrentWorkspace();
 
-    public String getCurrentWorkspace() {
-        return currentWorkspace;
-    }
+    public UserType getUserType();
 
-    public void setCurrentWorkspace(String currentWorkspace) {
-        this.currentWorkspace = currentWorkspace;
-    }
+    public UserStatus getUserStatus ();
 
-    public UserType getUserType() {
-        return userType;
-    }
+    public void setCurrentWorkspace (String currentWorkspace);
 }

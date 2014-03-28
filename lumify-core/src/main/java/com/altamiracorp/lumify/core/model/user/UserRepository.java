@@ -1,17 +1,17 @@
 package com.altamiracorp.lumify.core.model.user;
 
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.securegraph.Vertex;
-import com.google.inject.Singleton;
+import org.apache.accumulo.core.security.Authorizations;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
-
-import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.STATUS;
-import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.USERNAME;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
@@ -20,20 +20,20 @@ public abstract class UserRepository {
 
     public abstract void init(Map map);
 
-    public abstract Vertex findByUserName(String username);
+    public abstract User findByUserName(String username);
 
-    public abstract Iterable<Vertex> findAll();
+    public abstract Iterable<User> findAll();
 
-    public abstract Vertex findById(String userId);
+    public abstract User findById(String userId);
 
-    public abstract Vertex addUser(String username, String password, String[] userAuthorizations);
+    public abstract User addUser(String username, String password, String[] userAuthorizations);
 
-    public abstract void setPassword(Vertex user, String password);
+    public abstract void setPassword(User user, String password);
 
-    public abstract boolean isPasswordValid(Vertex user, String password);
+    public abstract boolean isPasswordValid(User user, String password);
 
-    public JSONObject toJson(Vertex userVertex, User user){
-        JSONObject json = toJson(userVertex);
+    public JSONObject toJsonWithAuths(User user) {
+        JSONObject json = toJson(user);
 
         JSONArray authorizations = new JSONArray();
         for (String a : getAuthorizations(user).getAuthorizations()) {
@@ -44,26 +44,58 @@ public abstract class UserRepository {
         return json;
     }
 
-    public JSONObject toJson(Vertex userVertex) {
+    public JSONObject toJson(User user) {
         try {
             JSONObject json = new JSONObject();
-            json.put("id", userVertex.getId().toString());
-            json.put("userName", USERNAME.getPropertyValue(userVertex));
-            json.put("status", STATUS.getPropertyValue(userVertex).toLowerCase());
-            json.put("userType", UserType.USER.toString());
+            json.put("id", user.getUserId());
+            json.put("userName", user.getUserName());
+            json.put("status", user.getUserStatus());
+            json.put("userType", user.getUserType());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public abstract Vertex setCurrentWorkspace(String userId, String workspaceId);
+    public ModelUserContext getModelUserContext(com.altamiracorp.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
+        ArrayList<String> auths = new ArrayList<String>();
 
-    public abstract Vertex setStatus(String userId, UserStatus status);
+        if (authorizations.getAuthorizations() != null) {
+            for (String a : authorizations.getAuthorizations()) {
+                if (a != null && a.length() > 0) {
+                    auths.add(a);
+                }
+            }
+        }
 
-    public abstract void addAuthorization(Vertex userVertex, String auth);
+        if (additionalAuthorizations != null) {
+            for (String a : additionalAuthorizations) {
+                if (a != null && a.length() > 0) {
+                    auths.add(a);
+                }
+            }
+        }
 
-    public abstract void removeAuthorization(Vertex userVertex, String auth);
+        return getModelUserContext(auths.toArray(new String[auths.size()]));
+    }
+
+    public ModelUserContext getModelUserContext(String... authorizations) {
+        // TODO: figure out a better way to create this without requiring accumulo
+        return new AccumuloUserContext(new Authorizations(authorizations));
+    }
+
+    public User getSystemUser ()
+    {
+        return new SystemUser(getModelUserContext(new String[0]));
+    }
+
+    public abstract User setCurrentWorkspace(String userId, String workspaceId);
+
+    public abstract User setStatus(String userId, UserStatus status);
+
+    public abstract void addAuthorization(User userUser, String auth);
+
+    public abstract void removeAuthorization(User userUser, String auth);
 
     public abstract com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 }

@@ -98,12 +98,12 @@ public class WorkspaceRepositoryTest {
         when(user1.getUserId()).thenReturn(user1Id);
 
         user1Vertex = graph.addVertex(user1Id, lumifyVisibility.getVisibility(), new InMemoryAuthorizations(UserRepository.VISIBILITY_STRING));
-        when(userRepository.findById(eq(user1Id))).thenReturn(user1Vertex);
+        when(userRepository.findById(eq(user1Id))).thenReturn(user1);
 
         String user2Id = "USER_testUser2";
         when(user2.getUserId()).thenReturn(user2Id);
         user2Vertex = graph.addVertex(user2Id, lumifyVisibility.getVisibility(), new InMemoryAuthorizations(UserRepository.VISIBILITY_STRING));
-        when(userRepository.findById(eq(user2Id))).thenReturn(user2Vertex);
+        when(userRepository.findById(eq(user2Id))).thenReturn(user2);
 
         Object entity1VertexId = "entity1Id";
         entity1Vertex = graph.addVertex(entity1VertexId, new LumifyVisibility().getVisibility(), new InMemoryAuthorizations());

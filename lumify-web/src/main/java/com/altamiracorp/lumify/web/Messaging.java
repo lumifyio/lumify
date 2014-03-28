@@ -170,7 +170,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
-            Vertex user = userRepository.setStatus(authUser.getUserId(), status);
+            com.altamiracorp.lumify.core.user.User user = userRepository.setStatus(authUser.getUserId(), status);
 
             JSONObject json = new JSONObject();
             json.put("type", "userStatusChange");

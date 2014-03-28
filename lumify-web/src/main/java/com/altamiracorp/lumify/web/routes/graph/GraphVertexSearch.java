@@ -3,14 +3,12 @@ package com.altamiracorp.lumify.web.routes.graph;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -48,7 +46,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final DetectedObjectRepository detectedObjectRepository;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
 
     @Inject
     public GraphVertexSearch(
@@ -56,13 +54,12 @@ public class GraphVertexSearch extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
-            final DetectedObjectRepository detectedObjectRepository,
-            final UserProvider userProvider) {
+            final DetectedObjectRepository detectedObjectRepository) {
         super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
         String workspaceId = getWorkspaceId(request);
 
         JSONArray filterJson = new JSONArray(filter);

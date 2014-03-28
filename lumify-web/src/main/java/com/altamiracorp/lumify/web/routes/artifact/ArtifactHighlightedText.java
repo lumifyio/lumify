@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -27,7 +26,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     private final Graph graph;
     private final TermMentionRepository termMentionRepository;
     private final EntityHighlighter entityHighlighter;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
 
     @Inject
     public ArtifactHighlightedText(
@@ -35,13 +34,12 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             final UserRepository userRepository,
             final TermMentionRepository termMentionRepository,
             final EntityHighlighter entityHighlighter,
-            final Configuration configuration,
-            final UserProvider userProvider) {
+            final Configuration configuration) {
         super(userRepository, configuration);
         this.graph = graph;
         this.termMentionRepository = termMentionRepository;
         this.entityHighlighter = entityHighlighter;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -49,7 +47,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getWorkspaceId(request);
-        ModelUserContext modelUserContext = this.userProvider.getModelUserContext(authorizations, workspaceId);
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         String graphVertexId = getAttributeString(request, "graphVertexId");
         Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);

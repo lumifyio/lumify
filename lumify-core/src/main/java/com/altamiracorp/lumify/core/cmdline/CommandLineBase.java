@@ -6,8 +6,8 @@ import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Authorizations;
@@ -25,7 +25,6 @@ public abstract class CommandLineBase {
     private Configuration configuration;
     private boolean willExit = false;
     protected boolean initFramework = true;
-    private UserProvider userProvider;
     private UserRepository userRepository;
     private Authorizations authorizations;
     private User user;
@@ -64,7 +63,7 @@ public abstract class CommandLineBase {
 
         if (initFramework) {
             InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(getConfiguration()));
-            FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userProvider.getSystemUser());
+            FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
         }
 
         int result = run(cmd);
@@ -147,7 +146,7 @@ public abstract class CommandLineBase {
 
     protected User getUser() {
         if (this.user == null) {
-            this.user = this.userProvider.getSystemUser();
+            this.user = userRepository.getSystemUser();
         }
         return this.user;
     }
@@ -169,11 +168,6 @@ public abstract class CommandLineBase {
     }
 
     @Inject
-    public void setUserProvider(UserProvider userProvider) {
-        this.userProvider = userProvider;
-    }
-
-    @Inject
     public void setCuratorFramework(CuratorFramework curatorFramework) {
         this.curatorFramework = curatorFramework;
     }
@@ -181,9 +175,5 @@ public abstract class CommandLineBase {
     @Inject
     public void setGraph(Graph graph) {
         this.graph = graph;
-    }
-
-    public UserProvider getUserProvider() {
-        return userProvider;
     }
 }

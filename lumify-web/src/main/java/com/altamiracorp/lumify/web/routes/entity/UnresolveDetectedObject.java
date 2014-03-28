@@ -10,7 +10,6 @@ import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -31,7 +30,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
     private final DetectedObjectRepository detectedObjectRepository;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -41,13 +40,12 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final DetectedObjectRepository detectedObjectRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final UserProvider userProvider,
             final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
@@ -58,7 +56,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
 
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);

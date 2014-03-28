@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.web;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
@@ -41,8 +40,6 @@ public class X509AuthenticationProviderTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserProvider userProvider;
-    @Mock
     private Vertex userVertex;
     @Mock
     private User user;
@@ -54,7 +51,7 @@ public class X509AuthenticationProviderTest {
 
     @Before
     public void setupTests() {
-        instance = new TestX509AuthenticationProvider(userRepository, userProvider);
+        instance = new TestX509AuthenticationProvider(userRepository);
 
         when(request.getSession()).thenReturn(httpSession);
     }
@@ -90,11 +87,8 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(userVertex);
+        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(user);
         when(userVertex.getId()).thenReturn("userId");
-//        when(userMetadata.getUserName()).thenReturn(TEST_USERNAME);
-//        when(userMetadata.getCurrentWorkspace()).thenReturn("workspaceName");
-        when(userProvider.createFromVertex(userVertex)).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
         verify(httpSession).setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);
@@ -120,8 +114,8 @@ public class X509AuthenticationProviderTest {
 
     private class TestX509AuthenticationProvider extends X509AuthenticationProvider {
 
-        public TestX509AuthenticationProvider(UserRepository userRepository, UserProvider userProvider) {
-            super(userRepository, userProvider);
+        public TestX509AuthenticationProvider(UserRepository userRepository) {
+            super(userRepository);
         }
 
         @Override

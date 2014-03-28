@@ -3,6 +3,8 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.user.SecureGraphUser;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.id.UUIDIdGenerator;
@@ -49,7 +51,7 @@ public class SecureGraphUserRepositoryTest {
     public void testAddUser() {
         secureGraphUserRepository.addUser("testUser", "testPassword", new String[]{"auth1", "auth2"});
 
-        Vertex userVertex = secureGraphUserRepository.findByUserName("testUser");
-        assertEquals("testUser", UserLumifyProperties.USERNAME.getPropertyValue(userVertex));
+        SecureGraphUser secureGraphUser = (SecureGraphUser)secureGraphUserRepository.findByUserName("testUser");
+        assertEquals("testUser", UserLumifyProperties.USERNAME.getPropertyValue(secureGraphUser.getUser()));
     }
 }

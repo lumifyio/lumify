@@ -11,7 +11,6 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -32,7 +31,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -42,13 +41,12 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final UserProvider userProvider,
             final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
@@ -75,7 +73,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         String workspaceId = getWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
 

@@ -28,9 +28,7 @@ import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
-import com.altamiracorp.lumify.core.user.DefaultUserProvider;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
@@ -111,7 +109,6 @@ public class LumifyBootstrap extends AbstractModule {
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
-        bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
 
         bind(CuratorFramework.class)
                 .toProvider(new CuratorFrameworkProvider(configuration))

@@ -2,10 +2,8 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
-import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class UsernameAndPasswordAuthenticationProvider extends AuthenticationProvider {
     private final UserRepository userRepository;
-    private UserProvider userProvider;
 
     @Inject
-    public UsernameAndPasswordAuthenticationProvider(final UserRepository userRepository, final UserProvider userProvider) {
+    public UsernameAndPasswordAuthenticationProvider(final UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userProvider = userProvider;
     }
 
     @Override
@@ -36,9 +32,9 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
         final String username = UrlUtils.urlDecode(request.getParameter("username"));
         final String password = UrlUtils.urlDecode(request.getParameter("password"));
 
-        Vertex user = userRepository.findByUserName(username);
+        User user = userRepository.findByUserName(username);
         if (user != null && userRepository.isPasswordValid(user, password)) {
-            setUser(request, this.userProvider.createFromVertex(user));
+            setUser(request, user);
             return true;
         } else {
             return false;

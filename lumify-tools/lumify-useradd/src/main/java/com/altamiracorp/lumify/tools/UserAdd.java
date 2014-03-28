@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.tools;
 
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -87,7 +88,7 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        Vertex user = this.userRepository.findByUserName(this.username);
+        User user = this.userRepository.findByUserName(this.username);
 
         if (cmd.hasOption("reset")) {
             if (user == null) {
@@ -95,14 +96,14 @@ public class UserAdd extends CommandLineBase {
                 return 4;
             }
             this.userRepository.setPassword(user, this.password);
-            System.out.println("User password reset: " + user.getId());
+            System.out.println("User password reset: " + user.getUserId());
         } else {
             if (user != null) {
                 System.err.println("username already exists");
                 return 3;
             }
             user = this.userRepository.addUser(this.username, this.password, this.authorizations);
-            System.out.println("User added: " + user.getId());
+            System.out.println("User added: " + user.getUserId());
         }
 
         return 0;

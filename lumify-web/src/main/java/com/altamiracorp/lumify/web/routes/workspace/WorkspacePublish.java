@@ -18,7 +18,6 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.JSONUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -42,7 +41,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final ModelSession modelSession;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
@@ -55,8 +54,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                             final Configuration configuration,
                             final Graph graph,
                             final ModelSession modelSession,
-                            final VisibilityTranslator visibilityTranslator,
-                            final UserProvider userProvider) {
+                            final VisibilityTranslator visibilityTranslator) {
         super(userRepository, configuration);
         this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
@@ -64,7 +62,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.modelSession = modelSession;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -237,7 +235,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
-        ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
 
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
@@ -246,7 +244,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Property rowKeyProperty : vertex.getProperties("_rowKey")) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
             if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
@@ -331,7 +329,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
-        ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }

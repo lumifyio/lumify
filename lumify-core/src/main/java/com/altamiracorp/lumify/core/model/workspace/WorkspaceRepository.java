@@ -94,13 +94,13 @@ public class WorkspaceRepository {
     }
 
     public Workspace add(String title, User user) {
-        Vertex userVertex = this.userRepository.findById(user.getUserId());
-        checkNotNull(userVertex, "Could not find user: " + user.getUserId());
-
         String workspaceId = WORKSPACE_ID_PREFIX + graph.getIdGenerator().nextId();
         authorizationRepository.addAuthorizationToGraph(workspaceId);
 
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspaceId);
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        checkNotNull(userVertex, "Could not find user: " + user.getUserId());
+
         VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, VISIBILITY.getVisibility(), authorizations);
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, VISIBILITY.getVisibility());
@@ -254,7 +254,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
-        Vertex userVertex = userRepository.findById(userId);
+        Vertex userVertex = graph.getVertex(userId, authorizations);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
@@ -291,7 +291,7 @@ public class WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        Vertex userVertex = userRepository.findById(userId);
+        Vertex userVertex = graph.getVertex(userId, authorizations);
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
