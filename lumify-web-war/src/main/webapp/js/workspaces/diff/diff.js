@@ -243,7 +243,7 @@ define([
 
         this.onRowClick = function(event) {
             var $target = $(event.target).not('button').closest('tr'),
-                vertexRow = $target.is('.vertex-row') ? $target : $target.prev('.vertex-row'),
+                vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
                 vertexId = vertexRow.data('vertexId'),
                 vertex = vertexId && appData.vertex(vertexId),
                 alreadySelected = vertexRow.is('.active');
