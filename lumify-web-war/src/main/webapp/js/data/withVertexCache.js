@@ -140,14 +140,16 @@ define([
 
 
         function setPreviewsForVertex(vertex, currentWorkspace) {
-            var workspaceParameter = '?workspaceId=' + encodeURIComponent(currentWorkspace),
-                vId = encodeURIComponent(vertex.id),
-                artifactUrl = _.template("/artifact/" + vId + "/{ type }" + workspaceParameter);
+            var params = {
+                    workspaceId: currentWorkspace,
+                    graphVertexId: vertex.id
+                },
+                artifactUrl = _.template("/artifact/{ type }?" + $.param(params));
 
             vertex.imageSrcIsFromConcept = false;
 
             if (vertex.properties._glyphIcon) {
-                vertex.imageSrc = vertex.properties._glyphIcon.value + workspaceParameter;
+                vertex.imageSrc = vertex.properties._glyphIcon.value + '?' + $.param({workspaceId:currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 

@@ -533,10 +533,12 @@ define([
                 if (ontologyProperty.dataType == 'date') {
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
+                    var descKey = 'http://lumify.io#geoLocationDescription';
+
                     value = properties[name];
-                    value['http://lumify.io#geoLocationDescription'] = properties['http://lumify.io#geoLocationDescription'];
-                    if (value && value['http://lumify.io#geoLocationDescription'] && value['http://lumify.io#geoLocationDescription'].value) {
-                        stringValue = value['http://lumify.io#geoLocationDescription'].value;
+                    value[descKey] = properties[descKey];
+                    if (value && value[descKey] && value[descKey].value) {
+                        stringValue = value[descKey].value;
                     }
                     if (!stringValue) {
                         stringValue = formatters.geoLocation.pretty(value && value.value)
@@ -557,7 +559,14 @@ define([
                     // Title is displayed above property list
                     name !== 'title') {
 
-                    addProperty(properties[name], name, displayName, value, stringValue, properties[name]._visibilityJson);
+                    addProperty(
+                        properties[name],
+                        name,
+                        displayName,
+                        value,
+                        stringValue,
+                        properties[name]._visibilityJson
+                    );
                 }
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;

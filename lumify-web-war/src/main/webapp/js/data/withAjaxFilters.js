@@ -9,8 +9,8 @@ define([], function() {
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
             /^user/,
             /^configuration$/,
-            /^workspace$/,
-            /^workspace\/$/,
+            /^workspaces?$/,
+            /^workspace\?/,
             /^workspace\/diff/,
             /^workspace\/relationships/,
             /^workspace\/update/,
@@ -129,7 +129,7 @@ define([], function() {
                                 return result === true;
                             });
 
-                        if (!converterFound) {
+                        if (!converterFound && _.keys(json).length) {
                             var keypathFound = false;
 
                             VERTICES_RESPONSE_KEYPATHS.forEach(function(paths) {
@@ -151,6 +151,8 @@ define([], function() {
                                         updated.push( $.extend(true, v, self.updateCacheWithVertex(v)) );
                                     });
                                 } else if (!keypathFound) {
+                                    keypathFound = true;
+
                                     // Might be an error if we didn't match and
                                     // getting vertices without updating cache
                                     // and applying patches

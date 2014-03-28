@@ -1,14 +1,15 @@
 
 define([
     'pathfinding',
-    'util/retina'
-], function(PF, retina) {
+    'util/retina',
+    'util/formatters'
+], function(PF, retina, formatters) {
 
     var DEBUG_SHOW_GRID = false;
 
     return doLayout;
 
-    function doLayout(cy, currentNodes, boundingBox, vertexIds, cyIdMap, layoutOptions) {
+    function doLayout(cy, currentNodes, boundingBox, vertexIds, layoutOptions) {
 
 
         var layoutPositions = {},
@@ -66,7 +67,7 @@ define([
                     maxY = Math.floor((position.y - start.y + nodeSize.y / 2 + (nodeBoundingBox.h - nodeSize.y)) / cell.y),
                     x = Math.floor((position.x - start.x) / cell.x),
                     y = Math.floor((position.y - start.y) / cell.y),
-                    nodeId = cyIdMap[this.id()];
+                    nodeId = formatters.className.from(this.id());
 
                 previouslyPlacedMap[nodeId] = {x:x,y:y};
 
