@@ -37,6 +37,20 @@ define([], function() {
                 }
             },
 
+            function findPath(json, updated) {
+                var self = this;
+
+                if (json.paths) {
+                    json.paths.forEach(function(path) {
+                        path.forEach(function(vertex) {
+                            var cache = self.updateCacheWithVertex(vertex);
+                            $.extend(true, vertex, cache);
+                            updated.push(cache);
+                        });
+                    });
+                }
+            },
+
             function vertexProperties(json, updated) {
                 var cache;
                 if (json.vertex && json.vertex.id && json.properties) {
