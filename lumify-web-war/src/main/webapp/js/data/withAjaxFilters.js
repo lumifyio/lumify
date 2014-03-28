@@ -5,6 +5,14 @@ define([], function() {
         
     var // keypaths to vertices objects in ajax responses
         VERTICES_RESPONSE_KEYPATHS = ['vertices', 'data.vertices'],
+        
+        IGNORE_NO_CONVERTER_FOUND_REGEXS = [
+            /^user/,
+            /^workspace$/,
+            /^workspace\/[^\/]+$/,
+            /^workspace\/[^\/]+\/diff/,
+            /^workspace\/[^\/]+\/relationships/,
+        ],
 
         // Custom converters for routes that are more complicated than above,
         // call updateCacheWithVertex and append to updated, return
@@ -135,7 +143,13 @@ define([], function() {
                                     // Might be an error if we didn't match and
                                     // getting vertices without updating cache
                                     // and applying patches
-                                    console.warn('No converter applied for url:', options.url);
+                                    if (
+                                        !_.some(IGNORE_NO_CONVERTER_FOUND_REGEXS, function(regex) {
+                                            return regex.test(options.url);
+                                        })
+                                    ) {
+                                        console.warn('No converter applied for url:', options.url);
+                                    }
                                 }
                             });
                         }
