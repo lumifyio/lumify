@@ -162,6 +162,9 @@ define([
                         switch(diff.type) {
                             case 'VertexDiffItem': 
                                 diff.id = outputItem.id = vertexId;
+                                if (outputItem.vertex) {
+                                    outputItem.title = outputItem.vertex.properties.title.value;
+                                }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
                                 self.diffsById[vertexId] = diff;
