@@ -161,7 +161,7 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getWorkspaceIdOrDefault(final HttpServletRequest request) {
-        String workspaceId = getAttributeString(request, "workspaceId");
+        String workspaceId = (String) request.getAttribute("workspaceId");
         if (workspaceId == null || workspaceId.trim().length() == 0) {
             workspaceId = request.getHeader(LUMIFY_WORKSPACE_ID_HEADER_NAME);
             if (workspaceId == null || workspaceId.trim().length() == 0) {
