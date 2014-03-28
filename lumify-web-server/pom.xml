@@ -25,5 +25,6 @@
     <modules>
         <module>lumify-jetty-server</module>
         <module>lumify-tomcat-server</module>
+        <module>lumify-web-server-base</module>
     </modules>
 </project>
