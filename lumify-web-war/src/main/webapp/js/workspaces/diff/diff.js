@@ -82,10 +82,10 @@ define([
                     var scroll = self.$node.find('.diffs-list'),
                         previousScroll = scroll.scrollTop(),
                         previousPublished = self.$node.find('.mark-publish').map(function() {
-                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                            return '.' + formatters.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousUndo = self.$node.find('.mark-undo').map(function() {
-                            return '.' + self.classNameForVertex($(this).data('diffId'));
+                            return '.' + formatters.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousSelection  = _.compact(self.$node.find('.active').map(function() {
                             return $(this).data('diffId');
@@ -154,7 +154,7 @@ define([
                             properties: [],
                             edges: [],
                             action: {},
-                            className: self.classNameForVertex(vertexId),
+                            className: formatters.className.to(vertexId),
                             vertex: appData.vertex(vertexId)
                         };
 
@@ -177,7 +177,7 @@ define([
                                 if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
                                     outputItem.title = diff['new'].value;
                                 } else {
-                                    diff.className = self.classNameForVertex(diff.id);
+                                    diff.className = formatters.className.to(diff.id);
                                     outputItem.properties.push(diff)
                                 }
                                 self.diffsById[diff.id] = diff;
@@ -186,7 +186,7 @@ define([
                             case 'EdgeDiffItem':
                                 diff.id = diff.edgeId;
                                 diff.inVertex = appData.vertex(diff.inVertexId);
-                                diff.className = self.classNameForVertex(diff.edgeId);
+                                diff.className = formatters.className.to(diff.edgeId);
                                 diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                 addDiffDependency(diff.inVertexId, diff);
                                 addDiffDependency(diff.outVertexId, diff);
@@ -225,24 +225,6 @@ define([
             }
         }
 
-        var classNameIndex = 0, 
-            vertexIdMap = {}, clsIdMap = {};
-        this.classNameForVertex = function(vertexId) {
-            if (clsIdMap[vertexId]) {
-                return clsIdMap[vertexId];
-            }
-
-            var clsName = 'vId-' + classNameIndex++;
-
-            vertexIdMap[clsName] = vertexId;
-            clsIdMap[vertexId] = clsName;
-
-            return clsName;
-        };
-        this.vertexIdForClassName = function(clsName) {
-            return vertexIdMap[clsName];
-        };
-
         this.onObjectsSelected = function(event, data) {
             var self = this,
                 toSelect = data && data.vertices.concat(data.edges || []) || [];
@@ -254,7 +236,7 @@ define([
         this.selectVertices = function(vertices) {
             var self = this,
                 cls = vertices.map(function(vertex) {
-                    return '.' + self.classNameForVertex(_.isString(vertex) ? vertex : vertex.id);
+                    return '.' + formatters.className.to(_.isString(vertex) ? vertex : vertex.id);
                 });
             this.$node.find(cls.join(',')).addClass('active')
         };
@@ -389,7 +371,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
+            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-undo')
@@ -434,7 +416,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + clsIdMap[diff.id]).each(function() {
+            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-publish')

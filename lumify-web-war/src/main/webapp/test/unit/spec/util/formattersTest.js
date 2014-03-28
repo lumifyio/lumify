@@ -125,5 +125,19 @@ define(['util/formatters'], function(f) {
                 })
             }
         })
+
+        describe('className', function() {
+
+            it('should be able to transform to and from className', function() {
+                var str = 's$#!!3456';
+
+                f.className.to(str).should.equal('id0')
+                f.className.from('id0').should.equal(str)
+
+                f.className.to(str + '2').should.equal('id1')
+                f.className.from('id1').should.equal(str + '2')
+            })
+
+        })
     });
 });
