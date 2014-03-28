@@ -131,6 +131,11 @@ define([], function() {
                                     val.forEach(function(v) {
                                         updated.push( $.extend(true, v, self.updateCacheWithVertex(v)) );
                                     });
+                                } else {
+                                    // Might be an error if we didn't match and
+                                    // getting vertices without updating cache
+                                    // and applying patches
+                                    console.warn('No converter applied for url:', options.url);
                                 }
                             });
                         }
