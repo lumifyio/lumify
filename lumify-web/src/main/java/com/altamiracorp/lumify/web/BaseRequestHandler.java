@@ -145,7 +145,11 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected String getAttributeString(final HttpServletRequest request, final String name) {
-        return (String) request.getAttribute(name);
+        String attr = (String) request.getAttribute(name);
+        if (attr != null) {
+            return attr;
+        }
+        return getRequiredParameter(request, name);
     }
 
     protected String getWorkspaceId(final HttpServletRequest request) {

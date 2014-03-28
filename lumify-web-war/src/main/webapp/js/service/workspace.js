@@ -22,13 +22,19 @@ function(ServiceBase) {
 
     WorkspaceService.prototype.getByRowKey = function (workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(workspaceId)
+            url: 'workspace',
+            data: {
+                workspaceId: workspaceId
+            }
         });
     };
 
     WorkspaceService.prototype.getVertices = function (workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(workspaceId) + '/vertices',
+            url: 'workspace/vertices',
+            data: {
+                workspaceId: workspaceId
+            }
         });
     };
 
@@ -37,9 +43,10 @@ function(ServiceBase) {
         if (additionalIds && additionalIds.length) {
             data.ids = additionalIds;
         }
+        data.workspaceId = workspaceId;
 
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(workspaceId) + '/relationships',
+            url: 'workspace/relationships',
             data: data
         });
     };
@@ -55,7 +62,10 @@ function(ServiceBase) {
 
     WorkspaceService.prototype.diff = function(workspaceId) {
         return this._ajaxGet({
-            url: 'workspace/' + encodeURIComponent(workspaceId) + '/diff'
+            url: 'workspace/diff',
+            data: {
+                workspaceId: workspaceId
+            }
         })
     };
 
@@ -79,8 +89,9 @@ function(ServiceBase) {
 
     WorkspaceService.prototype.save = function (workspaceId, changes) {
         var options = {
-            url: 'workspace/' + encodeURIComponent(workspaceId) + '/update',
+            url: 'workspace/update',
             data: {
+                workspaceId: workspaceId,
                 data: {
                     entityUpdates: [],
                     entityDeletes: [],
@@ -102,7 +113,10 @@ function(ServiceBase) {
 
     WorkspaceService.prototype.copy = function (workspaceId) {
         var options = {
-            url: 'workspace/' + workspaceId + '/copy'
+            url: 'workspace/copy',
+            data: {
+                workspaceId: workspaceId
+            }
         }
 
         return this._ajaxPost(options);
@@ -110,7 +124,10 @@ function(ServiceBase) {
 
     WorkspaceService.prototype['delete'] = function(workspaceId) {
         return this._ajaxDelete({
-            url: 'workspace/' + encodeURIComponent(workspaceId)
+            url: 'workspace',
+            data: {
+                workspaceId: workspaceId
+            }
         });
     };
 

@@ -31,8 +31,9 @@ define(
 
         RelationshipService.prototype.setVisibility = function (edgeId, visibilitySource) {
             return this._ajaxPost({
-                url: 'relationship/' + encodeURIComponent(edgeId) + '/visibility/set',
+                url: 'relationship/visibility/set',
                 data: {
+                    graphEdgeId: edgeId,
                     visibilitySource: visibilitySource
                 }
             });
@@ -59,8 +60,9 @@ define(
 
         RelationshipService.prototype.getRelationshipDetails = function (id) {
             return this._ajaxGet({
-                url: 'relationship/' + encodeURIComponent(id) + '/properties',
+                url: 'relationship/properties',
                 data: {
+                    graphEdgeId: id
                 }
             });
         };
