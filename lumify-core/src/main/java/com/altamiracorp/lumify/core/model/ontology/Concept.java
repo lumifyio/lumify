@@ -77,7 +77,7 @@ public class Concept {
                 result.put("pluralDisplayName", English.plural(getDisplayName()));
             }
             if (hasGlyphIconResource()) {
-                result.put("glyphIconHref", "resource/" + URLEncoder.encode(getId(), "utf8"));
+                result.put("glyphIconHref", "resource?id=" + URLEncoder.encode(getId(), "utf8"));
             }
             if (getColor() != null) {
                 result.put("color", getColor());
