@@ -141,7 +141,7 @@
         var rowKey = $(evt.target).parent().data('rowkey');
         var confirmed = confirm("Are you sure you want to delete the entry: " + tokens + "?");
         if (confirmed) {
-            $(evt.target).replaceWith('<img src="/img/loading.gif"/>');
+            $(evt.target).replaceWith('<img src="img/loading.gif"/>');
             $.ajax({
                 type: 'DELETE',
                 url: '/admin/dictionary/' + rowKey,
