@@ -14,7 +14,10 @@ define(
 
         AuditService.prototype.getAudits = function (vertexId) {
             return this._ajaxGet({
-                url: 'audit/' + vertexId
+                url: 'audit',
+                data: {
+                    graphVertexId: vertexId
+                }
             });
         };
 

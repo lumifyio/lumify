@@ -59,20 +59,20 @@ public class Router extends HttpServlet {
             app.post("/logout", Logout.class);
 
             app.get("/configuration", authenticator, Configuration.class);
-            app.get("/js/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
-            app.get("/jsc/configuration/plugins/{pluginName}/*", authenticator, Plugin.class);
+            app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
+            app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
 
             app.get("/ontology", authenticator, Ontology.class);
 
-            app.get("/audit/{graphVertexId}", authenticator, VertexAudit.class);
+            app.get("/audit", authenticator, VertexAudit.class);
 
-            app.get("/resource/{id}", authenticator, ResourceGet.class);
+            app.get("/resource", authenticator, ResourceGet.class);
 
-            app.get("/artifact/{graphVertexId}/highlightedText", authenticator, ArtifactHighlightedText.class);
-            app.get("/artifact/{graphVertexId}/raw", authenticator, ArtifactRaw.class);
-            app.get("/artifact/{graphVertexId}/thumbnail", authenticator, ArtifactThumbnail.class);
-            app.get("/artifact/{graphVertexId}/poster-frame", authenticator, ArtifactPosterFrame.class);
-            app.get("/artifact/{graphVertexId}/video-preview", authenticator, ArtifactVideoPreviewImage.class);
+            app.get("/artifact/highlightedText", authenticator, ArtifactHighlightedText.class);
+            app.get("/artifact/raw", authenticator, ArtifactRaw.class);
+            app.get("/artifact/thumbnail", authenticator, ArtifactThumbnail.class);
+            app.get("/artifact/poster-frame", authenticator, ArtifactPosterFrame.class);
+            app.get("/artifact/video-preview", authenticator, ArtifactVideoPreviewImage.class);
             app.post("/artifact/import", authenticator, ArtifactImport.class);
 
             app.post("/entity/resolveTerm", authenticator, ResolveTermEntity.class);
@@ -80,37 +80,37 @@ public class Router extends HttpServlet {
             app.post("/entity/resolveDetectedObject", authenticator, ResolveDetectedObject.class);
             app.post("/entity/unresolveDetectedObject", authenticator, UnresolveDetectedObject.class);
 
-            app.post("/vertex/{graphVertexId}/property/set", authenticator, VertexSetProperty.class);
-            app.post("/vertex/{graphVertexId}/property/delete", authenticator, VertexDeleteProperty.class);
-            app.get("/vertex/{graphVertexId}/property/{propertyName}/{propertyKey}/termMentions", authenticator, VertexGetPropertyTermMentions.class);
-            app.get("/vertex/{graphVertexId}/property/{propertyName}/{propertyKey}", authenticator, VertexGetPropertyValue.class);
-            app.post("/vertex/{graphVertexId}/visibility/set", authenticator, VertexSetVisibility.class);
-            app.get("/vertex/{graphVertexId}/properties", authenticator, VertexProperties.class);
-            app.get("/vertex/{graphVertexId}/relationships", authenticator, VertexRelationships.class);
+            app.post("/vertex/property/set", authenticator, VertexSetProperty.class);
+            app.post("/vertex/property/delete", authenticator, VertexDeleteProperty.class);
+            app.get("/vertex/property/termMentions", authenticator, VertexGetPropertyTermMentions.class);
+            app.get("/vertex/property", authenticator, VertexGetPropertyValue.class);
+            app.post("/vertex/visibility/set", authenticator, VertexSetVisibility.class);
+            app.get("/vertex/properties", authenticator, VertexProperties.class);
+            app.get("/vertex/relationships", authenticator, VertexRelationships.class);
             app.post("/vertex/removeRelationship", authenticator, VertexRelationshipRemoval.class);
             app.post("/vertex/multiple", authenticator, VertexMultiple.class);
 
             app.post("/relationship/property/set", authenticator, SetRelationshipProperty.class);
             app.post("/relationship/property/delete", authenticator, DeleteRelationshipProperty.class);
             app.post("/relationship/create", authenticator, RelationshipCreate.class);
-            app.get("/relationship/{graphEdgeId}/properties", authenticator, RelationshipProperties.class);
-            app.post("/relationship/{graphEdgeId}/visibility/set", authenticator, RelationshipSetVisibility.class);
+            app.get("/relationship/properties", authenticator, RelationshipProperties.class);
+            app.post("/relationship/visibility/set", authenticator, RelationshipSetVisibility.class);
 
             app.get("/graph/findPath", authenticator, GraphFindPath.class);
-            app.get("/graph/{graphVertexId}/relatedVertices", authenticator, GraphRelatedVertices.class);
+            app.get("/graph/relatedVertices", authenticator, GraphRelatedVertices.class);
             app.get("/graph/vertex/search", authenticator, GraphVertexSearch.class);
             app.get("/graph/vertex/geoLocationSearch", authenticator, GraphGeoLocationSearch.class);
-            app.post("/graph/vertex/{graphVertexId}/uploadImage", authenticator, GraphVertexUploadImage.class);
+            app.post("/graph/vertex/uploadImage", authenticator, GraphVertexUploadImage.class);
 
-            app.get("/workspace", authenticator, WorkspaceList.class);
+            app.get("/workspaces", authenticator, WorkspaceList.class);
             app.post("/workspace/new", authenticator, WorkspaceNew.class);
-            app.get("/workspace/{workspaceId}/diff", authenticator, WorkspaceDiff.class);
-            app.get("/workspace/{workspaceId}/relationships", authenticator, WorkspaceRelationships.class);
-            app.post("/workspace/{workspaceId}/relationships", authenticator, WorkspaceRelationships.class);
-            app.get("/workspace/{workspaceId}/vertices", authenticator, WorkspaceVertices.class);
-            app.post("/workspace/{workspaceId}/update", authenticator, WorkspaceUpdate.class);
-            app.get("/workspace/{workspaceId}", authenticator, WorkspaceById.class);
-            app.delete("/workspace/{workspaceId}", authenticator, WorkspaceDelete.class);
+            app.get("/workspace/diff", authenticator, WorkspaceDiff.class);
+            app.get("/workspace/relationships", authenticator, WorkspaceRelationships.class);
+            app.post("/workspace/relationships", authenticator, WorkspaceRelationships.class);
+            app.get("/workspace/vertices", authenticator, WorkspaceVertices.class);
+            app.post("/workspace/update", authenticator, WorkspaceUpdate.class);
+            app.get("/workspace", authenticator, WorkspaceById.class);
+            app.delete("/workspace", authenticator, WorkspaceDelete.class);
             app.post("/workspace/publish", authenticator, WorkspacePublish.class);
             app.post("/workspace/undo", authenticator, WorkspaceUndo.class);
 
@@ -121,14 +121,14 @@ public class Router extends HttpServlet {
             app.get("/user", authenticator, UserList.class);
 
             app.get("/map/map-init.js", MapInitHandler.class);
-            app.get("/map/marker/{type}/image", MapMarkerImage.class);
+            app.get("/map/marker/image", MapMarkerImage.class);
             app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
             app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
             app.get("/admin/dictionary", authenticator, AdminDictionary.class);
-            app.get("/admin/dictionary/{concept}", authenticator, AdminDictionaryByConcept.class);
+            app.get("/admin/dictionary", authenticator, AdminDictionaryByConcept.class);
             app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
-            app.delete("/admin/dictionary/{entryRowKey}", authenticator, AdminDictionaryEntryDelete.class);
+            app.delete("/admin/dictionary", authenticator, AdminDictionaryEntryDelete.class);
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));
         } catch (Exception ex) {

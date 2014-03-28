@@ -27,7 +27,7 @@ define(
         ConfigService.prototype.getProperties = function (refresh) {
             if (!refresh && this.cachedProperties) return this.cachedProperties;
 
-            return (this.cachedProperties = $.get('/configuration').then(this.applyDefaults));
+            return (this.cachedProperties = $.get('configuration').then(this.applyDefaults));
         };
 
         ConfigService.prototype.applyDefaults = function(properties) {

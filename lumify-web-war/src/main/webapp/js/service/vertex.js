@@ -14,8 +14,9 @@ define(
 
         VertexService.prototype.setProperty = function (vertexId, propertyName, value, visibilitySource, justificationText, sourceInfo) {
             return this._ajaxPost({
-                url: 'vertex/' + encodeURIComponent(vertexId) + '/property/set',
+                url: 'vertex/property/set',
                 data: {
+                    graphVertexId: vertexId,
                     propertyName: propertyName,
                     value: value,
                     visibilitySource: visibilitySource,
@@ -27,8 +28,9 @@ define(
 
         VertexService.prototype.setVisibility = function (vertexId, visibilitySource) {
             return this._ajaxPost({
-                url: 'vertex/' + encodeURIComponent(vertexId) + '/visibility/set',
+                url: 'vertex/visibility/set',
                 data: {
+                    graphVertexId: vertexId,
                     visibilitySource: visibilitySource
                 }
             });
@@ -36,8 +38,9 @@ define(
 
         VertexService.prototype.deleteProperty = function (vertexId, propertyName) {
             return this._ajaxPost({
-                url: 'vertex/' + encodeURIComponent(vertexId) + '/property/delete',
+                url: 'vertex/property/delete',
                 data: {
+                    graphVertexId: vertexId,
                     propertyName: propertyName
                 }
             });
@@ -113,29 +116,40 @@ define(
         VertexService.prototype.getArtifactHighlightedTextById = function (graphVertexId) {
             return this._ajaxGet({
                 dataType: 'html',
-                url: "artifact/" + encodeURIComponent(graphVertexId) + "/highlightedText"
+                url: "artifact/highlightedText",
+                data: {
+                    graphVertexId: graphVertexId
+                }
             });
         };
 
 
         VertexService.prototype.getRelatedVertices = function (data) {
             return this._ajaxGet({
-                url: 'graph/' + encodeURIComponent(data.graphVertexId) + '/relatedVertices',
+                url: 'graph/relatedVertices',
                 data: {
+                    graphVertexId: data.graphVertexId,
                     limitParentConceptId: data.limitParentConceptId
                 }
             });
         };
 
         VertexService.prototype.getVertexRelationships = function (graphVertexId, paging) {
+            var data = paging || {};
+            data.graphVertexId = graphVertexId;
             return this._ajaxGet({
-                url: 'vertex/' + encodeURIComponent(graphVertexId) + '/relationships',
-                data: paging || {}
+                url: 'vertex/relationships',
+                data: data
             });
         };
 
         VertexService.prototype.getVertexProperties = function (graphVertexId) {
-            return this._ajaxGet({ url: 'vertex/' + encodeURIComponent(graphVertexId) + '/properties'});
+            return this._ajaxGet({
+                url: 'vertex/properties',
+                data: {
+                    graphVertexId: graphVertexId
+                }
+            });
         };
 
         VertexService.prototype._search = function (resource, query) {
@@ -157,9 +171,12 @@ define(
             }
 
             //maybe it's an object for future options stuff?
-            var i = encodeURIComponent(typeof id == "object" ? id.id : id);
+            var graphVertexId = (typeof id == "object" ? id.id : id);
             return this._ajaxGet({
-                url: resource + "/" + i
+                url: resource,
+                data: {
+                    graphVertexId: graphVertexId
+                }
             });
         };
 
