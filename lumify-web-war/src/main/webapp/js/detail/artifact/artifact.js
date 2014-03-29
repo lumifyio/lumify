@@ -151,8 +151,8 @@ define([
                 properties = vertex && vertex.properties;
 
             if (properties) {
-                this.videoTranscript = ('_videoTranscript' in properties) ? properties._videoTranscript.value : {};
-                this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
+                this.videoTranscript = ('http://lumify.io#videoTranscript' in properties) ? properties['http://lumify.io#videoTranscript'].value : {};
+                this.videoDuration = ('http://lumify.io#videoDuration' in properties) ? properties['http://lumify.io#videoDuration'].value : 0;
             }
 
             this.$node.html(template({
