@@ -198,15 +198,24 @@ define([
             workspaceService.diff(appData.workspaceId)
                 .fail(function() {
                     badge.removePrefixedClasses('badge-').addClass('badge-important')
+                        .popover('destroy')
                         .attr('title', 'An error occured')
                         .text('!');
                 })
-                .done(function(diff) {
-                    var vertexDiffsById = _.indexBy(diff.diffs, function(diff) {
+                .done(function(response) {
+                    var diffs = response.diffs;
+
+                    // Check if same
+                    if (self.previousDiff && _.isEqual(diffs, self.previousDiff)) {
+                        return;
+                    }
+                    self.previousDiff = _.map(diffs, _.clone);
+
+                    var vertexDiffsById = _.indexBy(diffs, function(diff) {
                             return diff.vertexId;    
                         }),
                         countOfTitleChanges = 0,
-                        filteredDiffs = _.filter(diff.diffs, function(diff) {
+                        filteredDiffs = _.filter(diffs, function(diff) {
                             if (diff.type !== 'PropertyDiffItem') return true;
                             if (/^[_]/.test(diff.name)) return false;
                             if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
@@ -273,12 +282,52 @@ define([
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
                         .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
-                    if (formattedCount && formattedCount != previousCount) {
+
+                    if (count > 0) {
+                        window._animate = function() {
+                            var previousWidth = badge.width();
+                            badge.css({
+                                width: previousWidth + 'px',
+                                backgroundColor: '#3a87ad',
+                                transition: 'all cubic-bezier(.29,.79,0,1.48) 0.5s',
+                                overflow: 'hidden',
+                                position: 'relative',
+                                top: '4px'
+                            }).html(formattedCount + ' <span>unpublished</span>');
+
+                            badge.css({
+                                backgroundColor: '#0088cc',
+                                width: (badge[0].scrollWidth - 
+                                        (parseInt(badge.css('paddingLeft'),10) + parseInt(badge.css('paddingRight'),10))) + 'px'
+                            }).find('span').css({
+                                transition: 'opacity ease-out 0.5s',
+                            })
+
+                            _.delay(badgeReset = function() {
+                                badge.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                                    if (e.originalEvent.propertyName === 'width') {
+                                        badge.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                                        badge.text(formattedCount);
+                                    }
+                                }).css({
+                                    transition: 'all cubic-bezier(.92,-0.42,.37,1.31) 0.5s',
+                                    backgroundColor: '#3a87ad',
+                                    width: previousWidth + 'px'
+                                }).find('span').css('opacity',0);
+                            }, 3000)
+                        };
+
+                        window._animate();
+
+
+                        //$0.scrollWidth 
+
+                        /*
                         badge.removeClass('flash');
                         requestAnimationFrame(function() {
                             badge.addClass('flash');
                         })
-                    }
+                        */
                     if (count === 0) {
                         badge.popover('destroy');
                     }
