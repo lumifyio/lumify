@@ -11,6 +11,7 @@ define([
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
     var MENUBAR_WIDTH = 30;
     var UPDATE_WORKSPACE_DIFF_SECONDS = 3;
+    var SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
 
     return defineComponent(WorkspaceOverlay);
 
@@ -284,40 +285,7 @@ define([
                         .text(count > 0 ? formattedCount : '');
 
                     if (count > 0) {
-                        window._animate = function() {
-                            var previousWidth = badge.width();
-                            badge.css({
-                                width: previousWidth + 'px',
-                                backgroundColor: '#3a87ad',
-                                transition: 'all cubic-bezier(.29,.79,0,1.48) 0.5s',
-                                overflow: 'hidden',
-                                position: 'relative',
-                                top: '4px'
-                            }).html(formattedCount + ' <span>unpublished</span>');
-
-                            badge.css({
-                                backgroundColor: '#0088cc',
-                                width: (badge[0].scrollWidth - 
-                                        (parseInt(badge.css('paddingLeft'),10) + parseInt(badge.css('paddingRight'),10))) + 'px'
-                            }).find('span').css({
-                                transition: 'opacity ease-out 0.5s',
-                            })
-
-                            _.delay(badgeReset = function() {
-                                badge.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
-                                    if (e.originalEvent.propertyName === 'width') {
-                                        badge.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
-                                        badge.text(formattedCount);
-                                    }
-                                }).css({
-                                    transition: 'all cubic-bezier(.92,-0.42,.37,1.31) 0.5s',
-                                    backgroundColor: '#3a87ad',
-                                    width: previousWidth + 'px'
-                                }).find('span').css('opacity',0);
-                            }, 3000)
-                        };
-
-                        window._animate();
+                        self.animateBadge(badge, formattedCount);
 
 
                         //$0.scrollWidth 
@@ -328,10 +296,64 @@ define([
                             badge.addClass('flash');
                         })
                         */
-                    if (count === 0) {
+                    } else if (count === 0) {
                         badge.popover('destroy');
                     }
                 })
+        };
+
+        var badgeReset, animateTimer;
+        this.animateBadge = function(badge, formattedCount) {
+            badge.text(formattedCount).css('width', 'auto');
+
+            var previousWidth = badge.width(),
+                html = formattedCount + ' <span>unpublished</span>',
+                findWidth = function() {
+                    return (
+                        badge[0].scrollWidth - (
+                        parseInt(badge.css('paddingLeft'),10) + parseInt(badge.css('paddingRight'),10)
+                        )
+                    ) + 'px';
+                };
+
+            if (animateTimer) {
+                clearTimeout(animateTimer);
+                animateTimer = _.delay(
+                    badgeReset.bind(null, previousWidth), 
+                    SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000
+                );
+                return badge.html(html).css({ width: findWidth() })
+            }
+
+            badge.css({
+                width: previousWidth + 'px',
+                backgroundColor: '#3a87ad',
+                transition: 'all cubic-bezier(.29,.79,0,1.48) 0.5s',
+                overflow: 'hidden',
+                position: 'relative',
+                top: '4px'
+            }).html(html);
+
+            badge.css({
+                backgroundColor: '#0088cc',
+                width: findWidth()
+            }).find('span').css({
+                transition: 'opacity ease-out 0.5s',
+            })
+
+            animateTimer = _.delay((badgeReset = function(previousWidth) {
+                animateTimer = null;
+                badge.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                    if (e.originalEvent.propertyName === 'width') {
+                        badge.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                        badge.text(formattedCount).css('width', 'auto');
+                    }
+                }).css({
+                    transition: 'all cubic-bezier(.92,-0.42,.37,1.31) 0.5s',
+                    backgroundColor: '#3a87ad',
+                    width: previousWidth + 'px'
+                }).find('span').css('opacity',0);
+            }).bind(null, previousWidth), SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000);
         };
 
         this.updateUserTooltip = function(data) {
