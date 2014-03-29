@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.ingest.video;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.util.ProcessRunner;
 import com.altamiracorp.securegraph.Property;
@@ -14,6 +15,8 @@ import com.google.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
 
@@ -64,13 +67,10 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             try {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
                 spv.searchIndex(false);
-                getVideoProperty(VIDEO_TYPE_MP4).addPropertyValue(m, PROPERTY_KEY, spv, data.getProperty().getVisibility());
-                getVideoSizeProperty(VIDEO_TYPE_MP4).addPropertyValue(m, PROPERTY_KEY, mp4ReloactedFile.length(), data.getProperty().getVisibility());
-
+                Map<String, Object> metadata = new HashMap<String, Object>();
+                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
+                VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
-                getGraph().flush();
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getVideoProperty(VIDEO_TYPE_MP4).getKey());
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getVideoSizeProperty(VIDEO_TYPE_MP4).getKey());
             } finally {
                 mp4RelocatedFileIn.close();
             }

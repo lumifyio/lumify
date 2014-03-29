@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.ingest.audio;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.util.ProcessRunner;
 import com.altamiracorp.securegraph.Property;
@@ -14,6 +15,8 @@ import com.google.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
 
@@ -43,13 +46,10 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
             try {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
-                getAudioProperty(AUDIO_TYPE_OGG).addPropertyValue(m, PROPERTY_KEY, spv, data.getProperty().getVisibility());
-                getAudioSizeProperty(AUDIO_TYPE_OGG).addPropertyValue(m, PROPERTY_KEY, mp4File.length(), data.getProperty().getVisibility());
-
+                Map<String, Object> metadata = new HashMap<String, Object>();
+                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
+                MediaLumifyProperties.AUDIO_OGG.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
-                getGraph().flush();
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioProperty(AUDIO_TYPE_OGG).getKey());
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, getAudioSizeProperty(AUDIO_TYPE_OGG).getKey());
             } finally {
                 mp4FileIn.close();
             }

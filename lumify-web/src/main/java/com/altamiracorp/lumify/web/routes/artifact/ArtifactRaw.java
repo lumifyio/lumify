@@ -1,9 +1,8 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -23,28 +22,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ArtifactRaw extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
     private static final Pattern RANGE_PATTERN = Pattern.compile("bytes=([0-9]*)-([0-9]*)");
-    private static final Set<String> VALID_VIDEO_TYPES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
-            VIDEO_TYPE_MP4,
-            VIDEO_TYPE_WEBM
-    )));
-    private static final Set<String> VALID_AUDIO_TYPES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
-            AUDIO_TYPE_MP4,
-            AUDIO_TYPE_OGG
-    )));
 
     private final Graph graph;
 
@@ -127,33 +113,14 @@ public class ArtifactRaw extends BaseRequestHandler {
             }
         }
 
-        if (VALID_VIDEO_TYPES.contains(type) || VALID_AUDIO_TYPES.contains(type)) {
-            response.setCharacterEncoding(null);
-            response.setContentType(type);
-            response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+        response.setCharacterEncoding(null);
+        response.setContentType(type);
+        response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
 
-            StreamingLumifyProperty mediaProperty;
-            IdentityLumifyProperty<Long> mediaSizeProperty = null;
+        StreamingPropertyValue mediaPropertyValue = getStreamingPropertyValue(artifactVertex, type);
 
-            if (VALID_VIDEO_TYPES.contains(type)) {
-                mediaProperty = getVideoProperty(type);
-                mediaSizeProperty = getVideoSizeProperty(type);
-            } else {
-                mediaProperty = getAudioProperty(type);
-                mediaSizeProperty = getAudioSizeProperty(type);
-            }
-
-            StreamingPropertyValue videoPropertyValue = mediaProperty.getPropertyValue(artifactVertex);
-            checkNotNull(videoPropertyValue, String.format("Could not find video property %s on artifact %s", mediaProperty.getKey(),
-                    artifactVertex.getId()));
-            in = videoPropertyValue.getInputStream();
-
-            totalLength = mediaSizeProperty.getPropertyValue(artifactVertex);
-            checkNotNull(totalLength, String.format("Could not find total video size %s on vertex %s", mediaSizeProperty.getKey(),
-                    artifactVertex.getId()));
-        } else {
-            throw new RuntimeException("Invalid video type: " + type);
-        }
+        totalLength = mediaPropertyValue.getLength();
+        in = mediaPropertyValue.getInputStream();
 
         if (partialEnd == null) {
             partialEnd = totalLength;
@@ -177,6 +144,26 @@ public class ArtifactRaw extends BaseRequestHandler {
         copy(in, out, partialLength);
 
         response.flushBuffer();
+    }
+
+    private StreamingPropertyValue getStreamingPropertyValue(Vertex artifactVertex, String type) {
+        StreamingPropertyValue mediaPropertyValue;
+        if (MediaLumifyProperties.MIME_TYPE_AUDIO_MP4.equals(type)) {
+            mediaPropertyValue = MediaLumifyProperties.AUDIO_MP4.getPropertyValue(artifactVertex);
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.AUDIO_MP4, artifactVertex.getId()));
+        } else if (MediaLumifyProperties.MIME_TYPE_AUDIO_OGG.equals(type)) {
+            mediaPropertyValue = MediaLumifyProperties.AUDIO_OGG.getPropertyValue(artifactVertex);
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.AUDIO_OGG, artifactVertex.getId()));
+        } else if (MediaLumifyProperties.MIME_TYPE_VIDEO_MP4.equals(type)) {
+            mediaPropertyValue = MediaLumifyProperties.VIDEO_MP4.getPropertyValue(artifactVertex);
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.VIDEO_MP4, artifactVertex.getId()));
+        } else if (MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM.equals(type)) {
+            mediaPropertyValue = MediaLumifyProperties.VIDEO_WEBM.getPropertyValue(artifactVertex);
+            checkNotNull(mediaPropertyValue, String.format("Could not find %s property on artifact %s", MediaLumifyProperties.VIDEO_WEBM, artifactVertex.getId()));
+        } else {
+            throw new RuntimeException("Invalid video type: " + type);
+        }
+        return mediaPropertyValue;
     }
 
     private void copy(InputStream in, OutputStream out, Long length) throws IOException {

@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -15,7 +16,6 @@ import com.google.inject.Inject;
 
 import java.io.InputStream;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorker {
@@ -42,9 +42,9 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         }
 
         LOGGER.debug("assigning concept type %s to vertex %s", concept.getId(), data.getVertex().getId());
-        CONCEPT_TYPE.setProperty(data.getVertex(), concept.getId(), data.getVertex().getVisibility());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getVertex(), concept.getId(), data.getVertex().getVisibility());
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), ElementMutation.DEFAULT_KEY, CONCEPT_TYPE.getKey());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), ElementMutation.DEFAULT_KEY, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
 
         return new GraphPropertyWorkResult();
     }

@@ -14,7 +14,6 @@ import com.altamiracorp.lumify.core.ingest.BaseArtifactProcessor;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
-import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -47,12 +46,10 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseLumifyBolt.class);
