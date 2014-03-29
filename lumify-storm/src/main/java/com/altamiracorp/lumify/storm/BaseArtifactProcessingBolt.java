@@ -4,10 +4,12 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
-import com.altamiracorp.lumify.core.ingest.*;
+import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
+import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
+import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
+import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
-import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
@@ -138,10 +140,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             saveVideoFrames(graphVertex.getId(), artifactExtractedInfo.getVideoFrames());
         }
 
-        if (artifactExtractedInfo.getDetectedObjects() != null) {
-            saveDetectedObjects(graphVertex.getId(), artifactExtractedInfo.getDetectedObjects());
-        }
-
         if (archiveTempDir != null) {
             FileUtils.deleteDirectory(archiveTempDir);
             LOGGER.debug("Deleted temporary directory holding archive content");
@@ -171,18 +169,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             in.close();
         }
         getHdfsFileSystem().delete(new Path(videoFrame.getHdfsPath()), false);
-    }
-
-    private void saveDetectedObjects(Object artifactVertexId, List<ArtifactDetectedObject> detectedObjects) {
-        for (ArtifactDetectedObject detectedObject : detectedObjects) {
-            saveDetectedObject(artifactVertexId, detectedObject);
-        }
-    }
-
-    private void saveDetectedObject(Object artifactVertexId, ArtifactDetectedObject detectedObject) {
-        detectedObjectRepository.saveDetectedObject(artifactVertexId, null, detectedObject.getConcept(),
-                detectedObject.getX1(), detectedObject.getY1(), detectedObject.getX2(), detectedObject.getY2(), false, detectedObject.getProcess(), new LumifyVisibility().getVisibility(),
-                getUser().getModelUserContext());
     }
 
     protected void runWorkers(InputStream in, FileMetadata fileMetadata, ArtifactExtractedInfo artifactExtractedInfo, File archiveTempDir) throws Exception {

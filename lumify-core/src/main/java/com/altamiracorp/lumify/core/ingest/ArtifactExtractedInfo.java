@@ -17,7 +17,6 @@ public class ArtifactExtractedInfo {
     private static final String TEXT_HDFS_PATH = "textHdfsPath";
     private static final String ONTOLOGY_CLASS_URI = "ontologyClassUri";
     private static final String RAW = "raw";
-    private static final String DETECTED_OBJECTS = "detectedObjects";
     private static final String VIDEO_TRANSCRIPT = "videoTranscript";
     private static final String AUDIO_HDFS_PATH = "audioHdfsPath";
     private static final String POSTER_FRAME_HDFS_PATH = "posterFrameHdfsPath";
@@ -244,14 +243,6 @@ public class ArtifactExtractedInfo {
 
     public String getAudioHdfsPath() {
         return (String) properties.get(AUDIO_HDFS_PATH);
-    }
-
-    public void setDetectedObjects(List<ArtifactDetectedObject> detectedObjects) {
-        properties.put(DETECTED_OBJECTS, detectedObjects);
-    }
-
-    public List<ArtifactDetectedObject> getDetectedObjects() {
-        return (List<ArtifactDetectedObject>) properties.get(DETECTED_OBJECTS);
     }
 
     public void setVideoTranscript(VideoTranscript videoTranscript) {

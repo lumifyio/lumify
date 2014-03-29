@@ -3,17 +3,20 @@ package com.altamiracorp.lumify.core.ingest.graphProperty;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Authorizations;
 import com.google.inject.Injector;
+import org.apache.hadoop.fs.FileSystem;
 
 import java.util.Map;
 
 public class GraphPropertyWorkerPrepareData {
     private final Map stormConf;
+    private final FileSystem hdfsFileSystem;
     private final User user;
     private final Authorizations authorizations;
     private final Injector injector;
 
-    public GraphPropertyWorkerPrepareData(Map stormConf, User user, Authorizations authorizations, Injector injector) {
+    public GraphPropertyWorkerPrepareData(Map stormConf, FileSystem hdfsFileSystem, User user, Authorizations authorizations, Injector injector) {
         this.stormConf = stormConf;
+        this.hdfsFileSystem = hdfsFileSystem;
         this.user = user;
         this.authorizations = authorizations;
         this.injector = injector;
@@ -33,5 +36,9 @@ public class GraphPropertyWorkerPrepareData {
 
     public Injector getInjector() {
         return injector;
+    }
+
+    public FileSystem getHdfsFileSystem() {
+        return hdfsFileSystem;
     }
 }

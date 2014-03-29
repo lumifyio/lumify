@@ -12,7 +12,7 @@ public abstract class GraphPropertyWorker {
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
 
-    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) {
+    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
 
     }
 

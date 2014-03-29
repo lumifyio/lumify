@@ -16,7 +16,7 @@ import java.io.InputStream;
 
 public class HashCalculationWorker
         extends ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>
-        implements DocumentTextExtractionWorker, ImageTextExtractionWorker, VideoTextExtractionWorker, StructuredDataExtractionWorker {
+        implements DocumentTextExtractionWorker, VideoTextExtractionWorker, StructuredDataExtractionWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HashCalculationWorker.class);
 
     @Override

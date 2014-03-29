@@ -8,6 +8,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
+import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyThreadedWrapper;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
@@ -30,9 +31,12 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,13 +76,31 @@ public class GraphPropertyBolt extends BaseRichBolt {
     }
 
     private void prepareWorkers(Map stormConf) {
-        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(stormConf, this.user, this.authorizations, InjectHelper.getInjector());
+        FileSystem hdfsFileSystem;
+        Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
+        try {
+            String hdfsRootDir = (String) stormConf.get(com.altamiracorp.lumify.core.config.Configuration.HADOOP_URL);
+            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
+        } catch (Exception e) {
+            throw new LumifyException("Could not open hdfs filesystem", e);
+        }
+
+        GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(
+                stormConf,
+                hdfsFileSystem,
+                this.user,
+                this.authorizations,
+                InjectHelper.getInjector());
         List<GraphPropertyWorker> workers = toList(ServiceLoader.load(GraphPropertyWorker.class));
         this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
         this.workerThreads = new ArrayList<Thread>(workers.size());
         for (GraphPropertyWorker worker : workers) {
             InjectHelper.inject(worker);
-            worker.prepare(workerPrepareData);
+            try {
+                worker.prepare(workerPrepareData);
+            } catch (Exception ex) {
+                throw new LumifyException("Could not prepare graph property worker " + worker.getClass().getName(), ex);
+            }
 
             GraphPropertyThreadedWrapper wrapper = new GraphPropertyThreadedWrapper(worker);
             InjectHelper.inject(wrapper);
