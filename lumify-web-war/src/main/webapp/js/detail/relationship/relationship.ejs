@@ -6,13 +6,13 @@
 
 <h1>
 <span class="vertex-to-vertex-relationship generic-draggable fake-link" data-vertex-id='<%- relationshipData.source.id %>' >
-        <%= relationshipData.source.prop('title') %>
+        <%= appData.prop(relationshipData.source, 'title') %>
 </span>
 
 &#8674;
 
 <span class="vertex-to-vertex-relationship generic-draggable fake-link" data-vertex-id='<%- relationshipData.target.id %>'>
-        <%= relationshipData.target.prop('title') %>
+        <%= appData.prop(relationshipData.target, 'title') %>
 </span>
 </h1>
 

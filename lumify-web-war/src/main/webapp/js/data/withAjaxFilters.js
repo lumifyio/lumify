@@ -26,7 +26,6 @@ define([], function() {
                 var cache;
                 if (!json.sourceVertexId &&_.isString(json.id) && _.isObject(json.properties) && _.keys(json.properties).length) {
                     cache = this.updateCacheWithVertex(json);
-                    $.extend(true, json, cache);
                     updated.push(cache);
 
                     updated = true;
@@ -41,7 +40,6 @@ define([], function() {
                     json.relationships.forEach(function(relationship) {
                         if (relationship.vertex) {
                             var cache = self.updateCacheWithVertex(relationship.vertex);
-                            $.extend(true, relationship.vertex, cache);
                             updated.push(cache);
                         }
                     });
@@ -55,7 +53,6 @@ define([], function() {
                     json.paths.forEach(function(path) {
                         path.forEach(function(vertex) {
                             var cache = self.updateCacheWithVertex(vertex);
-                            $.extend(true, vertex, cache);
                             updated.push(cache);
                         });
                     });
@@ -90,7 +87,6 @@ define([], function() {
                     json.forEach(function(vertex) {
                         var cache = self.updateCacheWithVertex(vertex);
                         cache.properties._refreshedFromServer = true;
-                        $.extend(true, vertex, cache);
                         updated.push(cache);
                     });
                     return true;
@@ -148,7 +144,7 @@ define([], function() {
                                 if (val && self.resemblesVertices(val)) {
                                     keypathFound = true;
                                     val.forEach(function(v) {
-                                        updated.push( $.extend(true, v, self.updateCacheWithVertex(v)) );
+                                        updated.push( self.updateCacheWithVertex(v) );
                                     });
                                 } else if (!keypathFound) {
                                     keypathFound = true;
