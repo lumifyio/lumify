@@ -124,8 +124,8 @@ define([
                         if (cyA.length && !cyB.length) return 1;
                         if (cyB.length && !cyA.length) return -1;
 
-                        var titleA = a.properties.title.value.toLowerCase(),
-                            titleB = b.properties.title.value.toLowerCase();
+                        var titleA = a.prop('title').toLowerCase(),
+                            titleB = b.prop('title').toLowerCase();
 
                         return titleA < titleB ? -1 : titleB < titleA ? 1 : 0;
                     });
@@ -380,7 +380,7 @@ define([
         };
 
         this.updateCyNodeData = function (data, vertex) {
-            var truncatedTitle = vertex.properties.title.value || vertex.properties.title || "No title available";
+            var truncatedTitle = appData.prop(vertex, 'title');
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";

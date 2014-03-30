@@ -163,7 +163,7 @@ define([
                             case 'VertexDiffItem': 
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {
-                                    outputItem.title = outputItem.vertex.properties.title.value;
+                                    outputItem.title = outputItem.vertex.prop('title');
                                 }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
@@ -205,7 +205,7 @@ define([
 
                     if (!outputItem.title && outputItem.vertex) {
                         outputItem.action = actionTypes.UPDATE;
-                        outputItem.title = outputItem.vertex.properties.title.value;
+                        outputItem.title = outputItem.vertex.prop('title')
                         outputItem.id = outputItem.vertex.id;
                     }
 

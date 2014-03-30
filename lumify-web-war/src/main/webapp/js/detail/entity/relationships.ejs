@@ -9,7 +9,7 @@
         <% if (type !== 'references') { %>
           <span 
             class="<%= r.vertices.classes.other %>"
-            data-vertex-id="<%= r.vertices.other.id %>" data-info="<%= JSON.stringify(r.vertices.other.properties) %>"><%- r.vertices.other.properties.title.value %></span>
+            data-vertex-id="<%= r.vertices.other.id %>" data-info="<%= JSON.stringify(r.vertices.other.properties) %>"><%- r.vertices.other.prop('title') %></span>
           <span class="rel-arrow"><%= (r.vertices.other.id !== r.vertices.src.id) ? '&#8592;' : '&#8594;' %></span>
         <% } %>
         </li>

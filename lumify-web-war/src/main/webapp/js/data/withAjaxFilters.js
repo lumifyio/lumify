@@ -170,11 +170,7 @@ define([], function() {
                         if (updated.length) {
                             _.defer(function() {
                                 self.trigger('verticesUpdated', { 
-                                    vertices:updated.map(function(v) {
-                                        var vertex = $.extend(true, {}, v);
-                                        vertex.workspace = {};
-                                        return Object.freeze(vertex);
-                                    })
+                                    vertices:updated.map(Object.freeze)
                                 });
                             });
                         }
