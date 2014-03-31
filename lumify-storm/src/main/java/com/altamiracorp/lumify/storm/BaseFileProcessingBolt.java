@@ -17,21 +17,18 @@
 package com.altamiracorp.lumify.storm;
 
 import backtype.storm.tuple.Tuple;
-import com.altamiracorp.lumify.core.contentType.MimeTypeMapper;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
-import com.google.inject.Inject;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import javax.annotation.Nullable;
 import java.io.*;
 
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
@@ -43,8 +40,6 @@ import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.
  */
 public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseFileProcessingBolt.class);
-
-    private MimeTypeMapper mimeTypeMapper;
 
     protected FileMetadata getFileMetadata(Tuple input) throws Exception {
         String fileName = input.getString(0);
@@ -81,9 +76,6 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
                 raw = new ByteArrayInputStream(rawString.getBytes());
             }
         }
-        if (mimeType == null) {
-            mimeType = getMimeType(fileName);
-        }
 
         FileMetadata fileMetadata = new FileMetadata()
                 .setFileName(fileName)
@@ -96,15 +88,6 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             fileMetadata.setTitle(fileMetadata.getFileNameWithoutDateSuffix());
         }
         return fileMetadata;
-    }
-
-    protected String getMimeType(String fileName) throws Exception {
-        String mimeType = null;
-        if (mimeTypeMapper != null) {
-            InputStream in = openFile(fileName);
-            mimeType = mimeTypeMapper.guessMimeType(in, fileName);
-        }
-        return mimeType;
     }
 
     /**
@@ -138,14 +121,5 @@ public abstract class BaseFileProcessingBolt extends BaseLumifyBolt {
             in.close();
         }
         return tempDir;
-    }
-
-    protected MimeTypeMapper getMimeTypeMapper() {
-        return mimeTypeMapper;
-    }
-
-    @Inject(optional = true)
-    public void setMimeTypeMapper(@Nullable MimeTypeMapper mimeTypeMapper) {
-        this.mimeTypeMapper = mimeTypeMapper;
     }
 }

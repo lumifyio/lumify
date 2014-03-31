@@ -18,7 +18,6 @@ package com.altamiracorp.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.contentType.MimeTypeMapper;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
@@ -130,9 +129,6 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(VisibilityTranslator.class)
                 .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
-                .in(Scopes.SINGLETON);
-        bind(MimeTypeMapper.class)
-                .toProvider(getConfigurableProvider(MimeTypeMapper.class, configuration, Configuration.MIME_TYPE_MAPPER, false))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

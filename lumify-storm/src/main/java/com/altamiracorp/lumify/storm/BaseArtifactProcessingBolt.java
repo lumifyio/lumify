@@ -88,7 +88,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             File primaryFile = getPrimaryFileFromArchive(archiveTempDir);
             in = openFile(primaryFile.getAbsolutePath());
             fileMetadata.setPrimaryFileFromArchive(primaryFile);
-            fileMetadata.setMimeType(getMimeTypeMapper().guessMimeType(new FileInputStream(primaryFile), primaryFile.getAbsoluteFile().toString()));
         } else {
             in = openFile(fileMetadata.getFileName());
         }
