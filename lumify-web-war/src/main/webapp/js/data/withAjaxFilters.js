@@ -166,7 +166,7 @@ define([], function() {
                         if (updated.length) {
                             _.defer(function() {
                                 self.trigger('verticesUpdated', { 
-                                    vertices:updated.map(Object.freeze)
+                                    vertices: updated
                                 });
                             });
                         }

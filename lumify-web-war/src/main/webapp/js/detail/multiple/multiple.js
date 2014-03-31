@@ -59,7 +59,7 @@ define([
                 this.ontologyService.properties(),
                 d3_deferred
             ).done(function(verticesResponse, concepts, properties, d3) {
-                var vertices = verticesResponse[0];
+                var vertices = verticesResponse[0].vertices;
 
                 VertexList.attachTo(self.select('vertexListSelector'), {
                     vertices: vertices
@@ -125,7 +125,7 @@ define([
                     sortPropertyValues: sortPropertyValues.bind(null, properties, byProperty)
                 };
 
-            Object.keys(byProperty).filter(shouldDisplay).forEach(function(name) {
+            Object.keys(byProperty).filter(shouldDisplay.bind(null, properties)).forEach(function(name) {
 
                 var template = histogramTemplate({
                         displayName: fn.getPropertyDisplayName(name)
@@ -200,15 +200,15 @@ define([
                     });
             });
 
-            function shouldDisplay(propertyName) {
+            function shouldDisplay(properties, propertyName) {
                 if (propertyName == 'http://lumify.io#conceptType') {
                     return true;
-                } else if (/^[_]/.test(propertyName)) {
+                } else if (NO_HISTOGRAM_PROPERTIES.indexOf(propertyName.replace('http://lumify.io#', '')) >= 0) {
                     return false;
-                } else if (NO_HISTOGRAM_PROPERTIES.indexOf(propertyName) >= 0) {
-                    return false;
+                } else {
+                    var ontology = properties.byTitle[propertyName];
+                    return !!(ontology && ontology.userVisible); 
                 }
-                return true;
             }
 
             function sortPropertyValues(properties, byProperty, propertyName, a, b) {
@@ -233,7 +233,7 @@ define([
             function getPropertyValueDisplay(concepts, properties, propertyName, propertyValue) {
                 var propertyValueDisplay = propertyValue;
                 if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
-                    propertyValueDisplay = concepts.byId[propertyValue].title;
+                    propertyValueDisplay = concepts.byId[propertyValue].displayName;
                 } else if (properties.byTitle[propertyName]) {
                     switch (properties.byTitle[propertyName].dataType) {
                         case 'date':
