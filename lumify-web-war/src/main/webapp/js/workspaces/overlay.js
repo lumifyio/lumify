@@ -204,13 +204,16 @@ define([
                         .text('!');
                 })
                 .done(function(response) {
-                    var diffs = response.diffs;
+                    var diffs = response.diffs,
+                        diffsWithoutVisibleProperty = _.map(diffs, function(d) {
+                            return _.omit(d, 'visible');
+                        });
 
                     // Check if same
-                    if (self.previousDiff && _.isEqual(diffs, self.previousDiff)) {
+                    if (self.previousDiff && _.isEqual(diffsWithoutVisibleProperty, self.previousDiff)) {
                         return;
                     }
-                    self.previousDiff = _.map(diffs, _.clone);
+                    self.previousDiff = diffsWithoutVisibleProperty;
 
                     var vertexDiffsById = _.indexBy(diffs, function(diff) {
                             return diff.vertexId;    

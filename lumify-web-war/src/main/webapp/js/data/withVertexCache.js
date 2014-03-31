@@ -77,8 +77,8 @@ define([
 
                 if (toRequest.length) {
                     this.vertexService.getMultiple(toRequest)
-                        .done(function(requestedVertices) {
-                            deferred.resolve(vertices.concat(requestedVertices));
+                        .done(function(data) {
+                            deferred.resolve(vertices.concat(data.vertices));
                         })
                 } else {
                     deferred.resolve(vertices);
@@ -137,11 +137,10 @@ define([
             cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
             cache.detectedObjects = cache.detectedObjects || [];
 
-            if (!('prop' in cache)) {
-                Object.defineProperty(cache, 'prop', {
-                    value: this.prop.bind(null, cache)
-                });
-            }
+            $.extend(true, vertex, cache);
+
+            this.addProperties(cache);
+            this.addProperties(vertex);
 
             return cache;
         };
@@ -152,6 +151,14 @@ define([
                 p[name].value :
                 (defaultValue || ('No ' + name + ' available'));
         };
+
+        this.addProperties = function(obj) {
+            if (!('prop' in obj)) {
+                Object.defineProperty(obj, 'prop', {
+                    value: this.prop.bind(null, obj)
+                });
+            }
+        }
 
         function setPreviewsForVertex(vertex, currentWorkspace) {
             var params = {

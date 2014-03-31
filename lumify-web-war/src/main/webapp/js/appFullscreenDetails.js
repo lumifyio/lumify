@@ -119,7 +119,8 @@ define([
                 .addClass('visible');
         };
 
-        this.handleVerticesLoaded = function(vertices) {
+        this.handleVerticesLoaded = function(data) {
+            var vertices = data.vertices;
 
             Detail.teardownAll();
             this.$node.find('.detail-pane').remove();
