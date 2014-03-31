@@ -8,8 +8,6 @@ import com.altamiracorp.lumify.core.ingest.AdditionalArtifactWorkData;
 import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
-import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
-import com.altamiracorp.lumify.core.model.videoFrames.VideoFrameRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.ThreadedInputStreamProcess;
@@ -17,7 +15,6 @@ import com.altamiracorp.lumify.core.util.ThreadedTeeInputStreamWorker;
 import com.altamiracorp.lumify.storm.file.FileMetadata;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,8 +30,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BaseArtifactProcessingBolt.class);
 
     private ThreadedInputStreamProcess<ArtifactExtractedInfo, AdditionalArtifactWorkData> threadedInputStreamProcess;
-    private VideoFrameRepository videoFrameRepository;
-    private DetectedObjectRepository detectedObjectRepository;
 
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -136,10 +131,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
         Vertex graphVertex = saveArtifact(artifactExtractedInfo);
 
-        if (artifactExtractedInfo.getVideoFrames() != null) {
-            saveVideoFrames(graphVertex.getId(), artifactExtractedInfo.getVideoFrames());
-        }
-
         if (archiveTempDir != null) {
             FileUtils.deleteDirectory(archiveTempDir);
             LOGGER.debug("Deleted temporary directory holding archive content");
@@ -153,22 +144,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     protected File getPrimaryFileFromArchive(File archiveTempDir) {
         throw new RuntimeException("Not implemented for class " + getClass());
-    }
-
-    private void saveVideoFrames(Object artifactVertexId, List<ArtifactExtractedInfo.VideoFrame> videoFrames) throws IOException {
-        for (ArtifactExtractedInfo.VideoFrame videoFrame : videoFrames) {
-            saveVideoFrame(artifactVertexId, videoFrame);
-        }
-    }
-
-    private void saveVideoFrame(Object artifactVertexId, ArtifactExtractedInfo.VideoFrame videoFrame) throws IOException {
-        InputStream in = getHdfsFileSystem().open(new Path(videoFrame.getHdfsPath()));
-        try {
-            videoFrameRepository.saveVideoFrame(artifactVertexId, in, videoFrame.getFrameStartTime(), getUser());
-        } finally {
-            in.close();
-        }
-        getHdfsFileSystem().delete(new Path(videoFrame.getHdfsPath()), false);
     }
 
     protected void runWorkers(InputStream in, FileMetadata fileMetadata, ArtifactExtractedInfo artifactExtractedInfo, File archiveTempDir) throws Exception {
@@ -292,15 +267,5 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
 
     protected void onAfterGraphVertexCreated(Vertex graphVertex) {
         workQueueRepository.pushText(graphVertex.getId().toString());
-    }
-
-    @Inject
-    public void setVideoFrameRepository(VideoFrameRepository videoFrameRepository) {
-        this.videoFrameRepository = videoFrameRepository;
-    }
-
-    @Inject
-    public void setDetectedObjectRepository(DetectedObjectRepository detectedObjectRepository) {
-        this.detectedObjectRepository = detectedObjectRepository;
     }
 }

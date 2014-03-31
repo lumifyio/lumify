@@ -1,13 +1,15 @@
 package com.altamiracorp.lumify.core.ingest;
 
 import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ArtifactExtractedInfo {
     private static final String ROW_KEY = "rowKey";
@@ -21,7 +23,6 @@ public class ArtifactExtractedInfo {
     private static final String AUDIO_HDFS_PATH = "audioHdfsPath";
     private static final String POSTER_FRAME_HDFS_PATH = "posterFrameHdfsPath";
     private static final String VIDEO_DURATION = "videoDuration";
-    private static final String VIDEO_FRAMES = "videoFrames";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String FILE_NAME = "fileName";
@@ -283,37 +284,6 @@ public class ArtifactExtractedInfo {
         return (String) properties.get(POSTER_FRAME_HDFS_PATH);
     }
 
-    public void setVideoDuration(long videoDuration) {
-        set(VIDEO_DURATION, videoDuration);
-    }
-
-    public long getVideoDuration() {
-        return (Long) properties.get(VIDEO_DURATION);
-    }
-
-    public void setVideoFrames(List<VideoFrame> videoFrames) {
-        // ensure internal video frame list is not externally mutable
-        List<VideoFrame> safeClone = Lists.newLinkedList(videoFrames);
-        set(VIDEO_FRAMES, safeClone);
-    }
-
-    /**
-     * Builder pattern for videoFrames property.
-     *
-     * @param videoFrames the videoFrames
-     * @return this
-     */
-    public ArtifactExtractedInfo videoFrames(final List<VideoFrame> videoFrames) {
-        setVideoFrames(videoFrames);
-        return this;
-    }
-
-    public List<VideoFrame> getVideoFrames() {
-        // ensure internal video frames are not externally mutable
-        List<VideoFrame> frames = (List<VideoFrame>) properties.get(VIDEO_FRAMES);
-        return frames != null ? Collections.unmodifiableList(frames) : null;
-    }
-
     public String getMimeType() {
         return (String) properties.get(MIME_TYPE);
     }
@@ -507,23 +477,5 @@ public class ArtifactExtractedInfo {
         }
 
         return true;
-    }
-
-    public static class VideoFrame {
-        private final String hdfsPath;
-        private final long frameStartTime;
-
-        public VideoFrame(String hdfsPath, long frameStartTime) {
-            this.hdfsPath = hdfsPath;
-            this.frameStartTime = frameStartTime;
-        }
-
-        public String getHdfsPath() {
-            return hdfsPath;
-        }
-
-        public long getFrameStartTime() {
-            return frameStartTime;
-        }
     }
 }

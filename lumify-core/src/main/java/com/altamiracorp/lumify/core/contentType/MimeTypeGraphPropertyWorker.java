@@ -28,7 +28,7 @@ public class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
 
         ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
         RawLumifyProperties.MIME_TYPE.setProperty(m, mimeType, data.getVertex().getVisibility());
-        m.alterPropertyMetadata(data.getProperty(), RawLumifyProperties.MIME_TYPE.getKey(), mimeType);
+        m.alterPropertyMetadata(data.getProperty(), RawLumifyProperties.METADATA_MIME_TYPE, mimeType);
         m.save();
 
         getGraph().flush();

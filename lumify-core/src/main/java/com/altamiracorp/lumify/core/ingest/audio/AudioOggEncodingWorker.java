@@ -18,8 +18,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
-
 public class AudioOggEncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = AudioOggEncodingWorker.class.getName();
     private ProcessRunner processRunner;
@@ -47,7 +45,7 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
                 MediaLumifyProperties.AUDIO_OGG.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
@@ -66,7 +64,7 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(vertex);
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType == null || !mimeType.startsWith("audio")) {
             return false;
         }

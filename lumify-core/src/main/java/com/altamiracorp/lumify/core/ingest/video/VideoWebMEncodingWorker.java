@@ -18,8 +18,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
-
 public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     private static final String PROPERTY_KEY = VideoWebMEncodingWorker.class.getName();
     private ProcessRunner processRunner;
@@ -58,7 +56,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(webmFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
                 MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
@@ -76,7 +74,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(vertex);
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

@@ -5,7 +5,6 @@ import com.altamiracorp.lumify.core.ingest.ArtifactExtractedInfo;
 import com.altamiracorp.lumify.core.ingest.TextExtractionWorkerPrepareData;
 import com.altamiracorp.lumify.core.ingest.document.DocumentTextExtractionWorker;
 import com.altamiracorp.lumify.core.ingest.structuredData.StructuredDataExtractionWorker;
-import com.altamiracorp.lumify.core.ingest.video.VideoTextExtractionWorker;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
@@ -15,7 +14,7 @@ import java.io.InputStream;
 
 public class HashCalculationWorker
         extends ThreadedTeeInputStreamWorker<ArtifactExtractedInfo, AdditionalArtifactWorkData>
-        implements DocumentTextExtractionWorker, VideoTextExtractionWorker, StructuredDataExtractionWorker {
+        implements DocumentTextExtractionWorker, StructuredDataExtractionWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HashCalculationWorker.class);
 
     @Override
