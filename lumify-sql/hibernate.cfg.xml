@@ -11,6 +11,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.pool_size">1</property>
         <property name="show_sql">true</property>
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
+        <mapping class="com.altamiracorp.lumify.sql.model.SqlUser"/>
     </session-factory>
 </hibernate-configuration>

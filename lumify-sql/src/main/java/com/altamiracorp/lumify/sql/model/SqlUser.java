@@ -8,7 +8,7 @@ import com.altamiracorp.lumify.core.user.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "SQL_USER")
+@Table(name = "user")
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
@@ -18,15 +18,14 @@ public class SqlUser implements User {
     private String userName;
     private byte[] passwordSalt;
     private byte[] passwordHash;
+    private UserStatus userStatus;
 
     public SqlUser() {
     }
 
-    ;
-
     @Id
     @GeneratedValue
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     public int getId() {
         return id;
     }
@@ -35,7 +34,7 @@ public class SqlUser implements User {
         this.id = id;
     }
 
-    @Column(name = "EXTERNAL_ID")
+    @Column(name = "external_id")
     public String getExternalId() {
         return externalId;
     }
@@ -44,7 +43,7 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    @Column(name = "NAME")
+    @Column(name = "name")
     public String getUserName() {
         return userName;
     }
@@ -53,7 +52,7 @@ public class SqlUser implements User {
         this.userName = userName;
     }
 
-    @Column(name = "CURRENT_WORKSPACE")
+    @Column(name = "current_workspace")
     public String getCurrentWorkspace() {
         return currentWorkspace;
     }
@@ -62,7 +61,7 @@ public class SqlUser implements User {
         this.currentWorkspace = currentWorkspace;
     }
 
-    @Column(name = "PASSWORD_HASH")
+    @Column(name = "password_hash")
     public byte[] getPasswordHash() {
         return passwordHash;
     }
@@ -71,7 +70,7 @@ public class SqlUser implements User {
         this.passwordHash = passwordHash;
     }
 
-    @Column(name = "PASSWORD_SALT")
+    @Column(name = "password_salt")
     public byte[] getPasswordSalt() {
         return passwordSalt;
     }
@@ -80,24 +79,31 @@ public class SqlUser implements User {
         this.passwordSalt = passwordSalt;
     }
 
-    @Override
+    @Column(name = "user_status")
     public UserStatus getUserStatus() {
-        return UserStatus.OFFLINE;
+        return userStatus;
+    }
+
+    public void setUserStatus (UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     @Override
+    @Transient
     public String getUserId() {
         return Integer.toString(id);
     }
 
+    @Transient
     public ModelUserContext getModelUserContext() {
         return modelUserContext;
     }
 
-    public void setModelUserContext() {
+    public void setModelUserContext(ModelUserContext modelUserContext) {
         this.modelUserContext = modelUserContext;
     }
 
+    @Transient
     public UserType getUserType() {
         return UserType.USER;
     }

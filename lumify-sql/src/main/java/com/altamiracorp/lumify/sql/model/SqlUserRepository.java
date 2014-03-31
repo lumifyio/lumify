@@ -56,7 +56,7 @@ public class SqlUserRepository extends UserRepository {
         if (existingUser != null) {
             throw new LumifyException("User, " + username + ", already exists");
         }
-        String authorizationsString = StringUtils.join(userAuthorizations, ",");
+
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
@@ -68,11 +68,12 @@ public class SqlUserRepository extends UserRepository {
             newUser.setUserName(username);
             newUser.setPasswordSalt(salt);
             newUser.setPasswordHash(passwordHash);
-            LOGGER.debug("add %s to core user table", username);
+            LOGGER.debug("add %s to user table", username);
+            session.save(newUser);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();;
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             session.close();
         }
