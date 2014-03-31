@@ -1,12 +1,14 @@
-package com.altamiracorp.lumify.core.model.user;
+package com.altamiracorp.lumify.sql.model;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.user.User;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="SQL_USER")
+@Table(name = "SQL_USER")
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
@@ -14,13 +16,18 @@ public class SqlUser implements User {
     private int id;
     private String externalId;
     private String userName;
+    private byte[] passwordSalt;
+    private byte[] passwordHash;
 
-    public SqlUser () {};
+    public SqlUser() {
+    }
+
+    ;
 
     @Id
     @GeneratedValue
-    @Column(name="USER_ID")
-    public int getId () {
+    @Column(name = "USER_ID")
+    public int getId() {
         return id;
     }
 
@@ -28,7 +35,7 @@ public class SqlUser implements User {
         this.id = id;
     }
 
-    @Column(name="EXTERNAL_ID")
+    @Column(name = "EXTERNAL_ID")
     public String getExternalId() {
         return externalId;
     }
@@ -37,7 +44,7 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    @Column(name="NAME")
+    @Column(name = "NAME")
     public String getUserName() {
         return userName;
     }
@@ -46,7 +53,7 @@ public class SqlUser implements User {
         this.userName = userName;
     }
 
-    @Column(name="CURRENT_WORKSPACE")
+    @Column(name = "CURRENT_WORKSPACE")
     public String getCurrentWorkspace() {
         return currentWorkspace;
     }
@@ -55,6 +62,30 @@ public class SqlUser implements User {
         this.currentWorkspace = currentWorkspace;
     }
 
+    @Column(name = "PASSWORD_HASH")
+    public byte[] getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(byte[] passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    @Column(name = "PASSWORD_SALT")
+    public byte[] getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(byte[] passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
+    @Override
+    public UserStatus getUserStatus() {
+        return UserStatus.OFFLINE;
+    }
+
+    @Override
     public String getUserId() {
         return Integer.toString(id);
     }
@@ -63,12 +94,11 @@ public class SqlUser implements User {
         return modelUserContext;
     }
 
-    public UserType getUserType() {
-        return UserType.USER;
+    public void setModelUserContext() {
+        this.modelUserContext = modelUserContext;
     }
 
-    @Override
-    public UserStatus getUserStatus() {
-        return UserStatus.OFFLINE;
+    public UserType getUserType() {
+        return UserType.USER;
     }
 }

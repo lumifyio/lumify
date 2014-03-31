@@ -6,11 +6,11 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">lumify</property>
-        <property name="hibernate.connection.url">jdbc:mysql://192.168.33.10/lumify</property>
+        <property name="hibernate.connection.url">jdbc:mysql://192.168.33.10:3306/lumify</property>
         <property name="hibernate.connection.username">lumify</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.pool_size">1</property>
         <property name="show_sql">true</property>
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
     </session-factory>
 </hibernate-configuration>

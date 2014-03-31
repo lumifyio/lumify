@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core;
+package com.altamiracorp.lumify.sql;
 
 import com.altamiracorp.lumify.core.bootstrap.BootstrapBindingProvider;
 import com.altamiracorp.lumify.core.config.Configuration;
@@ -26,7 +26,7 @@ public class SqlBootstrapBindingProvider implements BootstrapBindingProvider {
                         if (!(new File(fileName).exists())) {
                             throw new LumifyException("hibernate config missing:" + HIBERNATE_CFG_XML);
                         }
-                        config.configure(fileName);
+                        config.configure(new File(fileName));
                         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
                         SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistryBuilder);
                         return sessionFactory;

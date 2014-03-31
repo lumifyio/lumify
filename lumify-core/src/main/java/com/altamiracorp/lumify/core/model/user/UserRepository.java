@@ -32,6 +32,16 @@ public abstract class UserRepository {
 
     public abstract boolean isPasswordValid(User user, String password);
 
+    public abstract User setCurrentWorkspace(String userId, String workspaceId);
+
+    public abstract User setStatus(String userId, UserStatus status);
+
+    public abstract void addAuthorization(User userUser, String auth);
+
+    public abstract void removeAuthorization(User userUser, String auth);
+
+    public abstract com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
+
     public JSONObject toJsonWithAuths(User user) {
         JSONObject json = toJson(user);
 
@@ -88,14 +98,4 @@ public abstract class UserRepository {
     {
         return new SystemUser(getModelUserContext(new String[0]));
     }
-
-    public abstract User setCurrentWorkspace(String userId, String workspaceId);
-
-    public abstract User setStatus(String userId, UserStatus status);
-
-    public abstract void addAuthorization(User userUser, String auth);
-
-    public abstract void removeAuthorization(User userUser, String auth);
-
-    public abstract com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 }
