@@ -134,7 +134,7 @@ define([
                 // TODO: Image/Video before documents
 
                 // Sort by title
-                descriptors.push(v.properties.title.value);
+                descriptors.push(v.prop('title'));
                 return descriptors.join(''); 
             });
 
@@ -234,7 +234,7 @@ define([
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
-                            document.title = '"' + newVerticesById[newVertexIds[0]].properties.title.value + '" added';
+                            document.title = '"' + newVerticesById[newVertexIds[0]].prop('title') + '" added';
                         } else {
                             document.title = newVertexIds.length + ' items added';
                         }
@@ -259,9 +259,9 @@ define([
             });
             
             if (sorted.length === 1) {
-                return sorted[0].properties.title.value;
+                return sorted[0].prop('title');
             } else {
-                var first = '"' + sorted[0].properties.title.value + '"',
+                var first = '"' + sorted[0].prop('title') + '"',
                     l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');

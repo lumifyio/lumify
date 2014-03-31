@@ -59,7 +59,7 @@ define([
 
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
-                title = vertex && vertex.properties.title.value || data.vertexId;
+                title = vertex && vertex.prop('title') || data.vertexId;
 
             this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title})).closest('.entity-filters').show();
             this.notifyOfFilters();

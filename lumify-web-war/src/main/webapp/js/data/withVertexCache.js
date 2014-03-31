@@ -135,9 +135,23 @@ define([
             } else console.error('Unable to attach concept to vertex', cache.properties['http://lumify.io#conceptType']);
 
             cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
+            cache.detectedObjects = cache.detectedObjects || [];
+
+            if (!('prop' in cache)) {
+                Object.defineProperty(cache, 'prop', {
+                    value: this.prop.bind(null, cache)
+                });
+            }
+
             return cache;
         };
 
+        this.prop = function(vertex, name, defaultValue) {
+            var p = vertex.properties;
+            return (p && p[name] && !_.isUndefined(p[name].value)) ? 
+                p[name].value :
+                (defaultValue || ('No ' + name + ' available'));
+        };
 
         function setPreviewsForVertex(vertex, currentWorkspace) {
             var params = {
