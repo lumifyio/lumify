@@ -334,7 +334,7 @@ define([
 
                 var deferred = $.Deferred();
                 if (needsRefreshing.length) {
-                    this.vertexService.getMultiple(_.pluck(needsRefreshing, 'id')).done(function(vertices) {
+                    this.vertexService.getMultiple(_.pluck(needsRefreshing, 'id')).done(function() {
                         deferred.resolve(data.vertices);
                     });
                 } else deferred.resolve(data.vertices);
@@ -484,8 +484,8 @@ define([
 
             if (len) {
                 this.trigger('displayInformation', { message:this.formatVertexAction('Paste', vertexIds)});
-                this.vertexService.getMultiple(vertexIds).done(function(serverVertices) {
-                    self.trigger('addVertices', { vertices:serverVertices });
+                this.vertexService.getMultiple(vertexIds).done(function(data) {
+                    self.trigger('addVertices', data);
                 });
             }
         };

@@ -12,6 +12,7 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,9 +46,11 @@ public class VertexMultiple extends BaseRequestHandler {
         };
 
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
-        JSONArray results = new JSONArray();
+        JSONObject results = new JSONObject();
+        JSONArray vertices = new JSONArray();
+        results.put("vertices", vertices);
         for (Vertex v : graphVertices) {
-            results.put(GraphUtil.toJson(v, workspaceId));
+            vertices.put(GraphUtil.toJson(v, workspaceId));
         }
 
         respondWithJson(response, results);
