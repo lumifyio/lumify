@@ -143,6 +143,9 @@ define([
                 });
             }
 
+
+            $.extend(true, vertex, cache);
+
             return cache;
         };
 

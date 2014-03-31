@@ -42,18 +42,6 @@ define([
         }
     }
 
-    function freeze(obj) {
-        if (_.isArray(obj)) {
-            return _.map(obj, function(v) {
-                return Object.freeze(Object.create(v));
-            });
-        } else if (obj.vertices) {
-            obj.vertices = Object.freeze(obj.vertices);
-        }
-
-        return Object.freeze(obj);
-    }
-
     function resetWorkspace(vertex) {
         vertex.workspace = {};
     }
@@ -332,9 +320,9 @@ define([
                 var needsRefreshing = data.vertices.filter(function(v) { 
                         var cached = self.vertex(v.id);
                         if (!cached) {
-                            return !v.properties || !v.properties._refreshedFromServer;
+                            return _.keys(v.properties || {}).length === 0;
                         }
-                        return !cached.properties._refreshedFromServer;
+                        return false;
                     }),
                     passedWorkspace = {};
 
@@ -372,7 +360,7 @@ define([
                         }
                     });
 
-                    if (existing.length) self.trigger('existingVerticesAdded', { vertices:freeze(existing) });
+                    if (existing.length) self.trigger('existingVerticesAdded', { vertices: existing });
 
                     if (added.length === 0) {
                         var message = "No New Vertices Added";
@@ -397,7 +385,7 @@ define([
                     if (added.length) {
                         ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
-                            vertices:freeze(added),
+                            vertices: added,
                             remoteEvent: data.remoteEvent,
                             options: data.options || {}
                         });
@@ -447,7 +435,7 @@ define([
                 }
                 if (updated.length) {
                     this.trigger('verticesUpdated', { 
-                        vertices:freeze(updated),
+                        vertices: updated,
                         remoteEvent: data.remoteEvent
                     });
                 }
@@ -579,7 +567,7 @@ define([
                         return ids.indexOf(v.id) === -1;
                     });
                     this.trigger('verticesDeleted', { 
-                        vertices:freeze(toDelete),
+                        vertices: toDelete,
                         remoteEvent: data.remoteEvent
                     });
                 }
@@ -640,7 +628,7 @@ define([
         this.onReloadWorkspace = function(evt, data) {
             this.workspaceReady(function(workspace) {
                 this.relationshipsReady(function(relationships) {
-                    this.trigger('workspaceLoaded', freeze(workspace));
+                    this.trigger('workspaceLoaded', workspace);
                     this.trigger('relationshipsLoaded', { relationships:relationships });
                 });
             });
@@ -675,13 +663,13 @@ define([
 
                         var serverVertices = vertexResponse[0];
                         var vertices = serverVertices.map(function(vertex) {
-                            var workspaceData = workspace.entities[vertex.id];
+                            var workspaceData = workspace.entities[vertex.id] || {};
                             delete workspaceData.dropPosition;
+                            workspaceData.selected = false;
+                            vertex.workspace = workspaceData;
 
                             var cache = self.updateCacheWithVertex(vertex);
                             cache.properties._refreshedFromServer = true;
-                            cache.workspace = workspaceData || {};
-                            cache.workspace.selected = false;
                             self.workspaceVertices[vertex.id] = cache.workspace;
 
                             workspace.data.verticesById[vertex.id] = cache;
@@ -692,13 +680,12 @@ define([
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
                             return a.workspace.graphPosition ? -1 : b.workspace.graphPosition ? 1 : 0;
                         });
-                        workspace.data.verticesById = _.indexBy(vertices, 'id');
 
                         undoManager.reset();
 
                         self.refreshRelationships();
                         self.workspaceMarkReady(workspace);
-                        self.trigger('workspaceLoaded', freeze(workspace));
+                        self.trigger('workspaceLoaded', workspace);
                     });
                 });
         };
