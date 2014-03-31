@@ -57,6 +57,7 @@ define([
                 self.handleCancelling(relationshipService.getRelationshipDetails(data.id))
             ).done(function(ontologyRelationships, relationshipData) {
                 self.$node.html(template({
+                    appData: appData,
                     auditsButton: self.auditsButton(),
                     relationshipData: relationshipData[0]
                 }));

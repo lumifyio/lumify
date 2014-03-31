@@ -163,7 +163,7 @@ define([
                             case 'VertexDiffItem': 
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {
-                                    outputItem.title = outputItem.vertex.properties.title.value;
+                                    outputItem.title = outputItem.vertex.prop('title');
                                 }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
@@ -171,16 +171,20 @@ define([
                                 break;
 
                             case 'PropertyDiffItem':
-                                diff.id = vertexId + diff.name;
-                                addDiffDependency(diff.elementId, diff);
 
-                                if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
-                                    outputItem.title = diff['new'].value;
-                                } else {
-                                    diff.className = formatters.className.to(diff.id);
-                                    outputItem.properties.push(diff)
+                                var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
+                                if (ontologyProperty && ontologyProperty.userVisible) {
+                                    diff.id = vertexId + diff.name;
+                                    addDiffDependency(diff.elementId, diff);
+
+                                    if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
+                                        outputItem.title = diff['new'].value;
+                                    } else {
+                                        diff.className = formatters.className.to(diff.id);
+                                        outputItem.properties.push(diff)
+                                    }
+                                    self.diffsById[diff.id] = diff;
                                 }
-                                self.diffsById[diff.id] = diff;
                                 break;
 
                             case 'EdgeDiffItem':
@@ -201,7 +205,7 @@ define([
 
                     if (!outputItem.title && outputItem.vertex) {
                         outputItem.action = actionTypes.UPDATE;
-                        outputItem.title = outputItem.vertex.properties.title.value;
+                        outputItem.title = outputItem.vertex.prop('title')
                         outputItem.id = outputItem.vertex.id;
                     }
 
@@ -243,7 +247,7 @@ define([
 
         this.onRowClick = function(event) {
             var $target = $(event.target).not('button').closest('tr'),
-                vertexRow = $target.is('.vertex-row') ? $target : $target.prev('.vertex-row'),
+                vertexRow = $target.is('.vertex-row') ? $target : $target.prevAll('.vertex-row'),
                 vertexId = vertexRow.data('vertexId'),
                 vertex = vertexId && appData.vertex(vertexId),
                 alreadySelected = vertexRow.is('.active');

@@ -94,6 +94,7 @@ define([
                     properties.list.forEach(function(property) {
                         if (/^[^_]/.test(property.title) && property.title !== 'boundingBox') {
                             var data = {
+                                userVisible: property.userVisible,
                                 title: property.title,
                                 displayName: property.displayName
                             };

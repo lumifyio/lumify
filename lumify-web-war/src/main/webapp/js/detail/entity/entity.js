@@ -63,7 +63,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(vertex.properties.title.value);
+                    self.select('titleSelector').html(vertex.prop('title'));
                 }
             });
         };
@@ -164,7 +164,7 @@ define([
 
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
-                    return defaultSort(a.vertex.properties.title.value, b.vertex.properties.title.value);
+                    return defaultSort(a.vertex.prop('title'), b.vertex.prop('title'));
                 }
 
                 // Specifies the special group sort order

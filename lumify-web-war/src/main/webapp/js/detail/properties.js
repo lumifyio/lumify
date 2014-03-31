@@ -72,7 +72,10 @@ define([
                 .off('.properties')
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
 
-            this.$node.html(propertiesTemplate({properties: null}));
+            this.$node.html(propertiesTemplate({
+                properties: null,
+                formatters: formatters
+            }));
             this.displayProperties(this.attr.data.properties);
         });
 
@@ -189,7 +192,7 @@ define([
                     return;
                 }
 
-                var propLi = self.$node.find('.property-' + propertyName);
+                var propLi = self.$node.find('.property-' + formatters.className.to(propertyName));
                 if (!propLi.length) {
                     var property = self.ontologyProperties.byTitle[propertyName],
                         value;
@@ -208,6 +211,7 @@ define([
 
                     propLi = $(
                         propertiesItemTemplate({
+                            formatters: formatters,
                             property: {
                                 key: property.title,
                                 displayName: property.displayName,
@@ -358,7 +362,7 @@ define([
             var button = this.select('addNewPropertiesSelector'),
                 root = $('<div class="underneath">'),
                 property = data && data.property,
-                propertyRow = property && this.$node.find('.property-' + property.key);
+                propertyRow = property && this.$node.find('.property-' + formatters.className.to(property.key));
 
             this.$node.find('button.info').popover('hide');
 
@@ -388,7 +392,7 @@ define([
                 this.select('titleSelector').html(propertyChangeData.value);
             }
             this.select('propertiesSelector')
-                .find('.property-' + propertyChangeData.propertyName + ' .value')
+                .find('.property-' + formatters.className.to(propertyChangeData.propertyName) + ' .value')
                 .html(propertyChangeData.value);
         };
 
@@ -466,7 +470,11 @@ define([
                         popoutEnabled = true;
                     }
 
-                    var props = $(propertiesTemplate({properties: filtered, popout: popoutEnabled}));
+                    var props = $(propertiesTemplate({
+                        properties: filtered,
+                        popout: popoutEnabled,
+                        formatters: formatters
+                    }));
                     self.$node.html(props);
                     self.updateVisibility();
                     self.updatePopovers();
@@ -549,6 +557,8 @@ define([
 
                 if (// Ignore underscore leading property names
                     /^[^_]/.test(name) &&
+
+                    ontologyProperty.userVisible &&
 
                     // Showing the source and target for an edge is redundant (shown in title)
                     (!isEdge || !_.contains(['source', 'target'], name)) &&

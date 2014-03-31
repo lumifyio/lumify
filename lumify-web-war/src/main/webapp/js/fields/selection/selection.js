@@ -55,6 +55,7 @@ define([
                         minLength: 0,
                         items: 100,
                         source: _.chain(this.attr.properties)
+                            .filter(function(p) { return p.userVisible; })
                             .map(function(p) { return p.displayName || p.title; })
                             .sortBy(function(name) { return name.toLowerCase(); })
                             .uniq()

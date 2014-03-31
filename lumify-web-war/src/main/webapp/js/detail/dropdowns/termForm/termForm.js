@@ -274,7 +274,7 @@ define([
                     if ($focused.length !== 0) {
                         $tag = $focused.find('.label-info');
 
-                        $tag.text(resolvedVertex.properties.title.value)
+                        $tag.text(resolvedVertex.prop('title'))
                             .removeAttr('data-info').data('info', result)
                         $tag.addClass('resolved entity label');
 
@@ -288,7 +288,7 @@ define([
                         if (!classes){
                             classes = 'label-info detected-object'
                         }
-                        $tag = $("<a>").addClass(classes + ' label resolved entity').attr("href", "#").text(resolvedVertex.properties.title.value);
+                        $tag = $("<a>").addClass(classes + ' label resolved entity').attr("href", "#").text(resolvedVertex.prop('title'));
 
                         var added = false;
 
@@ -405,7 +405,7 @@ define([
                 }
             } else {
                 data = this.attr.resolvedVertex;
-                objectSign = data && data.properties ? data.properties.title.value : '';
+                objectSign = data && data.properties ? data.prop('title') : '';
                 existingEntity = this.attr.existing;
                 graphVertexId = data && data.id
                 this.unresolve = graphVertexId && graphVertexId !== '';
@@ -544,7 +544,7 @@ define([
                 .then(function(response) {
                     badge.removeClass('loading');
                     return _.filter(response.vertices, function(v) {
-                        return ~v.properties.title.value.toLowerCase().indexOf(query.toLowerCase());
+                        return ~v.prop('title').toLowerCase().indexOf(query.toLowerCase());
                     });
                 }).done(this.updateQueryCountBadge.bind(this));
 
@@ -569,9 +569,9 @@ define([
                         self.runQuery(query).done(function(entities) {
                             var all = _.map(entities, function(e) {
                                 return $.extend({
-                                    toLowerCase: function() { return e.properties.title.value.toLowerCase(); },
+                                    toLowerCase: function() { return e.prop('title').toLowerCase(); },
                                     toString: function() { return e.id; },
-                                    indexOf: function(s) { return e.properties.title.value.indexOf(s); }
+                                    indexOf: function(s) { return e.prop('title').indexOf(s); }
                                 }, e);
                             });
 
@@ -647,7 +647,7 @@ define([
 
                         if (matchingItem && matchingItem.length) {
                             graphVertexId = item;
-                            label = matchingItem[0].properties ? matchingItem[0].properties.title.value : matchingItem;
+                            label = matchingItem[0].properties ? matchingItem[0].prop('title') : matchingItem;
 
                             if (graphVertexId == createNewText) {
                                 graphVertexId = '';
@@ -666,7 +666,7 @@ define([
                     highlighter: function(item) {
 
                         var html = (item === createNewText) ?
-                                item : Object.getPrototypeOf(this).highlighter.apply(this, [item.properties.title.value]),
+                                item : Object.getPrototypeOf(this).highlighter.apply(this, [item.prop('title')]),
                             icon = '',
                             concept = _.find(self.allConcepts, function(c) {
                                 return item.properties && c.id === item.properties['http://lumify.io#conceptType'].value;

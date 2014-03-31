@@ -158,12 +158,12 @@ define([
 
             var v = appData.vertex(value.vertexId);
             if (v) {
-                value.vertexTitle = v.properties.title.value;
+                value.vertexTitle = v.prop('title');
                 return deferredTitle.resolve();
             }
 
             appData.refresh(value.vertexId).done(function(vertex) {
-                value.vertexTitle = v.properties.title.value;
+                value.vertexTitle = v.prop('title');
                 deferredTitle.resolve();
             });
 
