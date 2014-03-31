@@ -6,7 +6,9 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -22,8 +24,6 @@ import com.google.inject.Inject;
 import java.io.InputStream;
 import java.util.Map;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
 public abstract class GraphPropertyWorker {
@@ -100,9 +100,10 @@ public abstract class GraphPropertyWorker {
         this.termMentionRepository = termMentionRepository;
     }
 
-    protected TermMentionModel saveTermMention(Vertex vertex, TermMention termMention, User user, Visibility visibility, Authorizations authorizations) {
+    protected TermMentionModel saveTermMention(Vertex artifactGraphVertex, TermMention termMention, User user, Visibility visibility, Authorizations authorizations) {
         LOGGER.debug("Saving term mention '%s':%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getStart(), termMention.getEnd());
-        TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(vertex.getId().toString(), termMention.getStart(), termMention.getEnd()));
+        Vertex vertex = null;
+        TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getStart(), termMention.getEnd()));
         termMentionModel.getMetadata().setSign(termMention.getSign(), visibility);
         termMentionModel.getMetadata().setOntologyClassUri(termMention.getOntologyClassUri(), visibility);
         if (termMention.getProcess() != null && !termMention.getProcess().equals("")) {
@@ -124,8 +125,8 @@ public abstract class GraphPropertyWorker {
                     vertex = graph.getVertex(termMention.getId(), authorizations);
                 } else {
                     vertex = trySingle(graph.query(authorizations)
-                            .has(TITLE.getKey(), title)
-                            .has(CONCEPT_TYPE.getKey(), concept.getId())
+                            .has(LumifyProperties.TITLE.getKey(), title)
+                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), concept.getId())
                             .vertices());
                 }
             }
@@ -135,8 +136,8 @@ public abstract class GraphPropertyWorker {
                 } else {
                     vertexElementMutation = graph.prepareVertex(visibility, authorizations);
                 }
-                TITLE.setProperty(vertexElementMutation, title, visibility);
-                CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getId(), visibility);
+                LumifyProperties.TITLE.setProperty(vertexElementMutation, title, visibility);
+                OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getId(), visibility);
             } else {
                 vertexElementMutation = vertex.prepareMutation();
             }
@@ -160,10 +161,10 @@ public abstract class GraphPropertyWorker {
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?
-            Edge edge = trySingle(vertex.getEdges(vertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
+            Edge edge = trySingle(artifactGraphVertex.getEdges(vertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
             if (edge == null) {
-                edge = graph.addEdge(vertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
-                auditRepository.auditRelationship(AuditAction.CREATE, vertex, vertex, edge, termMention.getProcess(), "", user, visibility);
+                edge = graph.addEdge(artifactGraphVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), visibility, authorizations);
+                auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", user, visibility);
             }
 
             termMentionModel.getMetadata().setVertexId(vertex.getId().toString(), visibility);
