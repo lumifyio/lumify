@@ -5,14 +5,12 @@ import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
-import com.google.inject.Inject;
 
 import java.io.InputStream;
 
@@ -20,7 +18,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ConceptTypeAssignmentGraphPropertyWorker.class);
-    private OntologyRepository ontologyRepository;
 
     @Override
     public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
@@ -28,16 +25,16 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         Concept concept;
 
         if (mimeType.startsWith("image")) {
-            concept = ontologyRepository.getConceptById(ConceptType.IMAGE.toString());
+            concept = getOntologyRepository().getConceptById(ConceptType.IMAGE.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.IMAGE.toString());
         } else if (mimeType.startsWith("audio")) {
-            concept = ontologyRepository.getConceptById(ConceptType.AUDIO.toString());
+            concept = getOntologyRepository().getConceptById(ConceptType.AUDIO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.AUDIO.toString());
         } else if (mimeType.startsWith("video")) {
-            concept = ontologyRepository.getConceptById(ConceptType.VIDEO.toString());
+            concept = getOntologyRepository().getConceptById(ConceptType.VIDEO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.VIDEO.toString());
         } else {
-            concept = ontologyRepository.getConceptById(ConceptType.DOCUMENT.toString());
+            concept = getOntologyRepository().getConceptById(ConceptType.DOCUMENT.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.DOCUMENT.toString());
         }
 
@@ -57,10 +54,5 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
 
         String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(vertex);
         return mimeType != null;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 }

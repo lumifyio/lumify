@@ -16,10 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
@@ -104,6 +101,7 @@ public class FileImport {
             LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, visibility);
             RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), visibility);
             RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), visibility);
+            RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(f.lastModified()), visibility);
 
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : this.fileImportSupportingFileHandlers) {
                 FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult = fileImportSupportingFileHandler.addSupportingFiles(vertexBuilder, f, visibility);
