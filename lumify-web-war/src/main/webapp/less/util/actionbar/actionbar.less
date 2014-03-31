@@ -2,16 +2,22 @@
 .tooltip.actionbar {
   .tooltip-inner {
     white-space: nowrap;
+    padding: 3px;
   }
   .actionbarbutton {
     background: none;
     border: 0;
-    color: white;
-    padding: 0 0.5em;
+    color: #eee;
+    padding: 0.5em 0.6em;    
     margin: 0;
     font-size: 100%;
     line-height: 1em;
     outline: none;
+    border-radius: 2px;    
     .disable-text-selection;
+
+    &:hover {
+      color: white;    
+    }
   }
 }

@@ -511,7 +511,9 @@ define([
 
             deferred.done(function() {
                 var selectedIds = _.pluck(vertices, 'id'),
-                    loadedVertices = self.vertices(vertices),
+                    loadedVertices = vertices.map(function(v) {
+                        return self.vertex(v.id) || v;
+                    }),
                     selected = _.groupBy(loadedVertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
 
                 if (_.isArray(self.previousSelection) && 
