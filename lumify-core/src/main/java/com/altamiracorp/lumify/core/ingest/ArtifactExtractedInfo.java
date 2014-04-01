@@ -21,8 +21,6 @@ public class ArtifactExtractedInfo {
     private static final String RAW = "raw";
     private static final String VIDEO_TRANSCRIPT = "videoTranscript";
     private static final String AUDIO_HDFS_PATH = "audioHdfsPath";
-    private static final String POSTER_FRAME_HDFS_PATH = "posterFrameHdfsPath";
-    private static final String VIDEO_DURATION = "videoDuration";
     private static final String MIME_TYPE = "mimeType";
     private static final String FILE_EXTENSION = "fileExtension";
     private static final String FILE_NAME = "fileName";
@@ -263,25 +261,6 @@ public class ArtifactExtractedInfo {
 
     public VideoTranscript getVideoTranscript() {
         return (VideoTranscript) properties.get(VIDEO_TRANSCRIPT);
-    }
-
-    public void setPosterFrameHdfsPath(String posterFrameHdfsPath) {
-        set(POSTER_FRAME_HDFS_PATH, posterFrameHdfsPath);
-    }
-
-    /**
-     * Builder pattern for posterFrameHdfsPath property.
-     *
-     * @param posterFrameHdfsPath the posterFrameHdfsPath
-     * @return this
-     */
-    public ArtifactExtractedInfo posterFrameHdfsPath(final String posterFrameHdfsPath) {
-        setPosterFrameHdfsPath(posterFrameHdfsPath);
-        return this;
-    }
-
-    public String getPosterFrameHdfsPath() {
-        return (String) properties.get(POSTER_FRAME_HDFS_PATH);
     }
 
     public String getMimeType() {

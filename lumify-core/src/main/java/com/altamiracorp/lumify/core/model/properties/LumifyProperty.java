@@ -17,7 +17,6 @@
 package com.altamiracorp.lumify.core.model.properties;
 
 import com.altamiracorp.securegraph.Element;
-import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.common.base.Function;
@@ -187,6 +186,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
     public final Iterable<TRaw> getPropertyValues(final Element element) {
         Iterable<Object> values = element != null ? element.getPropertyValues(key) : null;
         return values != null ? Iterables.transform(values, rawConverter) : Collections.EMPTY_LIST;
+    }
+
+    public boolean hasProperty(Element element, String propertyKey) {
+        return element.getProperty(propertyKey, getKey()) != null;
     }
 
     /**

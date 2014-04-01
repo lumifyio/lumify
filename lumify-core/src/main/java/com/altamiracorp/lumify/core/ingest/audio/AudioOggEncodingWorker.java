@@ -69,6 +69,10 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
+        if (MediaLumifyProperties.AUDIO_OGG.hasProperty(vertex, PROPERTY_KEY)) {
+            return false;
+        }
+
         return true;
     }
 

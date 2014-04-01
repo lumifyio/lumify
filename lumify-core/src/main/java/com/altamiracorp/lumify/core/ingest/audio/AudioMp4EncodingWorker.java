@@ -68,6 +68,11 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
+        if (MediaLumifyProperties.AUDIO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
+            return false;
+        }
+
+
         return true;
     }
 

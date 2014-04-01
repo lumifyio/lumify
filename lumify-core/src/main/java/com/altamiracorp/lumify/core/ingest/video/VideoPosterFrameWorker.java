@@ -18,65 +18,53 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoMp4EncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
+public class VideoPosterFrameWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoPosterFrameWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
-        File mp4ReloactedFile = File.createTempFile("relocated_mp4_", ".mp4");
+        File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
-                            "-y", // overwrite output files
+                            "-itsoffset", "-4",
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libx264",
-                            "-vprofile", "high",
-                            "-preset", "slow",
-                            "-b:v", "500k",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-vf", "scale=720:480",
-                            "-threads", "0",
-                            "-acodec", "libfdk_aac",
-                            "-b:a", "128k",
-                            "-f", "mp4",
-                            mp4File.getAbsolutePath()
+                            "-vcodec", "png",
+                            "-vframes", "1",
+                            "-an",
+                            "-f", "rawvideo",
+                            "-s", "720x480",
+                            "-y",
+                            videoPosterFrameFile.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            processRunner.execute(
-                    "qt-faststart",
-                    new String[]{
-                            mp4File.getAbsolutePath(),
-                            mp4ReloactedFile.getAbsolutePath()
-                    },
-                    null,
-                    data.getLocalFile().getAbsolutePath() + ": "
-            );
-
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
-
-            InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
-            try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
-                spv.searchIndex(false);
-                Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
-                MediaLumifyProperties.VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
-            } finally {
-                mp4RelocatedFileIn.close();
+            if (videoPosterFrameFile.length() == 0) {
+                throw new RuntimeException("Poster frame not created. Zero length file detected. (from: " + data.getLocalFile().getAbsolutePath() + ")");
             }
 
-            return new GraphPropertyWorkResult();
+            InputStream videoPosterFrameFileIn = new FileInputStream(videoPosterFrameFile);
+            try {
+                ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+
+                StreamingPropertyValue spv = new StreamingPropertyValue(videoPosterFrameFileIn, byte[].class);
+                spv.searchIndex(false);
+                Map<String, Object> metadata = new HashMap<String, Object>();
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
+                MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                m.save();
+                getGraph().flush();
+
+                return null;
+            } finally {
+                videoPosterFrameFileIn.close();
+            }
         } finally {
-            mp4File.delete();
-            mp4ReloactedFile.delete();
+            videoPosterFrameFile.delete();
         }
     }
 
@@ -87,10 +75,6 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         }
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType == null || !mimeType.startsWith("video")) {
-            return false;
-        }
-
-        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

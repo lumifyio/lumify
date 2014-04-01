@@ -79,6 +79,10 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
+        if (MediaLumifyProperties.VIDEO_WEBM.hasProperty(vertex, PROPERTY_KEY)) {
+            return false;
+        }
+
         return true;
     }
 

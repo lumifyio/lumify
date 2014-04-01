@@ -18,42 +18,24 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoMp4EncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
+public class VideoAudioExtractWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoAudioExtractWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
-        File mp4ReloactedFile = File.createTempFile("relocated_mp4_", ".mp4");
+        File mp3File = File.createTempFile("audio_extract_", ".mp3");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
-                            "-y", // overwrite output files
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libx264",
-                            "-vprofile", "high",
-                            "-preset", "slow",
-                            "-b:v", "500k",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-vf", "scale=720:480",
-                            "-threads", "0",
-                            "-acodec", "libfdk_aac",
-                            "-b:a", "128k",
-                            "-f", "mp4",
-                            mp4File.getAbsolutePath()
-                    },
-                    null,
-                    data.getLocalFile().getAbsolutePath() + ": "
-            );
-
-            processRunner.execute(
-                    "qt-faststart",
-                    new String[]{
-                            mp4File.getAbsolutePath(),
-                            mp4ReloactedFile.getAbsolutePath()
+                            "-vn",
+                            "-ar", "44100",
+                            "-ab", "320k",
+                            "-f", "mp3",
+                            "-y",
+                            mp3File.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
@@ -61,22 +43,24 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
 
-            InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
+            InputStream mp3FileIn = new FileInputStream(mp3File);
             try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
+                StreamingPropertyValue spv = new StreamingPropertyValue(mp3FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
-                MediaLumifyProperties.VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
+                MediaLumifyProperties.AUDIO_MP3.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
+                getGraph().flush();
+
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
             } finally {
-                mp4RelocatedFileIn.close();
+                mp3FileIn.close();
             }
 
             return new GraphPropertyWorkResult();
         } finally {
-            mp4File.delete();
-            mp4ReloactedFile.delete();
+            mp3File.delete();
         }
     }
 
@@ -90,7 +74,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.AUDIO_MP3.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

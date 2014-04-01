@@ -120,10 +120,6 @@ public abstract class BaseArtifactProcessingBolt extends BaseFileProcessingBolt 
             String newTextPath = moveTempAudioFile(artifactExtractedInfo.getAudioHdfsPath(), artifactExtractedInfo.getRowKey());
             artifactExtractedInfo.setAudioHdfsPath(newTextPath);
         }
-        if (artifactExtractedInfo.getPosterFrameHdfsPath() != null) {
-            String newTextPath = moveTempPosterFrameFile(artifactExtractedInfo.getPosterFrameHdfsPath(), artifactExtractedInfo.getRowKey());
-            artifactExtractedInfo.setPosterFrameHdfsPath(newTextPath);
-        }
         if (artifactExtractedInfo.getProcess() == null) {
             artifactExtractedInfo.setProcess("");
         }
