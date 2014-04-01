@@ -4,3 +4,4 @@ com.altamiracorp.lumify.core.ingest.video.VideoMp4EncodingWorker
 com.altamiracorp.lumify.core.ingest.video.VideoWebMEncodingWorker
 com.altamiracorp.lumify.core.ingest.video.VideoAudioExtractWorker
 com.altamiracorp.lumify.core.ingest.video.VideoPosterFrameWorker
+com.altamiracorp.lumify.core.ingest.video.VideoFrameExtractGraphPropertyWorker

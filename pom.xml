@@ -45,7 +45,6 @@
         <module>lumify-web-war</module>
         <module>lumify-tools</module>
         <module>lumify-ontology-dev</module>
-        <module>lumify-video-frame-extract</module>
     </modules>
     
     <repositories>

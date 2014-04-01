@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.videoFrameExtract;
+package com.altamiracorp.lumify.core.ingest.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -47,16 +48,21 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     videoDuration = frameStartTime;
                 }
 
-                ExistingElementMutation<Vertex> mutation = data.getVertex().prepareMutation();
-                StreamingPropertyValue frameValue = new StreamingPropertyValue(in, byte[].class);
-                frameValue.searchIndex(false);
-                String key = String.format("%d", frameStartTime);
-                Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
-                metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
-                MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVertex().getVisibility());
-                propertyKeys.add(key);
-                mutation.save();
+                InputStream frameFileIn = new FileInputStream(frameFile);
+                try {
+                    ExistingElementMutation<Vertex> mutation = data.getVertex().prepareMutation();
+                    StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
+                    frameValue.searchIndex(false);
+                    String key = String.format("%d", frameStartTime);
+                    Map<String, Object> metadata = new HashMap<String, Object>();
+                    metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
+                    metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
+                    MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVertex().getVisibility());
+                    propertyKeys.add(key);
+                    mutation.save();
+                } finally {
+                    frameFileIn.close();
+                }
             }
 
             getGraph().flush();
