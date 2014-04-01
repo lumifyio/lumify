@@ -1,7 +1,9 @@
 package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.altamiracorp.lumify.core.ingest.term.extraction.TermExtractionResult;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
+import com.altamiracorp.lumify.core.ingest.term.extraction.TermRelationship;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -22,9 +24,12 @@ import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.google.inject.Inject;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
@@ -100,7 +105,56 @@ public abstract class GraphPropertyWorker {
         this.termMentionRepository = termMentionRepository;
     }
 
-    protected TermMentionModel saveTermMention(Vertex artifactGraphVertex, TermMention termMention, Visibility visibility) {
+    protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult, Visibility visibility) {
+        List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions(), visibility);
+        saveRelationships(termExtractionResult.getRelationships(), termMentionsResults, visibility);
+    }
+
+    private void saveRelationships(List<TermRelationship> relationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices, Visibility visibility) {
+        for (TermRelationship relationship : relationships) {
+            TermMentionWithGraphVertex sourceTermMentionsWithGraphVertex = findTermMentionWithGraphVertex(termMentionsWithGraphVertices, relationship.getSourceTermMention());
+            checkNotNull(sourceTermMentionsWithGraphVertex, "source was not found for " + relationship.getSourceTermMention());
+            checkNotNull(sourceTermMentionsWithGraphVertex.getVertex(), "source vertex was not found for " + relationship.getSourceTermMention());
+            TermMentionWithGraphVertex destTermMentionsWithGraphVertex = findTermMentionWithGraphVertex(termMentionsWithGraphVertices, relationship.getDestTermMention());
+            checkNotNull(destTermMentionsWithGraphVertex, "dest was not found for " + relationship.getDestTermMention());
+            checkNotNull(destTermMentionsWithGraphVertex.getVertex(), "dest vertex was not found for " + relationship.getDestTermMention());
+            String label = relationship.getLabel();
+
+            // TODO: a better way to check if the same edge exists instead of looking it up every time?
+            Edge edge = trySingle(sourceTermMentionsWithGraphVertex.getVertex().getEdges(destTermMentionsWithGraphVertex.getVertex(), Direction.OUT, label, getAuthorizations()));
+            if (edge == null) {
+                graph.addEdge(
+                        sourceTermMentionsWithGraphVertex.getVertex(),
+                        destTermMentionsWithGraphVertex.getVertex(),
+                        label,
+                        visibility,
+                        getAuthorizations()
+                );
+            }
+        }
+        graph.flush();
+    }
+
+    private TermMentionWithGraphVertex findTermMentionWithGraphVertex(List<TermMentionWithGraphVertex> termMentionsWithGraphVertices, TermMention termMention) {
+        for (TermMentionWithGraphVertex termMentionsWithGraphVertex : termMentionsWithGraphVertices) {
+            if (termMentionsWithGraphVertex.getTermMention().getRowKey().getStartOffset() == termMention.getStart()
+                    && termMentionsWithGraphVertex.getTermMention().getRowKey().getEndOffset() == termMention.getEnd()
+                    && termMentionsWithGraphVertex.getVertex() != null) {
+                return termMentionsWithGraphVertex;
+            }
+        }
+        return null;
+    }
+
+    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, List<TermMention> termMentions, Visibility visibility) {
+        List<TermMentionWithGraphVertex> results = new ArrayList<TermMentionWithGraphVertex>();
+        for (TermMention termMention : termMentions) {
+            results.add(saveTermMention(artifactGraphVertex, termMention, visibility));
+        }
+        return results;
+    }
+
+    protected TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention, Visibility visibility) {
         LOGGER.debug("Saving term mention '%s':%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getStart(), termMention.getEnd());
         Vertex vertex = null;
         TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getStart(), termMention.getEnd()));
@@ -171,6 +225,24 @@ public abstract class GraphPropertyWorker {
         }
 
         termMentionRepository.save(termMentionModel, FlushFlag.NO_FLUSH);
-        return termMentionModel;
+        return new TermMentionWithGraphVertex(termMentionModel, vertex);
+    }
+
+    public static class TermMentionWithGraphVertex {
+        private final TermMentionModel termMention;
+        private final Vertex vertex;
+
+        public TermMentionWithGraphVertex(TermMentionModel termMention, Vertex vertex) {
+            this.termMention = termMention;
+            this.vertex = vertex;
+        }
+
+        public TermMentionModel getTermMention() {
+            return termMention;
+        }
+
+        public Vertex getVertex() {
+            return vertex;
+        }
     }
 }
