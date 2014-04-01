@@ -4,12 +4,14 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.MockPolicy;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +42,8 @@ public class X509AuthenticationProviderTest {
     @Mock
     private UserRepository userRepository;
     @Mock
+    private Graph graph;
+    @Mock
     private Vertex userVertex;
     @Mock
     private User user;
@@ -51,7 +55,7 @@ public class X509AuthenticationProviderTest {
 
     @Before
     public void setupTests() {
-        instance = new TestX509AuthenticationProvider(userRepository);
+        instance = new TestX509AuthenticationProvider(userRepository, graph);
 
         when(request.getSession()).thenReturn(httpSession);
     }
@@ -87,7 +91,7 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(user);
+        when(userRepository.findByDisplayName(eq(TEST_USERNAME))).thenReturn(user);
         when(userVertex.getId()).thenReturn("userId");
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
@@ -114,8 +118,8 @@ public class X509AuthenticationProviderTest {
 
     private class TestX509AuthenticationProvider extends X509AuthenticationProvider {
 
-        public TestX509AuthenticationProvider(UserRepository userRepository) {
-            super(userRepository);
+        public TestX509AuthenticationProvider(UserRepository userRepository, Graph graph) {
+            super(userRepository, graph);
         }
 
         @Override

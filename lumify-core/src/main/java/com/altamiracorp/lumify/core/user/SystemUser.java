@@ -21,7 +21,7 @@ public class SystemUser implements User {
         return modelUserContext;
     }
 
-    public String getUserName() {
+    public String getDisplayName() {
         return SYSTEM_USERNAME;
     }
 

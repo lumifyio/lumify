@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +18,14 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
     private static final String X509_USER_PASSWORD = "P1OpQsfZMFizHqqyt7lXNE56a6HSVQxdMJHClZ0hhZPhY1OrHvkfDwysDhvWrUIUZbIuEY09FH99qo9t0rjikwEaHK4u03yTLidY";
     private final UserRepository userRepository;
+    private final Graph graph;
 
     protected abstract String getUsername(X509Certificate cert);
 
-    protected X509AuthenticationProvider(UserRepository userRepository) {
+    protected X509AuthenticationProvider(UserRepository userRepository,
+                                         final Graph graph) {
         this.userRepository = userRepository;
+        this.graph = graph;
     }
 
     @Override
@@ -38,9 +42,9 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        User authUser = userRepository.findByUserName(username);
+        User authUser = userRepository.findByDisplayName(username);
         if (authUser == null) {
-            authUser = userRepository.addUser(username, X509_USER_PASSWORD, new String[0]);
+            authUser = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, X509_USER_PASSWORD, new String[0]);
         }
         setUser(request, authUser);
         chain.next(request, response);

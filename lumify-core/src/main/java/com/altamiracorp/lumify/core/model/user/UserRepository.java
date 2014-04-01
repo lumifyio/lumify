@@ -20,13 +20,13 @@ public abstract class UserRepository {
 
     public abstract void init(Map map);
 
-    public abstract User findByUserName(String username);
+    public abstract User findByDisplayName(String username);
 
     public abstract Iterable<User> findAll();
 
     public abstract User findById(String userId);
 
-    public abstract User addUser(String username, String password, String[] userAuthorizations);
+    public abstract User addUser(String externalId, String displayName, String password, String[] userAuthorizations);
 
     public abstract void setPassword(User user, String password);
 

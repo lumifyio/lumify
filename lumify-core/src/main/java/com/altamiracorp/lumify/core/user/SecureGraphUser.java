@@ -26,7 +26,7 @@ public class SecureGraphUser implements User {
         return modelUserContext;
     }
 
-    public String getUserName() {
+    public String getDisplayName() {
         return USERNAME.getPropertyValue(user);
     }
 

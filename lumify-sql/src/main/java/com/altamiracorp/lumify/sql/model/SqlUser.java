@@ -25,7 +25,7 @@ public class SqlUser implements User {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -43,12 +43,12 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    @Column(name = "name")
-    public String getUserName() {
+    @Column(name = "display_name")
+    public String getDisplayName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setDisplayName(String userName) {
         this.userName = userName;
     }
 

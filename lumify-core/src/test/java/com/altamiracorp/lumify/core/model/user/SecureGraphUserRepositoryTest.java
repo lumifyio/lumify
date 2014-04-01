@@ -4,9 +4,6 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SecureGraphUser;
-import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.id.UUIDIdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;
@@ -43,15 +40,17 @@ public class SecureGraphUserRepositoryTest {
         when(userConcept.getId()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
         secureGraphUserRepository = new SecureGraphUserRepository();
+        secureGraphUserRepository.setOntologyRepository(ontologyRepository);
         secureGraphUserRepository.setGraph(new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())));
         secureGraphUserRepository.setAuthorizationRepository(authorizationRepository);
+        secureGraphUserRepository.init(config.getConfig());
     }
 
     @Test
     public void testAddUser() {
-        secureGraphUserRepository.addUser("testUser", "testPassword", new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", new String[]{"auth1", "auth2"});
 
-        SecureGraphUser secureGraphUser = (SecureGraphUser)secureGraphUserRepository.findByUserName("testUser");
+        SecureGraphUser secureGraphUser = (SecureGraphUser)secureGraphUserRepository.findByDisplayName("testUser");
         assertEquals("testUser", UserLumifyProperties.USERNAME.getPropertyValue(secureGraphUser.getUser()));
     }
 }
