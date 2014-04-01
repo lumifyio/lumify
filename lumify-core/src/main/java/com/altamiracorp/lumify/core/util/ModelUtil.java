@@ -4,7 +4,6 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
 import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
-import com.altamiracorp.lumify.core.model.dictionary.DictionaryEntry;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.user.User;
 
@@ -17,7 +16,6 @@ public class ModelUtil {
     private static final List<String> tables = Arrays.asList(
             ArtifactThumbnail.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
-            DictionaryEntry.TABLE_NAME,
             Audit.TABLE_NAME,
             DetectedObjectModel.TABLE_NAME,
             // TODO refactor to config file info. But since this is only for development this is low priority

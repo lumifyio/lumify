@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.web;
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.web.routes.admin.*;
+import com.altamiracorp.lumify.web.routes.admin.AdminUploadOntology;
 import com.altamiracorp.lumify.web.routes.artifact.*;
 import com.altamiracorp.lumify.web.routes.audit.VertexAudit;
 import com.altamiracorp.lumify.web.routes.config.Configuration;
@@ -31,6 +31,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.ServiceLoader;
+
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class Router extends HttpServlet {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);
@@ -48,6 +52,8 @@ public class Router extends HttpServlet {
             super.init(config);
 
             final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
+
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoader.load(WebAppPlugin.class));
 
             app = new WebApp(config, injector);
 
@@ -125,10 +131,11 @@ public class Router extends HttpServlet {
             app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
             app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
-            app.get("/admin/dictionary", authenticator, AdminDictionary.class);
-            app.get("/admin/dictionary", authenticator, AdminDictionaryByConcept.class);
-            app.post("/admin/dictionary", authenticator, AdminDictionaryEntryAdd.class);
-            app.delete("/admin/dictionary", authenticator, AdminDictionaryEntryDelete.class);
+
+            for (WebAppPlugin webAppPlugin : webAppPlugins) {
+                LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
+                webAppPlugin.init(app, config, authenticator, authenticatorInstance);
+            }
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));
         } catch (Exception ex) {

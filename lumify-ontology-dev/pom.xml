@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lumify-ontology-dev</artifactId>
-    <description>Lumify: Ontology: Dev</description>
+    <name>Lumify: Ontology: Dev</name>
 
     <dependencies>
         <dependency>
