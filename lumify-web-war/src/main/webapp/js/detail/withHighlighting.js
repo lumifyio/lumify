@@ -46,6 +46,9 @@ define([
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
             this.highlightNode().off('scrollstop');
+            if (this.ActionBar) {
+                this.ActionBar.teardownAll();
+            }
         });
 
         this.after('initialize', function() {
@@ -78,10 +81,6 @@ define([
                 this.mouseDown = false;
             } else {
                 this.mouseDown = true;
-            }
-
-            if (event.type === 'mousedown' && $target.closest('.tooltip').length === 0 && this.ActionBar) {
-                this.ActionBar.teardownAll();
             }
 
             if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
@@ -348,11 +347,56 @@ define([
         };
 
         this.onResolvableClicked = function(event) {
-            var $target = $(event.target);
+            var self = this,
+                $target = $(event.target);
+
             if ($target.is('.underneath') || $target.parents('.underneath').length) {
                 return;
             }
-            _.defer(this.dropdownEntity.bind(this), false, $target);
+            
+            require(['util/actionbar/actionbar'], function(ActionBar) {
+                self.ActionBar = ActionBar;
+                ActionBar.teardownAll();
+                self.off('.actionbar');
+
+                if ($target.hasClass('resolved')) {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Open: 'open.actionbar',
+                            Unresolve: 'unresolve.actionbar'
+                        }
+                    });
+
+                    self.on('open.actionbar', function() {
+
+                            self.trigger('selectObjects', {
+                                vertices: [ 
+                                    { 
+                                        id: $target.data('info').graphVertexId 
+                                    }
+                                ]
+                            });
+                    });
+                    self.on('unresolve.actionbar', function() {
+                        _.defer(self.dropdownEntity.bind(self), false, $target);
+                    });
+
+                } else {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Resolve: 'resolve.actionbar'
+                        }
+                    });
+
+                    self.on('resolve.actionbar', function() {
+                        _.defer(self.dropdownEntity.bind(self), false, $target);
+                    })
+                }
+            });
         };
 
         this.updateEntityAndArtifactDraggables = function() {

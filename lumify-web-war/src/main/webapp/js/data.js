@@ -495,37 +495,56 @@ define([
 
             var self = this,
                 vertices = data && data.vertices || [],
-                selectedIds = _.pluck(vertices, 'id'),
-                selected = _.groupBy(vertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
+                needsLoading = _.chain(vertices)
+                    .filter(function(v) {
+                        return _.isEqual(v, { id: v.id }) && _.isUndefined(self.vertex(v.id));
+                    })
+                    .value(),
+                deferred = $.Deferred();
 
-            if (_.isArray(this.previousSelection) && 
-                _.isArray(selectedIds) &&
-                _.isEqual(this.previousSelection, selectedIds)) {
-                return;
-            }
-            this.previousSelection = selectedIds;
-
-            selected.vertices = selected.vertices || [];
-            selected.edges = selected.edges || [];
-
-            if (selected.vertices.length) {
-                this.trigger('clipboardSet', {
-                    text: window.location.href.replace(/#.*$/,'') + '#v=' + _.pluck(selected.vertices, 'id').join(',')
-                });
+            if (needsLoading.length) {
+                this.vertexService.getMultiple(_.pluck(needsLoading, 'id'))
+                    .done(function() { deferred.resolve(); });
             } else {
-                this.trigger('clipboardClear');
+                deferred.resolve();
             }
 
-            this.selectedVertices = selected.vertices;
-            this.selectedVertexIds = _.pluck(selected.vertices, 'id');
-            this.selectedEdges = selected.edges;
+            deferred.done(function() {
+                var selectedIds = _.pluck(vertices, 'id'),
+                    loadedVertices = vertices.map(function(v) {
+                        return self.vertex(v.id) || v;
+                    }),
+                    selected = _.groupBy(loadedVertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
 
-            _.keys(this.workspaceVertices).forEach(function(id) {
-                var info = self.workspaceVertices[id];
-                info.selected = selectedIds.indexOf(id) >= 0;
-            });
+                if (_.isArray(self.previousSelection) && 
+                    _.isArray(selectedIds) &&
+                    _.isEqual(self.previousSelection, selectedIds)) {
+                    return;
+                }
+                self.previousSelection = selectedIds;
 
-            this.trigger('objectsSelected', selected);
+                selected.vertices = selected.vertices || [];
+                selected.edges = selected.edges || [];
+
+                if (selected.vertices.length) {
+                    self.trigger('clipboardSet', {
+                        text: window.location.href.replace(/#.*$/,'') + '#v=' + _.pluck(selected.vertices, 'id').join(',')
+                    });
+                } else {
+                    self.trigger('clipboardClear');
+                }
+
+                self.selectedVertices = selected.vertices;
+                self.selectedVertexIds = _.pluck(selected.vertices, 'id');
+                self.selectedEdges = selected.edges;
+
+                _.keys(self.workspaceVertices).forEach(function(id) {
+                    var info = self.workspaceVertices[id];
+                    info.selected = selectedIds.indexOf(id) >= 0;
+                });
+
+                self.trigger('objectsSelected', selected);
+            })
         };
 
         this.onDeleteVertices = function(evt, data) {
