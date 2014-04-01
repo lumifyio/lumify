@@ -58,7 +58,7 @@ public abstract class UserRepository {
         try {
             JSONObject json = new JSONObject();
             json.put("id", user.getUserId());
-            json.put("userName", user.getUserName());
+            json.put("userName", user.getDisplayName());
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
             return json;
