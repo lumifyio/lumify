@@ -132,14 +132,21 @@ define([
                 auditsEl.html('<div class="nav-header">Audits<span class="badge loading"/></div>').show();
                 this.$node.find('.audit-list').remove();
 
-                this.auditRequest = this.auditService.getAudits(this.attr.data.id)
-                    .done(function(auditResponse) {
-                        var audits = _.sortBy(auditResponse.auditHistory, function(a) { 
+                $.when(
+                        this.ontologyService.ontology(),
+                        this.auditRequest = this.auditService.getAudits(this.attr.data.id)
+                    ).done(function(ontology, auditResponse) {
+                        var audits = _.sortBy(auditResponse[0].auditHistory, function(a) { 
                                 return new Date(a.dateTime).getTime() * -1; 
                             }),
                             auditGroups = _.groupBy(audits, function(a) {
+                                if (a.entityAudit) {
+                                    var concept = ontology.conceptsById[a.data.type]
+                                    if (concept) {
+                                        a.data.displayType = concept.displayName;
+                                    }
+                                }
                                 return a.propertyAudit ? 'property' : 'other';
-                                       //a.relationshipAudit ? 'relation' : 'other';
                             });
 
                         self.select('entityAuditsSelector').html(auditsListTemplate({
