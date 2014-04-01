@@ -18,6 +18,7 @@
         <!-- Maven Plugin Versions -->
         <plugin.maven.exec.version>1.2.1</plugin.maven.exec.version>
         <plugin.maven.war.version>2.4</plugin.maven.war.version>
+        <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
     </properties>
 
     <dependencies>
@@ -49,6 +50,12 @@
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>
             <artifactId>bigtable-jetty-session-manager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.api.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -85,10 +92,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty.orbit</groupId>
-            <artifactId>javax.servlet</artifactId>
         </dependency>
     </dependencies>
 
