@@ -94,6 +94,7 @@ define([
             this.on(document, 'toggleSearchPane', this.toggleSearchPane);
             this.on(document, 'escape', this.onEscapeKey);
             this.on(document, 'logout', this.logout);
+            this.on(document, 'showVertexContextMenu', this.onShowVertexContextMenu);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
@@ -180,8 +181,18 @@ define([
         };
 
         this.onEscapeKey = function() {
-            this.collapseAllPanes();
-            this.trigger('selectObjects', { vertices:[] });
+            var self = this;
+
+            // Close any context menus first
+            require(['util/vertex/menu'], function(VertexMenu) {
+                var contextMenu = $(document.body).lookupComponent(VertexMenu);
+                if (contextMenu) {
+                    contextMenu.teardown();
+                } else {
+                    self.collapseAllPanes();
+                    self.trigger('selectObjects');
+                }
+            });
         };
 
         this.trapAnchorClicks = function(e) {
@@ -202,6 +213,15 @@ define([
                     self.trigger(document, 'windowResize');
                 }, MAX_RESIZE_TRIGGER_INTERVAL);
             });
+        };
+
+        this.onShowVertexContextMenu = function(event, data) {
+            data.element = event.target;
+
+            require(['util/vertex/menu'], function(VertexMenu) {
+                VertexMenu.teardownAll();
+                VertexMenu.attachTo(document.body, data);
+            })
         };
 
         this.onMapAction = function(event, data) {

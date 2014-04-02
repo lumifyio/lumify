@@ -1,31 +1,28 @@
 
 define([
     'flight/lib/component',
-    './withVertexPopover'
+    '../withPopover'
 ], function(
     defineComponent,
-    withVertexPopover) {
+    withPopover) {
     'use strict';
 
-    return defineComponent(LoadingPopover, withVertexPopover);
+    return defineComponent(LoadingPopover, withPopover);
 
     function LoadingPopover() {
 
         this.defaultAttrs({
-            buttonSelector: 'button'
-        });
-
-        this.after('teardown', function() {
+            buttonSelector: '.dialog-popover button'
         });
 
         this.before('initialize', function(node, config) {
-            config.template = 'loadingPopover';
+            config.template = 'loading/loading';
             config.message = config.message || 'Loading...';
             config.teardownOnTap = false;
         });
 
         this.after('initialize', function() {
-            this.on('click', {
+            this.on(document, 'click', {
                 buttonSelector: this.onCancel
             });
         });

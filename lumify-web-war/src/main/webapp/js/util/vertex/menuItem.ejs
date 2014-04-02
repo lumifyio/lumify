@@ -1,0 +1,55 @@
+<% // Only supports one level of menus because rescursive include doesnt work with requirejs-ejs %>
+
+
+<% if (item === 'DIVIDER') { %>
+
+  <li class="divider"/>
+
+<% } else {
+  var hasSubmenu = item.submenu && item.submenu.length; %>
+
+  <li class="
+      <%= hasSubmenu ? 'dropdown-submenu' : '' %> 
+      <%= shouldDisable(item) ? 'disabled' : '' %>">
+  <a 
+    data-args="<%= JSON.stringify(item.args || {}) %>"
+    data-event="<%= item.event %>" 
+    class="
+      <%= item.shortcut ? 'has-shortcut' : '' %>
+      <%= item.subtitle ? 'has-subtitle' : '' %>
+    "
+    tabindex="-1" 
+    href="#"><%= processLabel(item) %><%- hasSubmenu ? '&hellip;' : '' %>
+      <% if (item.shortcut) { %><span class="shortcut"><%= item.shortcut %></span><% } %>
+      <% if (item.subtitle) { %><span class="subtitle"><%= item.subtitle %></span><% } %>
+    </a>
+
+    <% if (hasSubmenu) { %>
+      <ul class="dropdown-menu">
+
+        <% item.submenu.forEach(function(item) { %>
+          <% if (item === 'DIVIDER') { %>
+            <li class="divider"/>
+          <% } else { %>
+            <li <%= shouldDisable(item) ? 'disabled' : '' %>>
+            <a 
+              data-args="<%= JSON.stringify(item.args || {}) %>"
+              data-event="<%= item.event %>" 
+              class="
+                <%= item.shortcut ? 'has-shortcut' : '' %>
+                <%= item.subtitle ? 'has-subtitle' : '' %>
+              "
+              tabindex="-1" 
+              href="#"><%= processLabel(item) %>
+                <% if (item.shortcut) { %><span class="shortcut"><%= item.shortcut %></span><% } %>
+                <% if (item.subtitle) { %><span class="subtitle"><%= item.subtitle %></span><% } %>
+              </a>
+            </li>
+          <% } %>
+        <% }) %>
+
+      </ul>
+    <% } %>
+  </li>
+
+<% } %>

@@ -27,7 +27,7 @@ define([
         });
 
         this.setupWithTemplate = function(tpl) {
-            this.dialog = $('<div>')
+            this.dialog = $('<div class="dialog-popover">')
                 .css({position:'absolute'})
                 .html(tpl(this.attr))
                 .appendTo(this.$node);

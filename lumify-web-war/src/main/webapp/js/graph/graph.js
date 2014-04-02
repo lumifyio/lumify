@@ -6,7 +6,6 @@ define([
     'cytoscape',
     './renderer',
     './stylesheet',
-    './contextmenu/withGraphContextMenuItems',
     './withControlDrag',
     'tpl!./graph',
     'tpl!./loading',
@@ -26,7 +25,6 @@ define([
     cytoscape,
     Renderer,
     stylesheet,
-    withGraphContextMenuItems,
     withControlDrag,
     template,
     loadingTemplate,
@@ -51,7 +49,7 @@ define([
         GRID_LAYOUT_X_INCREMENT = 175,
         GRID_LAYOUT_Y_INCREMENT = 100;
 
-    return defineComponent(Graph, withAsyncQueue, withContextMenu, withGraphContextMenuItems, withControlDrag);
+    return defineComponent(Graph, withAsyncQueue, withContextMenu, withControlDrag);
 
     function Graph() {
         this.vertexService = new VertexService();
@@ -499,31 +497,6 @@ define([
             });
         };
 
-        this.onContextMenuLoadRelatedItems = function () {
-            var data = this.setupLoadRelatedItems();
-            this.onLoadRelatedSelected(data);
-        };
-
-        this.onContextMenuLoadRelatedItemsOfConcept = function(conceptId) {
-            var data = this.setupLoadRelatedItems();
-            data.limitParentConceptId = conceptId;
-            this.onLoadRelatedSelected(data);
-        };
-
-        this.setupLoadRelatedItems = function() {
-            var menu = this.select('vertexContextMenuSelector');
-            var currentVertexRK = menu.data('currentVertexRowKey');
-            var graphVertexId = menu.data('currentVertexGraphVertexId');
-            var position = {x: menu.data ('currentVertexPositionX'), y: menu.data ('currentVertexPositionY')};
-            var currentVertexOriginalPosition = retina.pixelsToPoints(position);
-            var data = {
-                _rowKey: currentVertexRK,
-                graphVertexId: graphVertexId,
-                originalPosition: currentVertexOriginalPosition
-            };
-            return data;
-        };
-
         this.onContextMenuDeleteEdge = function () {
             var menu = this.select('edgeContextMenuSelector'),
                 edge = menu.data('edge').vertex;
@@ -799,31 +772,16 @@ define([
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
             } else {
-                var title = event.cyTarget.data('title').value;
-                if (title.length > MAX_TITLE_LENGTH) {
-                    title = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
-                }
-
-                this.$node.find('a').each(function() {
-                    var $this = $(this),
-                        template = $this.data('template');
-
-                    if (template) {
-                        var children = $this.find('*').remove();
-                        $this.text(
-                            _.template(template)({title:title})
-                        ).append(children);
+                var originalEvent = event.originalEvent;
+                this.trigger(originalEvent.target, 'showVertexContextMenu', {
+                    vertexId: fromCyId(event.cyTarget.id()),
+                    position: {
+                        x: originalEvent.pageX,
+                        y: originalEvent.pageY
                     }
                 });
 
-                menu = this.select ('vertexContextMenuSelector');
-                menu.data("currentVertexRowKey",event.cyTarget.data('_rowKey'));
-                menu.data("currentVertexGraphVertexId", fromCyId(event.cyTarget.id()));
-                menu.data("currentVertexPositionX", event.cyTarget.position ('x'));
-                menu.data("currentVertexPositionY", event.cyTarget.position ('y'));
-                menu.data("title", event.cyTarget.data('title').value);
-                this.select('contextMenuSelector').blur().parent().removeClass('open');
-                this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
+                return;
             }
 
             // Show/Hide the layout selection menu item
@@ -1052,125 +1010,6 @@ define([
             });
         };
 
-
-        this.onLoadRelatedSelected = function(data) {
-
-            if ($.isArray(data) && data.length){
-                data = data[0];
-            }
-
-            var self = this,
-                vId = data.graphVertexId,
-                LoadingPopover,
-                req,
-                cancelHandler = function() {
-                    if (req) {
-                        req.abort();
-                    }
-                    self.off('popovercancel');
-                },
-                timeout = _.delay(function() {
-                    self.trigger('hideInformation');
-                    require(['graph/popovers/loadingPopover'], function(LP) {
-                        LoadingPopover = LP;
-                        LoadingPopover.teardownAll();
-                        self.cytoscapeReady().done(function(cy) {
-                            LoadingPopover.attachTo(self.$node, {
-                                cy: cy,
-                                cyNode: cy.getElementById(toCyId(vId)),
-                                message: 'Loading Related...'
-                            });
-                        });
-                    });
-                }, 1000);
-
-            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration:1000 });
-
-            this.on('popovercancel', cancelHandler);
-
-            $.when(
-                this.configService.getProperties(),
-                (req = this.vertexService.getRelatedVertices(data)),
-                this.cytoscapeReady()
-            ).always(function() {
-                clearTimeout(timeout);
-                if (LoadingPopover) {
-                    LoadingPopover.teardownAll();
-                }
-                self.trigger('hideInformation');
-                self.off('popovercancel');
-            }).fail(function() {
-                self.trigger('displayInformation', {
-                    message: 'Error Loading Related Items',
-                    dismiss: 'click',
-                    dismissDuration: 5000
-                });
-            }).done(function(config, verticesResponse, cy) {
-
-                var vertices = verticesResponse[0].vertices,
-                    count = vertices.length,
-                    forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
-                    promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
-                
-                if (count > 0 && (forceSearch || promptBeforeAdding)) {
-                    require(['graph/popovers/loadRelatedPopover'], function(LoadRelatedPopover) {
-                        LoadRelatedPopover.teardownAll();
-                        LoadRelatedPopover.attachTo(self.$node, {
-                            addToWorkspaceEvent: 'addRelatedToWorkspace',
-                            forceSearch: forceSearch,
-                            count: count,
-                            cy: cy,
-                            cyNode: cy.getElementById(toCyId(vId)),
-                            relatedToVertexId: vId,
-                            vertices: vertices
-                        });
-                    });
-                } else self.trigger('addRelatedToWorkspace', { vertices:vertices });
-            });
-        };
-
-        this.onAddRelatedToWorkspace = function(event, data) {
-            var vertices = data.vertices;
-            this.cytoscapeReady(function(cy) {
-                cy.filter(':selected').unselect();
-                cy.container().focus();
-                vertices.forEach(function(vertex, index) {
-                    vertex.workspace = {
-                        selected: true
-                    };
-                });
-
-                this.addingRelatedVertices = true;
-                this.trigger('addVertices', { vertices:vertices });
-                this.trigger('selectObjects', { vertices:vertices })
-            });
-        };
-
-        this.onLoadRelatedItems = function() {
-            var vertexIds = appData.selectedVertexIds;
-            if (vertexIds.length === 1) {
-                this.onLoadRelatedSelected({ graphVertexId: vertexIds[0] });
-            }
-        };
-
-        this.onSearchTitle = function() {
-            this.cytoscapeReady(function(cy) {
-                var selected = cy.nodes().filter(':selected');
-                if (selected.length) {
-                    this.trigger(document, 'searchByEntity', { query : selected.data('title').value});
-                }
-            });
-        }
-
-        this.onSearchRelated = function() {
-            this.cytoscapeReady(function(cy) {
-                var selected = cy.nodes().filter(':selected');
-                if (selected.length) {
-                    this.trigger(document, 'searchByRelatedEntity', { vertexId : fromCyId(selected.id()) });
-                }
-            });
-        }
-
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
@@ -1182,6 +1021,45 @@ define([
                     }
                 });
             }
+        };
+
+        this.onRegisterForPositionChanges = function(event, data) {
+            var self = this;
+
+            if (!data || !data.vertexId) {
+                return console.error('Registering for position events requires a vertexId');
+            }
+
+            this.cytoscapeReady().done(function(cy) {
+
+                var cyNode = cy.getElementById(toCyId(data.vertexId));
+                
+                if (!self.onViewportChangesForPositionChanges) {
+                    self.onViewportChangesForPositionChanges = function() {
+                        var positionInNode = retina.pixelsToPoints(cyNode.renderedPosition());
+                            offset = self.$node.offset();
+
+                        self.trigger(event.target, 'positionChanged', {
+                            position: {
+                                x: positionInNode.x + offset.left,
+                                y: positionInNode.y + offset.top,
+                            }
+                        })
+                    };
+                }
+
+                cy.on('pan zoom position', self.onViewportChangesForPositionChanges);
+                self.onViewportChangesForPositionChanges();
+            })
+        };
+
+        this.onUnregisterForPositionChanges = function(event, data) {
+            var self = this;
+            this.cytoscapeReady().done(function(cy) {
+                if (this.onViewportChangesForPositionChanges) {
+                    cy.off('pan zoom position', this.onViewportChangesForPositionChanges);
+                }
+            });
         };
 
         this.after('teardown', function() {
@@ -1213,10 +1091,8 @@ define([
             this.on(document, 'defocusPaths', this.onDefocusPaths);
             this.on(document, 'edgesDeleted', this.onEdgesDeleted);
 
-            this.on('loadRelatedItems', this.onLoadRelatedItems);
-            this.on('searchTitle', this.onSearchTitle);
-            this.on('searchRelated', this.onSearchRelated)
-            this.on('addRelatedToWorkspace', this.onAddRelatedToWorkspace);
+            this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
+            this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Graph',
@@ -1224,9 +1100,6 @@ define([
                     '-': { fire:'zoomOut', desc:'Zoom out' },
                     '=': { fire:'zoomIn', desc:'Zoom in' },
                     'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
-                    'alt-r': { fire:'loadRelatedItems', desc:'Add related items to workspace' },
-                    'alt-t': { fire:'searchTitle', desc:'Search for selected title' },
-                    'alt-s': { fire:'searchRelated', desc:'Search vertices related to selected' },
                 }
             });
 

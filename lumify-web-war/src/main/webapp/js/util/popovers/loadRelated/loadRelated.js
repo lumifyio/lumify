@@ -1,29 +1,33 @@
 
 define([
     'flight/lib/component',
-    './withVertexPopover'
+    '../withPopover'
 ], function(
     defineComponent,
-    withVertexPopover) {
+    withPopover) {
     'use strict';
 
-    return defineComponent(LoadRelatedPopover, withVertexPopover);
+    return defineComponent(LoadRelatedPopover, withPopover);
 
     function LoadRelatedPopover() {
 
         this.defaultAttrs({
-            searchButtonSelector: 'button.search',
-            addButtonSelector: 'button.add'
+            searchButtonSelector: '.dialog-popover button.search',
+            addButtonSelector: '.dialog-popover button.add'
         });
 
         this.before('initialize', function(node, config) {
+            if (!config.title) {
+                console.warn('title attribute required');
+                config.title = 'Unknown';
+            }
             config.template = config.forceSearch ? 
-                'loadRelatedPopoverForceSearch' :
-                'loadRelatedPopoverPrompt';
+                'loadRelated/loadRelatedForceSearch' :
+                'loadRelated/loadRelatedPrompt';
         });
 
         this.after('initialize', function() {
-            this.on('click', {
+            this.on(document, 'click', {
                 searchButtonSelector: this.onSearch,
                 addButtonSelector: this.onAdd
             });
@@ -35,7 +39,7 @@ define([
         };
 
         this.onAdd = function(event) {
-            this.trigger(this.attr.addToWorkspaceEvent, { vertices:this.attr.vertices });
+            this.trigger(document, 'addVertices', { vertices:this.attr.vertices });
             this.teardown();
         };
     }
