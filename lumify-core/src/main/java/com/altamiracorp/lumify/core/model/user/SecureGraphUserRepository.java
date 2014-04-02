@@ -13,12 +13,10 @@ import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
@@ -30,10 +28,10 @@ public class SecureGraphUserRepository extends UserRepository {
     private String userConceptId;
     private com.altamiracorp.securegraph.Authorizations authorizations;
     private AuthorizationRepository authorizationRepository;
-    private OntologyRepository ontologyRepository;
 
-    @Override
-    public void init(Map config) {
+    public SecureGraphUserRepository (final Graph graph,
+                                      final OntologyRepository ontologyRepository,
+                                      final AuthorizationRepository authorizationRepository) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
@@ -44,6 +42,8 @@ public class SecureGraphUserRepository extends UserRepository {
         authorizationsSet.add(VISIBILITY_STRING);
         authorizationsSet.add(LumifyVisibility.VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
+        this.authorizationRepository = authorizationRepository;
+        this.graph = graph;
     }
 
     private SecureGraphUser createFromVertex(Vertex user) {
@@ -208,20 +208,5 @@ public class SecureGraphUserRepository extends UserRepository {
             authorizations.add(s);
         }
         return authorizations;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
-    }
-
-    @Inject
-    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
-        this.authorizationRepository = authorizationRepository;
     }
 }

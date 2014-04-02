@@ -9,7 +9,7 @@ public class SystemUser implements User {
     private static final String SYSTEM_USERNAME = "system";
     private ModelUserContext modelUserContext;
 
-    public SystemUser (ModelUserContext modelUserContext){
+    public SystemUser(ModelUserContext modelUserContext) {
         this.modelUserContext = modelUserContext;
     }
 
@@ -34,10 +34,11 @@ public class SystemUser implements User {
     }
 
     @Override
-    public UserStatus getUserStatus() {
-        return UserStatus.OFFLINE;
+    public String getUserStatus() {
+        return UserStatus.OFFLINE.name();
     }
 
     @Override
-    public void setCurrentWorkspace(String currentWorkspace) {}
+    public void setCurrentWorkspace(String currentWorkspace) {
+    }
 }

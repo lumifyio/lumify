@@ -8,7 +8,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
-import com.google.inject.Inject;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,37 +15,38 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
-import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private SessionFactory sessionFactory;
 
-    @Override
-    public void init(Map map){
+    public SqlUserRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public User findByDisplayName(String username) {
+    public User findByDisplayName(String displayName) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("name", username)).list();
+        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("displayName", displayName)).list();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
             throw new LumifyException("more than one user was returned");
         } else {
-            return (SqlUser)users.get(0);
+            return (SqlUser) users.get(0);
         }
     }
 
     @Override
-    public Iterable<User> findAll(){
+    public Iterable<User> findAll() {
         Session session = sessionFactory.openSession();
         List users = session.createCriteria(SqlUser.class).list();
         return new ConvertingIterable<Object, User>(users) {
             @Override
             protected User convert(Object obj) {
-                return (SqlUser)obj;
+                return (SqlUser) obj;
             }
         };
     }
@@ -54,36 +54,37 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public User findById(String userId) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("external_id", userId)).list();
+        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("id", Integer.parseInt(userId))).list();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
             throw new LumifyException("more than one user was returned");
         } else {
-            return (SqlUser)users.get(0);
+            return (SqlUser) users.get(0);
         }
     }
 
     @Override
     public User addUser(String externalId, String displayName, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
-        User existingUser = findByDisplayName(displayName);
-        if (existingUser != null) {
-            throw new LumifyException("User, " + displayName + ", already exists");
+        if (findByDisplayName(displayName) != null) {
+            throw new LumifyException("User already exists");
         }
-
-        byte[] salt = UserPasswordUtil.getSalt();
-        byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
         Transaction transaction = null;
         SqlUser newUser = null;
         try {
             transaction = session.beginTransaction();
-            newUser = new SqlUser ();
+            newUser = new SqlUser();
             newUser.setDisplayName(displayName);
-            newUser.setPasswordSalt(salt);
-            newUser.setPasswordHash(passwordHash);
+            if (password != null) {
+                byte[] salt = UserPasswordUtil.getSalt();
+                byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
+                newUser.setPasswordSalt(salt);
+                newUser.setPasswordHash(passwordHash);
+            }
             newUser.setExternalId(externalId);
+            newUser.setUserStatus(UserStatus.OFFLINE.name());
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
             transaction.commit();
@@ -98,9 +99,10 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void setPassword(User user, String password) {
+        checkNotNull(password);
         Session session = sessionFactory.openSession();
-        if (user == null) {
-            throw new LumifyException("User cannot be null");
+        if (user == null || user.getUserId() == null || findById(user.getUserId()) == null) {
+            throw new LumifyException("User is not valid");
         }
 
         Transaction transaction = null;
@@ -111,7 +113,7 @@ public class SqlUserRepository extends UserRepository {
 
             ((SqlUser) user).setPasswordSalt(salt);
             ((SqlUser) user).setPasswordHash(passwordHash);
-            session.save(user);
+            session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
@@ -123,10 +125,15 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public boolean isPasswordValid(User user, String password) {
-        if (user == null) {
-            throw new LumifyException("User cannot be null");
+        checkNotNull(password);
+        if (user == null || (user.getUserId() != null && findById(user.getUserId()) == null)) {
+            throw new LumifyException("User is not valid");
         }
-        return UserPasswordUtil.validatePassword(password, ((SqlUser)user).getPasswordSalt(), ((SqlUser)user).getPasswordHash());
+
+        if (((SqlUser) user).getPasswordHash() == null || ((SqlUser) user).getPasswordSalt() == null) {
+            return false;
+        }
+        return UserPasswordUtil.validatePassword(password, ((SqlUser) user).getPasswordSalt(), ((SqlUser) user).getPasswordHash());
     }
 
     @Override
@@ -140,12 +147,12 @@ public class SqlUserRepository extends UserRepository {
         SqlUser sqlUser = null;
         try {
             transaction = session.beginTransaction();
-            sqlUser = (SqlUser)findById(userId);
+            sqlUser = (SqlUser) findById(userId);
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
             sqlUser.setCurrentWorkspace(workspaceId);
-            session.save(sqlUser);
+            session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
@@ -157,7 +164,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User setStatus(String userId, UserStatus status){
+    public User setStatus(String userId, UserStatus status) {
         Session session = sessionFactory.openSession();
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
@@ -167,12 +174,12 @@ public class SqlUserRepository extends UserRepository {
         SqlUser sqlUser = null;
         try {
             transaction = session.beginTransaction();
-            sqlUser = (SqlUser)findById(userId);
+            sqlUser = (SqlUser) findById(userId);
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            sqlUser.setUserStatus(status);
-            session.save(sqlUser);
+            sqlUser.setUserStatus(status.name());
+            session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();
@@ -194,12 +201,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations){
+    public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         throw new RuntimeException("not yet implemented");
-    }
-
-    @Inject
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

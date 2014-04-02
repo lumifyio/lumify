@@ -39,11 +39,8 @@ public class SecureGraphUserRepositoryTest {
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
         when(userConcept.getId()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
-        secureGraphUserRepository = new SecureGraphUserRepository();
-        secureGraphUserRepository.setOntologyRepository(ontologyRepository);
-        secureGraphUserRepository.setGraph(new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())));
-        secureGraphUserRepository.setAuthorizationRepository(authorizationRepository);
-        secureGraphUserRepository.init(config.getConfig());
+        secureGraphUserRepository = new SecureGraphUserRepository(new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
+                ontologyRepository, authorizationRepository);
     }
 
     @Test

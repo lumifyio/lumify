@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.securegraph.Vertex;
 
@@ -38,10 +37,12 @@ public class SecureGraphUser implements User {
         return UserType.USER;
     }
 
-    public Vertex getUser () { return user; }
+    public Vertex getUser() {
+        return user;
+    }
 
     @Override
-    public UserStatus getUserStatus() {
+    public String getUserStatus() {
         return null;
     }
 

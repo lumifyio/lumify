@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.sql.model;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.user.User;
 
@@ -9,22 +8,23 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+@SequenceGenerator(name = "id_gen", allocationSize = 1)
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
     private String currentWorkspace;
     private int id;
     private String externalId;
-    private String userName;
+    private String displayName;
     private byte[] passwordSalt;
     private byte[] passwordHash;
-    private UserStatus userStatus;
+    private String userStatus;
 
     public SqlUser() {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_gen")
     @Column(name = "id")
     public int getId() {
         return id;
@@ -45,11 +45,11 @@ public class SqlUser implements User {
 
     @Column(name = "display_name")
     public String getDisplayName() {
-        return userName;
+        return displayName;
     }
 
     public void setDisplayName(String userName) {
-        this.userName = userName;
+        this.displayName = userName;
     }
 
     @Column(name = "current_workspace")
@@ -80,11 +80,11 @@ public class SqlUser implements User {
     }
 
     @Column(name = "user_status")
-    public UserStatus getUserStatus() {
+    public String getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus (UserStatus userStatus) {
+    public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
     }
 
