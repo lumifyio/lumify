@@ -16,6 +16,8 @@
 
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
+import com.altamiracorp.securegraph.Visibility;
+
 /**
  * A relationship between two mentioned terms.
  */
@@ -23,11 +25,13 @@ public class TermRelationship {
     private final TermMention sourceTermMention;
     private final TermMention destTermMention;
     private final String label;
+    private final Visibility visibility;
 
-    public TermRelationship(TermMention sourceTermMention, TermMention destTermMention, String label) {
+    public TermRelationship(TermMention sourceTermMention, TermMention destTermMention, String label, Visibility visibility) {
         this.sourceTermMention = sourceTermMention;
         this.destTermMention = destTermMention;
         this.label = label;
+        this.visibility = visibility;
     }
 
     public TermMention getSourceTermMention() {
@@ -42,12 +46,17 @@ public class TermRelationship {
         return label;
     }
 
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 13 * hash + (this.sourceTermMention != null ? this.sourceTermMention.hashCode() : 0);
         hash = 13 * hash + (this.destTermMention != null ? this.destTermMention.hashCode() : 0);
         hash = 13 * hash + (this.label != null ? this.label.hashCode() : 0);
+        hash = 13 * hash + (this.visibility != null ? this.visibility.hashCode() : 0);
         return hash;
     }
 
@@ -67,6 +76,9 @@ public class TermRelationship {
             return false;
         }
         if ((this.label == null) ? (other.label != null) : !this.label.equals(other.label)) {
+            return false;
+        }
+        if ((this.visibility == null) ? (other.visibility != null) : !this.visibility.equals(other.visibility)) {
             return false;
         }
         return true;

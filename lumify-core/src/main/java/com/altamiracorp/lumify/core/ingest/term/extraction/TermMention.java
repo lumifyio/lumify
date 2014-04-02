@@ -15,6 +15,8 @@
  */
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
+import com.altamiracorp.securegraph.Visibility;
+
 import java.util.*;
 
 /**
@@ -26,25 +28,34 @@ public class TermMention {
     private final int end;
     private final String sign;
     private final String ontologyClassUri;
-    private final String relationshipLabel;
     private final boolean resolved;
     private final Map<String, Object> properties;
     private final boolean useExisting;
     private String process = "";
     private Object id;
+    private Visibility visibility;
 
-    private TermMention(int start, int end, String sign, String ontologyClassUri, boolean resolved, Map<String, Object> propertyValue,
-                        String relationshipLabel, boolean useExisting, String process, Object id) {
+    private TermMention(
+            int start,
+            int end,
+            String sign,
+            String ontologyClassUri,
+            boolean resolved,
+            Map<String, Object> propertyValue,
+            boolean useExisting,
+            String process,
+            Object id,
+            Visibility visibility) {
         this.start = start;
         this.end = end;
         this.sign = sign;
         this.ontologyClassUri = ontologyClassUri;
         this.resolved = resolved;
         this.properties = propertyValue;
-        this.relationshipLabel = relationshipLabel;
         this.useExisting = useExisting;
         this.process = process;
         this.id = id;
+        this.visibility = visibility;
     }
 
     public int getStart() {
@@ -75,10 +86,6 @@ public class TermMention {
         return properties;
     }
 
-    public String getRelationshipLabel() {
-        return relationshipLabel;
-    }
-
     public boolean getUseExisting() {
         return useExisting;
     }
@@ -91,10 +98,14 @@ public class TermMention {
         this.process = process;
     }
 
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
     @Override
     public String toString() {
-        return String.format("{id: %s, sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, relLabel: %s, props: %s, process: %s}",
-                id, sign, start, end, ontologyClassUri, resolved, useExisting, relationshipLabel, properties, process);
+        return String.format("{id: %s, sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, props: %s, process: %s}",
+                id, sign, start, end, ontologyClassUri, resolved, useExisting, properties, process);
     }
 
     @Override
@@ -104,7 +115,6 @@ public class TermMention {
         hash = 17 * hash + this.end;
         hash = 17 * hash + (this.sign != null ? this.sign.hashCode() : 0);
         hash = 17 * hash + (this.ontologyClassUri != null ? this.ontologyClassUri.hashCode() : 0);
-        hash = 17 * hash + (this.relationshipLabel != null ? this.relationshipLabel.hashCode() : 0);
         hash = 17 * hash + (this.resolved ? 1 : 0);
         hash = 17 * hash + (this.properties != null ? this.properties.hashCode() : 0);
         hash = 17 * hash + (this.useExisting ? 1 : 0);
@@ -133,9 +143,6 @@ public class TermMention {
         if ((this.ontologyClassUri == null) ? (other.ontologyClassUri != null) : !this.ontologyClassUri.equals(other.ontologyClassUri)) {
             return false;
         }
-        if ((this.relationshipLabel == null) ? (other.relationshipLabel != null) : !this.relationshipLabel.equals(other.relationshipLabel)) {
-            return false;
-        }
         if (this.resolved != other.resolved) {
             return false;
         }
@@ -157,14 +164,19 @@ public class TermMention {
         private int end;
         private String sign;
         private String ontologyClassUri;
-        private String relationshipLabel;
         private boolean resolved;
         private Map<String, Object> properties = new HashMap<String, Object>();
         private boolean useExisting;
         private final List<String> process = new ArrayList<String>();
         private Object id;
+        private Visibility visibility;
 
-        public Builder() {
+        public Builder(int start, int end, String sign, String ontologyClassUri, Visibility visibility) {
+            this.start = start;
+            this.end = end;
+            this.sign = sign;
+            this.ontologyClassUri = ontologyClassUri;
+            this.visibility = visibility;
         }
 
         public Builder(final TermMention tm) {
@@ -172,12 +184,12 @@ public class TermMention {
             end = tm.end;
             sign = tm.sign;
             ontologyClassUri = tm.ontologyClassUri;
-            relationshipLabel = tm.relationshipLabel;
             resolved = tm.resolved;
             properties = new HashMap<String, Object>(tm.properties);
             useExisting = tm.useExisting;
             process.add(tm.process);
             id = tm.id;
+            visibility = tm.visibility;
         }
 
         public Builder start(final int start) {
@@ -197,11 +209,6 @@ public class TermMention {
 
         public Builder ontologyClassUri(final String uri) {
             this.ontologyClassUri = uri;
-            return this;
-        }
-
-        public Builder relationshipLabel(final String label) {
-            this.relationshipLabel = label;
             return this;
         }
 
@@ -230,6 +237,11 @@ public class TermMention {
             return this;
         }
 
+        public Builder visibility(final Visibility visibility) {
+            this.visibility = visibility;
+            return this;
+        }
+
         public Builder setProperty(final String key, final Object value) {
             if (value == null) {
                 this.properties.remove(key);
@@ -248,7 +260,7 @@ public class TermMention {
                 procBuilder.append(proc);
             }
             return new TermMention(start, end, sign, ontologyClassUri, resolved, Collections.unmodifiableMap(properties),
-                    relationshipLabel, useExisting, procBuilder.toString(), id);
+                    useExisting, procBuilder.toString(), id, visibility);
         }
     }
 }

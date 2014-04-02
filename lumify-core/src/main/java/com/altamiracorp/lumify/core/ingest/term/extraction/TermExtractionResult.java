@@ -1,11 +1,12 @@
 package com.altamiracorp.lumify.core.ingest.term.extraction;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.google.common.collect.Lists;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TermExtractionResult {
     private final List<TermMention> termMentions = Lists.newArrayList();
@@ -69,10 +70,10 @@ public class TermExtractionResult {
                 }
                 if (orig.equals(dest)) {
                     dest = updated;
-                    replace =true;
+                    replace = true;
                 }
                 if (replace) {
-                    relUpdates.put(idx, new TermRelationship(src, dest, rel.getLabel()));
+                    relUpdates.put(idx, new TermRelationship(src, dest, rel.getLabel(), rel.getVisibility()));
                 }
             }
             for (Map.Entry<Integer, TermRelationship> update : relUpdates.entrySet()) {

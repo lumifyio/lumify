@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 
@@ -42,22 +43,18 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (matcher.find()) {
-            TermMention termMention = createTerm(matcher);
+            TermMention termMention = createTerm(matcher, data.getVertex().getVisibility());
             termMentions.add(termMention);
         }
-        saveTermMentions(data.getVertex(), termMentions, data.getVertex().getVisibility());
+        saveTermMentions(data.getVertex(), termMentions);
     }
 
-    private TermMention createTerm(final Matcher matched) {
+    private TermMention createTerm(final Matcher matched, Visibility visibility) {
         final String patternGroup = matched.group();
         int start = matched.start();
         int end = matched.end();
 
-        return new TermMention.Builder()
-                .start(start)
-                .end(end)
-                .sign(patternGroup)
-                .ontologyClassUri(this.ontologyClassUri)
+        return new TermMention.Builder(start, end, patternGroup, this.ontologyClassUri, visibility)
                 .resolved(false)
                 .useExisting(true)
                 .process(getClass().getName())
