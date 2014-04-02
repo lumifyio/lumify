@@ -8,7 +8,7 @@ define([
     'sf',
     'tpl!./multiple',
     'tpl!./histogram',
-    'util/vertexList/list'
+    'util/vertex/list'
 ], function (defineComponent, registry, appData, withTypeContent, VertexService, OntologyService, sf, template, histogramTemplate, VertexList) {
     'use strict';
 

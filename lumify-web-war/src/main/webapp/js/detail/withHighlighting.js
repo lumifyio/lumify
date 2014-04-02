@@ -7,8 +7,10 @@ define([
     'colorjs',
     'service/vertex',
     'service/ontology',
+    'util/popovers/withVertexScrollingPositionUpdates',
+    'util/range',
     'util/jquery.withinScrollable'
-], function(TermForm, StatementForm, stylesheet, colorjs, VertexService, OntologyService) {
+], function(TermForm, StatementForm, stylesheet, colorjs, VertexService, OntologyService, withPositionUpdates, range) {
     'use strict';
 
     var HIGHLIGHT_STYLES = [
@@ -23,11 +25,15 @@ define([
     return WithHighlighting;
 
     function WithHighlighting() {
+
+        withPositionUpdates.call(this);
+
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
 
         this.defaultAttrs({
             resolvableSelector: '.text .entity',
+            resolvedSelector: '.text .entity.resolved',
             highlightedWordsSelector: '.entity, .term, .artifact',
             draggablesSelector: '.resolved, .artifact, .generic-draggable'
         });
@@ -65,9 +71,12 @@ define([
 
             this.highlightNode().on('scrollstop', this.updateEntityAndArtifactDraggables.bind(this));
             this.on('click', {
-                resolvableSelector: this.onResolvableClicked
+                resolvableSelector: this.onResolvableClick
             });
-            this.on('mousedown mouseup click dblclick', this.trackMouse.bind(this));
+            this.on('contextmenu', {
+                resolvedSelector: this.onResolvedContextClick
+            });
+            this.on('mousedown mouseup click dblclick contextmenu', this.trackMouse.bind(this));
             this.on(document, 'termCreated', this.updateEntityAndArtifactDraggables.bind(this));
             this.on('updateDraggables', this.updateEntityAndArtifactDraggables.bind(this));
 
@@ -77,7 +86,11 @@ define([
         this.trackMouse = function(event) {
             var $target = $(event.target);
 
-            if (event.type === 'mouseup' || event.type === 'click' || event.type === 'dblclick') {
+            if (event.type === 'contextmenu') {
+                event.preventDefault();
+            }
+
+            if (~'mouseup click dblclick contextmenu'.split(' ').indexOf(event.type)) {
                 this.mouseDown = false;
             } else {
                 this.mouseDown = true;
@@ -230,7 +243,6 @@ define([
             }
         };
 
-
         this.onSelectionChange = function(e) {
             var selection = window.getSelection(),
                 text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
@@ -346,7 +358,25 @@ define([
             });
         };
 
-        this.onResolvableClicked = function(event) {
+        this.onResolvedContextClick = function(event) {
+            var $target = $(event.target).closest('span'),
+                vertexId = $target.data('info').graphVertexId;
+
+            range.clearSelection();
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.trigger($target, 'showVertexContextMenu', {
+                vertexId: vertexId,
+                position: {
+                    x: event.pageX,
+                    y: event.pageY
+                }
+            });
+        };
+
+        this.onResolvableClick = function(event) {
             var self = this,
                 $target = $(event.target);
 

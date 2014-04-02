@@ -10,6 +10,11 @@ define([
     if (!rangy.initialized) rangy.init();
 
     return {
+
+        clearSelection: function() {
+            rangy.getSelection().removeAllRanges();
+        },
+
         expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
 
             var e = rangy.createRange();

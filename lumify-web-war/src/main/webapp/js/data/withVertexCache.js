@@ -96,6 +96,24 @@ define([
             });
         };
 
+        this.getVertexTitle = function(vertexId) {
+            var deferredTitle = $.Deferred(),
+                v, vertexTitle;
+
+            var v = this.vertex(vertexId);
+            if (v) {
+                vertexTitle = v.prop('title');
+                return deferredTitle.resolve(vertexTitle);
+            }
+
+            this.refresh(vertexId).done(function(vertex) {
+                vertexTitle = vertex.prop('title');
+                deferredTitle.resolve(vertexTitle);
+            });
+
+            return deferredTitle;
+        };
+
         this.updateCacheWithVertex = function(vertex, options) {
             var id = vertex.id;
             var cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });

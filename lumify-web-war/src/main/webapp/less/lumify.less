@@ -8,11 +8,13 @@
 @import "util/transforms";
 @import "util/video/scrubber";
 @import "util/audio/scrubber";
+@import "util/popovers/popovers";
 @import "util/vertexList/list";
 @import "util/actionbar/actionbar";
 @import "util/instructions";
 @import "util/jquery-ui-draggable-multiselect";
 @import "util/context-menu";
+@import "util/selection";
 
 // Import bootstrap
 @import "../libs/bootstrap/less/bootstrap.less";
@@ -265,6 +267,10 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 
 .alert {
   word-break: break-word;
+}
+
+.dropdown-menu li.disabled:hover > a > span {
+  color: #777;
 }
 
 @import "util/badge-loading.less";

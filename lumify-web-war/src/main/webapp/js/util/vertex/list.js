@@ -7,12 +7,13 @@ define([
     'tpl!./item',
     'tpl!util/alert',
     'util/video/scrubber',
+    'util/popovers/withVertexScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
-], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, VideoScrubber) {
+], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, VideoScrubber, withPositionUpdates) {
     'use strict';
 
-    return defineComponent(List);
+    return defineComponent(List, withPositionUpdates);
 
     function List() {
 
@@ -91,12 +92,30 @@ define([
             this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
             this.on('up', this.move);
+            this.on('contextmenu', this.onContextMenu);
 
             _.defer(function() {
                 this.$node.scrollTop(0);
             }.bind(this))
-
         });
+
+        this.onContextMenu = function(event) {
+            var $target = $(event.target).closest('.vertex-item'),
+                vertexId = $target.data('vertexId');
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.trigger($target, 'showVertexContextMenu', {
+                vertexId: vertexId,
+                position: {
+                    x: event.pageX,
+                    y: event.pageY
+                }
+            });
+
+            this.selectItems($target);
+        };
 
         this.move = function(e, data) {
             var previousSelected = this.$node.find('.active')[e.type === 'up' ? 'first' : 'last'](),

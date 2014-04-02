@@ -66,6 +66,6 @@
                 data-date-relative="<%= relativeDate %>"
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
-       <span class="audit-message"><%= audit.data.action %> <%= audit.data.type %></span>
+       <span class="audit-message"><%= audit.data.action %> <%= audit.data.displayType || audit.data.type %></span>
     <% } %>
 </li>

@@ -99,7 +99,8 @@ define([
             
             if (referenceDisplay) {
                 this.select('fieldSelector').tooltip('destroy');
-                this.getVertexTitle(value).done(function() {
+                this.getVertexTitle(value).done(function(title) {
+                    value.vertexTitle = title;
                     self.transitionHeight(templateRef(value));
                 });
             } else {
@@ -153,21 +154,10 @@ define([
             var deferredTitle = $.Deferred();
 
             if (value.vertexTitle) {
-                return deferredTitle.resolve();
+                return deferredTitle.resolve(value.vertexTitle);
             }
 
-            var v = appData.vertex(value.vertexId);
-            if (v) {
-                value.vertexTitle = v.prop('title');
-                return deferredTitle.resolve();
-            }
-
-            appData.refresh(value.vertexId).done(function(vertex) {
-                value.vertexTitle = v.prop('title');
-                deferredTitle.resolve();
-            });
-
-            return deferredTitle;
+            return appData.getVertexTitle(value.vertexId);
         };
     }
 });
