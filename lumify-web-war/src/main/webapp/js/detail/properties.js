@@ -197,30 +197,34 @@ define([
                     var property = self.ontologyProperties.byTitle[propertyName],
                         value;
 
-                    for (var i = 0; i < auditsByProperty[propertyName].length; i++) {
-                        var propAudit = auditsByProperty[propertyName][i].propertyAudit;
-                        value = propAudit.newValue || propAudit.previousValue;
-                        if (value) {
-                            break;
+                    if (property && property.userVisible) {
+                        for (var i = 0; i < auditsByProperty[propertyName].length; i++) {
+                            var propAudit = auditsByProperty[propertyName][i].propertyAudit;
+                            value = propAudit.newValue || propAudit.previousValue;
+                            if (value) {
+                                break;
+                            }
                         }
-                    }
 
-                    if (property.dataType === 'geoLocation') {
-                        value = formatters.geoLocation.parse(value);
-                    }
+                        if (property.dataType === 'geoLocation') {
+                            value = formatters.geoLocation.parse(value);
+                        }
 
-                    propLi = $(
-                        propertiesItemTemplate({
-                            formatters: formatters,
-                            property: {
-                                key: property.title,
-                                displayName: property.displayName,
-                                value: value || 'deleted',
-                                metadata: {}
-                            },
-                            popout: false
-                        })
-                    ).addClass('audit-only-property').prependTo(self.$node.find('table tbody'));
+                        propLi = $(
+                            propertiesItemTemplate({
+                                formatters: formatters,
+                                property: {
+                                    key: property.title,
+                                    displayName: property.displayName,
+                                    value: value || 'deleted',
+                                    metadata: {}
+                                },
+                                popout: false
+                            })
+                        ).addClass('audit-only-property').prependTo(self.$node.find('table tbody'));
+                    } else if (_.isUndefined(property)) {
+                        console.warn(propertyName + " in audit record doesn't exist in ontology");
+                    }
                 }
                 propLi.after('<tr><td colspan=2></td></tr>')
                     .next('tr').find('td')
