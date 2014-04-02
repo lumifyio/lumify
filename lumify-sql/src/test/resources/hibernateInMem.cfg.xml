@@ -3,15 +3,15 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
-        <property name="hibernate.connection.url">jdbc:hsqldb:mem:testdb;shutdown=false</property>
+        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:mem:test</property>
         <property name="hibernate.connection.username">sa</property><!-- default username -->
         <property name="hibernate.connection.password"/><!-- default password -->
         <property name="hibernate.connection.pool_size">10</property>
         <property name="hibernate.connection.autocommit">true</property>
         <property name="hibernate.hbm2ddl.auto">create-drop</property><!-- creates the tables from the entites automatically -->
         <property name="show_sql">true</property>
-        <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
         <mapping class="com.altamiracorp.lumify.sql.model.SqlUser"/>
     </session-factory>
 </hibernate-configuration>
