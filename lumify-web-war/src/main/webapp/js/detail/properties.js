@@ -32,7 +32,8 @@ define([
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
         MAX_AUDIT_ITEMS = 5,
-        CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE;
+        CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
+        alreadyWarnedAboutMissingOntology = {};
 
     component.filterPropertiesForDisplay = filterPropertiesForDisplay;
     return component;
@@ -598,6 +599,11 @@ define([
                 addProperty(properties[name], name, 'Visibility', value, stringValue);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
+            } else {
+                if (!alreadyWarnedAboutMissingOntology[name]) {
+                    alreadyWarnedAboutMissingOntology[name] = true;
+                    console.warn(name + ' was not found in ontology');
+                }
             }
         });
         return displayProperties;
