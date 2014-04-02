@@ -31,6 +31,7 @@ public class TermMention {
     private final boolean resolved;
     private final Map<String, Object> properties;
     private final boolean useExisting;
+    private final String propertyKey;
     private String process = "";
     private Object id;
     private Visibility visibility;
@@ -40,6 +41,7 @@ public class TermMention {
             int end,
             String sign,
             String ontologyClassUri,
+            String propertyKey,
             boolean resolved,
             Map<String, Object> propertyValue,
             boolean useExisting,
@@ -50,6 +52,7 @@ public class TermMention {
         this.end = end;
         this.sign = sign;
         this.ontologyClassUri = ontologyClassUri;
+        this.propertyKey = propertyKey;
         this.resolved = resolved;
         this.properties = propertyValue;
         this.useExisting = useExisting;
@@ -72,6 +75,10 @@ public class TermMention {
 
     public String getOntologyClassUri() {
         return ontologyClassUri;
+    }
+
+    public String getPropertyKey() {
+        return propertyKey;
     }
 
     public Object getId() {
@@ -160,8 +167,9 @@ public class TermMention {
 
     public static class Builder {
 
-        private int start;
-        private int end;
+        private final String propertyKey;
+        private final int start;
+        private final int end;
         private String sign;
         private String ontologyClassUri;
         private boolean resolved;
@@ -171,45 +179,27 @@ public class TermMention {
         private Object id;
         private Visibility visibility;
 
-        public Builder(int start, int end, String sign, String ontologyClassUri, Visibility visibility) {
+        public Builder(int start, int end, String sign, String ontologyClassUri, String propertyKey, Visibility visibility) {
             this.start = start;
             this.end = end;
             this.sign = sign;
             this.ontologyClassUri = ontologyClassUri;
+            this.propertyKey = propertyKey;
             this.visibility = visibility;
         }
 
         public Builder(final TermMention tm) {
-            start = tm.start;
-            end = tm.end;
-            sign = tm.sign;
-            ontologyClassUri = tm.ontologyClassUri;
-            resolved = tm.resolved;
-            properties = new HashMap<String, Object>(tm.properties);
-            useExisting = tm.useExisting;
-            process.add(tm.process);
-            id = tm.id;
-            visibility = tm.visibility;
-        }
-
-        public Builder start(final int start) {
-            this.start = start;
-            return this;
-        }
-
-        public Builder end(final int end) {
-            this.end = end;
-            return this;
-        }
-
-        public Builder sign(final String sign) {
-            this.sign = sign;
-            return this;
-        }
-
-        public Builder ontologyClassUri(final String uri) {
-            this.ontologyClassUri = uri;
-            return this;
+            this.start = tm.start;
+            this.end = tm.end;
+            this.sign = tm.sign;
+            this.ontologyClassUri = tm.ontologyClassUri;
+            this.propertyKey = tm.propertyKey;
+            this.resolved = tm.resolved;
+            this.properties = new HashMap<String, Object>(tm.properties);
+            this.useExisting = tm.useExisting;
+            this.process.add(tm.process);
+            this.id = tm.id;
+            this.visibility = tm.visibility;
         }
 
         public Builder resolved(final boolean resolved) {
@@ -219,6 +209,16 @@ public class TermMention {
 
         public Builder useExisting(final boolean useExisting) {
             this.useExisting = useExisting;
+            return this;
+        }
+
+        public Builder sign(final String sign) {
+            this.sign = sign;
+            return this;
+        }
+
+        public Builder ontologyClassUri(final String ontologyClassUri) {
+            this.ontologyClassUri = ontologyClassUri;
             return this;
         }
 
@@ -259,7 +259,7 @@ public class TermMention {
                 }
                 procBuilder.append(proc);
             }
-            return new TermMention(start, end, sign, ontologyClassUri, resolved, Collections.unmodifiableMap(properties),
+            return new TermMention(start, end, sign, ontologyClassUri, propertyKey, resolved, Collections.unmodifiableMap(properties),
                     useExisting, procBuilder.toString(), id, visibility);
         }
     }

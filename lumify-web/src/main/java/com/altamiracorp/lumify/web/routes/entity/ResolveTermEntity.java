@@ -90,7 +90,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
+        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, id.toString());
 
         Concept concept = ontologyRepository.getConceptById(conceptId);
 

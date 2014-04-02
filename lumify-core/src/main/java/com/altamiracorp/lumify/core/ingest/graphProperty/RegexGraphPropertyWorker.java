@@ -43,18 +43,18 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (matcher.find()) {
-            TermMention termMention = createTerm(matcher, data.getVertex().getVisibility());
+            TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVertex().getVisibility());
             termMentions.add(termMention);
         }
         saveTermMentions(data.getVertex(), termMentions);
     }
 
-    private TermMention createTerm(final Matcher matched, Visibility visibility) {
+    private TermMention createTerm(final Matcher matched, String propertyKey, Visibility visibility) {
         final String patternGroup = matched.group();
         int start = matched.start();
         int end = matched.end();
 
-        return new TermMention.Builder(start, end, patternGroup, this.ontologyClassUri, visibility)
+        return new TermMention.Builder(start, end, patternGroup, this.ontologyClassUri, propertyKey, visibility)
                 .resolved(false)
                 .useExisting(true)
                 .process(getClass().getName())

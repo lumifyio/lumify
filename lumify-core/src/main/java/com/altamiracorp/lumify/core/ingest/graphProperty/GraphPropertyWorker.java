@@ -164,9 +164,9 @@ public abstract class GraphPropertyWorker {
     }
 
     private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention) {
-        LOGGER.debug("Saving term mention '%s':%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getStart(), termMention.getEnd());
+        LOGGER.debug("Saving term mention '%s':%s:%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd());
         Vertex vertex = null;
-        TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getStart(), termMention.getEnd()));
+        TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getPropertyKey(), termMention.getStart(), termMention.getEnd()));
         termMentionModel.getMetadata().setSign(termMention.getSign(), termMention.getVisibility());
         termMentionModel.getMetadata().setOntologyClassUri(termMention.getOntologyClassUri(), termMention.getVisibility());
         if (termMention.getProcess() != null && !termMention.getProcess().equals("")) {
