@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.ingest.audio;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -23,7 +22,7 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File mp4File = File.createTempFile("encode_mp4_", ".mp4");
         try {
             processRunner.execute(
@@ -51,8 +50,6 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             } finally {
                 mp4FileIn.close();
             }
-
-            return new GraphPropertyWorkResult();
         } finally {
             mp4File.delete();
         }

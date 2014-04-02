@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.ingest.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -23,7 +22,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
         try {
             processRunner.execute(
@@ -58,8 +57,6 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
                 MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
                 getGraph().flush();
-
-                return null;
             } finally {
                 videoPosterFrameFileIn.close();
             }

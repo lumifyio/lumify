@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.ingest.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -30,7 +29,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private double framesPerSecondToExtract = 0.1; // TODO make this configurable
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
@@ -70,8 +69,6 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             for (String propertyKey : propertyKeys) {
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
             }
-
-            return new GraphPropertyWorkResult();
         } finally {
             FileUtils.deleteDirectory(tempDir);
         }

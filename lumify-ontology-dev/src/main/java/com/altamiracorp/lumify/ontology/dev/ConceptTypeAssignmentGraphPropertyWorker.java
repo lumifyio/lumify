@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.ontology.dev;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
@@ -20,7 +19,7 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ConceptTypeAssignmentGraphPropertyWorker.class);
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(data.getVertex());
         Concept concept;
 
@@ -42,8 +41,6 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getVertex(), concept.getId(), data.getVertex().getVisibility());
         getGraph().flush();
         getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), ElementMutation.DEFAULT_KEY, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
-
-        return new GraphPropertyWorkResult();
     }
 
     @Override

@@ -29,7 +29,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
     private Timer processingTimeTimer;
     private boolean stopped;
     private final Queue<Work> workItems = new LinkedList<Work>();
-    private final Queue<WorkResult<GraphPropertyWorkResult>> workResults = new LinkedList<WorkResult<GraphPropertyWorkResult>>();
+    private final Queue<WorkResult> workResults = new LinkedList<WorkResult>();
     private JmxMetricsManager metricsManager;
 
     @Override
@@ -50,14 +50,13 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                 InputStream in = work.getIn();
                 try {
                     LOGGER.debug("BEGIN doWork (%s)", getClass().getName());
-                    GraphPropertyWorkResult result;
                     PausableTimerContext timerContext = new PausableTimerContext(processingTimeTimer);
                     if (in instanceof PausableTimerContextAware) {
                         ((PausableTimerContextAware) in).setPausableTimerContext(timerContext);
                     }
                     processingCounter.inc();
                     try {
-                        result = this.worker.execute(in, work.getData());
+                        this.worker.execute(in, work.getData());
                     } finally {
                         LOGGER.debug("END doWork (%s)", getClass().getName());
                         processingCounter.dec();
@@ -65,13 +64,13 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                         timerContext.stop();
                     }
                     synchronized (workResults) {
-                        workResults.add(new WorkResult<GraphPropertyWorkResult>(result, null));
+                        workResults.add(new WorkResult(null));
                         workResults.notifyAll();
                     }
                 } catch (Exception ex) {
                     totalErrorCounter.inc();
                     synchronized (workResults) {
-                        workResults.add(new WorkResult<GraphPropertyWorkResult>(null, ex));
+                        workResults.add(new WorkResult(ex));
                         workResults.notifyAll();
                     }
                 } finally {
@@ -79,7 +78,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                         in.close();
                     } catch (IOException ex) {
                         synchronized (workResults) {
-                            workResults.add(new WorkResult<GraphPropertyWorkResult>(null, ex));
+                            workResults.add(new WorkResult(ex));
                             workResults.notifyAll();
                         }
                     }
@@ -107,7 +106,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
         }
     }
 
-    public WorkResult<GraphPropertyWorkResult> dequeueResult() {
+    public WorkResult dequeueResult() {
         synchronized (workResults) {
             if (workResults.size() == 0) {
                 long startTime = new Date().getTime();
@@ -150,21 +149,15 @@ public class GraphPropertyThreadedWrapper implements Runnable {
         }
     }
 
-    public static class WorkResult<TResult> {
-        private final TResult result;
+    public static class WorkResult {
         private final Exception error;
 
-        public WorkResult(TResult result, Exception error) {
-            this.result = result;
+        public WorkResult(Exception error) {
             this.error = error;
         }
 
         public Exception getError() {
             return error;
-        }
-
-        public TResult getResult() {
-            return result;
         }
     }
 

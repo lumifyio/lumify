@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermExtractionResult;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermRelationship;
@@ -44,7 +45,7 @@ public abstract class GraphPropertyWorker {
         this.workerPrepareData = workerPrepareData;
     }
 
-    public abstract GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception;
+    public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
     public abstract boolean isHandled(Vertex vertex, Property property);
 
@@ -146,7 +147,15 @@ public abstract class GraphPropertyWorker {
         return null;
     }
 
-    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, List<TermMention> termMentions, Visibility visibility) {
+    protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions, Visibility visibility) {
+        for (TermMentionFilter termMentionFilter : this.workerPrepareData.getTermMentionFilters()) {
+            try {
+                termMentions = termMentionFilter.apply(artifactGraphVertex, termMentions, visibility);
+            } catch (Exception ex) {
+                throw new LumifyException("Failed to run term mention filter: " + termMentionFilter.getClass().getName(), ex);
+            }
+        }
+
         List<TermMentionWithGraphVertex> results = new ArrayList<TermMentionWithGraphVertex>();
         for (TermMention termMention : termMentions) {
             results.add(saveTermMention(artifactGraphVertex, termMention, visibility));
@@ -154,7 +163,7 @@ public abstract class GraphPropertyWorker {
         return results;
     }
 
-    protected TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention, Visibility visibility) {
+    private TermMentionWithGraphVertex saveTermMention(Vertex artifactGraphVertex, TermMention termMention, Visibility visibility) {
         LOGGER.debug("Saving term mention '%s':%s (%d:%d)", termMention.getSign(), termMention.getOntologyClassUri(), termMention.getStart(), termMention.getEnd());
         Vertex vertex = null;
         TermMentionModel termMentionModel = new TermMentionModel(new TermMentionRowKey(artifactGraphVertex.getId().toString(), termMention.getStart(), termMention.getEnd()));

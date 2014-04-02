@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core.ingest.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkResult;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -23,7 +22,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File webmFile = File.createTempFile("encode_webm_", ".webm");
         try {
             processRunner.execute(
@@ -62,8 +61,6 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
             } finally {
                 webmFileIn.close();
             }
-
-            return new GraphPropertyWorkResult();
         } finally {
             webmFile.delete();
         }

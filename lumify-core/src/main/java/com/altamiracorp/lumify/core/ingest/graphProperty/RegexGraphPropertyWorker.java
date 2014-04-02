@@ -11,6 +11,8 @@ import com.google.common.io.CharStreams;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,19 +33,19 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public GraphPropertyWorkResult execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         LOGGER.debug("Extracting pattern [%s] from provided text", pattern);
 
         final String text = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
 
         final Matcher matcher = pattern.matcher(text);
 
+        List<TermMention> termMentions = new ArrayList<TermMention>();
         while (matcher.find()) {
             TermMention termMention = createTerm(matcher);
-            saveTermMention(data.getVertex(), termMention, data.getVertex().getVisibility());
+            termMentions.add(termMention);
         }
-
-        return new GraphPropertyWorkResult();
+        saveTermMentions(data.getVertex(), termMentions, data.getVertex().getVisibility());
     }
 
     private TermMention createTerm(final Matcher matched) {

@@ -10,10 +10,7 @@ import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.ConfigurationHelper;
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyThreadedWrapper;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
-import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import com.altamiracorp.lumify.core.ingest.graphProperty.*;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -62,7 +59,6 @@ public class GraphPropertyBolt extends BaseRichBolt {
     private Counter totalErrorCounter;
     private Timer processingTimeTimer;
     private List<GraphPropertyThreadedWrapper> workerWrappers;
-    private List<Thread> workerThreads;
 
     @Override
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
@@ -76,24 +72,19 @@ public class GraphPropertyBolt extends BaseRichBolt {
     }
 
     private void prepareWorkers(Map stormConf) {
-        FileSystem hdfsFileSystem;
-        Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
-        try {
-            String hdfsRootDir = (String) stormConf.get(com.altamiracorp.lumify.core.config.Configuration.HADOOP_URL);
-            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
-        } catch (Exception e) {
-            throw new LumifyException("Could not open hdfs filesystem", e);
-        }
+        FileSystem hdfsFileSystem = getFileSystem(stormConf);
+
+        List<TermMentionFilter> termMentionFilters = loadTermMentionFilters(stormConf, hdfsFileSystem);
 
         GraphPropertyWorkerPrepareData workerPrepareData = new GraphPropertyWorkerPrepareData(
                 stormConf,
+                termMentionFilters,
                 hdfsFileSystem,
                 this.user,
                 this.authorizations,
                 InjectHelper.getInjector());
         List<GraphPropertyWorker> workers = toList(ServiceLoader.load(GraphPropertyWorker.class));
         this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
-        this.workerThreads = new ArrayList<Thread>(workers.size());
         for (GraphPropertyWorker worker : workers) {
             InjectHelper.inject(worker);
             try {
@@ -106,11 +97,43 @@ public class GraphPropertyBolt extends BaseRichBolt {
             InjectHelper.inject(wrapper);
             workerWrappers.add(wrapper);
             Thread thread = new Thread(wrapper);
-            this.workerThreads.add(thread);
             String workerName = worker.getClass().getName();
             thread.setName("graphPropertyWorker-" + workerName);
             thread.start();
         }
+    }
+
+    private FileSystem getFileSystem(Map stormConf) {
+        FileSystem hdfsFileSystem;
+        Configuration conf = ConfigurationHelper.createHadoopConfigurationFromMap(stormConf);
+        try {
+            String hdfsRootDir = (String) stormConf.get(com.altamiracorp.lumify.core.config.Configuration.HADOOP_URL);
+            hdfsFileSystem = FileSystem.get(new URI(hdfsRootDir), conf, "hadoop");
+        } catch (Exception e) {
+            throw new LumifyException("Could not open hdfs filesystem", e);
+        }
+        return hdfsFileSystem;
+    }
+
+    private List<TermMentionFilter> loadTermMentionFilters(Map stormConf, FileSystem hdfsFileSystem) {
+        TermMentionFilterPrepareData termMentionFilterPrepareData = new TermMentionFilterPrepareData(
+                stormConf,
+                hdfsFileSystem,
+                this.user,
+                this.authorizations,
+                InjectHelper.getInjector()
+        );
+
+        List<TermMentionFilter> termMentionFilters = toList(ServiceLoader.load(TermMentionFilter.class));
+        for (TermMentionFilter termMentionFilter : termMentionFilters) {
+            InjectHelper.inject(termMentionFilter);
+            try {
+                termMentionFilter.prepare(termMentionFilterPrepareData);
+            } catch (Exception ex) {
+                throw new LumifyException("Could not initialize term mention filter: " + termMentionFilter.getClass().getName(), ex);
+            }
+        }
+        return termMentionFilters;
     }
 
     private void prepareUser(Map stormConf) {
@@ -226,7 +249,9 @@ public class GraphPropertyBolt extends BaseRichBolt {
             teeInputStream.loopUntilTeesAreClosed();
         } finally {
             if (tempFile != null) {
-                tempFile.delete();
+                if (!tempFile.delete()) {
+                    LOGGER.warn("Could not delete temp file %s", tempFile.getAbsolutePath());
+                }
             }
         }
     }
