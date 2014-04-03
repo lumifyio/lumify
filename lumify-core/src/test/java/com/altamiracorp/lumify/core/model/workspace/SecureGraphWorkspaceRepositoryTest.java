@@ -92,7 +92,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         when(workspaceToUserRelationship.getId()).thenReturn("workspaceToUserRelationshipId");
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
-        workspaceRepository = new SecureGraphWorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository, workspaceDiff);
+        workspaceRepository = new SecureGraphWorkspaceRepository();
 
         String user1Id = "USER_testUser1";
         when(user1.getUserId()).thenReturn(user1Id);

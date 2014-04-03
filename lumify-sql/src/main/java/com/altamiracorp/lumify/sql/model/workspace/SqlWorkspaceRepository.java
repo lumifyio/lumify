@@ -5,8 +5,14 @@ import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.user.User;
 
 import java.util.List;
+import java.util.Map;
 
 public class SqlWorkspaceRepository implements WorkspaceRepository {
+    @Override
+    public void init(Map map) {
+
+    }
+
     @Override
     public void delete(Workspace workspace, User user) {
         throw new RuntimeException("Not yet Implemented");

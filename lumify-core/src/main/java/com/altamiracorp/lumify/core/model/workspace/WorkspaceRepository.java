@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WorkspaceRepository {
     String VISIBILITY_STRING = "workspace";
@@ -13,6 +14,8 @@ public interface WorkspaceRepository {
     String WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME = "http://lumify.io/workspace/toEntity";
     String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
     String WORKSPACE_ID_PREFIX = "WORKSPACE_";
+
+    void init(Map map);
 
     void delete(Workspace workspace, User user);
 

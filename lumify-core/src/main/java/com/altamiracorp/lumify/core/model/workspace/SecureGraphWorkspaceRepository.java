@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.altamiracorp.securegraph.util.IterableUtils.toSet;
@@ -27,26 +28,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
-    private final Graph graph;
-    private final String workspaceConceptId;
-    private final String workspaceToEntityRelationshipId;
-    private final String workspaceToUserRelationshipId;
-    private final UserRepository userRepository;
-    private final AuthorizationRepository authorizationRepository;
-    private final WorkspaceDiff workspaceDiff;
+    private Graph graph;
+    private String workspaceConceptId;
+    private String workspaceToEntityRelationshipId;
+    private String workspaceToUserRelationshipId;
+    private UserRepository userRepository;
+    private AuthorizationRepository authorizationRepository;
+    private WorkspaceDiff workspaceDiff;
+    private OntologyRepository ontologyRepository;
 
-    @Inject
-    public SecureGraphWorkspaceRepository(
-            final Graph graph,
-            final OntologyRepository ontologyRepository,
-            final UserRepository userRepository,
-            final AuthorizationRepository authorizationRepository,
-            final WorkspaceDiff workspaceDiff) {
-        this.graph = graph;
-        this.userRepository = userRepository;
-        this.authorizationRepository = authorizationRepository;
-        this.workspaceDiff = workspaceDiff;
 
+    @Override
+    public void init(Map map) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
@@ -334,5 +327,30 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
 
         return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, user);
+    }
+
+    @Inject
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
+
+    @Inject
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    @Inject
+    public void setUserRepository (UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Inject
+    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
+
+    @Inject
+    public void setWorkspaceDiff (WorkspaceDiff workspaceDiff ){
+        this.workspaceDiff = workspaceDiff;
     }
 }

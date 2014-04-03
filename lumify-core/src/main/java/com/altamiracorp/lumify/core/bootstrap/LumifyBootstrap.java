@@ -27,6 +27,7 @@ import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -134,6 +135,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(UserRepository.class)
                 .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(WorkspaceRepository.class)
+                .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
 
         injectProviders();
