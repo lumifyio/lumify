@@ -36,9 +36,6 @@ public class SqlUserRepositoryTest extends TestCase {
     @Test
     public void testAddUser() throws Exception {
         SqlUser sqlUser1 = (SqlUser) sqlUserRepository.addUser("abc", "test user1", "", new String[0]);
-        byte[] salt = sqlUser1.getPasswordSalt();
-        byte[] passwordHash = UserPasswordUtil.hashPassword("", salt);
-        assertTrue(UserPasswordUtil.validatePassword("", salt, passwordHash));
         assertEquals("abc", sqlUser1.getExternalId());
         assertEquals("test user1", sqlUser1.getDisplayName());
         assertEquals("OFFLINE", sqlUser1.getUserStatus());
@@ -52,8 +49,8 @@ public class SqlUserRepositoryTest extends TestCase {
         assertEquals("OFFLINE", sqlUser2.getUserStatus());
 
         SqlUser sqlUser3 = (SqlUser) sqlUserRepository.addUser("ghi", "test user3", "&gdja81", new String[0]);
-        salt = sqlUser3.getPasswordSalt();
-        passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
+        byte[] salt = sqlUser3.getPasswordSalt();
+        byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("ghi", sqlUser3.getExternalId());
         assertEquals("test user3", sqlUser3.getDisplayName());

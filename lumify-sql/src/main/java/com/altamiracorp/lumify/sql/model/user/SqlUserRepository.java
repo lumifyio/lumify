@@ -83,7 +83,7 @@ public class SqlUserRepository extends UserRepository {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
             newUser.setDisplayName(displayName);
-            if (password != null) {
+            if (password != null && !password.equals("")) {
                 byte[] salt = UserPasswordUtil.getSalt();
                 byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
                 newUser.setPasswordSalt(salt);
