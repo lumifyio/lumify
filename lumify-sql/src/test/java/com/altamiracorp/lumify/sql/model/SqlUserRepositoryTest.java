@@ -27,7 +27,8 @@ public class SqlUserRepositoryTest extends TestCase {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlUserRepository = new SqlUserRepository(sessionFactory);
+        sqlUserRepository = new SqlUserRepository();
+        sqlUserRepository.setSessionFactory(sessionFactory);
     }
 
     @Test

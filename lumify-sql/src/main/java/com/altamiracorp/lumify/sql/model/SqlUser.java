@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-@SequenceGenerator(name = "id_gen", allocationSize = 1)
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
@@ -24,7 +23,7 @@ public class SqlUser implements User {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;

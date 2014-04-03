@@ -18,7 +18,7 @@ public abstract class UserRepository {
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
 
-    public UserRepository() {}
+    public abstract void init(Map config);
 
     public abstract User findByDisplayName(String username);
 
