@@ -585,6 +585,7 @@ define([
                         properties[name],
                         name,
                         displayName,
+                        ontologyProperty.dataType,
                         value,
                         stringValue,
                         properties[name]._visibilityJson
@@ -596,9 +597,9 @@ define([
                 // TODO: call plugin
                 stringValue = (value && value.value && value.value.source) || 'public';
 
-                addProperty(properties[name], name, 'Visibility', value, stringValue);
+                addProperty(properties[name], name, 'Visibility', null, value, stringValue);
             } else if (isRelationshipType) {
-                addProperty(properties[name], name, 'Relationship type', properties[name].value);
+                addProperty(properties[name], name, 'Relationship type', null, properties[name].value);
             } else {
                 if (!alreadyWarnedAboutMissingOntology[name]) {
                     alreadyWarnedAboutMissingOntology[name] = true;
@@ -608,12 +609,13 @@ define([
         });
         return displayProperties;
 
-        function addProperty(property, name, displayName, value, stringValue, visibility) {
+        function addProperty(property, name, displayName, displayType, value, stringValue, visibility) {
             displayProperties.push({
                 key: name,
                 value: value,
                 stringValue: _.isUndefined(stringValue) ? value : stringValue,
                 displayName: displayName || name,
+                displayType: displayType || 'string',
                 visibility: visibility,
                 metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
             });
