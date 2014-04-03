@@ -243,7 +243,7 @@ define([
                     title: newSign,
                     conceptId: this.select('conceptSelector').val(),
                     graphVertexId: this.attr.resolvedVertex ? this.attr.resolvedVertex.id : this.currentGraphVertexId,
-                    rowKey: this.attr.dataInfo._rowKey,
+                    rowKey: this.attr.dataInfo['http://lumify.io#rowKey'],
                     artifactId: this.attr.artifactData.id,
                     x1: parseFloat(this.attr.dataInfo.x1),
                     y1: parseFloat(this.attr.dataInfo.y1),
@@ -673,7 +673,7 @@ define([
                             });
 
                         if (item.properties) {
-                            icon = item._glyphIcon || (item.properties._glyphIcon && item.properties._glyphIcon.value) || concept.glyphIconHref;
+                            icon = item['http://lumify.io#glyphIcon'] || (item.properties['http://lumify.io#glyphIcon'] && item.properties['http://lumify.io#glyphIcon'].value) || concept.glyphIconHref;
                         }
                         return entityTemplate({
                             html: html,

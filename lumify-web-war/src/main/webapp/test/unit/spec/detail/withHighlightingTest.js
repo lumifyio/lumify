@@ -43,7 +43,7 @@ define([
             this.component = new this.Component();
             this.component.initialize(this.$node, { 
                 data: { 
-                    properties: {_rowKey:'tmp-rowkey'},
+                    properties: {'http://lumify.io#rowKey':'tmp-rowkey'},
                     selectionDebounce: 10
                 }
             });

@@ -372,7 +372,7 @@ define([
         };
 
         this.classesForVertex = function(vertex) {
-            if (vertex.properties._glyphIcon) return 'hasCustomGlyph';
+            if (vertex.properties['http://lumify.io#glyphIcon']) return 'hasCustomGlyph';
 
             return '';
         };
@@ -384,7 +384,7 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, '_rowKey', 'http://lumify.io#conceptType', '_glyphIcon', 'title'));
+            var merged = $.extend(data, _.pick(vertex.properties, 'http://lumify.io#rowKey', 'http://lumify.io#conceptType', 'http://lumify.io#glyphIcon', 'title'));
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
 

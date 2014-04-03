@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.detectedObjects;
 
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class DetectedObjectModel extends Row<DetectedObjectRowKey> {
         try {
             JSONObject json = new JSONObject();
             json.put("classifierConcept", getMetadata().getClassiferConcept());
-            json.put("_rowKey", getRowKey());
+            json.put(LumifyProperties.ROW_KEY.getKey(), getRowKey());
             json.put("x1", getMetadata().getX1());
             json.put("y1", getMetadata().getY1());
             json.put("x2", getMetadata().getX2());

@@ -6,6 +6,8 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -114,7 +116,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
         TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), "_rowKey", termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = vertexMutation.save();
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());

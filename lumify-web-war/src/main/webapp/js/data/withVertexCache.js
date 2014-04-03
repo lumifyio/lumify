@@ -187,8 +187,8 @@ define([
 
             vertex.imageSrcIsFromConcept = false;
 
-            if (vertex.properties._glyphIcon) {
-                vertex.imageSrc = vertex.properties._glyphIcon.value + '?' + $.param({workspaceId:currentWorkspace});
+            if (vertex.properties['http://lumify.io#glyphIcon']) {
+                vertex.imageSrc = vertex.properties['http://lumify.io#glyphIcon'].value + '?' + $.param({workspaceId:currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 
