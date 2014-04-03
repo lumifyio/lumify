@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.core.model.textHighlighting;
 
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public abstract class OffsetItem implements Comparable {
             JSONObject infoJson = new JSONObject();
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
-            infoJson.put("_rowKey", RowKeyHelper.jsonEncode(getRowKey()));
+            infoJson.put(LumifyProperties.ROW_KEY.getKey(), RowKeyHelper.jsonEncode(getRowKey()));
             if (getGraphVertexId() != null && !getGraphVertexId().equals("")) {
                 infoJson.put("graphVertexId", getGraphVertexId());
             }

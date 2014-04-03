@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.dictionary;
 
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import org.json.JSONObject;
 
 public class DictionaryEntry extends Row<DictionaryEntryRowKey> {
@@ -25,14 +26,14 @@ public class DictionaryEntry extends Row<DictionaryEntryRowKey> {
     }
 
     @Override
-    public JSONObject toJson () {
+    public JSONObject toJson() {
         JSONObject json = new JSONObject();
 
-        json.put("_rowKey",getRowKey().toString());
-        json.put("concept",getMetadata().getConcept());
-        json.put("tokens",getMetadata().getTokens());
+        json.put(LumifyProperties.ROW_KEY.getKey(), getRowKey().toString());
+        json.put("concept", getMetadata().getConcept());
+        json.put("tokens", getMetadata().getTokens());
         if (getMetadata().getResolvedName() != null) {
-            json.put("resolvedName",getMetadata().getResolvedName());
+            json.put("resolvedName", getMetadata().getResolvedName());
         }
 
         return json;

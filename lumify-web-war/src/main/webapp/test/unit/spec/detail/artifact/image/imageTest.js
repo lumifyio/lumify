@@ -47,7 +47,7 @@ describeComponent('detail/artifact/image/image', function() {
             box.is(':visible').should.be.false
 
             this.$node.trigger('DetectedObjectEnter', {
-                _rowKey: ROW_KEY,
+                'http://lumify.io#rowKey': ROW_KEY,
                 x1: 0, y1: 0,
                 x2: 10, y2: 10
             })
@@ -61,7 +61,7 @@ describeComponent('detail/artifact/image/image', function() {
             var box = this.$facebox;
 
             this.$node.trigger('DetectedObjectLeave', {
-                _rowKey: ROW_KEY
+                'http://lumify.io#rowKey': ROW_KEY
             })
 
             box.is(':visible').should.be.false
@@ -74,7 +74,7 @@ describeComponent('detail/artifact/image/image', function() {
                     id: VERTEX_ID,
                     properties: {}
                 },
-                _rowKey: ROW_KEY,
+                'http://lumify.io#rowKey': ROW_KEY,
                 x1: 0, y1: 0, x2: 10, y2: 10
             })
 
@@ -84,7 +84,7 @@ describeComponent('detail/artifact/image/image', function() {
             checkFacebox(this.$faceboxEdit, { visible:true, disabled:true, left:'0px'})
 
             this.$node.trigger('DetectedObjectEnter', {
-                _rowKey: ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
+                'http://lumify.io#rowKey': ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
             })
             this.$facebox.css('left').should.not.equal('0px')
 
@@ -102,7 +102,7 @@ describeComponent('detail/artifact/image/image', function() {
 
         it('should show facebox for unresolved entity', function() {
             this.$node.trigger('DetectedObjectEdit', {
-                _rowKey: ROW_KEY,
+                'http://lumify.io#rowKey': ROW_KEY,
                 x1: 0, y1: 0, x2: 10, y2: 10
             })
 
@@ -112,7 +112,7 @@ describeComponent('detail/artifact/image/image', function() {
             checkFacebox(this.$faceboxEdit, { visible:true, disabled:false, left:'0px'})
 
             this.$node.trigger('DetectedObjectEnter', {
-                _rowKey: ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
+                'http://lumify.io#rowKey': ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
             })
             checkFacebox(this.$facebox, { visible: true })
             this.$facebox.css('left').should.not.equal('0px')

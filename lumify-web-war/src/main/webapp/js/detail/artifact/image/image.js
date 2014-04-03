@@ -229,7 +229,7 @@ define([
                 this.currentlyEditing = 'NEW';
                 this.showFaceboxForEdit(data);
             } else {
-                this.currentlyEditing = data._rowKey;
+                this.currentlyEditing = data['http://lumify.io#rowKey'];
                 this.showFaceboxForEdit(data);
             }
         };

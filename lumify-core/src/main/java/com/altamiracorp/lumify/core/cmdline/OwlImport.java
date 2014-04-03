@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.IOUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -84,8 +85,20 @@ public class OwlImport extends CommandLineBase {
         }
         inDir = inFile.getParentFile();
 
+        FileInputStream inFileIn = new FileInputStream(inFile);
+        try {
+            importFile(inFileIn, documentIRI);
+        } finally {
+            inFileIn.close();
+        }
+    }
+
+    public void importFile(InputStream in, IRI documentIRI) throws IOException, OWLOntologyCreationException {
+        byte[] inFileData = IOUtils.toByteArray(in);
+
+        Reader inFileReader = new InputStreamReader(new ByteArrayInputStream(inFileData));
+
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        Reader inFileReader = new FileReader(inFile);
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
         config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
 
@@ -115,7 +128,7 @@ public class OwlImport extends CommandLineBase {
             importObjectProperty(o, objectProperty);
         }
 
-        ontologyRepository.storeOntologyFile(inFile, documentIRI);
+        ontologyRepository.storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
 
         graph.flush();
         ontologyRepository.clearCache();
@@ -283,6 +296,9 @@ public class OwlImport extends CommandLineBase {
         }
         if ("http://lumify.io#currency".equals(iri)) {
             return PropertyType.CURRENCY;
+        }
+        if ("http://lumify.io#image".equals(iri)) {
+            return PropertyType.IMAGE;
         }
         throw new LumifyException("Unhandled property type " + iri);
     }

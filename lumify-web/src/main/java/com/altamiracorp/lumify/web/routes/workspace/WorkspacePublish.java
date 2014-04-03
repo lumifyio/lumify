@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -241,7 +242,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
 
-        for (Property rowKeyProperty : vertex.getProperties("_rowKey")) {
+        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
             if (termMentionModel == null) {
                 DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));

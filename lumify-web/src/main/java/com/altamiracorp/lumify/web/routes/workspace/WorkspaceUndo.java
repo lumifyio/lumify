@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -140,7 +141,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
         JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Iterator<Property> rowKeys = vertex.getProperties("_rowKey").iterator();
+        Iterator<Property> rowKeys = vertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));

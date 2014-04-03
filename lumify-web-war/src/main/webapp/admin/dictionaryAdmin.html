@@ -172,7 +172,7 @@
             <td class="concept"><%= entry.concept %></td>
             <td class="tokens"><%= entry.tokens %></td>
             <td class="resolvedName"><%= entry.resolvedName ? entry.resolvedName : "" %></td>
-            <td class="delete"><a class="deleteBtn" href="#" data-tokens="<%= entry.tokens %>" data-rowkey="<%= entry._rowKey %>"><img src="/img/glyphicons/glyphicons_197_remove.png"/></a></td>
+            <td class="delete"><a class="deleteBtn" href="#" data-tokens="<%= entry.tokens %>" data-rowkey="<%= entry['http://lumify.io#rowKey'] %>"><img src="/img/glyphicons/glyphicons_197_remove.png"/></a></td>
         </tr>
         <% }) %>
     </table>
