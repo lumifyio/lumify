@@ -77,7 +77,11 @@ public class SqlWorkspace implements Workspace {
     @Override
     @Transient
     public JSONObject toJson(boolean includeVertices) {
-        return null;
+        JSONObject workspaceJson = new JSONObject();
+        workspaceJson.put("workspaceId", getId());
+        workspaceJson.put("title", getDisplayTitle());
+        workspaceJson.put("createdBy", getCreatorUserId());
+        return workspaceJson;
     }
 
     @Override

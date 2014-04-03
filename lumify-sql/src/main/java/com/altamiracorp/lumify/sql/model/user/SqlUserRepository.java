@@ -179,7 +179,12 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        Session session = sessionFactory.openSession();
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+        } catch (HibernateException e) {
+            session = sessionFactory.openSession();
+        }
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }

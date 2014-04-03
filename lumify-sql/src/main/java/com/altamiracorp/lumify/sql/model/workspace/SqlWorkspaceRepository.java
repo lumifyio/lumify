@@ -167,12 +167,12 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public List<WorkspaceEntity> findEntities(String workspaceId, User user) {
-        throw new RuntimeException("Not yet Implemented");
+        return new ArrayList<WorkspaceEntity>();
     }
 
     @Override
     public List<WorkspaceEntity> findEntities(Workspace workspace, User user) {
-        throw new RuntimeException("Not yet Implemented");
+        return new ArrayList<WorkspaceEntity>();
     }
 
     @Override
@@ -303,7 +303,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public List<DiffItem> getDiff(Workspace workspace, User user) {
-        throw new RuntimeException("Not yet Implemented");
+        return new ArrayList<DiffItem>();
     }
 
     @Inject
