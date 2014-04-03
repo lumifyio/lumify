@@ -3,3 +3,4 @@ libs/*
 css/*
 jsc/*
 test/reports
+libpeerconnection.log
