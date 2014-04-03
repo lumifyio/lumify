@@ -1,12 +1,15 @@
 package com.altamiracorp.lumify.sql.model;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.hibernate.HibernateException;
@@ -15,14 +18,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private SessionFactory sessionFactory;
+    private AuthorizationRepository authorizationRepository;
 
     @Override
     public void init (Map config) {
@@ -205,8 +211,11 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        throw new RuntimeException("not yet implemented");
+        return authorizationRepository.createAuthorizations(new HashSet<String>());
     }
+
+    @Inject
+    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) { this.authorizationRepository = authorizationRepository; }
 
     @Inject
     public void setSessionFactory(SessionFactory sessionFactory) {
