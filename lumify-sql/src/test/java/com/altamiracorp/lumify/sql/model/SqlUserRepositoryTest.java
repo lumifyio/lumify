@@ -170,9 +170,10 @@ public class SqlUserRepositoryTest {
     public void testSetCurrentWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
         sqlWorkspace.setDisplayTitle("workspace1");
-        sqlUserRepository.addUser("123", "abc", null, new String[0]);
+        SqlUser testUser = (SqlUser)sqlUserRepository.addUser("123", "abc", null, new String[0]);
+        sqlWorkspace.setUsersCurrentWorkspace(testUser);
         sqlUserRepository.setCurrentWorkspace("1", sqlWorkspace);
-        SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
+        testUser = (SqlUser) sqlUserRepository.findById("1");
         assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
     }
 
