@@ -314,7 +314,7 @@ public class OntologyRepository {
         });
     }
 
-    public OntologyProperty getPropertyById(String propertyId) {
+    public OntologyProperty getPropertyByVertexId(String propertyId) {
         List<OntologyProperty> properties = getProperties();
         for (OntologyProperty property : properties) {
             if (property.getId().equals(propertyId)) {
@@ -422,10 +422,10 @@ public class OntologyRepository {
         for (int i = 0; i < filterJson.length(); i++) {
             JSONObject filter = filterJson.getJSONObject(i);
             if (filter.has("propertyId") && !filter.has("propertyName")) {
-                String propertyId = filter.getString("propertyId");
-                OntologyProperty property = getPropertyById(propertyId);
+                String propertyVertexId = filter.getString("propertyId");
+                OntologyProperty property = getPropertyByVertexId(propertyVertexId);
                 if (property == null) {
-                    throw new RuntimeException("Could not find property with id: " + propertyId);
+                    throw new RuntimeException("Could not find property with id: " + propertyVertexId);
                 }
                 filter.put("propertyName", property.getTitle());
                 filter.put("propertyDataType", property.getDataType());
