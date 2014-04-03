@@ -93,8 +93,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         } catch (HibernateException e) {
             transaction.rollback();
             throw new RuntimeException(e);
-        } finally {
-            session.close();
         }
         return newWorkspace;
     }
@@ -133,8 +131,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         } catch (HibernateException e) {
             transaction.rollback();
             throw new RuntimeException(e);
-        } finally {
-            session.close();
         }
     }
 
@@ -304,8 +300,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         } catch (HibernateException e) {
             transaction.rollback();
             throw new RuntimeException(e);
-        } finally {
-            session.close();
         }
     }
 
