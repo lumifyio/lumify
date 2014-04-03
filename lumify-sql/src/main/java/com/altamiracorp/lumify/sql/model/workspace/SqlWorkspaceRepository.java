@@ -40,7 +40,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -56,8 +56,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public Workspace findById(String workspaceId, User user) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("id", Integer.parseInt(workspaceId))).list();
+        session.close();
         if (workspaces.size() == 0) {
             return null;
         } else if (workspaces.size() > 1) {
@@ -69,7 +70,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public Workspace add(String title, User user) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
 
         Transaction transaction = null;
         SqlWorkspace newWorkspace = null;
@@ -100,8 +101,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public Iterable<Workspace> findAll(User user) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).list();
+        session.close();
         return new ConvertingIterable<Object, Workspace>(workspaces) {
             @Override
             protected Workspace convert(Object obj) {
@@ -120,7 +122,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
 
         Transaction transaction = null;
         try {
@@ -219,7 +221,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     private boolean isValidWorkspace(Workspace workspace) {
         checkNotNull(workspace);
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("id", Integer.parseInt(workspace.getId()))).list();
         if (workspaces.size() == 1) {
             return true;
@@ -260,7 +262,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
         SqlUser userToUpdate = (SqlUser) userRepository.findById(userId);
 
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
 
         Transaction transaction = null;
         try {
