@@ -8,7 +8,7 @@
         <artifactId>lumify-root</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
-    
+
     <artifactId>lumify</artifactId>
     <packaging>pom</packaging>
 
@@ -33,7 +33,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <modules>
         <module>lumify-core</module>
         <module>lumify-sql</module>
@@ -41,13 +41,12 @@
         <module>lumify-model-bigtable-queue</module>
         <module>lumify-model-kafka</module>
         <module>lumify-storm</module>
-		<module>lumify-sql</module>
         <module>lumify-web</module>
         <module>lumify-web-server</module>
         <module>lumify-web-war</module>
         <module>lumify-tools</module>
     </modules>
-    
+
     <repositories>
         <repository>
             <id>lumify-releases</id>
