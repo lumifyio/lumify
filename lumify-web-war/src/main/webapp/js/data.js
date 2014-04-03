@@ -10,6 +10,7 @@ define([
     'service/workspace',
     'service/vertex',
     'service/ontology',
+    'service/config',
     'util/undoManager',
     'util/clipboardManager'
 ], function(
@@ -18,7 +19,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue, 
     // Service
-    Keyboard, WorkspaceService, VertexService, OntologyService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, undoManager, ClipboardManager) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1500,
@@ -51,6 +52,7 @@ define([
         this.workspaceService = new WorkspaceService();
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
+        this.configService = new ConfigService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
         this.workspaceId = null;
@@ -115,6 +117,11 @@ define([
             this.on('workspaceCopied', this.onWorkspaceCopied);
             this.on('reloadWorkspace', this.onReloadWorkspace);
 
+            // Vertices
+            this.on('searchTitle', this.onSearchTitle);
+            this.on('searchRelated', this.onSearchRelated);
+            this.on('addRelatedItems', this.onAddRelatedItems);
+
             this.on('socketMessage', this.onSocketMessage);
 
             this.on('copydocumenttext', this.onDocumentTextCopy);
@@ -136,7 +143,16 @@ define([
                 scope: ['Graph', 'Map'],
                 shortcuts: {
                     'meta-a': { fire:'selectAll', desc:'Select all vertices' },
-                    'delete': { fire:'deleteSelected', desc:'Removes selected vertices from workspace, deletes selected relationships'}
+                    'delete': { fire:'deleteSelected', desc:'Removes selected vertices from workspace, deletes selected relationships'},
+                }
+            });
+
+            this.trigger(document, 'registerKeyboardShortcuts', {
+                scope: ['Graph', 'Map', 'Search'],
+                shortcuts: {
+                    'alt-r': { fire:'addRelatedItems', desc:'Add related items to workspace' },
+                    'alt-t': { fire:'searchTitle', desc:'Search for selected title' },
+                    'alt-s': { fire:'searchRelated', desc:'Search vertices related to selected' },
                 }
             });
 
@@ -172,6 +188,106 @@ define([
             }
         };
 
+        this.onSearchTitle = function(event, data) {
+            var self = this;
+
+            this.getVertexTitle(data.vertexId)
+                .done(function(title) {
+                    self.trigger('searchByEntity', { query : title });
+                });
+        };
+
+        this.onSearchRelated = function(event, data) {
+            this.trigger('searchByRelatedEntity', { vertexId : data.vertexId });
+        };
+
+        this.onAddRelatedItems = function(event, data) {
+
+            if (!data || _.isUndefined(data.vertexId)) {
+                if (this.selectedVertexIds.length === 1) {
+                    data = { vertexId: this.selectedVertexIds[0] };
+                } else {
+                    return;
+                }
+            }
+            
+            var self = this,
+                req = null,
+                cancelHandler = function() {
+                    if (req) {
+                        req.abort();
+                    }
+                    self.off('popovercancel');
+                },
+                LoadingPopover = null,
+                timeout = _.delay(function() {
+                    self.on('popovercancel', cancelHandler);
+                    self.trigger('hideInformation');
+                    require(['util/popovers/loading/loading'], function(LP) {
+                        LoadingPopover = LP;
+                        LoadingPopover.teardownAll();
+                        LoadingPopover.attachTo(event.target, {
+                            anchorTo: {
+                                vertexId: data.vertexId
+                            },
+                            message: 'Loading Related...'
+                        });
+                    });
+                }, 1000);
+
+            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration:1000 });
+
+            $.when(
+                this.configService.getProperties(),
+                (
+                    req = this.vertexService.getRelatedVertices({
+                        graphVertexId: data.vertexId,
+                        limitParentConceptId: data.limitParentConceptId
+                    })
+                )
+            ).always(function() {
+                clearTimeout(timeout);
+                if (LoadingPopover) {
+                    LoadingPopover.teardownAll();
+                }
+                self.trigger('hideInformation');
+                self.off('popovercancel');
+            }).fail(function(r, statusText) {
+                if (statusText !== 'abort') {
+                    self.trigger('displayInformation', {
+                        message: 'Error Loading Related Items',
+                        dismiss: 'click',
+                        dismissDuration: 5000
+                    });
+                }
+            }).done(function(config, verticesResponse) {
+                var vertices = verticesResponse[0].vertices,
+                    count = vertices.length,
+                    forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
+                    promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
+                
+                if (count > 0 && (forceSearch || promptBeforeAdding)) {
+                    require(['util/popovers/loadRelated/loadRelated'], function(LoadRelated) {
+                        self.getVertexTitle(data.vertexId)
+                            .done(function(title) {
+                                LoadRelated.teardownAll();
+                                LoadRelated.attachTo(event.target, {
+                                    forceSearch: forceSearch,
+                                    count: count,
+                                    relatedToVertexId: data.vertexId,
+                                    title: title,
+                                    vertices: vertices,
+                                    anchorTo: {
+                                        vertexId: data.vertexId
+                                    }
+                                });
+                            });
+                    });
+                } else {
+                    self.trigger('addVertices', { vertices:vertices });
+                }
+            });
+        };
 
         var copiedDocumentText,
             copiedDocumentTextStorageKey = 'SESSION_copiedDocumentText';
@@ -206,7 +322,14 @@ define([
             this.trigger('selectObjects', { vertices:this.verticesInWorkspace() });
         };
 
-        this.onDelete = function() {
+        this.onDelete = function(event, data) {
+
+            if (data && data.vertexId) {
+                return this.trigger('deleteVertices', {
+                    vertices: this.vertices([data.vertexId])
+                })
+            }
+
             if (this.selectedVertices.length) {
                 this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
             } else if (this.selectedEdges && this.selectedEdges.length) {

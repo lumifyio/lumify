@@ -9,7 +9,7 @@ define([
     'tpl!./entity',
     'tpl!./relationships',
     'tpl!util/alert',
-    'util/vertexList/list',
+    'util/vertex/list',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
     'service/vertex',

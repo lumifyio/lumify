@@ -42,7 +42,7 @@ define([], function() {
                     if (state > STATE_NONE) return;
                     if (controlKeyPressed && event.cyTarget !== cy) {
                         self.trigger('startVertexConnection', {
-                            sourceId: self.fromCyId(event.cyTarget.id())
+                            vertexId: self.fromCyId(event.cyTarget.id())
                         });
                     }
                 };
@@ -109,7 +109,7 @@ define([], function() {
             this.ignoreCySelectionEvents = true;
 
             this.cytoscapeReady(function(cy) {
-                startControlDragTarget = cy.getElementById(this.toCyId(data.sourceId));
+                startControlDragTarget = cy.getElementById(this.toCyId(data.vertexId));
                 cy.nodes().lock();
                 cy.on('mousemove', this.mouseDragHandler);
             });

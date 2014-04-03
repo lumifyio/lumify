@@ -32,7 +32,8 @@ define([
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
         MAX_AUDIT_ITEMS = 5,
-        CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE;
+        CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
+        alreadyWarnedAboutMissingOntology = {};
 
     component.filterPropertiesForDisplay = filterPropertiesForDisplay;
     return component;
@@ -132,14 +133,21 @@ define([
                 auditsEl.html('<div class="nav-header">Audits<span class="badge loading"/></div>').show();
                 this.$node.find('.audit-list').remove();
 
-                this.auditRequest = this.auditService.getAudits(this.attr.data.id)
-                    .done(function(auditResponse) {
-                        var audits = _.sortBy(auditResponse.auditHistory, function(a) { 
+                $.when(
+                        this.ontologyService.ontology(),
+                        this.auditRequest = this.auditService.getAudits(this.attr.data.id)
+                    ).done(function(ontology, auditResponse) {
+                        var audits = _.sortBy(auditResponse[0].auditHistory, function(a) { 
                                 return new Date(a.dateTime).getTime() * -1; 
                             }),
                             auditGroups = _.groupBy(audits, function(a) {
+                                if (a.entityAudit) {
+                                    var concept = ontology.conceptsById[a.data.type]
+                                    if (concept) {
+                                        a.data.displayType = concept.displayName;
+                                    }
+                                }
                                 return a.propertyAudit ? 'property' : 'other';
-                                       //a.relationshipAudit ? 'relation' : 'other';
                             });
 
                         self.select('entityAuditsSelector').html(auditsListTemplate({
@@ -591,6 +599,11 @@ define([
                 addProperty(properties[name], name, 'Visibility', value, stringValue);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', properties[name].value);
+            } else {
+                if (!alreadyWarnedAboutMissingOntology[name]) {
+                    alreadyWarnedAboutMissingOntology[name] = true;
+                    console.warn(name + ' was not found in ontology');
+                }
             }
         });
         return displayProperties;
