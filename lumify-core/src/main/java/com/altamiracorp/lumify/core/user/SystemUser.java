@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 
 public class SystemUser implements User {
     private static final long serialVersionUID = 1L;
@@ -25,7 +26,8 @@ public class SystemUser implements User {
         return SYSTEM_USERNAME;
     }
 
-    public String getCurrentWorkspace() {
+    @Override
+    public Workspace getCurrentWorkspace() {
         return null;
     }
 
@@ -39,6 +41,7 @@ public class SystemUser implements User {
     }
 
     @Override
-    public void setCurrentWorkspace(String currentWorkspace) {
+    public void setCurrentWorkspace(Workspace currentWorkspace) {
+
     }
 }

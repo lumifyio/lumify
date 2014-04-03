@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Vertex;
@@ -39,6 +40,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     // TODO should we save off this broadcaster? When using the BroadcasterFactory
     //      we always get null when trying to get the default broadcaster
     private static Broadcaster broadcaster;
+    private WorkspaceRepository workspaceRepository;
 
     @Override
     public void onRequest(AtmosphereResource resource) throws IOException {
@@ -157,7 +159,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     private void switchWorkspace(com.altamiracorp.lumify.core.user.User authUser, String workspaceId) {
         if (!workspaceId.equals(authUser.getCurrentWorkspace())) {
             userRepository.setCurrentWorkspace(authUser.getUserId(), workspaceId);
-            authUser.setCurrentWorkspace(workspaceId);
+            authUser.setCurrentWorkspace(workspaceRepository.findById(workspaceId, authUser));
 
             LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);
         }
@@ -238,5 +240,10 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Inject
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 }

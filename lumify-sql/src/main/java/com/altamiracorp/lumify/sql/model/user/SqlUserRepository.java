@@ -157,7 +157,7 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            sqlUser.setCurrentWorkspace(workspaceId);
+//            sqlUser.setCurrentWorkspace(workspaceId);
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {

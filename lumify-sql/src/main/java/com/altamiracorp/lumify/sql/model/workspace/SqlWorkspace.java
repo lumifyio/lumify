@@ -2,32 +2,34 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
-import org.hibernate.annotations.GenericGenerator;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "workspace")
+
 public class SqlWorkspace implements Workspace {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name="workspace_id")
     private int id;
-    @Column(name="display_title")
+    @Column(name = "display_title")
     private String displayTitle;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private SqlUser creator;
-    @OneToMany (mappedBy = "id")
-    private Set<SqlUser> userWithWriteAccess;
-    @OneToMany (mappedBy = "id")
-    private Set<SqlUser> userWithReadAccess;
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private SqlUser usersCurrentWorkspace;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.workspace")
+    public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
 
-    public String getId () {
+    public String getId() {
         return Integer.toString(id);
     }
 
@@ -56,20 +58,20 @@ public class SqlWorkspace implements Workspace {
         this.creator = creator;
     }
 
-    public Set<SqlUser> getUserWithWriteAccess() {
-        return userWithWriteAccess;
+    public SqlUser getUsersCurrentWorkspace() {
+        return usersCurrentWorkspace;
     }
 
-    public void setUserWithWriteAccess(Set<SqlUser> userWithWriteAccess) {
-        this.userWithWriteAccess = userWithWriteAccess;
+    public void setUsersCurrentWorkspace(SqlUser usersCurrentWorkspace) {
+        this.usersCurrentWorkspace = usersCurrentWorkspace;
     }
 
-    public Set<SqlUser> getUserWithReadAccess() {
-        return userWithReadAccess;
+    public Set<SqlWorkspaceUser> getSqlWorkspaceUser() {
+        return sqlWorkspaceUser;
     }
 
-    public void setUserWithReadAccess(Set<SqlUser> userWithReadAccess) {
-        this.userWithReadAccess = userWithReadAccess;
+    public void setSqlWorkspaceUser(Set<SqlWorkspaceUser> sqlWorkspaceUser) {
+        this.sqlWorkspaceUser = sqlWorkspaceUser;
     }
 
     @Override

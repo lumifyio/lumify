@@ -2,9 +2,14 @@ package com.altamiracorp.lumify.sql.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.user.UserType;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
+import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -13,20 +18,23 @@ public class SqlUser implements User {
     private ModelUserContext modelUserContext;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "user_id", unique = true)
     private int id;
-    @Column(name = "external_id")
+    @Column(name = "external_id", unique = true)
     private String externalId;
     @Column(name = "display_name")
     private String displayName;
-    @Column(name = "current_workspace")
-    private String currentWorkspace;
     @Column(name = "password_salt")
     private byte[] passwordSalt;
     @Column(name = "password_hash")
     private byte[] passwordHash;
     @Column(name = "user_status")
     private String userStatus;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "usersCurrentWorkspace")
+    @PrimaryKeyJoinColumn
+    private SqlWorkspace currentWorkspace;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.user", cascade = CascadeType.ALL)
+    private Set<SqlWorkspaceUser> sqlWorkspaceUsers = new HashSet<SqlWorkspaceUser>(0);
 
     public SqlUser() {
     }
@@ -55,12 +63,8 @@ public class SqlUser implements User {
         this.displayName = userName;
     }
 
-    public String getCurrentWorkspace() {
+    public SqlWorkspace getCurrentWorkspace() {
         return currentWorkspace;
-    }
-
-    public void setCurrentWorkspace(String currentWorkspace) {
-        this.currentWorkspace = currentWorkspace;
     }
 
     public byte[] getPasswordHash() {
@@ -83,8 +87,20 @@ public class SqlUser implements User {
         return userStatus;
     }
 
+    public void setCurrentWorkspace(Workspace currentWorkspace) {
+        this.currentWorkspace = (SqlWorkspace) currentWorkspace;
+    }
+
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public Set<SqlWorkspaceUser> getSqlWorkspaceUsers() {
+        return sqlWorkspaceUsers;
+    }
+
+    public void setSqlWorkspaceUsers(Set<SqlWorkspaceUser> sqlWorkspaceUsers) {
+        this.sqlWorkspaceUsers = sqlWorkspaceUsers;
     }
 
     @Override
@@ -98,6 +114,7 @@ public class SqlUser implements User {
         return modelUserContext;
     }
 
+    @Transient
     public void setModelUserContext(ModelUserContext modelUserContext) {
         this.modelUserContext = modelUserContext;
     }

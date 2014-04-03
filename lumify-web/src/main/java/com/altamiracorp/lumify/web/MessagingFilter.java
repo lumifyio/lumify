@@ -32,7 +32,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
             JSONArray workspaces = permissionsJson.optJSONArray("workspaces");
             if (workspaces != null) {
                 User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
-                if (!isWorkspaceInList(workspaces, currentUser.getCurrentWorkspace())) {
+                if (!isWorkspaceInList(workspaces, currentUser.getCurrentWorkspace().getId())) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }
             }

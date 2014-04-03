@@ -1,8 +1,12 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserType;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.securegraph.Vertex;
+import com.google.inject.Inject;
 
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.CURRENT_WORKSPACE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.USERNAME;
@@ -11,6 +15,9 @@ public class SecureGraphUser implements User {
     private static final long serialVersionUID = 1L;
     private Vertex user;
     private ModelUserContext modelUserContext;
+
+    private WorkspaceRepository workspaceRepository;
+    private UserRepository userRepository;
 
     public SecureGraphUser(Vertex user, ModelUserContext modelUserContext) {
         this.user = user;
@@ -29,8 +36,8 @@ public class SecureGraphUser implements User {
         return USERNAME.getPropertyValue(user);
     }
 
-    public String getCurrentWorkspace() {
-        return CURRENT_WORKSPACE.getPropertyValue(user);
+    public Workspace getCurrentWorkspace() {
+        return workspaceRepository.findById(CURRENT_WORKSPACE.getPropertyValue(user), userRepository.findById(user.getId().toString()));
     }
 
     public UserType getUserType() {
@@ -47,7 +54,17 @@ public class SecureGraphUser implements User {
     }
 
     @Override
-    public void setCurrentWorkspace(String currentWorkspace) {
-        CURRENT_WORKSPACE.setProperty(user, currentWorkspace, user.getVisibility());
+    public void setCurrentWorkspace(Workspace currentWorkspace) {
+        CURRENT_WORKSPACE.setProperty(user, currentWorkspace.getId(), user.getVisibility());
+    }
+
+    @Inject
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }
