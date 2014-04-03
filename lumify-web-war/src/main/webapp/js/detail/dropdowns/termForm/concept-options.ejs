@@ -6,5 +6,5 @@
       indent = slashes.replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'); %>
   <option 
     <% if (concept.id == selectedConceptId) { %>selected<% } %>
-    value="<%= concept.id %>"><%= indent %><%= concept.displayName %></option>
+    value="<%= concept.id %>"><%- indent %><%= concept.displayName %></option>
 <% }); %>

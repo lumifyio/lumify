@@ -1,13 +1,24 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://lumify.io/dev#"
-         xml:base="http://lumify.io/dev"
-         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-         xmlns:lumify="http://lumify.io#"
-         xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <owl:Ontology rdf:about="http://lumify.io"/>
 
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://lumify.io#"
+     xml:base="http://lumify.io"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io"/>
+    
 
 
     <!-- 
@@ -18,31 +29,31 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io#color -->
 
-    <owl:AnnotationProperty rdf:about="http://lumify.io#color"/>
-
+    <owl:AnnotationProperty rdf:about="&lumify;color"/>
+    
 
 
     <!-- http://lumify.io#displayType -->
 
-    <owl:AnnotationProperty rdf:about="http://lumify.io#displayType"/>
-
+    <owl:AnnotationProperty rdf:about="&lumify;displayType"/>
+    
 
 
     <!-- http://lumify.io#glyphIconFileName -->
 
-    <owl:AnnotationProperty rdf:about="http://lumify.io#glyphIconFileName"/>
-
+    <owl:AnnotationProperty rdf:about="&lumify;glyphIconFileName"/>
+    
 
 
     <!-- http://lumify.io#userVisible -->
 
-    <owl:AnnotationProperty rdf:about="http://lumify.io#userVisible"/>
-
+    <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
+    
 
 
     <!-- 
@@ -53,25 +64,25 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io#currency -->
 
-    <rdfs:Datatype rdf:about="http://lumify.io#currency"/>
-
+    <rdfs:Datatype rdf:about="&lumify;currency"/>
+    
 
 
     <!-- http://lumify.io#geolocation -->
 
-    <rdfs:Datatype rdf:about="http://lumify.io#geolocation"/>
-
+    <rdfs:Datatype rdf:about="&lumify;geolocation"/>
+    
 
 
     <!-- http://lumify.io#image -->
 
-    <rdfs:Datatype rdf:about="http://lumify.io#image"/>
-
+    <rdfs:Datatype rdf:about="&lumify;image"/>
+    
 
 
     <!-- 
@@ -82,45 +93,95 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-
+    
 
 
     <!-- http://lumify.io#conceptType -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io#conceptType">
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:DatatypeProperty rdf:about="&lumify;conceptType">
+        <rdfs:label xml:lang="en">Concept Type</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io#glyphIcon -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io#glyphIcon">
-        <rdfs:range rdf:resource="http://lumify.io#image"/>
-        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:DatatypeProperty rdf:about="&lumify;glyphIcon">
+        <rdfs:label xml:lang="en">Glyph Icon</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&lumify;image"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io#mapGlyphIcon -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io#mapGlyphIcon">
-        <rdfs:range rdf:resource="http://lumify.io#image"/>
-        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:DatatypeProperty rdf:about="&lumify;mapGlyphIcon">
+        <rdfs:label xml:lang="en">Map Glyph Icon</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&lumify;image"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
+    
 
+
+    <!-- http://lumify.io#mimeType -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;mimeType">
+        <rdfs:label xml:lang="en">Mime Type</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#publishedDate -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;publishedDate">
+        <rdfs:label xml:lang="en">Published Date</rdfs:label>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#rowKey -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;rowKey">
+        <rdfs:label xml:lang="en">Row Key</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#source -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;source">
+        <rdfs:label xml:lang="en">Source</rdfs:label>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
 
 
     <!-- http://lumify.io#title -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io#title">
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:DatatypeProperty rdf:about="&lumify;title">
+        <rdfs:label xml:lang="en">Title</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
 </rdf:RDF>
 
 
 
-        <!-- Generated by the OWL API (version 3.4.10-SNAPSHOT) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 

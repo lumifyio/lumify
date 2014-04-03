@@ -252,7 +252,7 @@ define([
                         return obj.entityVertex.id === data.id;
                     }
 
-                    return obj._rowKey === data.id;
+                    return obj['http://lumify.io#rowKey'] === data.id;
                 }));
             }
 
@@ -273,7 +273,7 @@ define([
             this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', detectedObject);
             this.select('detectedObjectLabelsSelector').show();
             this.$node.find('.detected-object-labels .detected-object').each(function() {
-                if ($(this).data('info')._rowKey === data.id) {
+                if ($(this).data('info')['http://lumify.io#rowKey'] === data.id) {
                     $(this).closest('span').addClass('focused')
                 }
             });

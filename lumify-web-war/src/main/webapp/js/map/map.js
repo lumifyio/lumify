@@ -8,6 +8,7 @@ define([
     'tpl!./instructions/regionRadius',
     'tpl!./instructions/regionLoading',
     'service/vertex',
+    'service/ontology',
     'util/retina',
     'util/controls',
     'util/formatters',
@@ -20,6 +21,7 @@ define([
     radiusTemplate,
     loadingTemplate,
     VertexService,
+    OntologyService,
     retina,
     Controls,
     formatters,
@@ -39,6 +41,7 @@ define([
         var ol, latlon, point;
 
         this.vertexService = new VertexService();
+        this.ontologyService = new OntologyService();
         this.mode = MODE_NORMAL;
 
         this.defaultAttrs({
@@ -241,11 +244,16 @@ define([
         this.findOrCreateMarker = function(map, vertex) {
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
-                geoLocation = vertex.properties.geoLocation,
+                geoLocations = this.ontologyProperties.byDataType['geoLocation'],
+                geoLocationProperty = geoLocations.length && geoLocations[0],
+                geoLocation = geoLocationProperty && vertex.properties[geoLocationProperty.title],
                 conceptType = vertex.properties['http://lumify.io#conceptType'].value,
                 heading = vertex.properties.heading && vertex.properties.heading.value,
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
-                iconUrl =  '/map/marker/' + conceptType + '/image?scale=' + (retina.devicePixelRatio > 1 ? '2' : '1');
+                iconUrl =  '/map/marker/image?' + $.param({
+                    type: conceptType,
+                    scale: retina.devicePixelRatio > 1 ? '2' : '1'
+                });
 
             if (!geoLocation || !geoLocation.value.latitude || !geoLocation.value.longitude) return;
 
@@ -650,11 +658,16 @@ define([
 
             // Prevent map shake on initialize while catching up with vertexAdd
             // events
-            this.preventShake = true;
-            this.mapMarkReady(map);
-            this.mapReady().done(function() {
-                self.preventShake = false;
-            });
+           
+            this.ontologyService.properties()
+                .done(function(p) {
+                    self.ontologyProperties = p;
+                    self.preventShake = true;
+                    self.mapMarkReady(map);
+                    self.mapReady().done(function() {
+                        self.preventShake = false;
+                    });
+                })
         };
 
         this.featureStyle = function() {

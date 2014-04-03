@@ -191,7 +191,8 @@ define([
                     .then(function(ontology) {
                         return {
                             list: _.sortBy(ontology.properties, 'displayName'),
-                            byTitle: _.indexBy(ontology.properties, 'title')
+                            byTitle: _.indexBy(ontology.properties, 'title'),
+                            byDataType: _.groupBy(ontology.properties, 'dataType')
                         };
                     });
     };

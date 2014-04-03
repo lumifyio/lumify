@@ -104,10 +104,26 @@
                                 karma.conf.js,
                                 bower.json,
                                 node_modules/**,
+                                js/**,
+                                less/**,
+                                build/**,
+                                README.*,
                                 libs/sinon/**,
                                 libs/sinon-chai/**,
                                 libs/flight-mocha/**,
-                                libs/chai/**
+                                libs/chai/**,
+                                libs/underscore/docs/**,
+                                libs/**/art/**,
+                                libs/**/benchmark/**,
+                                libs/**/visual/**,
+                                libs/**/debug/**,
+                                libs/**/demo/**,
+                                libs/**/documentation/**,
+                                libs/**/etc/**,
+                                libs/**/example/**,
+                                libs/**/examples/**,
+                                libs/**/test/**,
+                                libs/**/tests/**
                             </warSourceExcludes>
                             <archive>
                                 <manifest>

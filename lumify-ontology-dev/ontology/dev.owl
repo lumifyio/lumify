@@ -432,6 +432,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#birthDate">
         <rdfs:label xml:lang="en">Birth Date</rdfs:label>
+        <lumify:displayType xml:lang="en">date</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -442,6 +443,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#date">
         <rdfs:label xml:lang="en">Date</rdfs:label>
+        <lumify:displayType xml:lang="en">date</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -462,6 +464,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#formationDate">
         <rdfs:label xml:lang="en">Formation Date</rdfs:label>
+        <lumify:displayType xml:lang="en">date</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#organization"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
@@ -482,6 +485,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
         <rdfs:label xml:lang="en">Geolocation</rdfs:label>
+        <lumify:displayType xml:lang="en">geoLocation</lumify:displayType>
         <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
@@ -493,6 +497,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#netIncome">
         <rdfs:label xml:lang="en">Net Income</rdfs:label>
+        <lumify:displayType xml:lang="en">currency</lumify:displayType>
         <rdfs:range rdf:resource="&lumify;currency"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#company"/>
     </owl:DatatypeProperty>
@@ -503,6 +508,7 @@
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#publishedDate">
         <rdfs:label xml:lang="en">Published Date</rdfs:label>
+        <lumify:displayType xml:lang="en">date</lumify:displayType>
         <rdfs:domain rdf:resource="http://lumify.io/dev#raw"/>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>

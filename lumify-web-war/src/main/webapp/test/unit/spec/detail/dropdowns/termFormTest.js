@@ -41,7 +41,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
                                      "graphVertexId":"80736",
                                      "start":110,
                                      "_conceptType":"44",
-                                     "_rowKey":"Web\\x1FOpenNlpDictionary\\x1FPerson",
+                                     "http://lumify.io#rowKey":"Web\\x1FOpenNlpDictionary\\x1FPerson",
                                      "type":"TermMention",
                                      "end":113
                                  })

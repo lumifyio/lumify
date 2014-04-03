@@ -81,15 +81,6 @@ public class OntologyRepository {
         this.relationshipLabelsCache.invalidateAll();
     }
 
-    public void storeOntologyFile(File file, IRI documentIRI) throws IOException {
-        InputStream in = new FileInputStream(file);
-        try {
-            storeOntologyFile(in, documentIRI);
-        } finally {
-            in.close();
-        }
-    }
-
     public void storeOntologyFile(InputStream in, IRI documentIRI) {
         StreamingPropertyValue value = new StreamingPropertyValue(in, byte[].class);
         value.searchIndex(false);
