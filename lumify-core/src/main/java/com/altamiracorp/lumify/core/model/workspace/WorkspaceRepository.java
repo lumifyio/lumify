@@ -56,7 +56,7 @@ public class WorkspaceRepository {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
-        Concept rootConcept = ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI);
+        Concept rootConcept = ontologyRepository.getConceptByVertexId(OntologyRepository.ROOT_CONCEPT_IRI);
 
         Concept workspaceConcept = ontologyRepository.getOrCreateConcept(null, WORKSPACE_CONCEPT_NAME, "workspace");
         workspaceConceptId = workspaceConcept.getId();

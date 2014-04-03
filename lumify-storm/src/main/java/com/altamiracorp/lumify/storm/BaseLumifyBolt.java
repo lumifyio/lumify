@@ -240,7 +240,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
         LumifyVisibility lumifyVisibility = new LumifyVisibility();
 
         checkNotNull(artifactExtractedInfo.getConceptType(), "concept type cannot be null");
-        Concept concept = ontologyRepository.getConceptById(artifactExtractedInfo.getConceptType());
+        Concept concept = ontologyRepository.getConceptByVertexId(artifactExtractedInfo.getConceptType());
         checkNotNull(concept, "Could not find concept " + artifactExtractedInfo.getConceptType());
         CONCEPT_TYPE.setProperty(artifact, concept.getId(), lumifyVisibility.getVisibility());
 

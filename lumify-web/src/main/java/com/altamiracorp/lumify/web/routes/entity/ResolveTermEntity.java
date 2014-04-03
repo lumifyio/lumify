@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
@@ -94,7 +93,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
 
-        Concept concept = ontologyRepository.getConceptById(conceptId);
+        Concept concept = ontologyRepository.getConceptByVertexId(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);

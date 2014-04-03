@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.web.routes.graph;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
@@ -34,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
@@ -112,7 +110,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         if (conceptType != null) {
-            Concept concept = ontologyRepository.getConceptById(conceptType);
+            Concept concept = ontologyRepository.getConceptByVertexId(conceptType);
             if (getLeafNodes == null || !getLeafNodes.equals("false")) {
                 List<Concept> leafNodeList = ontologyRepository.getAllLeafNodesByConcept(concept);
                 if (leafNodeList.size() > 0) {
