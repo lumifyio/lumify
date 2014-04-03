@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 import com.altamiracorp.lumify.sql.model.user.SqlUserRepository;
+import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
 import com.altamiracorp.securegraph.util.IterableUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -167,16 +168,17 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testSetCurrentWorkspace() throws Exception {
+        SqlWorkspace sqlWorkspace = new SqlWorkspace();
+        sqlWorkspace.setDisplayTitle("workspace1");
         sqlUserRepository.addUser("123", "abc", null, new String[0]);
-        sqlUserRepository.setCurrentWorkspace("1", "workspace1");
-
+        sqlUserRepository.setCurrentWorkspace("1", sqlWorkspace);
         SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
-        assertEquals("workspace1", testUser.getCurrentWorkspace());
+        assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
     }
 
     @Test(expected = LumifyException.class)
     public void testSetCurrentWorkspaceWithNonExisitingUser() {
-        sqlUserRepository.setCurrentWorkspace("1", "workspace1");
+        sqlUserRepository.setCurrentWorkspace("1", new SqlWorkspace());
     }
 
     @Test

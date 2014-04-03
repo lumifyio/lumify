@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -145,10 +146,16 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) workspace;
-//        Set<SqlUser> readAccess = sqlWorkspace.getUserWithReadAccess();
-//        Set<SqlUser> writeAccess = sqlWorkspace.getUserWithWriteAccess();
+        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
         List<WorkspaceUser> withAccess = new ArrayList<WorkspaceUser>();
+
+        for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
+            if (!sqlWorkspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.NONE.toString())) {
+                String userId = sqlWorkspaceUser.getUser().getUserId();
+                boolean isCreator = workspace.getCreatorUserId().equals(userId);
+                withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
+            }
+        }
 
 //        if (readAccess != null && readAccess.size() > 0) {
 //            for (SqlUser sqlUser : readAccess) {
@@ -200,12 +207,13 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         if (!isValidWorkspace(workspace)) {
             throw new LumifyException("Not a valid workspace");
         }
-//        Set<SqlUser> users = ((SqlWorkspace) workspace).getUserWithWriteAccess();
-//        for (SqlUser sqlUser : users) {
-//            if (sqlUser.getUserId().equals(user.getUserId())) {
-//                return true;
-//            }
-//        }
+        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
+        for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
+            if (workspaceUser.getUser().getUserId().equals(user.getUserId()) &&
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString())) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -227,15 +235,13 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         if (doesUserHaveWriteAccess(workspace, user)) {
             return true;
         }
-//        Set<SqlUser> readAccessUser = ((SqlWorkspace) workspace).getUserWithReadAccess();
-//
-//        if (readAccessUser != null) {
-//            for (SqlUser sqlUser : readAccessUser) {
-//                if (sqlUser.getUserId().equals(user.getUserId())) {
-//                    return true;
-//                }
-//            }
-//        }
+        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
+        for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
+            if (workspaceUser.getUser().getUserId().equals(user.getUserId()) &&
+                    workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.READ.toString())) {
+                return true;
+            }
+        }
         return false;
     }
 

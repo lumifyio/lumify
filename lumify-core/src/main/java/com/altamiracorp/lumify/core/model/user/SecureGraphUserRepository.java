@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SecureGraphUser;
 import com.altamiracorp.lumify.core.user.User;
@@ -129,13 +130,13 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User setCurrentWorkspace(String userId, String workspaceId) {
+    public User setCurrentWorkspace(String userId, Workspace workspace) {
         User user = findById(userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         if (user == null) {
             throw new RuntimeException("Could not find user: " + userId);
         }
-        CURRENT_WORKSPACE.setProperty(userVertex, workspaceId, VISIBILITY.getVisibility());
+        CURRENT_WORKSPACE.setProperty(userVertex, workspace.getId(), VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }

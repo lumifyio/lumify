@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
@@ -32,7 +33,7 @@ public abstract class UserRepository {
 
     public abstract boolean isPasswordValid(User user, String password);
 
-    public abstract User setCurrentWorkspace(String userId, String workspaceId);
+    public abstract User setCurrentWorkspace(String userId, Workspace workspace);
 
     public abstract User setStatus(String userId, UserStatus status);
 

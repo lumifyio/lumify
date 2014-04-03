@@ -12,7 +12,10 @@
         <property name="hibernate.hbm2ddl.auto">create-drop</property><!-- creates the tables from the entites automatically -->
         <property name="show_sql">true</property>
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <property name="hibernate.current_session_context_class">thread</property>
         <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace"/>
+        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
+        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser"/>
     </session-factory>
 </hibernate-configuration>

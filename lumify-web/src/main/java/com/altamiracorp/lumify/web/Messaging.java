@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -158,8 +159,9 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
 
     private void switchWorkspace(com.altamiracorp.lumify.core.user.User authUser, String workspaceId) {
         if (!workspaceId.equals(authUser.getCurrentWorkspace())) {
-            userRepository.setCurrentWorkspace(authUser.getUserId(), workspaceId);
-            authUser.setCurrentWorkspace(workspaceRepository.findById(workspaceId, authUser));
+            Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
+            userRepository.setCurrentWorkspace(authUser.getUserId(), workspace);
+            authUser.setCurrentWorkspace(workspace);
 
             LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);
         }

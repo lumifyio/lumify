@@ -5,11 +5,10 @@ import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.hibernate.HibernateException;
@@ -28,17 +27,19 @@ public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private SessionFactory sessionFactory;
     private AuthorizationRepository authorizationRepository;
-    private WorkspaceRepository workspaceRepository;
 
     @Override
-    public void init (Map config) {
+    public void init(Map config) {
 
-    };
+    }
+
+    ;
 
     @Override
     public User findByDisplayName(String displayName) {
         Session session = sessionFactory.openSession();
         List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("displayName", displayName)).list();
+        session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
@@ -52,6 +53,7 @@ public class SqlUserRepository extends UserRepository {
     public Iterable<User> findAll() {
         Session session = sessionFactory.openSession();
         List users = session.createCriteria(SqlUser.class).list();
+        session.close();
         return new ConvertingIterable<Object, User>(users) {
             @Override
             protected User convert(Object obj) {
@@ -64,6 +66,7 @@ public class SqlUserRepository extends UserRepository {
     public User findById(String userId) {
         Session session = sessionFactory.openSession();
         List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("id", Integer.parseInt(userId))).list();
+        session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
@@ -146,12 +149,12 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User setCurrentWorkspace(String userId, String workspaceId) {
-        Session session = sessionFactory.openSession();
+    public User setCurrentWorkspace(String userId, Workspace workspace) {
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
 
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         SqlUser sqlUser = null;
         try {
@@ -160,12 +163,8 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            
-            SqlWorkspace sqlWorkspace = (SqlWorkspace)workspaceRepository.findById(workspaceId, sqlUser);
-            if (sqlWorkspace == null) {
-                throw new LumifyException("workspace does not exist");
-            }
-            sqlUser.setCurrentWorkspace(sqlWorkspace);
+
+            sqlUser.setCurrentWorkspace(workspace);
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
@@ -179,12 +178,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        Session session;
-        try {
-            session = sessionFactory.getCurrentSession();
-        } catch (HibernateException e) {
-            session = sessionFactory.openSession();
-        }
+        Session session = sessionFactory.getCurrentSession();
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
@@ -203,8 +197,6 @@ public class SqlUserRepository extends UserRepository {
         } catch (HibernateException e) {
             transaction.rollback();
             throw new RuntimeException(e);
-        } finally {
-            session.close();
         }
         return sqlUser;
     }
@@ -225,7 +217,9 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Inject
-    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) { this.authorizationRepository = authorizationRepository; }
+    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
 
     @Inject
     public void setSessionFactory(SessionFactory sessionFactory) {
