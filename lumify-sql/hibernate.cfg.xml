@@ -14,6 +14,7 @@
         <property name="hbm2ddl.auto">update</property>
         <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace"/>
+        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser"/>
     </session-factory>
 </hibernate-configuration>

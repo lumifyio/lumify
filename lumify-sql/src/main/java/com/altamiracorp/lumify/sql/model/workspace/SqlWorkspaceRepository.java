@@ -17,7 +17,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -74,12 +76,17 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             transaction = session.beginTransaction();
             newWorkspace = new SqlWorkspace();
             newWorkspace.setDisplayTitle(title);
-            Set<SqlUser> userWithAccess = new HashSet<SqlUser>();
-            userWithAccess.add((SqlUser) user);
-//            newWorkspace.setUserWithWriteAccess(userWithAccess);
             newWorkspace.setCreator((SqlUser) user);
-            LOGGER.debug("add %s to workspace table", title);
             session.save(newWorkspace);
+
+            SqlWorkspaceUser sqlWorkspaceUser = new SqlWorkspaceUser();
+            sqlWorkspaceUser.setWorkspaceAccess(WorkspaceAccess.WRITE);
+            sqlWorkspaceUser.setUser((SqlUser) user);
+            sqlWorkspaceUser.setWorkspace(newWorkspace);
+
+            LOGGER.debug("add %s to workspace table", title);
+            ((SqlUser) user).getSqlWorkspaceUsers().add(sqlWorkspaceUser);
+            session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
             transaction.rollback();

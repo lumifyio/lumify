@@ -16,7 +16,7 @@ public class SqlWorkspace implements Workspace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="workspace_id")
+    @Column(name = "workspaceid")
     private int id;
     @Column(name = "display_title")
     private String displayTitle;
