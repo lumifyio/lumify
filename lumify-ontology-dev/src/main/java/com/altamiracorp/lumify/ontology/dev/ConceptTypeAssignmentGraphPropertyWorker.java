@@ -24,16 +24,16 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         Concept concept;
 
         if (mimeType.startsWith("image")) {
-            concept = getOntologyRepository().getConceptById(ConceptType.IMAGE.toString());
+            concept = getOntologyRepository().getConceptByVertexId(ConceptType.IMAGE.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.IMAGE.toString());
         } else if (mimeType.startsWith("audio")) {
-            concept = getOntologyRepository().getConceptById(ConceptType.AUDIO.toString());
+            concept = getOntologyRepository().getConceptByVertexId(ConceptType.AUDIO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.AUDIO.toString());
         } else if (mimeType.startsWith("video")) {
-            concept = getOntologyRepository().getConceptById(ConceptType.VIDEO.toString());
+            concept = getOntologyRepository().getConceptByVertexId(ConceptType.VIDEO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.VIDEO.toString());
         } else {
-            concept = getOntologyRepository().getConceptById(ConceptType.DOCUMENT.toString());
+            concept = getOntologyRepository().getConceptByVertexId(ConceptType.DOCUMENT.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.DOCUMENT.toString());
         }
 

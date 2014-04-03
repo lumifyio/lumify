@@ -173,7 +173,7 @@ public abstract class GraphPropertyWorker {
             termMentionModel.getMetadata().setAnalyticProcess(termMention.getProcess(), termMention.getVisibility());
         }
 
-        Concept concept = ontologyRepository.getConceptById(termMention.getOntologyClassUri());
+        Concept concept = ontologyRepository.getConceptByVertexId(termMention.getOntologyClassUri());
         if (concept == null) {
             LOGGER.error("Could not find ontology graph vertex '%s'", termMention.getOntologyClassUri());
             return null;
