@@ -14,10 +14,9 @@ public class SqlWorkspace implements Workspace {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GenericGenerator(name = "generator", strategy = "guid")
-    @GeneratedValue(generator = "generator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private String id;
+    private int id;
     @Column(name="display_title")
     private String displayTitle;
     @OneToOne
@@ -29,7 +28,7 @@ public class SqlWorkspace implements Workspace {
     private Set<SqlUser> userWithReadAccess;
 
     public String getId () {
-        return id;
+        return Integer.toString(id);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class SqlWorkspace implements Workspace {
         return creator.getUserId();
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

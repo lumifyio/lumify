@@ -7,7 +7,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 import com.altamiracorp.lumify.sql.model.user.SqlUserRepository;
 import com.altamiracorp.securegraph.util.IterableUtils;
-import junit.framework.TestCase;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
@@ -16,8 +15,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.*;
+
 @RunWith(JUnit4.class)
-public class SqlUserRepositoryTest extends TestCase {
+public class SqlUserRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlUserRepository sqlUserRepository;
     private static org.hibernate.cfg.Configuration configuration;

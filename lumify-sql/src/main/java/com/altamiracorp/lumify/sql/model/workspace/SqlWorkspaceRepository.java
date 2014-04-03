@@ -144,12 +144,16 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         Set<SqlUser> writeAccess = sqlWorkspace.getUserWithWriteAccess();
         List<WorkspaceUser> withAccess = new ArrayList<WorkspaceUser>();
 
-        for (SqlUser sqlUser : readAccess) {
-            withAccess.add(new WorkspaceUser(sqlUser.getUserId(), WorkspaceAccess.READ, workspace.getCreatorUserId().equals(sqlUser.getUserId())));
+        if (readAccess != null && readAccess.size() > 0) {
+            for (SqlUser sqlUser : readAccess) {
+                withAccess.add(new WorkspaceUser(sqlUser.getUserId(), WorkspaceAccess.READ, workspace.getCreatorUserId().equals(sqlUser.getUserId())));
+            }
         }
 
-        for (SqlUser sqlUser : writeAccess) {
-            withAccess.add(new WorkspaceUser(sqlUser.getUserId(), WorkspaceAccess.WRITE, workspace.getCreatorUserId().equals(sqlUser.getUserId())));
+        if (writeAccess != null && writeAccess.size() > 0) {
+            for (SqlUser sqlUser : writeAccess) {
+                withAccess.add(new WorkspaceUser(sqlUser.getUserId(), WorkspaceAccess.WRITE, workspace.getCreatorUserId().equals(sqlUser.getUserId())));
+            }
         }
 
         return withAccess;
@@ -218,9 +222,12 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             return true;
         }
         Set<SqlUser> readAccessUser = ((SqlWorkspace) workspace).getUserWithReadAccess();
-        for (SqlUser sqlUser : readAccessUser) {
-            if (sqlUser.getUserId().equals(user.getUserId())) {
-                return true;
+
+        if (readAccessUser != null) {
+            for (SqlUser sqlUser : readAccessUser) {
+                if (sqlUser.getUserId().equals(user.getUserId())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -240,9 +247,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         }
 
         SqlUser userToUpdate = (SqlUser) userRepository.findById(userId);
-        if (userToUpdate == null) {
-            throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
-        }
 
         Session session = sessionFactory.openSession();
 
@@ -253,26 +257,34 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             Set<SqlUser> readAccess = sqlWorkspace.getUserWithReadAccess();
             Set<SqlUser> writeAccess = sqlWorkspace.getUserWithWriteAccess();
             if (workspaceAccess == WorkspaceAccess.READ) {
+                if (readAccess == null) {
+                    readAccess = new HashSet<SqlUser>();
+                }
                 readAccess.add(userToUpdate);
             } else if (workspaceAccess == WorkspaceAccess.WRITE) {
+                if (writeAccess == null) {
+                    writeAccess = new HashSet<SqlUser>();
+                }
                 writeAccess.add(userToUpdate);
             } else {
-                for (SqlUser sqlUser : readAccess) {
-                    if (sqlUser.equals(userId)) {
-                        readAccess.remove(sqlUser);
+                if (readAccess != null) {
+                    for (SqlUser sqlUser : readAccess) {
+                        if (sqlUser.equals(userId)) {
+                            readAccess.remove(sqlUser);
+                        }
                     }
                 }
 
-                for (SqlUser sqlUser : writeAccess) {
-                    if (sqlUser.equals(userId)) {
-                        writeAccess.remove(sqlUser);
+                if (writeAccess != null) {
+                    for (SqlUser sqlUser : writeAccess) {
+                        if (sqlUser.equals(userId)) {
+                            writeAccess.remove(sqlUser);
+                        }
                     }
                 }
-
-                ((SqlWorkspace) workspace).setUserWithReadAccess(readAccess);
-                ((SqlWorkspace) workspace).setUserWithWriteAccess(writeAccess);
             }
-
+            ((SqlWorkspace) workspace).setUserWithReadAccess(readAccess);
+            ((SqlWorkspace) workspace).setUserWithWriteAccess(writeAccess);
             session.update(workspace);
             transaction.commit();
         } catch (HibernateException e) {
