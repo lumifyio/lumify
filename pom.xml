@@ -40,6 +40,7 @@
         <module>lumify-model-bigtable-queue</module>
         <module>lumify-model-kafka</module>
         <module>lumify-storm</module>
+		<module>lumify-sql</module>
         <module>lumify-web</module>
         <module>lumify-web-server</module>
         <module>lumify-web-war</module>
