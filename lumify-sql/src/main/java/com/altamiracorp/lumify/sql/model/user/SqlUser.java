@@ -15,6 +15,7 @@ import java.util.Set;
 @Table(name = "user")
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
+    @Transient
     private ModelUserContext modelUserContext;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -103,18 +104,15 @@ public class SqlUser implements User {
         this.sqlWorkspaceUsers = sqlWorkspaceUsers;
     }
 
-    @Override
     @Transient
     public String getUserId() {
         return Integer.toString(id);
     }
 
-    @Transient
     public ModelUserContext getModelUserContext() {
         return modelUserContext;
     }
 
-    @Transient
     public void setModelUserContext(ModelUserContext modelUserContext) {
         this.modelUserContext = modelUserContext;
     }

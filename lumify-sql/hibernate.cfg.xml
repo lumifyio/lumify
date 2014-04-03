@@ -11,7 +11,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.pool_size">1</property>
         <property name="show_sql">true</property>
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
         <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser"/>

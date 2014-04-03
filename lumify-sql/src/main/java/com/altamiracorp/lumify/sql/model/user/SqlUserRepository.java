@@ -5,9 +5,11 @@ import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.hibernate.HibernateException;
@@ -26,6 +28,7 @@ public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private SessionFactory sessionFactory;
     private AuthorizationRepository authorizationRepository;
+    private WorkspaceRepository workspaceRepository;
 
     @Override
     public void init (Map config) {
@@ -157,7 +160,12 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-//            sqlUser.setCurrentWorkspace(workspaceId);
+            
+            SqlWorkspace sqlWorkspace = (SqlWorkspace)workspaceRepository.findById(workspaceId, sqlUser);
+            if (sqlWorkspace == null) {
+                throw new LumifyException("workspace does not exist");
+            }
+            sqlUser.setCurrentWorkspace(sqlWorkspace);
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
