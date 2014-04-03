@@ -13,5 +13,6 @@
         <property name="show_sql">true</property>
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
         <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
+        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace"/>
     </session-factory>
 </hibernate-configuration>

@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.workspace;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
+import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,11 +11,13 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class SecureGraphWorkspace implements Workspace {
+    private static final long serialVersionUID = 1L;
     private final Vertex workspaceVertex;
     private final User user;
     private final WorkspaceRepository workspaceRepository;
     private List<WorkspaceUser> users;
 
+    @Inject
     public SecureGraphWorkspace(Vertex workspaceVertex, WorkspaceRepository workspaceRepository, User user) {
         this.workspaceVertex = workspaceVertex;
         this.workspaceRepository = workspaceRepository;
@@ -29,7 +32,7 @@ public class SecureGraphWorkspace implements Workspace {
 
             JSONObject workspaceJson = new JSONObject();
             workspaceJson.put("workspaceId", getId());
-            workspaceJson.put("title", getTitle());
+            workspaceJson.put("title", getDisplayTitle());
             workspaceJson.put("createdBy", getCreatorUserId());
             workspaceJson.put("isSharedToUser", !getCreatorUserId().equals(user.getUserId()));
             workspaceJson.put("isEditable", hasWritePermissions);
@@ -90,12 +93,11 @@ public class SecureGraphWorkspace implements Workspace {
     }
 
     @Override
-    public String getTitle() {
+    public String getDisplayTitle() {
         return WorkspaceLumifyProperties.TITLE.getPropertyValue(this.workspaceVertex);
     }
 
-    @Override
-    public Vertex getVertex() {
+    public Vertex getWorkspace() {
         return workspaceVertex;
     }
 

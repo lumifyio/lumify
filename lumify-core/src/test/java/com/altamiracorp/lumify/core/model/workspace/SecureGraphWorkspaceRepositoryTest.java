@@ -126,9 +126,9 @@ public class SecureGraphWorkspaceRepositoryTest {
 //        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
 //        assertEquals(startingEdgeCount + 1, graph.getAllEdges().size()); // +1 = the edge between workspace and user1
 //
-//        assertNull("Should not have access", graph.getVertex(workspace.getId(), new InMemoryAuthorizations()));
+//        assertNull("Should not have access", graph.getWorkspace(workspace.getId(), new InMemoryAuthorizations()));
 //        InMemoryAuthorizations authorizations = new InMemoryAuthorizations(WorkspaceRepository.VISIBILITY_STRING, workspace.getId());
-//        assertNotNull("Should have access", graph.getVertex(workspace.getId(), authorizations));
+//        assertNotNull("Should have access", graph.getWorkspace(workspace.getId(), authorizations));
 //
 //        when(userRepository.getAuthorizations(eq(user1), eq(WorkspaceRepository.VISIBILITY_STRING), eq(WorkspaceRepository.WORKSPACE_ID_PREFIX + workspaceId))).thenReturn(authorizations);
 //        Workspace foundWorkspace = workspaceRepository.findById(workspace.getId(), user1);
@@ -178,9 +178,9 @@ public class SecureGraphWorkspaceRepositoryTest {
 //        boolean foundWorkspace1 = false;
 //        boolean foundWorkspace2 = false;
 //        for (Workspace workspace : user1Workspaces) {
-//            if (workspace.getTitle().equals(workspace1Title)) {
+//            if (workspace.getDisplayTitle().equals(workspace1Title)) {
 //                foundWorkspace1 = true;
-//            } else if (workspace.getTitle().equals(workspace2Title)) {
+//            } else if (workspace.getDisplayTitle().equals(workspace2Title)) {
 //                foundWorkspace2 = true;
 //            }
 //        }
@@ -189,7 +189,7 @@ public class SecureGraphWorkspaceRepositoryTest {
 //
 //        List<Workspace> user2Workspaces = toList(workspaceRepository.findAll(user2));
 //        assertEquals(1, user2Workspaces.size());
-//        assertEquals(workspace3Title, user2Workspaces.get(0).getTitle());
+//        assertEquals(workspace3Title, user2Workspaces.get(0).getDisplayTitle());
 //
 //        try {
 //            workspaceRepository.updateUserOnWorkspace(user2Workspaces.get(0), user1.getUserId(), WorkspaceAccess.READ, user1);

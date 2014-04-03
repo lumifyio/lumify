@@ -1,18 +1,18 @@
 package com.altamiracorp.lumify.core.model.workspace;
 
-import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONObject;
 
-public interface Workspace {
+import java.io.Serializable;
+
+public interface Workspace extends Serializable{
+
     JSONObject toJson(boolean includeVertices);
 
     String getId();
 
     String getCreatorUserId();
 
-    String getTitle();
-
-    Vertex getVertex();
+    String getDisplayTitle();
 
     boolean hasWritePermissions(String userId);
 }

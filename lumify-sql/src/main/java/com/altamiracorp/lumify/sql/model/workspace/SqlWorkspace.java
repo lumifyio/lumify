@@ -1,32 +1,81 @@
 package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.lumify.sql.model.user.SqlUser;
+import org.hibernate.annotations.GenericGenerator;
 import org.json.JSONObject;
 
-public class SqlWorkspace implements Workspace {
-    @Override
-    public JSONObject toJson(boolean includeVertices) {
-        return null;
-    }
+import javax.persistence.*;
+import java.util.Set;
 
-    @Override
-    public String getId() {
-        return null;
+@Entity
+@Table(name = "workspace")
+public class SqlWorkspace implements Workspace {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GenericGenerator(name = "generator", strategy = "guid")
+    @GeneratedValue(generator = "generator")
+    @Column(name = "id")
+    private String id;
+    @Column(name="display_title")
+    private String displayTitle;
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private SqlUser creator;
+    @OneToMany (mappedBy = "id")
+    private Set<SqlUser> userWithWriteAccess;
+    @OneToMany (mappedBy = "id")
+    private Set<SqlUser> userWithReadAccess;
+
+    public String getId () {
+        return id;
     }
 
     @Override
     public String getCreatorUserId() {
-        return null;
+        return creator.getUserId();
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDisplayTitle() {
+        return displayTitle;
+    }
+
+    public void setDisplayTitle(String displayTitle) {
+        this.displayTitle = displayTitle;
+    }
+
+    public SqlUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(SqlUser creator) {
+        this.creator = creator;
+    }
+
+    public Set<SqlUser> getUserWithWriteAccess() {
+        return userWithWriteAccess;
+    }
+
+    public void setUserWithWriteAccess(Set<SqlUser> userWithWriteAccess) {
+        this.userWithWriteAccess = userWithWriteAccess;
+    }
+
+    public Set<SqlUser> getUserWithReadAccess() {
+        return userWithReadAccess;
+    }
+
+    public void setUserWithReadAccess(Set<SqlUser> userWithReadAccess) {
+        this.userWithReadAccess = userWithReadAccess;
     }
 
     @Override
-    public String getTitle() {
-        return null;
-    }
-
-    @Override
-    public Vertex getVertex() {
+    @Transient
+    public JSONObject toJson(boolean includeVertices) {
         return null;
     }
 
