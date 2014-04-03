@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.sql.model;
+package com.altamiracorp.lumify.sql.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.user.UserType;
@@ -11,20 +11,26 @@ import javax.persistence.*;
 public class SqlUser implements User {
     private static final long serialVersionUID = 1L;
     private ModelUserContext modelUserContext;
-    private String currentWorkspace;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
+    @Column(name = "external_id")
     private String externalId;
+    @Column(name = "display_name")
     private String displayName;
+    @Column(name = "current_workspace")
+    private String currentWorkspace;
+    @Column(name = "password_salt")
     private byte[] passwordSalt;
+    @Column(name = "password_hash")
     private byte[] passwordHash;
+    @Column(name = "user_status")
     private String userStatus;
 
     public SqlUser() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -33,7 +39,6 @@ public class SqlUser implements User {
         this.id = id;
     }
 
-    @Column(name = "external_id")
     public String getExternalId() {
         return externalId;
     }
@@ -42,7 +47,6 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    @Column(name = "display_name")
     public String getDisplayName() {
         return displayName;
     }
@@ -51,7 +55,6 @@ public class SqlUser implements User {
         this.displayName = userName;
     }
 
-    @Column(name = "current_workspace")
     public String getCurrentWorkspace() {
         return currentWorkspace;
     }
@@ -60,7 +63,6 @@ public class SqlUser implements User {
         this.currentWorkspace = currentWorkspace;
     }
 
-    @Column(name = "password_hash")
     public byte[] getPasswordHash() {
         return passwordHash;
     }
@@ -69,7 +71,6 @@ public class SqlUser implements User {
         this.passwordHash = passwordHash;
     }
 
-    @Column(name = "password_salt")
     public byte[] getPasswordSalt() {
         return passwordSalt;
     }
@@ -78,7 +79,6 @@ public class SqlUser implements User {
         this.passwordSalt = passwordSalt;
     }
 
-    @Column(name = "user_status")
     public String getUserStatus() {
         return userStatus;
     }

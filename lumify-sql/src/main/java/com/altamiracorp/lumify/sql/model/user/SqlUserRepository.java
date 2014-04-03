@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.sql.model;
+package com.altamiracorp.lumify.sql.model.user;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
@@ -8,8 +8,6 @@ import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.hibernate.HibernateException;
@@ -21,7 +19,6 @@ import org.hibernate.criterion.Restrictions;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -12,6 +12,6 @@
         <property name="hibernate.hbm2ddl.auto">create-drop</property><!-- creates the tables from the entites automatically -->
         <property name="show_sql">true</property>
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
-        <mapping class="com.altamiracorp.lumify.sql.model.SqlUser"/>
+        <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
     </session-factory>
 </hibernate-configuration>

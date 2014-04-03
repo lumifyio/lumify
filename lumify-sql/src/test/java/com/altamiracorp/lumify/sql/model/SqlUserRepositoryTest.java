@@ -4,6 +4,8 @@ import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.sql.model.user.SqlUser;
+import com.altamiracorp.lumify.sql.model.user.SqlUserRepository;
 import com.altamiracorp.securegraph.util.IterableUtils;
 import junit.framework.TestCase;
 import org.hibernate.SessionFactory;

@@ -33,7 +33,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WorkspaceRepositoryTest {
+public class SecureGraphWorkspaceRepositoryTest {
     private InMemoryGraph graph;
 
     @Mock
@@ -92,7 +92,7 @@ public class WorkspaceRepositoryTest {
         when(workspaceToUserRelationship.getId()).thenReturn("workspaceToUserRelationshipId");
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
-        workspaceRepository = new WorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository, workspaceDiff);
+        workspaceRepository = new SecureGraphWorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository, workspaceDiff);
 
         String user1Id = "USER_testUser1";
         when(user1.getUserId()).thenReturn(user1Id);
