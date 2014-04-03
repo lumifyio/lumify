@@ -10,6 +10,8 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
@@ -44,6 +46,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
     private final UserProvider userProvider;
+    private final OntologyRepository ontologyRepository;
     private final ModelSession modelSession;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
@@ -57,7 +60,8 @@ public class WorkspacePublish extends BaseRequestHandler {
                             final Graph graph,
                             final ModelSession modelSession,
                             final VisibilityTranslator visibilityTranslator,
-                            final UserProvider userProvider) {
+                            final UserProvider userProvider,
+                            final OntologyRepository ontologyRepository) {
         super(userRepository, configuration);
         this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
@@ -66,6 +70,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.modelSession = modelSession;
         this.userProvider = userProvider;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -230,7 +235,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
-            if (property.getName().startsWith("_") || property.getName().equals("title")) {
+            OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
+            checkNotNull(ontologyProperty, "Could not find property " + property.getName());
+            if (!ontologyProperty.getUserVisible()) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }

@@ -81,7 +81,7 @@ public class WorkspaceRepositoryTest {
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
-        when(ontologyRepository.getConceptById(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
+        when(ontologyRepository.getConceptByVertexId(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
 
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString())).thenReturn(workspaceConcept);
         when(workspaceConcept.getId()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);

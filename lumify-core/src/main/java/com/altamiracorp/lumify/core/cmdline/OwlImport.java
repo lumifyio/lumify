@@ -185,7 +185,7 @@ public class OwlImport extends CommandLineBase {
             OWLClassExpression superClassExpr = superClasses.iterator().next();
             OWLClass superClass = superClassExpr.asOWLClass();
             String superClassUri = superClass.getIRI().toString();
-            Concept parent = ontologyRepository.getConceptById(superClassUri);
+            Concept parent = ontologyRepository.getConceptByVertexId(superClassUri);
             if (parent != null) {
                 return parent;
             }
@@ -212,7 +212,7 @@ public class OwlImport extends CommandLineBase {
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
-            Concept domainConcept = ontologyRepository.getConceptById(domainClassUri);
+            Concept domainConcept = ontologyRepository.getConceptByVertexId(domainClassUri);
             checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
 
             LOGGER.info("Adding data property " + propertyId + " to class " + domainConcept.getId());
@@ -241,7 +241,7 @@ public class OwlImport extends CommandLineBase {
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
-            Concept ontologyClass = ontologyRepository.getConceptById(rangeClassUri);
+            Concept ontologyClass = ontologyRepository.getConceptByVertexId(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
             return ontologyClass;
         }
@@ -257,7 +257,7 @@ public class OwlImport extends CommandLineBase {
         for (OWLClassExpression rangeClassExpr : objectProperty.getDomains(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
-            Concept ontologyClass = ontologyRepository.getConceptById(rangeClassUri);
+            Concept ontologyClass = ontologyRepository.getConceptByVertexId(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
             return ontologyClass;
         }

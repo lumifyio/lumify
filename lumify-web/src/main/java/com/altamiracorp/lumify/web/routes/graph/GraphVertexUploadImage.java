@@ -4,7 +4,9 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
+import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -89,6 +91,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
+        String conceptId = ontologyRepository.getConceptByVertexId(PropertyType.IMAGE.toString()).getId();
+        OntologyLumifyProperties.DISPLAY_TYPE.setProperty(artifactBuilder, PropertyType.IMAGE.toString(), lumifyVisibility.getVisibility());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(artifactBuilder, String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());
         EntityLumifyProperties.SOURCE.setProperty(artifactBuilder, SOURCE_UPLOAD, lumifyVisibility.getVisibility());
         LumifyProperties.PROCESS.setProperty(artifactBuilder, PROCESS, lumifyVisibility.getVisibility());

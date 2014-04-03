@@ -22,6 +22,8 @@ import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.ontology.SecureGraphOntologyRepository;
 import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -109,6 +111,7 @@ public class LumifyBootstrap extends AbstractModule {
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
+        bind(OntologyRepository.class).to(SecureGraphOntologyRepository.class).in(Scopes.SINGLETON);
         bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
 
         bind(CuratorFramework.class)

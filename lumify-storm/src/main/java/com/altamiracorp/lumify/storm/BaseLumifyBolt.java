@@ -48,7 +48,8 @@ import java.util.*;
 
 import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.SOURCE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
-import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.*;
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.AUDIO;
+import static com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties.VIDEO_TRANSCRIPT;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 
 public abstract class BaseLumifyBolt extends BaseRichBolt {
