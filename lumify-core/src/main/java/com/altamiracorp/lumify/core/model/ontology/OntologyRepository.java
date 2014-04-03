@@ -23,7 +23,10 @@ import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -283,28 +286,6 @@ public class OntologyRepository {
         return conceptVertex != null ? new Concept(conceptVertex) : null;
     }
 
-    private List<OntologyProperty> getPropertiesByVertex(Vertex vertex) {
-        List<OntologyProperty> properties = new ArrayList<OntologyProperty>();
-
-        properties.addAll(getPropertiesByVertexNoRecursion(vertex));
-
-        Vertex parentConceptVertex = getParentConceptVertex(vertex);
-        if (parentConceptVertex != null) {
-            List<OntologyProperty> parentProperties = getPropertiesByVertex(parentConceptVertex);
-            properties.addAll(parentProperties);
-        }
-
-        return properties;
-    }
-
-    public List<OntologyProperty> getPropertiesByConceptIdNoRecursion(String conceptVertexId) {
-        Vertex conceptVertex = graph.getVertex(conceptVertexId, getAuthorizations());
-        if (conceptVertex == null) {
-            throw new RuntimeException("Could not find concept: " + conceptVertexId);
-        }
-        return getPropertiesByVertexNoRecursion(conceptVertex);
-    }
-
     private List<OntologyProperty> getPropertiesByVertexNoRecursion(Vertex vertex) {
         return toList(new ConvertingIterable<Vertex, OntologyProperty>(vertex.getVertices(Direction.OUT, LabelName.HAS_PROPERTY.toString(), getAuthorizations())) {
             @Override
@@ -348,10 +329,6 @@ public class OntologyRepository {
             parent.addAll(childrenList);
         }
         return parent;
-    }
-
-    public List<OntologyProperty> getPropertiesByRelationship(Relationship relationship) {
-        return getPropertiesByVertex(relationship.getVertex());
     }
 
     public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
