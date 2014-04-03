@@ -43,10 +43,6 @@ public class OntologyProperty {
         return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
-    public String getDisplayType() {
-        return DISPLAY_TYPE.getPropertyValue(vertex);
-    }
-
     public boolean getUserVisible() {
         return USER_VISIBLE.getPropertyValue(vertex);
     }
@@ -73,7 +69,6 @@ public class OntologyProperty {
             json.put("id", getId());
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
-            json.put("displayType", getDisplayType());
             json.put("userVisible", getUserVisible());
             json.put("dataType", getDataType().toString());
             return json;
