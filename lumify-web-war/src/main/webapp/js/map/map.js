@@ -398,9 +398,26 @@ define([
             this.mapReady(function(map) {
                 var feature = map.featuresLayer.getFeatureFromEvent(event);
                 if (feature) {
-                    var menu = this.select('contextMenuVertexSelector');
-                    menu.data('feature', feature);
-                    this.toggleMenu({ positionUsingEvent:event }, menu);
+
+                    var vertices = (feature.cluster || [feature]).map(function(f) {
+                        return f.data.vertex;
+                    });
+
+                    this.trigger('selectObjects', { vertices: vertices });
+
+                    if (vertices.length === 1) {
+                        this.trigger('showVertexContextMenu', {
+                            vertexId: vertices[0].id,
+                            position: {
+                                x: event.pageX,
+                                y: event.pageY
+                            }
+                        });
+                    } else {
+                        var menu = this.select('contextMenuVertexSelector');
+                        menu.data('feature', feature);
+                        this.toggleMenu({ positionUsingEvent:event }, menu);
+                    }
                 } else this.toggleMenu({ positionUsingEvent:event }, this.select('contextMenuSelector'));
             });
         };
