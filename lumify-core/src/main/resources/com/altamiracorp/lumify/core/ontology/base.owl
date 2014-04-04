@@ -212,6 +212,28 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io#author -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;author">
+        <rdfs:label xml:lang="en">Author</rdfs:label>
+        <userVisible>true</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+
+
+    <!-- http://lumify.io#mappingJson -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;mappingJson">
+        <rdfs:label xml:lang="en">Mapping JSON</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 </rdf:RDF>
 
 
