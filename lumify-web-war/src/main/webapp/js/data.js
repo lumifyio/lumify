@@ -263,6 +263,11 @@ define([
             }).done(function(config, verticesResponse) {
                 var vertices = verticesResponse[0].vertices,
                     count = vertices.length,
+                    eventOptions = {
+                        options: {
+                            addingVerticesRelatedTo: data.vertexId
+                        }
+                    },
                     forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
                     promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
                 
@@ -277,6 +282,7 @@ define([
                                     relatedToVertexId: data.vertexId,
                                     title: title,
                                     vertices: vertices,
+                                    eventOptions: eventOptions,
                                     anchorTo: {
                                         vertexId: data.vertexId
                                     }
@@ -284,7 +290,7 @@ define([
                             });
                     });
                 } else {
-                    self.trigger('addVertices', { vertices:vertices });
+                    self.trigger('addVertices', _.extend({ vertices:vertices }, eventOptions));
                 }
             });
         };
@@ -506,12 +512,16 @@ define([
 
                     if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added, adding:true });
                     if (added.length) {
+                        if (data.options && data.options.addingVerticesRelatedTo) {
+                            self.trigger('selectObjects');
+                        }
                         ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
                             vertices: added,
                             remoteEvent: data.remoteEvent,
                             options: data.options || {}
                         });
+                        self.trigger('selectObjects', { vertices: added })
                     }
                 });
             });

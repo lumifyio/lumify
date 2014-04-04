@@ -194,8 +194,11 @@ define([
                 });
 
                 if (toFitTo.length) {
-                    cy.zoomOutToFit(cytoscape.Collection(cy, toFitTo), $.extend({}, this.graphPadding), position, finished);
-                    animateToExisting(200);
+                    cy.zoomOutToFit(cytoscape.Collection(cy, toFitTo), {
+                        padding: this.paddingForZoomOut(),
+                        callback: finished
+                    });
+                    animateToExisting(400);
                 } else {
                     animateToExisting(0);
                     finished();
@@ -220,21 +223,15 @@ define([
         };
 
         this.addVertices = function(vertices, opts) {
-            var options = $.extend({ fit:false, animate:false }, opts),
+            var self = this,
+                options = $.extend({ fit:false, animate:false }, opts),
                 addedVertices = [],
                 updatedVertices = [],
-                self = this;
-
-            if (self.addingRelatedVertices) {
-                _.defer(function() {
-                    self.trigger('displayInformation', { message: 'Related Entities Added'});
-                });
-                self.addingRelatedVertices = false;
-            }
-
-            var dragging = $('.ui-draggable-dragging:not(.clone-vertex)'),
+                dragging = $('.ui-draggable-dragging:not(.clone-vertex)'),
+                isVisible = this.$node.closest('.visible').length === 1,
                 cloned = null;
-            if (dragging.length && this.$node.closest('.visible').length === 1) {
+
+            if (dragging.length && isVisible) {
                 cloned = dragging.clone()
                     .css({width:'auto'})
                     .addClass('clone-vertex')
@@ -332,15 +329,29 @@ define([
                         cyNodes.push(cyNodeData);
                     });
 
-                    cy.add(cyNodes);
+                    var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
                         v.workspace.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
                     });
 
 
                     if (options.fit && cy.nodes().length) {
+
                         _.defer(self.fit.bind(self));
+
+                    } else if (isVisible && options.addingVerticesRelatedTo) {
+                        var relatedToCyNode = cy.getElementById(self.toCyId(options.addingVerticesRelatedTo));
+                        if (relatedToCyNode.length) {
+                            var nodes = addedCyNodes.add(relatedToCyNode);
+
+                            _.defer(function() {
+                                cy.zoomOutToFit(nodes, {
+                                    padding: self.paddingForZoomOut()
+                                });
+                            })
+                        }
                     }
+
                     if (options.animate) {
                         if (cy.nodes().length) {
                             _.delay(function again() {
@@ -1061,6 +1072,17 @@ define([
                 }
             });
         };
+
+        this.paddingForZoomOut = function() {
+            return _.tap(_.extend({}, this.graphPadding), function(p) {
+                var extra = 50;
+
+                p.t += extra;
+                p.b += extra;
+                p.l += extra;
+                p.r += extra;
+            });
+        }
 
         this.after('teardown', function() {
             this.$node.empty();
