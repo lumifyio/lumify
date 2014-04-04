@@ -49,7 +49,7 @@ define([], function() {
 
                     this.trigger('propertychange', {
                         id: this.attr.id,
-                        propertyId: this.attr.property.id,
+                        propertyId: this.attr.property.title,
                         values: values,
                         predicate: predicate
                     });
@@ -62,7 +62,7 @@ define([], function() {
                 this._markedInvalid = true;
                 this.trigger('propertyinvalid', {
                     id: this.attr.id,
-                    propertyId: this.attr.property.id
+                    propertyId: this.attr.property.title
                 });
             }
         };
