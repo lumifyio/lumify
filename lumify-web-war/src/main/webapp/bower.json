@@ -5,7 +5,7 @@
     "bootstrap": "git://github.com/twbs/bootstrap.git#2.3.2",
     "bootstrap-datepicker": "~1.2.0",
     "color-js": "~1.0.1",
-    "cytoscape.js": "git://github.com/altamiracorp/cytoscape.js.git#923601472ce9de2ff24d9825c040ba4a804aa3f5",
+    "cytoscape.js": "git://github.com/altamiracorp/cytoscape.js.git#581b0c134690ce76b28fa7d4e0a25d5d2845f333",
     "d3": "~3.3.2",
     "flight": "~1.1.1",
     "intercom": "~0.1.4",
