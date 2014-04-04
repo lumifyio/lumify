@@ -10,20 +10,16 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DIS
 
 public class Relationship {
     private final Vertex vertex;
-    private final String sourceConceptId;
-    private final String destConceptId;
+    private final String sourceConceptIRI;
+    private final String destConceptIRI;
 
-    public Relationship(Vertex vertex, String sourceConceptId, String destConceptId) {
+    public Relationship(Vertex vertex, String sourceConceptIRI, String destConceptIRI) {
         this.vertex = vertex;
-        this.sourceConceptId = sourceConceptId;
-        this.destConceptId = destConceptId;
+        this.sourceConceptIRI = sourceConceptIRI;
+        this.destConceptIRI = destConceptIRI;
     }
 
-    public String getId() {
-        return this.vertex.getId().toString();
-    }
-
-    public String getTitle() {
+    public String getIRI() {
         return ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
@@ -31,26 +27,21 @@ public class Relationship {
         return DISPLAY_NAME.getPropertyValue(vertex);
     }
 
-    public String getSourceConceptId() {
-        return sourceConceptId;
+    public String getSourceConceptIRI() {
+        return sourceConceptIRI;
     }
 
-    public String getDestConceptId() {
-        return destConceptId;
-    }
-
-    public Vertex getVertex() {
-        return vertex;
+    public String getDestConceptIRI() {
+        return destConceptIRI;
     }
 
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
-            json.put("id", getId());
-            json.put("title", getTitle());
+            json.put("title", getIRI());
             json.put("displayName", getDisplayName());
-            json.put("source", getSourceConceptId());
-            json.put("dest", getDestConceptId());
+            json.put("source", getSourceConceptIRI());
+            json.put("dest", getDestConceptIRI());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
