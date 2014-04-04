@@ -51,7 +51,7 @@ define([
 
             this[this.attr.alignTo + 'Initializer']();
             this.updatePosition();
-
+            this.on(document, 'graphPaddingUpdated', this.updatePosition);
 
             var self = this;
             $(document).off('.actionbar').on('click.actionbar', function() {
@@ -97,11 +97,21 @@ define([
                 range = selection.rangeCount > 0 && selection.getRangeAt(0);
 
             if (range) {
-                var boundingBox = range.getBoundingClientRect();
+                var rects = range.getClientRects(),
+                    box;
+
+                if (rects.length) {
+                    box = _.sortBy(rects, function(r) {
+                        return r.top * -1;
+                    })[0];
+                } else {
+                    box = range.getBoundingClientRect();
+                }
+
                 this.$tip.css({
-                    left: boundingBox.left + boundingBox.width - this.$tip.width() / 2,
-                    top: boundingBox.top + boundingBox.height,
-                    opacity: boundingBox.top < TOP_HIDE_THRESHOLD ? '0' : '1'
+                    left: box.left + box.width - this.$tip.width() / 2,
+                    top: box.top + box.height,
+                    opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'
                 });
             } else this.teardown();
         };

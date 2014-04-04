@@ -39,7 +39,7 @@ define([
         };
 
         this.onAdd = function(event) {
-            this.trigger(document, 'addVertices', { vertices:this.attr.vertices });
+            this.trigger(document, 'addVertices', _.extend({ vertices:this.attr.vertices }, this.attr.eventOptions));
             this.teardown();
         };
     }
