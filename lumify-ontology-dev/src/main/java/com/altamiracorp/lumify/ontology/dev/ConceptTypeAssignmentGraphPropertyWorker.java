@@ -24,21 +24,21 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         Concept concept;
 
         if (mimeType.startsWith("image")) {
-            concept = getOntologyRepository().getConceptByVertexId(ConceptType.IMAGE.toString());
+            concept = getOntologyRepository().getConceptByIRI(ConceptType.IMAGE.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.IMAGE.toString());
         } else if (mimeType.startsWith("audio")) {
-            concept = getOntologyRepository().getConceptByVertexId(ConceptType.AUDIO.toString());
+            concept = getOntologyRepository().getConceptByIRI(ConceptType.AUDIO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.AUDIO.toString());
         } else if (mimeType.startsWith("video")) {
-            concept = getOntologyRepository().getConceptByVertexId(ConceptType.VIDEO.toString());
+            concept = getOntologyRepository().getConceptByIRI(ConceptType.VIDEO.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.VIDEO.toString());
         } else {
-            concept = getOntologyRepository().getConceptByVertexId(ConceptType.DOCUMENT.toString());
+            concept = getOntologyRepository().getConceptByIRI(ConceptType.DOCUMENT.toString());
             checkNotNull(concept, "Could not find concept " + ConceptType.DOCUMENT.toString());
         }
 
-        LOGGER.debug("assigning concept type %s to vertex %s", concept.getId(), data.getVertex().getId());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getVertex(), concept.getId(), data.getVertex().getVisibility());
+        LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getVertex().getId());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getVertex(), concept.getTitle(), data.getVertex().getVisibility());
         getGraph().flush();
         getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), ElementMutation.DEFAULT_KEY, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
     }
