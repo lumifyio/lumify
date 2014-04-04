@@ -1,10 +1,12 @@
 
 define([
     'flight/lib/component',
-    'tpl!./actionbar'
+    'tpl!./actionbar',
+    'util/withTeardown'
 ], function (
     defineComponent,
-    template
+    template,
+    withTeardown
 ) {
     'use strict';
 
@@ -15,11 +17,12 @@ define([
             'node'
         ];
 
-    return defineComponent(ActionBar);
+    return defineComponent(ActionBar, withTeardown);
 
     function ActionBar() {
 
         this.before('teardown', function() {
+            $(document).off('.actionbar');
             this[this.attr.alignTo + 'Teardown']();
             this.$node.tooltip('destroy');
             this.$tip.hide();

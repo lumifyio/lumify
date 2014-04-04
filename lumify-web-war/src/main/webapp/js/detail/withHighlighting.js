@@ -52,9 +52,6 @@ define([
             $(document).off('resumeSelectionChanges.detail');
             $(document).off('termCreated');
             this.highlightNode().off('scrollstop');
-            if (this.ActionBar) {
-                this.ActionBar.teardownAll();
-            }
         });
 
         this.after('initialize', function() {
@@ -314,7 +311,6 @@ define([
                 if (this.$node.find('.text.dropdown').length) return;
 
                 require(['util/actionbar/actionbar'], function(ActionBar) {
-                    self.ActionBar = ActionBar;
                     ActionBar.teardownAll();
                     ActionBar.attachTo(self.node, {
                         alignTo: 'textselection',
@@ -385,7 +381,6 @@ define([
             }
             
             require(['util/actionbar/actionbar'], function(ActionBar) {
-                self.ActionBar = ActionBar;
                 ActionBar.teardownAll();
                 self.off('.actionbar');
 
