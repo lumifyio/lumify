@@ -12,16 +12,9 @@ define([
 ], function (defineComponent, registry, appData, withTypeContent, VertexService, OntologyService, sf, template, histogramTemplate, VertexList) {
     'use strict';
 
-    var NO_HISTOGRAM_PROPERTIES = [
-
+    var NO_HISTOGRAM_DATATYPES = [
         // Would need to bin these intelligently to make useful
-        'geoLocation', 'latitude', 'longitude', 
-
-        // How aften would there actually be two with same title?
-        'title',
-
-        // TODO: should be displayed but needs custom binning
-        'publishedDate'
+        'geoLocation', 'date'
     ];
 
     return defineComponent(Multiple, withTypeContent);
@@ -203,10 +196,11 @@ define([
             function shouldDisplay(properties, propertyName) {
                 if (propertyName == 'http://lumify.io#conceptType') {
                     return true;
-                } else if (NO_HISTOGRAM_PROPERTIES.indexOf(propertyName.replace('http://lumify.io#', '')) >= 0) {
-                    return false;
                 } else {
                     var ontology = properties.byTitle[propertyName];
+                    if (ontology && ~NO_HISTOGRAM_DATATYPES.indexOf(ontology.dataType)) {
+                        return false;
+                    }
                     return !!(ontology && ontology.userVisible); 
                 }
             }
