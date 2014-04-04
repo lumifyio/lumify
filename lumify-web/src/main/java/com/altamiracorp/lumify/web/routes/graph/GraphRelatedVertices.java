@@ -47,7 +47,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Set<String> limitConceptIds = new HashSet<String>();
 

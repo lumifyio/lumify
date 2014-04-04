@@ -36,7 +36,7 @@ public class VertexAudit extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(getAuthorizations(request, user), getWorkspaceId(request));
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(getAuthorizations(request, user), getActiveWorkspaceId(request));
         Iterable<Audit> rows = auditRepository.findByRowStartsWith(graphVertexId, modelUserContext);
 
         JSONObject results = new JSONObject();

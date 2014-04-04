@@ -36,7 +36,7 @@ public class VertexMultiple extends BaseRequestHandler {
         String[] vertexStringIds = request.getParameterValues("vertexIds[]");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Iterable<Object> vertexIds = new ConvertingIterable<String, Object>(toIterable(vertexStringIds)) {
             @Override

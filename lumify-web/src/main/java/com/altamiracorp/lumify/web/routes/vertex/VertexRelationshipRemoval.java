@@ -40,7 +40,7 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
         final String sourceId = getRequiredParameter(request, "sourceId");
         final String targetId = getRequiredParameter(request, "targetId");
         final String edgeId = getRequiredParameter(request, "edgeId");
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);

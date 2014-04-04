@@ -44,7 +44,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         if (graphVertex == null) {

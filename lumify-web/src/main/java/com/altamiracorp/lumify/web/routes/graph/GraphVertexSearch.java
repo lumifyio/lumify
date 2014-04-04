@@ -82,8 +82,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
-        String workspaceId = getWorkspaceId(request);
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
+        String workspaceId = getActiveWorkspaceId(request);
 
         JSONArray filterJson = new JSONArray(filter);
 

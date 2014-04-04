@@ -76,7 +76,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         String y2 = getRequiredParameter(request, "y2");
 
         User user = getUser(request);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         Authorizations authorizations = getAuthorizations(request, user);
 

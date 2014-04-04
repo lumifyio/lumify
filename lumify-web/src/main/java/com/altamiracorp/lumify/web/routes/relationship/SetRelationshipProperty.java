@@ -58,7 +58,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         final JSONObject sourceJson;
         if (sourceInfo != null) {

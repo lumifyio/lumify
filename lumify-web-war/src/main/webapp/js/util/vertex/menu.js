@@ -166,7 +166,6 @@ define([
 
             this.positionMenu(this.attr.position);
 
-            var self = this;
             $(document).off('.vertexMenu').on('click.vertexMenu', function() {
                 $(document).off('.vertexMenu');
                 self.teardown();

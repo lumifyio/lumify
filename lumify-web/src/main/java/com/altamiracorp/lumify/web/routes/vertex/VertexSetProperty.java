@@ -57,7 +57,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
         User user = getUser(request);
 
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         final JSONObject sourceJson;
         if (sourceInfo != null) {

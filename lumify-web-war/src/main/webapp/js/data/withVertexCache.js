@@ -98,9 +98,10 @@ define([
 
         this.getVertexTitle = function(vertexId) {
             var deferredTitle = $.Deferred(),
-                v, vertexTitle;
+                v, 
+                vertexTitle;
 
-            var v = this.vertex(vertexId);
+            v = this.vertex(vertexId);
             if (v) {
                 vertexTitle = v.prop('title');
                 return deferredTitle.resolve(vertexTitle);

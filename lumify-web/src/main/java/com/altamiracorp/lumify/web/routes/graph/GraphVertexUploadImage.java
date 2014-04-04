@@ -84,7 +84,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         final Part file = files.get(0);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();

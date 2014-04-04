@@ -35,7 +35,7 @@ public class RelationshipProperties extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Edge edge = graph.getEdge(graphEdgeId, authorizations);
         Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);

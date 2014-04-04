@@ -152,7 +152,7 @@ public abstract class BaseRequestHandler implements Handler {
         return getRequiredParameter(request, name);
     }
 
-    protected String getWorkspaceId(final HttpServletRequest request) {
+    protected String getActiveWorkspaceId(final HttpServletRequest request) {
         String workspaceId = getWorkspaceIdOrDefault(request);
         if (workspaceId == null || workspaceId.trim().length() == 0) {
             throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
