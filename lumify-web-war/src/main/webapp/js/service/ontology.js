@@ -30,7 +30,8 @@ define([
                     .then(function(ontology) {
                         return $.extend({}, ontology, {
                             conceptsById: _.indexBy(ontology.concepts, 'id'),
-                            propertiesByTitle: _.indexBy(ontology.properties, 'title')
+                            propertiesByTitle: _.indexBy(ontology.properties, 'title'),
+                            propertiesById: _.indexBy(ontology.properties, 'id')
                         });
                     });
     };
@@ -207,7 +208,9 @@ define([
                                     properties = concept.properties,
                                     parentConceptId = concept.parentConcept;
 
-                                propertyIds.push.apply(propertyIds, properties);
+                                if (properties.length) {
+                                    propertyIds.push.apply(propertyIds, properties);
+                                }
                                 if (parentConceptId) {
                                     collectPropertyIds(parentConceptId);
                                 }
@@ -219,7 +222,7 @@ define([
                         var properties = _.chain(propertyIds)
                             .uniq()
                             .map(function(pId) {
-                                return ontology.propertiesByTitle[pId];
+                                return ontology.propertiesById[pId];
                             })
                             .value();
 
