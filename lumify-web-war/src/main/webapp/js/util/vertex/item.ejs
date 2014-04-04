@@ -9,7 +9,7 @@
       <div>
         <span class="preview"/>
         <span class="date"><%= vertex.properties['http://lumify.io#publishedDate'] ? new Date(vertex.properties['http://lumify.io#publishedDate'].value).toDateString() : '' %></span>
-        <span class="source"><%= vertex.resolvedSource %></span>
+        <span class="source"><%= vertex.properties['http://lumify.io#source'] ? vertex.properties['http://lumify.io#source'].value : '' %></span>
       </div>
     </a>
 </li>
