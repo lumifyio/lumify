@@ -138,7 +138,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
-                .setConceptGraphVertexId(concept.getId(), lumifyVisibility.getVisibility())
+                .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
                 .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 

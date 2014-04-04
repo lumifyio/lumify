@@ -117,7 +117,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
                     String[] conceptIds = new String[leafNodeList.size()];
                     int count = 0;
                     for (Concept c : leafNodeList) {
-                        conceptIds[count] = c.getId();
+                        conceptIds[count] = c.getTitle();
                         count++;
                     }
                     graphQuery.has(CONCEPT_TYPE.getKey(), Compare.IN, conceptIds);

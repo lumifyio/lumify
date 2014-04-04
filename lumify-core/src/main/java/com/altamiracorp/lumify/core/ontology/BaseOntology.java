@@ -68,7 +68,7 @@ public class BaseOntology {
 
             StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
             raw.searchIndex(false);
-            LumifyProperties.GLYPH_ICON.setProperty(entityConcept.getVertex(), raw, OntologyRepository.VISIBILITY.getVisibility());
+            entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
             graph.flush();
         } catch (IOException e) {
             throw new LumifyException("invalid stream for glyph icon");

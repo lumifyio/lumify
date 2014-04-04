@@ -100,7 +100,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
-            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
+            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), lumifyVisibility.getVisibility());
             TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();

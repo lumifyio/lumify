@@ -119,12 +119,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
-            OntologyLumifyProperties.COLOR.setProperty(result.getVertex(), color, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.COLOR.getKey(), color, OntologyRepository.VISIBILITY.getVisibility());
         }
 
         String displayType = getDisplayType(o, ontologyClass);
         if (displayType != null) {
-            OntologyLumifyProperties.DISPLAY_TYPE.setProperty(result.getVertex(), displayType, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getKey(), displayType, OntologyRepository.VISIBILITY.getVisibility());
         }
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
@@ -138,7 +138,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
                 value.searchIndex(false);
                 value.store(true);
-                LumifyProperties.GLYPH_ICON.setProperty(result.getVertex(), value, OntologyRepository.VISIBILITY.getVisibility());
+                result.setProperty(LumifyProperties.GLYPH_ICON.getKey(), value, OntologyRepository.VISIBILITY.getVisibility());
             } finally {
                 iconFileIn.close();
             }
@@ -185,7 +185,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Concept domainConcept = getConceptByIRI(domainClassUri);
             checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
 
-            LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getId());
+            LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
             addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, userVisible);
         }
     }

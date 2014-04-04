@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
@@ -14,8 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
-
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLYPH_ICON;
+import java.io.InputStream;
 
 public class ResourceGet extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
@@ -34,15 +32,15 @@ public class ResourceGet extends BaseRequestHandler {
         final String id = getAttributeString(request, "id");
 
         Concept concept = ontologyRepository.getConceptByIRI(id);
-        StreamingPropertyValue spv = GLYPH_ICON.getPropertyValue(concept.getVertex());
+        InputStream glyphIconIn = concept.getGlyphIcon();
 
-        if (spv == null) {
+        if (glyphIconIn == null) {
             respondWithNotFound(response);
             return;
         }
 
         ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-        IOUtils.copy(spv.getInputStream(), imgOut);
+        IOUtils.copy(glyphIconIn, imgOut);
 
         byte[] rawImg = imgOut.toByteArray();
 

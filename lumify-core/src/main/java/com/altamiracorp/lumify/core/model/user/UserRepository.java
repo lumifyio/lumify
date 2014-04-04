@@ -28,7 +28,6 @@ public class UserRepository {
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
     private final Graph graph;
-    private final String userConceptId;
     private final com.altamiracorp.securegraph.Authorizations authorizations;
     private final AuthorizationRepository authorizationRepository;
 
@@ -44,7 +43,6 @@ public class UserRepository {
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
-        userConceptId = userConcept.getId();
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
@@ -55,13 +53,13 @@ public class UserRepository {
     public Vertex findByUserName(String username) {
         return Iterables.getFirst(graph.query(authorizations)
                 .has(USERNAME.getKey(), username)
-                .has(CONCEPT_TYPE.getKey(), userConceptId)
+                .has(CONCEPT_TYPE.getKey(), LUMIFY_USER_CONCEPT_ID)
                 .vertices(), null);
     }
 
     public Iterable<Vertex> findAll() {
         return graph.query(authorizations)
-                .has(CONCEPT_TYPE.getKey(), userConceptId)
+                .has(CONCEPT_TYPE.getKey(), LUMIFY_USER_CONCEPT_ID)
                 .vertices();
     }
 
@@ -83,7 +81,7 @@ public class UserRepository {
         String userId = "USER_" + graph.getIdGenerator().nextId();
         VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY.getVisibility(), this.authorizations);
         USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
-        CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
+        CONCEPT_TYPE.setProperty(userBuilder, LUMIFY_USER_CONCEPT_ID, VISIBILITY.getVisibility());
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());

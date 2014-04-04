@@ -57,7 +57,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }
             for (Concept con : limitConcepts) {
-                limitConceptIds.add(con.getId());
+                limitConceptIds.add(con.getTitle());
             }
         }
 
