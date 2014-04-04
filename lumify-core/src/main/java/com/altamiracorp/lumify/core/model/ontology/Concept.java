@@ -41,7 +41,7 @@ public class Concept {
     }
 
     public boolean hasGlyphIconResource() {
-        // TO-DO: This can be changed to GLYPH_ICON.getPropertyValue(vertex) once ENTITY_IMAGE_URL is added
+        // TODO: This can be changed to GLYPH_ICON.getPropertyValue(vertex) once ENTITY_IMAGE_URL is added
         return vertex.getPropertyValue(GLYPH_ICON.getKey()) != null;
     }
 
@@ -85,7 +85,7 @@ public class Concept {
             if (this.properties != null) {
                 JSONArray propertiesJson = new JSONArray();
                 for (OntologyProperty property : this.properties) {
-                    propertiesJson.put(property.getId().toString());
+                    propertiesJson.put(property.getTitle());
                 }
                 result.put("properties", propertiesJson);
             }

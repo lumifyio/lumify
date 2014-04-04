@@ -1,31 +1,21 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
-
-public class Relationship {
-    private final Vertex vertex;
+public abstract class Relationship {
     private final String sourceConceptIRI;
     private final String destConceptIRI;
 
-    public Relationship(Vertex vertex, String sourceConceptIRI, String destConceptIRI) {
-        this.vertex = vertex;
+    protected Relationship(String sourceConceptIRI, String destConceptIRI) {
         this.sourceConceptIRI = sourceConceptIRI;
         this.destConceptIRI = destConceptIRI;
     }
 
-    public String getIRI() {
-        return ONTOLOGY_TITLE.getPropertyValue(vertex);
-    }
+    public abstract String getIRI();
 
-    public String getDisplayName() {
-        return DISPLAY_NAME.getPropertyValue(vertex);
-    }
+    public abstract String getDisplayName();
 
     public String getSourceConceptIRI() {
         return sourceConceptIRI;
