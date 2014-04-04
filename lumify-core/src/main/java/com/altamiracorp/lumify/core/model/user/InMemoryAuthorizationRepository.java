@@ -8,11 +8,17 @@ import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class InMemoryAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InMemoryAuthorizationRepository.class);
     private List<String> authorizations = new ArrayList<String>();
+
+    @Override
+    public void init(Map config) {
+
+    }
 
     @Override
     public void addAuthorizationToGraph(String auth) {

@@ -40,6 +40,7 @@ import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
+import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -106,7 +107,6 @@ public class LumifyBootstrap extends AbstractModule {
 
         MetricsManager metricsManager = new JmxMetricsManager();
 
-        bind(AuthorizationRepository.class).to(AccumuloAuthorizationRepository.class);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
@@ -138,6 +138,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(WorkspaceRepository.class)
                 .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(AuthorizationRepository.class)
+                .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

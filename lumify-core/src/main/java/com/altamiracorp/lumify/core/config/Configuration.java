@@ -34,6 +34,7 @@ public final class Configuration {
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
     public static final String USER_REPOSITORY = "user-repository";
     public static final String WORKSPACE_REPOSITORY = "workspace-repository";
+    public static final String AUTHORIZATION_REPOSITORY = "authorization-repository";
 
     private Map<String, String> config = new HashMap<String, String>();
 
