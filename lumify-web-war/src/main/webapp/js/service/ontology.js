@@ -30,8 +30,7 @@ define([
                     .then(function(ontology) {
                         return $.extend({}, ontology, {
                             conceptsById: _.indexBy(ontology.concepts, 'id'),
-                            propertiesByTitle: _.indexBy(ontology.properties, 'title'),
-                            propertiesById: _.indexBy(ontology.properties, 'id')
+                            propertiesByTitle: _.indexBy(ontology.properties, 'title')
                         });
                     });
     };
@@ -222,7 +221,7 @@ define([
                         var properties = _.chain(propertyIds)
                             .uniq()
                             .map(function(pId) {
-                                return ontology.propertiesById[pId];
+                                return ontology.propertiesByTitle[pId];
                             })
                             .value();
 
