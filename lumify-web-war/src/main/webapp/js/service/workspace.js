@@ -124,10 +124,7 @@ function(ServiceBase) {
 
     WorkspaceService.prototype['delete'] = function(workspaceId) {
         return this._ajaxDelete({
-            url: 'workspace',
-            data: {
-                workspaceId: workspaceId
-            }
+            url: 'workspace?' + $.param({ workspaceId: workspaceId })
         });
     };
 
