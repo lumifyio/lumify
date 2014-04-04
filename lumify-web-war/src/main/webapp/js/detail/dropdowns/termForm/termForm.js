@@ -266,15 +266,13 @@ define([
             this.vertexService.resolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
                 .done(function(data) {
-                    var resolvedVertex = data.entityVertex;
                     var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
                     var $tag;
                     var result = data;
 
                     if ($focused.length !== 0) {
                         $tag = $focused.find('.label-info');
-
-                        $tag.text(resolvedVertex.prop('title'))
+                        $tag.text(data.title)
                             .removeAttr('data-info').data('info', result)
                         $tag.addClass('resolved entity label');
 
@@ -288,7 +286,7 @@ define([
                         if (!classes){
                             classes = 'label-info detected-object'
                         }
-                        $tag = $("<a>").addClass(classes + ' label resolved entity').attr("href", "#").text(resolvedVertex.prop('title'));
+                        $tag = $("<a>").addClass(classes + ' label resolved entity').attr("href", "#").text(data.title);
 
                         var added = false;
 
@@ -308,9 +306,7 @@ define([
                         $tag.data('info', result)
                     }
 
-                    self.trigger('termCreated', resolvedVertex);
-
-                    self.trigger(document, 'updateVertices', { vertices: [resolvedVertex] });
+                    self.trigger('termCreated', data);
                     self.trigger(document, 'refreshRelationships');
 
                     _.defer(self.teardown.bind(self));

@@ -232,11 +232,54 @@ define([
             var self = this,
                 $target = $(event.target),
                 info = $target.closest('.label-info').data('info');
-
             this.$node.find('.focused').removeClass('focused')
-            this.showForm(info, this.attr.data, $target);
-            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
             $target.closest('.label-info').parent().addClass('focused');
+
+            require(['util/actionbar/actionbar'], function(ActionBar) {
+                self.ActionBar = ActionBar;
+                ActionBar.teardownAll();
+                self.off('.actionbar');
+
+                if ($target.hasClass('resolved')) {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Open: 'open.actionbar',
+                            Unresolve: 'unresolve.actionbar'
+                        }
+                    });
+
+                    self.on('open.actionbar', function() {
+
+                        self.trigger('selectObjects', {
+                            vertices: [
+                                {
+                                    id: $target.data('info').graphVertexId
+                                }
+                            ]
+                        });
+                    });
+                    self.on('unresolve.actionbar', function() {
+                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                    });
+
+                } else {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Resolve: 'resolve.actionbar'
+                        }
+                    });
+
+                    self.on('resolve.actionbar', function() {
+                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                    })
+                }
+            });
+
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
         };
 
         this.onCoordsChanged = function(event, data) {
@@ -326,7 +369,6 @@ define([
 
         this.showForm = function (dataInfo, artifactInfo, $target){
             this.$node.find('.underneath').teardownComponent(TermForm)
-
             var root = $('<div class="underneath">')
                 .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
             var resolvedVertex =  dataInfo.entityVertex;

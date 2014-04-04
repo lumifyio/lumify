@@ -235,6 +235,24 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
+    public static void broadcastDetectedObjectChange (String artifactVertexId, JSONObject artifactVertexWithDetectedObjects) {
+        try {
+            JSONObject dataJson = new JSONObject();
+            if (artifactVertexWithDetectedObjects != null) {
+                dataJson = artifactVertexWithDetectedObjects;
+            }
+
+            JSONObject json = new JSONObject();
+            json.put("type", "detectedObjectChange");
+            json.put("data", dataJson);
+            if (broadcaster != null) {
+                broadcaster.broadcast(json.toString());
+            }
+        } catch (JSONException ex) {
+            throw new RuntimeException("Could not create json", ex);
+        }
+    }
+
     @Inject
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;

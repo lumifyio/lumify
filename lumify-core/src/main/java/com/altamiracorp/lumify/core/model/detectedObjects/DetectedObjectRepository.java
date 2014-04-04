@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
@@ -62,7 +63,7 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
         if (detectedObjectModel == null) {
             detectedObjectModel = new DetectedObjectModel(detectedObjectRowKey);
         }
-        detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility)
+        detectedObjectModel.getMetadata()
                 .setX1(x1, visibility)
                 .setY1(y1, visibility)
                 .setX2(x2, visibility)
@@ -70,6 +71,8 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
 
         if (resolved) {
             detectedObjectModel.getMetadata().setResolvedId(vertexId, visibility);
+        } else {
+            detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility);
         }
 
         if (process != null) {
@@ -87,12 +90,21 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
             if (IterableUtils.count(findByRowStartsWith(model.getRowKey().toString(), modelUserContext)) > 1) {
                 continue;
             }
-            JSONObject detectedObjectModelJson = model.toJson();
-            if (model.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
-            }
-            detectedObjects.put(detectedObjectModelJson);
+            detectedObjects.put(toJSON(model, authorizations));
         }
         return detectedObjects;
+    }
+
+    public JSONObject toJSON (DetectedObjectModel detectedObjectModel, Authorizations authorizations) {
+        JSONObject object = detectedObjectModel.toJson();
+        if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+            Vertex vertex = graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations);
+            object.put("title", vertex.getPropertyValue(LumifyProperties.TITLE.getKey()));
+            object.put("graphVertexId", vertex.getId());
+            object.put("http://lumify.io#conceptType", vertex.getPropertyValue("http://lumify.io#conceptType"));
+        }
+        object.put(LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString());
+
+        return object;
     }
 }
