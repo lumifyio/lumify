@@ -52,7 +52,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         OntologyProperty property = ontologyRepository.getProperty(propertyName);
         if (property == null) {

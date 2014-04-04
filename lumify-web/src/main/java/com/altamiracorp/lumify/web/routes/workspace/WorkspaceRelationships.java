@@ -51,7 +51,7 @@ public class WorkspaceRelationships extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         long startTime = System.nanoTime();
 

@@ -78,7 +78,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
         Authorizations authorizations = getAuthorizations(request, user);

@@ -39,7 +39,7 @@ public class WorkspaceVertices extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
         Iterable<Object> vertexIds = new LookAheadIterable<WorkspaceEntity, Object>() {
