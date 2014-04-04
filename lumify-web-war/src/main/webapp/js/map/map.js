@@ -244,7 +244,7 @@ define([
         this.findOrCreateMarker = function(map, vertex) {
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
-                geoLocations = this.ontologyProperties.byDataType['geoLocation'],
+                geoLocations = this.ontologyProperties.byDataType.geoLocation,
                 geoLocationProperty = geoLocations.length && geoLocations[0],
                 geoLocation = geoLocationProperty && vertex.properties[geoLocationProperty.title],
                 conceptType = vertex.properties['http://lumify.io#conceptType'].value,
