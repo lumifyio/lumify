@@ -1,9 +1,11 @@
 
 
-define([], function() {
+define(['util/withTeardown'], function(withTeardown) {
     'use strict';
 
     return function() {
+
+        withTeardown.call(this);
 
         this.defaultAttrs({
             predicateSelector: 'select',
@@ -13,6 +15,8 @@ define([], function() {
         });
 
         this.after('teardown', function() {
+            var inputs = this.select('visibleInputsSelector');
+            inputs.tooltip('destroy');
             this.$node.empty();
         });
 
