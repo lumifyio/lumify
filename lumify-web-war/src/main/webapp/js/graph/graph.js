@@ -1080,7 +1080,7 @@ define([
                 p.t += extra;
                 p.b += extra;
                 p.l += extra;
-                p.r += extra;
+                // Right has the zoom controls overlap with it
             });
         }
 
