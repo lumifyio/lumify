@@ -67,7 +67,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         final JSONArray undoData = new JSONArray(getRequiredParameter(request, "undoData"));
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         JSONArray failures = new JSONArray();
         JSONArray successArray = new JSONArray();

@@ -78,7 +78,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
         User user = getUser(request);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
         Authorizations authorizations = getAuthorizations(request, user);
@@ -94,7 +94,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, id.toString());
 
-        Concept concept = ontologyRepository.getConceptByVertexId(conceptId);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
@@ -139,7 +139,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
-                .setConceptGraphVertexId(concept.getId(), lumifyVisibility.getVisibility())
+                .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
                 .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 

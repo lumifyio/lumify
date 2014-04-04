@@ -41,7 +41,7 @@ public class UserRepositoryTest {
         authorizationRepository = new InMemoryAuthorizationRepository();
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING.toString());
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
-        when(userConcept.getId()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
+        when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
         userRepository = new UserRepository(graph, ontologyRepository, authorizationRepository);
     }

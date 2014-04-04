@@ -82,8 +82,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getWorkspaceId(request));
-        String workspaceId = getWorkspaceId(request);
+        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
+        String workspaceId = getActiveWorkspaceId(request);
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -110,14 +110,14 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         if (conceptType != null) {
-            Concept concept = ontologyRepository.getConceptByVertexId(conceptType);
+            Concept concept = ontologyRepository.getConceptByIRI(conceptType);
             if (getLeafNodes == null || !getLeafNodes.equals("false")) {
                 List<Concept> leafNodeList = ontologyRepository.getAllLeafNodesByConcept(concept);
                 if (leafNodeList.size() > 0) {
                     String[] conceptIds = new String[leafNodeList.size()];
                     int count = 0;
                     for (Concept c : leafNodeList) {
-                        conceptIds[count] = c.getId();
+                        conceptIds[count] = c.getTitle();
                         count++;
                     }
                     graphQuery.has(CONCEPT_TYPE.getKey(), Compare.IN, conceptIds);

@@ -80,7 +80,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         final Part file = files.get(0);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Vertex entityVertex = graph.getVertex(graphVertexId, authorizations);
         ElementMutation<Vertex> entityVertexMutation = entityVertex.prepareMutation();
@@ -91,7 +91,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         }
 
         ElementBuilder<Vertex> artifactBuilder = convertToArtifact(file, authorizations);
-        String conceptId = ontologyRepository.getConceptByVertexId(PropertyType.IMAGE.toString()).getId();
+        String conceptId = ontologyRepository.getConceptByIRI(PropertyType.IMAGE.toString()).getTitle();
         OntologyLumifyProperties.DISPLAY_TYPE.setProperty(artifactBuilder, PropertyType.IMAGE.toString(), lumifyVisibility.getVisibility());
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(artifactBuilder, conceptId, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(artifactBuilder, String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex)), lumifyVisibility.getVisibility());

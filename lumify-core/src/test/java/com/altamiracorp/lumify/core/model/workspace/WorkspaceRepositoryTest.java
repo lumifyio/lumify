@@ -81,15 +81,15 @@ public class WorkspaceRepositoryTest {
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
-        when(ontologyRepository.getConceptByVertexId(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
+        when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
 
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString())).thenReturn(workspaceConcept);
-        when(workspaceConcept.getId()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);
+        when(workspaceConcept.getTitle()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);
 
-        when(workspaceToEntityRelationship.getId()).thenReturn("workspaceToEntityRelationshipId");
+        when(workspaceToEntityRelationship.getIRI()).thenReturn(WorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME);
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToEntityRelationship);
 
-        when(workspaceToUserRelationship.getId()).thenReturn("workspaceToUserRelationshipId");
+        when(workspaceToUserRelationship.getIRI()).thenReturn(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME);
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
         workspaceRepository = new WorkspaceRepository(graph, ontologyRepository, userRepository, authorizationRepository, workspaceDiff);
@@ -312,7 +312,7 @@ public class WorkspaceRepositoryTest {
         assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users
         boolean foundRemovedEdge = false;
         for (InMemoryEdge edge : edgesAfterDelete.values()) {
-            if (edge.getLabel().equals(workspaceToEntityRelationship.getId())) {
+            if (edge.getLabel().equals(workspaceToEntityRelationship.getIRI())) {
                 assertEquals(false, WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge));
                 foundRemovedEdge = true;
             }

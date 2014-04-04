@@ -4,10 +4,11 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.IRI;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public interface OntologyRepository {
@@ -21,21 +22,17 @@ public interface OntologyRepository {
 
     void clearCache();
 
-    void storeOntologyFile(InputStream in, IRI documentIRI);
-
-    List<OWLOntology> loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws OWLOntologyCreationException, IOException;
-
     Iterable<Relationship> getRelationshipLabels();
 
-    String getDisplayNameForLabel(String relationshipLabel);
-
-    List<OntologyProperty> getProperties();
-
-    OntologyProperty getProperty(String propertyName);
-
-    Relationship getRelationshipByVertexId(String relationshipId);
+    Iterable<OntologyProperty> getProperties();
 
     Iterable<Concept> getConcepts();
+
+    String getDisplayNameForLabel(String relationshipIRI);
+
+    OntologyProperty getProperty(String propertyIRI);
+
+    Relationship getRelationshipByIRI(String relationshipIRI);
 
     Iterable<Concept> getConceptsWithProperties();
 
@@ -43,19 +40,21 @@ public interface OntologyRepository {
 
     Concept getParentConcept(Concept concept);
 
-    Concept getParentConcept(String conceptId);
+    Concept getConceptByIRI(String conceptIRI);
 
-    Concept getConceptByVertexId(String conceptVertexId);
-
-    List<Concept> getConceptAndChildrenByVertexId(String conceptId);
+    List<Concept> getConceptAndChildrenByIRI(String conceptIRI);
 
     List<Concept> getAllLeafNodesByConcept(Concept concept);
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName);
 
-    OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType, boolean userVisible);
-
-    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipId, String displayName);
+    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
 
     void resolvePropertyIds(JSONArray filterJson) throws JSONException;
+
+    void importFile(File inFile, IRI documentIRI) throws Exception;
+
+    void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception;
+
+    void exportOntology(OutputStream out, IRI documentIRI) throws Exception;
 }

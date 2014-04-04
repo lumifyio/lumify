@@ -44,7 +44,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Edge graphEdge = graph.getEdge(graphEdgeId, authorizations);
         if (graphEdge == null) {

@@ -34,7 +34,7 @@ public class Ontology extends BaseRequestHandler {
         Iterable<Concept> concepts = ontologyRepository.getConceptsWithProperties();
         resultJson.put("concepts", Concept.toJsonConcepts(concepts));
 
-        List<OntologyProperty> properties = ontologyRepository.getProperties();
+        Iterable<OntologyProperty> properties = ontologyRepository.getProperties();
         resultJson.put("properties", OntologyProperty.toJsonProperties(properties));
 
         Iterable<Relationship> relationships = ontologyRepository.getRelationshipLabels();
