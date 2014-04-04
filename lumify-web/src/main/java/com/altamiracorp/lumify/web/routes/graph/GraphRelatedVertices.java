@@ -52,7 +52,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         Set<String> limitConceptIds = new HashSet<String>();
 
         if (limitParentConceptId != null) {
-            List<Concept> limitConcepts = ontologyRepository.getConceptAndChildrenByVertexId(limitParentConceptId);
+            List<Concept> limitConcepts = ontologyRepository.getConceptAndChildrenByIRI(limitParentConceptId);
             if (limitConcepts == null) {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }

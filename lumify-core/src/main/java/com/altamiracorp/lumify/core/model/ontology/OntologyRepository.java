@@ -24,15 +24,15 @@ public interface OntologyRepository {
 
     Iterable<Relationship> getRelationshipLabels();
 
-    String getDisplayNameForLabel(String relationshipLabel);
-
-    List<OntologyProperty> getProperties();
-
-    OntologyProperty getProperty(String propertyName);
-
-    Relationship getRelationshipByVertexId(String relationshipId);
+    Iterable<OntologyProperty> getProperties();
 
     Iterable<Concept> getConcepts();
+
+    String getDisplayNameForLabel(String relationshipIRI);
+
+    OntologyProperty getProperty(String propertyIRI);
+
+    Relationship getRelationshipByIRI(String relationshipIRI);
 
     Iterable<Concept> getConceptsWithProperties();
 
@@ -40,19 +40,15 @@ public interface OntologyRepository {
 
     Concept getParentConcept(Concept concept);
 
-    Concept getParentConcept(String conceptId);
+    Concept getConceptByIRI(String conceptIRI);
 
-    Concept getConceptByVertexId(String conceptVertexId);
-
-    List<Concept> getConceptAndChildrenByVertexId(String conceptId);
+    List<Concept> getConceptAndChildrenByIRI(String conceptIRI);
 
     List<Concept> getAllLeafNodesByConcept(Concept concept);
 
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName);
 
-    OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType, boolean userVisible);
-
-    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipId, String displayName);
+    Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
 
     void resolvePropertyIds(JSONArray filterJson) throws JSONException;
 

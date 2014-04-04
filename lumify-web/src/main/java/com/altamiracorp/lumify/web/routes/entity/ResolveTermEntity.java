@@ -93,7 +93,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
 
-        Concept concept = ontologyRepository.getConceptByVertexId(conceptId);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);

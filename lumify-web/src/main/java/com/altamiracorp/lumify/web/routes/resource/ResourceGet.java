@@ -33,7 +33,7 @@ public class ResourceGet extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String id = getAttributeString(request, "id");
 
-        Concept concept = ontologyRepository.getConceptByVertexId(id);
+        Concept concept = ontologyRepository.getConceptByIRI(id);
         StreamingPropertyValue spv = GLYPH_ICON.getPropertyValue(concept.getVertex());
 
         if (spv == null) {

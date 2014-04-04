@@ -90,7 +90,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        Concept concept = ontologyRepository.getConceptByVertexId(conceptId);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation;
 

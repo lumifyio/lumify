@@ -110,7 +110,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         if (conceptType != null) {
-            Concept concept = ontologyRepository.getConceptByVertexId(conceptType);
+            Concept concept = ontologyRepository.getConceptByIRI(conceptType);
             if (getLeafNodes == null || !getLeafNodes.equals("false")) {
                 List<Concept> leafNodeList = ontologyRepository.getAllLeafNodesByConcept(concept);
                 if (leafNodeList.size() > 0) {

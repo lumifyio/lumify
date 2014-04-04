@@ -59,9 +59,9 @@ public class MapMarkerImage extends BaseRequestHandler {
         if (imageData == null) {
             LOGGER.info("map marker cache miss %s (scale: %d, heading: %d)", typeStr, scale, heading);
 
-            Concept concept = ontologyRepository.getConceptByVertexId(typeStr);
+            Concept concept = ontologyRepository.getConceptByIRI(typeStr);
             if (concept == null) {
-                concept = ontologyRepository.getConceptByVertexId(typeStr);
+                concept = ontologyRepository.getConceptByIRI(typeStr);
             }
 
             boolean isMapGlyphIcon = false;

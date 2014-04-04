@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +54,7 @@ public class OntologyProperty {
         return vertex;
     }
 
-    public static JSONArray toJsonProperties(List<OntologyProperty> properties) {
+    public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
         for (OntologyProperty property : properties) {
             json.put(property.toJson());

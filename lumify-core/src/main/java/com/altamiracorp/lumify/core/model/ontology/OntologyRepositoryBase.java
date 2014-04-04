@@ -155,7 +155,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             OWLClassExpression superClassExpr = superClasses.iterator().next();
             OWLClass superClass = superClassExpr.asOWLClass();
             String superClassUri = superClass.getIRI().toString();
-            Concept parent = getConceptByVertexId(superClassUri);
+            Concept parent = getConceptByIRI(superClassUri);
             if (parent != null) {
                 return parent;
             }
@@ -171,24 +171,26 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private void importDataProperty(OWLOntology o, OWLDataProperty dataTypeProperty) {
-        String propertyId = dataTypeProperty.getIRI().toString();
+        String propertyIRI = dataTypeProperty.getIRI().toString();
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         if (propertyType == null) {
-            throw new LumifyException("Could not get property type on data property " + propertyId);
+            throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
 
         for (OWLClassExpression domainClassExpr : dataTypeProperty.getDomains(o)) {
             OWLClass domainClass = domainClassExpr.asOWLClass();
             String domainClassUri = domainClass.getIRI().toString();
-            Concept domainConcept = getConceptByVertexId(domainClassUri);
+            Concept domainConcept = getConceptByIRI(domainClassUri);
             checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
 
-            LOGGER.info("Adding data property " + propertyId + " to class " + domainConcept.getId());
-            addPropertyTo(domainConcept.getVertex(), propertyId, propertyDisplayName, propertyType, userVisible);
+            LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getId());
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, userVisible);
         }
     }
+
+    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible);
 
     private Relationship importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -211,7 +213,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
-            Concept ontologyClass = getConceptByVertexId(rangeClassUri);
+            Concept ontologyClass = getConceptByIRI(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
             return ontologyClass;
         }
@@ -227,7 +229,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         for (OWLClassExpression rangeClassExpr : objectProperty.getDomains(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
-            Concept ontologyClass = getConceptByVertexId(rangeClassUri);
+            Concept ontologyClass = getConceptByIRI(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
             return ontologyClass;
         }

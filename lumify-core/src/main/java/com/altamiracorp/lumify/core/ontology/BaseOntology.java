@@ -77,7 +77,7 @@ public class BaseOntology {
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptByVertexId(OntologyRepository.ROOT_CONCEPT_IRI);
+            Concept concept = ontologyRepository.getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(OntologyLumifyProperties.ONTOLOGY_TITLE.getKey())) {

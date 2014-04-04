@@ -151,17 +151,17 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public String getDisplayNameForLabel(String relationshipLabel) {
+    public String getDisplayNameForLabel(String relationshipIRI) {
         String displayName = null;
-        if (relationshipLabel != null && !relationshipLabel.trim().isEmpty()) {
+        if (relationshipIRI != null && !relationshipIRI.trim().isEmpty()) {
             try {
                 Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
                         .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
-                        .has(ONTOLOGY_TITLE.getKey(), relationshipLabel)
+                        .has(ONTOLOGY_TITLE.getKey(), relationshipIRI)
                         .vertices(), null);
                 displayName = relVertex != null ? DISPLAY_NAME.getPropertyValue(relVertex) : null;
             } catch (IllegalArgumentException iae) {
-                throw new IllegalStateException(String.format("Found multiple vertices for relationship label \"%s\"", relationshipLabel),
+                throw new IllegalStateException(String.format("Found multiple vertices for relationship label \"%s\"", relationshipIRI),
                         iae);
             }
         }
@@ -169,7 +169,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public List<OntologyProperty> getProperties() {
+    public Iterable<OntologyProperty> getProperties() {
         try {
             return allPropertiesCache.get("", new TimingCallable<List<OntologyProperty>>("getProperties") {
                 @Override
@@ -190,21 +190,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public OntologyProperty getProperty(String propertyName) {
+    public OntologyProperty getProperty(String propertyIRI) {
         try {
             Vertex propVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
                     .has(CONCEPT_TYPE.getKey(), TYPE_PROPERTY)
-                    .has(ONTOLOGY_TITLE.getKey(), propertyName)
+                    .has(ONTOLOGY_TITLE.getKey(), propertyIRI)
                     .vertices(), null);
             return propVertex != null ? new OntologyProperty(propVertex) : null;
         } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException(String.format("Too many \"%s\" properties", propertyName), iae);
+            throw new IllegalStateException(String.format("Too many \"%s\" properties", propertyIRI), iae);
         }
     }
 
     @Override
-    public Relationship getRelationshipByVertexId(String relationshipId) {
-        Vertex relationshipVertex = graph.getVertex(relationshipId, getAuthorizations());
+    public Relationship getRelationshipByIRI(String relationshipIRI) {
+        Vertex relationshipVertex = graph.getVertex(relationshipIRI, getAuthorizations());
         if (relationshipVertex == null) {
             return null;
         }
@@ -250,12 +250,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private Concept getRootConcept() {
-        return getConceptByVertexId(SecureGraphOntologyRepository.ROOT_CONCEPT_IRI);
+        return getConceptByIRI(SecureGraphOntologyRepository.ROOT_CONCEPT_IRI);
     }
 
     @Override
     public Concept getEntityConcept() {
-        return getConceptByVertexId(SecureGraphOntologyRepository.ENTITY_CONCEPT_IRI);
+        return getConceptByIRI(SecureGraphOntologyRepository.ENTITY_CONCEPT_IRI);
     }
 
     private List<Concept> getChildConcepts(Concept concept) {
@@ -265,13 +265,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getParentConcept(final Concept concept) {
-        return getParentConcept(concept.getId());
-    }
-
-    @Override
-    public Concept getParentConcept(String conceptId) {
-        Vertex conceptVertex = graph.getVertex(conceptId, getAuthorizations());
-        Vertex parentConceptVertex = getParentConceptVertex(conceptVertex);
+        Vertex parentConceptVertex = getParentConceptVertex(concept.getVertex());
         if (parentConceptVertex == null) {
             return null;
         }
@@ -287,8 +281,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Concept getConceptByVertexId(String conceptVertexId) {
-        Vertex conceptVertex = graph.getVertex(conceptVertexId, getAuthorizations());
+    public Concept getConceptByIRI(String conceptIRI) {
+        Vertex conceptVertex = graph.getVertex(conceptIRI, getAuthorizations());
         return conceptVertex != null ? new Concept(conceptVertex) : null;
     }
 
@@ -302,7 +296,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getPropertyByVertexId(String propertyId) {
-        List<OntologyProperty> properties = getProperties();
+        Iterable<OntologyProperty> properties = getProperties();
         for (OntologyProperty property : properties) {
             if (property.getId().equals(propertyId)) {
                 return property;
@@ -312,9 +306,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public List<Concept> getConceptAndChildrenByVertexId(String conceptId) {
+    public List<Concept> getConceptAndChildrenByIRI(String conceptIRI) {
         ArrayList<Concept> concepts = new ArrayList<Concept>();
-        Concept concept = getConceptByVertexId(conceptId);
+        Concept concept = getConceptByIRI(conceptIRI);
         if (concept == null) {
             return null;
         }
@@ -341,7 +335,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
-        Concept concept = getConceptByVertexId(conceptIRI);
+        Concept concept = getConceptByIRI(conceptIRI);
         if (concept != null) {
             return concept;
         }
@@ -375,27 +369,27 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public OntologyProperty addPropertyTo(Vertex vertex, String propertyId, String displayName, PropertyType dataType, boolean userVisible) {
-        checkNotNull(vertex, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyId, dataType, displayName, userVisible);
-        checkNotNull(property, "Could not find property: " + propertyId);
+    public OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible) {
+        checkNotNull(concept, "vertex was null");
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
+        checkNotNull(property, "Could not find property: " + propertyIRI);
 
-        findOrAddEdge(vertex, property.getVertex(), LabelName.HAS_PROPERTY.toString());
+        findOrAddEdge(concept.getVertex(), property.getVertex(), LabelName.HAS_PROPERTY.toString());
 
         graph.flush();
         return property;
     }
 
     @Override
-    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipId, String displayName) {
-        Relationship relationship = getRelationshipByVertexId(relationshipId);
+    public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName) {
+        Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(relationshipId, VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility(), getAuthorizations());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
-        ONTOLOGY_TITLE.setProperty(builder, relationshipId, VISIBILITY.getVisibility());
+        ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save();
 
