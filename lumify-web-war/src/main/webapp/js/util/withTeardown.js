@@ -20,7 +20,6 @@ define([], function() {
         });
 
         this.onComponentInitialized = function(event) {
-            console.log(event.target);
             event.stopPropagation();
 
             if (event.target !== this.node) {
@@ -30,7 +29,6 @@ define([], function() {
 
         this.before('teardown', function() {
             this.childComponents.forEach(function(c) {
-                console.log('tearing down ', c)
                 $(c).teardownAllComponents();
             });
         });
