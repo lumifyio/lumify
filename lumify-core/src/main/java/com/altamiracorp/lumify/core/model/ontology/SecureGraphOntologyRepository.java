@@ -38,7 +38,7 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class SecureGraphOntologyRepository implements OntologyRepository {
+public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphOntologyRepository.class);
     private final Graph graph;
     private Authorizations authorizations;

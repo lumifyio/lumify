@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import com.altamiracorp.lumify.core.cmdline.OwlImport;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
@@ -25,13 +24,11 @@ public class BaseOntology {
 
     private final OntologyRepository ontologyRepository;
     private final Graph graph;
-    private final OwlImport owlImport;
 
     @Inject
-    public BaseOntology(OntologyRepository ontologyRepository, Graph graph, OwlImport owlImport) {
+    public BaseOntology(OntologyRepository ontologyRepository, Graph graph) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.owlImport = owlImport;
     }
 
     public void defineOntology(User user) {
@@ -48,7 +45,7 @@ public class BaseOntology {
     private void importBaseOwlFile() {
         InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
         try {
-            this.owlImport.importFile(baseOwlFile, IRI.create("http://lumify.io"));
+            this.ontologyRepository.importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
