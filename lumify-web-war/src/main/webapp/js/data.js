@@ -443,6 +443,7 @@ define([
                 var self = this,
                     added = [],
                     existing = [];
+                    addingVerticesRelatedTo = !!(data.options && data.options.addingVerticesRelatedTo);
 
 
                 // Check if vertices are missing properties (from search results)
@@ -457,7 +458,7 @@ define([
 
                 data.vertices.forEach(function(v) {
                     v.workspace = v.workspace || {};
-                    v.workspace.selected = true;
+                    v.workspace.selected = addingVerticesRelatedTo;
                     passedWorkspace[v.id] = self.copy(v.workspace);
                 });
 
@@ -512,7 +513,7 @@ define([
 
                     if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added, adding:true });
                     if (added.length) {
-                        if (data.options && data.options.addingVerticesRelatedTo) {
+                        if (addingVerticesRelatedTo) {
                             self.trigger('selectObjects');
                         }
                         ws.data.vertices = ws.data.vertices.concat(added);
@@ -521,7 +522,9 @@ define([
                             remoteEvent: data.remoteEvent,
                             options: data.options || {}
                         });
-                        self.trigger('selectObjects', { vertices: added })
+                        if (addingVerticesRelatedTo) {
+                            self.trigger('selectObjects', { vertices: added })
+                        }
                     }
                 });
             });
