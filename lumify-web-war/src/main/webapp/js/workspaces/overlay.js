@@ -4,8 +4,9 @@ define([
     'tpl!./overlay',
     'util/formatters',
     'service/workspace',
+    'service/ontology',
     'data'
-], function(defineComponent, template, formatters, WorkspaceService, appData) {
+], function(defineComponent, template, formatters, WorkspaceService, OntologyService, appData) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
@@ -17,7 +18,8 @@ define([
 
     function WorkspaceOverlay() {
 
-        var workspaceService = new WorkspaceService();
+        var workspaceService = new WorkspaceService(),
+            ontologyService = new OntologyService();
 
         this.defaultAttrs({
             userSelector: '.user',
@@ -197,15 +199,17 @@ define([
                     .on('mouseenter mouseleave', this.onDiffBadgeMouse.bind(this))
             }
 
-            workspaceService.diff(appData.workspaceId)
+            $.when(
+                workspaceService.diff(appData.workspaceId),
+                ontologyService.properties())
                 .fail(function() {
                     badge.removePrefixedClasses('badge-').addClass('badge-important')
                         .popover('destroy')
                         .attr('title', 'An error occured')
                         .text('!');
                 })
-                .done(function(response) {
-                    var diffs = response.diffs,
+                .done(function(response, ontologyProperties) {
+                    var diffs = response[0].diffs,
                         diffsWithoutVisibleProperty = _.map(diffs, function(d) {
                             return _.omit(d, 'visible');
                         });
@@ -222,7 +226,10 @@ define([
                         countOfTitleChanges = 0,
                         filteredDiffs = _.filter(diffs, function(diff) {
                             if (diff.type !== 'PropertyDiffItem') return true;
-                            if (/^[_]/.test(diff.name)) return false;
+
+                            var ontologyProperty = ontologyProperties[diff.name];
+                            
+                            if (!ontologyProperty || ontologyProperty.userVisiblee) return false;
                             if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
                                 countOfTitleChanges++;
                             }
@@ -285,7 +292,6 @@ define([
                         }
                     });
 
-                    var previousCount = badge.text();
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
                         .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
