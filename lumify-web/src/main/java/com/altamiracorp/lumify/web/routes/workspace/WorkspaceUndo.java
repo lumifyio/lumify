@@ -21,6 +21,7 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
@@ -158,8 +159,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
                             (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
                                     detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
-                    DetectedObjectModel analyzedDetectedModel = new DetectedObjectModel(analyzedDetectedObjectRK);
-                    unresolved.put(workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations));
+                    DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.getRowKey(), modelUserContext);
+                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
+                    Messaging.broadcastDetectedObjectChange(detectedObjectRowKey.getArtifactId(), artifactVertexWithDetectedObjects);
+                    unresolved.put(artifactVertexWithDetectedObjects);
                 }
             } else {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey((String) rowKeyProperty.getValue());

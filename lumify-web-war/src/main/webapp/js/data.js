@@ -185,6 +185,9 @@ define([
                     }
                     self.trigger('edgesDeleted', { edgeId:message.data.edgeId});
                     break;
+                case 'detectedObjectChange':
+                    self.trigger('updateVertices', { vertices:[message.data.artifactVertex]});
+                    break;
             }
         };
 
