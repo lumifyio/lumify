@@ -175,7 +175,7 @@
 
     <owl:DatatypeProperty rdf:about="&lumify;title">
         <rdfs:label xml:lang="en">Title</rdfs:label>
-        <userVisible>false</userVisible>
+        <userVisible>true</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
