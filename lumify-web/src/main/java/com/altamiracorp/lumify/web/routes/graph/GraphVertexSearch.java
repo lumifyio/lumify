@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
@@ -81,8 +80,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         JSONArray filterJson = new JSONArray(filter);
 
@@ -109,14 +108,14 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         if (conceptType != null) {
-            Concept concept = ontologyRepository.getConceptById(conceptType);
+            Concept concept = ontologyRepository.getConceptByIRI(conceptType);
             if (getLeafNodes == null || !getLeafNodes.equals("false")) {
                 List<Concept> leafNodeList = ontologyRepository.getAllLeafNodesByConcept(concept);
                 if (leafNodeList.size() > 0) {
                     String[] conceptIds = new String[leafNodeList.size()];
                     int count = 0;
                     for (Concept c : leafNodeList) {
-                        conceptIds[count] = c.getId();
+                        conceptIds[count] = c.getTitle();
                         count++;
                     }
                     graphQuery.has(CONCEPT_TYPE.getKey(), Compare.IN, conceptIds);

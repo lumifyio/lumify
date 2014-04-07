@@ -1,56 +1,37 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-import com.altamiracorp.securegraph.Vertex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
-import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
+public abstract class Relationship {
+    private final String sourceConceptIRI;
+    private final String destConceptIRI;
 
-public class Relationship {
-    private final Vertex vertex;
-    private final String sourceConceptId;
-    private final String destConceptId;
-
-    public Relationship(Vertex vertex, String sourceConceptId, String destConceptId) {
-        this.vertex = vertex;
-        this.sourceConceptId = sourceConceptId;
-        this.destConceptId = destConceptId;
+    protected Relationship(String sourceConceptIRI, String destConceptIRI) {
+        this.sourceConceptIRI = sourceConceptIRI;
+        this.destConceptIRI = destConceptIRI;
     }
 
-    public String getId() {
-        return this.vertex.getId().toString();
+    public abstract String getIRI();
+
+    public abstract String getDisplayName();
+
+    public String getSourceConceptIRI() {
+        return sourceConceptIRI;
     }
 
-    public String getTitle() {
-        return ONTOLOGY_TITLE.getPropertyValue(vertex);
-    }
-
-    public String getDisplayName() {
-        return DISPLAY_NAME.getPropertyValue(vertex);
-    }
-
-    public String getSourceConceptId() {
-        return sourceConceptId;
-    }
-
-    public String getDestConceptId() {
-        return destConceptId;
-    }
-
-    public Vertex getVertex() {
-        return vertex;
+    public String getDestConceptIRI() {
+        return destConceptIRI;
     }
 
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
-            json.put("id", getId());
-            json.put("title", getTitle());
+            json.put("title", getIRI());
             json.put("displayName", getDisplayName());
-            json.put("source", getSourceConceptId());
-            json.put("dest", getDestConceptId());
+            json.put("source", getSourceConceptIRI());
+            json.put("dest", getDestConceptIRI());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

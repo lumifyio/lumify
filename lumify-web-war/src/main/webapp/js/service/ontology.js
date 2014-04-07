@@ -30,7 +30,7 @@ define([
                     .then(function(ontology) {
                         return $.extend({}, ontology, {
                             conceptsById: _.indexBy(ontology.concepts, 'id'),
-                            propertiesById: _.indexBy(ontology.properties, 'id')
+                            propertiesByTitle: _.indexBy(ontology.properties, 'title')
                         });
                     });
     };
@@ -207,7 +207,9 @@ define([
                                     properties = concept.properties,
                                     parentConceptId = concept.parentConcept;
 
-                                propertyIds.push.apply(propertyIds, properties);
+                                if (properties.length) {
+                                    propertyIds.push.apply(propertyIds, properties);
+                                }
                                 if (parentConceptId) {
                                     collectPropertyIds(parentConceptId);
                                 }
@@ -219,7 +221,7 @@ define([
                         var properties = _.chain(propertyIds)
                             .uniq()
                             .map(function(pId) {
-                                return ontology.propertiesById[pId];
+                                return ontology.propertiesByTitle[pId];
                             })
                             .value();
 
@@ -236,7 +238,7 @@ define([
                         var relationship = _.findWhere(ontology.relationships, { displayName:relationshipLabel }),
                             propertyIds = relationship.properties || [],
                             properties = _.map(propertyIds, function(pId) {
-                                return ontology.propertiesById[pId];
+                                return ontology.propertiesByTitle[pId];
                             });
 
                         return {

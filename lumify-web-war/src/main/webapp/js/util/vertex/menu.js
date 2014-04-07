@@ -99,6 +99,7 @@ define([
 
         this.after('teardown', function() {
             this.$menu.remove();
+            $('.draggable-wrapper').remove();
             $(document).off('.vertexMenu');
         });
 
@@ -129,6 +130,11 @@ define([
 
             if (title.length > 15) {
                 title = title.substring(0, 15) + '...';
+            }
+
+            var wrapper = $('.draggable-wrapper');
+            if (wrapper.length === 0) {
+                wrapper = $('<div class="draggable-wrapper"/>').appendTo(document.body);
             }
 
             this.$node.append(template({
@@ -166,7 +172,6 @@ define([
 
             this.positionMenu(this.attr.position);
 
-            var self = this;
             $(document).off('.vertexMenu').on('click.vertexMenu', function() {
                 $(document).off('.vertexMenu');
                 self.teardown();

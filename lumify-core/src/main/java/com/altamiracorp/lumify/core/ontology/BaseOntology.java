@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.ontology;
 
-import com.altamiracorp.lumify.core.cmdline.OwlImport;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
@@ -25,13 +24,11 @@ public class BaseOntology {
 
     private final OntologyRepository ontologyRepository;
     private final Graph graph;
-    private final OwlImport owlImport;
 
     @Inject
-    public BaseOntology(OntologyRepository ontologyRepository, Graph graph, OwlImport owlImport) {
+    public BaseOntology(OntologyRepository ontologyRepository, Graph graph) {
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
-        this.owlImport = owlImport;
     }
 
     public void defineOntology(User user) {
@@ -48,7 +45,7 @@ public class BaseOntology {
     private void importBaseOwlFile() {
         InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
         try {
-            this.owlImport.importFile(baseOwlFile, IRI.create("http://lumify.io"));
+            this.ontologyRepository.importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
@@ -71,7 +68,7 @@ public class BaseOntology {
 
             StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
             raw.searchIndex(false);
-            LumifyProperties.GLYPH_ICON.setProperty(entityConcept.getVertex(), raw, OntologyRepository.VISIBILITY.getVisibility());
+            entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
             graph.flush();
         } catch (IOException e) {
             throw new LumifyException("invalid stream for glyph icon");
@@ -80,7 +77,7 @@ public class BaseOntology {
 
     public boolean isOntologyDefined(User user) {
         try {
-            Concept concept = ontologyRepository.getConceptById(OntologyRepository.ROOT_CONCEPT_IRI);
+            Concept concept = ontologyRepository.getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
             return concept != null; // todo should check for more
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains(OntologyLumifyProperties.ONTOLOGY_TITLE.getKey())) {

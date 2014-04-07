@@ -39,8 +39,8 @@ public class VertexProperties extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {

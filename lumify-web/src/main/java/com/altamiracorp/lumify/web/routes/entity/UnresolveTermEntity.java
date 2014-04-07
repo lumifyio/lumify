@@ -70,10 +70,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
                 conceptId,
                 graphVertexId);
 
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
 

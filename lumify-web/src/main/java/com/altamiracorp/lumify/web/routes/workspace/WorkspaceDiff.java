@@ -8,7 +8,6 @@ import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
 import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,7 +31,7 @@ public class WorkspaceDiff extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         if (workspace == null) {
             respondWithNotFound(response);

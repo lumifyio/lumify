@@ -3,16 +3,18 @@ define([
     'flight/lib/component',
     'tpl!./justification',
     'tpl!./justificationRef',
-    'data'
+    'data',
+    'util/withTeardown'
 ], function (
     defineComponent,
     template,
     templateRef,
-    appData
+    appData,
+    withTeardown
 ) {
     'use strict';
 
-    return defineComponent(Justification);
+    return defineComponent(Justification, withTeardown);
 
 
     function Justification() {
@@ -21,6 +23,10 @@ define([
             fieldSelector: 'input',
             removeReferenceSelector: '.remove'
         });
+
+        this.after('teardown', function() {
+            this.select('fieldSelector').tooltip('destroy');
+        })
 
         this.after('initialize', function() {
             if (this.attr._sourceMetadata) {

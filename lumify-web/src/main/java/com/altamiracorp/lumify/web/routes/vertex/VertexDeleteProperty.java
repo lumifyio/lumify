@@ -46,7 +46,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         List<Property> properties = toList(graphVertex.getProperties(propertyName));

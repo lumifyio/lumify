@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectReposito
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
@@ -76,7 +77,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         String y2 = getRequiredParameter(request, "y2");
 
         User user = getUser(request);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         Authorizations authorizations = getAuthorizations(request, user);
 
@@ -90,7 +91,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        Concept concept = ontologyRepository.getConceptById(conceptId);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptId);
         Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         ElementMutation<Vertex> resolvedVertexMutation;
 
@@ -100,8 +101,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
-            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getId(), lumifyVisibility.getVisibility());
-            TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
+
+            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
@@ -115,17 +117,19 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         resolvedVertex = resolvedVertexMutation.save();
 
-        graph.flush();
-
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
                 (artifactId, resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
                         Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
                         user.getModelUserContext());
 
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), metadata, lumifyVisibility.getVisibility()).save();
+        graph.flush();
+
+        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, 0, 0, user);
+
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
-        JSONObject result = detectedObjectModel.toJson();
-        result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
+        JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());

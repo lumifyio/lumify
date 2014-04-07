@@ -55,7 +55,7 @@ public class RelationshipCreate extends BaseRequestHandler {
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
 
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);

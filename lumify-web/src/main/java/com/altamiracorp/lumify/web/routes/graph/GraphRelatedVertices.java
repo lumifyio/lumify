@@ -47,17 +47,17 @@ public class GraphRelatedVertices extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         Set<String> limitConceptIds = new HashSet<String>();
 
         if (limitParentConceptId != null) {
-            List<Concept> limitConcepts = ontologyRepository.getConceptByIdAndChildren(limitParentConceptId);
+            List<Concept> limitConcepts = ontologyRepository.getConceptAndChildrenByIRI(limitParentConceptId);
             if (limitConcepts == null) {
                 throw new RuntimeException("Bad 'limitParentConceptId', no concept found for id: " + limitParentConceptId);
             }
             for (Concept con : limitConcepts) {
-                limitConceptIds.add(con.getId());
+                limitConceptIds.add(con.getTitle());
             }
         }
 

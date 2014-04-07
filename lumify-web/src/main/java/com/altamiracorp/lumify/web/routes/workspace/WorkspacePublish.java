@@ -10,6 +10,8 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
@@ -24,6 +26,7 @@ import com.altamiracorp.lumify.core.util.JSONUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
+import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
@@ -43,6 +46,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final DetectedObjectRepository detectedObjectRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
+    private final OntologyRepository ontologyRepository;
     private final ModelSession modelSession;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
@@ -55,7 +59,8 @@ public class WorkspacePublish extends BaseRequestHandler {
                             final Configuration configuration,
                             final Graph graph,
                             final ModelSession modelSession,
-                            final VisibilityTranslator visibilityTranslator) {
+                            final VisibilityTranslator visibilityTranslator,
+                            final OntologyRepository ontologyRepository) {
         super(userRepository, configuration);
         this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
@@ -64,6 +69,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.modelSession = modelSession;
         this.userRepository = userRepository;
+        this.ontologyRepository = ontologyRepository;
     }
 
     @Override
@@ -71,7 +77,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         final JSONArray publishData = new JSONArray(getRequiredParameter(request, "publishData"));
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
         LOGGER.debug("publishing\n%s", publishData.toString(2));
         JSONArray failures = new JSONArray();
@@ -228,7 +234,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
-            if (property.getName().startsWith("_") || property.getName().equals("title")) {
+            OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
+            checkNotNull(ontologyProperty, "Could not find property " + property.getName());
+            if (!ontologyProperty.getUserVisible()) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
@@ -236,20 +244,26 @@ public class WorkspacePublish extends BaseRequestHandler {
         vertexElementMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
-        ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
 
-        for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemUser)) {
+        for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
             modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
 
         for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemModelUser);
             if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), systemModelUser);
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
                     modelSession.alterColumnsVisibility(detectedObjectModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+
+                    Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
+                    JSONObject artifactVertexWithDetectedObjects = GraphUtil.toJsonVertex(artifactVertex, workspaceId);
+                    artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemModelUser, authorizations, workspaceId));
+
+                    Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
                 }
             } else {
                 modelSession.alterColumnsVisibility(termMentionModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);

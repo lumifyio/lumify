@@ -155,19 +155,18 @@ define([
                 this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
             }
 
+            vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
+                var aX = a.x1, bX = b.x1;
+                return aX - bX;
+            });
+
             this.$node.html(template({
                 vertex: vertex,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton()
             }));
 
-            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
-                this.select('detectedObjectLabelsSelector').show();
-                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
-                    var aX = a.x1, bX = b.x1;
-                    return aX - bX;
-                });
-            }
+            this.select('detectedObjectLabelsSelector').show();
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
@@ -232,11 +231,54 @@ define([
             var self = this,
                 $target = $(event.target),
                 info = $target.closest('.label-info').data('info');
-
             this.$node.find('.focused').removeClass('focused')
-            this.showForm(info, this.attr.data, $target);
-            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
             $target.closest('.label-info').parent().addClass('focused');
+
+            require(['util/actionbar/actionbar'], function(ActionBar) {
+                self.ActionBar = ActionBar;
+                ActionBar.teardownAll();
+                self.off('.actionbar');
+
+                if ($target.hasClass('resolved')) {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Open: 'open.actionbar',
+                            Unresolve: 'unresolve.actionbar'
+                        }
+                    });
+
+                    self.on('open.actionbar', function() {
+
+                        self.trigger('selectObjects', {
+                            vertices: [
+                                {
+                                    id: $target.data('info').graphVertexId
+                                }
+                            ]
+                        });
+                    });
+                    self.on('unresolve.actionbar', function() {
+                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                    });
+
+                } else {
+
+                    ActionBar.attachTo($target, {
+                        alignTo: 'node',
+                        actions: {
+                            Resolve: 'resolve.actionbar'
+                        }
+                    });
+
+                    self.on('resolve.actionbar', function() {
+                        _.defer(self.showForm.bind(self), info, this.attr.data, $target);
+                    })
+                }
+            });
+
+            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
         };
 
         this.onCoordsChanged = function(event, data) {
@@ -326,16 +368,13 @@ define([
 
         this.showForm = function (dataInfo, artifactInfo, $target){
             this.$node.find('.underneath').teardownComponent(TermForm)
-
             var root = $('<div class="underneath">')
                 .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
-            var resolvedVertex =  dataInfo.entityVertex;
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,
                 dataInfo: dataInfo,
-                resolvedVertex: resolvedVertex,
-                existing: !!resolvedVertex,
+                existing: !!dataInfo.graphVertexId,
                 detectedObject: true
             });
         };

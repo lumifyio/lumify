@@ -26,6 +26,6 @@ public enum PropertyType {
                 return pt;
             }
         }
-        return PropertyType.valueOf(property);
+        return STRING;
     }
 }

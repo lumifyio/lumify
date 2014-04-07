@@ -15,6 +15,7 @@ define([], function() {
             /^workspace\/relationships/,
             /^workspace\/update/,
             /^vertex\/relationships/,
+            /^entity/,
         ],
 
         // Custom converters for routes that are more complicated than above,
@@ -82,7 +83,6 @@ define([], function() {
 
             function verticesRoot(json, updated) {
                 var self = this;
-
                 if (_.isArray(json) && json.length && json[0].id && json[0].properties) {
                     json.forEach(function(vertex) {
                         var cache = self.updateCacheWithVertex(vertex);
@@ -92,8 +92,6 @@ define([], function() {
                     return true;
                 }
             }
-
-
         ];
 
     return withCacheUpdatingAjaxFilters;

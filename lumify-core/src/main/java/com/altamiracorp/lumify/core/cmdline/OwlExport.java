@@ -1,20 +1,14 @@
 package com.altamiracorp.lumify.core.cmdline;
 
-import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.IRI;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.List;
 
 public class OwlExport extends CommandLineBase {
     private OntologyRepository ontologyRepository;
@@ -63,40 +57,18 @@ public class OwlExport extends CommandLineBase {
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
-        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
-        config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
-
-        List<OWLOntology> loadedOntologies = this.ontologyRepository.loadOntologyFiles(m, config, null);
-        OWLOntology o = findOntology(loadedOntologies, documentIRI);
-        if (o == null) {
-            throw new LumifyException("Could not find ontology with iri " + documentIRI);
-        }
-
         OutputStream out;
         if (outFileName != null) {
             out = new FileOutputStream(outFileName);
         } else {
             out = System.out;
         }
-        Writer fileWriter = new OutputStreamWriter(out);
-
         try {
-            new RDFXMLRenderer(o, fileWriter).render();
-
+            ontologyRepository.exportOntology(out, this.documentIRI);
             return 0;
         } finally {
-            fileWriter.close();
+            out.close();
         }
-    }
-
-    private OWLOntology findOntology(List<OWLOntology> loadedOntologies, IRI documentIRI) {
-        for (OWLOntology o : loadedOntologies) {
-            if (documentIRI.equals(o.getOntologyID().getOntologyIRI())) {
-                return o;
-            }
-        }
-        return null;
     }
 
     @Inject

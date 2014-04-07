@@ -5,7 +5,8 @@ define([
     'service/ontology',
     'fields/selection/selection',
     'data',
-    'tpl!util/alert'
+    'tpl!util/alert',
+    'util/withTeardown'
 ], function(
     defineComponent,
     withDropdown,
@@ -13,14 +14,15 @@ define([
     OntologyService,
     FieldSelection,
     appData,
-    alertTemplate
+    alertTemplate,
+    withTeardown
 ) {
     'use strict';
 
         // Animates the property value to the justification reference on paste if false
     var SKIP_SELECTION_ANIMATION = true;
 
-    return defineComponent(PropertyForm, withDropdown);
+    return defineComponent(PropertyForm, withDropdown, withTeardown);
 
     function PropertyForm() {
 
@@ -54,6 +56,7 @@ define([
             });
             this.on('keyup', {
                 propertyInputSelector: this.onKeyup,
+                justificationSelector: this.onKeyup,
                 visibilityInputSelector: this.onKeyup
             });
 
@@ -121,9 +124,7 @@ define([
         });
 
         this.after('teardown', function() {
-            this.select('configurationSelector').teardownAllComponents();
             this.select('visibilitySelector').teardownAllComponents();
-            this.select('justificationSelector').teardownAllComponents();
 
             if (this.$node.closest('.buttons').length === 0) {
                 this.$node.closest('tr').remove();
@@ -358,6 +359,8 @@ define([
                 justification = _.pick(this.justification || {}, 'sourceInfo', 'justificationText');
 
             _.defer(this.buttonLoading.bind(this, this.attr.saveButtonSelector));
+
+            this.$node.find('input').tooltip('hide')
 
             this.$node.find('.errors').hide();
             if (propertyName.length && 

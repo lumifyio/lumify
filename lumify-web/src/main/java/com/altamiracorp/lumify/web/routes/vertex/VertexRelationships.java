@@ -31,9 +31,9 @@ public class VertexRelationships extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
 
-        String graphVertexId = (String) request.getAttribute("graphVertexId");
+        String graphVertexId = getAttributeString(request, "graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
         long size = getOptionalParameterLong(request, "size", 25);
 

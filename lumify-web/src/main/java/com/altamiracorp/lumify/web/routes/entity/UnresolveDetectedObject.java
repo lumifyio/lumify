@@ -53,10 +53,10 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String rowKey = getRequiredParameter(request, "rowKey");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
-        String workspaceId = getWorkspaceId(request);
+        String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, getWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);

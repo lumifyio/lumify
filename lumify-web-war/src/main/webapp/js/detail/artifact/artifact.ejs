@@ -34,16 +34,16 @@
 
 <div class='detected-object-labels' style="display:none">
   <% (vertex.detectedObjects).forEach(function(object) {
-    if (object.entityVertex) {
-        var conceptType = object.entityVertex.prop('http://lumify.io#conceptType', object['http://lumify.io#conceptType']);
-        var title = object.entityVertex.prop('title', object.classiferConcept);
+    if (object.graphVertexId) {
+        var conceptType = object['http://lumify.io#conceptType'];
+        var title = object.title;
         var classes = 'label-info detected-object resolved entity conceptType-' + conceptType;%>
         <span class="detected-object-tag">
             <a class="<%= classes %> label opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= title %></a>
         </span>
     <%} else { %>
     <span class="detected-object-tag">
-        <a class="label label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.title || object.classifierConcept %></a>
+        <a class="label label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.classifierConcept %></a>
     </span>
   <% }}); %>
 </div>
