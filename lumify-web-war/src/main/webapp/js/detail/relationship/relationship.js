@@ -8,6 +8,7 @@ define([
     'service/vertex',
     'service/ontology',
     'detail/properties',
+    'util/formatters',
     'sf'
 ], function(
     defineComponent,
@@ -19,6 +20,7 @@ define([
     VertexService,
     OntologyService,
     Properties,
+    formatters,
     sf) {
     'use strict';
 
@@ -58,7 +60,8 @@ define([
                 self.$node.html(template({
                     appData: appData,
                     auditsButton: self.auditsButton(),
-                    relationshipData: relationshipData[0]
+                    relationshipData: relationshipData[0],
+                    formatters: formatters
                 }));
 
                 var properties = $.extend({}, data.properties);
