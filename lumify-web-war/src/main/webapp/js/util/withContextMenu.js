@@ -58,24 +58,26 @@ define([], function() {
                 placement = {
                     left: Math.min(
                         position.positionInVertex ?
-                            position.positionInVertex.x : (position.positionUsingEvent.originalEvent.pageX - offset.left),
+                            position.positionInVertex.x :
+                            (position.positionUsingEvent.originalEvent.pageX - offset.left),
                         windowSize.x - offset.left - menuSize.x - padding
                     ),
                     top: Math.min(
                         position.positionInVertex ?
-                            position.positionInVertex.y : (position.positionUsingEvent.originalEvent.pageY - offset.top),
+                            position.positionInVertex.y :
+                            (position.positionUsingEvent.originalEvent.pageY - offset.top),
                         windowSize.y - offset.top - menuSize.y - padding
                     )
                 },
-                submenuPlacement = { left:'100%', right:'auto', top:0, bottom:'auto' };
+                submenuPlacement = { left: '100%', right: 'auto', top: 0, bottom: 'auto' };
             if ((placement.left + menuSize.x + submenuSize.x + padding) > windowSize.x) {
-                submenuPlacement = $.extend(submenuPlacement, { right: '100%', left:'auto' });
+                submenuPlacement = $.extend(submenuPlacement, { right: '100%', left: 'auto' });
             }
             if ((placement.top + menuSize.y + (submenu.children('li').length * 26) + padding) > windowSize.y) {
-                submenuPlacement = $.extend(submenuPlacement, { top: 'auto', bottom:'0' });
+                submenuPlacement = $.extend(submenuPlacement, { top: 'auto', bottom: '0' });
             }
 
-            menu.parent('div').css($.extend({ position:'absolute' }, placement));
+            menu.parent('div').css($.extend({ position: 'absolute' }, placement));
             submenu.css(submenuPlacement);
 
             menu.dropdown('toggle');

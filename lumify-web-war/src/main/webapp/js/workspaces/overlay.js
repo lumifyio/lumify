@@ -60,7 +60,7 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
                 shortcuts: {
-                    'alt-d':  { fire:'showDiffPanel', desc:'Show unpublished changes' }
+                    'alt-d':  { fire: 'showDiffPanel', desc: 'Show unpublished changes' }
                 }
             });
         });
@@ -166,7 +166,7 @@ define([
             var prefix = 'last saved ',
                 subtitle = this.select('subtitleSelector').text(prefix + 'moments ago'),
                 setTimer = function() {
-                    this.updateTimer = setTimeout(function () {
+                    this.updateTimer = setTimeout(function() {
 
                         var time = formatters.date.relativeToNow(this.lastSaved);
                         subtitle.text(prefix + time);
@@ -230,7 +230,7 @@ define([
                         count = filteredDiffs.length - countOfTitleChanges,
                         formattedCount = formatters.number.pretty(count); 
 
-                    self.currentDiffIds =_.uniq(filteredDiffs.map(function(diff) {
+                    self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
                         return diff.vertexId || diff.elementId || diff.edgeId;
                     }));
 
@@ -239,12 +239,14 @@ define([
                             tip = popover && popover.tip();
 
                         if (tip && tip.is(':visible')) {
-                            self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: filteredDiffs });
+                            self.trigger(popover.tip().find('.popover-content'),
+                                 'diffsChanged',
+                                 { diffs: filteredDiffs });
                             popover.show();
                         } else {
                             badge
                                 .popover('destroy')
-                                .popover({placement:'top', content:'Loading...', title: 'Unpublished Changes'});
+                                .popover({placement: 'top', content: 'Loading...', title: 'Unpublished Changes'});
 
                             popover = badge.data('popover');
                             tip = popover.tip();
@@ -255,7 +257,7 @@ define([
                                     height: '250px'
                                 })
                                 .resizable({
-                                    handles: "n, e, ne",
+                                    handles: 'n, e, ne',
                                     maxWidth: self.popoverCss.maxWidth,
                                     maxHeight: self.popoverCss.maxHeight
                                 })
@@ -270,7 +272,7 @@ define([
                                 var css = {
                                     top: (parseInt(tip.css('top')) - 10) + 'px'
                                 };
-                                tip.css({top:top});
+                                tip.css({top: top});
 
                                 self.updatePopoverSize(tip);
                             })
@@ -289,16 +291,6 @@ define([
 
                     if (count > 0) {
                         self.animateBadge(badge, formattedCount);
-
-
-                        //$0.scrollWidth 
-
-                        /*
-                        badge.removeClass('flash');
-                        requestAnimationFrame(function() {
-                            badge.addClass('flash');
-                        })
-                        */
                     } else if (count === 0) {
                         badge.popover('destroy');
                     }
@@ -366,9 +358,11 @@ define([
                     .tooltip({
                         placement: 'right',
                         html: true,
-                        title: '<span style="white-space:nowrap">Authorizations: ' + (data.user.authorizations.join(', ') || 'none') + '</span>',
+                        title: '<span style="white-space:nowrap">Authorizations: ' +
+                            (data.user.authorizations.join(', ') || 'none') +
+                            '</span>',
                         trigger: 'hover',
-                        delay: { show:500, hide:0 }
+                        delay: { show: 500, hide: 0 }
                     })
             }
         }
@@ -401,7 +395,7 @@ define([
                         html: true,
                         title: '<span style="white-space:nowrap">' + text + '</span>',
                         trigger: 'hover',
-                        delay: { show:500, hide:0 }
+                        delay: { show: 500, hide: 0 }
                     });
             }
 

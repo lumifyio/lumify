@@ -34,12 +34,12 @@ define([
         });
 
         this.onSearch = function(event) {
-            this.trigger(document, 'searchByRelatedEntity', { vertexId : this.attr.relatedToVertexId });
+            this.trigger(document, 'searchByRelatedEntity', { vertexId: this.attr.relatedToVertexId });
             this.teardown();
         };
 
         this.onAdd = function(event) {
-            this.trigger(document, 'addVertices', _.extend({ vertices:this.attr.vertices }, this.attr.eventOptions));
+            this.trigger(document, 'addVertices', _.extend({ vertices: this.attr.vertices }, this.attr.eventOptions));
             this.teardown();
         };
     }

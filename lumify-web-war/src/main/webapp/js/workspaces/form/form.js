@@ -130,7 +130,7 @@ define([
                 return {
                     user: {
                         access: userPermission.access,
-                        permissionLabel: {read:'View', write:'Edit'}[userPermission.access.toLowerCase()],
+                        permissionLabel: {read: 'View', write: 'Edit'}[userPermission.access.toLowerCase()],
                         userId: user.id,
                         userName: user.userName
                     },
@@ -206,12 +206,6 @@ define([
             $target.text('Deleting...').attr('disabled', true);
 
             this.workspaceService['delete'](workspaceId)
-                .fail(function(xhr) {
-                    if (xhr.status === 403) {
-                        // TODO: alert user with error:
-                        // can't delete other users workspaces
-                    }
-                })
                 .always(function() {
                     $target.text(previousText).removeAttr('disabled');
                 })
@@ -220,7 +214,7 @@ define([
                 });
         };
 
-        this.onCopy = function (event) {
+        this.onCopy = function(event) {
             var self = this,
                 workspaceId = this.attr.data.workspaceId,
                 $target = $(event.target),
@@ -229,13 +223,7 @@ define([
             $target.text('Copying...').attr('disabled', true);
 
             this.workspaceService.copy(workspaceId)
-                .fail(function(xhr) {
-                    if (xhr.status === 403) {
-                        // TODO: alert user with error:
-                        // can't delete other users workspaces
-                    }
-                })
-                .always(function () {
+                .always(function() {
                     $target.text(previousText).removeAttr('disabled');
                 })
                 .done(function(workspace) {

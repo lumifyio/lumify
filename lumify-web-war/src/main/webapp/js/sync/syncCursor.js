@@ -1,11 +1,11 @@
 define([
     'flight/lib/component',
     'tpl!./syncCursor'
-], function (defineComponent, template) {
+], function(defineComponent, template) {
     'use strict';
 
-    var CURSOR_RATE_LIMIT_PER_SECOND = 0.03;
-    var SECOND = 1000;
+    var CURSOR_RATE_LIMIT_PER_SECOND = 0.03,
+        SECOND = 1000;
 
     return defineComponent(SyncCursor);
 
@@ -17,7 +17,7 @@ define([
             bodySelector: 'body'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.on('mousemove', this.onMouseMove);
             this.on('focus', this.onFocus);
             this.on('blur', this.onBlur);
@@ -31,25 +31,25 @@ define([
             this.updateWindowSize();
         });
 
-        this.after('teardown', function () {
+        this.after('teardown', function() {
             var self = this;
-            Object.keys(this.cursorsByUserId).forEach(function (userId) {
+            Object.keys(this.cursorsByUserId).forEach(function(userId) {
                 var cursor = self.cursorsByUserId[userId];
                 cursor.remove();
             });
         });
 
-        this.onOnlineStatusChanged = function (evt, data) {
+        this.onOnlineStatusChanged = function(evt, data) {
             this.currentUser = data.user;
         };
 
-        this.updateWindowSize = function () {
+        this.updateWindowSize = function() {
             var w = $(window);
             this.windowWidth = w.width();
             this.windowHeight = w.height();
         };
 
-        this.getCursor = function (user) {
+        this.getCursor = function(user) {
             var cursor = this.cursorsByUserId[user.id];
             if (cursor) {
                 return cursor;
@@ -60,16 +60,16 @@ define([
         };
 
         // Remote bound events trigger these
-        this.onRemoteCursorMove = function (e, data) {
+        this.onRemoteCursorMove = function(e, data) {
             if (this.currentUser.id == data.user.id) {
                 return;
             }
 
             var buffer = 10,
                 w = this.windowWidth,
-                h = this.windowHeight;
+                h = this.windowHeight,
+                cursor = this.getCursor(data.user);
 
-            var cursor = this.getCursor(data.user);
             cursor.css({
                 display: 'block',
                 left: Math.min(w, data.x),
@@ -79,7 +79,7 @@ define([
                 .toggleClass('offscreen-y', data.y > (h - buffer));
         };
 
-        this.onRemoteCursorFocus = function (e, data) {
+        this.onRemoteCursorFocus = function(e, data) {
             if (this.currentUser.id == data.user.id) {
                 return;
             }
@@ -87,7 +87,7 @@ define([
             cursor.addClass('focus');
         };
 
-        this.onRemoteCursorBlur = function (e, data) {
+        this.onRemoteCursorBlur = function(e, data) {
             if (this.currentUser.id == data.user.id) {
                 return;
             }
@@ -97,7 +97,7 @@ define([
 
         // Local handlers
         var timeout;
-        this.update = function (e) {
+        this.update = function(e) {
             this.trigger(document, 'syncCursorMove', {
                 x: e.pageX,
                 y: e.pageY,
@@ -108,19 +108,19 @@ define([
             this.lastSend = Date.now();
         };
 
-        this.onFocus = function () {
+        this.onFocus = function() {
             this.trigger(document, 'syncCursorFocus', {
                 user: this.currentUser
             });
         };
 
-        this.onBlur = function () {
+        this.onBlur = function() {
             this.trigger(document, 'syncCursorBlur', {
                 user: this.currentUser
             });
         };
 
-        this.onMouseMove = function (e) {
+        this.onMouseMove = function(e) {
             var now = Date.now(),
                 nextSendDate = this.lastSend ? this.lastSend + (SECOND * CURSOR_RATE_LIMIT_PER_SECOND) : now;
 
@@ -135,4 +135,3 @@ define([
         };
     }
 });
-

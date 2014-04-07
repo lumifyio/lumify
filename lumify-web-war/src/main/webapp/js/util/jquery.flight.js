@@ -37,7 +37,7 @@ define(['flight/lib/registry', 'jquery'],function(registry) {
         return this;
     };
 
-    function _lookupComponent (elem, instanceConstructor) {
+    function _lookupComponent(elem, instanceConstructor) {
         var results = registry.findInstanceInfoByNode(elem);
         for (var i = 0; i < results.length; ++i) {
             if (results[i].instance.constructor === instanceConstructor) {

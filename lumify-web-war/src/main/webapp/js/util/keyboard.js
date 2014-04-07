@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'util/formatters'
@@ -96,9 +95,8 @@ define([
                     93: 'metaKey'
                 };
 
-
             if (keys[w]) {
-                return { preventDefault: false, fire:keys[w] };
+                return { preventDefault: false, fire: keys[w] };
             }
             if (event.metaKey || event.ctrlKey) {
                 return this.shortcuts['CTRL-' + w] || this.shortcuts['META-' + w];

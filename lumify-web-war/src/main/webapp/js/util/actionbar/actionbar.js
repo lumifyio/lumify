@@ -3,14 +3,14 @@ define([
     'flight/lib/component',
     'tpl!./actionbar',
     'util/withTeardown'
-], function (
+], function(
     defineComponent,
     template,
     withTeardown
 ) {
     'use strict';
 
-    var FPS = 1000/60,
+    var FPS = 1000 / 60,
         TOP_HIDE_THRESHOLD = 40,
         ALIGN_TO_TYPES = [
             'textselection',
@@ -30,10 +30,10 @@ define([
 
         this.after('initialize', function() {
             if (!this.attr.actions) {
-                throw "actions attribute required";
+                throw 'actions attribute required';
             }
             if (ALIGN_TO_TYPES.indexOf(this.attr.alignTo) === -1) {
-                throw "alignTo only supports " + ALIGN_TO_TYPES.join(',');
+                throw 'alignTo only supports ' + ALIGN_TO_TYPES.join(',');
             }
 
             this.$node.removeAttr('title');
@@ -62,7 +62,6 @@ define([
                 self.teardown();
             });
         });
-
 
         this.onActionClick = function(event) {
             var self = this,

@@ -238,7 +238,7 @@ define( [], function() {
       /**
        * Stops the calculation by setting the current_iterations to max_iterations.
        */
-      this.stop_calculating = function() {
+      this.stopCalculating = function() {
         layout_iterations = this.max_iterations;
       };
 

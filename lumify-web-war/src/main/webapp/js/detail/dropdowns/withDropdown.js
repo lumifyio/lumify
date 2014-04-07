@@ -16,7 +16,7 @@ define([], function() {
                 // Fix issue where dropdown is zero width/height 
                 // when opening dropdown later in detail pane when
                 // dropdown is already open earlier in detail pane
-                node.css({position:'relative'});
+                node.css({position: 'relative'});
                 return _.defer(this.open.bind(this));
             }
 
@@ -35,7 +35,7 @@ define([], function() {
                 }
             });
             var form = node.find('.form');
-            node.css({ height:form.outerHeight(true) + 'px' });
+            node.css({ height: form.outerHeight(true) + 'px' });
         };
 
         this.after('teardown', function() {
@@ -108,4 +108,3 @@ define([], function() {
 
     return withDropdown;
 });
-

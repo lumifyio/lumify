@@ -1,5 +1,4 @@
 
-
 define([
     './dropdowns/termForm/termForm',
     './dropdowns/statementForm/statementForm',
@@ -14,10 +13,10 @@ define([
     'use strict';
 
     var HIGHLIGHT_STYLES = [
-            { name: 'None', selector:'none' },
-            { name: 'Icons', selector:'icons' },
-            { name: 'Underline', selector:'underline' },
-            { name: 'Colors', selector:'colors' }
+            { name: 'None', selector: 'none' },
+            { name: 'Icons', selector: 'icons' },
+            { name: 'Underline', selector: 'underline' },
+            { name: 'Colors', selector: 'colors' }
         ],
         DEFAULT = 2,
         useDefaultStyle = true;
@@ -62,7 +61,9 @@ define([
                 $(document).off('selectionchange.detail');
             });
             $(document).on('resumeSelectionChanges.detail', function() {
-                $(document).off('selectionchange.detail').on('selectionchange.detail', self.onSelectionChange.bind(self));
+                $(document)
+                    .off('selectionchange.detail')
+                    .on('selectionchange.detail', self.onSelectionChange.bind(self));
             });
             $(document).trigger('resumeSelectionChanges');
 
@@ -93,13 +94,15 @@ define([
                 this.mouseDown = true;
             }
 
-            if ($(event.target).closest('.opens-dropdown').length === 0 && $(event.target).closest('.underneath').length === 0 && !($(event.target).parent().hasClass('currentTranscript')) && !($(event.target).hasClass('alert alert-error'))) {
+            if ($(event.target).closest('.opens-dropdown').length === 0 &&
+                $(event.target).closest('.underneath').length === 0 &&
+                !($(event.target).parent().hasClass('currentTranscript')) &&
+                !($(event.target).hasClass('alert alert-error'))) {
                 if (event.type === 'mouseup' || event.type === 'dblclick') {
                     this.handleSelectionChange();
                 }
             }
         };
-
 
         this.highlightNode = function() {
             return this.$node.closest('.content');
@@ -115,7 +118,7 @@ define([
 
             var content = this.highlightNode(),
                 index = 0;
-            $.each( content.attr('class').split(/\s+/), function(_, item) {
+            $.each(content.attr('class').split(/\s+/), function(_, item) {
                 var match = item.match(/^highlight-(.+)$/);
                 if (match) {
                     return HIGHLIGHT_STYLES.forEach(function(style, i) {
@@ -132,7 +135,7 @@ define([
 
         this.removeHighlightClasses = function() {
             var content = this.highlightNode();
-            $.each( content.attr('class').split(/\s+/), function(index, item) {
+            $.each(content.attr('class').split(/\s+/), function(index, item) {
                 if (item.match(/^highlight-(.+)$/)) {
                     content.removeClass(item);
                 }
@@ -159,9 +162,15 @@ define([
                                         DIM: 2,
                                         TERM: 3
                                     },
-                                    className = concept.rawClassName || (concept.className && ('entity.' + concept.className)),
+                                    className = concept.rawClassName ||
+                                        (concept.className && ('entity.' + concept.className)),
                                     definition = function(state, template) {
-                                        return (template || tpl)({ STATES:STATES, state:state, concept:concept, colorjs:colorjs });
+                                        return (template || tpl)({
+                                            STATES: STATES,
+                                            state: state,
+                                            concept: concept,
+                                            colorjs: colorjs 
+                                        });
                                     };
 
                                 if (!className) {
@@ -190,13 +199,11 @@ define([
                                     definition(STATES.NORMAL)
                                 );
 
-
                                 // Drag-drop hover
                                 stylesheet.addRule(
                                     '.highlight-' + style.selector + ' .drop-hover.' + className,
                                     definition(STATES.HOVER)
                                 );
-
 
                                 // Detected objects
                                 stylesheet.addRule(
@@ -211,15 +218,11 @@ define([
                                     '.highlight-' + style.selector + ' .focused .detected-object.resolved.' + className,
                                     definition(STATES.NORMAL, doTpl)
                                 );
-                                /*
-                                stylesheet.addRule(
-                                    '.highlight-' + style.selector + ' .detected-object.' + className + '::hover' + ',' +
-                                    '.highlight-' + style.selector + ' .detected-object.resolved.' + className + '::hover',
-                                    definition(STATES.HOVER, doTpl)
-                                );
-                                */
 
-                                stylesheet.addRule('.concepticon-' + (concept.className || concept.rawClassName), 'background-image: url(' + concept.glyphIconHref + ')');
+                                stylesheet.addRule(
+                                    '.concepticon-' + (concept.className || concept.rawClassName),
+                                    'background-image: url(' + concept.glyphIconHref + ')'
+                                );
                             }
                             if (concept.children) {
                                 concept.children.forEach(apply);
@@ -245,7 +248,7 @@ define([
                 text = selection.rangeCount === 1 ? $.trim(selection.toString()) : '';
 
             // Ignore selection events within the dropdown
-            if ( selection.type == 'None' ||
+            if (selection.type == 'None' ||
                  $(selection.anchorNode).is('.underneath') ||
                  $(selection.anchorNode).parents('.underneath').length ||
                  $(selection.focusNode).is('.underneath') ||
@@ -253,7 +256,7 @@ define([
                 return;
             }
             
-            if ( $(selection.anchorNode).closest('.text').length === 0 ) return;
+            if ($(selection.anchorNode).closest('.text').length === 0) return;
 
             // Ignore if mouse cursor still down
             if (this.mouseDown) {
@@ -290,21 +293,21 @@ define([
 
                 if (sel.rangeCount === 0) return;
 
-                var range = sel.getRangeAt(0);
+                var range = sel.getRangeAt(0),
+                    // Avoid adding dropdown inside of entity
+                    endContainer = range.endContainer;
 
-                // Avoid adding dropdown inside of entity
-                var endContainer = range.endContainer;
                 while (/entity/.test(endContainer.parentNode.className)) {
                     endContainer = endContainer.parentNode;
                 }
 
                 var self = this,
                     selection = sel && { 
-                        anchor:sel.anchorNode,
-                        focus:sel.focusNode,
+                        anchor: sel.anchorNode,
+                        focus: sel.focusNode,
                         anchorOffset: sel.anchorOffset,
                         focusOffset: sel.focusOffset,
-                        range:sel.rangeCount && sel.getRangeAt(0).cloneRange() 
+                        range: sel.rangeCount && sel.getRangeAt(0).cloneRange() 
                     };
 
                 // Don't show action bar if dropdown opened
@@ -319,7 +322,7 @@ define([
                         }
                     });
 
-                    self.off('.actionbar').on('resolve.actionbar', function () {
+                    self.off('.actionbar').on('resolve.actionbar', function() {
 
                         var isEndTextNode = endContainer.nodeType === 1;
                         if (isEndTextNode) {
@@ -329,7 +332,7 @@ define([
                             // Move to first space in end so as to not break up word when splitting
                             var i = Math.max(range.endOffset - 1, 0), character = '', whitespaceCheck = /^[^\s]$/;
                             do {
-                                character = endContainer.textContent.substring(++i, i+1);
+                                character = endContainer.textContent.substring(++i, i + 1);
                             } while (whitespaceCheck.test(character));
 
                             endContainer.splitText(i);
@@ -445,7 +448,7 @@ define([
                             }
                         })
                         .draggable({
-                            helper:'clone',
+                            helper: 'clone',
                             revert: 'invalid',
                             revertDuration: 250,
                             // scroll:true (default) requests position:relative on
@@ -475,11 +478,12 @@ define([
                                 return isEntity;
                             },
                             drop: function(event, ui) {
-                                var destTerm = $(this);
-                                var form;
+                                var destTerm = $(this),
+                                    form;
 
                                 if (destTerm.hasClass('opens-dropdown')) {
-                                    form = $('<div class="underneath"/>').insertAfter (destTerm.closest('.detected-object-labels'));
+                                    form = $('<div class="underneath"/>')
+                                        .insertAfter(destTerm.closest('.detected-object-labels'));
                                 } else {
                                     form = $('<div class="underneath"/>').insertAfter(destTerm);
                                 }

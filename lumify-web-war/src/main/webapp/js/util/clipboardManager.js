@@ -62,7 +62,7 @@ define([
 
                 console.debug('Clipboard: Paste', val);
 
-                self.trigger('clipboardPaste', { data:val });
+                self.trigger('clipboardPaste', { data: val });
                 self.lastSetData = null;
                 textarea.val('').focus();
             });
@@ -75,19 +75,20 @@ define([
             if (val.length) {
                 var vertices = this._verticesInData(val);
 
-                if (vertices && vertices.length === 1)
+                if (vertices && vertices.length === 1) {
                     this.trigger('displayInformation', { message: 'Copied vertex' });
-                if (vertices && vertices.length > 1)
+                } else if (vertices && vertices.length > 1) {
                     this.trigger('displayInformation', { message: 'Copied ' + vertices.length + ' vertices' });
-                else if (!vertices)
+                } else if (!vertices) {
                     this.trigger('displayInformation', { message: 'Copied data' });
+                }
             }
         };
 
         this.onCut = function() {
             var val = this.textarea.val();
             console.debug('Clipboard: Cut', val);
-            this.trigger('clipboardCut', { data:val });
+            this.trigger('clipboardCut', { data: val });
         };
 
         this._onClick = function(event) {
@@ -115,7 +116,6 @@ define([
             return null;
         };
     }
-
 
     return defineComponent(ClipboardManager);
 });

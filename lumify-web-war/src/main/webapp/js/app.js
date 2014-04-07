@@ -16,19 +16,34 @@ define([
     'help/help',
     'util/mouseOverlay',
     'service/user'
-], function(defineComponent, appTemplate, data, Menubar, Dashboard, Search, Workspaces, WorkspaceOverlay, Sync, Users, Graph, Detail, Map, Help, MouseOverlay, UserService) {
+], function(
+    defineComponent,
+    appTemplate,
+    data,
+    Menubar,
+    Dashboard,
+    Search,
+    Workspaces,
+    WorkspaceOverlay,
+    Sync,
+    Users,
+    Graph,
+    Detail,
+    Map,
+    Help,
+    MouseOverlay,
+    UserService) {
     'use strict';
 
     return defineComponent(App);
 
     function App() {
-        var Graph3D;
-        var MAX_RESIZE_TRIGGER_INTERVAL = 250;
-        var DATA_MENUBAR_NAME = 'menubar-name';
-
+        var Graph3D,
+            MAX_RESIZE_TRIGGER_INTERVAL = 250,
+            DATA_MENUBAR_NAME = 'menubar-name';
 
         this.onError = function(evt, err) {
-            alert("Error: " + err.message); // TODO better error handling
+            alert('Error: ' + err.message); // TODO better error handling
         };
 
         this.defaultAttrs({
@@ -99,24 +114,23 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
                 shortcuts: {
-                    'escape': { fire:'escape', desc:'Close all open panes and deselect objects' },
+                    escape: { fire: 'escape', desc: 'Close all open panes and deselect objects' },
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Search',
                 shortcuts: {
-                    '/': { fire:'toggleSearchPane', desc:'Show search pane' }
+                    '/': { fire: 'toggleSearchPane', desc: 'Show search pane' }
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Lumify',
                 shortcuts: {
-                    'alt-l': { fire:'logout', desc:'Log out of Lumify' }
+                    'alt-l': { fire: 'logout', desc: 'Log out of Lumify' }
                 }
             });
-
 
             // Prevent the fragment identifier from changing after an anchor
             // with href="#" not stopPropagation'ed
@@ -181,7 +195,7 @@ define([
         });
 
         this.toggleSearchPane = function() {
-            this.trigger(document, 'menubarToggleDisplay', { name:'search' });
+            this.trigger(document, 'menubarToggleDisplay', { name: 'search' });
         };
 
         this.onEscapeKey = function() {
@@ -229,19 +243,19 @@ define([
         };
 
         this.onMapAction = function(event, data) {
-            this.trigger(document, 'changeView', { view: 'map', data:data });
+            this.trigger(document, 'changeView', { view: 'map', data: data });
         };
 
         this.onChangeView = function(event, data) {
-            var view = data && data.view;
+            var view = data && data.view,
+                pane = view && this.select(view + 'Selector');
 
-            var pane = view && this.select(view + 'Selector');
             if (pane && pane.hasClass('visible')) {
                 return;
             } else if (pane) {
-                this.trigger(document, 'menubarToggleDisplay', { name: pane.data(DATA_MENUBAR_NAME), data:data.data });
+                this.trigger(document, 'menubarToggleDisplay', { name: pane.data(DATA_MENUBAR_NAME), data: data.data });
             } else {
-                console.log("View " + data.view + " isn't supported");
+                console.log('View ' + data.view + " isn't supported");
             }
         };
 
@@ -264,7 +278,6 @@ define([
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }
-
 
                 self.trigger('selectObjects');
                 if (reloadWorkspace) self.trigger('reloadWorkspace');
@@ -291,7 +304,9 @@ define([
                         });
                     });
                 })
-                .done(function() { window.location.reload()});
+                .done(function() {
+                    window.location.reload();
+                });
         };
 
         this.toggleDisplay = function(e, data) {
@@ -334,7 +349,9 @@ define([
 
         this.onChatMessage = function(e, data) {
             if (!this.select('usersSelector').hasClass('visible')) {
-                this.trigger(document, 'menubarToggleDisplay', { name: this.select('usersSelector').data(DATA_MENUBAR_NAME) });
+                this.trigger(document, 'menubarToggleDisplay', {
+                    name: this.select('usersSelector').data(DATA_MENUBAR_NAME) 
+                });
             }
         };
 
@@ -400,11 +417,11 @@ define([
                     .outerWidth(true) || 0,
 
                 padding = {
-                    l:searchWidth + searchResultsWidth + searchFiltersWidth +
+                    l: searchWidth + searchResultsWidth + searchFiltersWidth +
                       workspacesWidth + workspaceFormWidth, 
-                    r:detailWidth,
-                    t:0, 
-                    b:0
+                    r: detailWidth,
+                    t: 0, 
+                    b: 0
                 };
 
             if (padding.l) {
@@ -417,13 +434,15 @@ define([
             this.trigger(document, 'graphPaddingUpdated', { padding: padding });
         };
 
-
         this.onSyncStarted = function() {
             this.collapseAllPanes();
 
             var graph = this.select('graphSelector');
-            if ( ! graph.is('.visible') ) {
-                self.trigger(document, 'menubarToggleDisplay', { name:graph.data(DATA_MENUBAR_NAME), syncToRemote:false });
+            if (!graph.is('.visible')) {
+                self.trigger(document, 'menubarToggleDisplay', {
+                    name: graph.data(DATA_MENUBAR_NAME),
+                    syncToRemote: false 
+                });
             }
         };
 
@@ -446,14 +465,17 @@ define([
                     var name = pane.data(DATA_MENUBAR_NAME),
                         isDetail = pane.is(detailPane);
 
-                    if ( !name ) {
-                        if ( isDetail ) {
+                    if (!name) {
+                        if (isDetail) {
                             return detailPane.addClass('collapsed').removeClass('visible');
                         }
                         return console.warn('No ' + DATA_MENUBAR_NAME + ' attribute, unable to collapse');
                     }
 
-                    self.trigger(document, 'menubarToggleDisplay', { name:name, syncToRemote:false });
+                    self.trigger(document, 'menubarToggleDisplay', {
+                        name: name,
+                        syncToRemote: false 
+                    });
                 }
             });
             this.triggerPaneResized();
@@ -474,8 +496,7 @@ define([
         };
     }
 
-
-    function resizable( el, handles, minWidth, maxWidth, callback ) {
+    function resizable(el, handles, minWidth, maxWidth, callback) {
         return el.resizable({
             handles: handles,
             minWidth: minWidth || 150,
@@ -485,4 +506,3 @@ define([
     }
 
 });
-

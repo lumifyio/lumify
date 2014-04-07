@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component'
 ], 
@@ -11,11 +10,12 @@ function(defineComponent) {
     function MouseOverlay() {
 
         this.after('initialize', function() {
-            this.overlayNode = //$('<div id="mouseoverlay" class="tooltip"><div class="tooltip-arrow"/></div>')
-                               $('<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>').
-                css('transform', '').
-                hide().
-                appendTo(document.body);
+            this.overlayNode = $('<div class="tooltip fade right in">' +
+                                 '<div class="tooltip-arrow"></div>' +
+                                 '<div class="tooltip-inner"></div></div>')
+                .css('transform', '')
+                .hide()
+                .appendTo(document.body);
 
             this.transformProperty = $.cssProps.transform;
             this.textNode = this.overlayNode.find('.tooltip-inner');
@@ -52,7 +52,10 @@ function(defineComponent) {
 
             this.tracking = true;
             this.textNode.text(data.message);
-            this.overlayNode.css('transform', 'translate(' + this.position[0] + 'px,' + this.position[1] + 'px)').show();
+            this.overlayNode
+                .css('transform',
+                    'translate(' + this.position[0] + 'px,' + this.position[1] + 'px)'
+                ).show();
 
             this.timeout = _.delay(function() {
                 self.overlayNode.hide();
@@ -62,7 +65,8 @@ function(defineComponent) {
             requestAnimationFrame(function align() {
                 if (self.tracking) {
                     if (self.mouseMoved) {
-                        self.overlayNode[0].style[self.transformProperty] = 'translate(' + self.position[0] + 'px,' + self.position[1] + 'px)';
+                        self.overlayNode[0].style[self.transformProperty] =
+                            'translate(' + self.position[0] + 'px,' + self.position[1] + 'px)';
                         self.mouseMoved = false;
                     }
                     requestAnimationFrame(align);
@@ -72,7 +76,7 @@ function(defineComponent) {
 
         this.onMouseMove = function(event) {
             this.mouseMoved = true;
-            this.position = [event.pageX+10,event.pageY-10];
+            this.position = [event.pageX + 10,event.pageY - 10];
         };
     }
 });

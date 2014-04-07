@@ -3,19 +3,19 @@ define([], function() {
     'use strict';
 
     var sheet = (function() {
-        var style = document.createElement("style");
+            var style = document.createElement('style');
 
-        // WebKit hack :(
-        style.appendChild(document.createTextNode(""));
+            // WebKit hack :(
+            style.appendChild(document.createTextNode(''));
 
-        document.head.appendChild(style);
-        return style.sheet;
-    })();
+            document.head.appendChild(style);
+            return style.sheet;
+        })(),
+        index = 0;
 
-    var index = 0;
     function addCSSRule(selector, rules) {
         if (sheet.insertRule) {
-            sheet.insertRule(selector + "{" + rules + "}", index++);
+            sheet.insertRule(selector + '{' + rules + '}', index++);
         } else {
             sheet.addRule(selector, rules, index++);
         }

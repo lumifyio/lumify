@@ -1,6 +1,5 @@
 
-define([
-], function() {
+define([], function() {
     'use strict';
 
     /**
@@ -11,24 +10,23 @@ define([
      *  undoManager.performedAction( actionName, undoFunction, redoFunction);
      */
     function UndoManager() {
-        var $this = this;
+        var self = this;
 
         this.undos = [];
         this.redos = [];
 
         $(function() {
             $(document).on({
-                'keydown': $this._handleKey.bind($this),
-                //'keyup': $this._handleKey.bind($this)
+                keydown: self._handleKey.bind(self)
             });
         });
     }
 
     UndoManager.prototype.performedAction = function(name, options) {
-        if ( name && 
+        if (name && 
              options && 
              typeof options.undo === 'function' &&
-             typeof options.redo === 'function' ) {
+             typeof options.redo === 'function') {
 
             this.undos.push({
                 name: name,
@@ -41,11 +39,11 @@ define([
     };
 
     UndoManager.prototype.canUndo = function() {
-        return !! this.undos.length;
+        return !!this.undos.length;
     };
 
     UndoManager.prototype.canRedo = function() {
-        return !! this.redos.length;
+        return !!this.redos.length;
     };
 
     UndoManager.prototype.reset = function() {
@@ -82,12 +80,12 @@ define([
     UndoManager.prototype._handleKey = function(event) {
         var character = String.fromCharCode(event.which).toUpperCase();
 
-        if ( this._isUndo(character, event) ) {
+        if (this._isUndo(character, event)) {
             this.performUndo();
             event.preventDefault();
         }
 
-        if ( this._isRedo(character, event) ) {
+        if (this._isRedo(character, event)) {
             this.performRedo();
             event.preventDefault();
         }
@@ -107,9 +105,6 @@ define([
                 undo: action.redo,
                 redo: action.undo
             });
-
-        } else {
-            // TODO: give user feedback (flash the screen) / beep?
         }
     }
 

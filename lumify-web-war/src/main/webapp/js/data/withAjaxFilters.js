@@ -1,5 +1,4 @@
 
-
 define([], function() {
 
         
@@ -25,7 +24,10 @@ define([], function() {
 
             function vertexProperties(json, updated) {
                 var cache;
-                if (!json.sourceVertexId &&_.isString(json.id) && _.isObject(json.properties) && _.keys(json.properties).length) {
+                if (!json.sourceVertexId &&
+                    _.isString(json.id) &&
+                    _.isObject(json.properties) && 
+                    _.keys(json.properties).length) {
                     cache = this.updateCacheWithVertex(json);
                     updated.push(cache);
 
@@ -96,7 +98,6 @@ define([], function() {
 
     return withCacheUpdatingAjaxFilters;
 
-
     function withCacheUpdatingAjaxFilters() {
 
         this.after('initialize', function() {
@@ -142,7 +143,7 @@ define([], function() {
                                 if (val && self.resemblesVertices(val)) {
                                     keypathFound = true;
                                     val.forEach(function(v) {
-                                        updated.push( self.updateCacheWithVertex(v) );
+                                        updated.push(self.updateCacheWithVertex(v));
                                     });
                                 } else if (!keypathFound) {
                                     keypathFound = true;

@@ -4,7 +4,7 @@ define([
     'service/sync',
     './syncCursor',
     'util/withAsyncQueue'
-], function (defineComponent, appData, SyncService, SyncCursor, withAsyncQueue) {
+], function(defineComponent, appData, SyncService, SyncCursor, withAsyncQueue) {
     'use strict';
 
     return defineComponent(Sync, withAsyncQueue);
@@ -27,7 +27,7 @@ define([
             this.events.push('syncCursorBlur');
         }
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
             this.on(document, 'socketMessage', this.onSocketMessage);
 
@@ -62,19 +62,23 @@ define([
             });
         };
 
-        this.onSocketMessage = function (evt, message) {
+        this.onSocketMessage = function(evt, message) {
             message.data = message.data || {};
             message.data.eventData = message.data.eventData || {};
             switch (message.type) {
                 case 'sync':
-                    console.debug('sync onSocketMessage (remote: ' + (message.data.eventData.remoteEvent ? 'true' : 'false') + ')', message);
+                    console.debug(
+                        'sync onSocketMessage (remote: ' +
+                        (message.data.eventData.remoteEvent ? 'true' : 'false') + ')',
+                        message
+                    );
                     message.data.eventData.remoteEvent = true;
                     this.trigger(document, message.data.eventName, message.data.eventData);
                     break;
             }
         };
 
-        this.onSyncedEvent = function (evt, data) {
+        this.onSyncedEvent = function(evt, data) {
             if (!this.currentWorkspaceId) {
                 return;
             }
@@ -99,7 +103,7 @@ define([
             } else this.syncService.publishWorkspaceSyncEvent(evt.type, this.currentWorkspaceId, data);
         };
 
-        this.onOnlineStatusChanged = function (evt, data) {
+        this.onOnlineStatusChanged = function(evt, data) {
             this.usersMarkReady(data);
             this.currentUser = data.user;
         };

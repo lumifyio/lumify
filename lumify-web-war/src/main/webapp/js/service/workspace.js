@@ -20,7 +20,7 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getByRowKey = function (workspaceId) {
+    WorkspaceService.prototype.getByRowKey = function(workspaceId) {
         return this._ajaxGet({
             url: 'workspace',
             data: {
@@ -29,7 +29,7 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getVertices = function (workspaceId) {
+    WorkspaceService.prototype.getVertices = function(workspaceId) {
         return this._ajaxGet({
             url: 'workspace/vertices',
             data: {
@@ -38,7 +38,7 @@ function(ServiceBase) {
         });
     };
 
-    WorkspaceService.prototype.getRelationships = function (workspaceId, additionalIds) {
+    WorkspaceService.prototype.getRelationships = function(workspaceId, additionalIds) {
         var data = {};
         if (additionalIds && additionalIds.length) {
             data.ids = additionalIds;
@@ -87,7 +87,7 @@ function(ServiceBase) {
         })
     };
 
-    WorkspaceService.prototype.save = function (workspaceId, changes) {
+    WorkspaceService.prototype.save = function(workspaceId, changes) {
         var options = {
             url: 'workspace/update',
             data: {
@@ -111,7 +111,7 @@ function(ServiceBase) {
         return this._ajaxPost(options);
     };
 
-    WorkspaceService.prototype.copy = function (workspaceId) {
+    WorkspaceService.prototype.copy = function(workspaceId) {
         var options = {
             url: 'workspace/copy',
             data: {
@@ -130,4 +130,3 @@ function(ServiceBase) {
 
     return WorkspaceService;
 });
-

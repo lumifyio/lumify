@@ -68,7 +68,7 @@ define([
                     });
                     $(document).on('mouseup.facebox', function(evt) {
                         $(document).off('.facebox');
-                        convertToPercentageAndTrigger(evt, { element:facebox });
+                        convertToPercentageAndTrigger(evt, { element: facebox });
                     });
 
                     return;
@@ -111,7 +111,7 @@ define([
                         $(document).off('mouseup.facebox mousemove.facebox');
                         self.currentlyEditing = 'NEW';
                         self.preventClick = true;
-                        convertToPercentageAndTrigger(evt, { element:box });
+                        convertToPercentageAndTrigger(evt, { element: box });
                     });
 
                 box.css(startPosition).hide();
@@ -129,7 +129,7 @@ define([
                     stop: convertToPercentageAndTrigger
                 }).draggable({ 
                     containment: this.$node,
-                    cursor: "move",
+                    cursor: 'move',
                     stop: convertToPercentageAndTrigger
                 });
 
@@ -166,7 +166,7 @@ define([
 
         this.showFacebox = function(data, opts) {
             var self = this,
-                options = $.extend({ editing:false, viewing:false }, opts || {});
+                options = $.extend({ editing: false, viewing: false }, opts || {});
 
             this.imageReady()
                 .done(function() {
@@ -200,11 +200,11 @@ define([
         };
 
         this.showFaceboxForEdit = function(data) {
-            this.showFacebox(data, { editing:true });
+            this.showFacebox(data, { editing: true });
         };
 
         this.showFaceboxForView = function(data) {
-            this.showFacebox(data, { viewing:true });
+            this.showFacebox(data, { viewing: true });
         };
 
         this.onHover = function(event, data) {

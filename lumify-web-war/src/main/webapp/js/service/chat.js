@@ -1,37 +1,34 @@
-define(
-    [
-        'service/serviceBase'
-    ],
-    function (ServiceBase) {
-        'use strict';
+define([
+    'service/serviceBase'
+], function(ServiceBase) {
+    'use strict';
 
-        function ChatService() {
-            ServiceBase.call(this);
+    function ChatService() {
+        ServiceBase.call(this);
 
-            return this;
-        }
+        return this;
+    }
 
-        ChatService.prototype = Object.create(ServiceBase.prototype);
+    ChatService.prototype = Object.create(ServiceBase.prototype);
 
-        ChatService.prototype.sendChatMessage = function (users, messageData) {
-            messageData.postDate = Date.now();
-            var data = {
-                type: 'chatMessage',
-                permissions: {
-                    users: users
-                },
-                data: messageData
-            };
-
-            this.socketPush(data);
-
-            var deferred = $.Deferred();
-
-            deferred.resolve(messageData);
-
-            return deferred;
+    ChatService.prototype.sendChatMessage = function(users, messageData) {
+        messageData.postDate = Date.now();
+        var data = {
+            type: 'chatMessage',
+            permissions: {
+                users: users
+            },
+            data: messageData
         };
 
-        return ChatService;
-    });
+        this.socketPush(data);
 
+        var deferred = $.Deferred();
+
+        deferred.resolve(messageData);
+
+        return deferred;
+    };
+
+    return ChatService;
+});

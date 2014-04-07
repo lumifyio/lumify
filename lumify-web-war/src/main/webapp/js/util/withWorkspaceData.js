@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/registry'
 ], function(registry) {

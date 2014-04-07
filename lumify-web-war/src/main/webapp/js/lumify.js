@@ -15,6 +15,7 @@ window.requestAnimationFrame =
         }
     );
 window.TRANSITION_END = 'transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd otransitionend';
+window.ANIMATION_END = 'animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd oanimationend';
 
 require([
     'jquery',

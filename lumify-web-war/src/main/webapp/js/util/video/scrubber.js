@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'videojs',
@@ -13,7 +12,7 @@ define([
         POSTER = 1,
         FRAMES = 2;
 
-    videojs.options.flash.swf = "/libs/video.js/video-js.swf";
+    videojs.options.flash.swf = '/libs/video.js/video-js.swf';
 
     return defineComponent(VideoScrubber);
 
@@ -103,27 +102,28 @@ define([
             this.trigger('videoPlayerInitialized');
 
             var scrubPercent = this.scrubPercent;
-            _.defer(videojs, video[0], { autoplay:true }, function() {
-                var player = this;
+            _.defer(videojs, video[0], { autoplay: true }, function() {
+                var self = this;
+
                 if (!userClickedPlayButton) {
-                    player.on("durationchange", durationchange);
-                    player.on("loadedmetadata", durationchange);
+                    self.on('durationchange', durationchange);
+                    self.on('loadedmetadata', durationchange);
                 }
-                player.on("timeupdate", timeupdate);
+                self.on('timeupdate', timeupdate);
 
                 function timeupdate(event) {
                     self.trigger('playerTimeUpdate', {
-                        currentTime: player.currentTime(),
-                        duration: player.duration()
+                        currentTime: self.currentTime(),
+                        duration: self.duration()
                     });
                 }
 
                 function durationchange(event) {
-                    var duration = player.duration();
+                    var duration = self.duration();
                     if (duration > 0.0 && scrubPercent > 0.0) {
-                        player.off('durationchange', durationchange);
-                        player.off("loadedmetadata", durationchange);
-                        player.currentTime(Math.max(0.0, duration * scrubPercent - 1.0));
+                        self.off('durationchange', durationchange);
+                        self.off('loadedmetadata', durationchange);
+                        self.currentTime(Math.max(0.0, duration * scrubPercent - 1.0));
                     }
                 }
             });
@@ -138,7 +138,7 @@ define([
             this.select('backgroundScrubberSelector').css({
                 width: '100%',
                 height: '100%',
-                position:'absolute',
+                position: 'absolute',
                 backgroundRepeat: 'no-repeat',
                 backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
             });
@@ -146,7 +146,7 @@ define([
             this.select('backgroundPosterSelector').css({
                 width: '100%',
                 height: '100%',
-                position:'absolute',
+                position: 'absolute',
                 backgroundSize: '100%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'left center',
@@ -155,14 +155,16 @@ define([
 
             this.showPoster();
 
-            this.on('videoPlayerInitialized', function (e) {
+            this.on('videoPlayerInitialized', function(e) {
                 self.off('mousemove');
                 self.off('mouseleave');
                 self.off('click');
             });
 
             this.on('mousemove', {
-                scrubbingLineSelector: function(e) { e.stopPropagation(); }
+                scrubbingLineSelector: function(e) {
+                    e.stopPropagation(); 
+                }
             });
             this.$node
                 .on('mouseenter mousemove', function(e) {

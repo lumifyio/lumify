@@ -11,11 +11,11 @@ define(['jquery'], function() {
     'use strict';
   
     $.fn.withinScrollable = function(scrollable) {
-        var elems = [];
-        var width = scrollable.outerWidth(true);
-        var height = scrollable.outerHeight(true);
-        var top = scrollable.scrollTop();
-        var left = scrollable.scrollLeft();
+        var elems = [],
+            width = scrollable.outerWidth(true),
+            height = scrollable.outerHeight(true),
+            top = scrollable.scrollTop(),
+            left = scrollable.scrollLeft();
 
         this.each(function() {
             if (withinScrollable(this, top, left, width, height)) {
