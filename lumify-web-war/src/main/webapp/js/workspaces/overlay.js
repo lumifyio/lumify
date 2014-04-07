@@ -132,6 +132,7 @@ define([
         };
 
         this.onSwitchWorkspace = function() {
+            this.previousDiff = null;
             this.$node.find('.badge').popover('destroy').remove();
         };
 
