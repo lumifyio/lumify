@@ -155,19 +155,18 @@ define([
                 this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
             }
 
+            vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
+                var aX = a.x1, bX = b.x1;
+                return aX - bX;
+            });
+
             this.$node.html(template({
                 vertex: vertex,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton()
             }));
 
-            if (vertex.detectedObjects && vertex.detectedObjects.length > 0) {
-                this.select('detectedObjectLabelsSelector').show();
-                vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
-                    var aX = a.x1, bX = b.x1;
-                    return aX - bX;
-                });
-            }
+            this.select('detectedObjectLabelsSelector').show();
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
