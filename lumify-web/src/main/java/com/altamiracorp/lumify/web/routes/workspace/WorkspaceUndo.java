@@ -160,7 +160,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                             (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
                                     detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
                     DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.getRowKey(), modelUserContext);
-                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
+                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
                     Messaging.broadcastDetectedObjectChange(detectedObjectRowKey.getArtifactId(), artifactVertexWithDetectedObjects);
                     unresolved.put(artifactVertexWithDetectedObjects);
                 }

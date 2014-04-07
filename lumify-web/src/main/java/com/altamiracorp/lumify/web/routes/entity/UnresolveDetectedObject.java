@@ -81,7 +81,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility,
+        JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility,
                 workspaceId, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);

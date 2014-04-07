@@ -99,7 +99,7 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject unresolveDetectedObject(Vertex vertex, DetectedObjectModel detectedObjectModel,
+    public JSONObject unresolveDetectedObject(Vertex vertex, String edgeId, DetectedObjectModel detectedObjectModel,
                                               DetectedObjectModel analyzedDetectedObject,
                                               LumifyVisibility visibility, String workspaceId,
                                               ModelUserContext modelUserContext, User user,
@@ -116,9 +116,8 @@ public class WorkspaceHelper {
             result.put("detectedObject", analyzedDetectedObject.toJson());
         }
 
-        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(vertex, Direction.BOTH, authorizations);
-        if (IterableUtils.count(edgeIds) == 1) {
-            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
+        if (edgeId != null) {
+            Edge edge = graph.getEdge(edgeId, authorizations);
             graph.removeEdge(edge, authorizations);
 
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
