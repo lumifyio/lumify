@@ -370,13 +370,11 @@ define([
             this.$node.find('.underneath').teardownComponent(TermForm)
             var root = $('<div class="underneath">')
                 .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
-            var resolvedVertex =  dataInfo.entityVertex;
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,
                 dataInfo: dataInfo,
-                resolvedVertex: resolvedVertex,
-                existing: !!resolvedVertex,
+                existing: !!dataInfo.graphVertexId,
                 detectedObject: true
             });
         };
