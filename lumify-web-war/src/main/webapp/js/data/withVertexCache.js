@@ -169,13 +169,14 @@ define([
                     workspaceId: currentWorkspace,
                     graphVertexId: vertex.id
                 },
-                artifactUrl = _.template('/artifact/{ type }?' + $.param(params));
+                artifactUrl = _.template('artifact/{ type }?' + $.param(params)),
+                glyphIconHref = vertex.properties['http://lumify.io#glyphIcon'];
 
             vertex.imageSrcIsFromConcept = false;
 
-            if (vertex.properties['http://lumify.io#glyphIcon']) {
-                vertex.imageSrc = vertex.properties['http://lumify.io#glyphIcon'].value + '?' + 
-                    $.param({workspaceId: currentWorkspace});
+            if (glyphIconHref) {
+                var sep = glyphIconHref.value.indexOf('?') > 0 ? '&' : '?';
+                vertex.imageSrc = glyphIconHref.value + sep + $.param({workspaceId: currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 

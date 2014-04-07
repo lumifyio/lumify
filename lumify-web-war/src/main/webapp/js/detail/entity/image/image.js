@@ -130,7 +130,7 @@ define([
 
             // TODO: move to vertexService
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/graph/vertex/' + this.attr.data.id + '/uploadImage');
+            xhr.open('POST', 'graph/vertex/uploadImage?graphVertexId=' + this.attr.data.id);
             xhr.setRequestHeader('Lumify-Workspace-Id', appData.workspaceId);
             xhr.onload = function(event) {
                 if (xhr.status === 200) {
