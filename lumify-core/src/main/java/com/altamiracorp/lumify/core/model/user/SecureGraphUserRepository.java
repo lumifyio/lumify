@@ -39,7 +39,7 @@ public class SecureGraphUserRepository extends UserRepository {
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
-        userConceptId = userConcept.getId();
+        userConceptId = userConcept.getTitle();
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
