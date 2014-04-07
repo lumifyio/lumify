@@ -51,9 +51,15 @@
     }
 
     .popover-content {
+      min-width: 8em;
+      padding: 0.5em;
+
       table {
         margin: 0 0 0.5em 0;
         font-size: 85%;
+        &:empty {
+          display: none;
+        }
       }
 
       .property-name {
