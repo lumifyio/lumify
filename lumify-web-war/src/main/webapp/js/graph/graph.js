@@ -353,8 +353,8 @@ define([
                     if (options.animate) {
                         if (cy.nodes().length) {
                             _.delay(function again() {
-                                container.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd',
-                                function(e) {
+                                container.on(TRANSITION_END, function(e) {
+                                    container.off(TRANSITION_END);
                                     container.removeClass('animatein animatestart');
                                 });
                                 container.addClass('animateinstart');
@@ -963,7 +963,7 @@ define([
         this.hideLoading = function() {
             var loading = this.$node.find('.loading-graph');
             if (loading.length) {
-                loading.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function(e) {
+                loading.on(TRANSITION_END, function(e) {
                     loading.remove();
                 });
                 loading.addClass('hidden');

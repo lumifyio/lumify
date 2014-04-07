@@ -20,11 +20,11 @@ define([], function() {
                 return _.defer(this.open.bind(this));
             }
 
-            node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+            node.on(TRANSITION_END, function(e) {
                 var oe = e.originalEvent || e;
 
                 if (oe.target === self.node && oe.propertyName === 'height') {
-                    node.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                    node.off(TRANSITION_END);
                     node.css({
                         transition: 'none',
                         height: 'auto',

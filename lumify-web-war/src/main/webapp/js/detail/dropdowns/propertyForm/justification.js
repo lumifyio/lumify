@@ -134,8 +134,11 @@ define([
 
             _.defer(function() {
                 var toHeight = node.find('.animationwrap').outerHeight(true);
-                node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                node.on(TRANSITION_END, function(e) {
                     var oe = e.originalEvent || e;
+
+                    node.off(TRANSITION_END);
+
                     if (oe.propertyName === 'height') {
                         node.off('.justification');
                         node.css({

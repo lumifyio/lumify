@@ -346,9 +346,9 @@ define([
 
             animateTimer = _.delay((badgeReset = function(previousWidth) {
                 animateTimer = null;
-                badge.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                badge.on(TRANSITION_END, function(e) {
                     if (e.originalEvent.propertyName === 'width') {
-                        badge.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                        badge.off(TRANSITION_END);
                         badge.text(formattedCount).css('width', 'auto');
                     }
                 }).css({

@@ -162,11 +162,15 @@ define([
 
             this.triggerPaneResized();
             if (self.attr.animateFromLogin) {
-                $(document.body).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', _.once(function(e) {
-                    data.loadActiveWorkspace();
-                    self.trigger(document, 'applicationReady');
-                    graphPane.focus();
-                }));
+                $(document.body).on(TRANSITION_END, function(e) {
+                    var oe = e.originalEvent;
+                    if (oe.propertyName === 'opacity' && $(oe.target).is(graphPane)) {
+                        $(document.body).off(TRANSITION_END);
+                        data.loadActiveWorkspace();
+                        self.trigger(document, 'applicationReady');
+                        graphPane.focus();
+                    }
+                });
                 _.defer(function() {
                     $(document.body).addClass('animateloginstart');
                 })
@@ -306,8 +310,8 @@ define([
             if (SLIDE_OUT.indexOf(data.name) >= 0) {
                 var self = this;
 
-                pane.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
-                    pane.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                pane.one(TRANSITION_END, function() {
+                    pane.off(TRANSITION_END);
                     if (!isVisible) {
                         self.trigger(data.name + 'PaneVisible');
                     }
