@@ -177,7 +177,7 @@ define([
                         var key = relationships.groupedBySourceDestConceptsKeyGen(sourceConceptTypeId, destConceptTypeId);
 
                         return _.chain(relationships.groupedBySourceDestConcepts[key] || [])
-                            .uniq(function(r) { return r.id })
+                            .uniq(function(r) { return r.title })
                             .sortBy('displayName')
                             .value()
                     });

@@ -7,10 +7,20 @@ define([
     'tpl!./item',
     'tpl!util/alert',
     'util/video/scrubber',
+    'util/formatters',
     'util/popovers/withVertexScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
-], function(defineComponent, registry, appData, template, vertexTemplate, alertTemplate, VideoScrubber, withPositionUpdates) {
+], function(
+    defineComponent,
+    registry,
+    appData,
+    template,
+    vertexTemplate,
+    alertTemplate,
+    VideoScrubber,
+    formatters,
+    withPositionUpdates) {
     'use strict';
 
     return defineComponent(List, withPositionUpdates);
@@ -49,8 +59,8 @@ define([
                     classes = [className],
                     vertexState = self.stateForVertex(v);
 
-                if ( vertexState.inGraph ) classes.push('graph-displayed');
-                if ( vertexState.inMap ) classes.push('map-displayed');
+                if (vertexState.inGraph) classes.push('graph-displayed');
+                if (vertexState.inMap) classes.push('map-displayed');
 
                 if (!v.imageSrcIsFromConcept) {
                     classes.push('has_preview');
@@ -71,13 +81,13 @@ define([
             this.$node
                 .addClass('vertex-list')
                 .html(template({ 
-                    vertices:this.attr.vertices,
+                    vertices: this.attr.vertices,
                     infiniteScrolling: this.attr.infiniteScrolling && this.attr.total !== this.attr.vertices.length,
-                    classNamesForVertex: this.classNameMapForVertices(this.attr.vertices)
+                    classNamesForVertex: this.classNameMapForVertices(this.attr.vertices),
+                    formatters: formatters
                 }));
 
             this.attachEvents();
-
 
             this.loadVisibleResultPreviews = _.debounce(this.loadVisibleResultPreviews.bind(this), 1000);
             this.loadVisibleResultPreviews();
@@ -87,7 +97,7 @@ define([
 
             this.setupDraggables();
 
-            this.onObjectsSelected(null, { edges:[], vertices:appData.selectedVertices});
+            this.onObjectsSelected(null, { edges: [], vertices: appData.selectedVertices});
 
             this.on('selectAll', this.onSelectAll);
             this.on('down', this.move);
@@ -133,7 +143,7 @@ define([
                 }
 
                 this.trigger(document, 'defocusVertices');
-                this.trigger('selectObjects', { vertices:selected });
+                this.trigger('selectObjects', { vertices: selected });
             }
         };
 
@@ -171,7 +181,7 @@ define([
 
         this.setupDraggables = function() {
             this.applyDraggable(this.$node.find('a'));
-            this.$node.droppable({ accept:'*', tolerance:'pointer' });
+            this.$node.droppable({ accept: '*', tolerance: 'pointer' });
         };
 
         this.onHoverItem = function(evt) {
@@ -184,7 +194,7 @@ define([
 
             var id = $(evt.target).closest('.vertex-item').data('vertexId');
             if (evt.type == 'mouseenter' && id) {
-                this.trigger(document, 'focusVertices', { vertexIds:[id] });
+                this.trigger(document, 'focusVertices', { vertexIds: [id] });
             } else {
                 this.trigger(document, 'defocusVertices');
             }
@@ -235,12 +245,12 @@ define([
                 var clsMap = this.classNameMapForVertices(data.vertices),
                     added = data.vertices.map(function(vertex) {
                         return vertexTemplate({
-                            vertex:vertex,
-                            classNamesForVertex: clsMap
+                            vertex: vertex,
+                            classNamesForVertex: clsMap,
+                            formatters: formatters
                         });
-                    });
-
-                var lastItem = loading.prev();
+                    }),
+                    lastItem = loading.prev();
 
                 loading.before(added);
 
@@ -293,7 +303,7 @@ define([
             var self = this;
 
             el.draggable({
-                helper:'clone',
+                helper: 'clone',
                 appendTo: 'body',
                 revert: 'invalid',
                 revertDuration: 250,
@@ -317,14 +327,14 @@ define([
                 }).toArray());
 
             if (vertices.length > 1) {
-                vertices.forEach (function (vertex) {
+                vertices.forEach(function(vertex) {
                     vertex.workspace = {
                         selected: true
                     };
                 });
             }
             this.trigger(document, 'defocusVertices');
-            this.trigger('selectObjects', { vertices:vertices });
+            this.trigger('selectObjects', { vertices: vertices });
         };
 
         this.onWorkspaceLoaded = function(evt, workspace) {
@@ -355,6 +365,7 @@ define([
                     newAnchor = $(vertexTemplate({
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
+                        formatters: formatters
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
                     src = vertex.imageSrc,
@@ -379,7 +390,7 @@ define([
         this.onVerticesDeleted = function(event, data) {
             var self = this;
             (data.vertices || []).forEach(function(vertex) {
-                self.toggleItemIcons(vertex.id, { inGraph:false, inMap:false });
+                self.toggleItemIcons(vertex.id, { inGraph: false, inMap: false });
             });
         };
 

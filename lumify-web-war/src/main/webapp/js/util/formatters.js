@@ -1,5 +1,8 @@
 
-define(['sf'], function() {
+define([
+    'sf',
+    './vertex/formatters'
+], function(sf, vertexFormatters) {
     'use strict';
 
     var classNameIndex = 0,
@@ -16,7 +19,7 @@ define(['sf'], function() {
             },
             charIcons: {
                 esc: isMac ? '⎋' : null,
-                'escape': isMac ? '⎋' : 'esc',
+                escape: isMac ? '⎋' : 'esc',
                 'delete': isMac ? '⌫' : null,
                 backspace: isMac ? '⌦' : null,
                 up: '↑', 
@@ -35,7 +38,7 @@ define(['sf'], function() {
         var special = {
           backspace: 8, tab: 9, clear: 12,
           enter: 13, 'return': 13,
-          esc: 27, 'escape': 27, space: 32,
+          esc: 27, escape: 27, space: 32,
           left: 37, up: 38,
           right: 39, down: 40,
           del: 46, 'delete': 46,
@@ -57,37 +60,38 @@ define(['sf'], function() {
 
     function decimalAdjust(type, value, exp) {
 		// If the exp is undefined or zero...
-		if (typeof exp === 'undefined' || +exp === 0) {
+		if (typeof exp === 'undefined' || parseFloat(exp) === 0) {
 			return Math[type](value);
 		}
-		value = +value;
-		exp = +exp;
+		value = parseFloat(value);
+		exp = parseFloat(exp);
 		// If the value is not a number or the exp is not an integer...
 		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
 			return NaN;
 		}
 		// Shift
 		value = value.toString().split('e');
-		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+		value = Math[type](parseFloat(value[0] + 'e' + (value[1] ? (parseFloat(value[1]) - exp) : -exp)));
 		// Shift back
 		value = value.toString().split('e');
-		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+		return parseFloat(value[0] + 'e' + (value[1] ? (parseFloat(value[1]) + exp) : exp));
 	}
 
-
-
     var FORMATTERS = {
+
+        vertex: vertexFormatters,
+
         number: {
             pretty: function(number) {
                 return sf('{0:#,###,###,###}', number);
             },
             prettyApproximate: function(number) {
                 if (number >= 1000000000) {
-                    return (decimalAdjust('round', number/1000000000, -1) + 'B');
+                    return (decimalAdjust('round', number / 1000000000, -1) + 'B');
                 } else if (number >= 1000000) {
-                    return (decimalAdjust('round', number/1000000, -1) + 'M');
+                    return (decimalAdjust('round', number / 1000000, -1) + 'M');
                 } else if (number >= 1000) {
-                    return (decimalAdjust('round', number/1000, -1) + 'K');
+                    return (decimalAdjust('round', number / 1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
             }
         },
@@ -112,8 +116,7 @@ define(['sf'], function() {
             parse: function(str) {
                 var m = str && str.match(/point\[(.*?),(.*?)\]/);
                 if (m) {
-                    var latitude = m[1];
-                    var longitude = m[2];
+                    var latitude = m[1], longitude = m[2];
                     return {
                         latitude: latitude,
                         longitude: longitude
@@ -142,7 +145,7 @@ define(['sf'], function() {
                 var normalized = key.replace(/\+/g, '-').toUpperCase(),
                     forLookup = normalized,
                     parts = normalized !== '-' ? normalized.split('-') : ['-'],
-                    shortcut = {normalized:normalized, forEventLookup:normalized};
+                    shortcut = {normalized: normalized, forEventLookup: normalized};
 
                 if (parts.length === 1) {
                     shortcut.keyCode = codeForCharacter(parts[0]);
@@ -167,16 +170,18 @@ define(['sf'], function() {
 
                 var metaIcon;
 
-                character = keyboardMappings.charIcons[character.toLowerCase()] || (character.length > 1 ? character.toLowerCase() : character);
+                character = keyboardMappings.charIcons[character.toLowerCase()] ||
+                    (character.length > 1 ? character.toLowerCase() : character);
 
-                if (metaKeys.metaKey)
+                if (metaKeys.metaKey) {
                     metaIcon = keyboardMappings.metaIcons.meta;
-                else if (metaKeys.ctrlKey)
+                } else if (metaKeys.ctrlKey) {
                     metaIcon = keyboardMappings.metaIcons.ctrl;
-                else if (metaKeys.altKey)
+                } else if (metaKeys.altKey) {
                     metaIcon = keyboardMappings.metaIcons.alt;
-                else if (metaKeys.shiftKey)
+                } else if (metaKeys.shiftKey) {
                     metaIcon = keyboardMappings.metaIcons.shift;
+                }
 
                 if (metaIcon) {
                     return metaIcon + (isMac ? '' : '+') + character;
@@ -187,7 +192,7 @@ define(['sf'], function() {
             plural: function(count, singular, plural) {
                 plural = plural || (singular + 's');
 
-                switch(count) {
+                switch (count) {
                     case 0: return 'No ' + plural;
                     case 1: return '1 ' + singular;
                     default: return count + ' ' + plural;
@@ -200,11 +205,11 @@ define(['sf'], function() {
                     dateInLocale = _.isDate(millis) ? millis : new Date(millis),
                     millisInMinutes = 1000 * 60,
                     millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
-                    dateInUTC = new Date( dateInLocale.getTime() + millisFromLocaleToUTC );
+                    dateInUTC = new Date(dateInLocale.getTime() + millisFromLocaleToUTC);
                 return dateInUTC;
             },
             dateString: function(millisStr) {
-                return sf("{0:yyyy-MM-dd}", FORMATTERS.date.utc(millisStr));
+                return sf('{0:yyyy-MM-dd}', FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
@@ -238,7 +243,6 @@ define(['sf'], function() {
             }
         }
     }
-
 
     return FORMATTERS;
 });

@@ -1,5 +1,4 @@
 
-
 define([
     'data',
     'flight/lib/component',
@@ -8,8 +7,9 @@ define([
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
     'detail/detail',
+    'util/formatters',
     'util/jquery.removePrefixedClasses'
-], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail) {
+], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail, formatters) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -101,7 +101,9 @@ define([
                 .addClass([
                     verts <= 4 ? 'vertices-' + verts : 'vertices-many',
                     'entities-' + entities,
-                    'entity-cols-' + _.find([4,3,2,1], function(i) { return entities % i === 0; }),
+                    'entity-cols-' + _.find([4,3,2,1], function(i) {
+                        return entities % i === 0; 
+                    }),
                     entities ? 'has-entities' : '',
                     'artifacts-' + artifacts,
                     artifacts ? 'has-artifacts' : ''
@@ -113,7 +115,7 @@ define([
         };
 
         this.handleNoVertices = function() {
-            document.title = "No vertices found";
+            document.title = 'No vertices found';
             this.select('noResultsSelector')
                 .html(errorTemplate({ vertices: this.attr.graphVertexIds }))
                 .addClass('visible');
@@ -135,7 +137,7 @@ define([
                 // TODO: Image/Video before documents
 
                 // Sort by title
-                descriptors.push(v.prop('title'));
+                descriptors.push(formatters.vertex.prop(v, 'title'));
                 return descriptors.join(''); 
             });
 
@@ -143,8 +145,8 @@ define([
             var notFoundIds = _.difference(this.attr.graphVertexIds, _.pluck(this.vertices, 'id')),
                 notFound = _.map(notFoundIds, function(nId) {
                     return { 
-                        id:nId,
-                        notFound:true,
+                        id: nId,
+                        notFound: true,
                         properties: {
                             title: '?'
                         } 
@@ -161,7 +163,9 @@ define([
             this.vertices.forEach(function(v) {
                 if (v.notFound) return;
 
-                var node = filterEntity(v) ?  this.$node.find('.entities-container') : this.$node.find('.artifacts-container'),
+                var node = filterEntity(v) ?
+                        this.$node.find('.entities-container') :
+                        this.$node.find('.artifacts-container'),
                     type = _.contains('document image video'.split(' '), v.concept.displayType) ? 'artifact' : 'entity',
                     subType = v.concept.displayType;
 
@@ -235,7 +239,9 @@ define([
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
-                            document.title = '"' + newVerticesById[newVertexIds[0]].prop('title') + '" added';
+                            document.title = '"' + 
+                                formatters.vertex.prop(newVerticesById[newVertexIds[0]], 'title') +
+                                '" added';
                         } else {
                             document.title = newVertexIds.length + ' items added';
                         }
@@ -260,9 +266,9 @@ define([
             });
             
             if (sorted.length === 1) {
-                return sorted[0].prop('title');
+                return formatters.vertex.prop(sorted[0], 'title');
             } else {
-                var first = '"' + sorted[0].prop('title') + '"',
+                var first = '"' + formatters.vertex.prop(sorted[0], 'title') + '"',
                     l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');
@@ -293,4 +299,3 @@ define([
         };
     }
 });
-

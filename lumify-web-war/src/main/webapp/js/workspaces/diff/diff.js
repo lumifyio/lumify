@@ -58,7 +58,8 @@ define([
                 self.$node.html(template({
                     diffs: processDiffs,
                     formatValue: formatValue,
-                    formatLabel: formatLabel
+                    formatLabel: formatLabel,
+                    formatters: formatters
                 }));
                 self.updateHeader();
             });
@@ -163,7 +164,7 @@ define([
                             case 'VertexDiffItem': 
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {
-                                    outputItem.title = outputItem.vertex.prop('title');
+                                    outputItem.title = formatters.vertex.prop(outputItem.vertex, 'title');
                                 }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
@@ -205,7 +206,7 @@ define([
 
                     if (!outputItem.title && outputItem.vertex) {
                         outputItem.action = actionTypes.UPDATE;
-                        outputItem.title = outputItem.vertex.prop('title')
+                        outputItem.title = formatters.vertex.prop(outputItem.vertex, 'title')
                         outputItem.id = outputItem.vertex.id;
                     }
 

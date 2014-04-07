@@ -1,10 +1,10 @@
 
-
 define([
     'flight/lib/component',
     'service/ontology',
-    './3djs/3djs'
-], function(defineComponent, OntologyService, $3djs) {
+    './3djs/3djs',
+    'util/formatters'
+], function(defineComponent, OntologyService, $3djs, formatters) {
     'use strict';
 
     var MAX_TITLE_LENGTH = 15,
@@ -17,9 +17,9 @@ define([
             return imageCache[src];
         }
 
-        var deferred = $.Deferred();
+        var deferred = $.Deferred(),
+            image = new Image();
 
-        var image = new Image();
         image.onload = function() {
             deferred.resolve(this);
         };
@@ -90,7 +90,7 @@ define([
                             })
                     );
                 } else {
-                    console.warn("No icon set for vertex: ", vertex);
+                    console.warn('No icon set for vertex: ', vertex);
                 }
             });
 
@@ -104,9 +104,9 @@ define([
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
 
-                var title = node.data.vertex.prop('title');
+                var title = formatters.vertex.prop(node.data.vertex, 'title');
                 if (title.length > MAX_TITLE_LENGTH) {
-                    node.data.label = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + "...";
+                    node.data.label = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + '...';
                 } else node.data.label = title;
 
                 node.needsUpdate = true;
@@ -187,7 +187,7 @@ define([
                     var data = graph.node(event.content).data.vertex;
                     selected.push(data);
                 }
-                self.trigger('selectObjects', { vertices:selected });
+                self.trigger('selectObjects', { vertices: selected });
             }, false);
         };
     }

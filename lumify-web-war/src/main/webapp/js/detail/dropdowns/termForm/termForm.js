@@ -7,13 +7,23 @@ define([
     'tpl!./entity',
     'service/vertex',
     'service/ontology',
+    'util/formatters',
     'tpl!util/alert',
     'util/jquery.removePrefixedClasses'
-], function (defineComponent, withDropdown, Properties, dropdownTemplate, conceptsTemplate, entityTemplate, VertexService, OntologyService, alertTemplate) {
+], function(
+    defineComponent,
+    withDropdown,
+    Properties,
+    dropdownTemplate,
+    conceptsTemplate,
+    entityTemplate,
+    VertexService,
+    OntologyService,
+    formatters,
+    alertTemplate) {
     'use strict';
 
     return defineComponent(TermForm, withDropdown);
-
 
     function TermForm() {
         this.vertexService = new VertexService();
@@ -31,7 +41,7 @@ define([
             addNewPropertiesSelector: '.none'
         });
 
-        this.after('teardown', function () {
+        this.after('teardown', function() {
             if (this.promoted && this.promoted.length) {
                 this.demoteSpanToTextVertex(this.promoted);
             }
@@ -48,19 +58,19 @@ define([
             }
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.deferredConcepts = $.Deferred();
             this.setupContent();
             this.registerEvents();
         });
 
-        this.showTypeahead = function () {
+        this.showTypeahead = function() {
             this.select('objectSignSelector').typeahead('lookup');
         };
 
-        this.onKeyPress = function (event) {
+        this.onKeyPress = function(event) {
             if (!this.lastQuery || this.lastQuery === this.select('objectSignSelector').val()) {
-                if (!this.select('actionButtonSelector').is(":disabled")) {
+                if (!this.select('actionButtonSelector').is(':disabled')) {
                     switch (event.which) {
                         case $.ui.keyCode.ENTER:
                             this.onButtonClicked(event);
@@ -70,7 +80,7 @@ define([
             }
 
             if (!this.debouncedLookup) {
-                this.debouncedLookup = _.debounce(function () {
+                this.debouncedLookup = _.debounce(function() {
                     this.select('objectSignSelector').typeahead('lookup');
                 }.bind(this), 100);
             }
@@ -78,7 +88,7 @@ define([
             this.debouncedLookup();
         };
 
-        this.reset = function () {
+        this.reset = function() {
             this.currentGraphVertexId = null;
             this.select('helpSelector').show();
             this.select('visibilitySelector').hide();
@@ -87,7 +97,7 @@ define([
             this.updateResolveImageIcon();
         };
 
-        this.graphVertexChanged = function (newGraphVertexId, item, initial) {
+        this.graphVertexChanged = function(newGraphVertexId, item, initial) {
             var self = this;
 
             this.currentGraphVertexId = newGraphVertexId;
@@ -103,7 +113,9 @@ define([
                 var conceptType = (info && (
                     (info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) ||
                         info['http://lumify.io#conceptType'] ||
-                        (info.properties && info.properties['http://lumify.io#conceptType'] && info.properties['http://lumify.io#conceptType'].value)
+                        (info.properties && 
+                         info.properties['http://lumify.io#conceptType'] &&
+                         info.properties['http://lumify.io#conceptType'].value)
                     )) || '';
 
                 this.updateConceptSelect(conceptType).show();
@@ -114,13 +126,14 @@ define([
                         .show();
                 } else {
                     this.select('actionButtonSelector')
-                        .text(newGraphVertexId && !initial && !this.attr.coords ? 'Resolve as Existing' : 'Resolve as New')
+                        .text(newGraphVertexId && !initial && !this.attr.coords ?
+                              'Resolve as Existing' : 'Resolve as New')
                         .show();
                 }
                 this.select('helpSelector').hide();
                 this.select('visibilitySelector').show();
 
-                require(['configuration/plugins/visibility/visibilityEditor'], function (Visibility) {
+                require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                     Visibility.attachTo(self.$node.find('.visibility'), {
                         value: ''
                     });
@@ -129,14 +142,14 @@ define([
 
             if (newGraphVertexId) {
                 this.vertexService.getVertexProperties(newGraphVertexId)
-                    .done(function () {
+                    .done(function() {
                         self.updateResolveImageIcon();
                     });
             } else this.updateResolveImageIcon();
 
         };
 
-        this.updateConceptSelect = function (val) {
+        this.updateConceptSelect = function(val) {
             var conceptSelect = this.select('conceptSelector').val(val);
 
             if (val) {
@@ -148,7 +161,7 @@ define([
             return conceptSelect;
         };
 
-        this.onButtonClicked = function (event) {
+        this.onButtonClicked = function(event) {
             if (!this.attr.detectedObject) {
                 this.termModification(event);
             } else {
@@ -156,7 +169,7 @@ define([
             }
         }
 
-        this.termModification = function (event) {
+        this.termModification = function(event) {
             var self = this,
                 $mentionNode = $(this.attr.mentionNode),
                 newObjectSign = $.trim(this.select('objectSignSelector').val()),
@@ -199,7 +212,7 @@ define([
             if (!this.unresolve) {
                 this.vertexService.resolveTerm(parameters)
                     .fail(this.requestFailure.bind(this))
-                    .done(function (data) {
+                    .done(function(data) {
                         self.highlightTerm(data);
                         self.trigger('termCreated', data);
 
@@ -210,7 +223,7 @@ define([
             } else {
                 this.vertexService.unresolveTerm(parameters)
                     .fail(this.requestFailure.bind(this))
-                    .done(function (data) {
+                    .done(function(data) {
                         self.highlightTerm(data);
 
                         if (data.deleteEdge) {
@@ -224,7 +237,7 @@ define([
             }
         };
 
-        this.requestFailure = function (request, message, error) {
+        this.requestFailure = function(request, message, error) {
             var messages = this.markFieldErrors(error);
 
             this.$node.find('.errors').html(
@@ -234,13 +247,15 @@ define([
             _.defer(this.clearLoading.bind(this));
         };
 
-        this.detectedObjectModification = function (event) {
+        this.detectedObjectModification = function(event) {
             var self = this,
                 newSign = $.trim(this.select('objectSignSelector').val()),
                 parameters = {
                     title: newSign,
                     conceptId: this.select('conceptSelector').val(),
-                    graphVertexId: this.attr.dataInfo.graphVertexId ? this.attr.dataInfo.graphVertexId : this.currentGraphVertexId,
+                    graphVertexId: this.attr.dataInfo.graphVertexId ?
+                        this.attr.dataInfo.graphVertexId :
+                        this.currentGraphVertexId,
                     rowKey: this.attr.dataInfo['http://lumify.io#rowKey'],
                     artifactId: this.attr.artifactData.id,
                     x1: parseFloat(this.attr.dataInfo.x1),
@@ -259,14 +274,14 @@ define([
             }
         }
 
-        this.resolveDetectedObject = function (parameters) {
+        this.resolveDetectedObject = function(parameters) {
             var self = this;
             this.vertexService.resolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
-                .done(function (data) {
-                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
-                    var $tag;
-                    var result = data;
+                .done(function(data) {
+                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused'),
+                        $tag,
+                        result = data;
 
                     if ($focused.length !== 0) {
                         $tag = $focused.find('.label-info');
@@ -276,22 +291,22 @@ define([
 
                     } else {
                         // Temporarily creating a new tag to show on ui prior to backend update
-                        var $allDetectedObjects = self.$node.closest('.type-content').find('.detected-object-labels');
-                        var $allDetectedObjectLabels = $allDetectedObjects.find('.detected-object-tag .label-info');
-                        var $parentSpan = $('<span>').addClass('detected-object-tag');
+                        var $allDetectedObjects = self.$node.closest('.type-content').find('.detected-object-labels'),
+                            $allDetectedObjectLabels = $allDetectedObjects.find('.detected-object-tag .label-info'),
+                            $parentSpan = $('<span>').addClass('detected-object-tag'),
+                            classes = $allDetectedObjectLabels.attr('class');
 
-                        var classes = $allDetectedObjectLabels.attr('class');
                         if (!classes) {
                             classes = 'label-info detected-object'
                         }
-                        $tag = $("<a>").addClass(classes + ' label resolved entity').attr("href", "#").text(data.title);
+                        $tag = $('<a>').addClass(classes + ' label resolved entity').attr('href', '#').text(data.title);
 
                         var added = false;
 
                         $parentSpan.append($tag);
 
-                        $allDetectedObjectLabels.each(function () {
-                            if (parseFloat($(this).data("info").x1) > data.x1) {
+                        $allDetectedObjectLabels.each(function() {
+                            if (parseFloat($(this).data('info').x1) > data.x1) {
                                 $tag.parent().insertBefore($(this).parent())
                                 added = true;
                                 return false;
@@ -311,18 +326,21 @@ define([
                 });
         };
 
-        this.unresolveDetectedObject = function (parameters) {
+        this.unresolveDetectedObject = function(parameters) {
             var self = this;
             this.vertexService.unresolveDetectedObject(parameters)
                 .fail(this.requestFailure.bind(this))
-                .done(function (data) {
-                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused');
-                    var $tag = $focused.find('.label-info');
+                .done(function(data) {
+                    var $focused = self.$node.closest('.type-content').find('.detected-object-labels .focused'),
+                        $tag = $focused.find('.label-info');
 
                     if (data.deleteTag) {
                         $focused.remove();
                     } else {
-                        $tag.text(data.detectedObject.classifierConcept).removeAttr('data-info').data('info', data.detectedObject).removeClass();
+                        $tag.text(data.detectedObject.classifierConcept)
+                            .removeAttr('data-info')
+                            .data('info', data.detectedObject)
+                            .removeClass();
                         $tag.addClass('label-info label detected-object opens-dropdown');
                     }
 
@@ -336,18 +354,18 @@ define([
                 });
         };
 
-        this.onConceptChanged = function (event) {
+        this.onConceptChanged = function(event) {
             var select = $(event.target);
 
             this.updateConceptLabel(select.val());
         };
 
-        this.onVisibilityChange = function (event, data) {
+        this.onVisibilityChange = function(event, data) {
             this.visibilitySource = data.value;
             // TODO: inspect valid
         };
 
-        this.updateConceptLabel = function (conceptId, vertex) {
+        this.updateConceptLabel = function(conceptId, vertex) {
             if (conceptId === '') {
                 this.select('actionButtonSelector').attr('disabled', true);
                 this.updateResolveImageIcon();
@@ -362,7 +380,7 @@ define([
             }
         };
 
-        this.setupContent = function () {
+        this.setupContent = function() {
 
             var self = this,
                 vertex = this.$node,
@@ -386,9 +404,9 @@ define([
                     // spans
                     sign = this.promoted.text();
 
-                    setTimeout(function () {
+                    _.defer(function() {
                         self.trigger(document, 'resumeSelectionChanges.detail');
-                    }, 10);
+                    });
                 }
 
                 if (existingEntity && mentionVertex.hasClass('resolved')) {
@@ -417,7 +435,7 @@ define([
             if (objectSign) {
                 var input = this.select('objectSignSelector');
                 input.attr('disabled', true);
-                this.runQuery(objectSign).done(function () {
+                this.runQuery(objectSign).done(function() {
                     input.removeAttr('disabled');
                 });
             }
@@ -426,7 +444,7 @@ define([
             this.startSign = objectSign;
         };
 
-        this.updateResolveImageIcon = function (vertex, conceptId) {
+        this.updateResolveImageIcon = function(vertex, conceptId) {
             var self = this,
                 info = $(self.attr.mentionNode).data('info') ||
                     (this.attr.existing ? this.attr.dataInfo : '');
@@ -435,7 +453,7 @@ define([
             }
 
             if (!vertex && (info || conceptId)) {
-                self.deferredConcepts.done(function (allConcepts) {
+                self.deferredConcepts.done(function(allConcepts) {
                     var type = info ?
                             info['http://lumify.io#conceptType'] : conceptId,
                         concept = self.conceptForConceptType(type, allConcepts);
@@ -463,11 +481,11 @@ define([
             }
         };
 
-        this.conceptForConceptType = function (conceptType, allConcepts) {
+        this.conceptForConceptType = function(conceptType, allConcepts) {
             return _.findWhere(allConcepts, { id: conceptType });
         };
 
-        this.registerEvents = function () {
+        this.registerEvents = function() {
 
             this.on('visibilitychange', this.onVisibilityChange);
 
@@ -479,7 +497,7 @@ define([
                 entityConceptMenuSelector: this.onEntityConceptSelected,
                 actionButtonSelector: this.onButtonClicked,
                 objectSignSelector: this.showTypeahead,
-                helpSelector: function () {
+                helpSelector: function() {
                     this.select('objectSignSelector').focus();
                     this.showTypeahead();
                 }
@@ -490,19 +508,19 @@ define([
                 conceptSelector: this.onKeyPress
             });
 
-            this.on('opened', function () {
+            this.on('opened', function() {
                 this.loadConcepts()
                     .done(this.setupObjectTypeAhead.bind(this))
-                    .done(function () {
+                    .done(function() {
                         this.deferredConcepts.resolve(this.allConcepts);
                     }.bind(this));
             });
         };
 
-        this.loadConcepts = function () {
+        this.loadConcepts = function() {
             var self = this;
             self.allConcepts = [];
-            return self.ontologyService.concepts().done(function (concepts) {
+            return self.ontologyService.concepts().done(function(concepts) {
                 var vertexInfo;
 
                 if (self.attr.detectedObject) {
@@ -516,7 +534,16 @@ define([
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,
-                    selectedConceptId: (vertexInfo && (vertexInfo['http://lumify.io#conceptType'] || (vertexInfo.properties && vertexInfo.properties['http://lumify.io#conceptType'].value))) || ''
+                    selectedConceptId: (
+                        vertexInfo &&
+                        (
+                            vertexInfo['http://lumify.io#conceptType'] ||
+                            (
+                                vertexInfo.properties &&
+                                vertexInfo.properties['http://lumify.io#conceptType'].value
+                            )
+                        )
+                    ) || ''
                 }));
 
                 if (self.select('conceptSelector').val() === '') {
@@ -525,8 +552,7 @@ define([
             });
         };
 
-
-        this.runQuery = function (query) {
+        this.runQuery = function(query) {
             query = $.trim(query || '');
             if (!this.queryCache) this.queryCache = {};
             if (this.queryCache[query]) return this.queryCache[query];
@@ -536,51 +562,49 @@ define([
             badge.addClass('loading');
 
             this.queryCache[query] = this.vertexService.graphVertexSearch(query)
-                .then(function (response) {
+                .then(function(response) {
                     badge.removeClass('loading');
-                    return _.filter(response.vertices, function (v) {
-                        return ~v.prop('title').toLowerCase().indexOf(query.toLowerCase());
+                    return _.filter(response.vertices, function(v) {
+                        return ~formatters.vertex.prop(v, 'title').toLowerCase().indexOf(query.toLowerCase());
                     });
                 }).done(this.updateQueryCountBadge.bind(this));
 
             return this.queryCache[query];
         };
 
-        this.updateQueryCountBadge = function (vertices) {
+        this.updateQueryCountBadge = function(vertices) {
             this.$node.find('.badge')
                 .attr('title', vertices.length + ' match' + (vertices.length === 1 ? '' : 'es') + ' found')
                 .text(vertices.length);
         };
 
-        this.setupObjectTypeAhead = function () {
+        this.setupObjectTypeAhead = function() {
             var self = this,
                 items = [],
                 input = this.select('objectSignSelector'),
                 createNewText = 'Resolve as new entity';
 
-
-            self.ontologyService.properties().done(function (ontologyProperties) {
-                var debouncedQuery = _.debounce(function (instance, query, callback) {
-                        self.runQuery(query).done(function (entities) {
-                            var all = _.map(entities, function (e) {
+            self.ontologyService.properties().done(function(ontologyProperties) {
+                var debouncedQuery = _.debounce(function(instance, query, callback) {
+                        self.runQuery(query).done(function(entities) {
+                            var all = _.map(entities, function(e) {
                                 return $.extend({
-                                    toLowerCase: function () {
-                                        return e.prop('title').toLowerCase();
+                                    toLowerCase: function() {
+                                        return formatters.vertex.prop(e, 'title').toLowerCase();
                                     },
-                                    toString: function () {
+                                    toString: function() {
                                         return e.id;
                                     },
-                                    indexOf: function (s) {
-                                        return e.prop('title').indexOf(s);
+                                    indexOf: function(s) {
+                                        return formatters.vertex.prop(e, 'title').indexOf(s);
                                     }
                                 }, e);
                             });
 
-
                             items = $.extend(true, [], items, _.indexBy(all, 'id'));
                             items[createNewText] = [query];
 
-                            self.sourceCache[query] = function (aCallback) {
+                            self.sourceCache[query] = function(aCallback) {
                                 var list = [createNewText].concat(all);
                                 aCallback(list);
 
@@ -601,14 +625,15 @@ define([
                     }, 500),
                     field = input.typeahead({
                         items: 50,
-                        source: function (query, callback) {
+                        source: function(query, callback) {
 
                             if (self.lastQuery && query !== self.lastQuery) {
                                 self.reset();
                             }
 
-                            if (!self.sourceCache) self.sourceCache = {};
-                            else if (self.sourceCache[query]) {
+                            if (!self.sourceCache) {
+                                self.sourceCache = {};
+                            } else if (self.sourceCache[query]) {
                                 self.sourceCache[query](callback);
                                 return;
                             }
@@ -616,15 +641,15 @@ define([
                             self.lastQuery = query;
                             debouncedQuery(this, query, callback);
                         },
-                        matcher: function (item) {
+                        matcher: function(item) {
                             if (item === createNewText) return true;
                             return true;
                         },
-                        sorter: function (items) {
+                        sorter: function(items) {
                             var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
                                 index;
 
-                            sorted.forEach(function (item, i) {
+                            sorted.forEach(function(item, i) {
                                 if (item === createNewText) {
                                     index = i;
                                     return false;
@@ -637,7 +662,7 @@ define([
 
                             return sorted;
                         },
-                        updater: function (item) {
+                        updater: function(item) {
                             var matchingItem = items[item],
                                 graphVertexId = '',
                                 label = item;
@@ -648,7 +673,9 @@ define([
 
                             if (matchingItem && matchingItem.length) {
                                 graphVertexId = item;
-                                label = matchingItem[0].properties ? matchingItem[0].prop('title') : matchingItem;
+                                label = matchingItem[0].properties ? 
+                                    formatters.vertex.prop(matchingItem[0], 'title') :
+                                    matchingItem;
 
                                 if (graphVertexId == createNewText) {
                                     graphVertexId = '';
@@ -664,33 +691,41 @@ define([
                             self.graphVertexChanged(graphVertexId, matchingItem);
                             return label;
                         },
-                        highlighter: function (item) {
+                        highlighter: function(item) {
 
                             var html = (item === createNewText) ?
-                                    item : Object.getPrototypeOf(this).highlighter.apply(this, [item.prop('title')]),
+                                    item : 
+                                    Object.getPrototypeOf(this).highlighter.apply(
+                                        this,
+                                        [formatters.vertex.prop(item, 'title')]
+                                    ),
                                 icon = '',
-                                concept = _.find(self.allConcepts, function (c) {
-                                    return item.properties && c.id === item.properties['http://lumify.io#conceptType'].value;
+                                concept = _.find(self.allConcepts, function(c) {
+                                    return item.properties && c.id === 
+                                        item.properties['http://lumify.io#conceptType'].value;
                                 });
 
                             if (item.properties) {
-                                icon = item['http://lumify.io#glyphIcon'] || (item.properties['http://lumify.io#glyphIcon'] && item.properties['http://lumify.io#glyphIcon'].value) || concept.glyphIconHref;
+                                icon = item['http://lumify.io#glyphIcon'] ||
+                                    (item.properties['http://lumify.io#glyphIcon'] &&
+                                     item.properties['http://lumify.io#glyphIcon'].value) ||
+                                     concept.glyphIconHref;
                             }
                             return entityTemplate({
                                 html: html,
                                 item: item,
-                                properties: item.properties && Properties.filterPropertiesForDisplay(item.properties, ontologyProperties),
+                                properties: item.properties &&
+                                    Properties.filterPropertiesForDisplay(item.properties, ontologyProperties),
                                 iconSrc: icon,
                                 concept: concept
                             });
                         }
-                    });
-
-                var typeahead = field.data('typeahead'),
+                    }),
+                    typeahead = field.data('typeahead'),
                     show = typeahead.show,
                     hide = typeahead.hide;
 
-                typeahead.$menu.on('mousewheel DOMMouseScroll', function (e) {
+                typeahead.$menu.on('mousewheel DOMMouseScroll', function(e) {
                     var delta = e.wheelDelta || (e.originalEvent && e.originalEvent.wheelDelta) || -e.detail,
                         bottomOverflow = this.scrollTop + $(this).outerHeight() - this.scrollHeight >= 0,
                         topOverflow = this.scrollTop <= 0;
@@ -700,12 +735,12 @@ define([
                     }
                 });
 
-                typeahead.hide = function () {
+                typeahead.hide = function() {
                     hide.apply(typeahead);
                     typeahead.$menu.css('max-height', 'none');
                 };
 
-                typeahead.show = function () {
+                typeahead.show = function() {
                     show.apply(typeahead);
 
                     if (~typeahead.$menu.css('max-height').indexOf('px')) {
@@ -734,10 +769,6 @@ define([
 
                         if (bottomSpace < 0) {
                             var scrollNeeded = scrollTop + Math.abs(bottomSpace) + padding;
-                            if (scrollNeeded > scrollTotalHeight) {
-                                // TODO: add padding or grow upwards?
-                            }
-
                             scrollParent.animate({
                                 scrollTop: scrollNeeded
                             });
@@ -747,7 +778,7 @@ define([
             });
         };
 
-        this.highlightTerm = function (data) {
+        this.highlightTerm = function(data) {
             var mentionVertex = $(this.attr.mentionNode),
                 updatingEntity = this.attr.existing;
 
@@ -766,13 +797,13 @@ define([
             }
         };
 
-        this.promoteSelectionToSpan = function () {
+        this.promoteSelectionToSpan = function() {
             var textVertex = this.node,
                 range = this.attr.selection.range,
                 el,
-                tempTextNode;
+                tempTextNode,
+                span = document.createElement('span');
 
-            var span = document.createElement('span');
             span.className = 'entity focused';
 
             var newRange = document.createRange();
@@ -780,7 +811,7 @@ define([
             newRange.setEnd(range.endContainer, range.endOffset);
 
             var r = range.cloneRange();
-            r.selectNodeContents($(".detail-pane .text").get(0));
+            r.selectNodeContents($('.detail-pane .text').get(0));
             r.setEnd(range.startContainer, range.startOffset);
             var l = r.toString().length;
 
@@ -822,7 +853,7 @@ define([
             return $(span).find('.entity').addClass('focused').end();
         };
 
-        this.demoteSpanToTextVertex = function (vertex) {
+        this.demoteSpanToTextVertex = function(vertex) {
 
             while (vertex[0].childNodes.length) {
                 $(vertex[0].childNodes[0]).removeClass('focused');

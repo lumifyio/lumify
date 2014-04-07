@@ -1,7 +1,8 @@
 
 define([
     'service/vertex',
-], function(VertexService) {
+    'util/formatters'
+], function(VertexService, formatters) {
 
     return withVertexCache;
 
@@ -103,12 +104,12 @@ define([
 
             v = this.vertex(vertexId);
             if (v) {
-                vertexTitle = v.prop('title');
+                vertexTitle = formatters.vertex.prop(v, 'title');
                 return deferredTitle.resolve(vertexTitle);
             }
 
             this.refresh(vertexId).done(function(vertex) {
-                vertexTitle = vertex.prop('title');
+                vertexTitle = formatters.vertex.prop(vertex, 'title');
                 deferredTitle.resolve(vertexTitle);
             });
 
@@ -116,8 +117,8 @@ define([
         };
 
         this.updateCacheWithVertex = function(vertex, options) {
-            var id = vertex.id;
-            var cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });
+            var id = vertex.id,
+                cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });
 
             if (options && options.deletedProperty && cache.properties) {
                 delete cache.properties[options.deletedProperty]
@@ -151,45 +152,30 @@ define([
             ];
             if (cache.concept) {
                 setPreviewsForVertex(cache, this.workspaceId);
-            } else console.error('Unable to attach concept to vertex', cache.properties['http://lumify.io#conceptType']);
+            } else {
+                console.error('Unable to attach concept to vertex', cache.properties['http://lumify.io#conceptType']);
+            }
 
             cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
             cache.detectedObjects = cache.detectedObjects || [];
 
             $.extend(true, vertex, cache);
 
-            this.addProperties(cache);
-            this.addProperties(vertex);
-
             return cache;
         };
-
-        this.prop = function(vertex, name, defaultValue) {
-            var p = vertex.properties;
-            return (p && p[name] && !_.isUndefined(p[name].value)) ? 
-                p[name].value :
-                (defaultValue || ('No ' + name + ' available'));
-        };
-
-        this.addProperties = function(obj) {
-            if (!('prop' in obj)) {
-                Object.defineProperty(obj, 'prop', {
-                    value: this.prop.bind(null, obj)
-                });
-            }
-        }
 
         function setPreviewsForVertex(vertex, currentWorkspace) {
             var params = {
                     workspaceId: currentWorkspace,
                     graphVertexId: vertex.id
                 },
-                artifactUrl = _.template("/artifact/{ type }?" + $.param(params));
+                artifactUrl = _.template('/artifact/{ type }?' + $.param(params));
 
             vertex.imageSrcIsFromConcept = false;
 
             if (vertex.properties['http://lumify.io#glyphIcon']) {
-                vertex.imageSrc = vertex.properties['http://lumify.io#glyphIcon'].value + '?' + $.param({workspaceId:currentWorkspace});
+                vertex.imageSrc = vertex.properties['http://lumify.io#glyphIcon'].value + '?' + 
+                    $.param({workspaceId: currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 

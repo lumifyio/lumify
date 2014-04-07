@@ -8,10 +8,10 @@ define([
 ], function(defineComponent, template, formatters, WorkspaceService, appData) {
     'use strict';
 
-    var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
-    var MENUBAR_WIDTH = 30;
-    var UPDATE_WORKSPACE_DIFF_SECONDS = 3;
-    var SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
+    var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
+        MENUBAR_WIDTH = 30,
+        UPDATE_WORKSPACE_DIFF_SECONDS = 3,
+        SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
 
     return defineComponent(WorkspaceOverlay);
 

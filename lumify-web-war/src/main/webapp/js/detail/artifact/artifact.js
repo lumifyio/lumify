@@ -12,6 +12,7 @@ define([
     'tpl!./transcriptEntry',
     'tpl!util/alert',
     'util/range',
+    'util/formatters',
     'service/ontology',
     'service/vertex',
     'data'
@@ -27,6 +28,7 @@ define([
     transcriptEntryTemplate,
     alertTemplate,
     rangeUtils,
+    formatters,
     OntologyService,
     VertexService,
     appData) {
@@ -95,8 +97,8 @@ define([
                     offsets = [];
                 
                 [
-                    {el:$anchor, offset:selection.anchorOffset}, 
-                    {el:$focus, offset:selection.focusOffset}
+                    {el: $anchor, offset: selection.anchorOffset}, 
+                    {el: $focus, offset: selection.focusOffset}
                 ].forEach(function(node) {
                     var offset = 
                         (node.el.parent('.entity').data('info') || {}).start || 
@@ -106,7 +108,9 @@ define([
                     offsets.push(offset + node.offset);
                 });
 
-                offsets = _.sortBy(offsets, function(a, b) { return a - b });
+                offsets = _.sortBy(offsets, function(a, b) {
+                    return a - b 
+                });
 
                 var range = selection.getRangeAt(0),
                     output = {},
@@ -125,7 +129,7 @@ define([
                     snippet: contextHighlight,
                     vertexId: this.attr.data.id,
                     text: selection.toString(),
-                    vertexTitle: this.attr.data.prop('title')
+                    vertexTitle: formatters.vertex.prop(this.attr.data, 'title')
                 });
             }
         };
@@ -134,7 +138,9 @@ define([
             var matching = _.findWhere(data.vertices, { id: this.attr.data.id });
 
             if (matching) {
-                this.select('titleSelector').html( matching.prop('title') );
+                this.select('titleSelector').html(
+                    formatters.vertex.prop(matching, 'title')
+                );
             }
         };
 
@@ -155,7 +161,7 @@ define([
                 this.videoDuration = ('_videoDuration' in properties) ? properties._videoDuration.value : 0;
             }
 
-            vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b){
+            vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b) {
                 var aX = a.x1, bX = b.x1;
                 return aX - bX;
             });
@@ -163,7 +169,8 @@ define([
             this.$node.html(template({
                 vertex: vertex,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
-                auditsButton: this.auditsButton()
+                auditsButton: this.auditsButton(),
+                formatters: formatters
             }));
 
             this.select('detectedObjectLabelsSelector').show();
@@ -176,7 +183,9 @@ define([
                     if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
                         self.select('textSelector').html(alertTemplate({ error: 'No Text Available' }));
                     } else {
-                        self.select('textSelector').html(!artifactText ? '' : artifactText.replace(/[\n]+/g, "<br><br>\n"));
+                        self.select('textSelector').html(!artifactText ?
+                             '' :
+                             artifactText.replace(/[\n]+/g, '<br><br>\n'));
                     }
                     self.updateEntityAndArtifactDraggables();
                     if (self[displayType + 'Setup']) {
@@ -191,16 +200,18 @@ define([
         };
 
         this.onScrubberFrameChange = function(evt, data) {
-            var frameIndex = data.index;
-            var numberOfFrames = data.numberOfFrames;
-            var time = (this.videoDuration / numberOfFrames) * frameIndex;
+            var frameIndex = data.index,
+                numberOfFrames = data.numberOfFrames,
+                time = (this.videoDuration / numberOfFrames) * frameIndex;
+
             this.updateCurrentTranscript(time);
         };
 
         this.updateCurrentTranscript = function(time) {
-            var transcriptEntry = this.findTranscriptEntryForTime(time);
-            var html = '';
-            if(transcriptEntry) {
+            var transcriptEntry = this.findTranscriptEntryForTime(time),
+                html = '';
+
+            if (transcriptEntry) {
                 html = transcriptEntryTemplate({
                     transcriptEntry: transcriptEntry,
                     formatTimeOffset: this.formatTimeOffset
@@ -214,7 +225,7 @@ define([
                 return null;
             }
             var bestMatch = this.videoTranscript.entries[0];
-            for(var i = 0; i < this.videoTranscript.entries.length; i++) {
+            for (var i = 0; i < this.videoTranscript.entries.length; i++) {
                 if(this.videoTranscript.entries[i].start <= time) {
                     bestMatch = this.videoTranscript.entries[i];
                 }
@@ -285,8 +296,8 @@ define([
             var self = this,
                 vertex = appData.vertex(this.attr.data.id),
                 detectedObject,
-                width = parseFloat(data.x2)-parseFloat(data.x1),
-                height = parseFloat(data.y2)-parseFloat(data.y1);
+                width = parseFloat(data.x2) - parseFloat(data.x1),
+                height = parseFloat(data.y2) - parseFloat(data.y1);
 
             if (vertex.detectedObjects) {
                 detectedObject = $.extend(true, {}, _.find(vertex.detectedObjects, function(obj) {
@@ -355,18 +366,18 @@ define([
         };
 
         this.imageSetup = function(vertex) {
-            var self = this;
-            var data = {
-                src: vertex.imageRawSrc,
-                id: vertex.id
-            };
+            var self = this,
+                data = {
+                    src: vertex.imageRawSrc,
+                    id: vertex.id
+                };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });
-            this.before('teardown', function (){
+            this.before('teardown', function() {
                 self.select('imagePreviewSelector').teardownComponent(Image);
             });
         };
 
-        this.showForm = function (dataInfo, artifactInfo, $target){
+        this.showForm = function(dataInfo, artifactInfo, $target) {
             this.$node.find('.underneath').teardownComponent(TermForm)
             var root = $('<div class="underneath">')
                 .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
