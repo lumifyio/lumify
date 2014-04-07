@@ -429,7 +429,7 @@ define([
         this.updateResolveImageIcon = function (vertex, conceptId) {
             var self = this,
                 info = $(self.attr.mentionNode).data('info') ||
-                    this.attr.existing ? this.attr.dataInfo : '';
+                    (this.attr.existing ? this.attr.dataInfo : '');
             if (vertex) {
                 $.extend(vertex, {}, vertex.properties);
             }
