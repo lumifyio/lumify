@@ -168,7 +168,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey((String) rowKeyProperty.getValue());
                 TermMentionRowKey analyzedRowKey = new TermMentionRowKey(termMentionRowKey.getGraphVertexId(), termMentionRowKey.getStartOffset(), termMentionRowKey.getEndOffset());
                 TermMentionModel analyzedTermMention = termMentionRepository.findByRowKey(analyzedRowKey.toString(), modelUserContext);
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getGraphVertexId(), termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
 

@@ -251,26 +251,6 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
             modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
-
-        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemModelUser);
-            if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), systemModelUser);
-                if (detectedObjectModel == null) {
-                    LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
-                } else {
-                    modelSession.alterColumnsVisibility(detectedObjectModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-
-                    Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-                    JSONObject artifactVertexWithDetectedObjects = GraphUtil.toJsonVertex(artifactVertex, workspaceId);
-                    artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemModelUser, authorizations, workspaceId));
-
-                    Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
-                }
-            } else {
-                modelSession.alterColumnsVisibility(termMentionModel, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
-            }
-        }
     }
 
     private void publishProperty(Element element, String action, String key, String name, String workspaceId, User user) {
@@ -349,6 +329,26 @@ public class WorkspacePublish extends BaseRequestHandler {
         ModelUserContext systemUser = userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
             modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+        }
+
+        for (Property rowKeyProperty : destVertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
+            if (termMentionModel == null) {
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), systemUser);
+                if (detectedObjectModel == null) {
+                    LOGGER.warn("No term mention or detected objects found for vertex, %s", sourceVertex.getId());
+                } else {
+                    modelSession.alterColumnsVisibility(detectedObjectModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+
+                    Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
+                    JSONObject artifactVertexWithDetectedObjects = GraphUtil.toJsonVertex(artifactVertex, workspaceId);
+                    artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemUser, authorizations, workspaceId));
+
+                    Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
+                }
+            } else {
+                modelSession.alterColumnsVisibility(termMentionModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+            }
         }
     }
 }

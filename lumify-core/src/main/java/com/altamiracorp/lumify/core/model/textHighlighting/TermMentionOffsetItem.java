@@ -44,6 +44,11 @@ public class TermMentionOffsetItem extends OffsetItem {
         return termMention.getMetadata().getGraphVertexId();
     }
 
+    @Override
+    public String getEdgeId() {
+        return termMention.getMetadata().getEdgeId();
+    }
+
     public String getTitle() {
         return termMention.getMetadata().getSign();
     }

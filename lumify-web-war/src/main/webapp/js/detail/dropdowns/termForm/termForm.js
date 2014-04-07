@@ -195,6 +195,7 @@ define([
 
             if (this.currentGraphVertexId) {
                 parameters.graphVertexId = this.currentGraphVertexId;
+                parameters.edgeId = dataInfo.edgeId;
             }
 
             _.defer(this.buttonLoading.bind(this));

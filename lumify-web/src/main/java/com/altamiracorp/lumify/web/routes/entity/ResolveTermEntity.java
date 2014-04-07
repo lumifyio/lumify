@@ -91,7 +91,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, id.toString());
 
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
@@ -115,7 +114,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
         TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = vertexMutation.save();
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
@@ -133,14 +131,18 @@ public class ResolveTermEntity extends BaseRequestHandler {
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
-
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
                 .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
-                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility());
+                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility())
+                .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
+
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.save();
 
         this.graph.flush();
 
