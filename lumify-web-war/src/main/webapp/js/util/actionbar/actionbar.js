@@ -79,11 +79,7 @@ define([
                 width = this.$node.width(),
                 height = this.$node.height();
 
-            this.$tip.css({
-                left: offset.left + width / 2 - this.$tip.width() / 2, 
-                top: offset.top + height,
-                opacity: offset.top < TOP_HIDE_THRESHOLD ? '0' : '1'
-            });
+            this.updateTipPositionWithDomElement(this.node, 'center');
         };
 
         this.nodeInitializer = function() {
@@ -99,22 +95,7 @@ define([
                 range = selection.rangeCount > 0 && selection.getRangeAt(0);
 
             if (range) {
-                var rects = range.getClientRects(),
-                    box;
-
-                if (rects.length) {
-                    box = _.sortBy(rects, function(r) {
-                        return r.top * -1;
-                    })[0];
-                } else {
-                    box = range.getBoundingClientRect();
-                }
-
-                this.$tip.css({
-                    left: box.left + box.width - this.$tip.width() / 2,
-                    top: box.top + box.height,
-                    opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'
-                });
+                this.updateTipPositionWithDomElement(range);
             } else this.teardown();
         };
 
@@ -135,6 +116,26 @@ define([
             this.scrollParent = $(el).scrollParent()
                 .off('.actionbar')
                 .on('scroll.actionbar', this.updatePosition);
-        }
+        };
+
+        this.updateTipPositionWithDomElement = function(el, alignment) {
+            var rects = el.getClientRects();
+
+            if (rects.length) {
+                box = _.sortBy(rects, function(r) {
+                    return r.top * -1;
+                })[0];
+            } else {
+                box = el.getBoundingClientRect();
+            }
+
+            this.$tip.css({
+                left: (alignment === 'center' && rects.length === 1) ?
+                    box.left + box.width / 2 - this.$tip.width() / 2 : 
+                    box.left + box.width - this.$tip.width() / 2,
+                top: box.top + box.height,
+                opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'
+            });
+        };
     }
 });
