@@ -445,7 +445,7 @@ define([
 
                 var self = this,
                     added = [],
-                    existing = [];
+                    existing = [],
                     addingVerticesRelatedTo = !!(data.options && data.options.addingVerticesRelatedTo);
 
 
