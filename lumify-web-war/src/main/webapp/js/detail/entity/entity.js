@@ -37,6 +37,10 @@ define([
 
     return defineComponent(Entity, withTypeContent, withHighlighting);
 
+    function defaultSort(x,y) {
+        return x === y ? 0 : x < y ? -1 : 1;
+    }
+
     function Entity(withDropdown) {
 
         this.defaultAttrs({
@@ -163,6 +167,25 @@ define([
                 }),
                 sortedKeys = Object.keys(groupedByType);
 
+            sortedKeys.forEach(function(section) {
+                if (section !== 'references') {
+                    groupedByType[section].sort(function(a,b) {
+                        var direction = defaultSort(
+                            a.vertex.id === a.vertices.src.id ? 0 : 1,
+                            b.vertex.id === b.vertices.src.id ? 0 : 1
+                        )
+                        if (direction === 0) {
+                            return defaultSort(
+                                formatters.vertex.prop(a.vertex, 'title').toLowerCase(),
+                                formatters.vertex.prop(b.vertex, 'title').toLowerCase()
+                            );
+                        } else {
+                            return direction;
+                        }
+                    });
+                }
+            });
+
             sortedKeys.sort(function(a,b) {
 
                 // If in references group sort by the title
@@ -184,10 +207,6 @@ define([
                 }
 
                 return defaultSort(a, b);
-
-                function defaultSort(x,y) {
-                    return x === y ? 0 : x < y ? -1 : 1;
-                }
             });
 
             var $rels = self.select('relationshipsSelector');
