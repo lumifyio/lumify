@@ -128,11 +128,12 @@
     "disallowMultipleLineBreaks": true,
     "validateLineBreaks": "LF",
     "validateQuoteMarks": { "mark": "'", "escape": true },
+    "disallowMixedSpacesAndTabs": true,
     "disallowKeywordsOnNewLine": ["else"],
     "requireLineFeedAtFileEnd": true,
     "maximumLineLength": 120,
     "requireCapitalizedConstructors": true,
-    "safeContextKeyword": [ "self" ],
+    "safeContextKeyword": [ "self", "cy" ],
     "requireDotNotation": true,
     "disallowYodaConditions": true,
     "excludeFiles": ["node_modules/**", "libs/**"]

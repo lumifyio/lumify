@@ -21,12 +21,12 @@ module.exports = function(grunt) {
     },
 
     exec: {
-        build_openlayers: {
+        buildOpenlayers: {
             command: 'python build.py -c none full ../OpenLayers.debug.js',
             stdout: false,
             cwd: 'libs/openlayers/build'
         },
-        build_cytoscape: {
+        buildCytoscape: {
             command: 'make minify',
             stdout: false,
             cwd: 'libs/cytoscape.js'
@@ -36,18 +36,18 @@ module.exports = function(grunt) {
     less: {
         development: {
             files: {
-                "css/lumify.css": "less/lumify.less"
+                'css/lumify.css': 'less/lumify.less'
             },
             options: {
-                paths: ["less"]
+                paths: ['less']
             }
         },
         production: {
             files: {
-                "css/lumify.css": "less/lumify.less"
+                'css/lumify.css': 'less/lumify.less'
             },
             options: {
-                paths: ["less"],
+                paths: ['less'],
                 compress: true,
                 sourceMap: true,
                 sourceMapFilename: 'css/lumify.css.map',
@@ -122,17 +122,27 @@ module.exports = function(grunt) {
 
     jscs: {
         options: {
-            config: ".jscs.json"
+            config: '.jscs.json'
         },
-        all: { 
-            src: ["js/**/*.js", "!js/**/three-plugins/*.js", "!js/graph/3d/3djs/3djs/graph/layout/force-directed.js", "!js/require.config.js"],
+        development: { 
+            src: [
+                'js/**/*.js',
+                '!js/**/three-plugins/*.js',
+                '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/require.config.js'
+            ],
         },
         ci: {
-            src: ["js/**/*.js", "!js/**/three-plugins/*.js", "!js/graph/3d/3djs/3djs/graph/layout/force-directed.js", "!js/require.config.js"],
+            src: [
+                'js/**/*.js',
+                '!js/**/three-plugins/*.js',
+                '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
+                '!js/require.config.js'
+            ],
             options: {
                 force: true,
-                reporter: "checkstyle",
-                reporterOutput: "build/jscs-checkstyle.xml"
+                reporter: 'checkstyle',
+                reporterOutput: 'build/jscs-checkstyle.xml'
             }
         }
     },
@@ -144,9 +154,9 @@ module.exports = function(grunt) {
             },
             options: {
                 jshint: {
-                    "browser": true,
-                    "-W033": true,
-                    "-W040": true
+                    browser: true,
+                    '-W033': true,
+                    '-W040': true
                 }
             }
         },
@@ -155,7 +165,7 @@ module.exports = function(grunt) {
     watch: {
         options: {
             dateFormat: function(time) {
-                grunt.log.ok('The watch finished in ' + (time/1000).toFixed(2) + 's. Waiting...');
+                grunt.log.ok('The watch finished in ' + (time / 1000).toFixed(2) + 's. Waiting...');
             },
             spawn: false,
             interrupt: true
@@ -173,6 +183,10 @@ module.exports = function(grunt) {
         lint: {
             files: ['js/**/*.js'],
             tasks: ['jshint:development']
+        },
+        jscs: {
+            files: [ 'js/**/*.js' ],
+            tasks: ['jscs:development']
         }
     },
 
@@ -219,11 +233,6 @@ module.exports = function(grunt) {
     }
   });
 
-  // on watch events configure jshint:all to only run on changed file
-  grunt.event.on('watch', function(action, filepath) {
-      grunt.config('jshint.development.src', filepath);
-  });
-
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-concurrent');
@@ -234,34 +243,42 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-mocha-selenium');
   grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks("grunt-jscs-checker");
+  grunt.loadNpmTasks('grunt-jscs-checker');
   grunt.loadNpmTasks('grunt-plato');
 
-  grunt.registerTask('deps', 'Install Webapp Dependencies', ['bower:install', 'bower:prune', 'exec']);
-
-
-  grunt.registerTask('test:functional:chrome', 'Run JavaScript Functional Tests in Chrome', ['mochaSelenium:chrome']);
-  grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', ['mochaSelenium:firefox']);
-  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', ['test:functional:chrome', 'test:functional:firefox']);
-  grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', ['karma']);
-  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', ['jshint:ci', 'plato:ci', 'jscs:ci']);
-  grunt.registerTask('test', 'Run unit and functional tests', ['concurrent:tests'])
-
-  grunt.registerTask('watch:style', function() {
-      var config = {
-          options: { interrupt: true },
-          jscs: {
-              files: [ 'js/**/*.js' ],
-              tasks: ['jscs:passing']
+  // Speed up jscs and jshint by only checking changed files
+  // ensure we still ignore files though
+  var initialJscsSrc = grunt.config('jscs.development.src');
+  grunt.event.on('watch', function(action, filepath) {
+      grunt.config('jshint.development.src', filepath);
+      initialJscsSrc.forEach(function(path) {
+          if (path !== ('!' + filepath)) {
+              grunt.config('jscs.development.src', filepath);
           }
-      };
-
-      grunt.config('watch', config);
-      grunt.task.run('watch');
+      })
   });
 
-  grunt.registerTask('development', 'Build js/less for development', ['less:development', 'requirejs:development']);
-  grunt.registerTask('production', 'Build js/less for production', ['less:production', 'requirejs:production']);
+  grunt.registerTask('deps', 'Install Webapp Dependencies', 
+     ['bower:install', 'bower:prune', 'exec']);
 
-  grunt.registerTask('default', ['development']);
+  grunt.registerTask('test:functional:chrome', 'Run JavaScript Functional Tests in Chrome', 
+     ['mochaSelenium:chrome']);
+  grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', 
+     ['mochaSelenium:firefox']);
+  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', 
+     ['test:functional:chrome', 'test:functional:firefox']);
+
+  grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', 
+     ['karma']);
+  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', 
+     ['jshint:ci', 'plato:ci', 'jscs:ci']);
+  grunt.registerTask('style:development', 'Run JavaScript CodeStyle reports', 
+    ['jshint:development', 'jscs:development']);
+
+  grunt.registerTask('development', 'Build js/less for development', 
+     ['less:development', 'requirejs:development']);
+  grunt.registerTask('production', 'Build js/less for production', 
+     ['less:production', 'requirejs:production']);
+
+  grunt.registerTask('default', ['development', 'style:development', 'watch']);
 };

@@ -40,7 +40,7 @@ define([
         this.onWorkspaceItemClick = function(event) {
             var $target = $(event.target);
 
-			if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
+            if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
             if ($target.closest('.workspace-form').length) return;
 
             var li = $(event.target).closest('li'),
