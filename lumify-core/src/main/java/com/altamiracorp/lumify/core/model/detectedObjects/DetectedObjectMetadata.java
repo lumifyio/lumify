@@ -12,6 +12,7 @@ public class DetectedObjectMetadata extends ColumnFamily {
     public static final String Y1 = "y1";
     public static final String Y2 = "y2";
     public static final String RESOLVED_ID = "resolvedId";
+    public static final String EDGE_ID = "edgeId";
     public static final String PROCESS = "process";
 
     public DetectedObjectMetadata() {
@@ -70,6 +71,15 @@ public class DetectedObjectMetadata extends ColumnFamily {
 
     public String getResolvedId() {
         return Value.toString(get(RESOLVED_ID));
+    }
+
+    public DetectedObjectMetadata setEdgeId(Object edgeId, Visibility visibility) {
+        set(EDGE_ID, edgeId, visibility.getVisibilityString());
+        return this;
+    }
+
+    public String getEdgeId() {
+        return Value.toString(get(EDGE_ID));
     }
 
     public String getProcess () {

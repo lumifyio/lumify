@@ -38,7 +38,7 @@ define([], function() {
                 };
 
                 self[name + 'MarkReady'] = function(data) {
-                    if (!data) throw new Error("No object passed to " + name + "MarkReady");
+                    if (!data) throw new Error('No object passed to ' + name + 'MarkReady');
 
                     if (deferreds[name]) {
                         deferreds[name].resolve(data);

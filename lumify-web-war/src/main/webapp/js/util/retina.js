@@ -25,7 +25,7 @@ define([], function() {
             },
             updateRatio = function(newRatio) {
                 self.devicePixelRatio = newRatio;
-                $(document).trigger('devicePixelRatioChanged', { devicePixelRatio:newRatio });
+                $(document).trigger('devicePixelRatioChanged', { devicePixelRatio: newRatio });
             },
             observeRatioChanges = function(callback) {
                 if ('matchMedia' in window) {
@@ -33,12 +33,10 @@ define([], function() {
                 }
             };
 
-
         this.devicePixelRatio = getRatio();
         this.onRatioChange = function() {
             updateRatio(getRatio());
         };
-
 
         this.pixelsToPoints = function(position) {
             if(!position) {
@@ -78,7 +76,6 @@ define([], function() {
 
         observeRatioChanges(this.onRatioChange.bind(this));
     }
-
 
     return new Retina();
 });

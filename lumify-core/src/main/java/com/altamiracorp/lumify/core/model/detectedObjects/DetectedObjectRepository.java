@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
@@ -48,28 +49,31 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
         return findByRowStartsWith(vertexId + ":", modelUserContext);
     }
 
-    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object vertexId, String concept,
+    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId,  String concept,
                                                   double x1, double y1, double x2, double y2, boolean resolved,
                                                   String process, Visibility visibility, ModelUserContext modelUserContext) {
         DetectedObjectRowKey detectedObjectRowKey;
-        if (vertexId == null) {
+        if (edgeId == null) {
             detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2);
         } else {
-            detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2, vertexId);
+            detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2, edgeId);
         }
 
         DetectedObjectModel detectedObjectModel = findByRowKey(detectedObjectRowKey.toString(), modelUserContext);
         if (detectedObjectModel == null) {
             detectedObjectModel = new DetectedObjectModel(detectedObjectRowKey);
         }
-        detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility)
+        detectedObjectModel.getMetadata()
                 .setX1(x1, visibility)
                 .setY1(y1, visibility)
                 .setX2(x2, visibility)
                 .setY2(y2, visibility);
 
         if (resolved) {
-            detectedObjectModel.getMetadata().setResolvedId(vertexId, visibility);
+            detectedObjectModel.getMetadata().setResolvedId(graphVertexId, visibility);
+            detectedObjectModel.getMetadata().setEdgeId(edgeId, visibility);
+        } else {
+            detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility);
         }
 
         if (process != null) {
@@ -87,12 +91,22 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
             if (IterableUtils.count(findByRowStartsWith(model.getRowKey().toString(), modelUserContext)) > 1) {
                 continue;
             }
-            JSONObject detectedObjectModelJson = model.toJson();
-            if (model.getMetadata().getResolvedId() != null) {
-                detectedObjectModelJson.put("entityVertex", GraphUtil.toJson(graph.getVertex(model.getMetadata().getResolvedId(), authorizations), workspaceId));
-            }
-            detectedObjects.put(detectedObjectModelJson);
+            detectedObjects.put(toJSON(model, authorizations));
         }
         return detectedObjects;
+    }
+
+    public JSONObject toJSON (DetectedObjectModel detectedObjectModel, Authorizations authorizations) {
+        JSONObject object = detectedObjectModel.toJson();
+        if (detectedObjectModel.getMetadata().getResolvedId() != null) {
+            Vertex vertex = graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations);
+            object.put("title", vertex.getPropertyValue(LumifyProperties.TITLE.getKey()));
+            object.put("graphVertexId", vertex.getId());
+            object.put("edgeId", detectedObjectModel.getRowKey().getEdgeId());
+            object.put("http://lumify.io#conceptType", vertex.getPropertyValue("http://lumify.io#conceptType"));
+        }
+        object.put(LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString());
+
+        return object;
     }
 }

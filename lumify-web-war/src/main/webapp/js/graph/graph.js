@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'data',
@@ -100,8 +99,8 @@ define([
                         y: data.position.y - offset.top
                     }),
                     start = {
-                        x:renderedPosition.x,
-                        y:renderedPosition.y
+                        x: renderedPosition.x,
+                        y: renderedPosition.y
                     },
                     inc = GRID_LAYOUT_X_INCREMENT * cy.zoom() * retina.devicePixelRatio,
                     yinc = GRID_LAYOUT_Y_INCREMENT * cy.zoom() * retina.devicePixelRatio,
@@ -122,8 +121,8 @@ define([
                         if (cyA.length && !cyB.length) return 1;
                         if (cyB.length && !cyA.length) return -1;
 
-                        var titleA = a.prop('title').toLowerCase(),
-                            titleB = b.prop('title').toLowerCase();
+                        var titleA = formatters.vertex.prop(a, 'title').toLowerCase(),
+                            titleB = formatters.vertex.prop(b, 'title').toLowerCase();
 
                         return titleA < titleB ? -1 : titleB < titleA ? 1 : 0;
                     });
@@ -194,8 +193,11 @@ define([
                 });
 
                 if (toFitTo.length) {
-                    cy.zoomOutToFit(cytoscape.Collection(cy, toFitTo), $.extend({}, this.graphPadding), position, finished);
-                    animateToExisting(200);
+                    cy.zoomOutToFit(cytoscape.Collection(cy, toFitTo), {
+                        padding: this.paddingForZoomOut(),
+                        callback: finished
+                    });
+                    animateToExisting(400);
                 } else {
                     animateToExisting(0);
                     finished();
@@ -209,7 +211,7 @@ define([
 
                 function finished() {
                     cytoscape.Collection(cy, toRemove).remove();
-                    self.trigger('addVertices', { vertices:toAdd });
+                    self.trigger('addVertices', { vertices: toAdd });
                     cy.container().focus();
                 }
             });
@@ -220,23 +222,17 @@ define([
         };
 
         this.addVertices = function(vertices, opts) {
-            var options = $.extend({ fit:false, animate:false }, opts),
+            var self = this,
+                options = $.extend({ fit: false, animate: false }, opts),
                 addedVertices = [],
                 updatedVertices = [],
-                self = this;
-
-            if (self.addingRelatedVertices) {
-                _.defer(function() {
-                    self.trigger('displayInformation', { message: 'Related Entities Added'});
-                });
-                self.addingRelatedVertices = false;
-            }
-
-            var dragging = $('.ui-draggable-dragging:not(.clone-vertex)'),
+                dragging = $('.ui-draggable-dragging:not(.clone-vertex)'),
+                isVisible = this.$node.closest('.visible').length === 1,
                 cloned = null;
-            if (dragging.length && this.$node.closest('.visible').length === 1) {
+
+            if (dragging.length && isVisible) {
                 cloned = dragging.clone()
-                    .css({width:'auto'})
+                    .css({width: 'auto'})
                     .addClass('clone-vertex')
                     .insertAfter(dragging);
             }
@@ -258,11 +254,12 @@ define([
 
                 nextAvailablePosition.y += yInc;
 
-
                 var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
                     startX = nextAvailablePosition.x,
                     vertexIds = _.pluck(vertices, 'id'),
-                    existingNodes = currentNodes.filter(function(i, n) { return vertexIds.indexOf(fromCyId(n.id())) >= 0; }), 
+                    existingNodes = currentNodes.filter(function(i, n) {
+                        return vertexIds.indexOf(fromCyId(n.id())) >= 0; 
+                    }), 
                     customLayout = $.Deferred();
 
                 if (options.layout) {
@@ -309,7 +306,7 @@ define([
                             cyNodeData.position = retina.pointsToPixels(nextAvailablePosition);
 
                             nextAvailablePosition.x += xInc;
-                            if((nextAvailablePosition.x - startX) > maxWidth) {
+                            if ((nextAvailablePosition.x - startX) > maxWidth) {
                                 nextAvailablePosition.y += yInc;
                                 nextAvailablePosition.x = startX;
                             }
@@ -321,7 +318,6 @@ define([
                             }
                         }
 
-
                         if (needsAdding || needsUpdating) {
                             (needsAdding ? addedVertices : updatedVertices).push({
                                 id: vertex.id,
@@ -332,19 +328,33 @@ define([
                         cyNodes.push(cyNodeData);
                     });
 
-                    cy.add(cyNodes);
+                    var addedCyNodes = cy.add(cyNodes);
                     addedVertices.concat(updatedVertices).forEach(function(v) {
                         v.workspace.graphPosition = retina.pixelsToPoints(cy.getElementById(toCyId(v)).position());
                     });
 
-
                     if (options.fit && cy.nodes().length) {
+
                         _.defer(self.fit.bind(self));
+
+                    } else if (isVisible && options.addingVerticesRelatedTo) {
+                        var relatedToCyNode = cy.getElementById(self.toCyId(options.addingVerticesRelatedTo));
+                        if (relatedToCyNode.length) {
+                            var nodes = addedCyNodes.add(relatedToCyNode);
+
+                            _.defer(function() {
+                                cy.zoomOutToFit(nodes, {
+                                    padding: self.paddingForZoomOut()
+                                });
+                            })
+                        }
                     }
+
                     if (options.animate) {
                         if (cy.nodes().length) {
                             _.delay(function again() {
-                                container.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function(e) {
+                                container.on(TRANSITION_END, function(e) {
+                                    container.off(TRANSITION_END);
                                     container.removeClass('animatein animatestart');
                                 });
                                 container.addClass('animateinstart');
@@ -353,15 +363,15 @@ define([
                         } else container.removeClass('animatein animateinstart');
                     }
 
-                    if (existingNodes.length && cloned && cloned.length) {
-                        // Animate to something
-                    } else if (cloned) cloned.remove();
+                    if (cloned && !(existingNodes.length && cloned && cloned.length)) {
+                        cloned.remove();
+                    }
 
                     if (updatedVertices.length) {
-                        self.trigger(document, 'updateVertices', { vertices:updatedVertices });
+                        self.trigger(document, 'updateVertices', { vertices: updatedVertices });
                     } else if (addedVertices.length) {
                         container.focus();
-                        self.trigger(document, 'addVertices', { vertices:addedVertices });
+                        self.trigger(document, 'addVertices', { vertices: addedVertices });
                     }
 
                     self.hideLoading();
@@ -377,14 +387,21 @@ define([
             return '';
         };
 
-        this.updateCyNodeData = function (data, vertex) {
-            var truncatedTitle = appData.prop(vertex, 'title');
+        this.updateCyNodeData = function(data, vertex) {
+            var truncatedTitle = formatters.vertex.prop(vertex, 'title');
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
-                truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + "...";
+                truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + '...';
             }
 
-            var merged = $.extend(data, _.pick(vertex.properties, 'http://lumify.io#rowKey', 'http://lumify.io#conceptType', 'http://lumify.io#glyphIcon', 'title'));
+            var merged = $.extend(data, 
+                _.pick(vertex.properties,
+                   'http://lumify.io#rowKey',
+                   'http://lumify.io#conceptType',
+                   'http://lumify.io#glyphIcon',
+                   'title'
+                )
+            );
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
 
@@ -396,8 +413,9 @@ define([
 
                 if (data.vertices.length) {
                     cy.$( 
-                        data.vertices.map(function(v) { return '#' + toCyId(v); }).join(',')
-                    ).remove();
+                        data.vertices.map(function(v) {
+                        return '#' + toCyId(v); 
+                    }).join(',')).remove();
 
                     this.setWorkspaceDirty();
                     this.updateVertexSelections(cy);
@@ -439,7 +457,7 @@ define([
                         var cyNode = cy.nodes().filter('#' + toCyId(updatedVertex));
                         if (cyNode.length) {
                             if (updatedVertex.workspace.graphPosition) {
-                                cyNode.position( retina.pointsToPixels(updatedVertex.workspace.graphPosition) );
+                                cyNode.position(retina.pointsToPixels(updatedVertex.workspace.graphPosition));
                             }
 
                             var newData = self.updateCyNodeData(cyNode.data(), updatedVertex);
@@ -481,14 +499,14 @@ define([
             }
         };
 
-        this.onContextMenuSearchFor = function () {
+        this.onContextMenuSearchFor = function() {
             var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByEntity', { query : menu.data('title')});
+            this.trigger(document, 'searchByEntity', { query: menu.data('title')});
         };
 
-        this.onContextMenuSearchRelated = function () {
+        this.onContextMenuSearchRelated = function() {
             var menu = this.select('vertexContextMenuSelector');
-            this.trigger(document, 'searchByRelatedEntity', { vertexId : menu.data('currentVertexGraphVertexId')});
+            this.trigger(document, 'searchByRelatedEntity', { vertexId: menu.data('currentVertexGraphVertexId')});
         };
 
         this.onContextMenuZoom = function(level) {
@@ -497,26 +515,26 @@ define([
             });
         };
 
-        this.onContextMenuDeleteEdge = function () {
+        this.onContextMenuDeleteEdge = function() {
             var menu = this.select('edgeContextMenuSelector'),
                 edge = menu.data('edge').vertex;
 
-            this.trigger('deleteEdges', { edges:[edge] });
+            this.trigger('deleteEdges', { edges: [edge] });
         };
 
-        this.onEdgesDeleted = function (event, data) {
-            this.cytoscapeReady(function (cy) {
+        this.onEdgesDeleted = function(event, data) {
+            this.cytoscapeReady(function(cy) {
                 var edge = cy.getElementById(this.toCyId(data.edgeId));
                 edge.remove();
             });
         };
 
-        this.onContextMenuRemoveItem = function (){
+        this.onContextMenuRemoveItem = function() {
             var menu = this.select('vertexContextMenuSelector'),
                 vertex = {
                     id: menu.data('currentVertexGraphVertexId')
                 };
-            this.trigger(document,'deleteVertices', {vertices:[vertex] });
+            this.trigger(document,'deleteVertices', {vertices: [vertex] });
         };
 
         this.onContextMenuFitToWindow = function() {
@@ -544,7 +562,7 @@ define([
             }
 
             function _fit(cy) {
-                if( cy.elements().size() === 0 ){
+                if(cy.elements().size() === 0){
                     cy.reset();
                 } else if (self.graphPadding) {
                     // Temporarily adjust max zoom 
@@ -576,7 +594,6 @@ define([
                         edges = this.verticesForGraphIds(cy, vertexIds, 'edges')
                             .css('width', 1.5 * retina.devicePixelRatio)
                             .addClass('focus');
-
 
                     function animate(elements, options) {
                         if (!elements.hasClass('focus')) {
@@ -656,7 +673,9 @@ define([
 
                 paths.forEach(function(path, i) {
                     var vertexIds = _.chain(path)
-                                .filter(function(v) { return v.id !== sourceId && v.id !== targetId; })
+                                .filter(function(v) {
+                                    return v.id !== sourceId && v.id !== targetId; 
+                                })
                                 .pluck('id')
                                 .value(),
                         end = colorjs('#0088cc').shiftHue(i * (360 / paths.length)).toCSSHex(),
@@ -717,8 +736,9 @@ define([
         };
 
         this.onContextMenuLayout = function(layout, opts) {
-            var self = this;
-            var options = $.extend({onlySelected:false}, opts);
+            var self = this,
+                options = $.extend({onlySelected: false}, opts);
+
             this.cytoscapeReady(function(cy) {
 
                 var unselected;
@@ -728,7 +748,7 @@ define([
                 }
 
                 var opts = $.extend({
-                    name:layout,
+                    name: layout,
                     fit: false,
                     stop: function() {
                         if (unselected) {
@@ -742,7 +762,7 @@ define([
                                 }
                             };
                         });
-                        self.trigger(document, 'updateVertices', { vertices:updates });
+                        self.trigger(document, 'updateVertices', { vertices: updates });
                     }
                 }, LAYOUT_OPTIONS[layout] || {});
 
@@ -765,7 +785,7 @@ define([
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             } else if (event.cyTarget.group ('edges') == 'edges') {
                 menu = this.select ('edgeContextMenuSelector');
-                menu.data("edge", event.cyTarget.data());
+                menu.data('edge', event.cyTarget.data());
                 if (event.cy.nodes().filter(':selected').length > 1) {
                     return false;
                 }
@@ -791,7 +811,7 @@ define([
                 menu.find('.layout-multi').hide();
             }
 
-            this.toggleMenu({positionUsingEvent:event}, menu);
+            this.toggleMenu({positionUsingEvent: event}, menu);
         };
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {
@@ -833,7 +853,7 @@ define([
                 vertices = [vertices[0]];
             }
             if (vertices.length > 0){
-                this.trigger('selectObjects', { vertices:vertices });
+                this.trigger('selectObjects', { vertices: vertices });
             } else {
                 this.trigger('selectObjects');
             }
@@ -845,27 +865,25 @@ define([
                 var vertices = event.cyTarget.selected() ? cy.nodes().filter(':selected').not('.temp') : event.cyTarget;
                 this.grabbedVertices = vertices.each(function() {
                     var p = retina.pixelsToPoints(this.position());
-                    this.data('originalPosition', { x:p.x, y:p.y });
-                    this.data('freed', false );
+                    this.data('originalPosition', { x: p.x, y: p.y });
+                    this.data('freed', false);
                 });
             });
         };
 
         this.graphFree = function(event) {
             if (!this.isWorkspaceEditable) return;
-            var self = this;
-
-            // CY is sending multiple "free" events, prevent that...
-            var dup = true,
+            var self = this,
+                dup = true, // CY is sending multiple "free" events, prevent that...
                 vertices = this.grabbedVertices;
 
             if (!vertices) return;
             vertices.each(function(i, e) {
                 var p = retina.pixelsToPoints(this.position());
-                if ( !e.data('freed') ) {
+                if (!e.data('freed')) {
                     dup = false;
                 }
-                e.data('targetPosition', {x:p.x, y:p.y});
+                e.data('targetPosition', {x: p.x, y: p.y});
                 e.data('freed', true);
             });
 
@@ -894,8 +912,8 @@ define([
             // then submit to undo manager
             var originalPositions = [], targetPositions = [];
             vertices.each(function(i, e) {
-                originalPositions.push( e.data('originalPosition') );
-                targetPositions.push( e.data('targetPosition') );
+                originalPositions.push(e.data('originalPosition'));
+                targetPositions.push(e.data('targetPosition'));
             });
 
             var graphMovedVerticesData = {
@@ -945,11 +963,13 @@ define([
         this.hideLoading = function() {
             var loading = this.$node.find('.loading-graph');
             if (loading.length) {
-                loading.on('transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd', function(e) {
+                loading.on(TRANSITION_END, function(e) {
                     loading.remove();
                 });
                 loading.addClass('hidden');
-                setTimeout(function() { loading.remove(); }, 2000);
+                _.delay(function() {
+                    loading.remove(); 
+                }, 2000);
             }
         };
 
@@ -967,7 +987,6 @@ define([
                 this.checkEmptyGraph();
             } 
 
-
             this.previousWorkspace = workspace.workspaceId;
         };
 
@@ -981,7 +1000,7 @@ define([
 
                         if (sourceNode.length && destNode.length) {
                             relationshipEdges.push ({
-                                group: "edges",
+                                group: 'edges',
                                 data: {
                                     id: toCyId(relationship.id),
                                     source: sourceNode.id(),
@@ -1013,7 +1032,7 @@ define([
         this.onMenubarToggleDisplay = function(e, data) {
             if (data.name === 'graph' && this.$node.is(':visible')) {
                 this.cytoscapeReady(function(cy) {
-                    cy.renderer().notify({type:'viewport'});
+                    cy.renderer().notify({type: 'viewport'});
 
                     if (this.fitOnMenubarToggle) {
                         this.fit(cy);
@@ -1062,6 +1081,17 @@ define([
             });
         };
 
+        this.paddingForZoomOut = function() {
+            return _.tap(_.extend({}, this.graphPadding), function(p) {
+                var extra = 50;
+
+                p.t += extra;
+                p.b += extra;
+                p.l += extra;
+                // Right has the zoom controls overlap with it
+            });
+        }
+
         this.after('teardown', function() {
             this.$node.empty();
         });
@@ -1097,9 +1127,9 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Graph',
                 shortcuts: {
-                    '-': { fire:'zoomOut', desc:'Zoom out' },
-                    '=': { fire:'zoomIn', desc:'Zoom in' },
-                    'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
+                    '-': { fire: 'zoomOut', desc: 'Zoom out' },
+                    '=': { fire: 'zoomIn', desc: 'Zoom in' },
+                    'alt-f': { fire: 'fit', desc: 'Fit all objects on screen' },
                 }
             });
 
@@ -1111,7 +1141,7 @@ define([
             this.ontologyService.concepts().done(function(concepts) {
                 var templateData = {
                     firstLevelConcepts: concepts.entityConcept.children || [],
-                    pathHopOptions: ["2","3","4"]
+                    pathHopOptions: ['2','3','4']
                 };
 
                 // TODO: make context menus work better
@@ -1131,21 +1161,20 @@ define([
         this.initializeGraph = function(style) {
             var self = this;
 
-            cytoscape("renderer", "lumify", Renderer);
+            cytoscape('renderer', 'lumify', Renderer);
             cytoscape({
                 showOverlay: false,
                 minZoom: 1 / 4,
                 maxZoom: 4,
-                container: this.select('cytoscapeContainerSelector').css({height:'100%'})[0],
+                container: this.select('cytoscapeContainerSelector').css({height: '100%'})[0],
                 renderer: {
                     name: 'lumify'
                 },
                 style: style,
 
-                ready: function(){
-                    var cy = this;
-
-                    var container = cy.container(),
+                ready: function() {
+                    var cy = this,
+                        container = cy.container(),
                         options = cy.options();
 
                     cy.on({
@@ -1174,7 +1203,7 @@ define([
                                 zoom = cy.zoom(),
                                 w = self.$node.width(),
                                 h = self.$node.height(),
-                                pos = cy.renderer().projectIntoViewport(w/2 + self.$node.offset().left, h/2),
+                                pos = cy.renderer().projectIntoViewport(w / 2 + self.$node.offset().left, h / 2),
                                 unpos = [pos[0] * zoom + pan.x, pos[1] * zoom + pan.y];
 
                             cy.zoom({
@@ -1183,8 +1212,12 @@ define([
                             })
                         };
 
-                    self.on('zoomIn', function(e) { zoom(zoomFactor); });
-                    self.on('zoomOut', function(e) { zoom(-zoomFactor); });
+                    self.on('zoomIn', function(e) { 
+                        zoom(zoomFactor); 
+                    });
+                    self.on('zoomOut', function(e) {
+                        zoom(zoomFactor * -1); 
+                    });
                 },
                 done: function() {
                     self.cytoscapeMarkReady(this);
@@ -1200,4 +1233,3 @@ define([
     }
 
 });
-

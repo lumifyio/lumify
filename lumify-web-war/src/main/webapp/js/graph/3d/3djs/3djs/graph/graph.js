@@ -1,7 +1,7 @@
 
-define(['./node'], function( Node ) {
+define(['./node'], function(Node) {
 
-    function Graph( options ) {
+    function Graph(options) {
         this._options = options || {};
         this.nodeSet = {};
         this.nodes = [];
@@ -10,18 +10,18 @@ define(['./node'], function( Node ) {
 
     Graph.Node = Node;
 
-    Graph.prototype.node = function( idOrNode ) {
-        var node = (typeof idOrNode === 'string' ) ? 
+    Graph.prototype.node = function(idOrNode) {
+        var node = (typeof idOrNode === 'string') ? 
             this.nodeSet[ idOrNode ] : idOrNode;
         
         return node;
     };
 
-    Graph.prototype.addNode = function( idOrNode ) {
-        var node = (typeof idOrNode === 'string' || !idOrNode ) ? 
-            new Node( idOrNode ) : idOrNode;
+    Graph.prototype.addNode = function(idOrNode) {
+        var node = (typeof idOrNode === 'string' || !idOrNode) ? 
+            new Node(idOrNode) : idOrNode;
 
-        if ( this.nodeSet[ node.id ] === undefined ) {
+        if (this.nodeSet[ node.id ] === undefined) {
 
             this.nodeSet[ node.id ] = node;
             this.nodes.push(node);
@@ -30,7 +30,7 @@ define(['./node'], function( Node ) {
         return this;
     };
 
-    Graph.prototype.removeNode = function( nodeId ) {
+    Graph.prototype.removeNode = function(nodeId) {
         var node = this.nodeSet[nodeId];
 
         if (node) {
@@ -38,14 +38,14 @@ define(['./node'], function( Node ) {
         }
     };
 
-    Graph.prototype.connect = function( node, nodeToConnect, options ) {
-        node = this.node( node );
-        nodeToConnect = this.node( nodeToConnect );
+    Graph.prototype.connect = function(node, nodeToConnect, options) {
+        node = this.node(node);
+        nodeToConnect = this.node(nodeToConnect);
 
-        if ( node && nodeToConnect ) {
-            node.connect( nodeToConnect, options );
+        if (node && nodeToConnect) {
+            node.connect(nodeToConnect, options);
 
-        } else throw new Error("Unable to connect nodes unless they both exist in the graph");
+        } else throw new Error('Unable to connect nodes unless they both exist in the graph');
 
         return this;
     };

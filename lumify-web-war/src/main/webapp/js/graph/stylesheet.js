@@ -16,34 +16,34 @@ define([
             .selector('node')
             .css({
                 'background-image': 'data(imageSrc)',
-                'width': 30 * retina.devicePixelRatio,
-                'height': 30 * retina.devicePixelRatio,
-                'content': 'data(truncatedTitle)',
                 'font-family': 'helvetica',
                 'font-size': 18 * retina.devicePixelRatio,
-                'text-outline-width': 2,
                 'text-outline-color': 'white',
+                'text-outline-width': 2,
                 'text-valign': 'bottom',
-                'color': '#999',
-                'shape': 'roundrectangle'
+                color: '#999',
+                content: 'data(truncatedTitle)',
+                height: 30 * retina.devicePixelRatio,
+                shape: 'roundrectangle',
+                width: 30 * retina.devicePixelRatio,
             })
 
             .selector('node.hasCustomGlyph')
             .css({
-                'width': 60 * retina.devicePixelRatio,
-                'height': 60 * retina.devicePixelRatio
+                width: 60 * retina.devicePixelRatio,
+                height: 60 * retina.devicePixelRatio
             })
 
             .selector('node.hover')
             .css({
-                'opacity': 0.6
+                opacity: 0.6
             })
 
             .selector('node.focus')
             .css({
                 'border-width': 5 * retina.devicePixelRatio,
                 'border-color': '#a5e1ff',
-                'color': '#00547e',
+                color: '#00547e',
                 'font-weight': 'bold',
                 'font-size': 20 * retina.devicePixelRatio
             })
@@ -58,8 +58,8 @@ define([
             .selector('node.temp')
             .css({
                 'background-color': 'rgba(255,255,255,0.0)',
-                'width': '1',
-                'height': '1'
+                width: '1',
+                height: '1'
             })
 
             .selector('node.controlDragSelection')
@@ -72,29 +72,29 @@ define([
             .css({
                 'background-color': '#0088cc',
                 'border-color': '#0088cc',
-                'color': '#0088cc'
+                color: '#0088cc'
             })
 
             .selector('edge:selected')
             .css({
                 'line-color': '#0088cc',
-                'color': '#0088cc',
+                color: '#0088cc',
                 'target-arrow-color': '#0088cc',
                 'source-arrow-color': '#0088cc',
-                'width': 4 * retina.devicePixelRatio
+                width: 4 * retina.devicePixelRatio
             })
 
             .selector('edge')
             .css({
-                'width': 1.5 * retina.devicePixelRatio,
+                width: 1.5 * retina.devicePixelRatio,
                 'target-arrow-shape': 'triangle'
             })
 
             .selector('edge.label')
                 .css({
-                'content': 'data(label)',
+                content: 'data(label)',
                 'font-size': 12 * retina.devicePixelRatio,
-                'color': '#0088cc',
+                color: '#0088cc',
                 'text-outline-color': 'white',
                 'text-outline-width': 4,
             })
@@ -102,9 +102,9 @@ define([
             .selector('edge.path-hidden-verts')
             .css({
                 'line-style': 'dashed',
-                'content': 'data(label)',
+                content: 'data(label)',
                 'font-size': 16 * retina.devicePixelRatio,
-                'color': 'data(pathColor)',
+                color: 'data(pathColor)',
                 'text-outline-color': 'white',
                 'text-outline-width': 4,
             })
@@ -114,12 +114,12 @@ define([
                 'line-color': 'data(pathColor)',
                 'target-arrow-color': 'data(pathColor)',
                 'source-arrow-color': 'data(pathColor)',
-                'width': 4 * retina.devicePixelRatio,
+                width: 4 * retina.devicePixelRatio,
             })
 
             .selector('edge.temp')
             .css({
-                'width': 4,
+                width: 4,
                 'line-color': '#0088cc',
                 'line-style': 'dotted',
                 'target-arrow-color': '#0088cc'

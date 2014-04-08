@@ -20,8 +20,6 @@ define([
                 value: $.trim(_.isUndefined(this.attr.value) ? '' : this.attr.value)
             }));
 
-            this.onChange = _.debounce(this.onChange.bind(this), 250);
-
             this.on('visibilityclear', this.onClear);
             this.on('change keyup paste', {
                 fieldSelector: this.onChange

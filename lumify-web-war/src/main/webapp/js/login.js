@@ -77,7 +77,7 @@ define([
                                 animateFromLogin: true
                             });
 
-                            self.$node.find('.logo').one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function() {
+                            self.$node.find('.logo').one(TRANSITION_END, function() {
                                 self.teardown();
                             });
                         });

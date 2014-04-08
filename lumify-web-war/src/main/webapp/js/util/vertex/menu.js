@@ -48,15 +48,15 @@ define([
                 { 
                     label: 'Search',
                     submenu: [
-                        { label: '\"{ title }\"', shortcut: 'alt+t', event: 'searchTitle', selection:1 },
-                        { label: 'Related Items', shortcut: 'alt+s', event: 'searchRelated', selection:1 }
+                        { label: '\"{ title }\"', shortcut: 'alt+t', event: 'searchTitle', selection: 1 },
+                        { label: 'Related Items', shortcut: 'alt+s', event: 'searchRelated', selection: 1 }
                     ]
                 },
 
                 { 
                     label: 'Add Related',
                     submenu: (relatedSubmenuItems = [
-                        { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection:1 }
+                        { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection: 1 }
                     ])
                 },
 
@@ -99,6 +99,7 @@ define([
 
         this.after('teardown', function() {
             this.$menu.remove();
+            $('.draggable-wrapper').remove();
             $(document).off('.vertexMenu');
         });
 
@@ -129,6 +130,11 @@ define([
 
             if (title.length > 15) {
                 title = title.substring(0, 15) + '...';
+            }
+
+            var wrapper = $('.draggable-wrapper');
+            if (wrapper.length === 0) {
+                wrapper = $('<div class="draggable-wrapper"/>').appendTo(document.body);
             }
 
             this.$node.append(template({
@@ -190,19 +196,18 @@ define([
                         windowSize.y - menuSize.y - padding
                     )
                 },
-                submenuPlacement = { left:'100%', right:'auto', top:0, bottom:'auto' };
+                submenuPlacement = { left: '100%', right: 'auto', top: 0, bottom: 'auto' };
             if ((placement.left + menuSize.x + submenuSize.x + padding) > windowSize.x) {
-                submenuPlacement = $.extend(submenuPlacement, { right: '100%', left:'auto' });
+                submenuPlacement = $.extend(submenuPlacement, { right: '100%', left: 'auto' });
             }
             if ((placement.top + menuSize.y + (submenu.children('li').length * 26) + padding) > windowSize.y) {
-                submenuPlacement = $.extend(submenuPlacement, { top: 'auto', bottom:'0' });
+                submenuPlacement = $.extend(submenuPlacement, { top: 'auto', bottom: '0' });
             }
 
             menu.parent('div')
                 .addClass('open')
-                .css($.extend({ position:'absolute' }, placement));
+                .css($.extend({ position: 'absolute' }, placement));
             submenu.css(submenuPlacement);
         };
     }
 });
-

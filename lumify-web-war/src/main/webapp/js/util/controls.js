@@ -1,6 +1,4 @@
 
-//
-
 define([
     'flight/lib/component',
     'tpl!./controls'
@@ -79,13 +77,13 @@ define([
             }
 
             var pan = eventToPan(this.panner, e);
-            if( isNaN(pan.x) || isNaN(pan.y) ){
+            if (isNaN(pan.x) || isNaN(pan.y)){
                 return;
             }
 						
             var self = this;
-            this.panInterval = setInterval(function(){
-                self.trigger('pan', { pan:pan });
+            this.panInterval = setInterval(function() {
+                self.trigger('pan', { pan: pan });
             }, PAN_SPEED);
         };
 
@@ -96,19 +94,17 @@ define([
         };
     }
 
-
     // Ported from jquery.cytoscape-panzoom plugin
     function eventToPan(panner, e) {
         var v = {
-            x: e.originalEvent.pageX - panner.offset().left - panner.width()/2,
-            y: e.originalEvent.pageY - panner.offset().top - panner.height()/2
-        }
+                x: e.originalEvent.pageX - panner.offset().left - panner.width() / 2,
+                y: e.originalEvent.pageY - panner.offset().top - panner.height() / 2
+            },
+            r = PAN_AREA_DRAG_SIZE,
+            d = Math.sqrt(v.x * v.x + v.y * v.y),
+            percent = Math.min(d / r, 1);
 
-        var r = PAN_AREA_DRAG_SIZE;
-        var d = Math.sqrt( v.x*v.x + v.y*v.y );
-        var percent = Math.min( d/r, 1 );
-
-        if( d < PAN_INACTIVE_AREA ){
+        if (d < PAN_INACTIVE_AREA) {
             return {
                 x: NaN,
                 y: NaN
@@ -116,11 +112,11 @@ define([
         }
 
         v = {
-            x: v.x/d,
-            y: v.y/d
+            x: v.x / d,
+            y: v.y / d
         };
 
-        percent = Math.max( PAN_MIN_PERCENT_SPEED, percent );
+        percent = Math.max(PAN_MIN_PERCENT_SPEED, percent);
 
         var vnorm = {
             x: -1 * v.x * (percent * PAN_DISTANCE),

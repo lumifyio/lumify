@@ -91,8 +91,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
-        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, id.toString());
 
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
@@ -116,14 +114,13 @@ public class ResolveTermEntity extends BaseRequestHandler {
         CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
         TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         Vertex createdVertex = vertexMutation.save();
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
 
         this.graph.flush();
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, createdVertex.getId(), false, 0, 0, user);
+        workspaceRepository.updateEntityOnWorkspace(workspace, createdVertex.getId(), false, null, null, user);
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
@@ -134,14 +131,19 @@ public class ResolveTermEntity extends BaseRequestHandler {
             // TODO: replace second "" when we implement commenting on ui
             auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
-
+        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId,propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
                 .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
-                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility());
+                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility())
+                .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
+
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.save();
 
         this.graph.flush();
 

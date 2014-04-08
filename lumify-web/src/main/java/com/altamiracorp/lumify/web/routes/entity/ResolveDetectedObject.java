@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectReposito
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
@@ -100,8 +101,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
             resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
-            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), lumifyVisibility.getVisibility());
-            TITLE.setProperty(resolvedVertexMutation, title, lumifyVisibility.getVisibility());
+
+            CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
+            TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
             resolvedVertex = resolvedVertexMutation.save();
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
@@ -117,15 +119,9 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         graph.flush();
 
-        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
-                (artifactId, resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
-                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
-                        user.getModelUserContext());
+        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, null, user);
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-
-        JSONObject result = detectedObjectModel.toJson();
-        result.put("entityVertex", GraphUtil.toJson(resolvedVertex, workspaceId));
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
@@ -133,6 +129,16 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
+
+        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
+                (artifactId, edge.getId(), resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
+                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
+                        user.getModelUserContext());
+
+        JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
+
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), metadata, lumifyVisibility.getVisibility()).save();
+        resolvedVertexMutation.save();
 
         graph.flush();
 

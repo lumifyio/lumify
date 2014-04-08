@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
-import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
@@ -54,7 +53,7 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
+    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
@@ -65,7 +64,6 @@ public class WorkspaceHelper {
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
             boolean deleteEdge = false;
-            Object edgeId = null;
             int termCount = 0;
             while (termMentionModels.hasNext()) {
                 TermMentionModel termMentionModel = termMentionModels.next();
@@ -76,15 +74,11 @@ public class WorkspaceHelper {
                 }
             }
             if (termCount == 1) {
-                Iterable<Edge> edges = artifactVertex.getEdges(vertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations);
-                if (edges.iterator().hasNext()) {
-                    Edge edge = edges.iterator().next();
-                    if (edge != null) {
-                        edgeId = edge.getId();
-                        graph.removeEdge(edge, authorizations);
-                        deleteEdge = true;
-                        auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
-                    }
+                if (edgeId != null) {
+                    Edge edge = graph.getEdge(edgeId, authorizations);
+                    graph.removeEdge(edgeId, authorizations);
+                    deleteEdge = true;
+                    auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
                 }
             }
 
@@ -105,7 +99,7 @@ public class WorkspaceHelper {
         return result;
     }
 
-    public JSONObject unresolveDetectedObject(Vertex vertex, DetectedObjectModel detectedObjectModel,
+    public JSONObject unresolveDetectedObject(Vertex vertex, String edgeId, DetectedObjectModel detectedObjectModel,
                                               DetectedObjectModel analyzedDetectedObject,
                                               LumifyVisibility visibility, String workspaceId,
                                               ModelUserContext modelUserContext, User user,
@@ -122,9 +116,8 @@ public class WorkspaceHelper {
             result.put("detectedObject", analyzedDetectedObject.toJson());
         }
 
-        Iterable<Object> edgeIds = artifactVertex.getEdgeIds(vertex, Direction.BOTH, authorizations);
-        if (IterableUtils.count(edgeIds) == 1) {
-            Edge edge = graph.getEdge(edgeIds.iterator().next(), authorizations);
+        if (edgeId != null) {
+            Edge edge = graph.getEdge(edgeId, authorizations);
             graph.removeEdge(edge, authorizations);
 
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());

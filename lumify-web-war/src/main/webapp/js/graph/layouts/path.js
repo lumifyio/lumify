@@ -11,20 +11,19 @@ define([
 
     function doLayout(cy, currentNodes, boundingBox, vertexIds, layoutOptions) {
 
-
         var layoutPositions = {},
             // Hard coded for best "feel" bigger then icon, but
             // smaller then text label
-            cell = { x:150, y:75 },
-            start = retina.pixelsToPoints({x:boundingBox.x1, y:boundingBox.y1}),
-            size = retina.pixelsToPoints({x:boundingBox.w,y:boundingBox.h}),
+            cell = { x: 150, y: 75 },
+            start = retina.pixelsToPoints({x: boundingBox.x1, y: boundingBox.y1}),
+            size = retina.pixelsToPoints({x: boundingBox.w,y: boundingBox.h}),
             outerCellPadding = 2;
 
         // Add 2 cells of padding cells around box
         start.x = Math.ceil(start.x - cell.x * outerCellPadding);
         start.y = Math.ceil(start.y - cell.y * outerCellPadding);
-        size.x = Math.ceil(size.x + cell.x * (outerCellPadding*2));
-        size.y = Math.ceil(size.y + cell.y * (outerCellPadding*2));
+        size.x = Math.ceil(size.x + cell.x * (outerCellPadding * 2));
+        size.y = Math.ceil(size.y + cell.y * (outerCellPadding * 2));
 
         var numCellsX = Math.ceil(size.x / cell.x),
             numCellsY = Math.ceil(size.y / cell.y),
@@ -37,12 +36,13 @@ define([
             previouslyPlaced = [],
             previouslyPlacedMap = {};
 
-
         // Sort vertex dependencies
         vertexIds.sort(function(vId) { 
-            return _.uniq(_.pluck(layoutOptions.map, 'sourceId').concat(_.pluck(layoutOptions.map, 'targetId'))).indexOf(vId) * -1; 
+            return _.uniq(
+                _.pluck(layoutOptions.map, 'sourceId')
+                    .concat(_.pluck(layoutOptions.map, 'targetId'))
+            ).indexOf(vId) * -1; 
         })
-
 
         // Position vertices
         vertexIds.forEach(function(vId) {
@@ -64,12 +64,17 @@ define([
                     minX = Math.floor((position.x - start.x - nodeSize.x / 2) / cell.x),
                     maxX = Math.floor((position.x - start.x + nodeSize.x / 2) / cell.x),
                     minY = Math.floor((position.y - start.y - nodeSize.y / 2) / cell.y),
-                    maxY = Math.floor((position.y - start.y + nodeSize.y / 2 + (nodeBoundingBox.h - nodeSize.y)) / cell.y),
+                    maxY = Math.floor(
+                        (position.y - start.y +
+                         nodeSize.y / 2 +
+                         (nodeBoundingBox.h - nodeSize.y)
+                        ) / cell.y
+                    ),
                     x = Math.floor((position.x - start.x) / cell.x),
                     y = Math.floor((position.y - start.y) / cell.y),
                     nodeId = formatters.className.from(this.id());
 
-                previouslyPlacedMap[nodeId] = {x:x,y:y};
+                previouslyPlacedMap[nodeId] = {x: x,y: y};
 
                 // Mark grid cells that shouldn't be used in path
                 for (var wx = minX; wx <= maxX; wx++) {
@@ -79,12 +84,11 @@ define([
                 }
 
                 if (nodeId === pathVertices.sourceId) {
-                    sourcePosition = {x:x,y:y};
+                    sourcePosition = {x: x, y: y};
                 } else if (nodeId === pathVertices.targetId) {
-                    targetPosition = {x:x,y:y};
+                    targetPosition = {x: x,y: y};
                 }
             });
-
 
             // Show grid overlay
             if (DEBUG_SHOW_GRID) {
@@ -96,12 +100,12 @@ define([
             var findPosition = function(position) {
                 var p = previouslyPlacedMap[pathVertices[position]];
                 if (!p) {
-                    var thisVertexEdges;
-                    var checkId = vId;
+                    var thisVertexEdges,
+                        checkId = vId;
                     do {
                         thisVertexEdges = layoutOptions.map[checkId];
                         checkId = thisVertexEdges && thisVertexEdges[position];
-                    } while(checkId && !previouslyPlacedMap[checkId]);
+                    } while (checkId && !previouslyPlacedMap[checkId]);
 
                     p = previouslyPlacedMap[checkId];
                 }
@@ -141,7 +145,7 @@ define([
                         do {
                             node = tryNodes[i++];
                             position = [ node.x, node.y ];
-                        } while(
+                        } while (
                             i < tryNodes.length &&
                             (
                                 (sourcePosition.x === position[0] && sourcePosition.y === position[1]) || 
@@ -150,7 +154,7 @@ define([
                         )
 
                         previouslyPlaced.push(position);
-                        previouslyPlacedMap[vId] = {x:position[0], y:position[1] };
+                        previouslyPlacedMap[vId] = {x: position[0], y: position[1] };
                         layoutPositions[vId] = {
                             x: position[0] * cell.x + start.x + (cell.x / 2),
                             y: position[1] * cell.y + start.y + (cell.y / 2)

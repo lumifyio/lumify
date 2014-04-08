@@ -16,12 +16,8 @@
 
   <link href='css/lumify.css' rel='stylesheet' media='screen'>
 
-  <script src='js/require.config.js'></script>
+  <script src='jsc/require.config.js'></script>
   <script>
-    if (/#DEBUG$/.test(location.href)) {
-      location.href = location.href.replace(/DEBUG$/,'');
-      require.urlArgs = "cache-bust=" +  Date.now();
-    }
     // Uncomment to run without requirejs concatenation (faster)
     // require.baseUrl = 'js';
     // require.urlArgs = "cache-bust=" +  Date.now();

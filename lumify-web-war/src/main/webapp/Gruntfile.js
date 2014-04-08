@@ -125,18 +125,10 @@ module.exports = function(grunt) {
             config: ".jscs.json"
         },
         all: { 
-            src: ["js/**/*.js", "!js/**/three-plugins/*.js"],
-        },
-        passing: { 
-            src: [
-                "js/lumify.js",
-                "js/detail/properties.js",
-                "js/detail/dropdowns/propertyForm/propForm.js",
-                "js/workspaces/diff/*.js"
-            ]
+            src: ["js/**/*.js", "!js/**/three-plugins/*.js", "!js/graph/3d/3djs/3djs/graph/layout/force-directed.js", "!js/require.config.js"],
         },
         ci: {
-            src: ["js/**/*.js", "!js/**/three-plugins/*.js"],
+            src: ["js/**/*.js", "!js/**/three-plugins/*.js", "!js/graph/3d/3djs/3djs/graph/layout/force-directed.js", "!js/require.config.js"],
             options: {
                 force: true,
                 reporter: "checkstyle",

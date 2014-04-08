@@ -4,20 +4,22 @@ define([
     'tpl!./overlay',
     'util/formatters',
     'service/workspace',
+    'service/ontology',
     'data'
-], function(defineComponent, template, formatters, WorkspaceService, appData) {
+], function(defineComponent, template, formatters, WorkspaceService, OntologyService, appData) {
     'use strict';
 
-    var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30;
-    var MENUBAR_WIDTH = 30;
-    var UPDATE_WORKSPACE_DIFF_SECONDS = 3;
-    var SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
+    var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
+        MENUBAR_WIDTH = 30,
+        UPDATE_WORKSPACE_DIFF_SECONDS = 3,
+        SHOW_UNPUBLUSHED_CHANGES_SECONDS = 3;
 
     return defineComponent(WorkspaceOverlay);
 
     function WorkspaceOverlay() {
 
-        var workspaceService = new WorkspaceService();
+        var workspaceService = new WorkspaceService(),
+            ontologyService = new OntologyService();
 
         this.defaultAttrs({
             userSelector: '.user',
@@ -60,7 +62,7 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
                 shortcuts: {
-                    'alt-d':  { fire:'showDiffPanel', desc:'Show unpublished changes' }
+                    'alt-d':  { fire: 'showDiffPanel', desc: 'Show unpublished changes' }
                 }
             });
         });
@@ -132,6 +134,7 @@ define([
         };
 
         this.onSwitchWorkspace = function() {
+            this.previousDiff = null;
             this.$node.find('.badge').popover('destroy').remove();
         };
 
@@ -166,7 +169,7 @@ define([
             var prefix = 'last saved ',
                 subtitle = this.select('subtitleSelector').text(prefix + 'moments ago'),
                 setTimer = function() {
-                    this.updateTimer = setTimeout(function () {
+                    this.updateTimer = setTimeout(function() {
 
                         var time = formatters.date.relativeToNow(this.lastSaved);
                         subtitle.text(prefix + time);
@@ -196,15 +199,17 @@ define([
                     .on('mouseenter mouseleave', this.onDiffBadgeMouse.bind(this))
             }
 
-            workspaceService.diff(appData.workspaceId)
+            $.when(
+                workspaceService.diff(appData.workspaceId),
+                ontologyService.properties())
                 .fail(function() {
                     badge.removePrefixedClasses('badge-').addClass('badge-important')
                         .popover('destroy')
                         .attr('title', 'An error occured')
                         .text('!');
                 })
-                .done(function(response) {
-                    var diffs = response.diffs,
+                .done(function(response, ontologyProperties) {
+                    var diffs = response[0].diffs,
                         diffsWithoutVisibleProperty = _.map(diffs, function(d) {
                             return _.omit(d, 'visible');
                         });
@@ -221,7 +226,9 @@ define([
                         countOfTitleChanges = 0,
                         filteredDiffs = _.filter(diffs, function(diff) {
                             if (diff.type !== 'PropertyDiffItem') return true;
-                            if (/^[_]/.test(diff.name)) return false;
+
+                            var ontologyProperty = ontologyProperties.byTitle[diff.name];
+                            if (!ontologyProperty || !ontologyProperty.userVisible) return false;
                             if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
                                 countOfTitleChanges++;
                             }
@@ -230,7 +237,7 @@ define([
                         count = filteredDiffs.length - countOfTitleChanges,
                         formattedCount = formatters.number.pretty(count); 
 
-                    self.currentDiffIds =_.uniq(filteredDiffs.map(function(diff) {
+                    self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
                         return diff.vertexId || diff.elementId || diff.edgeId;
                     }));
 
@@ -239,12 +246,14 @@ define([
                             tip = popover && popover.tip();
 
                         if (tip && tip.is(':visible')) {
-                            self.trigger(popover.tip().find('.popover-content'), 'diffsChanged', { diffs: filteredDiffs });
+                            self.trigger(popover.tip().find('.popover-content'),
+                                 'diffsChanged',
+                                 { diffs: filteredDiffs });
                             popover.show();
                         } else {
                             badge
                                 .popover('destroy')
-                                .popover({placement:'top', content:'Loading...', title: 'Unpublished Changes'});
+                                .popover({placement: 'top', content: 'Loading...', title: 'Unpublished Changes'});
 
                             popover = badge.data('popover');
                             tip = popover.tip();
@@ -255,7 +264,7 @@ define([
                                     height: '250px'
                                 })
                                 .resizable({
-                                    handles: "n, e, ne",
+                                    handles: 'n, e, ne',
                                     maxWidth: self.popoverCss.maxWidth,
                                     maxHeight: self.popoverCss.maxHeight
                                 })
@@ -270,7 +279,7 @@ define([
                                 var css = {
                                     top: (parseInt(tip.css('top')) - 10) + 'px'
                                 };
-                                tip.css({top:top});
+                                tip.css({top: top});
 
                                 self.updatePopoverSize(tip);
                             })
@@ -282,23 +291,12 @@ define([
                         }
                     });
 
-                    var previousCount = badge.text();
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
                         .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
 
                     if (count > 0) {
                         self.animateBadge(badge, formattedCount);
-
-
-                        //$0.scrollWidth 
-
-                        /*
-                        badge.removeClass('flash');
-                        requestAnimationFrame(function() {
-                            badge.addClass('flash');
-                        })
-                        */
                     } else if (count === 0) {
                         badge.popover('destroy');
                     }
@@ -346,9 +344,9 @@ define([
 
             animateTimer = _.delay((badgeReset = function(previousWidth) {
                 animateTimer = null;
-                badge.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                badge.on(TRANSITION_END, function(e) {
                     if (e.originalEvent.propertyName === 'width') {
-                        badge.off('transitionend webkitTransitionEnd oTransitionEnd otransitionend');
+                        badge.off(TRANSITION_END);
                         badge.text(formattedCount).css('width', 'auto');
                     }
                 }).css({
@@ -366,9 +364,11 @@ define([
                     .tooltip({
                         placement: 'right',
                         html: true,
-                        title: '<span style="white-space:nowrap">Authorizations: ' + (data.user.authorizations.join(', ') || 'none') + '</span>',
+                        title: '<span style="white-space:nowrap">Authorizations: ' +
+                            (data.user.authorizations.join(', ') || 'none') +
+                            '</span>',
                         trigger: 'hover',
-                        delay: { show:500, hide:0 }
+                        delay: { show: 500, hide: 0 }
                     })
             }
         }
@@ -401,7 +401,7 @@ define([
                         html: true,
                         title: '<span style="white-space:nowrap">' + text + '</span>',
                         trigger: 'hover',
-                        delay: { show:500, hide:0 }
+                        delay: { show: 500, hide: 0 }
                     });
             }
 

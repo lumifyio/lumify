@@ -553,7 +553,7 @@ define([
                 if (ontologyProperty.dataType == 'date') {
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
-                    var descKey = 'http://lumify.io#geoLocationDescription';
+                    var descKey = 'http://lumify.io/dev#geoLocationDescription';
 
                     value = properties[name];
                     value[descKey] = properties[descKey];

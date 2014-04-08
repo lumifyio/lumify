@@ -1,9 +1,10 @@
 
-
-define([], function() {
+define(['util/withTeardown'], function(withTeardown) {
     'use strict';
 
     return function() {
+
+        withTeardown.call(this);
 
         this.defaultAttrs({
             predicateSelector: 'select',
@@ -13,6 +14,8 @@ define([], function() {
         });
 
         this.after('teardown', function() {
+            var inputs = this.select('visibleInputsSelector');
+            inputs.tooltip('destroy');
             this.$node.empty();
         });
 
@@ -25,7 +28,7 @@ define([], function() {
 
             if (this.attr.tooltip && this.$node.find('.input-prepend').length === 0) {
                 inputs.eq(0)
-                    .tooltip($.extend({ container:'body' }, this.attr.tooltip))
+                    .tooltip($.extend({ container: 'body' }, this.attr.tooltip))
                     .data('tooltip').tip().addClass('field-tooltip');
             }
 
@@ -49,7 +52,7 @@ define([], function() {
 
                     this.trigger('propertychange', {
                         id: this.attr.id,
-                        propertyId: this.attr.property.id,
+                        propertyId: this.attr.property.title,
                         values: values,
                         predicate: predicate
                     });
@@ -62,7 +65,7 @@ define([], function() {
                 this._markedInvalid = true;
                 this.trigger('propertyinvalid', {
                     id: this.attr.id,
-                    propertyId: this.attr.property.id
+                    propertyId: this.attr.property.title
                 });
             }
         };

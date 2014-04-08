@@ -1,25 +1,28 @@
 
 define([
     'flight/lib/component',
-    'tpl!./actionbar'
-], function (
+    'tpl!./actionbar',
+    'util/withTeardown'
+], function(
     defineComponent,
-    template
+    template,
+    withTeardown
 ) {
     'use strict';
 
-    var FPS = 1000/60,
+    var FPS = 1000 / 60,
         TOP_HIDE_THRESHOLD = 40,
         ALIGN_TO_TYPES = [
             'textselection',
             'node'
         ];
 
-    return defineComponent(ActionBar);
+    return defineComponent(ActionBar, withTeardown);
 
     function ActionBar() {
 
         this.before('teardown', function() {
+            $(document).off('.actionbar');
             this[this.attr.alignTo + 'Teardown']();
             this.$node.tooltip('destroy');
             this.$tip.hide();
@@ -27,10 +30,10 @@ define([
 
         this.after('initialize', function() {
             if (!this.attr.actions) {
-                throw "actions attribute required";
+                throw 'actions attribute required';
             }
             if (ALIGN_TO_TYPES.indexOf(this.attr.alignTo) === -1) {
-                throw "alignTo only supports " + ALIGN_TO_TYPES.join(',');
+                throw 'alignTo only supports ' + ALIGN_TO_TYPES.join(',');
             }
 
             this.$node.removeAttr('title');
@@ -51,7 +54,7 @@ define([
 
             this[this.attr.alignTo + 'Initializer']();
             this.updatePosition();
-
+            this.on(document, 'graphPaddingUpdated', this.updatePosition);
 
             var self = this;
             $(document).off('.actionbar').on('click.actionbar', function() {
@@ -59,7 +62,6 @@ define([
                 self.teardown();
             });
         });
-
 
         this.onActionClick = function(event) {
             var self = this,
@@ -77,11 +79,7 @@ define([
                 width = this.$node.width(),
                 height = this.$node.height();
 
-            this.$tip.css({
-                left: offset.left + width / 2 - this.$tip.width() / 2, 
-                top: offset.top + height,
-                opacity: offset.top < TOP_HIDE_THRESHOLD ? '0' : '1'
-            });
+            this.updateTipPositionWithDomElement(this.node, 'center');
         };
 
         this.nodeInitializer = function() {
@@ -97,12 +95,7 @@ define([
                 range = selection.rangeCount > 0 && selection.getRangeAt(0);
 
             if (range) {
-                var boundingBox = range.getBoundingClientRect();
-                this.$tip.css({
-                    left: boundingBox.left + boundingBox.width - this.$tip.width() / 2,
-                    top: boundingBox.top + boundingBox.height,
-                    opacity: boundingBox.top < TOP_HIDE_THRESHOLD ? '0' : '1'
-                });
+                this.updateTipPositionWithDomElement(range);
             } else this.teardown();
         };
 
@@ -123,6 +116,26 @@ define([
             this.scrollParent = $(el).scrollParent()
                 .off('.actionbar')
                 .on('scroll.actionbar', this.updatePosition);
-        }
+        };
+
+        this.updateTipPositionWithDomElement = function(el, alignment) {
+            var rects = el.getClientRects();
+
+            if (rects.length) {
+                box = _.sortBy(rects, function(r) {
+                    return r.top * -1;
+                })[0];
+            } else {
+                box = el.getBoundingClientRect();
+            }
+
+            this.$tip.css({
+                left: (alignment === 'center' && rects.length === 1) ?
+                    box.left + box.width / 2 - this.$tip.width() / 2 : 
+                    box.left + box.width - this.$tip.width() / 2,
+                top: box.top + box.height,
+                opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'
+            });
+        };
     }
 });

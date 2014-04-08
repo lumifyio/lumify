@@ -1,9 +1,13 @@
 <table class="table">
-  <!-- SWITCH TO RIGHT ALIGNED WHEN MOREtr><td>Authored</td></tr-->
+  <% /* SWITCH TO RIGHT ALIGNED WHEN MORE */ %>
+
+  <% if (property.metadata.sandboxStatus === 'PRIVATE') { %>
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value"><%= property.metadata.sandboxStatus || 'Unknown' %></td>
+    <td class="property-value">Unpublished</td>
   </tr>
+  <% } %>
+
   <% var j = property.metadata._justificationMetadata,
          s = property.metadata._sourceMetadata;
      if (j || s) {  %>

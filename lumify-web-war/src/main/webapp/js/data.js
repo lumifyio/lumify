@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'flight/lib/registry',
@@ -39,7 +38,7 @@ define([
         if (instanceInfo) {
             return instanceInfo.instance;
         } else {
-            throw "Unable to find data instance";
+            throw 'Unable to find data instance';
         }
     }
 
@@ -88,15 +87,13 @@ define([
             ClipboardManager.attachTo(this.node);
             Keyboard.attachTo(this.node);
 
-
             // Set Current WorkspaceId header on all ajax requests
-            $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+            $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
                 if (!options.headers) options.headers = {};
                 if (self.workspaceId) {
                     options.headers['Lumify-Workspace-Id'] = self.workspaceId;
                 }
             });
-
 
             // Vertices
             this.on('addVertices', this.onAddVertices);
@@ -113,7 +110,6 @@ define([
             this.on('saveWorkspace', this.onSaveWorkspace);
             this.on('switchWorkspace', this.onSwitchWorkspace);
             this.on('workspaceDeleted', this.onWorkspaceDeleted);
-            this.on('workspaceDeleting', this.onWorkspaceDeleting);
             this.on('workspaceCopied', this.onWorkspaceCopied);
             this.on('reloadWorkspace', this.onReloadWorkspace);
 
@@ -142,22 +138,25 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map'],
                 shortcuts: {
-                    'meta-a': { fire:'selectAll', desc:'Select all vertices' },
-                    'delete': { fire:'deleteSelected', desc:'Removes selected vertices from workspace, deletes selected relationships'},
+                    'meta-a': { fire: 'selectAll', desc: 'Select all vertices' },
+                    'delete': { 
+                        fire: 'deleteSelected',
+                        desc: 'Removes selected vertices from workspace, deletes selected relationships'
+                    },
                 }
             });
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: ['Graph', 'Map', 'Search'],
                 shortcuts: {
-                    'alt-r': { fire:'addRelatedItems', desc:'Add related items to workspace' },
-                    'alt-t': { fire:'searchTitle', desc:'Search for selected title' },
-                    'alt-s': { fire:'searchRelated', desc:'Search vertices related to selected' },
+                    'alt-r': { fire: 'addRelatedItems', desc: 'Add related items to workspace' },
+                    'alt-t': { fire: 'searchTitle', desc: 'Search for selected title' },
+                    'alt-s': { fire: 'searchRelated', desc: 'Search vertices related to selected' },
                 }
             });
 
             this.workspaceService.subscribe({
-                onMessage: function (err, message) {
+                onMessage: function(err, message) {
                     if (err) {
                         console.error('Error', err);
                         return self.trigger(document, 'error', { message: err.toString() });
@@ -173,17 +172,20 @@ define([
             });
         };
 
-        this.onSocketMessage = function (evt, message) {
+        this.onSocketMessage = function(evt, message) {
             var self = this;
             switch (message.type) {
                 case 'propertiesChange':
-                    self.trigger('updateVertices', { vertices:[message.data.vertex]});
+                    self.trigger('updateVertices', { vertices: [message.data.vertex]});
                     break;
                 case 'edgeDeletion':
-                    if (_.findWhere(self.selectedEdges, { id:message.data.edgeId })) {
+                    if (_.findWhere(self.selectedEdges, { id: message.data.edgeId })) {
                         self.trigger('selectObjects');
                     }
-                    self.trigger('edgesDeleted', { edgeId:message.data.edgeId});
+                    self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
+                    break;
+                case 'detectedObjectChange':
+                    self.trigger('updateVertices', { vertices: [message.data.artifactVertex]});
                     break;
             }
         };
@@ -193,12 +195,12 @@ define([
 
             this.getVertexTitle(data.vertexId)
                 .done(function(title) {
-                    self.trigger('searchByEntity', { query : title });
+                    self.trigger('searchByEntity', { query: title });
                 });
         };
 
         this.onSearchRelated = function(event, data) {
-            this.trigger('searchByRelatedEntity', { vertexId : data.vertexId });
+            this.trigger('searchByRelatedEntity', { vertexId: data.vertexId });
         };
 
         this.onAddRelatedItems = function(event, data) {
@@ -235,7 +237,7 @@ define([
                     });
                 }, 1000);
 
-            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration:1000 });
+            this.trigger('displayInformation', { message: 'Loading Related...', dismissDuration: 1000 });
 
             $.when(
                 this.configService.getProperties(),
@@ -263,6 +265,11 @@ define([
             }).done(function(config, verticesResponse) {
                 var vertices = verticesResponse[0].vertices,
                     count = vertices.length,
+                    eventOptions = {
+                        options: {
+                            addingVerticesRelatedTo: data.vertexId
+                        }
+                    },
                     forceSearch = count > config['vertex.loadRelatedMaxForceSearch'],
                     promptBeforeAdding = count > config['vertex.loadRelatedMaxBeforePrompt'];
                 
@@ -277,6 +284,7 @@ define([
                                     relatedToVertexId: data.vertexId,
                                     title: title,
                                     vertices: vertices,
+                                    eventOptions: eventOptions,
                                     anchorTo: {
                                         vertexId: data.vertexId
                                     }
@@ -284,7 +292,7 @@ define([
                             });
                     });
                 } else {
-                    self.trigger('addVertices', { vertices:vertices });
+                    self.trigger('addVertices', _.extend({ vertices: vertices }, eventOptions));
                 }
             });
         };
@@ -319,7 +327,7 @@ define([
         };
 
         this.onSelectAll = function() {
-            this.trigger('selectObjects', { vertices:this.verticesInWorkspace() });
+            this.trigger('selectObjects', { vertices: this.verticesInWorkspace() });
         };
 
         this.onDelete = function(event, data) {
@@ -351,7 +359,9 @@ define([
                         graphPosition: vertex.workspace.graphPosition
                     };
                 },
-                uniqueVertices = function(v) { return v.vertexId; };
+                uniqueVertices = function(v) {
+                    return v.vertexId; 
+                };
 
             if (data.adding) {
                 this.newlyAddedIds = this.newlyAddedIds.concat(_.pluck(data.entityUpdates, 'id'));
@@ -397,7 +407,6 @@ define([
             });
         };
 
-
         this.refreshRelationships = function() {
             var self = this;
 
@@ -422,13 +431,12 @@ define([
                 edge.properties.target,
                 edge.properties.relationshipType,
                 edge.id).done(function() {
-                    if (_.findWhere(self.selectedEdges, { id:edge.id })) {
+                    if (_.findWhere(self.selectedEdges, { id: edge.id })) {
                         self.trigger('selectObjects');
                     }
-                    self.trigger('edgesDeleted', { edgeId:edge.id });
+                    self.trigger('edgesDeleted', { edgeId: edge.id });
                 });
         };
-
 
         this.onAddVertices = function(evt, data) {
             this.workspaceReady(function(ws) {
@@ -436,11 +444,10 @@ define([
 
                 var self = this,
                     added = [],
-                    existing = [];
-
-
-                // Check if vertices are missing properties (from search results)
-                var needsRefreshing = data.vertices.filter(function(v) { 
+                    existing = [],
+                    addingVerticesRelatedTo = !!(data.options && data.options.addingVerticesRelatedTo),
+                    // Check if vertices are missing properties (from search results)
+                    needsRefreshing = data.vertices.filter(function(v) { 
                         var cached = self.vertex(v.id);
                         if (!cached) {
                             return _.keys(v.properties || {}).length === 0;
@@ -451,7 +458,7 @@ define([
 
                 data.vertices.forEach(function(v) {
                     v.workspace = v.workspace || {};
-                    v.workspace.selected = true;
+                    v.workspace.selected = addingVerticesRelatedTo;
                     passedWorkspace[v.id] = self.copy(v.workspace);
                 });
 
@@ -471,8 +478,8 @@ define([
                             vertex.workspace = $.extend(vertex.workspace, passedWorkspace[vertex.id]);
                         }
 
-                        var inWorkspace = self.workspaceVertices[vertex.id];
-                        var cache = self.updateCacheWithVertex(vertex);
+                        var inWorkspace = self.workspaceVertices[vertex.id],
+                            cache = self.updateCacheWithVertex(vertex);
 
                         self.workspaceVertices[vertex.id] = cache.workspace;
 
@@ -486,15 +493,15 @@ define([
                     if (existing.length) self.trigger('existingVerticesAdded', { vertices: existing });
 
                     if (added.length === 0) {
-                        var message = "No New Vertices Added";
-                        self.trigger('displayInformation', { message:message });
+                        var message = 'No New Vertices Added';
+                        self.trigger('displayInformation', { message: message });
                         return;
                     }
 
-                    if(!data.noUndo) {
+                    if (!data.noUndo) {
                         var dataClone = JSON.parse(JSON.stringify(data));
                         dataClone.noUndo = true;
-                        undoManager.performedAction( 'Add ' + dataClone.vertices.length + ' vertices', {
+                        undoManager.performedAction('Add ' + dataClone.vertices.length + ' vertices', {
                             undo: function() {
                                 self.trigger('deleteVertices', dataClone);
                             },
@@ -504,28 +511,32 @@ define([
                         });
                     }
 
-                    if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates:added, adding:true });
+                    if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates: added, adding: true });
                     if (added.length) {
+                        if (addingVerticesRelatedTo) {
+                            self.trigger('selectObjects');
+                        }
                         ws.data.vertices = ws.data.vertices.concat(added);
                         self.trigger('verticesAdded', { 
                             vertices: added,
                             remoteEvent: data.remoteEvent,
                             options: data.options || {}
                         });
+                        if (addingVerticesRelatedTo) {
+                            self.trigger('selectObjects', { vertices: added })
+                        }
                     }
                 });
             });
         };
 
-
         this.onUpdateVertices = function(evt, data) {
             var self = this;
 
             this.workspaceReady(function(ws) {
-                var undoData = { noUndo: true, vertices: [] };
-                var redoData = { noUndo: true, vertices: [] };
-
-                var shouldSave = false,
+                var undoData = { noUndo: true, vertices: [] },
+                    redoData = { noUndo: true, vertices: [] },
+                    shouldSave = false,
                     updated = data.vertices.map(function(vertex) {
                         if (!vertex.id && vertex.graphVertexId) {
                             vertex = {
@@ -539,22 +550,25 @@ define([
                             shouldSave = true;
                         }
 
-
-                        if (shouldSave) undoData.vertices.push(self.workspaceOnlyVertexCopy({id:vertex.id}));
+                        if (shouldSave) undoData.vertices.push(self.workspaceOnlyVertexCopy({id: vertex.id}));
                         var cache = self.updateCacheWithVertex(vertex);
                         if (shouldSave) redoData.vertices.push(self.workspaceOnlyVertexCopy(cache));
                         return cache;
                     });
 
-                if(!data.noUndo && undoData.vertices.length) {
-                    undoManager.performedAction( 'Update ' + undoData.vertices.length + ' vertices', {
-                        undo: function() { self.trigger('updateVertices', undoData); },
-                        redo: function() { self.trigger('updateVertices', redoData); }
+                if (!data.noUndo && undoData.vertices.length) {
+                    undoManager.performedAction('Update ' + undoData.vertices.length + ' vertices', {
+                        undo: function() {
+                            self.trigger('updateVertices', undoData); 
+                        },
+                        redo: function() {
+                            self.trigger('updateVertices', redoData); 
+                        }
                     });
                 }
 
                 if (shouldSave && !data.remoteEvent) {
-                    this.trigger('saveWorkspace', { entityUpdates:updated });
+                    this.trigger('saveWorkspace', { entityUpdates: updated });
                 }
                 if (updated.length) {
                     this.trigger('verticesUpdated', { 
@@ -592,7 +606,7 @@ define([
 
             if (len) {
                 this.trigger('deleteVertices', { vertices: this.vertices(vertexIds) });
-                this.trigger('displayInformation', { message:this.formatVertexAction('Cut', vertexIds)});
+                this.trigger('displayInformation', { message: this.formatVertexAction('Cut', vertexIds)});
             }
         };
 
@@ -606,7 +620,7 @@ define([
                 plural = len === 1 ? 'vertex' : 'vertices';
 
             if (len) {
-                this.trigger('displayInformation', { message:this.formatVertexAction('Paste', vertexIds)});
+                this.trigger('displayInformation', { message: this.formatVertexAction('Paste', vertexIds)});
                 this.vertexService.getMultiple(vertexIds).done(function(data) {
                     self.trigger('addVertices', data);
                 });
@@ -627,7 +641,9 @@ define([
 
             if (needsLoading.length) {
                 this.vertexService.getMultiple(_.pluck(needsLoading, 'id'))
-                    .done(function() { deferred.resolve(); });
+                    .done(function() {
+                        deferred.resolve(); 
+                    });
             } else {
                 deferred.resolve();
             }
@@ -637,7 +653,9 @@ define([
                     loadedVertices = vertices.map(function(v) {
                         return self.vertex(v.id) || v;
                     }),
-                    selected = _.groupBy(loadedVertices, function(v) { return v.concept ? 'vertices' : 'edges'; });
+                    selected = _.groupBy(loadedVertices, function(v) {
+                        return v.concept ? 'vertices' : 'edges'; 
+                    });
 
                 if (_.isArray(self.previousSelection) && 
                     _.isArray(selectedIds) &&
@@ -651,7 +669,9 @@ define([
 
                 if (selected.vertices.length) {
                     self.trigger('clipboardSet', {
-                        text: window.location.href.replace(/#.*$/,'') + '#v=' + _.pluck(selected.vertices, 'id').join(',')
+                        text: window.location.href.replace(/#.*$/,'') +
+                            '#v=' +
+                            _.pluck(selected.vertices, 'id').join(',')
                     });
                 } else {
                     self.trigger('clipboardClear');
@@ -693,15 +713,19 @@ define([
                     }
                 });
 
-                if(!data.noUndo && undoDelete.length) {
-                    undoManager.performedAction( 'Delete ' + toDelete.length + ' vertices', {
-                        undo: function() { self.trigger(document, 'addVertices', { noUndo:true, vertices:undoDelete }); },
-                        redo: function() { self.trigger(document, 'deleteVertices', { noUndo:true, vertices:redoDelete }); }
+                if (!data.noUndo && undoDelete.length) {
+                    undoManager.performedAction('Delete ' + toDelete.length + ' vertices', {
+                        undo: function() {
+                            self.trigger(document, 'addVertices', { noUndo: true, vertices: undoDelete }); 
+                        },
+                        redo: function() {
+                            self.trigger(document, 'deleteVertices', { noUndo: true, vertices: redoDelete }); 
+                        }
                     });
                 }
 
                 if (!data.remoteEvent) {
-                    this.trigger('saveWorkspace', { entityDeletes:toDelete });
+                    this.trigger('saveWorkspace', { entityDeletes: toDelete });
                 }
                 if (toDelete.length) {
                     var ids = _.pluck(toDelete, 'id');
@@ -762,7 +786,7 @@ define([
             }
         };
 
-        this.onWorkspaceCopied = function (evt, data) {
+        this.onWorkspaceCopied = function(evt, data) {
             this.workspaceId = data.workspaceId;
             this.loadActiveWorkspace();
         }
@@ -771,15 +795,9 @@ define([
             this.workspaceReady(function(workspace) {
                 this.relationshipsReady(function(relationships) {
                     this.trigger('workspaceLoaded', workspace);
-                    this.trigger('relationshipsLoaded', { relationships:relationships });
+                    this.trigger('relationshipsLoaded', { relationships: relationships });
                 });
             });
-        };
-
-        this.onWorkspaceDeleting = function (evt, data) {
-            if (this.workspaceId == data.workspaceId) {
-                // TODO: use activity to display message
-            }
         };
 
         this.loadWorkspace = function(workspaceData) {
@@ -803,20 +821,20 @@ define([
                         _.each(_.values(self.cachedVertices), resetWorkspace);
                         self.workspaceVertices = {};
 
-                        var serverVertices = vertexResponse[0];
-                        var vertices = serverVertices.map(function(vertex) {
-                            var workspaceData = workspace.entities[vertex.id] || {};
-                            delete workspaceData.dropPosition;
-                            workspaceData.selected = false;
-                            vertex.workspace = workspaceData;
+                        var serverVertices = vertexResponse[0],
+                            vertices = serverVertices.map(function(vertex) {
+                                var workspaceData = workspace.entities[vertex.id] || {};
+                                delete workspaceData.dropPosition;
+                                workspaceData.selected = false;
+                                vertex.workspace = workspaceData;
 
-                            var cache = self.updateCacheWithVertex(vertex);
-                            cache.properties._refreshedFromServer = true;
-                            self.workspaceVertices[vertex.id] = cache.workspace;
+                                var cache = self.updateCacheWithVertex(vertex);
+                                cache.properties._refreshedFromServer = true;
+                                self.workspaceVertices[vertex.id] = cache.workspace;
 
-                            workspace.data.verticesById[vertex.id] = cache;
-                            return cache;
-                        });
+                                workspace.data.verticesById[vertex.id] = cache;
+                                return cache;
+                            });
 
                         workspace.data.vertices = vertices.sort(function(a, b) { 
                             if (a.workspace.graphPosition && b.workspace.graphPosition) return 0;
@@ -861,14 +879,13 @@ define([
                 });
         };
 
-        this.getIds = function () {
+        this.getIds = function() {
             return Object.keys(this.workspaceVertices);
         };
 
         this.setupDroppable = function() {
-            var self = this;
-
-            var enabled = false,
+            var self = this,
+                enabled = false,
                 droppable = this.select('droppableSelector');
 
             // Other droppables might be on top of graph, listen to 
@@ -896,7 +913,7 @@ define([
                 accept: function(item) {
                     return true;
                 },
-                over: function( event, ui ) {
+                over: function(event, ui) {
                     var draggable = ui.draggable,
                         start = true,
                         graphVisible = $('.graph-pane-2d').is('.visible'),
@@ -919,7 +936,7 @@ define([
                         if (graphVisible) {
                             ui.helper.toggleClass('draggable-invisible', enabled);
                         } else if (dashboardVisible) {
-                            self.trigger('menubarToggleDisplay', { name:'graph' });
+                            self.trigger('menubarToggleDisplay', { name: 'graph' });
                             dashboardVisible = false;
                             graphVisible = true;
                         }
@@ -938,7 +955,7 @@ define([
                         }
                     });
                 },
-                drop: function( event, ui ) {
+                drop: function(event, ui) {
                     $('.draggable-wrapper').remove();
 
                     // Early exit if should leave to a different droppable
@@ -953,7 +970,7 @@ define([
 
                     self.workspaceReady(function(ws) {
                         if (ws.isEditable) {
-                            self.trigger('verticesDropped', { vertices:vertices });
+                            self.trigger('verticesDropped', { vertices: vertices });
                         }
                     });
                 }.bind(this)

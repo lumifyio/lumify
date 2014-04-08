@@ -1,5 +1,4 @@
 
-
 define([
     'util/retina'
 ], function(retina) {
@@ -16,8 +15,8 @@ define([
         })
 
         this.after('initialize', function() {
-            if (!this.attr.cy) throw "cy attr required";
-            if (!this.attr.cyNode || this.attr.cyNode.length !== 1) throw "cyNode attr required: " + this.attr.cyNode;
+            if (!this.attr.cy) throw 'cy attr required';
+            if (!this.attr.cyNode || this.attr.cyNode.length !== 1) throw 'cyNode attr required: ' + this.attr.cyNode;
 
             this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 1000 / 30);
             this.onTap = this.onTap.bind(this);
@@ -28,7 +27,7 @@ define([
 
         this.setupWithTemplate = function(tpl) {
             this.dialog = $('<div class="dialog-popover">')
-                .css({position:'absolute'})
+                .css({position: 'absolute'})
                 .html(tpl(this.attr))
                 .appendTo(this.$node);
 

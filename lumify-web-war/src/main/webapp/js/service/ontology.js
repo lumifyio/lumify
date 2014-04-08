@@ -1,8 +1,7 @@
 define([
     'service/serviceBase'
-], function (ServiceBase) {
+], function(ServiceBase) {
     'use strict';
-
 
     var PARENT_CONCEPT = 'http://www.w3.org/2002/07/owl#Thing';
 
@@ -26,7 +25,7 @@ define([
     OntologyService.prototype = Object.create(ServiceBase.prototype);
 
     OntologyService.prototype.ontology = function() {
-        return this._ajaxGet({ url:'ontology' })
+        return this._ajaxGet({ url: 'ontology' })
                     .then(function(ontology) {
                         return $.extend({}, ontology, {
                             conceptsById: _.indexBy(ontology.concepts, 'id'),
@@ -35,12 +34,15 @@ define([
                     });
     };
 
-    OntologyService.prototype.concepts = function () {
+    OntologyService.prototype.concepts = function() {
         var clsIndex = 0, conceptToClassMap = {}, classToConceptMap = {};
         return this.ontology()
                     .then(function(ontology) {
                         return {
-                            entityConcept: buildTree(ontology.concepts, _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})),
+                            entityConcept: buildTree(
+                                ontology.concepts,
+                                _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})
+                            ),
                             byId: ontology.conceptsById, 
                             byClassName: _.indexBy(ontology.concepts, 'className'),
                             byTitle: _.chain(ontology.concepts)
@@ -117,7 +119,7 @@ define([
         }
     };
 
-    OntologyService.prototype.relationships = function () {
+    OntologyService.prototype.relationships = function() {
         return $.when(this.concepts(), this.ontology())
                     .then(function(concepts, ontology) {
                         var list = _.sortBy(ontology.relationships, 'displayName');
@@ -174,19 +176,24 @@ define([
     OntologyService.prototype.conceptToConceptRelationships = function(sourceConceptTypeId, destConceptTypeId) {
         return this.relationships()
                     .then(function(relationships) {
-                        var key = relationships.groupedBySourceDestConceptsKeyGen(sourceConceptTypeId, destConceptTypeId);
+                        var key = relationships.groupedBySourceDestConceptsKeyGen(
+                            sourceConceptTypeId,
+                            destConceptTypeId
+                        );
 
                         return _.chain(relationships.groupedBySourceDestConcepts[key] || [])
-                            .uniq(function(r) { return r.id })
+                            .uniq(function(r) {
+                                return r.title 
+                            })
                             .sortBy('displayName')
                             .value()
                     });
     };
     OntologyService.prototype.conceptToConceptRelationships.memoizeHashFunction = function(s,d) {
-        return s+d;
+        return s + d;
     };
 
-    OntologyService.prototype.properties = function () {
+    OntologyService.prototype.properties = function() {
         return this.ontology()
                     .then(function(ontology) {
                         return {
@@ -197,7 +204,7 @@ define([
                     });
     };
 
-    OntologyService.prototype.propertiesByConceptId = function (conceptId) {
+    OntologyService.prototype.propertiesByConceptId = function(conceptId) {
         return this.ontology()
                     .then(function(ontology) {
                         var 
@@ -207,12 +214,13 @@ define([
                                     properties = concept.properties,
                                     parentConceptId = concept.parentConcept;
 
-                                propertyIds.push.apply(propertyIds, properties);
+                                if (properties.length) {
+                                    propertyIds.push.apply(propertyIds, properties);
+                                }
                                 if (parentConceptId) {
                                     collectPropertyIds(parentConceptId);
                                 }
                             };
-
 
                         collectPropertyIds(conceptId);
 
@@ -230,10 +238,12 @@ define([
                     });
     };
 
-    OntologyService.prototype.propertiesByRelationshipLabel = function (relationshipLabel) {
+    OntologyService.prototype.propertiesByRelationshipLabel = function(relationshipLabel) {
         return this.ontology()
                     .then(function(ontology) {
-                        var relationship = _.findWhere(ontology.relationships, { displayName:relationshipLabel }),
+                        var relationship = _.findWhere(ontology.relationships, { 
+                                displayName: relationshipLabel 
+                            }),
                             propertyIds = relationship.properties || [],
                             properties = _.map(propertyIds, function(pId) {
                                 return ontology.propertiesByTitle[pId];
@@ -276,7 +286,7 @@ define([
 
     function buildPropertiesByTitle(properties) {
         var result = {};
-        properties.forEach(function (property) {
+        properties.forEach(function(property) {
             result[property.title] = property;
         });
         return result;
@@ -284,4 +294,3 @@ define([
 
     return OntologyService;
 });
-

@@ -61,7 +61,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String graphVertexId = getRequiredParameter(request, "graphVertexId");
-        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String edgeId = getRequiredParameter(request, "edgeId");
 
         LOGGER.debug(
                 "UnresolveTermEntity (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
@@ -91,10 +91,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, graphVertexId);
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edgeId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         TermMentionModel analyzedTermMention = termMentionRepository.findByRowKey(new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd).toString(), modelUserContext);
-        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, termMention, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations);
+        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);
     }

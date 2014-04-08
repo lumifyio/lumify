@@ -29,7 +29,6 @@ define([
             config.template = 'createConnectionPopover';
         });
 
-
         this.after('initialize', function() {
             this.on('click', {
                 buttonSelector: this.onCreateConnection
@@ -56,7 +55,7 @@ define([
 
                     if (relationships.length) {
                         select.html(
-                            relationships.map(function(d){
+                            relationships.map(function(d) {
                                 return '<option value="' + d.title + '">' + d.displayName + '</option>';
                             }).join('')
                         ).siblings('button').removeAttr('disabled');
@@ -79,7 +78,6 @@ define([
         this.onVisibilityChange = function(event, data) {
             this.visibilitySource = data.value;
         };
-
 
         this.onCreateConnection = function(e) {
             var $target = $(e.target);
@@ -107,7 +105,7 @@ define([
                 });
         };
 
-        this.getRelationshipLabels = function (source, dest) {
+        this.getRelationshipLabels = function(source, dest) {
             var self = this,
                 sourceConceptTypeId = source.data('http://lumify.io#conceptType').value,
                 destConceptTypeId = dest.data('http://lumify.io#conceptType').value;
@@ -118,9 +116,9 @@ define([
             ).then(function(relationships, ontologyRelationships) {
                 var relationshipsTpl = [];
 
-                relationships.forEach(function (relationship) {
-                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
-                    var displayName;
+                relationships.forEach(function(relationship) {
+                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],
+                        displayName;
                     if (ontologyRelationship) {
                         displayName = ontologyRelationship.displayName;
                     } else {

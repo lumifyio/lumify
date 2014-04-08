@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     './activity/activity',
@@ -12,27 +11,27 @@ define([
     function Menubar() {
 
         // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces activity users logout';
-        var TOOLTIPS = {
-            dashboard: 'Dashboard',
-            graph: { html:'Graph<span class="subtitle">2D / 3D</span>' },
-            map: 'Map',
-            search: 'Search',
-            workspaces: 'Workspaces',
-            users: 'Chat',
-            logout: 'Log&nbsp;out'
-        };
+        var BUTTONS = 'dashboard graph map search workspaces activity users logout',
+            TOOLTIPS = {
+                dashboard: 'Dashboard',
+                graph: { html: 'Graph<span class="subtitle">2D / 3D</span>' },
+                map: 'Map',
+                search: 'Search',
+                workspaces: 'Workspaces',
+                users: 'Chat',
+                logout: 'Log&nbsp;out'
+            },
 
-        // Which cannot both be active
-        var MUTALLY_EXCLUSIVE_SWITCHES = [ 
-            { names:['dashboard', 'graph','map'], options: { allowCollapse:false } },
-            { names:['workspaces', 'search'], options: { } }
-        ];
+            // Which cannot both be active
+            MUTALLY_EXCLUSIVE_SWITCHES = [ 
+                { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
+                { names: ['workspaces', 'search'], options: { } }
+            ],
 
-        // Don't change state to highlighted on click
-        var DISABLE_ACTIVE_SWITCH = 'activity metrics prefs logout'.split(' ');
+            // Don't change state to highlighted on click
+            DISABLE_ACTIVE_SWITCH = 'activity metrics prefs logout'.split(' '),
 
-        var DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
+            DISABLE_HIDE_TOOLTIP_ON_CLICK = 'activity logout'.split(' ');
 
         this.activities = 0;
 
@@ -47,7 +46,7 @@ define([
                 var isSwitch = false;
                 if (DISABLE_ACTIVE_SWITCH.indexOf(name) === -1) {
                     MUTALLY_EXCLUSIVE_SWITCHES.forEach(function(exclusive, i) {
-                        if (exclusive.names.indexOf(name) !== -1 && exclusive.options.allowCollapse === false ) {
+                        if (exclusive.names.indexOf(name) !== -1 && exclusive.options.allowCollapse === false) {
                             isSwitch = true;
                         }
                     });
@@ -65,7 +64,7 @@ define([
                         this.trigger(document, 'toggleGraphDimensions');
                     }
                     return;
-                } else this.trigger(document, 'menubarToggleDisplay', {name:name});
+                } else this.trigger(document, 'menubarToggleDisplay', {name: name});
             };
         });
 
@@ -80,11 +79,11 @@ define([
                     placement: 'right',
                     html: true,
                     title: TOOLTIPS[selectorClass].html || TOOLTIPS[selectorClass],
-                    delay: { show: 250, hide:0 }
+                    delay: { show: 250, hide: 0 }
                 });
             });
             
-            Activity.attachTo( this.select('activityIconSelector') );
+            Activity.attachTo(this.select('activityIconSelector'));
 
             this.on('click', events);
 
@@ -92,7 +91,6 @@ define([
 
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
         });
-
 
         this.attachSyncEventsToAnimateUsers = function() {
             var self = this,
@@ -106,11 +104,10 @@ define([
             });
         };
 
-
         this.onMenubarToggle = function(e, data) {
-            var $this = this;
-            var icon = this.select(data.name + 'IconSelector');
-            var active = icon.hasClass('active');
+            var self = this,
+                icon = this.select(data.name + 'IconSelector'),
+                active = icon.hasClass('active');
 
             if (DISABLE_ACTIVE_SWITCH.indexOf(data.name) === -1) {
                 var isSwitch = false;
@@ -121,9 +118,12 @@ define([
                             isSwitch = true;
                                 exclusive.names.forEach(function(name) {
                                     if (name !== data.name) {
-                                        var otherIcon = $this.select(name + 'IconSelector');
-                                        if ( otherIcon.hasClass('active') ) {
-                                            $this.trigger(document, 'menubarToggleDisplay', { name: name, isSwitchButCollapse:true });
+                                        var otherIcon = self.select(name + 'IconSelector');
+                                        if (otherIcon.hasClass('active')) {
+                                            self.trigger(document, 'menubarToggleDisplay', {
+                                                name: name,
+                                                isSwitchButCollapse: true 
+                                            });
                                         }
                                     } else icon.addClass('active');
                                 });
@@ -131,7 +131,7 @@ define([
                     });
                 }
 
-                if ( !isSwitch || data.isSwitchButCollapse ) {
+                if (!isSwitch || data.isSwitchButCollapse) {
                     icon.toggleClass('active');
                 }
 

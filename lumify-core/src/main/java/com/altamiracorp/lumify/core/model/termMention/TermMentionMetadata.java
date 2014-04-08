@@ -11,6 +11,16 @@ public class TermMentionMetadata extends ColumnFamily {
     public static final String VERTEX_ID = "graphVertexId";
     public static final String CONCEPT_GRAPH_VERTEX_ID = "conceptGraphVertexId";
     public static final String ANALYTIC_PROCESS = "analyticProcess";
+    public static final String EDGE_ID = "edgeId";
+
+    public String getEdgeId() {
+        return Value.toString(get(EDGE_ID));
+    }
+
+    public TermMentionMetadata setEdgeId (String edgeId, Visibility visibility) {
+        set (EDGE_ID, edgeId, visibility.getVisibilityString());
+        return this;
+    }
 
     public TermMentionMetadata() {
         super(NAME);

@@ -155,12 +155,16 @@ define([
             var cls = [],
                 props = vertex.properties || vertex;
 
-            if (vertex.concept.displayType === 'document' || vertex.concept.displayType === 'image' || vertex.concept.displayType === 'video') {
+            if (vertex.concept.displayType === 'document' ||
+                vertex.concept.displayType === 'image' ||
+                vertex.concept.displayType === 'video') {
                 cls.push('artifact entity resolved');
                 if (props['http://lumify.io#conceptType']) cls.push(props['http://lumify.io#conceptType'].value);
             } else {
                 cls.push('entity resolved');
-                if (props['http://lumify.io#conceptType']) cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
+                if (props['http://lumify.io#conceptType']) {
+                    cls.push('conceptType-' + props['http://lumify.io#conceptType'].value);
+                }
             }
             cls.push('gId-' + (vertex.id || props.graphNodeId));
 

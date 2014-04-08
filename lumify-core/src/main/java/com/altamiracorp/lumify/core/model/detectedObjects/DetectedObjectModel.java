@@ -32,7 +32,9 @@ public class DetectedObjectModel extends Row<DetectedObjectRowKey> {
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
-            json.put("classifierConcept", getMetadata().getClassiferConcept());
+            if (getMetadata().getResolvedId() == null) {
+                json.put("classifierConcept", getMetadata().getClassiferConcept());
+            }
             json.put(LumifyProperties.ROW_KEY.getKey(), getRowKey());
             json.put("x1", getMetadata().getX1());
             json.put("y1", getMetadata().getY1());

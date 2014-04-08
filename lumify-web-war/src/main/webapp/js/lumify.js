@@ -14,6 +14,8 @@ window.requestAnimationFrame =
             setTimeout(callback, 1000 / 60);
         }
     );
+window.TRANSITION_END = 'transitionend webkitTransitionEnd MSTransitionEnd oTransitionEnd otransitionend';
+window.ANIMATION_END = 'animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd oanimationend';
 
 require([
     'jquery',

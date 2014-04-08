@@ -3,17 +3,18 @@ define([
     'flight/lib/component',
     'tpl!./justification',
     'tpl!./justificationRef',
-    'data'
-], function (
+    'data',
+    'util/withTeardown'
+], function(
     defineComponent,
     template,
     templateRef,
-    appData
+    appData,
+    withTeardown
 ) {
     'use strict';
 
-    return defineComponent(Justification);
-
+    return defineComponent(Justification, withTeardown);
 
     function Justification() {
 
@@ -21,6 +22,10 @@ define([
             fieldSelector: 'input',
             removeReferenceSelector: '.remove'
         });
+
+        this.after('teardown', function() {
+            this.select('fieldSelector').tooltip('destroy');
+        })
 
         this.after('initialize', function() {
             if (this.attr._sourceMetadata) {
@@ -46,13 +51,19 @@ define([
                 _.defer(function() {
                     var val = self.select('fieldSelector').val();
                     if (!self.setReferenceWithValue(val)) {
-                        self.trigger('justificationchange', { justificationText:val, valid:$.trim(val).length > 0 });
+                        self.trigger('justificationchange', { 
+                            justificationText: val,
+                            valid: $.trim(val).length > 0 
+                        });
                     }
                 });
                 return;
             }
             var val = this.select('fieldSelector').val();
-            this.trigger('justificationchange', { justificationText:val, valid:$.trim(val).length > 0 });
+            this.trigger('justificationchange', { 
+                justificationText: val,
+                valid: $.trim(val).length > 0 
+            });
         };
 
         this.onValuePasted = function(event, data) {
@@ -78,7 +89,10 @@ define([
             this.animate = true;
             this.toggleView(false);
             this.select('fieldSelector').focus();
-            this.trigger('justificationchange', { justificationText:'', valid:false });
+            this.trigger('justificationchange', { 
+                justificationText: '',
+                valid: false 
+            });
         };
 
         this.setValue = function(value) {
@@ -86,11 +100,14 @@ define([
 
             if (_.isString(value)) {
                 this.toggleView(false, value);
-                this.trigger('justificationchange', { justificationText:value, valid:$.trim(value).length > 0 });
+                this.trigger('justificationchange', { 
+                    justificationText: value,
+                    valid: $.trim(value).length > 0 
+                });
             } else {
                 var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
                 this.toggleView(true, value);
-                this.trigger('justificationchange', { sourceInfo:sourceInfo, valid:true });
+                this.trigger('justificationchange', { sourceInfo: sourceInfo, valid: true });
             }
         };
 
@@ -104,9 +121,9 @@ define([
                     self.transitionHeight(templateRef(value));
                 });
             } else {
-                this.transitionHeight(template({value:value || ''}));
+                this.transitionHeight(template({value: value || ''}));
                 this.select('fieldSelector').tooltip({ 
-                    container:'body' 
+                    container: 'body' 
                 }).data('tooltip').tip().addClass('field-tooltip');
             }
         };
@@ -128,12 +145,15 @@ define([
 
             _.defer(function() {
                 var toHeight = node.find('.animationwrap').outerHeight(true);
-                node.on('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function(e) {
+                node.on(TRANSITION_END, function(e) {
                     var oe = e.originalEvent || e;
+
+                    node.off(TRANSITION_END);
+
                     if (oe.propertyName === 'height') {
                         node.off('.justification');
                         node.css({
-                            height:'auto',
+                            height: 'auto',
                             overflow: 'inherit',
                             transition: 'none'
                         });

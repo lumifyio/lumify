@@ -10,6 +10,7 @@ define([
     'tpl!./relationships',
     'tpl!util/alert',
     'util/vertex/list',
+    'util/formatters',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
     'service/vertex',
@@ -24,14 +25,15 @@ define([
     relationshipsTemplate,
     alertTemplate,
     VertexList,
+    formatters,
     PropertyForm,
     OntologyService,
     VertexService,
     sf) {
     'use strict';
 
-    var ontologyService = new OntologyService();
-    var vertexService = new VertexService();
+    var ontologyService = new OntologyService(),
+        vertexService = new VertexService();
 
     return defineComponent(Entity, withTypeContent, withHighlighting);
 
@@ -63,7 +65,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(vertex.prop('title'));
+                    self.select('titleSelector').html(formatters.vertex.prop(vertex, 'title'));
                 }
             });
         };
@@ -77,14 +79,14 @@ define([
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
-                        auditsButton: self.auditsButton()
+                        auditsButton: self.auditsButton(),
+                        formatters: formatters
                     }));
 
                     Image.attachTo(self.select('glyphIconSelector'), {
                         data: vertex,
                         service: vertexService
                     });
-
 
                    Properties.attachTo(self.select('propertiesSelector'), {
                        data: vertex
@@ -151,24 +153,28 @@ define([
 
             var groupedByType = _.groupBy(relationships, function(r) { 
 
-                // Has Entity are collected into references (no matter
-                // relationship direction
-                if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
-                    return 'references';
-                }
+                    // Has Entity are collected into references (no matter
+                    // relationship direction
+                    if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
+                        return 'references';
+                    }
 
-                return r.displayLabel;
-            });
-            var sortedKeys = Object.keys(groupedByType);
+                    return r.displayLabel;
+                }),
+                sortedKeys = Object.keys(groupedByType);
+
             sortedKeys.sort(function(a,b) {
 
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
-                    return defaultSort(a.vertex.prop('title'), b.vertex.prop('title'));
+                    return defaultSort(
+                        formatters.vertex.prop(a.vertex, 'title'), 
+                        formatters.vertex.prop(b.vertex, 'title')
+                    );
                 }
 
                 // Specifies the special group sort order
-                var groups = { references:1 };
+                var groups = { references: 1 };
                 if (groups[a] && groups[b]) {
                     return defaultSort(groups[a], groups[b]);
                 } else if (groups[a]) {
@@ -187,7 +193,8 @@ define([
             var $rels = self.select('relationshipsSelector');
             $rels.html(relationshipsTemplate({
                 relationshipsGroupedByType: groupedByType,
-                sortedKeys: sortedKeys
+                sortedKeys: sortedKeys,
+                formatters: formatters
             }));
 
             VertexList.attachTo($rels.find('.references'), {
@@ -229,12 +236,12 @@ define([
 
             if ($target.is('.entity, .artifact')) {
                 var id = $target.data('vertexId');
-                this.trigger('selectObjects', { vertices:[appData.vertex(id)] });
+                this.trigger('selectObjects', { vertices: [appData.vertex(id)] });
                 evt.stopPropagation();
             } else if ($target.is('.relationship')) {
                 var info = $target.data('info');
                 if (info) {
-                    this.trigger('selectObjects', { vertices:[info] });
+                    this.trigger('selectObjects', { vertices: [info] });
                 }
                 evt.stopPropagation();
             }
@@ -242,4 +249,3 @@ define([
 
     }
 });
-

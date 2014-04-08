@@ -33,7 +33,7 @@ public class VertexRelationships extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        String graphVertexId = (String) request.getAttribute("graphVertexId");
+        String graphVertexId = getAttributeString(request, "graphVertexId");
         long offset = getOptionalParameterLong(request, "offset", 0);
         long size = getOptionalParameterLong(request, "size", 25);
 

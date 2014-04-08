@@ -2,7 +2,7 @@
 <div class="entity-background">
   <div class="entity-glyphIcon"/>
 
-  <h1 title="<%= vertex.prop('title') %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= vertex.prop('title') %></h1>
+  <h1 title="<%= formatters.vertex.prop(vertex, 'title') %>" class='generic-draggable entity-title' data-vertex-id="<%= vertex.id %>"><%= formatters.vertex.prop(vertex, 'title') %></h1>
 
   <div class="detail-toolbar">
     <div class="btn-toolbar">

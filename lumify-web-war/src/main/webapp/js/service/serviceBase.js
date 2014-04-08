@@ -14,10 +14,10 @@ define(['atmosphere'],
             var defaults = {
 
                 // the base url to find the service
-                serviceBaseUrl: "/",
+                serviceBaseUrl: '/',
 
                 //the context of the service
-                serviceContext: "",
+                serviceContext: '',
 
                 //to use jsonp, or not to use jsonp
                 jsonp: false
@@ -28,27 +28,27 @@ define(['atmosphere'],
             return this;
         }
 
-		ServiceBase.prototype.getSocket = function () {
+		ServiceBase.prototype.getSocket = function() {
 			return document.$socket;
 		};
 
         ServiceBase.prototype.socketPush = function(data) {
             data.sourceId = document.subSocketId;
             var string = JSON.stringify(data);
-            if (string.length > 1024*1024) {
+            if (string.length > 1024 * 1024) {
                 return console.warn('Unable to push data, too large: ', string.length, data)
             }
             return document.$subSocket.push(string);
         };
 
-        ServiceBase.prototype.subscribe = function (config) {
+        ServiceBase.prototype.subscribe = function(config) {
             var self = this,
                 req = {
-                    url: location.href.replace(/\/#?$/, '') + "/messaging/",
+                    url: location.href.replace(/\/#?$/, '') + '/messaging/',
                     transport: 'websocket',
                     fallbackTransport: 'long-polling',
-                    contentType: "application/json",
-                    trackMessageLength : true,
+                    contentType: 'application/json',
+                    trackMessageLength: true,
                     suspend: false,
                     shared: false,
                     uuid: this.getSocket().guid(),
@@ -66,17 +66,17 @@ define(['atmosphere'],
                     onClose: function(req) {
                         console.error('closed', req.reasonPhrase, req.error);
                     },
-                    onMessage: function (response) {
+                    onMessage: function(response) {
                         var body = response.responseBody,
                             data = JSON.parse(body);
 
-                        if(data && data.sourceId == document.subSocketId) {
+                        if (data && data.sourceId == document.subSocketId) {
                             return;
                         }
 
                         if (config.onMessage) config.onMessage(null, data);
                     },
-                    onError: function (response) {
+                    onError: function(response) {
                         console.error('subscribe error:', response);
                         if (config.onMessage) config.onMessage(response.error, null);
 
@@ -107,34 +107,33 @@ define(['atmosphere'],
         }
 
         ServiceBase.prototype._ajaxPost = function(options) {
-            options.type = options.type || "POST";
+            options.type = options.type || 'POST';
             return this._ajaxGet(options);
         };
 
         ServiceBase.prototype._ajaxDelete = function(options) {
-            options.type = options.type || "DELETE";
+            options.type = options.type || 'DELETE';
             return this._ajaxGet(options);
         };
 
         ServiceBase.prototype._ajaxGet = function(options) {
-            options.type = options.type || "GET";
+            options.type = options.type || 'GET';
             options.dataType = options.dataType || this._resolveDataType();
             options.resolvedUrl = options.resolvedUrl || this._resolveUrl(options.url);
 
             return $.ajax(options);
         };
 
-		ServiceBase.prototype._unsubscribe = function (url) {
+		ServiceBase.prototype._unsubscribe = function(url) {
 			this.getSocket().unsubscribeUrl(url);
 		};
 
-
-        ServiceBase.prototype._resolveUrl = function (urlSuffix) {
+        ServiceBase.prototype._resolveUrl = function(urlSuffix) {
             return this.options.serviceBaseUrl + this.options.serviceContext + urlSuffix;
         };
 
-        ServiceBase.prototype._resolveDataType = function () {
-            return this.options.jsonp ? "jsonp" : "json";
+        ServiceBase.prototype._resolveDataType = function() {
+            return this.options.jsonp ? 'jsonp' : 'json';
         };
 
         return ServiceBase;

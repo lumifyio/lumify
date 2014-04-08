@@ -22,8 +22,12 @@ define([], function() {
 
             this.mouseDragHandler = self.onControlDragMouseMove.bind(this);
 
-            this.on(document, 'controlKey', function() { controlKeyPressed = true; });
-            this.on(document, 'controlKeyUp', function() { controlKeyPressed = false; });
+            this.on(document, 'controlKey', function() {
+                controlKeyPressed = true; 
+            });
+            this.on(document, 'controlKeyUp', function() {
+                controlKeyPressed = false; 
+            });
             this.on(document, 'mouseup', function() {
                 if (state === STATE_STARTED) {
                     self.trigger('endVertexConnection', {
@@ -80,7 +84,6 @@ define([], function() {
             }
         };
 
-
         this.onFinishedVertexConnection = function(event) {
             state = STATE_NONE;
 
@@ -133,8 +136,8 @@ define([], function() {
                 }
 
                 var componentName = { 
-                    CreateConnection : 'createConnectionPopover',
-                    FindPath         : 'findPathPopover'
+                    CreateConnection: 'createConnectionPopover',
+                    FindPath: 'findPathPopover'
                 }[connectionType] ||   'controlDragPopover';
 
                 require(['graph/popovers/' + componentName], function(Popover) {
@@ -208,7 +211,7 @@ define([], function() {
                 currentTargetId = targetId;
                 if (!edge.length) {
                     cy.add({
-                        group: "edges",
+                        group: 'edges',
                         classes: 'temp',
                         data: {
                             id: edgeId,

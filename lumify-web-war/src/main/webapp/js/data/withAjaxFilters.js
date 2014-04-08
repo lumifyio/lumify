@@ -1,5 +1,4 @@
 
-
 define([], function() {
 
         
@@ -15,6 +14,7 @@ define([], function() {
             /^workspace\/relationships/,
             /^workspace\/update/,
             /^vertex\/relationships/,
+            /^entity/,
         ],
 
         // Custom converters for routes that are more complicated than above,
@@ -24,7 +24,10 @@ define([], function() {
 
             function vertexProperties(json, updated) {
                 var cache;
-                if (!json.sourceVertexId &&_.isString(json.id) && _.isObject(json.properties) && _.keys(json.properties).length) {
+                if (!json.sourceVertexId &&
+                    _.isString(json.id) &&
+                    _.isObject(json.properties) && 
+                    _.keys(json.properties).length) {
                     cache = this.updateCacheWithVertex(json);
                     updated.push(cache);
 
@@ -82,7 +85,6 @@ define([], function() {
 
             function verticesRoot(json, updated) {
                 var self = this;
-
                 if (_.isArray(json) && json.length && json[0].id && json[0].properties) {
                     json.forEach(function(vertex) {
                         var cache = self.updateCacheWithVertex(vertex);
@@ -92,12 +94,9 @@ define([], function() {
                     return true;
                 }
             }
-
-
         ];
 
     return withCacheUpdatingAjaxFilters;
-
 
     function withCacheUpdatingAjaxFilters() {
 
@@ -144,7 +143,7 @@ define([], function() {
                                 if (val && self.resemblesVertices(val)) {
                                     keypathFound = true;
                                     val.forEach(function(v) {
-                                        updated.push( self.updateCacheWithVertex(v) );
+                                        updated.push(self.updateCacheWithVertex(v));
                                     });
                                 } else if (!keypathFound) {
                                     keypathFound = true;

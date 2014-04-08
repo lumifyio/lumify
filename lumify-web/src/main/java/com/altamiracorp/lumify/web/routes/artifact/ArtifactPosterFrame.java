@@ -59,7 +59,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             boundaryDims[0] = boundaryDims[1] = Integer.parseInt(widthStr);
 
             response.setContentType("image/jpeg");
-            response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
+            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
 
             byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "poster-frame", boundaryDims[0],
                     boundaryDims[1], user);

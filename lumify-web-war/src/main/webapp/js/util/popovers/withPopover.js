@@ -1,5 +1,4 @@
 
-
 define([
 ], function() {
     'use strict';
@@ -31,7 +30,7 @@ define([
 
         this.setupWithTemplate = function(tpl) {
             this.dialog = $('<div class="dialog-popover">')
-                .css({position:'absolute'})
+                .css({position: 'absolute'})
                 .html(tpl(this.attr))
                 .appendTo(document.body);
 
@@ -62,7 +61,7 @@ define([
             this.positionChangeErrorCheck = _.delay(function() {
                 if (!self.dialogPosition) {
                     console.error(ERROR_NO_POSITION_RESPONSE);
-                    self.dialogPosition = { x:0, y:0 };
+                    self.dialogPosition = { x: 0, y: 0 };
                     self.positionDialog();
                 }
             }, 500)
