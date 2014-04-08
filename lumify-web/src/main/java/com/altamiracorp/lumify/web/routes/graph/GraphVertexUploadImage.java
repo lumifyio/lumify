@@ -32,7 +32,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
@@ -42,6 +41,7 @@ import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.GLY
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.*;
 import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
@@ -111,8 +111,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
-        Iterator<Edge> existingEdges = entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations).iterator();
-        if (!existingEdges.hasNext()) {
+        List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations));
+        if (existingEdges.size() == 0) {
             Edge edge = graph.addEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }

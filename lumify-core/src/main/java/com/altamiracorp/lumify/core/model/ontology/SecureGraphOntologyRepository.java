@@ -347,13 +347,13 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     protected void findOrAddEdge(Vertex fromVertex, final Vertex toVertex, String edgeLabel) {
-        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
+        List<Vertex> matchingEdges = toList(new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
             @Override
             protected boolean isIncluded(Vertex vertex) {
                 return vertex.getId().equals(toVertex.getId());
             }
-        }.iterator();
-        if (matchingEdges.hasNext()) {
+        });
+        if (matchingEdges.size() > 0) {
             return;
         }
         fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());

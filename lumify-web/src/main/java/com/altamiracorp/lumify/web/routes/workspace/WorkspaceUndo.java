@@ -174,9 +174,8 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
-        while (workspaceToVertex.hasNext()) {
-            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
+        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
+            graph.removeEdge(edge, systemAuthorization);
         }
 
         graph.removeVertex(vertex, authorizations);
