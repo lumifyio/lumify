@@ -5,8 +5,8 @@ define([
 ], function(VertexService, formatters) {
                 
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
-        '_visibility',
-        '_visibilityJson',
+        'http://lumify.io#visibility',
+        'http://lumify.io#visibilityJson',
         'detectedObjects',
         'properties',
         'sandboxStatus'
