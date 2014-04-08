@@ -130,7 +130,10 @@ define([
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
             
-            $.extend(cache, _.pick(vertex, ['_visibility', '_visibilityJson', 'sandboxStatus']));
+            $.extend(cache, _.pick(vertex, [
+                'http://lumify.io#visibility',
+                'http://lumify.io#visibilityJson',
+                'sandboxStatus']));
 
             if (!cache.properties.source || !cache.properties.source.value) {
                 if (cache.properties._source && cache.properties._source.value) {

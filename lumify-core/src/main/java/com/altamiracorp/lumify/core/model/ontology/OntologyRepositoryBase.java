@@ -272,6 +272,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if ("http://lumify.io#image".equals(iri)) {
             return PropertyType.IMAGE;
         }
+        if ("http://www.w3.org/2001/XMLSchema#hexBinary".equals(iri)) {
+            return PropertyType.BINARY;
+        }
         throw new LumifyException("Unhandled property type " + iri);
     }
 

@@ -96,10 +96,54 @@
     
 
 
+    <!-- http://lumify.io#author -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;author">
+        <rdfs:label xml:lang="en">Author</rdfs:label>
+        <userVisible>true</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io#conceptType -->
 
     <owl:DatatypeProperty rdf:about="&lumify;conceptType">
         <rdfs:label xml:lang="en">Concept Type</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#createDate -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;createDate">
+        <rdfs:label xml:lang="en">Create Date</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#fileName -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;fileName">
+        <rdfs:label xml:lang="en">File Name</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#fileNameExtension -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;fileNameExtension">
+        <rdfs:label xml:lang="en">File Name Extension</rdfs:label>
         <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -129,10 +173,32 @@
     
 
 
+    <!-- http://lumify.io#mappingJson -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;mappingJson">
+        <rdfs:label xml:lang="en">Mapping JSON</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io#mimeType -->
 
     <owl:DatatypeProperty rdf:about="&lumify;mimeType">
         <rdfs:label xml:lang="en">Mime Type</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#process -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;process">
+        <rdfs:label xml:lang="en">Process</rdfs:label>
         <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
@@ -145,6 +211,17 @@
     <owl:DatatypeProperty rdf:about="&lumify;publishedDate">
         <rdfs:label xml:lang="en">Published Date</rdfs:label>
         <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io#raw -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;raw">
+        <rdfs:label xml:lang="en">Raw Data</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
     
@@ -179,57 +256,24 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
+    
 
 
+    <!-- http://lumify.io#visibility -->
 
-    <!-- http://lumify.io#createDate -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;createDate">
-        <rdfs:label xml:lang="en">Create Date</rdfs:label>
-        <userVisible>false</userVisible>
-        <rdfs:range rdf:resource="&xsd;dateTime"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-     </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io#fileName -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;fileName">
-        <rdfs:label xml:lang="en">File Name</rdfs:label>
+    <owl:DatatypeProperty rdf:about="&lumify;visibility">
+        <rdfs:label xml:lang="en">Visibility</rdfs:label>
         <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
+    
 
 
+    <!-- http://lumify.io#visibilityJson -->
 
-    <!-- http://lumify.io#fileNameExtension -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;fileNameExtension">
-        <rdfs:label xml:lang="en">File Name Extension</rdfs:label>
-        <userVisible>false</userVisible>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io#author -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;author">
-        <rdfs:label xml:lang="en">Author</rdfs:label>
-        <userVisible>true</userVisible>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:DatatypeProperty>
-
-
-
-    <!-- http://lumify.io#mappingJson -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;mappingJson">
-        <rdfs:label xml:lang="en">Mapping JSON</rdfs:label>
+    <owl:DatatypeProperty rdf:about="&lumify;visibilityJson">
+        <rdfs:label xml:lang="en">Visibility JSON</rdfs:label>
         <userVisible>false</userVisible>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
