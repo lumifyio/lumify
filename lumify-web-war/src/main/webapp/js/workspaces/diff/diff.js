@@ -248,7 +248,7 @@ define([
                 cls = vertices.map(function(vertex) {
                     return '.' + formatters.className.to(_.isString(vertex) ? vertex : vertex.id);
                 });
-            this.$node.find(cls.join(',')).addClass('active')
+            this.$node.find(cls.join(',')).addClass('active');
         };
 
         this.onRowClick = function(event) {
@@ -331,7 +331,8 @@ define([
                         )
                         .appendTo(header);
 
-                    bothButtons.show();
+                    button.show();
+
                     _.delay(error.remove.bind(error), 5000)
                 })
                 .done(function(response) {
