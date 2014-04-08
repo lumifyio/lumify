@@ -119,7 +119,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         graph.flush();
 
-        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, 0, 0, user);
+        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, null, user);
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
