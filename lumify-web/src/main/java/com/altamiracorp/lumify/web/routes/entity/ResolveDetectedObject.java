@@ -107,29 +107,20 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             resolvedVertex = resolvedVertexMutation.save();
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
+            GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
+            resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+            resolvedVertex = resolvedVertexMutation.save();
+
+            graph.flush();
+
+            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, null, user);
         } else {
-            resolvedVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+            resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+            resolvedVertexMutation = resolvedVertex.prepareMutation();
         }
 
-        GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
-
-        resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-        resolvedVertex = resolvedVertexMutation.save();
-
-        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
-                (artifactId, resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
-                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
-                        user.getModelUserContext());
-
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), metadata, lumifyVisibility.getVisibility()).save();
-        graph.flush();
-
-        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, 0, 0, user);
-
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-
-        JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
@@ -137,6 +128,16 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
         // TODO: index the new vertex
+
+        DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
+                (artifactId, edge.getId(), resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
+                        Double.parseDouble(y2), true, null, lumifyVisibility.getVisibility(),
+                        user.getModelUserContext());
+
+        JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
+
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility()).save();
+        resolvedVertexMutation.save();
 
         graph.flush();
 

@@ -156,7 +156,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                             (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
                                     detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
                     DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.getRowKey(), modelUserContext);
-                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
+                    JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
                     Messaging.broadcastDetectedObjectChange(detectedObjectRowKey.getArtifactId(), artifactVertexWithDetectedObjects);
                     unresolved.put(artifactVertexWithDetectedObjects);
                 }
@@ -164,15 +164,14 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey((String) rowKeyProperty.getValue());
                 TermMentionRowKey analyzedRowKey = new TermMentionRowKey(termMentionRowKey.getGraphVertexId(), termMentionRowKey.getStartOffset(), termMentionRowKey.getEndOffset());
                 TermMentionModel analyzedTermMention = termMentionRepository.findByRowKey(analyzedRowKey.toString(), modelUserContext);
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getGraphVertexId(), termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
-        while (workspaceToVertex.hasNext()) {
-            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
+        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
+            graph.removeEdge(edge, systemAuthorization);
         }
 
         graph.removeVertex(vertex, authorizations);

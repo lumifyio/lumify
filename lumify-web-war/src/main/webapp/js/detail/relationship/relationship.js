@@ -8,6 +8,7 @@ define([
     'service/vertex',
     'service/ontology',
     'detail/properties',
+    'util/formatters',
     'sf'
 ], function(
     defineComponent,
@@ -19,12 +20,13 @@ define([
     VertexService,
     OntologyService,
     Properties,
+    formatters,
     sf) {
     'use strict';
 
-    var relationshipService = new RelationshipService();
-    var vertexService = new VertexService();
-    var ontologyService = new OntologyService();
+    var relationshipService = new RelationshipService(),
+        vertexService = new VertexService(),
+        ontologyService = new OntologyService();
 
     return defineComponent(Relationship, withTypeContent, withHighlighting);
 
@@ -48,7 +50,6 @@ define([
             this.loadRelationship();
         });
 
-
         this.loadRelationship = function() {
             var self = this,
                 data = this.attr.data;
@@ -59,11 +60,16 @@ define([
                 self.$node.html(template({
                     appData: appData,
                     auditsButton: self.auditsButton(),
-                    relationshipData: relationshipData[0]
+                    relationshipData: relationshipData[0],
+                    formatters: formatters
                 }));
 
                 var properties = $.extend({}, data.properties);
-                properties.relationshipType = (ontologyRelationships.byTitle[data.properties.relationshipType] || ontologyRelationships.byId[data.properties.relationshipType] || {}).displayName;
+                properties.relationshipType = (
+                    ontologyRelationships.byTitle[data.properties.relationshipType] ||
+                    ontologyRelationships.byId[data.properties.relationshipType] ||
+                    {}
+                ).displayName;
 
                 _.keys(properties).forEach(function(key) {
                     properties[key] = {
@@ -72,7 +78,7 @@ define([
                 });
                 Object.keys(relationshipData[0].properties).forEach(function(propKey) {
                     properties[propKey] =  {
-                        value:relationshipData[0].properties[propKey]
+                        value: relationshipData[0].properties[propKey]
                     };
                 });
 
@@ -88,9 +94,9 @@ define([
         };
 
         this.onVertexToVertexRelationshipClicked = function(evt) {
-            var $target = $(evt.target);
-            var id = $target.data('vertexId');
-            this.trigger(document, 'selectObjects', { vertices:[appData.vertex(id)] });
+            var $target = $(evt.target),
+                id = $target.data('vertexId');
+            this.trigger(document, 'selectObjects', { vertices: [appData.vertex(id)] });
         };
 
         this.onPaneClicked = function(evt) {
@@ -98,20 +104,9 @@ define([
 
             if ($target.is('.entity, .artifact, span.relationship')) {
                 var id = $target.data('vertexId');
-                this.trigger(document, 'selectObjects', { vertices:[appData.vertex(id)] });
+                this.trigger(document, 'selectObjects', { vertices: [appData.vertex(id)] });
                 evt.stopPropagation();
             }
         };
     }
 });
-
-
-
-
-
-
-
-
-
-
-

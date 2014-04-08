@@ -21,7 +21,9 @@ define([
                 helpSelector: this.onHelp
             })
 
-            this.on('select-all', function(e) { e.stopPropagation(); });
+            this.on('select-all', function(e) {
+                e.stopPropagation(); 
+            });
             this.on(document, 'graphPaddingUpdated', this.onPaddingUpdated);
         });
 

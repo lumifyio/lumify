@@ -1,5 +1,4 @@
 
-
 define([
     'cytoscape',
     './shapes/movieStrip'
@@ -9,11 +8,11 @@ define([
     cytoscape.style.types.nodeShape.enums.push('none');
     cytoscape.style.types.nodeShape.enums.push('movieStrip');
 
-    var CanvasRenderer = cytoscape.extension( 'renderer', 'canvas' );
-    var nodeShapes = CanvasRenderer.nodeShapes;
+    var CanvasRenderer = cytoscape.extension('renderer', 'canvas'),
+        nodeShapes = CanvasRenderer.nodeShapes;
 
-    function Renderer( options ) {
-        CanvasRenderer.call( this, options );
+    function Renderer(options) {
+        CanvasRenderer.call(this, options);
     }
 
     var drawInscribedImage = CanvasRenderer.prototype.drawInscribedImage;
@@ -24,10 +23,10 @@ define([
 	{
 		var shape = node._private.style.shape.value;
 
-        if ( shape == 'none' ) return 'ellipse';
+        if (shape == 'none') return 'ellipse';
 
-		if( node.isParent() ){
-			if( shape === 'rectangle' || shape === 'roundrectangle' ){
+		if (node.isParent()) {
+			if (shape === 'rectangle' || shape === 'roundrectangle') {
 				return shape;
 			} else {
 				return 'rectangle';
@@ -42,7 +41,7 @@ define([
      * Scale image to the size of the node
      */
 	Renderer.prototype.drawInscribedImage = function(context, img, node) {
-		var r = this,
+		var self = this,
             zoom = this.data.cy._private.zoom,
             nodeX = node._private.position.x,
             nodeY = node._private.position.y,
@@ -66,9 +65,9 @@ define([
         context.globalAlpha = node._private.style.opacity.value;
 
         // Draw outline and clip to it based on node shape css
-        if ( node._private.style.shape.value !== 'none' ) {
-            var shapeName = r.getNodeShape(node);
-            var shape = nodeShapes[shapeName];
+        if (node._private.style.shape.value !== 'none') {
+            var shapeName = self.getNodeShape(node),
+                shape = nodeShapes[shapeName];
 
             if (shape && shape.drawBackground) {
                 context.save();
@@ -76,7 +75,7 @@ define([
                 shape.drawBackground(context, nodeX, nodeY, fitW, fitH);
                 context.restore();
             }
-            shape.drawPath( context, nodeX, nodeY, fitW, fitH);
+            shape.drawPath(context, nodeX, nodeY, fitW, fitH);
             context.clip();
         }
 
@@ -88,7 +87,6 @@ define([
 
 		context.restore();
 	};
-
 
     return Renderer;
 });

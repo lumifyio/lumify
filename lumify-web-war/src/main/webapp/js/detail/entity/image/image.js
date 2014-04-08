@@ -32,19 +32,31 @@ define([
             this.$node.html(template({}));
 
             this.select('fileSelector').on({
-                click: function() { self.$node.addClass('file-hover'); this.value = null; },
+                click: function() {
+                    self.$node.addClass('file-hover'); this.value = null; 
+                },
                 change: this.onFileChange.bind(this)
             });
 
             this.$node.addClass('upload-available');
             this.$node.on({
-                mouseenter: function() { $(this).addClass('file-hover'); },
-                mouseleave: function() { $(this).removeClass('file-hover'); }
+                mouseenter: function() {
+                    $(this).addClass('file-hover'); 
+                },
+                mouseleave: function() {
+                    $(this).removeClass('file-hover'); 
+                }
             });
-            this.node.ondragover = function () { $(this).addClass('file-hover'); return false; };
-            this.node.ondragenter = function () { $(this).addClass('file-hover'); return false; };
-            this.node.ondragleave = function() { $(this).removeClass('file-hover'); return false; };
-            this.node.ondrop = function (e) {
+            this.node.ondragover = function() {
+                $(this).addClass('file-hover'); return false; 
+            };
+            this.node.ondragenter = function() {
+                $(this).addClass('file-hover'); return false; 
+            };
+            this.node.ondragleave = function() {
+                $(this).removeClass('file-hover'); return false; 
+            };
+            this.node.ondrop = function(e) {
                 e.preventDefault();
 
                 if (self.$node.hasClass('uploading')) return;
@@ -99,7 +111,7 @@ define([
             var self = this, 
                 reader = new FileReader();
 
-            reader.onload = function (event) {
+            reader.onload = function(event) {
                 self.updateImageBackground(event.target.result);
             };
 
@@ -118,22 +130,22 @@ define([
 
             // TODO: move to vertexService
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/graph/vertex/' + this.attr.data.id + '/uploadImage');
+            xhr.open('POST', 'graph/vertex/uploadImage?graphVertexId=' + this.attr.data.id);
             xhr.setRequestHeader('Lumify-Workspace-Id', appData.workspaceId);
             xhr.onload = function(event) {
                 if (xhr.status === 200) {
-                    var result = JSON.parse(xhr.responseText);
-                    var vertex = appData.updateCacheWithVertex(result);
-                    self.trigger('filecomplete', { vertex:vertex });
+                    var result = JSON.parse(xhr.responseText),
+                        vertex = appData.updateCacheWithVertex(result);
+                    self.trigger('filecomplete', { vertex: vertex });
                 } else {
-                    self.trigger('fileerror', { status:xhr.status, response:xhr.responseText });
+                    self.trigger('fileerror', { status: xhr.status, response: xhr.responseText });
                 }
             };
             xhr.onerror = function() {
                 console.error(arguments);
             };
 
-            xhr.upload.onprogress = function (event) {
+            xhr.upload.onprogress = function(event) {
                 if (event.lengthComputable) {
                     var complete = (event.loaded / event.total || 0);
                     if (complete < 1.0) {
@@ -166,19 +178,23 @@ define([
             canvas.height = h * retina.devicePixelRatio;
             this.canvas.css({ width: w, height: h });
 
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
-            var radius = Math.min(canvas.width, canvas.height) / 2 * 0.3;
+            var centerX = canvas.width / 2,
+                centerY = canvas.height / 2,
+                radius = Math.min(canvas.width, canvas.height) / 2 * 0.3;
 
             c.beginPath();
             c.moveTo(centerX, centerY);
-            c.arc(centerX, centerY, radius + 2 * retina.devicePixelRatio, - Math.PI / 2, 2 * Math.PI - (Math.PI / 2), false);
+            c.arc(centerX, centerY, 
+                  radius + 2 * retina.devicePixelRatio, -Math.PI / 2, 2 * Math.PI - (Math.PI / 2), false
+            );
             c.fillStyle = 'rgba(0,0,0,0.5)';
             c.fill();
 
             c.beginPath();
             c.moveTo(centerX, centerY);
-            c.arc(centerX, centerY, radius, - Math.PI / 2, 2 * Math.PI * Math.min(1.0, complete) - (Math.PI / 2), false);
+            c.arc(centerX, centerY, 
+                  radius, -Math.PI / 2, 2 * Math.PI * Math.min(1.0, complete) - (Math.PI / 2), false
+            );
             c.fillStyle = 'rgba(255,255,255,0.8)';
             c.fill();
 
@@ -203,7 +219,7 @@ define([
 
             this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageSrc));
             
-            this.trigger(document, 'updateVertices', { vertices:[data.vertex] });
+            this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
         };
 
         this.onUpdateProgress = function(event, data) {
@@ -227,8 +243,8 @@ define([
 
                 // Animate manually, fast upload
                 requestAnimationFrame(function draw() {
-                    var now = Date.now();
-                    var complete = (now - startedUpload) / 500;
+                    var now = Date.now(),
+                        complete = (now - startedUpload) / 500;
                     if (complete <= 1) {
                         self.draw(complete);
                         requestAnimationFrame(draw);

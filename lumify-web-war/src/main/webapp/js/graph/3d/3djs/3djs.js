@@ -1,12 +1,10 @@
 
-
 define([
     './3djs/graph/graph',
     './3djs/graph/renderer'
-],
-function ( Graph, GraphRenderer ) {
+], function(Graph, GraphRenderer) {
 
-    return  {
+    return {
 
         VERSION: '1.0',
 
@@ -14,4 +12,3 @@ function ( Graph, GraphRenderer ) {
         GraphRenderer: GraphRenderer
     };
 });
-

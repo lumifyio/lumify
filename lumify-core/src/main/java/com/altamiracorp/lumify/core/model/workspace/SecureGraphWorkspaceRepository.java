@@ -124,7 +124,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
     @Override
     public List<WorkspaceUser> findUsersWithAccess(final Workspace workspace, final User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        Iterable<Edge> userEdges = ((SecureGraphWorkspace) workspace).getWorkspace().query(authorizations).edges(workspaceToUserRelationshipId);
+        Iterable<Edge> userEdges = ((SecureGraphWorkspace) workspace).getWorkspace().query(authorizations).edges(WORKSPACE_TO_USER_RELATIONSHIP_NAME);
         return toList(new ConvertingIterable<Edge, WorkspaceUser>(userEdges) {
             @Override
             protected WorkspaceUser convert(Edge edge) {
@@ -155,7 +155,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        Iterable<Edge> entityEdges = ((SecureGraphWorkspace) workspace).getWorkspace().query(authorizations).edges(workspaceToEntityRelationshipId);
+        Iterable<Edge> entityEdges = ((SecureGraphWorkspace) workspace).getWorkspace().query(authorizations).edges(WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME);
         return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
             @Override
             protected WorkspaceEntity convert(Edge edge) {
@@ -257,7 +257,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         if (userVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
-        List<Edge> edges = toList(((SecureGraphWorkspace) workspace).getWorkspace().getEdges(userVertex, Direction.BOTH, workspaceToUserRelationshipId, authorizations));
+        List<Edge> edges = toList(((SecureGraphWorkspace) workspace).getWorkspace().getEdges(userVertex, Direction.BOTH, WORKSPACE_TO_USER_RELATIONSHIP_NAME, authorizations));
         for (Edge edge : edges) {
             graph.removeEdge(edge, authorizations);
         }
@@ -303,13 +303,13 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
             throw new LumifyResourceNotFoundException("Could not find workspace vertex: " + workspace.getId(), workspace.getId());
         }
 
-        List<Edge> existingEdges = toList(workspaceVertex.getEdges(userVertex, Direction.OUT, workspaceToUserRelationshipId, authorizations));
+        List<Edge> existingEdges = toList(workspaceVertex.getEdges(userVertex, Direction.OUT, WORKSPACE_TO_USER_RELATIONSHIP_NAME, authorizations));
         if (existingEdges.size() > 0) {
             for (Edge existingEdge : existingEdges) {
                 WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(existingEdge, workspaceAccess.toString(), VISIBILITY.getVisibility());
             }
         } else {
-            EdgeBuilder edgeBuilder = graph.prepareEdge(((SecureGraphWorkspace) workspace).getWorkspace(), userVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility(), authorizations);
+            EdgeBuilder edgeBuilder = graph.prepareEdge(((SecureGraphWorkspace) workspace).getWorkspace(), userVertex, WORKSPACE_TO_USER_RELATIONSHIP_NAME, VISIBILITY.getVisibility(), authorizations);
             WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, workspaceAccess.toString(), VISIBILITY.getVisibility());
             edgeBuilder.save();
         }

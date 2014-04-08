@@ -4,16 +4,18 @@ define([
     './withVertexPopover',
     'service/vertex',
     'service/ontology',
-    'service/relationship'
+    'service/relationship',
+    'util/withFormFieldErrors'
 ], function(
     defineComponent,
     withVertexPopover,
     VertexService,
     OntologyService,
-    RelationshipService) {
+    RelationshipService,
+    withFormFieldErrors) {
     'use strict';
 
-    return defineComponent(CreateConnectionPopover, withVertexPopover);
+    return defineComponent(CreateConnectionPopover, withVertexPopover, withFormFieldErrors);
 
     function CreateConnectionPopover() {
 
@@ -28,7 +30,6 @@ define([
         this.before('initialize', function(node, config) {
             config.template = 'createConnectionPopover';
         });
-
 
         this.after('initialize', function() {
             this.on('click', {
@@ -56,7 +57,7 @@ define([
 
                     if (relationships.length) {
                         select.html(
-                            relationships.map(function(d){
+                            relationships.map(function(d) {
                                 return '<option value="' + d.title + '">' + d.displayName + '</option>';
                             }).join('')
                         ).siblings('button').removeAttr('disabled');
@@ -80,34 +81,42 @@ define([
             this.visibilitySource = data.value;
         };
 
-
         this.onCreateConnection = function(e) {
-            var $target = $(e.target);
-
-            $target.text('Connecting...').attr('disabled', true);
-
             var self = this,
+                $target = $(e.target)
+                    .text('Connecting...')
+                    .attr('disabled', true),
                 parameters = {
                     sourceGraphVertexId: this.attr.sourceVertexId,
                     destGraphVertexId: this.attr.targetVertexId,
                     predicateLabel: $target.siblings('select').val(),
                     visibilitySource: this.visibilitySource
-                };
+                },
+                inputs = this.$node.find('select, input')
+                    .attr('disabled', true);
+
+            this.attr.teardownOnTap = false;
 
             this.relationshipService.createRelationship(parameters)
+                .always(function() {
+                    self.attr.teardownOnTap = true;
+                })
+                .fail(function(req, reason, statusText) {
+                    $target.text('Connect')
+                        .add(inputs)
+                        .removeAttr('disabled');
+                    self.markFieldErrors(statusText);
+                })
                 .done(function(data) {
                     self.on(document, 'relationshipsLoaded', function loaded() {
                         self.trigger('finishedVertexConnection');
                         self.off(document, 'relationshipsLoaded', loaded);
                     });
-                    // TODO: should we send an expected relationship so
-                    // data.js will continue checking until it's eventually
-                    // consistent?
                     self.trigger('refreshRelationships');
                 });
         };
 
-        this.getRelationshipLabels = function (source, dest) {
+        this.getRelationshipLabels = function(source, dest) {
             var self = this,
                 sourceConceptTypeId = source.data('http://lumify.io#conceptType').value,
                 destConceptTypeId = dest.data('http://lumify.io#conceptType').value;
@@ -118,9 +127,9 @@ define([
             ).then(function(relationships, ontologyRelationships) {
                 var relationshipsTpl = [];
 
-                relationships.forEach(function (relationship) {
-                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
-                    var displayName;
+                relationships.forEach(function(relationship) {
+                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],
+                        displayName;
                     if (ontologyRelationship) {
                         displayName = ontologyRelationship.displayName;
                     } else {

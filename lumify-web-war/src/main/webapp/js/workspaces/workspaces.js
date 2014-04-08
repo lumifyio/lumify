@@ -37,14 +37,15 @@ define([
             formSelector: '.workspace-form'
         });
 
-        this.onWorkspaceItemClick = function( event ) {
+        this.onWorkspaceItemClick = function(event) {
             var $target = $(event.target);
 
-			if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
+            if ($target.is('input') || $target.is('button') || $target.is('.new-workspace')) return;
             if ($target.closest('.workspace-form').length) return;
 
-            var li = $(event.target).closest('li');
-            var workspaceId = li.data('workspaceId');
+            var li = $(event.target).closest('li'),
+                workspaceId = li.data('workspaceId');
+
             if (workspaceId) {
                 this.switchToWorkspace(workspaceId);
             }
@@ -52,13 +53,13 @@ define([
 
         this.switchToWorkspace = function(workspaceId) {
             if (workspaceId === appData.workspaceId) return;
-            this.trigger( document, 'switchWorkspace', { workspaceId: workspaceId });
+            this.trigger(document, 'switchWorkspace', { workspaceId: workspaceId });
         };
 
         this.onAddNew = function(event) {
-            var self = this;
+            var self = this,
+                title = $(event.target).parents('li').find('input').val();
 
-            var title = $(event.target).parents('li').find('input').val();
             if (!title) return;
 
             this.workspaceService.saveNew(title)
@@ -78,7 +79,7 @@ define([
             }
         };
 
-        this.onDisclosure = function( event ) {
+        this.onDisclosure = function(event) {
             var self = this,
                 $target = $(event.target),
                 data = $target.closest('li').data();
@@ -120,11 +121,11 @@ define([
             }
         };
 
-        this.onWorkspaceDeleting = function( event, data) {
+        this.onWorkspaceDeleting = function(event, data) {
             this.deletingWorkspace = $.extend({}, data);
         };
 
-        this.onWorkspaceDeleted = function ( event, data ) {
+        this.onWorkspaceDeleted = function(event, data) {
             this.collapseEditForm();
             this.loadWorkspaceList();
 
@@ -133,18 +134,18 @@ define([
             }
         };
 
-        this.onSwitchWorkspace = function ( event, data ) {
+        this.onSwitchWorkspace = function(event, data) {
             var li = this.findWorkspaceRow(data.workspaceId);
             if (li.length) {
-                this.switchActive( data.workspaceId );
+                this.switchActive(data.workspaceId);
                 li.find('.badge').addClass('loading').show().next().hide();
             }
             this.collapseEditForm();
         };
 
-        this.onWorkspaceLoad = function ( event, data ) {
+        this.onWorkspaceLoad = function(event, data) {
             this.updateListItemWithData(data);
-            this.switchActive( data.workspaceId );
+            this.switchActive(data.workspaceId);
         };
 
         this.findWorkspaceRow = function(workspaceId) {
@@ -153,12 +154,12 @@ define([
             });
         };
 
-        this.onWorkspaceSaving = function ( event, data ) {
+        this.onWorkspaceSaving = function(event, data) {
             var li = this.findWorkspaceRow(data.workspaceId);
             li.find('.badge').addClass('loading').show().next().hide();
         };
 
-        this.onWorkspaceSaved = function ( event, data ) {
+        this.onWorkspaceSaved = function(event, data) {
             this.updateListItemWithData(data);
             this.trigger(document, 'workspaceRemoteSave', data);
         };
@@ -175,15 +176,19 @@ define([
                     data = this.workspaceDataForItemRow(data);
                     var content = $(itemTemplate({ workspace: data, selected: this.workspaceId }));
                     if (li.length === 0) {
-                        this.$node.find('li.nav-header').eq(+data.isSharedToUser).after(content);
+                        this.$node.find('li.nav-header').eq(data.isSharedToUser ? 1 : 0).after(content);
                     } else {
                         li.replaceWith(content);
                     }
 
                     // Sort section because title might be renamed
                     var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser),
-                        titleGetter = function() { return $(this).data('title'); },
-                        lowerCase = function(s) { return s.toLowerCase(); },
+                        titleGetter = function() {
+                            return $(this).data('title'); 
+                        },
+                        lowerCase = function(s) {
+                            return s.toLowerCase(); 
+                        },
                         titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
                         insertIndex = _.indexOf(titles, data.title),
                         currentIndex = lis.index(content);
@@ -209,12 +214,12 @@ define([
             }
         };
 
-        this.onWorkspaceCopied = function ( event, data ) {
+        this.onWorkspaceCopied = function(event, data) {
             this.collapseEditForm();
             this.loadWorkspaceList();
         };
 
-        this.onWorkspaceRemoteSave = function ( event, data) {
+        this.onWorkspaceRemoteSave = function(event, data) {
             if (!data || !data.remoteEvent) return;
 
             this.currentUserReady(function(currentUser) {
@@ -228,17 +233,17 @@ define([
             });
         };
 
-        this.onWorkspaceNotAvailable = function ( event, data) {
+        this.onWorkspaceNotAvailable = function(event, data) {
             this.loadWorkspaceList();
-            this.trigger('displayInformation', { message:'Workspace not found' });
+            this.trigger('displayInformation', { message: 'Workspace not found' });
         };
 
-        this.switchActive = function( workspaceId ) {
+        this.switchActive = function(workspaceId) {
             var self = this;
             this.workspaceId = workspaceId;
 
             var found = false;
-            this.select( 'workspaceListItemSelector' )
+            this.select('workspaceListItemSelector')
                 .removeClass('active')
                 .each(function() {
                     if ($(this).data('workspaceId') == workspaceId) {
@@ -263,15 +268,19 @@ define([
                    .done(function(usersResponse, workspaceResponse) {
                        var users = usersResponse[0].users || [],
                            workspaces = workspaceResponse[0].workspaces || [],
-                           usersById = _.indexBy(users, function(u) { return u.id; });
+                           usersById = _.indexBy(users, function(u) {
+                               return u.id; 
+                           });
 
                         self.usersById = usersById;
-                        self.$node.html( workspacesTemplate({}) );
+                        self.$node.html(workspacesTemplate({}));
                         self.select('listSelector').html(
                             listTemplate({
                                 results: _.chain(workspaces)
                                     .map(self.workspaceDataForItemRow.bind(self))
-                                    .sortBy(function(w) { return w.title.toLowerCase() })
+                                    .sortBy(function(w) {
+                                        return w.title.toLowerCase() 
+                                    })
                                     .groupBy(function(w) { 
                                         return w.isSharedToUser ? 'shared' : 'mine';
                                     })
@@ -327,28 +336,28 @@ define([
             }
         }
 
-        this.after( 'initialize', function() {
+        this.after('initialize', function() {
 
             this.registerForCurrentUser();
 
-            this.on( document, 'workspaceLoaded', this.onWorkspaceLoad );
-            this.on( document, 'workspaceSaving', this.onWorkspaceSaving );
-            this.on( document, 'workspaceSaved', this.onWorkspaceSaved );
-            this.on( document, 'workspaceDeleted', this.onWorkspaceDeleted );
-            this.on( document, 'workspaceCopied', this.onWorkspaceCopied );
-            this.on( document, 'workspaceRemoteSave', this.onWorkspaceRemoteSave );
-            this.on( document, 'workspaceNotAvailable', this.onWorkspaceNotAvailable );
+            this.on(document, 'workspaceLoaded', this.onWorkspaceLoad);
+            this.on(document, 'workspaceSaving', this.onWorkspaceSaving);
+            this.on(document, 'workspaceSaved', this.onWorkspaceSaved);
+            this.on(document, 'workspaceDeleted', this.onWorkspaceDeleted);
+            this.on(document, 'workspaceCopied', this.onWorkspaceCopied);
+            this.on(document, 'workspaceRemoteSave', this.onWorkspaceRemoteSave);
+            this.on(document, 'workspaceNotAvailable', this.onWorkspaceNotAvailable);
 
-            this.on( document, 'menubarToggleDisplay', this.onToggleMenu );
-            this.on( document, 'switchWorkspace', this.onSwitchWorkspace );
+            this.on(document, 'menubarToggleDisplay', this.onToggleMenu);
+            this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
 
             this.on('workspaceDeleting', this.onWorkspaceDeleting);
-            this.on( 'click', {
+            this.on('click', {
                 workspaceListItemSelector: this.onWorkspaceItemClick,
                 addNewSelector: this.onAddNew,
                 disclosureSelector: this.onDisclosure
             });
-            this.on( 'keyup', {
+            this.on('keyup', {
                 addNewInputSelector: this.onInputKeyUp
             });
         });

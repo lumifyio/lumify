@@ -2,11 +2,10 @@
 define(['jquery', 'jqueryui'], function() {
     'use strict';
 
-    $.ui.plugin.add( "draggable", "multi", {
-
+    $.ui.plugin.add('draggable', 'multi', {
 
         create: function(e, ui) {
-            var inst = this.data("ui-draggable"),
+            var inst = this.data('ui-draggable'),
                 container = this.closest('ul');
     
             if (container.data('initialized') !== true) {
@@ -32,8 +31,7 @@ define(['jquery', 'jqueryui'], function() {
                     });
             }
 
-
-            if ( inst.options.revert === 'invalid' ) {
+            if (inst.options.revert === 'invalid') {
 
                 inst.options.revert = function(dropped) {
                     var reverted = inst.reverted = !dropped;
@@ -91,7 +89,7 @@ define(['jquery', 'jqueryui'], function() {
             });
 
             function onSelection(evt, elements) {
-                if ( inst.options.selection ) {
+                if (inst.options.selection) {
                     inst.options.selection.call(
                         inst.element,
                         evt,
@@ -104,10 +102,10 @@ define(['jquery', 'jqueryui'], function() {
 
         start: function(e, ui) {
             if (arguments.length > 2) {
-                console.warn("Switch plugin to use [instance] argument instead of data");
+                console.warn('Switch plugin to use [instance] argument instead of data');
             }
 
-            var instance = this.data("ui-draggable"),
+            var instance = this.data('ui-draggable'),
                 helper = ui.helper,
                 anchor = $(this),
                 item = anchor.parent('li'),
@@ -125,7 +123,7 @@ define(['jquery', 'jqueryui'], function() {
 
             // If dragging a selected node, bring along other selected
             // items
-            if ( item.hasClass('active') ) {
+            if (item.hasClass('active')) {
                 var items = list.find('.active a')
                     .not(anchor)
                     .map(function() {
@@ -140,7 +138,9 @@ define(['jquery', 'jqueryui'], function() {
                     });
 
                 helper.append(items);
-                instance.alsoDragging = items.map(function() { return $(this); });
+                instance.alsoDragging = items.map(function() {
+                    return $(this);
+                });
 
             } else {
                 instance.alsoDragging = false;
@@ -148,19 +148,19 @@ define(['jquery', 'jqueryui'], function() {
         },
 
         drag: function(ev, ui) {
-            var instance = this.data("ui-draggable");
-            if ( !instance.alsoDragging || !instance.alsoDragging.length ) {
+            var instance = this.data('ui-draggable');
+            if (!instance.alsoDragging || !instance.alsoDragging.length) {
                 return;
             }
         },
 
-        stop: function(ev, ui){
-            var inst = this.data("ui-draggable");
-            if ( !inst.alsoDragging || !inst.alsoDragging.length ) {
+        stop: function(ev, ui) {
+            var inst = this.data('ui-draggable');
+            if (!inst.alsoDragging || !inst.alsoDragging.length) {
                 return;
             }
 
-            if ( !inst.reverted && inst.options.otherDraggables ) {
+            if (!inst.reverted && inst.options.otherDraggables) {
                 inst.options.otherDraggables.call(
                     inst.element, 
                     ev, 
@@ -169,7 +169,7 @@ define(['jquery', 'jqueryui'], function() {
                     }));
             }
 
-            if ( ! inst.reverted ) {
+            if (!inst.reverted) {
                 inst.alsoDragging.each(function() {
                     this.remove();
                 });

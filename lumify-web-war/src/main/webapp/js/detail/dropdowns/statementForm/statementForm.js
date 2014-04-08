@@ -5,7 +5,13 @@ define([
     'tpl!./relationship-options',
     'service/relationship',
     'service/ontology'
-], function (defineComponent, withDropdown, statementFormTemplate, relationshipTypeTemplate, RelationshipService, OntologyService) {
+], function(
+    defineComponent,
+    withDropdown,
+    statementFormTemplate,
+    relationshipTypeTemplate,
+    RelationshipService,
+    OntologyService) {
     'use strict';
 
     return defineComponent(StatementForm, withDropdown);
@@ -26,7 +32,7 @@ define([
             buttonDivSelector: '.buttons'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             var self = this;
 
             this.$node.html(statementFormTemplate({
@@ -35,7 +41,6 @@ define([
             }));
             
             this.on('visibilitychange', this.onVisibilityChange);
-
 
             this.applyTermClasses(this.attr.sourceTerm, this.select('sourceTermSelector'));
             this.applyTermClasses(this.attr.destTerm, this.select('destTermSelector'));
@@ -56,13 +61,13 @@ define([
             })
         });
 
-        this.after('teardown', function () {
+        this.after('teardown', function() {
             this.attr.sourceTerm.removeClass('focused');
             this.attr.destTerm.removeClass('focused');
         });
 
-        this.onInputKeyUp = function (event) {
-            if (!this.select('createStatementButtonSelector').is(":disabled")) {
+        this.onInputKeyUp = function(event) {
+            if (!this.select('createStatementButtonSelector').is(':disabled')) {
                 switch (event.which) {
                     case $.ui.keyCode.ENTER:
                         this.onCreateStatement(event);
@@ -74,12 +79,12 @@ define([
             this.visibilitySource = data.value;
         };
 
-        this.applyTermClasses = function (el, applyToElement) {
+        this.applyTermClasses = function(el, applyToElement) {
             var classes = el.attr('class').split(/\s+/),
                 ignored = [/^ui-*/, /^term$/, /^entity$/, /^label-info$/, /^detected-object$/];
 
-            classes.forEach(function (cls) {
-                var ignore = _.any(ignored, function (regex) {
+            classes.forEach(function(cls) {
+                var ignore = _.any(ignored, function(regex) {
                     return regex.test(cls);
                 });
                 if (!ignore) {
@@ -95,7 +100,7 @@ define([
             })
         };
 
-        this.onSelection = function (e) {
+        this.onSelection = function(e) {
             if (this.select('relationshipSelector').val().length === 0) {
                 this.select('createStatementButtonSelector')
                     .attr('disabled', true);
@@ -105,13 +110,13 @@ define([
                 .attr('disabled', false);
         };
 
-        this.onOpened = function () {
+        this.onOpened = function() {
             this.select('relationshipSelector')
                 .on('change', this.onSelection.bind(this))
                 .focus();
         };
 
-        this.onInvert = function (e) {
+        this.onInvert = function(e) {
             e.preventDefault();
 
             var sourceTerm = this.attr.sourceTerm;
@@ -122,12 +127,13 @@ define([
             this.getRelationshipLabels();
         };
 
-
-        this.onCreateStatement = function (event) {
+        this.onCreateStatement = function(event) {
             var self = this,
                 parameters = {
-                    sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId || this.attr.sourceTerm.data('vertex-id'),
-                    destGraphVertexId: this.attr.destTerm.data('info').graphVertexId || this.attr.destTerm.data('vertex-id'),
+                    sourceGraphVertexId: this.attr.sourceTerm.data('info').graphVertexId ||
+                        this.attr.sourceTerm.data('vertex-id'),
+                    destGraphVertexId: this.attr.destTerm.data('info').graphVertexId ||
+                        this.attr.destTerm.data('vertex-id'),
                     predicateLabel: this.select('relationshipSelector').val(),
                     visibilitySource: this.visibilitySource
                 };
@@ -140,29 +146,37 @@ define([
 
             _.defer(this.buttonLoading.bind(this));
 
-            this.relationshipService.createRelationship(parameters).done(function (data) {
-                _.defer(self.teardown.bind(self));
-                self.trigger(document, 'refreshRelationships');
-            });
+            this.relationshipService.createRelationship(parameters)
+                .fail(function(req, reason, status) {
+                    self.clearLoading();
+                    self.markFieldErrors(status);
+                })
+                .done(function(data) {
+                    _.defer(self.teardown.bind(self));
+                    self.trigger(document, 'refreshRelationships');
+                });
         };
 
-        this.getRelationshipLabels = function () {
-            var self = this;
-            var sourceConceptTypeId = this.attr.sourceTerm.data('info')['http://lumify.io#conceptType'];
-            var destConceptTypeId = this.attr.destTerm.data('info')['http://lumify.io#conceptType'];
-            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId).done(function (relationships) {
-                self.displayRelationships(relationships);
-            });
+        this.getRelationshipLabels = function() {
+            var self = this,
+                sourceConceptTypeId = this.attr.sourceTerm.data('info')['http://lumify.io#conceptType'],
+                destConceptTypeId = this.attr.destTerm.data('info')['http://lumify.io#conceptType'];
+
+            self.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId)
+                .done(function(relationships) {
+                    self.displayRelationships(relationships);
+                });
         };
 
-        this.displayRelationships = function (relationships) {
+        this.displayRelationships = function(relationships) {
             var self = this;
-            self.ontologyService.relationships().done(function (ontologyRelationships) {
+            self.ontologyService.relationships().done(function(ontologyRelationships) {
                 var relationshipsTpl = [];
 
-                relationships.forEach(function (relationship) {
-                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title];
-                    var displayName;
+                relationships.forEach(function(relationship) {
+                    var ontologyRelationship = ontologyRelationships.byTitle[relationship.title],
+                        displayName;
+
                     if (ontologyRelationship) {
                         displayName = ontologyRelationship.displayName;
                     } else {

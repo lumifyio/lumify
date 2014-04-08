@@ -277,10 +277,7 @@ define([
                 clonedPosition = clonedSelection.position(),
                 clonedMarginLeft = parseInt(clonedSelection.css('left'), 10);
 
-            clonedSelection
-                .one('transitionend webkitTransitionEnd ' +
-                     'oTransitionEnd otransitionend',
-                function() {
+            clonedSelection.one(TRANSITION_END, function() {
                     clonedSelection.remove();
                     popSnippet();
                 }).css({

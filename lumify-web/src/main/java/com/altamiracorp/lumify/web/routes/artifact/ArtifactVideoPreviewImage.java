@@ -60,7 +60,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             boundaryDims[1] = Integer.parseInt(widthStr);
 
             response.setContentType("image/jpeg");
-            response.addHeader("Content-Disposition", "inline; filename=thumnail" + boundaryDims[0] + ".jpg");
+            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
 
             byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0],
                     boundaryDims[1], user);

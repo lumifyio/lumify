@@ -4,7 +4,7 @@ define([
     'tpl!./chatWindow',
     'tpl!./chatMessage',
     'sf'
-], function (defineComponent, ChatService, chatWindowTemplate, chatMessageTemplate, sf) {
+], function(defineComponent, ChatService, chatWindowTemplate, chatMessageTemplate, sf) {
     'use strict';
 
     return defineComponent(Chat);
@@ -18,7 +18,7 @@ define([
             chatWindowSelector: '.chat-window'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.focusMessage = _.debounce(this.focusMessage.bind(this), 100);
             this.on(document, 'userSelected', this.onUserSelected);
             this.on(document, 'chatMessage', this.onChatMessage);
@@ -29,14 +29,15 @@ define([
             });
         });
 
-        this.findChatByUserId = function (userId) {
-            var self = this;
-            var chatRowKey = Object.keys(this.openChats).filter(function (chatRowKey) {
-                var chat = self.openChats[chatRowKey];
-                return chat.users.some(function (u) {
-                    return u.id == userId;
+        this.findChatByUserId = function(userId) {
+            var self = this,
+                chatRowKey = Object.keys(this.openChats).filter(function(chatRowKey) {
+                    var chat = self.openChats[chatRowKey];
+                    return chat.users.some(function(u) {
+                        return u.id == userId;
+                    });
                 });
-            });
+
             if (chatRowKey.length > 0) {
                 return self.openChats[chatRowKey[0]];
             }
@@ -47,7 +48,7 @@ define([
             $('#chat-window-' + rowKey).show().find('.message').focus();
         };
 
-        this.onUserSelected = function (evt, userData) {
+        this.onUserSelected = function(evt, userData) {
             var chat = this.findChatByUserId(userData.id);
             if (chat) {
                 return this.createChatWindowAndFocus(chat);
@@ -61,11 +62,11 @@ define([
             this.trigger(document, 'chatCreated', chat);
         };
 
-        this.onChatCreated = function (evt, chat) {
+        this.onChatCreated = function(evt, chat) {
             this.createChatWindowAndFocus(chat);
         };
 
-        this.createChatWindowAndFocus = function (chat) {
+        this.createChatWindowAndFocus = function(chat) {
             if (!chat.windowCreated) {
                 var html = $(chatWindowTemplate({ chat: chat }));
                 html.hide().appendTo(this.$node);
@@ -76,7 +77,7 @@ define([
             this.focusMessage(chat.rowKey);
         };
 
-        this.addMessage = function (messageData) {
+        this.addMessage = function(messageData) {
             if (messageData.tempId) {
                 $('#' + messageData.tempId).remove();
             }
@@ -84,10 +85,12 @@ define([
                 messageData.chatRowKey = messageData.from.rowKey;
             }
             this.checkChatWindow(messageData);
-            var $chatWindow = $('#chat-window-' + messageData.chatRowKey);
-            var data = {
-                messageData: messageData
-            };
+
+            var $chatWindow = $('#chat-window-' + messageData.chatRowKey),
+                data = {
+                    messageData: messageData
+                };
+
             if (messageData.postDate) {
                 data.prettyDate = sf('{0:hh:mm:ss tt}', new Date(messageData.postDate));
             } else {
@@ -98,7 +101,7 @@ define([
             this.scrollWindowToBottom($chatWindow);
         };
 
-        this.checkChatWindow = function (messageData) {
+        this.checkChatWindow = function(messageData) {
             var $chatWindow = $('#chat-window-' + messageData.chatRowKey);
             if ($chatWindow.length === 0) {
                 var chat = this.openChats[messageData.chatRowKey];
@@ -118,15 +121,15 @@ define([
             this.scrollWindowToBottom($chatWindow);
         };
 
-        this.scrollWindowToBottom = function (chatWindow) {
+        this.scrollWindowToBottom = function(chatWindow) {
             clearTimeout(this.scrollTimeout);
-            this.scrollTimeout = setTimeout(function () {
+            this.scrollTimeout = setTimeout(function() {
                 var bottom = chatWindow.get(0).scrollHeight - chatWindow.height();
                 chatWindow.clearQueue().animate({scrollTop: bottom}, 'fast');
             }, 100);
         };
 
-        this.onSocketMessage = function (evt, data) {
+        this.onSocketMessage = function(evt, data) {
             var self = this;
 
             switch (data.type) {
@@ -136,34 +139,33 @@ define([
             }
         };
 
-        this.onChatMessage = function (evt, message) {
+        this.onChatMessage = function(evt, message) {
             this.addMessage(message);
         };
 
-        this.onNewMessageFormSubmit = function (evt) {
+        this.onNewMessageFormSubmit = function(evt) {
             evt.preventDefault();
 
-            var self = this;
-            var $target = $(evt.target);
-            var $chatWindow = $target.parents('.chat-window');
-            var $messageInput = $('.message', $target);
+            var self = this,
+                $target = $(evt.target),
+                $chatWindow = $target.parents('.chat-window'),
+                $messageInput = $('.message', $target),
+                chatRowKey = $chatWindow.data('chatrowkey'),
+                chat = this.openChats[chatRowKey],
+                tempId = 'chat-message-temp-' + Date.now(),
 
-            var chatRowKey = $chatWindow.data('chatrowkey');
-            var chat = this.openChats[chatRowKey];
+                // add a temporary message to create the feel of responsiveness
+                messageData = {
+                    chatRowKey: chatRowKey,
+                    from: currentUser,
+                    message: $messageInput.val(),
+                    postDate: null,
+                    tempId: tempId
+                };
 
-            var tempId = 'chat-message-temp-' + Date.now();
-
-            // add a temporary message to create the feel of responsiveness
-            var messageData = {
-                chatRowKey: chatRowKey,
-                from: currentUser,
-                message: $messageInput.val(),
-                postDate: null,
-                tempId: tempId
-            };
             this.addMessage(messageData);
 
-            var userIds = chat.users.map(function (u) {
+            var userIds = chat.users.map(function(u) {
                 return u.id;
             });
             userIds.push(currentUser.id);

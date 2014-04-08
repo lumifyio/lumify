@@ -20,7 +20,7 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.$node.html(template({placeholder:this.attr.placeholder}));
+            this.$node.html(template({placeholder: this.attr.placeholder}));
             if (this.attr.properties.length === 0 || this.attr.properties.length.value === 0) {
                 this.select('findPropertySelection')
                     .attr('placeholder', 'No valid properties')
@@ -55,9 +55,15 @@ define([
                         minLength: 0,
                         items: 100,
                         source: _.chain(this.attr.properties)
-                            .filter(function(p) { return p.userVisible; })
-                            .map(function(p) { return p.displayName || p.title; })
-                            .sortBy(function(name) { return name.toLowerCase(); })
+                            .filter(function(p) {
+                                return p.userVisible; 
+                            })
+                            .map(function(p) { 
+                                return p.displayName || p.title; 
+                            })
+                            .sortBy(function(name) { 
+                                return name.toLowerCase(); 
+                            })
                             .uniq()
                             .value(),
                         matcher: function(item) {
@@ -88,19 +94,18 @@ define([
         });
 
         this.propertySelected = function(name) {
-            var property = _.findWhere(this.attr.properties, { displayName:name }) ||
-                           _.findWhere(this.attr.properties, { title:name });
+            var property = _.findWhere(this.attr.properties, { displayName: name }) ||
+                           _.findWhere(this.attr.properties, { title: name });
 
             if (property) {
                 this.currentProperty = property;
-                this.trigger('propertyselected', { property:property });
+                this.trigger('propertyselected', { property: property });
                 _.defer(function() {
                     this.select('findPropertySelection').blur();
                 }.bind(this));
             }
         };
     }
-
 
     function allowEmptyLookup() {
         var items;

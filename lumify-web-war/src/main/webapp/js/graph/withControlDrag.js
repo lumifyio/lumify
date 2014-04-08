@@ -22,8 +22,12 @@ define([], function() {
 
             this.mouseDragHandler = self.onControlDragMouseMove.bind(this);
 
-            this.on(document, 'controlKey', function() { controlKeyPressed = true; });
-            this.on(document, 'controlKeyUp', function() { controlKeyPressed = false; });
+            this.on(document, 'controlKey', function() {
+                controlKeyPressed = true; 
+            });
+            this.on(document, 'controlKeyUp', function() {
+                controlKeyPressed = false; 
+            });
             this.on(document, 'mouseup', function() {
                 if (state === STATE_STARTED) {
                     self.trigger('endVertexConnection', {
@@ -80,24 +84,28 @@ define([], function() {
             }
         };
 
-
         this.onFinishedVertexConnection = function(event) {
-            state = STATE_NONE;
+            var self = this,
+                resetCytoscape = function() {
+                    state = STATE_NONE;
+                    self.cytoscapeReady(function(cy) {
+                        cy.$('.temp').remove();
+                        cy.$('.controlDragSelection').removeClass('controlDragSelection');
+                        currentEdgeId = null;
+                        currentSourceId = null;
+                        currentTargetId = null;
 
-            this.cytoscapeReady(function(cy) {
-                cy.$('.temp').remove();
-                cy.$('.controlDragSelection').removeClass('controlDragSelection');
-                currentEdgeId = null;
-                currentSourceId = null;
-                currentTargetId = null;
+                        self.ignoreCySelectionEvents = false;
+                        self.trigger('defocusPaths');
+                    });
+                }
 
-                var self = this;
-                require(['graph/popovers/withVertexPopover'], function(withVertexPopover) {
-                    self.$node.teardownAllComponentsWithMixin(withVertexPopover);
-                })
-
-                this.ignoreCySelectionEvents = false;
-                this.trigger('defocusPaths');
+            require(['graph/popovers/withVertexPopover'], function(withVertexPopover) {
+                var popovers = self.$node.lookupAllComponentsWithMixin(withVertexPopover);
+                if (popovers.length === 0 || popovers[0].attr.teardownOnTap !== false) {
+                    resetCytoscape();
+                    _.invoke(popovers, 'teardown');
+                }
             });
         };
 
@@ -133,8 +141,8 @@ define([], function() {
                 }
 
                 var componentName = { 
-                    CreateConnection : 'createConnectionPopover',
-                    FindPath         : 'findPathPopover'
+                    CreateConnection: 'createConnectionPopover',
+                    FindPath: 'findPathPopover'
                 }[connectionType] ||   'controlDragPopover';
 
                 require(['graph/popovers/' + componentName], function(Popover) {
@@ -208,7 +216,7 @@ define([], function() {
                 currentTargetId = targetId;
                 if (!edge.length) {
                     cy.add({
-                        group: "edges",
+                        group: 'edges',
                         classes: 'temp',
                         data: {
                             id: edgeId,

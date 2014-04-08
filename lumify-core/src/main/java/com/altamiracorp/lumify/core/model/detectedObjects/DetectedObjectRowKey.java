@@ -48,4 +48,8 @@ public class DetectedObjectRowKey extends RowKey {
         return keyElements.length == 6 ? keyElements[keyElements.length - 6] : keyElements[keyElements.length - 5];
     }
 
+    public String getEdgeId () {
+        String[] keyElements = this.toString().split(":");
+        return keyElements[keyElements.length - 1];
+    }
 }

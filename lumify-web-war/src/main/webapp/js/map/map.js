@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'data',
@@ -82,14 +81,14 @@ define([
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
-            this.padding = {l:0,r:0,b:0,t:0};
+            this.padding = {l: 0,r: 0,b: 0,t: 0};
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Map',
                 shortcuts: {
-                    '-': { fire:'zoomOut', desc:'Zoom out' },
-                    '=': { fire:'zoomIn', desc:'Zoom in' },
-                    'alt-f': { fire:'fit', desc:'Fit all objects on screen' },
+                    '-': { fire: 'zoomOut', desc: 'Zoom out' },
+                    '=': { fire: 'zoomIn', desc: 'Zoom in' },
+                    'alt-f': { fire: 'fit', desc: 'Fit all objects on screen' },
                 }
             });
 
@@ -97,7 +96,7 @@ define([
 
             var verticesInWorkspace = appData.verticesInWorkspace();
             if (verticesInWorkspace.length) {
-                this.updateOrAddVertices(verticesInWorkspace, { adding:true, preventShake:true });
+                this.updateOrAddVertices(verticesInWorkspace, { adding: true, preventShake: true });
             }
         });
 
@@ -121,7 +120,7 @@ define([
                     map.pan(
                         data.pan.x * -1, 
                         data.pan.y * -1, 
-                        { animate:false }
+                        { animate: false }
                     );
                 });
                 this.on('fit', function(e) {
@@ -132,8 +131,12 @@ define([
                 var slowZoomIn = _.throttle(map.zoomIn.bind(map), 250, {trailing: false}),
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
-                this.on('zoomIn', function() { slowZoomIn(); });
-                this.on('zoomOut', function() { slowZoomOut(); });
+                this.on('zoomIn', function() {
+                    slowZoomIn(); 
+                });
+                this.on('zoomOut', function() {
+                    slowZoomOut(); 
+                });
             });
         };
 
@@ -162,7 +165,7 @@ define([
             this.isWorkspaceEditable = workspaceData.isEditable;
             this.mapReady(function(map) {
                 map.featuresLayer.removeAllFeatures();
-                this.updateOrAddVertices(workspaceData.data.vertices, { adding:true, preventShake:true });
+                this.updateOrAddVertices(workspaceData.data.vertices, { adding: true, preventShake: true });
             });
         };
 
@@ -173,7 +176,7 @@ define([
         };
 
         this.onVerticesAdded = function(evt, data) {
-            this.updateOrAddVertices(data.vertices, { adding:true });
+            this.updateOrAddVertices(data.vertices, { adding: true });
         };
 
         this.onVerticesUpdated = function(evt, data) {
@@ -235,7 +238,9 @@ define([
                 });
 
                 var sf = this.clusterStrategy.selectedFeatures = {};
-                selectedIds.forEach(function(sId) { sf[sId] = true; });
+                selectedIds.forEach(function(sId) {
+                    sf[sId] = true; 
+                });
 
                 featuresLayer.redraw();
             });
@@ -263,7 +268,7 @@ define([
             if (!feature) {
                 map.featuresLayer.features.forEach(function(f) {
                     if (!feature && f.cluster) {
-                        feature = _.findWhere(f.cluster, { id:vertex.id });
+                        feature = _.findWhere(f.cluster, { id: vertex.id });
                     }
                 });
             }
@@ -365,7 +370,7 @@ define([
                     zoom = Math.min(5, zoom);
                 }
 
-                map.setCenter( new ol.LonLat(centerLonLat.lon-lon, centerLonLat.lat-lat), zoom);
+                map.setCenter(new ol.LonLat(centerLonLat.lon - lon, centerLonLat.lat - lat), zoom);
             } else {
                 map.zoomTo(2);
             }
@@ -377,7 +382,8 @@ define([
                 animate = function() {
                     map.removeClass(cls);
                     _.defer(function() {
-                        map.on('animationend MSAnimationEnd webkitAnimationEnd oAnimationEnd oanimationend', function() {
+                        map.on(ANIMATION_END, function() {
+                            map.off(ANIMATION_END);
                             map.removeClass(cls);
                         });
                         map.addClass(cls);
@@ -416,9 +422,9 @@ define([
                     } else {
                         var menu = this.select('contextMenuVertexSelector');
                         menu.data('feature', feature);
-                        this.toggleMenu({ positionUsingEvent:event }, menu);
+                        this.toggleMenu({ positionUsingEvent: event }, menu);
                     }
-                } else this.toggleMenu({ positionUsingEvent:event }, this.select('contextMenuSelector'));
+                } else this.toggleMenu({ positionUsingEvent: event }, this.select('contextMenuSelector'));
             });
         };
 
@@ -429,7 +435,7 @@ define([
                     return f.data.vertex;
                 });
 
-            this.trigger('deleteVertices', { vertices:vertices });
+            this.trigger('deleteVertices', { vertices: vertices });
         };
 
         this.onContextMenuLoadResultsWithinRadius = function() {
@@ -479,10 +485,12 @@ define([
                     this.$node.append(radiusTemplate({}));
 
                     var offset = self.$node.offset();
-                    self.regionCenterPoint = map.getLonLatFromViewPortPx({x:evt.pageX-offset.left,y:evt.pageY-offset.top});
-                    var centerPoint = new ol.Geometry.Point(self.regionCenterPoint.lon, self.regionCenterPoint.lat);
-
-                    var circleFeature = new ol.Feature.Vector(
+                    self.regionCenterPoint = map.getLonLatFromViewPortPx({
+                        x: evt.pageX - offset.left,
+                        y: evt.pageY - offset.top
+                    });
+                    var centerPoint = new ol.Geometry.Point(self.regionCenterPoint.lon, self.regionCenterPoint.lat),
+                        circleFeature = new ol.Feature.Vector(
                             OpenLayers.Geometry.Polygon.createRegularPolygon(
                                 centerPoint,
                                 // Default diameter is 10% of viewport
@@ -491,7 +499,7 @@ define([
                                 0
                             ),
                             {},
-                            { fillOpacity: 0.8, fillColor:'#0070C3', strokeColor:'#08538B' }
+                            { fillOpacity: 0.8, fillColor: '#0070C3', strokeColor: '#08538B' }
                         ),
                         layer = new ol.Layer.Vector('SelectionLayer', {
                             /*
@@ -523,9 +531,12 @@ define([
 
                     self.mode = MODE_REGION_SELECTION_MODE_LOADING;
 
-                    var area = self.regionFeature.geometry.getArea();
-                    var radius = 0.565352 * Math.sqrt(area) / 1000;
-                    var lonlat = self.regionCenterPoint.transform(map.getProjectionObject(), new ol.Projection("EPSG:4326"));
+                    var area = self.regionFeature.geometry.getArea(),
+                        radius = 0.565352 * Math.sqrt(area) / 1000,
+                        lonlat = self.regionCenterPoint.transform(
+                            map.getProjectionObject(),
+                            new ol.Projection('EPSG:4326')
+                        );
 
                     self.$node.find('.instructions').remove();
                     self.$node.append(loadingTemplate({}));
@@ -544,7 +555,6 @@ define([
 
             }
         };
-
 
         this.initializeMap = function() {
             var self = this;
@@ -572,7 +582,7 @@ define([
         };
 
         this.createMap = function(ol, ClusterStrategy) {
-            ol.ImgPath = "/libs/openlayers/img";
+            ol.ImgPath = '/libs/openlayers/img';
 
             var self = this,
                 controls = new ol.Control.Navigation({
@@ -585,10 +595,10 @@ define([
                     zoomDuration: 0,
                     numZoomLevels: 18,
                     theme: null,
-                    displayProjection: new ol.Projection("EPSG:4326"),
+                    displayProjection: new ol.Projection('EPSG:4326'),
                     controls: [ controls ]
                 }),
-                base = new ol.Layer.Google("Google Streets", {
+                base = new ol.Layer.Google('Google Streets', {
                     numZoomLevels: 20,
                     wrapDateLine: false
                 }),
@@ -600,25 +610,26 @@ define([
                 }),
                 style = self.featureStyle(),
                 selectedStyle = {
-                    fillColor:'#0070C3', labelOutlineColor:'#08538B', strokeColor:'#08538B',
+                    fillColor: '#0070C3', labelOutlineColor: '#08538B', strokeColor: '#08538B',
                 },
                 partialSelectionStyle = {
-                    strokeColor:'#08538B'
+                    strokeColor: '#08538B'
                 };
 
             map.featuresLayer = new ol.Layer.Vector('Markers', {
                 strategies: [ cluster ],
                 styleMap: new ol.StyleMap({
                     'default': new ol.Style(style.baseStyle, style.baseContext),
-                    'temporary': new ol.Style($.extend({}, style.baseStyle, partialSelectionStyle), style.baseContext),
-                    'select': new ol.Style($.extend({}, style.baseStyle, selectedStyle), style.baseContext)
+                    temporary: new ol.Style($.extend({}, style.baseStyle, partialSelectionStyle), style.baseContext),
+                    select: new ol.Style($.extend({}, style.baseStyle, selectedStyle), style.baseContext)
                 })
             });
 
-            map.featuresLayer.getDataExtent = function () {
-                var maxExtent = null;
-                var features = this.features;
-                if(features && (features.length > 0)) {
+            map.featuresLayer.getDataExtent = function() {
+                var maxExtent = null,
+                    features = this.features;
+
+                if (features && (features.length > 0)) {
                     var geometry = null;
                     features.forEach(function(feature) {
                         (feature.cluster || [feature]).forEach(function(f) {
@@ -650,7 +661,7 @@ define([
                     var vertices = _.map(featureEvents.feature.cluster || [featureEvents.feature], function(feature) {
                             return feature.data.vertex; 
                         });
-                    self.trigger('selectObjects', {vertices:vertices});
+                    self.trigger('selectObjects', {vertices: vertices});
                 }
             });
             map.events.on({
@@ -690,16 +701,16 @@ define([
         this.featureStyle = function() {
             return {
                 baseStyle: {
-                    pointRadius: "${radius}",
-                    label: "${label}",
+                    pointRadius: '${radius}',
+                    label: '${label}',
                     labelOutlineColor: '#AD2E2E',
                     labelOutlineWidth: '2',
                     fontWeight: 'bold',
                     fontSize: '16px',
                     fontColor: '#ffffff',
-                    fillColor: "#F13B3C",
+                    fillColor: '#F13B3C',
                     fillOpacity: 0.8,
-                    strokeColor: "#AD2E2E",
+                    strokeColor: '#AD2E2E',
                     strokeWidth: 3,
                     cursor: 'pointer'
                 },
@@ -737,4 +748,3 @@ define([
     }
 
 });
-

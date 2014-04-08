@@ -2,20 +2,19 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./detail'
-], function (defineComponent, registry, template) {
+], function(defineComponent, registry, template) {
     'use strict';
 
     return defineComponent(Detail);
 
     function Detail() {
 
-
         this.defaultAttrs({
             mapCoordinatesSelector: '.map-coordinates',
             detailTypeContentSelector: '.type-content'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             this.on('click', {
                 mapCoordinatesSelector: this.onMapCoordinatesClicked
             });
@@ -33,11 +32,11 @@ define([
         });
 
         // Ignore drop events so they don't propagate to the graph/map
-        this.preventDropEventsFromPropagating = function () {
+        this.preventDropEventsFromPropagating = function() {
             this.$node.droppable({ tolerance: 'pointer', accept: '*' });
         };
 
-        this.onMapCoordinatesClicked = function (evt, data) {
+        this.onMapCoordinatesClicked = function(evt, data) {
             evt.preventDefault();
             var $target = $(evt.target);
             data = {
@@ -47,7 +46,7 @@ define([
             this.trigger('mapCenter', data);
         };
 
-        this.onObjectsSelected = function (evt, data) {
+        this.onObjectsSelected = function(evt, data) {
             var self = this,
                 vertices = data.vertices,
                 edges = data.edges,
@@ -65,11 +64,16 @@ define([
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
                     type = vertices[0].concept && vertices[0].concept.displayType ||
-                        (vertices[0].properties['http://lumify.io#conceptType'].value != 'relationship' ? 'entity' : 'relationship');
+                        (vertices[0].properties['http://lumify.io#conceptType'].value != 'relationship' ?
+                         'entity' : 'relationship');
                 if (type === 'relationship') {
                     moduleName = type;
                 } else {
-                    moduleName = (((type != 'document' && type != 'image' && type != 'video' && type != 'audio') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+                    moduleName = (((type != 'document' &&
+                                    type != 'image' &&
+                                    type != 'video' &&
+                                    type != 'audio') ? 'entity' : 'artifact'
+                    ) || 'entity').toLowerCase();
                 }
                 moduleData = vertex;
             } else {
@@ -81,7 +85,7 @@ define([
 
             require([
                 'detail/' + moduleName + '/' + moduleName,
-            ], function (Module) {
+            ], function(Module) {
                 Module.attachTo(self.select('detailTypeContentSelector'), {
                     data: moduleData,
                     highlightStyle: self.attr.highlightStyle
@@ -89,11 +93,11 @@ define([
             });
         };
 
-        this.teardownComponents = function () {
+        this.teardownComponents = function() {
             var typeContentNode = this.select('detailTypeContentSelector'),
                 instanceInfos = registry.findInstanceInfoByNode(typeContentNode[0]);
             if (instanceInfos.length) {
-                instanceInfos.forEach(function (info) {
+                instanceInfos.forEach(function(info) {
                     info.instance.teardown();
                 });
             }

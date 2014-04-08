@@ -15,7 +15,6 @@ define([
 
             this.$node.html(template(this.attr));
 
-
             this.on('change keyup', {
                 inputSelector: function(event) { 
                     var val = $.trim($(event.target).val());

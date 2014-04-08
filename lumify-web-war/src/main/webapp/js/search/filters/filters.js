@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'flight/lib/registry',
@@ -7,6 +6,7 @@ define([
     'tpl!./item',
     'tpl!./entityItem',
     'data',
+    'util/formatters',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -16,6 +16,7 @@ define([
     itemTemplate,
     entityItemTemplate,
     appData,
+    formatters,
     FieldSelection,
     OntologyService) {
     'use strict';
@@ -59,9 +60,11 @@ define([
 
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
-                title = vertex && vertex.prop('title') || data.vertexId;
+                title = vertex && formatters.vertex.prop(vertex, 'title') || data.vertexId;
 
-            this.$node.find('.entity-filter-header').after(entityItemTemplate({title:title})).closest('.entity-filters').show();
+            this.$node.find('.entity-filter-header')
+                .after(entityItemTemplate({title: title}))
+                .closest('.entity-filters').show();
             this.notifyOfFilters();
         }
 
@@ -140,7 +143,7 @@ define([
 
         this.createNewRowIfNeeded = function() {
             if (this.$node.find('.newrow').length === 0) {
-                this.$node.find('.prop-filters').append(itemTemplate({properties:this.properties}));
+                this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
                 FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                     properties: this.properties,
                     placeholder: 'Add Filter'

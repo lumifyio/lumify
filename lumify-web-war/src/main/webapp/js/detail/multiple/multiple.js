@@ -9,7 +9,17 @@ define([
     'tpl!./multiple',
     'tpl!./histogram',
     'util/vertex/list'
-], function (defineComponent, registry, appData, withTypeContent, VertexService, OntologyService, sf, template, histogramTemplate, VertexList) {
+], function(
+    defineComponent,
+    registry,
+    appData,
+    withTypeContent,
+    VertexService,
+    OntologyService,
+    sf,
+    template,
+    histogramTemplate,
+    VertexList) {
     'use strict';
 
     var NO_HISTOGRAM_DATATYPES = [
@@ -29,10 +39,11 @@ define([
             vertexListSelector: '.multiple .vertices-list'
         });
 
-        this.after('initialize', function () {
+        this.after('initialize', function() {
             var self = this,
-                vertices = this.attr.data.filter(function (v) {
-                    return !v.properties['http://lumify.io#conceptType'] || v.properties['http://lumify.io#conceptType'] != 'relationship';
+                vertices = this.attr.data.filter(function(v) {
+                    return !v.properties['http://lumify.io#conceptType'] ||
+                        v.properties['http://lumify.io#conceptType'] != 'relationship';
                 }),
                 ids = _.pluck(vertices, 'id');
 
@@ -44,13 +55,13 @@ define([
 
             this.on('selectObjects', this.onSelectObjects);
 
-            var d3_deferred = $.Deferred();
-            require(['d3'], d3_deferred.resolve);
+            var d3Deferred = $.Deferred();
+            require(['d3'], d3Deferred.resolve);
             $.when(
                 this.vertexService.getMultiple(ids),
                 this.ontologyService.concepts(),
                 this.ontologyService.properties(),
-                d3_deferred
+                d3Deferred
             ).done(function(verticesResponse, concepts, properties, d3) {
                 var vertices = verticesResponse[0].vertices;
 
@@ -94,7 +105,10 @@ define([
             if (type === 'relationship') {
                 moduleName = type;
             } else {
-                moduleName = (((type != 'document' && type != 'image' && type != 'video') ? 'entity' : 'artifact') || 'entity').toLowerCase();
+                moduleName = (((type != 'document' &&
+                                type != 'image' &&
+                                type != 'video') ? 'entity' : 'artifact'
+                ) || 'entity').toLowerCase();
             }
 
             this._selectedGraphId = first.id;
@@ -132,64 +146,86 @@ define([
                     data = Object.keys(byProperty[name])
                         .map(function(key) { 
                             return { 
-                                key:key, 
-                                number:byProperty[name][key].length,
+                                key: key, 
+                                number: byProperty[name][key].length,
                                 vertexIds: _.pluck(byProperty[name][key], 'id')
                             };
                         }),
                     width = container.width(),
                     height = data.length * 30,
                     x = d3.scale.linear()
-                        .domain([0, d3.sum(data, function(d) { return d.number; })])
+                        .domain([0, d3.sum(data, function(d) {
+                            return d.number; 
+                        })])
                         .range([0, 100]),
                     y = d3.scale.ordinal()
-                        .domain(data.map(function(v) { return v.key; }))
+                        .domain(data.map(function(v) {
+                            return v.key; 
+                        }))
                         .rangeRoundBands([0, height], 0.1),
                     svg = d3.select(container[0]).append('svg')
-                        .attr("width", '100%')
-                        .attr("height", height)
-                        .selectAll(".bar")
+                        .attr('width', '100%')
+                        .attr('height', height)
+                        .selectAll('.bar')
                         .data(data)
                         .enter()
-                        .append("g")
-                        .attr('data-info', function(d) { return JSON.stringify($.extend({ property:name }, d)); });
+                        .append('g')
+                        .attr('data-info', function(d) {
+                            return JSON.stringify($.extend({ property: name }, d)); 
+                        });
 
-                svg.append("rect")
-                    .attr("class", "bar")
-                    .attr("x", 0)
-                    .attr("y", function(d, i) { return y(d.key); })
-                    .attr("width", function(d) {return x(d.number) + '%'; })
-                    .attr("height", function(d) { return y.rangeBand(); });
-
-                svg.append("text")
-                    .attr("class", "text")
-                    .text(function(d) { return fn.getPropertyValueDisplay(name, d.key); })
-                    .each(function() {
-                        var height = this.getBBox().height;
-                        this.setAttribute("dy", y.rangeBand() / 2 + height / 4 + 'px');
+                svg.append('rect')
+                    .attr('class', 'bar')
+                    .attr('x', 0)
+                    .attr('y', function(d, i) { 
+                        return y(d.key); 
                     })
-                .attr("x", 0)
-                    .attr("y", function(d, i) { return y(d.key); })
-                    .attr("dx", "10px")
-                    .attr("fill", "#fff")
-                    .attr("text-anchor", "start");
+                    .attr('width', function(d) {
+                        return x(d.number) + '%'; 
+                    })
+                    .attr('height', function(d) {
+                        return y.rangeBand(); 
+                    });
 
-                svg.append("text")
-                    .attr("class", "text-number")
-                    .attr("text-anchor", "end")
-                    .attr("x", function(d) { return x(d.number) + '%'; })
-                    .attr("y", function(d, i) { return y(d.key); })
-                    .text(function(d) { return d.number; })
+                svg.append('text')
+                    .attr('class', 'text')
+                    .text(function(d) { 
+                        return fn.getPropertyValueDisplay(name, d.key); 
+                    })
                     .each(function() {
                         var height = this.getBBox().height;
-                        this.setAttribute("dy", y.rangeBand() / 2 + height / 4 + 'px');
+                        this.setAttribute('dy', y.rangeBand() / 2 + height / 4 + 'px');
+                    })
+                .attr('x', 0)
+                    .attr('y', function(d, i) {
+                        return y(d.key); 
+                    })
+                    .attr('dx','10px')
+                    .attr('fill', '#fff')
+                    .attr('text-anchor', 'start');
 
-                        var text = this.previousSibling.getBBox();
-                        var minX = text.width + text.x + 10;
-                        var x = this.getBBox().x;
+                svg.append('text')
+                    .attr('class', 'text-number')
+                    .attr('text-anchor', 'end')
+                    .attr('x', function(d) {
+                        return x(d.number) + '%';
+                    })
+                    .attr('y', function(d, i) {
+                        return y(d.key); 
+                    })
+                    .text(function(d) {
+                        return d.number; 
+                    })
+                    .each(function() {
+                        var height = this.getBBox().height;
+                        this.setAttribute('dy', y.rangeBand() / 2 + height / 4 + 'px');
+
+                        var text = this.previousSibling.getBBox(),
+                            minX = text.width + text.x + 10,
+                            x = this.getBBox().x;
                         if (x < minX) {
-                            this.setAttribute("dx", minX - x);
-                        } else this.setAttribute("dx", "-10px");
+                            this.setAttribute('dx', minX - x);
+                        } else this.setAttribute('dx', '-10px');
                     });
             });
 
@@ -231,7 +267,7 @@ define([
                 } else if (properties.byTitle[propertyName]) {
                     switch (properties.byTitle[propertyName].dataType) {
                         case 'date':
-                            propertyValueDisplay = sf("{0:yyyy/MM/dd}", new Date(parseInt(propertyValue)));
+                            propertyValueDisplay = sf('{0:yyyy/MM/dd}', new Date(parseInt(propertyValue)));
                             break;
                     }
                 }
@@ -241,8 +277,8 @@ define([
 
             function calculateByProperty(vertices) {
                 var byProperty = {};
-                vertices.forEach(function (v) {
-                    Object.keys(v.properties).forEach(function (propertyName) {
+                vertices.forEach(function(v) {
+                    Object.keys(v.properties).forEach(function(propertyName) {
                         if (!byProperty[propertyName]) {
                             byProperty[propertyName] = {};
                         }
@@ -260,19 +296,18 @@ define([
             }
         };
 
-
         this.histogramHover = function(event, object) {
             var data = $(event.target).closest('g').data('info'),
                 eventName = event.type === 'mouseenter' ? 'focus' : 'defocus';
 
-            this.trigger(document, eventName + 'Vertices', { vertexIds:data.vertexIds });
+            this.trigger(document, eventName + 'Vertices', { vertexIds: data.vertexIds });
         };
 
         this.histogramClick = function(event, object) {
             var data = $(event.target).closest('g').data('info');
 
-            this.trigger(document, 'selectObjects', { vertices:appData.vertices(data.vertexIds) });
-            this.trigger(document, 'defocusVertices', { vertexIds:data.vertexIds });
+            this.trigger(document, 'selectObjects', { vertices: appData.vertices(data.vertexIds) });
+            this.trigger(document, 'defocusVertices', { vertexIds: data.vertexIds });
         };
     }
 });

@@ -1,7 +1,7 @@
 
 <li class="<%= classNamesForVertex[vertex.id] || '' %> vertex-item" 
     data-vertex-id="<%= vertex.id %>"
-    ><a><%= vertex.prop('title') %>
+    ><a><%= formatters.vertex.prop(vertex, 'title') %>
       <ul>
         <li class="graph"><button title="Displayed in Graph" href="#">Graph</button></li>
         <li class="map"><button title="Displayed in Map" href="#">Map</button></li>

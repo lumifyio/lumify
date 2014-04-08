@@ -34,8 +34,8 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Help',
                 shortcuts: {
-                    'escape': { fire:'escape',     desc:'Close this help dialog' },
-                    'shift-/': { fire:'toggleHelp', desc:'Toggle this help dialog' }
+                    escape: { fire: 'escape', desc: 'Close this help dialog' },
+                    'shift-/': { fire: 'toggleHelp', desc: 'Toggle this help dialog' }
                 }
             })
             this.trigger(document, 'requestKeyboardShortcuts');
@@ -50,7 +50,7 @@ define([
         this.onKeyboardShortcutsRegistered = function(e, data) {
             this.$node.find('ul').html(
                 sectionsTemplate({
-                    shortcutsByScope:data,
+                    shortcutsByScope: data,
                     prettyCommand: prettyCommand,
                     sortFunction: function(s1, s2) {
                         var i1 = SCOPE_SORTING_HINTS.indexOf(s1),

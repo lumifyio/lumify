@@ -40,7 +40,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
     }
 
     public static String getUrl(Object graphVertexId) {
-        return "/artifact/" + graphVertexId + "/thumbnail";
+        return "artifact/thumbnail?graphVertexId=" + graphVertexId;
     }
 
     @Override

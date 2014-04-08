@@ -49,14 +49,15 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
         return findByRowStartsWith(vertexId + ":", modelUserContext);
     }
 
-    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object vertexId, String concept,
+    // TODO clean this method signature up. Takes way too many parameters.
+    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId,  String concept,
                                                   double x1, double y1, double x2, double y2, boolean resolved,
                                                   String process, Visibility visibility, ModelUserContext modelUserContext) {
         DetectedObjectRowKey detectedObjectRowKey;
-        if (vertexId == null) {
+        if (edgeId == null) {
             detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2);
         } else {
-            detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2, vertexId);
+            detectedObjectRowKey = new DetectedObjectRowKey(artifactVertexId, x1, y1, x2, y2, edgeId);
         }
 
         DetectedObjectModel detectedObjectModel = findByRowKey(detectedObjectRowKey.toString(), modelUserContext);
@@ -70,7 +71,8 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
                 .setY2(y2, visibility);
 
         if (resolved) {
-            detectedObjectModel.getMetadata().setResolvedId(vertexId, visibility);
+            detectedObjectModel.getMetadata().setResolvedId(graphVertexId, visibility);
+            detectedObjectModel.getMetadata().setEdgeId(edgeId, visibility);
         } else {
             detectedObjectModel.getMetadata().setClassifierConcept(concept, visibility);
         }
@@ -101,6 +103,7 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
             Vertex vertex = graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations);
             object.put("title", vertex.getPropertyValue(LumifyProperties.TITLE.getKey()));
             object.put("graphVertexId", vertex.getId());
+            object.put("edgeId", detectedObjectModel.getRowKey().getEdgeId());
             object.put("http://lumify.io#conceptType", vertex.getPropertyValue("http://lumify.io#conceptType"));
         }
         object.put(LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString());

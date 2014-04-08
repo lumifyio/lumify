@@ -86,14 +86,14 @@ define([
 
                             var index, map = {};
                             for (var i = 0; i < notInWorkspace.length; i++) {
-                                path_loop: for (var j = 0; j < paths.length; j++) {
+                                pathLoop: for (var j = 0; j < paths.length; j++) {
                                     for (var x = 0; x < paths[j].length; x++) {
                                         if (paths[j][x].id === notInWorkspace[i].id) {
                                             map[notInWorkspace[i].id] = {
-                                                sourceId: paths[j][x-1].id,
-                                                targetId: paths[j][x+1].id
+                                                sourceId: paths[j][x - 1].id,
+                                                targetId: paths[j][x + 1].id
                                             };
-                                            break path_loop;
+                                            break pathLoop;
                                         }
                                     }
                                 }
@@ -106,9 +106,8 @@ define([
                         }
 
                         cy.$('.temp').remove();
-                        self.trigger('focusPaths', { paths:paths, sourceId:src, targetId:dest });
+                        self.trigger('focusPaths', { paths: paths, sourceId: src, targetId: dest });
                     } else text.text('Searching up to ' + formatters.string.plural(self.attr.hops, 'hop'));
-
 
                     title.text(pathsFoundText).closest('.popover-title').show();
                     self.positionDialog();
@@ -124,10 +123,10 @@ define([
             };
 
             return this.vertexService.findPath(parameters)
-                        .then(function (data) {
+                        .then(function(data) {
                             var vertices = [], added = {};
-                            data.paths.forEach(function (path) {
-                                path.forEach(function (vertex) {
+                            data.paths.forEach(function(path) {
+                                path.forEach(function(vertex) {
                                     if (!added[vertex.id]) {
                                         vertices.push(vertex);
                                         added[vertex.id] = true;
@@ -155,7 +154,7 @@ define([
                     }
                 }
             });
-            this.trigger('selectObjects', { vertices:vertices });
+            this.trigger('selectObjects', { vertices: vertices });
         };
 
         this.onFindPathHopsButton = function(e) {

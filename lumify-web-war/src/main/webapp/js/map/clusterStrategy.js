@@ -4,14 +4,14 @@ define(['openlayers'], function(OpenLayers) {
     return OpenLayers.Class(OpenLayers.Strategy.Cluster, {
         activate: function() {
             var activated = OpenLayers.Strategy.prototype.activate.call(this);
-            if(activated) {
+            if (activated) {
                 this.selectedFeatures = {};
                 this.layer.events.on({
-                    "beforefeaturesadded": this.cacheFeatures,
-                    "featuresremoved": this.removeFeatures,
-                    "featureselected": this.onFeaturesSelected,
-                    "featureunselected": this.onFeaturesUnselected,
-                    "moveend": this.cluster,
+                    beforefeaturesadded: this.cacheFeatures,
+                    featuresremoved: this.removeFeatures,
+                    featureselected: this.onFeaturesSelected,
+                    featureunselected: this.onFeaturesUnselected,
+                    moveend: this.cluster,
                     scope: this
                 });
             }
@@ -54,26 +54,32 @@ define(['openlayers'], function(OpenLayers) {
         cluster: function(event) {
             var i;
 
-            if((!event || event.zoomChanged) && this.features) {
+            if ((!event || event.zoomChanged) && this.features) {
                 var resolution = this.layer.map.getResolution();
-                if(resolution != this.resolution || !this.clustersExist() || this.previousCount != this.features.length) {
+                if (resolution != this.resolution ||
+                    !this.clustersExist() ||
+                    this.previousCount != this.features.length
+                ) {
                     this.previousCount = this.features.length;
                     this.resolution = resolution;
-                    var clusters = [];
-                    var feature, clustered, cluster;
-                    for(i=0; i<this.features.length; ++i) {
+                    var clusters = [],
+                        feature,
+                        clustered,
+                        cluster;
+
+                    for (i = 0; i < this.features.length; ++i) {
                         feature = this.features[i];
-                        if(feature.geometry) {
+                        if (feature.geometry) {
                             clustered = false;
-                            for(var j=clusters.length-1; j>=0; --j) {
+                            for (var j = clusters.length - 1; j >= 0; --j) {
                                 cluster = clusters[j];
-                                if(this.shouldCluster(cluster, feature)) {
+                                if (this.shouldCluster(cluster, feature)) {
                                     this.addToCluster(cluster, feature);
                                     clustered = true;
                                     break;
                                 }
                             }
-                            if(!clustered) {
+                            if (!clustered) {
                                 clusters.push(this.createCluster(this.features[i]));
                             }
                         }
@@ -81,14 +87,14 @@ define(['openlayers'], function(OpenLayers) {
                     this.clustering = true;
                     this.layer.removeAllFeatures();
                     this.clustering = false;
-                    if(clusters.length > 0) {
+                    if (clusters.length > 0) {
                         if(this.threshold > 1) {
                             var clone = clusters.slice();
                             clusters = [];
                             var candidate;
-                            for(i=0, len=clone.length; i<len; ++i) {
+                            for (i = 0, len = clone.length; i < len; ++i) {
                                 candidate = clone[i];
-                                if(candidate.attributes.count < this.threshold) {
+                                if (candidate.attributes.count < this.threshold) {
                                     Array.prototype.push.apply(clusters, candidate.cluster);
                                 } else {
                                     clusters.push(candidate);
@@ -167,7 +173,7 @@ define(['openlayers'], function(OpenLayers) {
 
         cacheFeatures: function(event) {
             var propagate = true;
-            if(!this.clustering) {
+            if (!this.clustering) {
                 this.features = this.features || [];
                 var currentIds = [];
                 this.features.forEach(function gatherId(feature) {
@@ -178,7 +184,7 @@ define(['openlayers'], function(OpenLayers) {
                     currentIds.push(feature.id);
                 });
                 event.features.forEach(function(feature) {
-                    if (! ~currentIds.indexOf(feature.id)) {
+                    if (!~currentIds.indexOf(feature.id)) {
                         this.features.push(feature);
                     }
                 }.bind(this));
@@ -192,7 +198,7 @@ define(['openlayers'], function(OpenLayers) {
             if(!this.clustering) {
                 var existingIds = _.pluck(event.features, 'id');
                 this.features = _.filter(this.features, function(feature) {
-                    return ! ~existingIds.indexOf(feature.id);
+                    return !~existingIds.indexOf(feature.id);
                 });
             }
         }

@@ -1,26 +1,23 @@
-define(
-    [
-        'service/serviceBase'
-    ],
-    function (ServiceBase) {
-        'use strict';
+define([
+    'service/serviceBase'
+], function(ServiceBase) {
+    'use strict';
 
-        function AuditService() {
-            ServiceBase.call(this);
-            return this;
-        }
+    function AuditService() {
+        ServiceBase.call(this);
+        return this;
+    }
 
-        AuditService.prototype = Object.create(ServiceBase.prototype);
+    AuditService.prototype = Object.create(ServiceBase.prototype);
 
-        AuditService.prototype.getAudits = function (vertexId) {
-            return this._ajaxGet({
-                url: 'audit',
-                data: {
-                    graphVertexId: vertexId
-                }
-            });
-        };
+    AuditService.prototype.getAudits = function(vertexId) {
+        return this._ajaxGet({
+            url: 'audit',
+            data: {
+                graphVertexId: vertexId
+            }
+        });
+    };
 
-        return AuditService;
-    });
-
+    return AuditService;
+});

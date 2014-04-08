@@ -307,9 +307,15 @@ define([
 
         this.onAddProperty = function(event, data) {
             var self = this,
-                isEdge = this.attr.data.properties['http://lumify.io#conceptType'].value === 'relationship',
+                conceptType = this.attr.data.properties['http://lumify.io#conceptType'],
+                isEdge = !(conceptType && conceptType.value !== 'relationship'),
                 done = isEdge ? function(edge) {
-                    var properties = $.extend({}, self.attr.data.properties, edge.properties);
+                    if (edge.properties._visibilityJson) {
+                        edge.properties._visibilityJson.value = {
+                            value: edge.properties._visibilityJson.value
+                        };
+                    }
+                    var properties = $.extend(true, self.attr.data.properties, edge.properties);
                     self.displayProperties(properties);
                 } : function() { };
 
@@ -503,7 +509,7 @@ define([
                 self.$node.find('.visibility').each(function() {
                     var visibility = $(this).data('visibility');
                     VisibilityDisplay.attachTo(this, {
-                        value: visibility.source
+                        value: visibility && visibility.source
                     })
                 });
             });
@@ -594,8 +600,12 @@ define([
             } else if (name === '_visibilityJson') {
                 value = properties[name].value;
 
+                if (value && _.isObject(value.value)) {
+                    value = value.value;
+                }
+
                 // TODO: call plugin
-                stringValue = (value && value.value && value.value.source) || 'public';
+                stringValue = (value && value.source) || 'public';
 
                 addProperty(properties[name], name, 'Visibility', null, value, stringValue);
             } else if (isRelationshipType) {

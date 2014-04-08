@@ -52,7 +52,13 @@ define([
 
         this.searchResults = null;
 
-        this.onEntitySearchResultsForConcept = function($searchResultsSummary, concept, entities, count, parentPropertyListElements) {
+        this.onEntitySearchResultsForConcept = function(
+            $searchResultsSummary,
+            concept,
+            entities, 
+            count,
+            parentPropertyListElements
+        ) {
             var self = this,
                 resultsCount = count,
                 badge = this.updateCountBadgeForConcept(concept.id, resultsCount),
@@ -66,7 +72,7 @@ define([
                 parentPropertyListElements.show();
             }
 
-            if(concept.children && concept.children.length > 0) {
+            if (concept.children && concept.children.length > 0) {
                 var parentLis = parentPropertyListElements.add(li);
                 concept.children.forEach(function(childConcept) {
                     self.onEntitySearchResultsForConcept(
@@ -86,10 +92,10 @@ define([
             $searchQueryValidation.html('');
 
             var query = this.select('querySelector').val();
-            if(query) {
+            if (query) {
                 query = $.trim(query);
             }
-            if(!query && !this.relatedToVertexId) {
+            if (!query && !this.relatedToVertexId) {
                 this.select('resultsSummarySelector').empty();
                 return $searchQueryValidation.html(alertTemplate({ error: 'Query cannot be empty' }));
             }
@@ -111,14 +117,15 @@ define([
 
         this.getConceptChildrenHtml = function(concept, indent) {
             var self = this,
-                html = "";
+                html = '';
+
             (concept.children || []).forEach(function(concept) {
                 html += conceptItemTemplate({
                     concept: concept,
                     classSafeConceptId: self.classSafeConceptId(concept.id),
                     indent: indent
                 });
-                if(concept.children && concept.children.length > 0) {
+                if (concept.children && concept.children.length > 0) {
                     html += self.getConceptChildrenHtml(concept, indent + 15);
                 }
             });
@@ -135,17 +142,17 @@ define([
 
         this.popoutIfNeeded = function() {
             if (!this.$node.closest(':data(menubarName)').hasClass('visible')) {
-                this.trigger ('menubarToggleDisplay', { name : 'search' });
+                this.trigger ('menubarToggleDisplay', { name: 'search' });
             }
         }
 
-        this.onSearchByEntity = function (evt, data) {
+        this.onSearchByEntity = function(evt, data) {
             this.select('querySelector').val(data.query);
-            this.clearFilters({triggerUpdates:false});
-            this.trigger ('search', { query : data.query});
+            this.clearFilters({triggerUpdates: false});
+            this.trigger ('search', { query: data.query});
         };
 
-        this.onSearchByRelatedEntity = function (evt, data) {
+        this.onSearchByRelatedEntity = function(evt, data) {
             this.select('querySelector').val('');
         };
 
@@ -192,7 +199,7 @@ define([
             this.ontologyService.concepts().done(function(concepts) {
                 this.updateConceptSections(concepts);
 
-                var paging = { offset:0, size:100 },
+                var paging = { offset: 0, size: 100 },
                     subTypeFilter = null;
 
                 this.previousSearch = this.vertexService.graphVertexSearch(query, this.filters, subTypeFilter, paging)
@@ -207,18 +214,22 @@ define([
                                         if (!results[conceptType]) results[conceptType] = [];
 
                                         // Check for an existing result with the same id
-                                        var resultFound = results[conceptType].some(function(result) { return result.id === v.id; });
+                                        var resultFound = results[conceptType].some(function(result) {
+                                            return result.id === v.id; 
+                                        });
 
                                         // Only store unique results
                                         if (resultFound === false) {
                                             results[conceptType].push(v);
                                         }
-                                    };
+                                    },
+                                    vertexConcept = concepts.byId[conceptType];
 
-                                var vertexConcept = concepts.byId[conceptType];
                                 while (vertexConcept) {
                                     addToSearchResults(vertexConcept.id, v);
-                                    vertexConcept = vertexConcept.parentId ? concepts.byId[vertexConcept.parentId] : null;
+                                    vertexConcept = vertexConcept.parentId ?
+                                        concepts.byId[vertexConcept.parentId] :
+                                        null;
                                 }
                             };
                         vertexResults.vertices.forEach(sortVerticesIntoResults);
@@ -239,9 +250,16 @@ define([
                             concepts.byTitle.forEach(function(concept) {
                                 var count = countMap[concept.id] || 0,
                                     childrenCounts = _.pick(countMap, _.pluck(concept.children, 'id')),
-                                    total = _.reduce(childrenCounts, function(memo, i) {return memo + i}, 0);
+                                    total = _.reduce(childrenCounts, function(memo, i) {
+                                        return memo + i
+                                    }, 0);
 
-                                self.onEntitySearchResultsForConcept(summaryNode, concept, results.entity, count + total);
+                                self.onEntitySearchResultsForConcept(
+                                    summaryNode,
+                                    concept,
+                                    results.entity,
+                                    count + total
+                                );
                             });
                         }
 
@@ -321,12 +339,12 @@ define([
             });
         };
 
-        this.onKeyUp = function (evt) {
+        this.onKeyUp = function(evt) {
             var search = this.select('querySelector'),
                 query = search.val();
 
             if (query != this.currentQuery) {
-                this.trigger("searchQueryChanged", { query: query});
+                this.trigger('searchQueryChanged', { query: query});
                 this.currentQuery = query;
             }
 
@@ -335,14 +353,18 @@ define([
             }
         };
 
-        this.onQueryFocus = function (evt, data) {
+        this.onQueryFocus = function(evt, data) {
             var filters = this.select('filtersSelector').show();
             this.hideSearchResults();
             this.$node.find('.search-results-summary .active').removeClass('active');
         };
 
         this.hideSearchResults = function() {
-            registry.findInstanceInfoByNode(this.select('resultsSelector').hide().find('.content')[0]).forEach(function(info) {
+            registry.findInstanceInfoByNode(
+                this.select('resultsSelector')
+                    .hide()
+                    .find('.content')[0]
+            ).forEach(function(info) {
                 info.instance.teardown();
             });
             this.trigger(document, 'paneResized');
@@ -394,13 +416,12 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Search',
                 shortcuts: {
-                    'meta-a': { fire:'selectAll', desc:'Select all search results' },
-                    'up': { fire:'up', desc:'Select previous result'},
-                    'down': { fire:'down', desc:'Select next result'}
+                    'meta-a': { fire: 'selectAll', desc: 'Select all search results' },
+                    up: { fire: 'up', desc: 'Select previous result'},
+                    down: { fire: 'down', desc: 'Select next result'}
                 }
             });
         });
-
 
         this.onMenubarToggle = function(evt, data) {
             var pane = this.$node.closest(':data(menubarName)');
@@ -425,7 +446,7 @@ define([
             }
 
             if (this.entityFilters && this.entityFilters.relatedToVertexId) {
-                query = { query:query, relatedToVertexId:this.entityFilters.relatedToVertexId };
+                query = { query: query, relatedToVertexId: this.entityFilters.relatedToVertexId };
             }
 
             this.infiniteSearchRequest = this.vertexService.graphVertexSearch(
@@ -458,7 +479,7 @@ define([
                 return;
             }
 
-            this.trigger('search', { query:query || '' });
+            this.trigger('search', { query: query || '' });
         };
 
         this.onFiltersInfoRemoveClick = function() {

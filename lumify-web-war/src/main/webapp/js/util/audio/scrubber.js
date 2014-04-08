@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'tpl!./scrubber',

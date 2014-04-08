@@ -1,5 +1,4 @@
 
-
 define(['util/withTeardown'], function(withTeardown) {
     'use strict';
 
@@ -29,7 +28,7 @@ define(['util/withTeardown'], function(withTeardown) {
 
             if (this.attr.tooltip && this.$node.find('.input-prepend').length === 0) {
                 inputs.eq(0)
-                    .tooltip($.extend({ container:'body' }, this.attr.tooltip))
+                    .tooltip($.extend({ container: 'body' }, this.attr.tooltip))
                     .data('tooltip').tip().addClass('field-tooltip');
             }
 

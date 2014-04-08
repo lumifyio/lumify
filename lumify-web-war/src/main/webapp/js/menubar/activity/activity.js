@@ -30,18 +30,18 @@ define([
         this.activitiesCount = 0;
         this.activities = { };
 
-        this.after( 'initialize', function() {
+        this.after('initialize', function() {
 
-            ACTIVITIES.forEach( function(a) {
-                if ( a.eventStarting && a.eventFinished ) {
+            ACTIVITIES.forEach(function(a) {
+                if (a.eventStarting && a.eventFinished) {
                     this.on(document, a.eventStarting, function(e, data) {
-                        this.start( a, e, data);
+                        this.start(a, e, data);
                     });
                     this.on(document, a.eventFinished, function(e, data) {
-                        this.finish( a, e, data);
+                        this.finish(a, e, data);
                     });
                 } else {
-                    throw new Error( 'Activity description requires start/finish events' );
+                    throw new Error('Activity description requires start/finish events');
                 }
             }.bind(this));
 
@@ -52,7 +52,6 @@ define([
             });
 
         });
-
 
         this.start = function(activity, event, data) {
 
@@ -75,8 +74,7 @@ define([
                     this.updateActivity(false, activity.descriptions[1] || activity.eventFinished);
                 }.bind(this);
 
-
-            if ( duration < minDurationMillis ) {
+            if (duration < minDurationMillis) {
                 this.finishDelay = setTimeout(function() {
                     updateActivity();
                 }, minDurationMillis - duration);
@@ -88,7 +86,7 @@ define([
         this.updateActivity = function(animating, message) {
             var lastActivity = this.activitiesCount === 0;
 
-            if ( !lastActivity ) {
+            if (!lastActivity) {
                 animating = true;
             }
 
