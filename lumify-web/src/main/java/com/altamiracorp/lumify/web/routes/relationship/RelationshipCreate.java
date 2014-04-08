@@ -12,10 +12,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +58,13 @@ public class RelationshipCreate extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         Vertex destVertex = graph.getVertex(destGraphVertexId, authorizations);
         Vertex sourceVertex = graph.getVertex(sourceGraphVertexId, authorizations);
+
+        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            chain.next(request, response);
+            return;
+        }
 
         Edge edge = GraphUtil.addEdge(graph, sourceVertex, destVertex, predicateLabel, justificationText, sourceInfo, visibilitySource, workspaceId, visibilityTranslator, authorizations);
 
