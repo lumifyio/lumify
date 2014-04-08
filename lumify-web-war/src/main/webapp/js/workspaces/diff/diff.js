@@ -9,6 +9,8 @@ define([
 ], function(defineComponent, template, OntologyService, WorkspaceService, formatters, appData) {
     'use strict';
 
+    var SHOW_CHANGES_TEXT_SECONDS = 3;
+
     return defineComponent(Diff);
 
     function Diff() {
@@ -74,12 +76,6 @@ define([
             self.on('diffsChanged', function(event, data) {
                 self.processDiffs(data.diffs).done(function(processDiffs) {
 
-                    if (self.$node.closest('.popover:visible').length &&
-                        self.$node.find('.header .alert').length) {
-                        // Don't update diff panel if errors are showing
-                        return;
-                    }
-
                     var scroll = self.$node.find('.diffs-list'),
                         previousScroll = scroll.scrollTop(),
                         previousPublished = self.$node.find('.mark-publish').map(function() {
@@ -95,19 +91,28 @@ define([
                     self.$node.html(template({
                         diffs: processDiffs,
                         formatValue: formatValue,
-                        formatLabel: formatLabel
+                        formatLabel: formatLabel,
+                        formatters: formatters
                     }));
 
                     self.selectVertices(previousSelection);
                     self.$node.find(previousPublished.join(',')).each(function() {
-                        $(this).addClass('mark-publish')
-                            .find('.publish').addClass('btn-success')
+                        var $this = $(this);
+
+                        if ($this.find('.actions').length) {
+                            $(this).addClass('mark-publish')
+                                .find('.publish').addClass('btn-success')
+                        }
                     });
                     self.$node.find(previousUndo.join(',')).each(function() {
-                        $(this).addClass('mark-undo')
-                            .find('.undo').addClass('btn-danger')
+                        var $this = $(this);
+
+                        if ($this.find('.actions').length) {
+                            $(this).addClass('mark-undo')
+                                .find('.undo').addClass('btn-danger')
+                        }
                     });
-                    self.updateHeader();
+                    self.updateHeader(self.$node.closest('.popover:visible').length > 0);
                     self.$node.find('.diffs-list').scrollTop(previousScroll);
                 });
             })
@@ -315,7 +320,7 @@ define([
 
             workspaceService[type](diffsToSend)
                 .always(function() {
-                    bothButtons.removeAttr('disabled').removeClass('loading');
+                    bothButtons.hide().removeAttr('disabled').removeClass('loading');
                 })
                 .fail(function(xhr, status, errorText) {
                     var error = $('<div>')
@@ -326,13 +331,13 @@ define([
                         )
                         .appendTo(header);
 
+                    bothButtons.show();
                     _.delay(error.remove.bind(error), 5000)
                 })
                 .done(function(response) {
                     var failures = response.failures,
                         success = response.success;
 
-                    self.updateHeader();
                     self.$node.find('.header .alert').remove();
 
                     if (failures && failures.length) {
@@ -347,20 +352,37 @@ define([
                 });
         };
 
-        this.updateHeader = function() {
-            var markedAsPublish = this.$node.find('.mark-publish').length,
+        this.updateHeader = function(showSuccess) {
+            var self = this,
+                markedAsPublish = this.$node.find('.mark-publish').length,
                 markedAsUndo = this.$node.find('.mark-undo').length,
                 header = this.$node.find('.header span'),
+                headerText = header.text(),
                 publish = this.$node.find('.publish-all'),
                 undo = this.$node.find('.undo-all');
 
-            header.toggle(markedAsPublish === 0 && markedAsUndo === 0);
+            if (this.updateHeaderDelay) {
+                clearTimeout(this.updateHeaderDelay);
+                this.updateHeaderDelay = null;
+            }
 
-            publish.toggle(markedAsPublish > 0)
-                   .text('Publish ' + formatters.string.plural(markedAsPublish, 'change'));
-            
-            undo.toggle(markedAsUndo > 0)
-                .text('Undo ' + formatters.string.plural(markedAsUndo, 'change'));
+            if (showSuccess) {
+                publish.hide();
+                undo.hide();
+                header.show().text(headerText + ' (updated)');
+                this.updateHeaderDelay = _.delay(function() {
+                    header.text(headerText);
+                    self.updateHeader();
+                }, SHOW_CHANGES_TEXT_SECONDS * 1000);
+            } else {
+                header.toggle(markedAsPublish === 0 && markedAsUndo === 0);
+
+                publish.toggle(markedAsPublish > 0)
+                       .text('Publish ' + formatters.string.plural(markedAsPublish, 'change'));
+                
+                undo.toggle(markedAsUndo > 0)
+                    .text('Undo ' + formatters.string.plural(markedAsUndo, 'change'));
+            }
         }
 
         this.onMarkUndo = function(event, data) {

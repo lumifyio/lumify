@@ -227,9 +227,8 @@ define([
                         filteredDiffs = _.filter(diffs, function(diff) {
                             if (diff.type !== 'PropertyDiffItem') return true;
 
-                            var ontologyProperty = ontologyProperties[diff.name];
-                            
-                            if (!ontologyProperty || ontologyProperty.userVisiblee) return false;
+                            var ontologyProperty = ontologyProperties.byTitle[diff.name];
+                            if (!ontologyProperty || !ontologyProperty.userVisible) return false;
                             if (diff.name === 'title' && vertexDiffsById[diff.elementId]) {
                                 countOfTitleChanges++;
                             }
