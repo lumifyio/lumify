@@ -19,6 +19,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.workspace.WorkspaceHelper;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -79,16 +80,23 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+        Edge edge = graph.getEdge(edgeId, authorizations);
 
-        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
-        if (sandboxStatus == SandboxStatus.PUBLIC) {
+        SandboxStatus vertexSandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
+        SandboxStatus edgeSandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC && edgeSandboxStatus == SandboxStatus.PUBLIC) {
             LOGGER.warn("Can not unresolve a public entity");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             chain.next(request, response);
             return;
         }
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(resolvedVertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
+        JSONObject visibilityJson;
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(edge.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
+        } else {
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(resolvedVertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
+        }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, mentionStart, mentionEnd, edgeId);
