@@ -103,15 +103,16 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (!type.equals("vertex")) {
                     continue;
                 }
-                checkNotNull(data.getString("vertexId"));
-                Vertex vertex = graph.getVertex(data.getString("vertexId"), authorizations);
+                String vertexId = data.getString("vertexId");
+                checkNotNull(vertexId);
+                Vertex vertex = graph.getVertex(vertexId, authorizations);
                 checkNotNull(vertex);
                 if (data.getString("status").equals(SandboxStatus.PUBLIC.toString())) {
                     String msg;
                     if (action.equals("delete")) {
-                        msg = "Cannot delete a public vertex";
+                        msg = "Cannot delete public vertex " + vertexId;
                     } else {
-                        msg = "Vertex is already public";
+                        msg = "Vertex " + vertexId + " is already public";
                     }
                     LOGGER.warn(msg);
                     data.put("error_msg", msg);
