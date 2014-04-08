@@ -49,7 +49,8 @@ public class DetectedObjectRepository extends Repository<DetectedObjectModel> {
         return findByRowStartsWith(vertexId + ":", modelUserContext);
     }
 
-    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId,  String concept,
+    // TODO clean this method signature up. Takes way too many parameters.
+d    public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId,  String concept,
                                                   double x1, double y1, double x2, double y2, boolean resolved,
                                                   String process, Visibility visibility, ModelUserContext modelUserContext) {
         DetectedObjectRowKey detectedObjectRowKey;
