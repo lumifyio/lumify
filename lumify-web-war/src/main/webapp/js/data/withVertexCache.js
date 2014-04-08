@@ -3,6 +3,14 @@ define([
     'service/vertex',
     'util/formatters'
 ], function(VertexService, formatters) {
+                
+    var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
+        '_visibility',
+        '_visibilityJson',
+        'detectedObjects',
+        'properties',
+        'sandboxStatus'
+    ];
 
     return withVertexCache;
 
@@ -118,7 +126,11 @@ define([
 
         this.updateCacheWithVertex = function(vertex, options) {
             var id = vertex.id,
-                cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });
+                cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id }),
+                hasChanged = !_.isEqual(
+                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)), 
+                    _.pick.apply(_, [vertex].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES))
+                );
 
             if (options && options.deletedProperty && cache.properties) {
                 delete cache.properties[options.deletedProperty]
@@ -164,7 +176,7 @@ define([
 
             $.extend(true, vertex, cache);
 
-            return cache;
+            return (options && options.returnNullIfNotChanged === true && !hasChanged) ? null : cache;
         };
 
         function setPreviewsForVertex(vertex, currentWorkspace) {

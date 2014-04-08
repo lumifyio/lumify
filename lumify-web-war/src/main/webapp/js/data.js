@@ -173,14 +173,17 @@ define([
         };
 
         this.onSocketMessage = function(evt, message) {
-            var self = this;
+            var self = this,
+                updated = null;
+
             switch (message.type) {
                 case 'propertiesChange':
                     // TODO: create edgesUpdated events
                     if (!message.data.vertex.sourceVertexId) {
-                        self.trigger('verticesUpdated', { 
-                            vertices: [ self.updateCacheWithVertex(message.data.vertex) ]
-                        });
+                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
+                        if (updated) {
+                            self.trigger('verticesUpdated', { vertices: [updated] });
+                        }
                     }
                     break;
                 case 'edgeDeletion':
@@ -190,9 +193,10 @@ define([
                     self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
                     break;
                 case 'detectedObjectChange':
-                    self.trigger('verticesUpdated', { 
-                        vertices: [ self.updateCacheWithVertex(message.data.artifactVertex) ]
-                    });
+                    updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
+                    if (updated) {
+                        self.trigger('verticesUpdated', { vertices: [updated] });
+                    }
                     break;
             }
         };

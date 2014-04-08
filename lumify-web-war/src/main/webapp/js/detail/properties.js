@@ -528,6 +528,7 @@ define([
         }
 
         if (!('http://lumify.io#visibilityJson' in properties)) {
+            properties = $.extend({}, properties);
             properties['http://lumify.io#visibilityJson'] = {
                 value: {
                     source: ''
