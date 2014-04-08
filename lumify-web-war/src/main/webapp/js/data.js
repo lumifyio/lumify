@@ -484,7 +484,6 @@ define([
                     vertices = self.vertices(vertices);
 
                     vertices.forEach(function(vertex) {
-                        vertex.properties._refreshedFromServer = true;
                         if (passedWorkspace[vertex.id]) {
                             vertex.workspace = $.extend(vertex.workspace, passedWorkspace[vertex.id]);
                         }
@@ -840,7 +839,6 @@ define([
                                 vertex.workspace = workspaceData;
 
                                 var cache = self.updateCacheWithVertex(vertex);
-                                cache.properties._refreshedFromServer = true;
                                 self.workspaceVertices[vertex.id] = cache.workspace;
 
                                 workspace.data.verticesById[vertex.id] = cache;
