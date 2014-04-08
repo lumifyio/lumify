@@ -239,12 +239,7 @@ define([
         };
 
         this.requestFailure = function(request, message, error) {
-            var messages = this.markFieldErrors(error);
-
-            this.$node.find('.errors').html(
-                alertTemplate({
-                    error: messages
-                })).show();
+            this.markFieldErrors(error);
             _.defer(this.clearLoading.bind(this));
         };
 
