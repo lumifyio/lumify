@@ -14,13 +14,11 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONObject;
@@ -39,7 +37,6 @@ public class WorkspaceHelper {
     private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
     private final Graph graph;
-    private final UserProvider userProvider;
 
     @Inject
     public WorkspaceHelper(final ModelSession modelSession,
@@ -47,15 +44,13 @@ public class WorkspaceHelper {
                            final AuditRepository auditRepository,
                            final UserRepository userRepository,
                            final DetectedObjectRepository detectedObjectRepository,
-                           final Graph graph,
-                           final UserProvider userProvider) {
+                           final Graph graph) {
         this.modelSession = modelSession;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
-        this.userProvider = userProvider;
     }
 
     public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
@@ -165,9 +160,9 @@ public class WorkspaceHelper {
         Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
             if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
                     continue;
                 } else {

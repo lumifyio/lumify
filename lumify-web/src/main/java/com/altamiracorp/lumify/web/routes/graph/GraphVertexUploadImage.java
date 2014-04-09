@@ -133,8 +133,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, imageVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, imageVertex.getId(), null, null, null, user);
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, imageVertex.getId(), true, null, null, user);
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), true, null, null, user);
 
         this.graph.flush();
         workQueueRepository.pushUserImageQueue(imageVertex.getId().toString());

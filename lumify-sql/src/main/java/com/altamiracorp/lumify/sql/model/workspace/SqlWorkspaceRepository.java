@@ -191,7 +191,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, int graphPositionX, int graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
 
     }
 

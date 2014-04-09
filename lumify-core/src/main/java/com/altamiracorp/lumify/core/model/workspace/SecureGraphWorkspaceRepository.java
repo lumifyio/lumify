@@ -212,7 +212,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, int graphPositionX, int graphPositionY, User user) {
+    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }

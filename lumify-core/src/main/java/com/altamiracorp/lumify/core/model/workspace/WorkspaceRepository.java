@@ -37,7 +37,7 @@ public interface WorkspaceRepository {
 
     void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
 
-    void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, int graphPositionX, int graphPositionY, User user);
+    void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
 
     void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 

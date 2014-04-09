@@ -101,7 +101,8 @@ public class VertexSetProperty extends BaseRequestHandler {
         graph.flush();
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
-        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
+
+        this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), true, null, null, user);
 
         JSONObject result = GraphUtil.toJson(graphVertex, workspaceId);
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
