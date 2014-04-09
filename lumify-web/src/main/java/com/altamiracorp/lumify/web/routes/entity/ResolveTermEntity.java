@@ -119,8 +119,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
             this.graph.flush();
 
-            // TODO should this be commented out?
-//            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, null, user);
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, null, user);
         }
 
 
