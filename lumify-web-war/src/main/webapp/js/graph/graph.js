@@ -383,6 +383,9 @@ define([
 
         this.classesForVertex = function(vertex) {
             if (vertex.properties['http://lumify.io#glyphIcon']) return 'hasCustomGlyph';
+            if (~['video', 'image'].indexOf(vertex.concept.displayType)) {
+                return vertex.concept.displayType;
+            }
 
             return '';
         };
