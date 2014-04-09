@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
@@ -307,6 +308,10 @@ public class WorkspacePublish extends BaseRequestHandler {
             throw new LumifyException(String.format("edge with id '%s' is not local to workspace '%s'", edge.getId(), workspaceId));
         }
 
+        if (edge.getLabel().equals(LabelName.ENTITY_HAS_IMAGE_RAW.toString())) {
+            publishGlyphIconProperty(edge, workspaceId, user, authorizations);
+        }
+
         edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey());
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
@@ -348,5 +353,19 @@ public class WorkspacePublish extends BaseRequestHandler {
                 modelSession.alterColumnsVisibility(termMentionModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
+    }
+
+    private void publishGlyphIconProperty(Edge hasImageEdge, String workspaceId, User user, Authorizations authorizations) {
+        Vertex entityVertex = hasImageEdge.getVertex(Direction.OUT, authorizations);
+        checkNotNull(entityVertex, "Could not find has image source vertex " + hasImageEdge.getVertexId(Direction.OUT));
+        ExistingElementMutation elementMutation = entityVertex.prepareMutation();
+        Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.GLYPH_ICON.getKey());
+        for (Property glyphIconProperty : glyphIconProperties) {
+            if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
+                elementMutation.save();
+                return;
+            }
+        }
+        LOGGER.warn("new has image edge without a glyph icon property being set on vertex %s", entityVertex.getId());
     }
 }
