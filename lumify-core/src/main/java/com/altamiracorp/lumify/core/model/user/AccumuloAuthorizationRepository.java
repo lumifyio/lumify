@@ -16,7 +16,7 @@ import java.util.*;
 
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
-    public static final String LOCK_NAME = "AuthorizationRepository";
+    public static final String LOCK_NAME = "AccumuloAuthorizationRepository";
     private Graph graph;
     private LockRepository lockRepository;
 
