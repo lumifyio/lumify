@@ -65,7 +65,9 @@ define([
         });
 
         this.showTypeahead = function() {
-            this.select('objectSignSelector').typeahead('lookup');
+            if (!this.unresolve) {
+                this.select('objectSignSelector').typeahead('lookup');
+            }
         };
 
         this.onKeyPress = function(event) {
@@ -124,6 +126,7 @@ define([
                     this.select('actionButtonSelector')
                         .text('Unresolve')
                         .show();
+                    this.$node.find('input,select').attr('disabled', true);
                 } else {
                     this.select('actionButtonSelector')
                         .text(newGraphVertexId && !initial && !this.attr.coords ?
@@ -135,7 +138,8 @@ define([
 
                 require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
                     Visibility.attachTo(self.$node.find('.visibility'), {
-                        value: ''
+                        value: '',
+                        readonly: self.unresolve
                     });
                 });
             }
@@ -428,7 +432,7 @@ define([
 
             this.graphVertexChanged(graphVertexId, data, true);
 
-            if (objectSign) {
+            if (!this.unresolve && objectSign) {
                 var input = this.select('objectSignSelector');
                 input.attr('disabled', true);
                 this.runQuery(objectSign).done(function() {

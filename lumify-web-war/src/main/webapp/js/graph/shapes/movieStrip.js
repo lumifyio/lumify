@@ -15,24 +15,30 @@ define([
             height = Math.floor(fitH / total),
             holeSize = {
                 width: extend * 0.6,
-                height: height - padding * 2
+                height: height - padding
             },
-            holeLeftPosition = extend / 2 - holeSize.width / 2,
+            holeLeftPosition = Math.round(extend / 2 - holeSize.width / 2),
+            holeTopPosition = (fitH - height * total),
             leftPosition = {
                 x: nodeX - fitW / 2 - extend,
-                y: nodeY - fitH / 2 - padding
+                y: nodeY - fitH / 2
             };
 
-        context.fillRect(leftPosition.x, leftPosition.y, fitW + extend * 2, fitH + padding * 2);
+        context.fillRect(leftPosition.x,
+                         leftPosition.y,
+                         fitW + extend * 2,
+                         fitH);
+
         context.fillStyle = 'white';
 
         for (var j = 0; j < 2; j++) {
             for (var i = 0; i < total; i++) {
                 context.fillRect( 
-                        leftPosition.x + holeLeftPosition + j * (fitW + extend),
-                        leftPosition.y + i * height + padding * 2,
-                        holeSize.width, 
-                        holeSize.height);
+                    leftPosition.x + holeLeftPosition + j * (fitW + extend),
+                    leftPosition.y + holeTopPosition + i * height,
+                    holeSize.width, 
+                    holeSize.height
+                );
             }
         }
     };
