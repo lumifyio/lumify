@@ -310,12 +310,7 @@ define([
                 conceptType = this.attr.data.properties['http://lumify.io#conceptType'],
                 isEdge = !(conceptType && conceptType.value !== 'relationship'),
                 done = isEdge ? function(edge) {
-                    if (edge.properties._visibilityJson) {
-                        edge.properties._visibilityJson.value = {
-                            value: edge.properties._visibilityJson.value
-                        };
-                    }
-                    var properties = $.extend(true, self.attr.data.properties, edge.properties);
+                    var properties = $.extend(self.attr.data.properties, edge.properties)
                     self.displayProperties(properties);
                 } : function() { };
 
