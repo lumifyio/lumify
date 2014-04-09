@@ -48,5 +48,9 @@ public interface WorkspaceRepository {
     void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
     List<DiffItem> getDiff(Workspace workspace, User user);
+
+    String getCreatorUserId(Workspace workspace, User user);
+
+    boolean hasWritePermissions(Workspace workspace, User user);
 }
 

@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -35,7 +36,7 @@ public class WorkspaceList extends BaseRequestHandler {
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
         JSONArray workspacesJson = new JSONArray();
         for (Workspace workspace : workspaces) {
-            JSONObject workspaceJson = workspace.toJson(false);
+            JSONObject workspaceJson = GraphUtil.toJson(workspaceRepository, workspace, user, false);
             if (workspaceJson != null) {
                 if (activeWorkspaceId.equals(workspace.getId())) { //if its the active one
                     workspaceJson.put("active", true);

@@ -3,15 +3,22 @@ package com.altamiracorp.lumify.core.util;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceUser;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +34,6 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GraphUtil {
-
     public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
@@ -153,6 +159,51 @@ public class GraphUtil {
             }
         }
         return value;
+    }
+
+    public static JSONObject toJson(WorkspaceRepository workspaceRepository, Workspace workspace, User user, boolean includeVertices) {
+        try {
+            List<WorkspaceUser> workspaceUsers = workspaceRepository.findUsersWithAccess(workspace, user);
+            boolean hasWritePermissions = workspaceRepository.hasWritePermissions(workspace, user);
+
+            JSONObject workspaceJson = new JSONObject();
+            workspaceJson.put("workspaceId", workspace.getId());
+            workspaceJson.put("title", workspace.getDisplayTitle());
+            workspaceJson.put("createdBy", workspaceRepository.getCreatorUserId(workspace, user));
+            workspaceJson.put("isSharedToUser", !workspaceRepository.getCreatorUserId(workspace, user).equals(user.getUserId()));
+            workspaceJson.put("isEditable", hasWritePermissions);
+
+            JSONArray usersJson = new JSONArray();
+            for (WorkspaceUser workspaceUser : workspaceUsers) {
+                String userId = workspaceUser.getUserId();
+                JSONObject userJson = new JSONObject();
+                userJson.put("userId", userId);
+                userJson.put("access", workspaceUser.getWorkspaceAccess().toString().toLowerCase());
+                usersJson.put(userJson);
+            }
+            workspaceJson.put("users", usersJson);
+
+            if (includeVertices) {
+                List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
+                JSONObject entitiesJson = new JSONObject();
+                for (WorkspaceEntity workspaceEntity : workspaceEntities) {
+                    if (!workspaceEntity.isVisible()) {
+                        continue;
+                    }
+                    JSONObject workspaceEntityJson = new JSONObject();
+                    JSONObject graphPositionJson = new JSONObject();
+                    graphPositionJson.put("x", workspaceEntity.getGraphPositionX());
+                    graphPositionJson.put("y", workspaceEntity.getGraphPositionY());
+                    workspaceEntityJson.put("graphPosition", graphPositionJson);
+                    entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
+                }
+                workspaceJson.put("entities", entitiesJson);
+            }
+
+            return workspaceJson;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {

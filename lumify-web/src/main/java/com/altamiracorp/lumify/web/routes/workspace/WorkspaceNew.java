@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -20,17 +21,14 @@ public class WorkspaceNew extends BaseRequestHandler {
     private static final String DEFAULT_WORKSPACE_TITLE = "Default";
 
     private final WorkspaceRepository workspaceRepository;
-    private final Graph graph;
 
     @Inject
     public WorkspaceNew(
             final WorkspaceRepository workspaceRepository,
             final UserRepository userRepository,
-            final Configuration configuration,
-            final Graph graph) {
+            final Configuration configuration) {
         super(userRepository, configuration);
         this.workspaceRepository = workspaceRepository;
-        this.graph = graph;
     }
 
     @Override
@@ -48,6 +46,6 @@ public class WorkspaceNew extends BaseRequestHandler {
 
         LOGGER.info("Created workspace: %s, title: %s", workspace.getId(), workspace.getDisplayTitle());
 
-        respondWithJson(response, workspace.toJson(true));
+        respondWithJson(response, GraphUtil.toJson(workspaceRepository, workspace, user, true));
     }
 }

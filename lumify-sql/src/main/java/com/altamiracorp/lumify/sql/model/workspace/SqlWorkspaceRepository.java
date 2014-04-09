@@ -150,7 +150,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
             if (!sqlWorkspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.NONE.toString())) {
                 String userId = sqlWorkspaceUser.getUser().getUserId();
-                boolean isCreator = workspace.getCreatorUserId().equals(userId);
+                boolean isCreator = getCreatorUserId(workspace, user).equals(userId);
                 withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
             }
         }
@@ -306,6 +306,16 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     @Override
     public List<DiffItem> getDiff(Workspace workspace, User user) {
         return new ArrayList<DiffItem>();
+    }
+
+    @Override
+    public String getCreatorUserId(Workspace workspace, User user) {
+        return null;
+    }
+
+    @Override
+    public boolean hasWritePermissions(Workspace workspace, User user) {
+        return false;
     }
 
     @Inject

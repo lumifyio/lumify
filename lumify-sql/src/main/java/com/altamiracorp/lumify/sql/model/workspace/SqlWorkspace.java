@@ -31,11 +31,6 @@ public class SqlWorkspace implements Workspace {
         return Integer.toString(id);
     }
 
-    @Override
-    public String getCreatorUserId() {
-        return creator.getUserId();
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -70,20 +65,5 @@ public class SqlWorkspace implements Workspace {
 
     public void setSqlWorkspaceUser(Set<SqlWorkspaceUser> sqlWorkspaceUser) {
         this.sqlWorkspaceUser = sqlWorkspaceUser;
-    }
-
-    @Override
-    @Transient
-    public JSONObject toJson(boolean includeVertices) {
-        JSONObject workspaceJson = new JSONObject();
-        workspaceJson.put("workspaceId", getId());
-        workspaceJson.put("title", getDisplayTitle());
-        workspaceJson.put("createdBy", getCreatorUserId());
-        return workspaceJson;
-    }
-
-    @Override
-    public boolean hasWritePermissions(String userId) {
-        return false;
     }
 }

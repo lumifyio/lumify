@@ -68,7 +68,7 @@ public class SqlWorkspaceRepositoryTest {
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(1);
         SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", sqlUser);
-        assertEquals("1", workspace.getCreatorUserId());
+        assertEquals("1", sqlWorkspaceRepository.getCreatorUserId(workspace, sqlUser));
         assertEquals("test workspace", workspace.getDisplayTitle());
 //        assertFalse(workspace.getUserWithWriteAccess().isEmpty());
 //        assertNull(workspace.getUserWithReadAccess());
