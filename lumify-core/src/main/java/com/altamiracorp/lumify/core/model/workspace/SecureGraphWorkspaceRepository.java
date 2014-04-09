@@ -271,8 +271,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         graph.flush();
     }
 
-    @Override
-    public boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+    private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId()) && userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE) {
@@ -282,8 +281,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         return false;
     }
 
-    @Override
-    public boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+    private boolean doesUserHaveReadAccess(Workspace workspace, User user) {
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId())

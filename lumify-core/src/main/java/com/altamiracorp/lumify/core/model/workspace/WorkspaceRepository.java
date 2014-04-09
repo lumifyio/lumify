@@ -41,10 +41,6 @@ public interface WorkspaceRepository {
 
     void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
-    boolean doesUserHaveWriteAccess(Workspace workspace, User user);
-
-    boolean doesUserHaveReadAccess(Workspace workspace, User user);
-
     void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
     List<DiffItem> getDiff(Workspace workspace, User user);

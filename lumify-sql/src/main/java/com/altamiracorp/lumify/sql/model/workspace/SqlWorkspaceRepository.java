@@ -56,7 +56,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     public Workspace findById(String workspaceId, User user) {
         Session session = sessionFactory.openSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", Integer.parseInt(workspaceId))).list();
-        session.close();
         if (workspaces.size() == 0) {
             return null;
         } else if (workspaces.size() > 1) {
@@ -177,8 +176,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         updateUserOnWorkspace(workspace, userId, WorkspaceAccess.NONE, user);
     }
 
-    @Override
-    public boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+    private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
         Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
         for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
             if (workspaceUser.getUser().getUserId().equals(user.getUserId()) && workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString())) {
@@ -188,8 +186,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         return false;
     }
 
-    @Override
-    public boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+    private boolean doesUserHaveReadAccess(Workspace workspace, User user) {
         if (doesUserHaveWriteAccess(workspace, user)) {
             return true;
         }
