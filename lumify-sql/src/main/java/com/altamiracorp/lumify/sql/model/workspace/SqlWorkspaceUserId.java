@@ -2,16 +2,15 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
 public class SqlWorkspaceUserId implements Serializable{
     private static final long serialVersionUID = 1L;
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     private SqlUser user;
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     private SqlWorkspace workspace;
 
     public SqlUser getUser() {

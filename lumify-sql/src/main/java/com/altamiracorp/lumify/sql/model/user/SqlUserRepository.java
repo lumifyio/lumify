@@ -9,7 +9,6 @@ import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import org.hibernate.HibernateException;
@@ -33,8 +32,6 @@ public class SqlUserRepository extends UserRepository {
     public void init(Map config) {
 
     }
-
-    ;
 
     @Override
     public User findByDisplayName(String displayName) {

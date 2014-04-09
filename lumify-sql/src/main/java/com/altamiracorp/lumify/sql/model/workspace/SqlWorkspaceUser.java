@@ -19,8 +19,6 @@ public class SqlWorkspaceUser {
     public SqlWorkspaceUser() {
     }
 
-    ;
-
     public SqlWorkspaceUserId getSqlWorkspaceUserId() {
         return sqlWorkspaceUserId;
     }

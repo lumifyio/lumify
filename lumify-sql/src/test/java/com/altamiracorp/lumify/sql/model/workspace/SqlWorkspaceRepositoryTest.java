@@ -14,11 +14,9 @@ import org.hibernate.service.ServiceRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -29,9 +27,9 @@ public class SqlWorkspaceRepositoryTest {
     private SqlWorkspaceRepository sqlWorkspaceRepository;
     private static org.hibernate.cfg.Configuration configuration;
     private static SessionFactory sessionFactory;
-
-    @Mock
     private SqlUserRepository sqlUserRepository;
+
+    private SqlUser testUser;
 
     @Before
     public void setUp() throws Exception {
@@ -39,24 +37,26 @@ public class SqlWorkspaceRepositoryTest {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
+        sqlUserRepository = new SqlUserRepository();
+        sqlUserRepository.setSessionFactory(sessionFactory);
         sqlWorkspaceRepository = new SqlWorkspaceRepository();
         sqlWorkspaceRepository.setSessionFactory(sessionFactory);
         sqlWorkspaceRepository.setUserRepository(sqlUserRepository);
+
+        testUser = (SqlUser)sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }
 
     @Test
     public void testDelete() throws Exception {
-        SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(1);
-        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", sqlUser);
-        sqlWorkspaceRepository.delete(workspace, sqlUser);
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
+        sqlWorkspaceRepository.delete(workspace, testUser);
 
-        assertNull(sqlWorkspaceRepository.findById("1", sqlUser));
+        assertNull(sqlWorkspaceRepository.findById("1", testUser));
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
     public void testDeleteWithUserPermissions() {
-        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", new SqlUser());
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace 1", testUser);
 
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(2);
@@ -65,42 +65,35 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test
     public void testAdd() throws Exception {
-        SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(1);
-        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", sqlUser);
-        assertEquals("1", sqlWorkspaceRepository.getCreatorUserId(workspace, sqlUser));
+        SqlWorkspace workspace = (SqlWorkspace) sqlWorkspaceRepository.add("test workspace", testUser);
+        assertEquals("1", workspace.getCreator().getUserId());
         assertEquals("test workspace", workspace.getDisplayTitle());
-//        assertFalse(workspace.getUserWithWriteAccess().isEmpty());
-//        assertNull(workspace.getUserWithReadAccess());
+        assertEquals(1, workspace.getSqlWorkspaceUser().size());
 
-//        Set<SqlUser> sqlUsers = workspace.getUserWithWriteAccess();
-//        assertEquals(sqlUser.getUserId(), sqlUsers.iterator().next().getUserId());
-
+        SqlWorkspaceUser sqlWorkspaceUser = workspace.getSqlWorkspaceUser().iterator().next();
+        assertEquals(WorkspaceAccess.WRITE.toString(), sqlWorkspaceUser.getWorkspaceAccess());
+        assertEquals("1", sqlWorkspaceUser.getWorkspace().getId());
     }
 
     @Test
     public void testFindAll() throws Exception {
-        Iterable<Workspace> userIterable = sqlWorkspaceRepository.findAll(new SqlUser());
+        Iterable<Workspace> userIterable = sqlWorkspaceRepository.findAll(testUser);
         assertTrue(IterableUtils.count(userIterable) == 0);
 
-        SqlUser user = new SqlUser();
-        user.setId(1);
-
-        sqlWorkspaceRepository.add("test workspace 1", user);
-        sqlWorkspaceRepository.add("test workspace 2", user);
-        sqlWorkspaceRepository.add("test workspace 3", user);
-        userIterable = sqlWorkspaceRepository.findAll(user);
+        sqlWorkspaceRepository.add("test workspace 1", testUser);
+        sqlWorkspaceRepository.add("test workspace 2", testUser);
+        sqlWorkspaceRepository.add("test workspace 3", testUser);
+        userIterable = sqlWorkspaceRepository.findAll(testUser);
         assertTrue(IterableUtils.count(userIterable) == 3);
     }
 
     @Test
     public void testSetTitle() throws Exception {
-        SqlUser sqlUser = new SqlUser();
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", sqlUser);
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         assertEquals("test", sqlWorkspace.getDisplayTitle());
-        sqlWorkspaceRepository.setTitle(sqlWorkspace, "changed title", sqlUser);
-        SqlWorkspace modifiedWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", sqlUser);
+        sqlWorkspaceRepository.setTitle(sqlWorkspace, "changed title", testUser);
+        SqlWorkspace modifiedWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
         assertEquals("changed title", modifiedWorkspace.getDisplayTitle());
     }
 
@@ -111,7 +104,7 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test(expected = LumifyAccessDeniedException.class)
     public void testSetTitleWithoutUserPermissions() {
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", new SqlUser());
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser1 = new SqlUser();
         sqlUser1.setId(2);
@@ -138,7 +131,7 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test(expected = LumifyAccessDeniedException.class)
     public void testFindUsersWithAccessWithoutUserPermissions() {
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", new SqlUser());
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(2);
@@ -147,27 +140,22 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test
     public void testUpdateUserOnWorkspace() throws Exception {
-        SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(1);
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", sqlUser);
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
-        SqlUser sqlUser1 = new SqlUser();
-        sqlUser1.setId(2);
-        when(sqlUserRepository.findById("1")).thenReturn(sqlUser1);
-        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.WRITE, sqlUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", sqlUser);
-        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, sqlUser1));
+        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.WRITE, testUser);
+        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
+        sqlWorkspace.getSqlWorkspaceUser();
+        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
 
-        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, sqlUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", sqlUser);
-        assertFalse(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, sqlUser1));
-        assertFalse(sqlWorkspaceRepository.doesUserHaveReadAccess(sqlWorkspace, sqlUser1));
+        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, testUser);
+        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
+        assertFalse(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
+        assertFalse(sqlWorkspaceRepository.doesUserHaveReadAccess(sqlWorkspace, testUser));
 
-        SqlUser sqlUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", new String[0]);
-        when(sqlUserRepository.findById("2")).thenReturn(sqlUser1);
-        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.WRITE, sqlUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", sqlUser);
-        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, sqlUser2));
+        sqlUserRepository.addUser("456", "qwe", "", new String[0]);
+        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.WRITE, testUser);
+        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
+        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
     }
 
     @Test(expected = LumifyAccessDeniedException.class)

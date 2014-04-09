@@ -30,7 +30,8 @@ public class SqlUser implements User {
     private byte[] passwordHash;
     @Column(name = "user_status")
     private String userStatus;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "usersCurrentWorkspace", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn (name="workspace_id")
     private SqlWorkspace currentWorkspace;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.user", cascade = CascadeType.ALL)
     private Set<SqlWorkspaceUser> sqlWorkspaceUsers = new HashSet<SqlWorkspaceUser>(0);

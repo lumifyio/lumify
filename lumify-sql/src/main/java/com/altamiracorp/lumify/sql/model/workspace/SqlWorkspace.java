@@ -14,25 +14,22 @@ import java.util.Set;
 public class SqlWorkspace implements Workspace {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "workspaceid")
-    private int id;
+    @Column(name = "workspace_id", unique = true)
+    private int workspaceId;
     @Column(name = "display_title")
     private String displayTitle;
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @PrimaryKeyJoinColumn (name="user_id")
     private SqlUser creator;
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    private SqlUser usersCurrentWorkspace;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.workspace")
     public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
 
     public String getId() {
-        return Integer.toString(id);
+        return Integer.toString(workspaceId);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int workspaceId) {
+        this.workspaceId = workspaceId;
     }
 
     public String getDisplayTitle() {
@@ -49,14 +46,6 @@ public class SqlWorkspace implements Workspace {
 
     public void setCreator(SqlUser creator) {
         this.creator = creator;
-    }
-
-    public SqlUser getUsersCurrentWorkspace() {
-        return usersCurrentWorkspace;
-    }
-
-    public void setUsersCurrentWorkspace(SqlUser usersCurrentWorkspace) {
-        this.usersCurrentWorkspace = usersCurrentWorkspace;
     }
 
     public Set<SqlWorkspaceUser> getSqlWorkspaceUser() {

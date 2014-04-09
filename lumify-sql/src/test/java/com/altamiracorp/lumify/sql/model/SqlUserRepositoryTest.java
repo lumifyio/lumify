@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 import com.altamiracorp.lumify.sql.model.user.SqlUserRepository;
 import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
+import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceRepository;
 import com.altamiracorp.securegraph.util.IterableUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -22,6 +23,7 @@ import static org.junit.Assert.*;
 public class SqlUserRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlUserRepository sqlUserRepository;
+    private SqlWorkspaceRepository sqlWorkspaceRepository;
     private static org.hibernate.cfg.Configuration configuration;
     private static SessionFactory sessionFactory;
 
@@ -31,6 +33,8 @@ public class SqlUserRepositoryTest {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository();
+        sqlWorkspaceRepository.setSessionFactory(sessionFactory);
         sqlUserRepository = new SqlUserRepository();
         sqlUserRepository.setSessionFactory(sessionFactory);
     }
@@ -170,10 +174,9 @@ public class SqlUserRepositoryTest {
     public void testSetCurrentWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
         sqlWorkspace.setDisplayTitle("workspace1");
-        SqlUser testUser = (SqlUser)sqlUserRepository.addUser("123", "abc", null, new String[0]);
-        sqlWorkspace.setUsersCurrentWorkspace(testUser);
+        sqlUserRepository.addUser("123", "abc", null, new String[0]);
         sqlUserRepository.setCurrentWorkspace("1", sqlWorkspace);
-        testUser = (SqlUser) sqlUserRepository.findById("1");
+        SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
         assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
     }
 
