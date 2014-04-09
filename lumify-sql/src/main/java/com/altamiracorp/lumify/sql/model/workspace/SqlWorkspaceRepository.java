@@ -15,6 +15,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,6 +265,11 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     @Override
     public boolean hasWritePermissions(Workspace workspace, User user) {
         return false;
+    }
+
+    @Override
+    public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
+        return null;
     }
 
     @Inject

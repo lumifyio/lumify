@@ -41,7 +41,7 @@ public class WorkspaceById extends BaseRequestHandler {
         } else {
             LOGGER.debug("Successfully found workspace");
             request.getSession().setAttribute("activeWorkspace", workspaceId);
-            final JSONObject resultJSON = GraphUtil.toJson(workspaceRepository, workspace, authUser, true);
+            final JSONObject resultJSON = workspaceRepository.toJson(workspace, authUser, true);
             respondWithJson(response, resultJSON);
         }
 

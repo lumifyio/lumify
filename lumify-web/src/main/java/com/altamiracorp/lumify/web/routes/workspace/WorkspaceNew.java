@@ -3,7 +3,9 @@ package com.altamiracorp.lumify.web.routes.workspace;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -14,6 +16,7 @@ import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class WorkspaceNew extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceNew.class);
@@ -45,6 +48,6 @@ public class WorkspaceNew extends BaseRequestHandler {
 
         LOGGER.info("Created workspace: %s, title: %s", workspace.getId(), workspace.getDisplayTitle());
 
-        respondWithJson(response, GraphUtil.toJson(workspaceRepository, workspace, user, true));
+        respondWithJson(response, workspaceRepository.toJson(workspace, user, true));
     }
 }

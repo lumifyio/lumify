@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.workspace;
 import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -60,5 +61,7 @@ public interface WorkspaceRepository {
 
     // change Workspace to workspace id?
     boolean hasWritePermissions(Workspace workspace, User user);
+
+    JSONObject toJson (Workspace workspace, User user, boolean includeVertices);
 }
 

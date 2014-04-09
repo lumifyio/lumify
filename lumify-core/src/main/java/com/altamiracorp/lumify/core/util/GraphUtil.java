@@ -161,52 +161,6 @@ public class GraphUtil {
         return value;
     }
 
-    // TODO refactor this to remove WorkspaceRepository from parameters and pass in workspaceUsers, workspaceEntities, and hasWritePermissions
-    public static JSONObject toJson(WorkspaceRepository workspaceRepository, Workspace workspace, User user, boolean includeVertices) {
-        try {
-            List<WorkspaceUser> workspaceUsers = workspaceRepository.findUsersWithAccess(workspace, user);
-            boolean hasWritePermissions = workspaceRepository.hasWritePermissions(workspace, user);
-
-            JSONObject workspaceJson = new JSONObject();
-            workspaceJson.put("workspaceId", workspace.getId());
-            workspaceJson.put("title", workspace.getDisplayTitle());
-            workspaceJson.put("createdBy", workspaceRepository.getCreatorUserId(workspace, user));
-            workspaceJson.put("isSharedToUser", !workspaceRepository.getCreatorUserId(workspace, user).equals(user.getUserId()));
-            workspaceJson.put("isEditable", hasWritePermissions);
-
-            JSONArray usersJson = new JSONArray();
-            for (WorkspaceUser workspaceUser : workspaceUsers) {
-                String userId = workspaceUser.getUserId();
-                JSONObject userJson = new JSONObject();
-                userJson.put("userId", userId);
-                userJson.put("access", workspaceUser.getWorkspaceAccess().toString().toLowerCase());
-                usersJson.put(userJson);
-            }
-            workspaceJson.put("users", usersJson);
-
-            if (includeVertices) {
-                List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
-                JSONObject entitiesJson = new JSONObject();
-                for (WorkspaceEntity workspaceEntity : workspaceEntities) {
-                    if (!workspaceEntity.isVisible()) {
-                        continue;
-                    }
-                    JSONObject workspaceEntityJson = new JSONObject();
-                    JSONObject graphPositionJson = new JSONObject();
-                    graphPositionJson.put("x", workspaceEntity.getGraphPositionX());
-                    graphPositionJson.put("y", workspaceEntity.getGraphPositionY());
-                    workspaceEntityJson.put("graphPosition", graphPositionJson);
-                    entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
-                }
-                workspaceJson.put("entities", entitiesJson);
-            }
-
-            return workspaceJson;
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
         return getPropertySandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);

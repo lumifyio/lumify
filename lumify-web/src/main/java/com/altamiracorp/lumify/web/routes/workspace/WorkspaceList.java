@@ -36,7 +36,7 @@ public class WorkspaceList extends BaseRequestHandler {
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
         JSONArray workspacesJson = new JSONArray();
         for (Workspace workspace : workspaces) {
-            JSONObject workspaceJson = GraphUtil.toJson(workspaceRepository, workspace, user, false);
+            JSONObject workspaceJson = workspaceRepository.toJson(workspace, user, false);
             if (workspaceJson != null) {
                 if (activeWorkspaceId.equals(workspace.getId())) { //if its the active one
                     workspaceJson.put("active", true);
