@@ -49,12 +49,6 @@ public interface WorkspaceRepository {
     // change Workspace to workspace id?
     void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
-    // TODO not used can we get rid of
-    boolean doesUserHaveWriteAccess(Workspace workspace, User user);
-
-    // TODO not used can we get rid of
-    boolean doesUserHaveReadAccess(Workspace workspace, User user);
-
     // change Workspace to workspace id?
     void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 

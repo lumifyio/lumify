@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -138,24 +139,23 @@ public class SqlWorkspaceRepositoryTest {
         sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, sqlUser);
     }
 
-    @Test
+    @Test (expected = LumifyAccessDeniedException.class)
     public void testUpdateUserOnWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.WRITE, testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        sqlWorkspace.getSqlWorkspaceUser();
-        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        assertTrue(workspaceUsers.size() == 1);
+        assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
+
+        SqlUser testUser2 = (SqlUser)sqlUserRepository.addUser("456", "qwe", "", new String[0]);
+        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser2);
+        assertTrue(workspaceUsers.size() == 2);
+        assertEquals(workspaceUsers.get(1).getWorkspaceAccess(), WorkspaceAccess.READ);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        assertFalse(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
-        assertFalse(sqlWorkspaceRepository.doesUserHaveReadAccess(sqlWorkspace, testUser));
-
-        sqlUserRepository.addUser("456", "qwe", "", new String[0]);
-        sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.WRITE, testUser);
-        sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.findById("1", testUser);
-        assertTrue(sqlWorkspaceRepository.doesUserHaveWriteAccess(sqlWorkspace, testUser));
+        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
