@@ -26,11 +26,6 @@ public class SystemUser implements User {
         return SYSTEM_USERNAME;
     }
 
-    @Override
-    public Workspace getCurrentWorkspace() {
-        return null;
-    }
-
     public UserType getUserType() {
         return UserType.SYSTEM;
     }
@@ -38,10 +33,5 @@ public class SystemUser implements User {
     @Override
     public String getUserStatus() {
         return UserStatus.OFFLINE.name();
-    }
-
-    @Override
-    public void setCurrentWorkspace(Workspace currentWorkspace) {
-
     }
 }

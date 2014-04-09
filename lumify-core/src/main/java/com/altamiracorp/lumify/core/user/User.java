@@ -7,17 +7,14 @@ import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import java.io.Serializable;
 
 public interface User extends Serializable {
+    public static final long serialVersionUID = 1L;
     public String getUserId();
 
     public ModelUserContext getModelUserContext();
 
     public String getDisplayName();
 
-    public Workspace getCurrentWorkspace();
-
     public UserType getUserType();
 
     public String getUserStatus();
-
-    public void setCurrentWorkspace(Workspace currentWorkspace);
 }

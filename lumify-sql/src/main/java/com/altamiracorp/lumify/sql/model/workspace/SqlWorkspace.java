@@ -12,8 +12,6 @@ import java.util.Set;
 @Table(name = "workspace")
 
 public class SqlWorkspace implements Workspace {
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "workspaceid")

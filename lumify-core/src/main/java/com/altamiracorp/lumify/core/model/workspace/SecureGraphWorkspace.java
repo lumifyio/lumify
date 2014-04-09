@@ -11,16 +11,13 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class SecureGraphWorkspace implements Workspace {
-    private static final long serialVersionUID = 1L;
     private final Vertex workspaceVertex;
     private final User user;
-    private final WorkspaceRepository workspaceRepository;
+    private WorkspaceRepository workspaceRepository;
     private List<WorkspaceUser> users;
 
-    @Inject
-    public SecureGraphWorkspace(Vertex workspaceVertex, WorkspaceRepository workspaceRepository, User user) {
+    public SecureGraphWorkspace(Vertex workspaceVertex, User user) {
         this.workspaceVertex = workspaceVertex;
-        this.workspaceRepository = workspaceRepository;
         this.user = user;
     }
 
@@ -101,11 +98,11 @@ public class SecureGraphWorkspace implements Workspace {
         return workspaceVertex;
     }
 
-    public static Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final WorkspaceRepository workspaceRepository, final User user) {
+    public static Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final User user) {
         return new ConvertingIterable<Vertex, Workspace>(vertices) {
             @Override
             protected Workspace convert(Vertex vertex) {
-                return new SecureGraphWorkspace(vertex, workspaceRepository, user);
+                return new SecureGraphWorkspace(vertex, user);
             }
         };
     }
@@ -119,5 +116,10 @@ public class SecureGraphWorkspace implements Workspace {
             }
         }
         return false;
+    }
+
+    @Inject
+    public void setWorkspaceRepository (WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 }

@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.workspace.SecureGraphWorkspace;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SecureGraphUser;
@@ -55,8 +56,10 @@ public class SecureGraphUserRepository extends UserRepository {
         String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
 
-        LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", USERNAME.getPropertyValue(user), AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(user, modelUserContext);
+        String userName =  USERNAME.getPropertyValue(user);
+        String userId = (String)user.getId();
+        LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
+        return new SecureGraphUser(userId, userName, modelUserContext);
     }
 
     @Override
@@ -139,6 +142,20 @@ public class SecureGraphUserRepository extends UserRepository {
         CURRENT_WORKSPACE.setProperty(userVertex, workspace.getId(), VISIBILITY.getVisibility());
         graph.flush();
         return user;
+    }
+
+    @Override
+    public String getCurrentWorkspaceId(String userId) {
+        User user = findById(userId);
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        if (user == null) {
+            throw new RuntimeException("Could not find user: " + userId);
+        }
+        String workspaceId = CURRENT_WORKSPACE.getPropertyValue(userVertex);
+        if (workspaceId == null) {
+            throw new RuntimeException("Could not find current workspace: " + workspaceId);
+        }
+        return workspaceId;
     }
 
     @Override

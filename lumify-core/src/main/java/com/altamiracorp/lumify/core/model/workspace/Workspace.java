@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public interface Workspace extends Serializable{
-
+    public static final long serialVersionUID = 1L;
     JSONObject toJson(boolean includeVertices);
 
     String getId();

@@ -35,6 +35,8 @@ public abstract class UserRepository {
 
     public abstract User setCurrentWorkspace(String userId, Workspace workspace);
 
+    public abstract String getCurrentWorkspaceId(String userId);
+
     public abstract User setStatus(String userId, UserStatus status);
 
     public abstract void addAuthorization(User userUser, String auth);

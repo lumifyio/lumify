@@ -12,20 +12,20 @@ import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.CURRE
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.USERNAME;
 
 public class SecureGraphUser implements User {
-    private static final long serialVersionUID = 1L;
-    private Vertex user;
     private ModelUserContext modelUserContext;
-
+    private String displayName;
+    private String userId;
     private WorkspaceRepository workspaceRepository;
     private UserRepository userRepository;
 
-    public SecureGraphUser(Vertex user, ModelUserContext modelUserContext) {
-        this.user = user;
+    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext) {
+        this.displayName = displayName;
         this.modelUserContext = modelUserContext;
+        this.userId = userId;
     }
 
     public String getUserId() {
-        return user.getId().toString();
+        return userId;
     }
 
     public ModelUserContext getModelUserContext() {
@@ -33,29 +33,16 @@ public class SecureGraphUser implements User {
     }
 
     public String getDisplayName() {
-        return USERNAME.getPropertyValue(user);
-    }
-
-    public Workspace getCurrentWorkspace() {
-        return workspaceRepository.findById(CURRENT_WORKSPACE.getPropertyValue(user), userRepository.findById(user.getId().toString()));
+        return displayName;
     }
 
     public UserType getUserType() {
         return UserType.USER;
     }
 
-    public Vertex getUser() {
-        return user;
-    }
-
     @Override
     public String getUserStatus() {
         return null;
-    }
-
-    @Override
-    public void setCurrentWorkspace(Workspace currentWorkspace) {
-        CURRENT_WORKSPACE.setProperty(user, currentWorkspace.getId(), user.getVisibility());
     }
 
     @Inject

@@ -1,8 +1,11 @@
 package com.altamiracorp.lumify.web;
 
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
 import org.json.JSONArray;
@@ -11,6 +14,7 @@ import org.json.JSONObject;
 
 public class MessagingFilter implements PerRequestBroadcastFilter {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MessagingFilter.class);
+    private UserRepository userRepository;
 
     @Override
     public BroadcastAction filter(AtmosphereResource r, Object originalMessage, Object message) {
@@ -32,7 +36,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
             JSONArray workspaces = permissionsJson.optJSONArray("workspaces");
             if (workspaces != null) {
                 User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
-                if (!isWorkspaceInList(workspaces, currentUser.getCurrentWorkspace().getId())) {
+                if (!isWorkspaceInList(workspaces, userRepository.getCurrentWorkspaceId(currentUser.getUserId()))) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }
             }
@@ -69,4 +73,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
     public BroadcastAction filter(Object originalMessage, Object message) {
         return new BroadcastAction(message);
     }
+
+    @Inject
+    public void setUserRepository (UserRepository userRepository) { this.userRepository = userRepository;}
 }

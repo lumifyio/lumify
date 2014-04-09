@@ -75,7 +75,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         if (workspaceVertex == null) {
             return null;
         }
-        Workspace workspace = new SecureGraphWorkspace(workspaceVertex, this, user);
+        Workspace workspace = new SecureGraphWorkspace(workspaceVertex, user);
         if (!doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
@@ -102,14 +102,14 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
         edgeBuilder.save();
 
         graph.flush();
-        return new SecureGraphWorkspace(workspaceVertex, this, user);
+        return new SecureGraphWorkspace(workspaceVertex, user);
     }
 
     @Override
     public Iterable<Workspace> findAll(User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, UserRepository.VISIBILITY_STRING);
         Iterable<Vertex> vertices = graph.getVertex(user.getUserId(), authorizations).getVertices(Direction.IN, workspaceToUserRelationshipId, authorizations);
-        return SecureGraphWorkspace.toWorkspaceIterable(vertices, this, user);
+        return SecureGraphWorkspace.toWorkspaceIterable(vertices, user);
     }
 
     @Override

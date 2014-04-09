@@ -10,8 +10,7 @@ import java.io.Serializable;
 @Table(name = "workspace_user")
 @AssociationOverrides({@AssociationOverride(name = "sqlWorkspaceUserId.user", joinColumns = @JoinColumn(name = "user_id")),
         @AssociationOverride(name = "sqlWorkspaceUserId.workspace", joinColumns = @JoinColumn(name = "workspace_id"))})
-public class SqlWorkspaceUser implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class SqlWorkspaceUser {
     @EmbeddedId
     private SqlWorkspaceUserId sqlWorkspaceUserId = new SqlWorkspaceUserId();
     @Column(name = "access")

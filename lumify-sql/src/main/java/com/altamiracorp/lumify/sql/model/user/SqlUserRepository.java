@@ -177,6 +177,11 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
+    public String getCurrentWorkspaceId(String userId) {
+        return null;
+    }
+
+    @Override
     public User setStatus(String userId, UserStatus status) {
         Session session = sessionFactory.getCurrentSession();
         if (userId == null) {
