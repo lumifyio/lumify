@@ -17,6 +17,7 @@ public interface WorkspaceRepository {
 
     void init(Map map);
 
+    // change Workspace to workspace id?
     void delete(Workspace workspace, User user);
 
     Workspace findById(String workspaceId, User user);
@@ -25,32 +26,45 @@ public interface WorkspaceRepository {
 
     Iterable<Workspace> findAll(User user);
 
+    // change Workspace to workspace id?
     void setTitle(Workspace workspace, String title, User user);
 
+    // change Workspace to workspace id?
     List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user);
 
     List<WorkspaceEntity> findEntities(String workspaceId, User user);
 
+    // change Workspace to workspace id?
     List<WorkspaceEntity> findEntities(Workspace workspace, User user);
 
+    // change Workspace to workspace id?
     Workspace copy(Workspace workspace, User user);
 
+    // change Workspace to workspace id?
     void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
 
-    void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
+    // change Workspace to workspace id?
+    void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
 
+    // change Workspace to workspace id?
     void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
+    // TODO not used can we get rid of
     boolean doesUserHaveWriteAccess(Workspace workspace, User user);
 
+    // TODO not used can we get rid of
     boolean doesUserHaveReadAccess(Workspace workspace, User user);
 
+    // change Workspace to workspace id?
     void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
+    // change Workspace to workspace id?
     List<DiffItem> getDiff(Workspace workspace, User user);
 
+    // change Workspace to workspace id?
     String getCreatorUserId(Workspace workspace, User user);
 
+    // change Workspace to workspace id?
     boolean hasWritePermissions(Workspace workspace, User user);
 }
 

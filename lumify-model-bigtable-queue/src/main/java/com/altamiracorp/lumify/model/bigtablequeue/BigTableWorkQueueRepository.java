@@ -11,7 +11,6 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItem;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -57,7 +56,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     @Override
     public void format() {
         LOGGER.debug("BEGIN format");
-        ModelUserContext ctx = userRepository.getModelUserContext(new String[0]);
+        ModelUserContext ctx = userRepository.getModelUserContext();
         List<String> tableList = this.modelSession.getTableList(ctx);
         for (String tableName : tableList) {
             if (tableName.startsWith(this.tablePrefix)) {
@@ -90,11 +89,6 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
         queue.save(queueItem, flushFlag);
     }
 
-    public static QueueItem createVertexIdQueueItem(String queueTableName, Object vertexId) {
-        JSONObject json = contentToJson(ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, vertexId.toString()));
-        return createQueueItem(queueTableName, json);
-    }
-
     public static QueueItem createQueueItem(String queueTableName, JSONObject json, String... extra) {
         return new QueueItem(queueTableName, json, extra);
     }
@@ -104,7 +98,9 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Inject
-    public void setUserRepository (UserRepository userRepository) { this.userRepository = userRepository; }
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Inject
     public void setModelSession(ModelSession modelSession) {

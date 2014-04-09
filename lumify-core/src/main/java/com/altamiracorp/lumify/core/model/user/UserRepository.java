@@ -21,6 +21,7 @@ public abstract class UserRepository {
 
     public abstract void init(Map config);
 
+    // TODO seems like we should never search by display name
     public abstract User findByDisplayName(String username);
 
     public abstract Iterable<User> findAll();
@@ -33,6 +34,7 @@ public abstract class UserRepository {
 
     public abstract boolean isPasswordValid(User user, String password);
 
+    // TODO change to Workspace to workspace id
     public abstract User setCurrentWorkspace(String userId, Workspace workspace);
 
     public abstract String getCurrentWorkspaceId(String userId);

@@ -99,7 +99,9 @@ public class SqlUserRepository extends UserRepository {
             session.save(newUser);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         } finally {
             session.close();
@@ -126,7 +128,9 @@ public class SqlUserRepository extends UserRepository {
             session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         } finally {
             session.close();
@@ -165,7 +169,9 @@ public class SqlUserRepository extends UserRepository {
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         } finally {
             session.close();
@@ -186,7 +192,7 @@ public class SqlUserRepository extends UserRepository {
         }
 
         Transaction transaction = null;
-        SqlUser sqlUser = null;
+        SqlUser sqlUser;
         try {
             transaction = session.beginTransaction();
             sqlUser = (SqlUser) findById(userId);
@@ -197,7 +203,9 @@ public class SqlUserRepository extends UserRepository {
             session.update(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
         return sqlUser;
@@ -205,12 +213,10 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public void addAuthorization(User userUser, String auth) {
-
     }
 
     @Override
     public void removeAuthorization(User userUser, String auth) {
-
     }
 
     @Override

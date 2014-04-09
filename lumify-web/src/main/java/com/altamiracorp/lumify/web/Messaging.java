@@ -160,6 +160,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     private void switchWorkspace(com.altamiracorp.lumify.core.user.User authUser, String workspaceId) {
         if (!workspaceId.equals(userRepository.getCurrentWorkspaceId(authUser.getUserId()))) {
             Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
+            // TODO can setCurrentWorkspace just take the workspaceId?
             userRepository.setCurrentWorkspace(authUser.getUserId(), workspace);
 
             LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);

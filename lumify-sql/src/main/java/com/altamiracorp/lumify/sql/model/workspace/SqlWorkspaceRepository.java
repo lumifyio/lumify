@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.exception.LumifyException;
-import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.*;
 import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.user.User;
@@ -27,7 +26,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SqlWorkspaceRepository implements WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private SessionFactory sessionFactory;
-    private UserRepository userRepository;
 
     @Override
     public void init(Map map) {
@@ -47,7 +45,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             session.delete(workspace);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }
@@ -88,7 +88,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             session.save(newWorkspace);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
         return newWorkspace;
@@ -122,7 +124,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             session.update(workspace);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }
@@ -139,7 +143,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
             if (!sqlWorkspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.NONE.toString())) {
                 String userId = sqlWorkspaceUser.getUser().getUserId();
-                boolean isCreator =  ((SqlWorkspace)workspace).getCreator().getUserId().equals(userId);
+                boolean isCreator = ((SqlWorkspace) workspace).getCreator().getUserId().equals(userId);
                 withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
             }
         }
@@ -164,12 +168,14 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
-
+        // TODO this should probably be implemented
+        LOGGER.warn("deleteEntityFromWorkspace not implemented");
     }
 
     @Override
-    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
-
+    public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
+        // TODO this should probably be implemented
+        LOGGER.warn("updateEntityOnWorkspace not implemented");
     }
 
     @Override
@@ -236,7 +242,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             session.update(workspace);
             transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }
@@ -264,10 +272,5 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     @Inject
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
-
-    @Inject
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 }

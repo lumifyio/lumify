@@ -161,6 +161,7 @@ public class GraphUtil {
         return value;
     }
 
+    // TODO refactor this to remove WorkspaceRepository from parameters and pass in workspaceUsers, workspaceEntities, and hasWritePermissions
     public static JSONObject toJson(WorkspaceRepository workspaceRepository, Workspace workspace, User user, boolean includeVertices) {
         try {
             List<WorkspaceUser> workspaceUsers = workspaceRepository.findUsersWithAccess(workspace, user);
