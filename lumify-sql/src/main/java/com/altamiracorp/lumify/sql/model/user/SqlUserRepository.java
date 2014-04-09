@@ -167,6 +167,7 @@ public class SqlUserRepository extends UserRepository {
             }
             sqlUser.setCurrentWorkspace(workspace);
             session.update(sqlUser);
+            session.update(workspace);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -181,7 +182,22 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public String getCurrentWorkspaceId(String userId) {
-        return null;
+        if (userId == null) {
+            throw new LumifyException("UserId cannot be null");
+        }
+
+        Session session = sessionFactory.openSession();
+        try {
+            SqlUser sqlUser = (SqlUser) findById(userId);
+            if (sqlUser == null) {
+                throw new LumifyException("User does not exist");
+            }
+            return sqlUser.getCurrentWorkspace().getId();
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
+        } finally {
+            session.close();
+        }
     }
 
     @Override
