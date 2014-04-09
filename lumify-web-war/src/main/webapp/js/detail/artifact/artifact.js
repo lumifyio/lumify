@@ -177,7 +177,7 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.vertexService.getArtifactHighlightedTextById(vertex.id)
+            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(vertex.id))
                 .done(function(artifactText, status, xhr) {
                     var displayType = vertex.concept.displayType;
                     if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {

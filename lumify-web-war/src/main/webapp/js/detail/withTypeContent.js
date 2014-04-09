@@ -183,6 +183,16 @@ define([
         // Pass a started XHR request to automatically cancel if detail pane
         // changes
         this.handleCancelling = function(xhr) {
+
+            // If this is an ajax request notify the detail pane to stop
+            // showing loading icon
+            var self = this;
+            if (_.isFunction(xhr.abort)) {
+                xhr.always(function() {
+                    self.trigger('finishedLoadingTypeContent');
+                });
+            }
+
             this._xhrs.push(xhr);
             return xhr;
         };

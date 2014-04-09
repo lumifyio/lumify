@@ -100,9 +100,7 @@ define([
                 deferred = this.vertexService.getVertexProperties(vertex.id);
             }
 
-            return deferred.then(function(v) {
-                return self.vertex((v && v.id) || vertex.id);
-            });
+            return deferred;
         };
 
         this.getVertexTitle = function(vertexId) {
