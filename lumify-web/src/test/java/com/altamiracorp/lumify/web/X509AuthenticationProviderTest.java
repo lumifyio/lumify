@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.core.classloader.annotations.MockPolicy;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -91,7 +90,7 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findByDisplayName(eq(TEST_USERNAME))).thenReturn(user);
+        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(user);
         when(userVertex.getId()).thenReturn("userId");
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);

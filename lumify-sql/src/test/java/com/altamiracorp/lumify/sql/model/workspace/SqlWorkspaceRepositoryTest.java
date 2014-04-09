@@ -42,7 +42,6 @@ public class SqlWorkspaceRepositoryTest {
         sqlUserRepository.setSessionFactory(sessionFactory);
         sqlWorkspaceRepository = new SqlWorkspaceRepository();
         sqlWorkspaceRepository.setSessionFactory(sessionFactory);
-        sqlWorkspaceRepository.setUserRepository(sqlUserRepository);
 
         testUser = (SqlUser)sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }

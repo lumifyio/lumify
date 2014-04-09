@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.workspace.SecureGraphWorkspace;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SecureGraphUser;
@@ -63,7 +62,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User findByDisplayName(String username) {
+    public User findByUserName(String username) {
         return createFromVertex(Iterables.getFirst(graph.query(authorizations)
                 .has(USERNAME.getKey(), username)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
@@ -89,7 +88,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User addUser(String userId, String displayName, String password, String[] userAuthorizations) {
-        User existingUser = findByDisplayName(displayName);
+        User existingUser = findByUserName(displayName);
         if (existingUser != null) {
             throw new RuntimeException("");
         }

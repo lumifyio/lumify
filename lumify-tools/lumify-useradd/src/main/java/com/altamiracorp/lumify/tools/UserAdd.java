@@ -3,7 +3,6 @@ package com.altamiracorp.lumify.tools;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
@@ -90,7 +89,7 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        User user = this.userRepository.findByDisplayName(this.username);
+        User user = this.userRepository.findByUserName(this.username);
 
         if (cmd.hasOption("reset")) {
             if (user == null) {

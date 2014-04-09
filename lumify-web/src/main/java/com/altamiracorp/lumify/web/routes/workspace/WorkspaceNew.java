@@ -10,7 +10,6 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class WorkspaceNew extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User authUser = getUser(request);
-        User user = getUserRepository().findByDisplayName(authUser.getDisplayName());
+        User user = getUserRepository().findByUserName(authUser.getDisplayName());
 
         String title = getOptionalParameter(request, "title");
 

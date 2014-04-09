@@ -21,8 +21,7 @@ public abstract class UserRepository {
 
     public abstract void init(Map config);
 
-    // TODO seems like we should never search by display name
-    public abstract User findByDisplayName(String username);
+    public abstract User findByUserName(String username);
 
     public abstract Iterable<User> findAll();
 

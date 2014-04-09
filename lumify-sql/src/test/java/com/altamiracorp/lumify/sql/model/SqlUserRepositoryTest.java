@@ -73,7 +73,7 @@ public class SqlUserRepositoryTest {
     @Test
     public void testFindByDisplayName() throws Exception {
         sqlUserRepository.addUser("12345", "test user", "&gdja81", new String[0]);
-        SqlUser user = (SqlUser) sqlUserRepository.findByDisplayName("test user");
+        SqlUser user = (SqlUser) sqlUserRepository.findByUserName("test user");
         byte[] salt = user.getPasswordSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
@@ -82,7 +82,7 @@ public class SqlUserRepositoryTest {
         assertEquals(1, user.getId());
         assertEquals("OFFLINE", user.getUserStatus());
 
-        assertNull(sqlUserRepository.findByDisplayName("test user1"));
+        assertNull(sqlUserRepository.findByUserName("test user1"));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class SqlUserRepositoryTest {
     public void testSetPassword() throws Exception {
         SqlUser testUser = (SqlUser) sqlUserRepository.addUser("abcd", "test user", "1234", new String[0]);
 
-        assertTrue(sqlUserRepository.findByDisplayName("test user") != null);
+        assertTrue(sqlUserRepository.findByUserName("test user") != null);
         assertTrue(UserPasswordUtil.validatePassword("1234", testUser.getPasswordSalt(), testUser.getPasswordHash()));
 
         sqlUserRepository.setPassword(testUser, "ijk");

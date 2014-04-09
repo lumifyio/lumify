@@ -42,7 +42,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        User authUser = userRepository.findByDisplayName(username);
+        User authUser = userRepository.findByUserName(username);
         if (authUser == null) {
             authUser = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, X509_USER_PASSWORD, new String[0]);
         }

@@ -34,9 +34,9 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User findByDisplayName(String displayName) {
+    public User findByUserName(String userName) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("displayName", displayName)).list();
+        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("userName", userName)).list();
         session.close();
         if (users.size() == 0) {
             return null;
@@ -77,7 +77,7 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public User addUser(String externalId, String displayName, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
-        if (findByDisplayName(displayName) != null) {
+        if (findByUserName(displayName) != null) {
             throw new LumifyException("User already exists");
         }
 

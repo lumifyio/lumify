@@ -22,8 +22,8 @@ public class SqlUser implements User {
     private int id;
     @Column(name = "external_id", unique = true)
     private String externalId;
-    @Column(name = "display_name")
-    private String displayName;
+    @Column(name = "user_name")
+    private String userName;
     @Column(name = "password_salt")
     private byte[] passwordSalt;
     @Column(name = "password_hash")
@@ -55,12 +55,12 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayName () {
+        return userName;
     }
 
     public void setDisplayName(String userName) {
-        this.displayName = userName;
+        this.userName = userName;
     }
 
     public SqlWorkspace getCurrentWorkspace() {
