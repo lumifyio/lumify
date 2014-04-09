@@ -58,9 +58,9 @@ define([
             var d3Deferred = $.Deferred();
             require(['d3'], d3Deferred.resolve);
             $.when(
-                this.vertexService.getMultiple(ids),
-                this.ontologyService.concepts(),
-                this.ontologyService.properties(),
+                this.handleCancelling(this.vertexService.getMultiple(ids)),
+                this.handleCancelling(this.ontologyService.concepts()),
+                this.handleCancelling(this.ontologyService.properties()),
                 d3Deferred
             ).done(function(verticesResponse, concepts, properties, d3) {
                 var vertices = verticesResponse[0].vertices;

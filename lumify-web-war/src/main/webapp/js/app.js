@@ -380,13 +380,6 @@ define([
         };
 
         this.onPaneResize = function(e, ui) {
-            var COLLAPSE_TOLERANCE = 50,
-                width = ui.size.width,
-                shouldCollapse = width < COLLAPSE_TOLERANCE;
-
-            $(e.target).toggleClass('collapsed', shouldCollapse);
-            $(e.target).toggleClass('visible', !shouldCollapse);
-
             this.triggerPaneResized();
         };
 

@@ -18,6 +18,7 @@ define([
             this.on('click', {
                 mapCoordinatesSelector: this.onMapCoordinatesClicked
             });
+            this.on('finishedLoadingTypeContent', this.onFinishedTypeContent);
 
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.preventDropEventsFromPropagating();
@@ -30,6 +31,10 @@ define([
                 this.onObjectsSelected(null, { vertices: [this.attr.loadGraphVertexData] });
             }
         });
+
+        this.onFinishedTypeContent = function() {
+            this.$node.removeClass('loading');
+        };
 
         // Ignore drop events so they don't propagate to the graph/map
         this.preventDropEventsFromPropagating = function() {
@@ -52,11 +57,19 @@ define([
                 edges = data.edges,
                 moduleName, moduleData;
 
-            this.teardownComponents();
-
             if (!vertices.length && !edges.length) {
-                return;
+                var pane = this.$node.closest('.detail-pane');
+
+                return pane.on(TRANSITION_END, function(e) {
+                    if (/transform/.test(e.originalEvent && e.originalEvent.propertyName)) {
+                        self.teardownComponents();
+                        pane.off(TRANSITION_END);
+                    }
+                });
             }
+
+            this.teardownComponents();
+            this.$node.addClass('loading');
 
             if (vertices.length > 1) {
                 moduleName = 'multiple';
@@ -94,13 +107,7 @@ define([
         };
 
         this.teardownComponents = function() {
-            var typeContentNode = this.select('detailTypeContentSelector'),
-                instanceInfos = registry.findInstanceInfoByNode(typeContentNode[0]);
-            if (instanceInfos.length) {
-                instanceInfos.forEach(function(info) {
-                    info.instance.teardown();
-                });
-            }
+            this.select('detailTypeContentSelector').teardownAllComponents();
         }
     }
 });

@@ -5,6 +5,26 @@
 
   padding: 2.5em 1em 0 1em;
 
+  &.loading {
+
+    background: url(../img/loading-large@2x.png) no-repeat center;
+    background-size: 150px auto;
+
+    &:after {
+        color: #ddd;
+        content: 'Loading';
+        display: block;
+        font-family: "HelveticaNeue-Thin", Arial, sans-serif;
+        font-size: 150%;
+        left: 0;
+        margin-top: 4.5em;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        width: 100%;
+    }
+  }
+
   .type-content > .preview, .content > .preview {
     height: 300px;
     cursor: pointer;
