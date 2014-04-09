@@ -7,7 +7,8 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class SqlWorkspaceUserId {
+public class SqlWorkspaceUserId implements Serializable{
+    private static final long serialVersionUID = 1L;
     @ManyToOne
     private SqlUser user;
     @ManyToOne
