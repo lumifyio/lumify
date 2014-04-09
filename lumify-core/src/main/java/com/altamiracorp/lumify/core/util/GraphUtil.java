@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.core.util;
 
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
-import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
@@ -75,29 +74,14 @@ public class GraphUtil {
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", getSandboxStatus(element, workspaceId).toString());
         if (element.getVisibility() != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), element.getVisibility().toString());
+            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), element.getVisibility().toString());
         }
-        String visibilityJson = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        if (visibilityJson != null && visibilityJson.length() > 0) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), new JSONObject(visibilityJson));
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        if (visibilityJson != null) {
+            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilityJson);
         }
 
         return json;
-    }
-
-    public static Double[] parseLatLong(Object val) {
-        Double[] result = new Double[2];
-        if (val instanceof String) {
-            String valStr = (String) val;
-            String[] latlong = valStr.substring(valStr.indexOf('[') + 1, valStr.indexOf(']')).split(",");
-            result[0] = Double.parseDouble(latlong[0]);
-            result[1] = Double.parseDouble(latlong[1]);
-        } else if (val instanceof GeoPoint) {
-            GeoPoint valGeoPoint = (GeoPoint) val;
-            result[0] = valGeoPoint.getLatitude();
-            result[1] = valGeoPoint.getLongitude();
-        }
-        return result;
     }
 
     public static JSONObject toJsonProperties(Iterable<Property> properties, String workspaceId) {
@@ -127,7 +111,7 @@ public class GraphUtil {
         result.put("value", toJsonValue(property.getValue()));
 
         if (property.getVisibility() != null) {
-            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.toString(), property.getVisibility().toString());
+            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
             Object value = property.getMetadata().get(key);
@@ -172,15 +156,14 @@ public class GraphUtil {
     }
 
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
-        String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        return getPropertySandboxStatusFromVisibilityJsonString(visibilityJsonString, workspaceId);
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        return getPropertySandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
     }
 
-    private static SandboxStatus getPropertySandboxStatusFromVisibilityJsonString(String visibilityJsonString, String workspaceId) {
-        if (visibilityJsonString == null) {
+    private static SandboxStatus getPropertySandboxStatusFromVisibilityJsonString(JSONObject visibilityJson, String workspaceId) {
+        if (visibilityJson == null) {
             return SandboxStatus.PUBLIC;
         }
-        JSONObject visibilityJson = new JSONObject(visibilityJsonString);
         JSONArray workspacesJsonArray = visibilityJson.optJSONArray(VisibilityTranslator.JSON_WORKSPACES);
         if (workspacesJsonArray == null) {
             return SandboxStatus.PUBLIC;
@@ -195,8 +178,8 @@ public class GraphUtil {
         SandboxStatus[] sandboxStatuses = new SandboxStatus[properties.size()];
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
-            String visibilityJsonString = (String) property.getMetadata().get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-            sandboxStatuses[i] = getPropertySandboxStatusFromVisibilityJsonString(visibilityJsonString, workspaceId);
+            JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(property.getMetadata());
+            sandboxStatuses[i] = getPropertySandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
         }
 
         for (int i = 0; i < properties.size(); i++) {
@@ -229,16 +212,16 @@ public class GraphUtil {
     }
 
     public static void updateElementVisibilitySource(Graph graph, VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
-        String visibilityJsonString = (String) element.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJsonString, visibilitySource);
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
+        visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
-        if (element.getProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()) != null) {
-            m.alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), lumifyVisibility.getVisibility());
+        if (LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element) != null) {
+            m.alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), lumifyVisibility.getVisibility());
         }
-        m.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(m, visibilityJson, lumifyVisibility.getVisibility());
         m.save();
     }
 
@@ -263,9 +246,9 @@ public class GraphUtil {
         }
         ElementMutation<T> elementMutation = element.prepareMutation();
 
-        String visibilityJsonString = (String) propertyMetadata.get(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString());
-        JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJsonString, visibilitySource, workspaceId);
-        propertyMetadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(propertyMetadata);
+        visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
@@ -314,8 +297,8 @@ public class GraphUtil {
             Authorizations authorizations) {
         JSONObject visibilityJson = updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations)
-                .setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations);
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
 
         addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
 
@@ -339,24 +322,18 @@ public class GraphUtil {
         }
     }
 
-    public static JSONObject updateVisibilitySource(String jsonString, String visibilitySource) {
-        JSONObject json;
-        if (jsonString == null) {
+    public static JSONObject updateVisibilitySource(JSONObject json, String visibilitySource) {
+        if (json == null) {
             json = new JSONObject();
-        } else {
-            json = new JSONObject(jsonString);
         }
 
         json.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
         return json;
     }
 
-    public static JSONObject updateVisibilitySourceAndAddWorkspaceId(String jsonString, String visibilitySource, String workspaceId) {
-        JSONObject json;
-        if (jsonString == null) {
+    public static JSONObject updateVisibilitySourceAndAddWorkspaceId(JSONObject json, String visibilitySource, String workspaceId) {
+        if (json == null) {
             json = new JSONObject();
-        } else {
-            json = new JSONObject(jsonString);
         }
 
         json.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
@@ -367,12 +344,9 @@ public class GraphUtil {
         return json;
     }
 
-    public static JSONObject updateVisibilityJsonRemoveFromWorkspace(String jsonString, String workspaceId) {
-        JSONObject json;
-        if (jsonString == null) {
+    public static JSONObject updateVisibilityJsonRemoveFromWorkspace(JSONObject json, String workspaceId) {
+        if (json == null) {
             json = new JSONObject();
-        } else {
-            json = new JSONObject(jsonString);
         }
 
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
@@ -381,14 +355,10 @@ public class GraphUtil {
         return json;
     }
 
-    public static JSONObject updateVisibilityJsonRemoveFromAllWorkspace(String jsonString) {
-        JSONObject json;
-        if (jsonString == null) {
+    public static JSONObject updateVisibilityJsonRemoveFromAllWorkspace(JSONObject json) {
+        if (json == null) {
             json = new JSONObject();
-        } else {
-            json = new JSONObject(jsonString);
         }
-
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
         JSONUtil.removeWorkspacesFromJSONArray(workspaceJsonArray);
 

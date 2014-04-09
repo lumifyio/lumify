@@ -168,25 +168,30 @@ module.exports = function(grunt) {
                 grunt.log.ok('The watch finished in ' + (time / 1000).toFixed(2) + 's. Waiting...');
             },
             spawn: false,
-            interrupt: true
+            interrupt: true,
+            livereload: {
+                port: 35729,
+                key: grunt.file.read('test/localhost.key'),
+                cert: grunt.file.read('test/localhost.cert')
+            }
         },
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
             tasks: ['less:development', 'notify:css'],
-            options: { livereload: true }
         },
         scripts: {
             files: ['js/**/*.js', 'js/**/*.ejs'],
             tasks: ['requirejs:development', 'notify:js'],
-            options: { livereload: true }
         },
         lint: {
             files: ['js/**/*.js'],
-            tasks: ['jshint:development']
+            tasks: ['jshint:development'],
+            options: { livereload: false }
         },
         jscs: {
             files: [ 'js/**/*.js' ],
-            tasks: ['jscs:development']
+            tasks: ['jscs:development'],
+            options: { livereload: false }
         }
     },
 

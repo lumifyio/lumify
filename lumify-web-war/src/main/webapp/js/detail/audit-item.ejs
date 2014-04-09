@@ -14,7 +14,7 @@
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
        <span class="audit-to">
-         <% if (to && audit.propertyAudit.propertyName === '_visibilityJson') { %>
+         <% if (to && audit.propertyAudit.propertyName === 'http://lumify.io#visibilityJson') { %>
            <span class="visibility" data-visibility="<%= to %>"></span>
          <% } else { %>
            <%= to %>

@@ -29,7 +29,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
@@ -139,12 +138,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
         ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId, LumifyVisibility.VISIBILITY_STRING);
-        String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Iterator<Property> rowKeys = vertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
-        while (rowKeys.hasNext()) {
-            Property rowKeyProperty = rowKeys.next();
+        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
             if (termMentionModel == null) {
                 DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));

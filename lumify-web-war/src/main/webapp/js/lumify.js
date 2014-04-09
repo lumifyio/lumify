@@ -2,6 +2,27 @@
 // Debug retina/non-retina by changing to 1/2
 // window.devicePixelRatio = 1;
 
+// Call this function and reload to enable liveReload when `grunt` is running
+window.enableLiveReload = function(enable) {
+    if ('localStorage' in window) {
+        if (enable === true || typeof enable === 'undefined') {
+            console.debug('Enabling LiveReload...')
+            require(['//localhost:35729/livereload.js'], function() {
+                console.debug('LiveReload successfully enabled');
+            });
+            localStorage.setItem('liveReloadEnabled', true);
+        } else {
+            console.debug('Disabling LiveReload')
+            localStorage.removeItem('liveReloadEnabled');
+        }
+    }
+}
+if ('localStorage' in window) {
+    if (localStorage.getItem('liveReloadEnabled')) {
+        enableLiveReload(true);
+    }
+}
+
 window.requestAnimationFrame =
     typeof window === 'undefined' ?
     function() { } :

@@ -1,17 +1,14 @@
 package com.altamiracorp.lumify.core.security;
 
-public enum LumifyVisibilityProperties {
-    VISIBILITY_PROPERTY("_visibility"),
-    VISIBILITY_JSON_PROPERTY("_visibilityJson");
+import com.altamiracorp.lumify.core.model.properties.JsonLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.TextLumifyProperty;
 
-    private final String property;
+// TODO convert to property types. See com.altamiracorp.lumify.core.model.properties.LumifyProperties
+public class LumifyVisibilityProperties {
+    public static final JsonLumifyProperty VISIBILITY_JSON_PROPERTY = new JsonLumifyProperty("http://lumify.io#visibilityJson");
+    public static final TextLumifyProperty VISIBILITY_PROPERTY = TextLumifyProperty.all("http://lumify.io#visibility");
 
-    LumifyVisibilityProperties (String property) {
-        this.property = property;
-    }
-
-    @Override
-    public final String toString () {
-        return this.property;
+    private LumifyVisibilityProperties() {
+        throw new UnsupportedOperationException("do not construct utility class");
     }
 }

@@ -3,6 +3,14 @@ define([
     'service/vertex',
     'util/formatters'
 ], function(VertexService, formatters) {
+                
+    var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
+        'http://lumify.io#visibility',
+        'http://lumify.io#visibilityJson',
+        'detectedObjects',
+        'properties',
+        'sandboxStatus'
+    ];
 
     return withVertexCache;
 
@@ -118,7 +126,11 @@ define([
 
         this.updateCacheWithVertex = function(vertex, options) {
             var id = vertex.id,
-                cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id });
+                cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id }),
+                hasChanged = !_.isEqual(
+                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)), 
+                    _.pick.apply(_, [vertex].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES))
+                );
 
             if (options && options.deletedProperty && cache.properties) {
                 delete cache.properties[options.deletedProperty]
@@ -130,7 +142,10 @@ define([
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
             
-            $.extend(cache, _.pick(vertex, ['_visibility', '_visibilityJson', 'sandboxStatus']));
+            $.extend(cache, _.pick(vertex, [
+                'http://lumify.io#visibility',
+                'http://lumify.io#visibilityJson',
+                'sandboxStatus']));
 
             if (!cache.properties.source || !cache.properties.source.value) {
                 if (cache.properties._source && cache.properties._source.value) {
@@ -161,7 +176,7 @@ define([
 
             $.extend(true, vertex, cache);
 
-            return cache;
+            return (options && options.returnNullIfNotChanged === true && !hasChanged) ? null : cache;
         };
 
         function setPreviewsForVertex(vertex, currentWorkspace) {

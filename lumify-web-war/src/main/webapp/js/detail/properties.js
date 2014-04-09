@@ -196,7 +196,7 @@ define([
                 });
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
-                if ((/^_/).test(propertyName) && propertyName !== '_visibilityJson') {
+                if ((/^_/).test(propertyName) && propertyName !== 'http://lumify.io#visibilityJson') {
                     return;
                 }
 
@@ -319,7 +319,7 @@ define([
                     self.displayProperties(properties);
                 } : function() { };
 
-            if (data.property.name === '_visibilityJson') {
+            if (data.property.name === 'http://lumify.io#visibilityJson') {
 
                 this[isEdge ? 'relationshipService' : 'vertexService'].setVisibility(
                         this.attr.data.id,
@@ -426,7 +426,7 @@ define([
                     property = $this.data('property'),
                     ontologyProperty = self.ontologyProperties.byTitle[property.key];
 
-                    if (property.key === '_visibilityJson' || ontologyProperty) {
+                    if (property.key === 'http://lumify.io#visibilityJson' || ontologyProperty) {
                         $this.popover('destroy');
                         $this.popover({
                             trigger: 'click',
@@ -527,8 +527,9 @@ define([
             properties = o;
         }
 
-        if (!('_visibilityJson' in properties)) {
-            properties._visibilityJson = {
+        if (!('http://lumify.io#visibilityJson' in properties)) {
+            properties = $.extend({}, properties);
+            properties['http://lumify.io#visibilityJson'] = {
                 value: {
                     source: ''
                 }
@@ -536,8 +537,8 @@ define([
         }
 
         var keys = Object.keys(properties).sort(function(a,b) {
-            if (a === '_visibilityJson') return -1;
-            if (b === '_visibilityJson') return 1;
+            if (a === 'http://lumify.io#visibilityJson') return -1;
+            if (b === 'http://lumify.io#visibilityJson') return 1;
             if (a === 'startDate' && b === 'endDate') return -1;
             if (b === 'startDate' && a === 'endDate') return 1;
 
@@ -594,10 +595,10 @@ define([
                         ontologyProperty.dataType,
                         value,
                         stringValue,
-                        properties[name]._visibilityJson
+                        properties[name]['http://lumify.io#visibilityJson']
                     );
                 }
-            } else if (name === '_visibilityJson') {
+            } else if (name === 'http://lumify.io#visibilityJson') {
                 value = properties[name].value;
 
                 if (value && _.isObject(value.value)) {

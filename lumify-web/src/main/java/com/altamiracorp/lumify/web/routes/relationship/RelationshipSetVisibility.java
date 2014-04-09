@@ -66,7 +66,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         JSONObject json = GraphUtil.toJson(graphEdge, workspaceId);
-        Messaging.broadcastPropertyChange(graphEdgeId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilitySource, json);
+        Messaging.broadcastPropertyChange(graphEdgeId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilitySource, json);
         respondWithJson(response, json);
     }
 }

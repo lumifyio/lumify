@@ -6,6 +6,7 @@ define([], function() {
         VERTICES_RESPONSE_KEYPATHS = ['vertices', 'data.vertices'],
         
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
+            /^audit/,
             /^user/,
             /^configuration$/,
             /^workspaces?$/,
@@ -23,17 +24,15 @@ define([], function() {
         JSON_CONVERTERS = [
 
             function vertexProperties(json, updated) {
-                var cache;
                 if (!json.sourceVertexId &&
                     _.isString(json.id) &&
                     _.isObject(json.properties) && 
                     _.keys(json.properties).length) {
-                    cache = this.updateCacheWithVertex(json);
-                    updated.push(cache);
-
-                    updated = true;
+                    updated.push(
+                        this.updateCacheWithVertex(json, { returnNullIfNotChanged: true })
+                    );
+                    return true;
                 }
-                return updated;
             },
 
             function vertexRelationships(json, updated) {
@@ -42,10 +41,14 @@ define([], function() {
                 if (json.relationships) {
                     json.relationships.forEach(function(relationship) {
                         if (relationship.vertex) {
-                            var cache = self.updateCacheWithVertex(relationship.vertex);
-                            updated.push(cache);
+                            updated.push(
+                                self.updateCacheWithVertex(relationship.vertex, { 
+                                    returnNullIfNotChanged: true 
+                                })
+                            );
                         }
                     });
+                    return true;
                 }
             },
 
@@ -55,8 +58,9 @@ define([], function() {
                 if (json.paths) {
                     json.paths.forEach(function(path) {
                         path.forEach(function(vertex) {
-                            var cache = self.updateCacheWithVertex(vertex);
-                            updated.push(cache);
+                            updated.push(
+                                self.updateCacheWithVertex(vertex, { returnNullIfNotChanged: true })
+                            );
                         });
                     });
                     return true;
@@ -64,21 +68,16 @@ define([], function() {
             },
 
             function vertexProperties(json, updated) {
-                var cache;
                 if (json.vertex && json.vertex.id && json.properties) {
-                    cache = this.updateCacheWithVertex(json.vertex, {
-                        deletedProperty: json.deletedProperty
-                    });
-                    updated.push(cache);
+                    updated.push(this.updateCacheWithVertex(json.vertex, { returnNullIfNotChanged: true }));
                     return true;
                 } else if (json.vertex && json.vertex.graphVertexId && json.properties) {
-                    cache = this.updateCacheWithVertex({
-                        id: json.vertex.graphVertexId,
-                        properties: json.properties
-                    }, {
-                        deletedProperty: json.deletedProperty
-                    });
-                    updated.push(cache);
+                    updated.push(
+                        this.updateCacheWithVertex({
+                            id: json.vertex.graphVertexId,
+                            properties: json.properties
+                        }, { returnNullIfNotChanged: true })
+                    );
                     return true;
                 }
             },
@@ -87,9 +86,9 @@ define([], function() {
                 var self = this;
                 if (_.isArray(json) && json.length && json[0].id && json[0].properties) {
                     json.forEach(function(vertex) {
-                        var cache = self.updateCacheWithVertex(vertex);
-                        cache.properties._refreshedFromServer = true;
-                        updated.push(cache);
+                        updated.push(
+                            self.updateCacheWithVertex(vertex, { returnNullIfNotChanged: true })
+                        );
                     });
                     return true;
                 }
@@ -143,7 +142,7 @@ define([], function() {
                                 if (val && self.resemblesVertices(val)) {
                                     keypathFound = true;
                                     val.forEach(function(v) {
-                                        updated.push(self.updateCacheWithVertex(v));
+                                        updated.push(self.updateCacheWithVertex(v, { returnNullIfNotChanged: true }));
                                     });
                                 } else if (!keypathFound) {
                                     keypathFound = true;
@@ -162,6 +161,7 @@ define([], function() {
                             });
                         }
 
+                        updated = _.compact(updated);
                         if (updated.length) {
                             _.defer(function() {
                                 self.trigger('verticesUpdated', { 
