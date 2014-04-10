@@ -211,6 +211,9 @@ define([
             dateString: function(millisStr) {
                 return sf('{0:yyyy-MM-dd}', FORMATTERS.date.utc(millisStr));
             },
+            dateTimeString: function(millisStr) {
+                return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.utc(millisStr));
+            },
             relativeToNow: function(date) {
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),
                     time = '';

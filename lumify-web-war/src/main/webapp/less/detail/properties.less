@@ -60,16 +60,27 @@
         &:empty {
           display: none;
         }
+
+        tr:last-child td {
+          padding-bottom: 0.5em;
+        }
       }
 
       .property-name {
         padding-left: 0;
         font-weight: bold;
-        text-align: left; // Remove when more then 1
+        text-align: right;
+        font-size: 90%;
+      }
+
+      .property-status {
+        padding-bottom: 0.5em;
       }
 
       .property-justification {
         text-align: left;
+        border-top: 1px solid #eee;
+        padding-top: 0.5em;
       }
 
       .selection {

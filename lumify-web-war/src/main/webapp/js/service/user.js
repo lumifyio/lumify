@@ -17,6 +17,12 @@ define([
     function UserService() {
         ServiceBase.call(this);
 
+        var toMemoize = [
+            'userInfo',
+        ];
+
+        this.memoizeFunctions(toMemoize);
+
         return this;
     }
 
@@ -67,6 +73,15 @@ define([
     UserService.prototype.getCurrentUsers = function() {
         return this._ajaxGet({
             url: 'user'
+        });
+    };
+
+    UserService.prototype.userInfo = function(userId) {
+        return this._ajaxGet({
+            url: 'user/info',
+            data: {
+                userId: userId
+            }
         });
     };
 
