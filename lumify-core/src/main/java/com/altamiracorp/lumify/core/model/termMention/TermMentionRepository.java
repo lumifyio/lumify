@@ -32,6 +32,6 @@ public class TermMentionRepository extends Repository<TermMentionModel> {
     }
 
     public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext) {
-        return findByRowStartsWith(graphVertexId + ":", modelUserContext);
+        return findByRowStartsWith(graphVertexId + TermMentionRowKey.ROW_KEY_SEP, modelUserContext);
     }
 }

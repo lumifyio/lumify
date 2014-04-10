@@ -5,7 +5,7 @@ import com.altamiracorp.lumify.core.util.RowKeyHelper;
 import org.apache.commons.lang.StringUtils;
 
 public class TermMentionRowKey extends RowKey {
-    private static char ROW_KEY_SEP = '\u001e';
+    public static char ROW_KEY_SEP = '\u001e';
 
     public TermMentionRowKey(String rowKey) {
         super(rowKey);
