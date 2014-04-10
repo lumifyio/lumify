@@ -43,7 +43,7 @@ public class WorkspaceVertices extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
-        final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
+        final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         Iterable<Object> vertexIds = new LookAheadIterable<WorkspaceEntity, Object>() {
             @Override
             protected boolean isIncluded(WorkspaceEntity workspaceEntity, Object entityVertexId) {
