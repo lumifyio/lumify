@@ -171,13 +171,11 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            SqlWorkspace sqlWorkspace = (SqlWorkspace) workspace;
             Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
             for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
                 sqlWorkspaceVertex.setVisible(false);
+                session.update(sqlWorkspaceVertex);
             }
-            sqlWorkspace.setSqlWorkspaceVertices(sqlWorkspaceVertices);
-            session.update(sqlWorkspace);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -235,7 +233,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
                         session.update(sqlWorkspaceVertex);
                     }
                 }
-                session.update(sqlWorkspaceVertices);
             }
             transaction.commit();
 

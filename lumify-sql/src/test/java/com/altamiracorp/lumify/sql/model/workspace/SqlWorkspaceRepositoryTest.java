@@ -166,7 +166,22 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test
     public void testSoftDeleteEntityFromWorkspace() throws Exception {
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
+        String vertexId = "1234";
 
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 1);
+        SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
+        assertTrue(sqlWorkspaceVertex.isVisible());
+
+        sqlWorkspaceRepository.softDeleteEntityFromWorkspace(sqlWorkspace, "1234", testUser);
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 1);
+        sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
+        assertFalse(sqlWorkspaceVertex.isVisible());
     }
 
     @Test
@@ -196,5 +211,4 @@ public class SqlWorkspaceRepositoryTest {
         assertEquals(10, sqlWorkspaceVertex.getGraphPositionY());
         assertFalse(sqlWorkspaceVertex.isVisible());
     }
-
 }
