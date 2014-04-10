@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceAccess;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceUser;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 import com.altamiracorp.lumify.sql.model.user.SqlUserRepository;
@@ -210,5 +211,21 @@ public class SqlWorkspaceRepositoryTest {
         assertEquals(1, sqlWorkspaceVertex.getGraphPositionX());
         assertEquals(10, sqlWorkspaceVertex.getGraphPositionY());
         assertFalse(sqlWorkspaceVertex.isVisible());
+    }
+
+    @Test
+    public void testFindEntities () throws Exception {
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, 0, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "345", true, 1, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "678", true, 2, 0, testUser);
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "910", true, 3, 0, testUser);
+
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 4);
+
+        List<WorkspaceEntity> workspaceEntities = sqlWorkspaceRepository.findEntities(sqlWorkspace, testUser);
+        assertTrue(workspaceEntities.size() == 4);
     }
 }

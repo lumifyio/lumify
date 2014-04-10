@@ -18,8 +18,12 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SqlWorkspaceRepository implements WorkspaceRepository {
@@ -157,12 +161,34 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public List<WorkspaceEntity> findEntities(Workspace workspace, User user) {
-        return new ArrayList<WorkspaceEntity>();
+        if (!doesUserHaveReadAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
+        }
+
+        Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
+        return toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
+            @Override
+            protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
+                Object vertexId = sqlWorkspaceVertex.getSqlVertex().getVertexId();
+
+                int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
+                int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
+                boolean visible = sqlWorkspaceVertex.isVisible();
+
+                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
+            }
+        });
     }
 
     @Override
     public Workspace copy(Workspace workspace, User user) {
-        throw new RuntimeException("Not yet Implemented");
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) add("Copy of " + workspace.getDisplayTitle(), user);
+        List<WorkspaceEntity> entities = findEntities(workspace, user);
+        for (WorkspaceEntity entity : entities) {
+            updateEntityOnWorkspace(sqlWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
+        }
+
+        return sqlWorkspace;
     }
 
     @Override
@@ -219,7 +245,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
                 workspaceVertex.setVisible(visible);
                 workspaceVertex.setGraphPositionX(graphPositionX);
                 workspaceVertex.setGraphPositionY(graphPositionY);
-                workspaceVertex.setSqlWorkspace((SqlWorkspace)workspace);
+                workspaceVertex.setSqlWorkspace((SqlWorkspace) workspace);
                 workspaceVertex.setSqlVertex(sqlVertex);
                 session.save(workspaceVertex);
                 session.update(workspace);
