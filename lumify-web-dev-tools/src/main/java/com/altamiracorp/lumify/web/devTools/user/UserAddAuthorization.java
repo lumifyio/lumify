@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.web.routes.user;
+package com.altamiracorp.lumify.web.devTools.user;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;

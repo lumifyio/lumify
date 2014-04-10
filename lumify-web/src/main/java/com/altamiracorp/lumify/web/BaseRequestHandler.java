@@ -226,14 +226,12 @@ public abstract class BaseRequestHandler implements Handler {
         configureResponse(ResponseTypes.JSON_ARRAY, response, jsonArray);
     }
 
-    /**
-     * Configures the content type for the provided response to contain plaintext data
-     *
-     * @param response  The response instance to modify
-     * @param plaintext The data to include in the response
-     */
     protected void respondWithPlaintext(final HttpServletResponse response, final String plaintext) {
         configureResponse(ResponseTypes.PLAINTEXT, response, plaintext);
+    }
+
+    protected void respondWithHtml(final HttpServletResponse response, final String html) {
+        configureResponse(ResponseTypes.HTML, response, html);
     }
 
     protected User getUser(HttpServletRequest request) {
@@ -247,13 +245,24 @@ public abstract class BaseRequestHandler implements Handler {
         try {
             switch (type) {
                 case JSON_OBJECT:
-                    Responder.respondWith(response, (JSONObject) responseData);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(responseData.toString());
                     break;
                 case JSON_ARRAY:
-                    Responder.respondWith(response, (JSONArray) responseData);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(responseData.toString());
                     break;
                 case PLAINTEXT:
-                    Responder.respondWith(response, (String) responseData);
+                    response.setContentType("text/plain");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(responseData.toString());
+                    break;
+                case HTML:
+                    response.setContentType("text/html");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(responseData.toString());
                     break;
                 default:
                     throw new RuntimeException("Unsupported response type encountered");

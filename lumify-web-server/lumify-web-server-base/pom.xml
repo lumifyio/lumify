@@ -23,6 +23,11 @@
             <artifactId>lumify-web</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.lumify</groupId>
+            <artifactId>lumify-web-dev-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

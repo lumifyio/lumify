@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web;
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.web.routes.admin.AdminList;
 import com.altamiracorp.lumify.web.routes.admin.AdminUploadOntology;
 import com.altamiracorp.lumify.web.routes.artifact.*;
 import com.altamiracorp.lumify.web.routes.audit.VertexAudit;
@@ -24,6 +25,7 @@ import com.altamiracorp.lumify.web.routes.vertex.*;
 import com.altamiracorp.lumify.web.routes.workspace.*;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticFileHandler;
+import com.altamiracorp.miniweb.StaticResourceHandler;
 import com.google.inject.Injector;
 
 import javax.servlet.*;
@@ -128,12 +130,10 @@ public class Router extends HttpServlet {
             app.get("/map/marker/image", MapMarkerImage.class);
             app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
-            // TODO refactor into WebAppPlugin: ontology admin
-            app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
+            app.get("/admin", authenticator, AdminList.class);
 
-            // TODO refactor into WebAppPlugin: dev
-            app.post("/user/auth/add", authenticator, UserAddAuthorization.class);
-            app.post("/user/auth/remove", authenticator, UserRemoveAuthorization.class);
+            app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
+            app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
 
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
