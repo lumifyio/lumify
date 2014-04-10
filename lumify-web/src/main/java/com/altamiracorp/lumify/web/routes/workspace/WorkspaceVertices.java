@@ -7,6 +7,8 @@ import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -22,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class WorkspaceVertices extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceVertices.class);
     private final Graph graph;
     private final WorkspaceRepository workspaceRepository;
 
@@ -44,7 +47,14 @@ public class WorkspaceVertices extends BaseRequestHandler {
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
         final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
-        Iterable<Object> vertexIds = new LookAheadIterable<WorkspaceEntity, Object>() {
+        Iterable<Object> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
+        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
+        JSONArray results = GraphUtil.toJson(graphVertices, workspaceId);
+        respondWithJson(response, results);
+    }
+
+    private LookAheadIterable<WorkspaceEntity, Object> getVisibleWorkspaceEntityIds(final List<WorkspaceEntity> workspaceEntities) {
+        return new LookAheadIterable<WorkspaceEntity, Object>() {
             @Override
             protected boolean isIncluded(WorkspaceEntity workspaceEntity, Object entityVertexId) {
                 return workspaceEntity.isVisible();
@@ -60,13 +70,5 @@ public class WorkspaceVertices extends BaseRequestHandler {
                 return workspaceEntities.iterator();
             }
         };
-
-        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
-        JSONArray results = new JSONArray();
-        for (Vertex v : graphVertices) {
-            results.put(GraphUtil.toJson(v, workspaceId));
-        }
-
-        respondWithJson(response, results);
     }
 }

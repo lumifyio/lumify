@@ -12,6 +12,8 @@ import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.model.workspace.diff.WorkspaceDiff;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.LumifyLogger;
+import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
@@ -31,6 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphWorkspaceRepository.class);
     private Graph graph;
     private String workspaceConceptId;
     private String workspaceToEntityRelationshipId;
@@ -86,6 +89,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public Workspace findById(String workspaceId, User user) {
+        LOGGER.debug("findById(workspaceId: %s, userId: %s)", workspaceId, user.getUserId());
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, authorizations);
         if (workspaceVertex == null) {
@@ -164,6 +168,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public List<WorkspaceEntity> findEntities(final Workspace workspace, User user) {
+        LOGGER.debug("findEntities(workspaceId: %s, userId: %s)", workspace.getId(), user.getUserId());
         if (!doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
