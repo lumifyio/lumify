@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "workspace")
-
 public class SqlWorkspace implements Workspace {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +20,10 @@ public class SqlWorkspace implements Workspace {
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn (name="user_id")
     private SqlUser creator;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.workspace")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")
     public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceVertexId.workspace")
+    private Set<SqlWorkspaceVertex> sqlWorkspaceVertices = new HashSet<SqlWorkspaceVertex>(0);
 
     public String getId() {
         return Integer.toString(workspaceId);
@@ -54,5 +55,13 @@ public class SqlWorkspace implements Workspace {
 
     public void setSqlWorkspaceUser(Set<SqlWorkspaceUser> sqlWorkspaceUser) {
         this.sqlWorkspaceUser = sqlWorkspaceUser;
+    }
+
+    public Set<SqlWorkspaceVertex> getSqlWorkspaceVertices() {
+        return sqlWorkspaceVertices;
+    }
+
+    public void setSqlWorkspaceVertices(Set<SqlWorkspaceVertex> sqlWorkspaceVertices) {
+        this.sqlWorkspaceVertices = sqlWorkspaceVertices;
     }
 }

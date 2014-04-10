@@ -299,14 +299,14 @@ public class SecureGraphWorkspaceRepositoryTest {
 //        }
 //
 //        try {
-//            workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
+//            workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user2);
 //            fail("user2 should not have write access to workspace");
 //        } catch (LumifyAccessDeniedException ex) {
 //            assertEquals(user2, ex.getUser());
 //            assertEquals(workspace.getId(), ex.getResourceId());
 //        }
 //
-//        workspaceRepository.deleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
+//        workspaceRepository.softDeleteEntityFromWorkspace(workspace, entity1Vertex.getId(), user1);
 //        assertEquals(startingVertexCount + 1, graph.getAllVertices().size()); // +1 = the workspace vertex
 //        Map<Object, InMemoryEdge> edgesAfterDelete = graph.getAllEdges();
 //        assertEquals(startingEdgeCount + 2, edgesAfterDelete.size()); // +1 = the edges between workspaces, users

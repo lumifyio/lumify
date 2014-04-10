@@ -42,7 +42,7 @@ public interface WorkspaceRepository {
     Workspace copy(Workspace workspace, User user);
 
     // change Workspace to workspace id?
-    void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
+    void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
 
     // change Workspace to workspace id?
     void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);

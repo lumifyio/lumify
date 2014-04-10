@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SqlWorkspaceRepositoryTest {
@@ -43,7 +42,7 @@ public class SqlWorkspaceRepositoryTest {
         sqlWorkspaceRepository = new SqlWorkspaceRepository();
         sqlWorkspaceRepository.setSessionFactory(sessionFactory);
 
-        testUser = (SqlUser)sqlUserRepository.addUser("123", "user 1", null, new String[0]);
+        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }
 
     @Test
@@ -114,13 +113,11 @@ public class SqlWorkspaceRepositoryTest {
 
     @Test
     public void testFindUsersWithAccess() throws Exception {
-        SqlUser sqlUser = new SqlUser();
-        sqlUser.setId(2);
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", sqlUser);
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
-        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, sqlUser);
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
         assertFalse(workspaceUsers.isEmpty());
-        assertEquals("2", workspaceUsers.get(0).getUserId());
+        assertEquals("1", workspaceUsers.get(0).getUserId());
         assertTrue(workspaceUsers.get(0).isCreator());
     }
 
@@ -138,7 +135,7 @@ public class SqlWorkspaceRepositoryTest {
         sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, sqlUser);
     }
 
-    @Test (expected = LumifyAccessDeniedException.class)
+    @Test(expected = LumifyAccessDeniedException.class)
     public void testUpdateUserOnWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
@@ -147,22 +144,57 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
-        SqlUser testUser2 = (SqlUser)sqlUserRepository.addUser("456", "qwe", "", new String[0]);
+        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
         workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser2);
         assertTrue(workspaceUsers.size() == 2);
         assertEquals(workspaceUsers.get(1).getWorkspaceAccess(), WorkspaceAccess.READ);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, testUser);
-        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.NONE);
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
     public void testUpdateUserOnWorkspaceWithoutPermissions() throws Exception {
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", new SqlUser());
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(2);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.WRITE, sqlUser);
     }
+
+    @Test
+    public void testSoftDeleteEntityFromWorkspace() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateEntityOnWorkspace () throws Exception {
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
+        String vertexId = "1234";
+
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, true, 0, 0, testUser);
+
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 1);
+        SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
+        assertEquals("1234", sqlWorkspaceVertex.getSqlVertex().getVertexId());
+        assertEquals(0, sqlWorkspaceVertex.getGraphPositionX());
+        assertEquals(0, sqlWorkspaceVertex.getGraphPositionY());
+        assertTrue(sqlWorkspaceVertex.isVisible());
+
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, false, 1, 10, testUser);
+
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 1);
+        sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
+        assertEquals("1234", sqlWorkspaceVertex.getSqlVertex().getVertexId());
+        assertEquals(1, sqlWorkspaceVertex.getGraphPositionX());
+        assertEquals(10, sqlWorkspaceVertex.getGraphPositionY());
+        assertFalse(sqlWorkspaceVertex.isVisible());
+    }
+
 }

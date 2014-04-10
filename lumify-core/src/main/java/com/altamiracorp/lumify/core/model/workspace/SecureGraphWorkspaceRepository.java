@@ -203,7 +203,7 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
     }
 
     @Override
-    public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+    public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
         if (!doesUserHaveWriteAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }

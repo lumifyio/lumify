@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.exception.LumifyResourceNotFoundException;
 import com.altamiracorp.lumify.core.model.workspace.*;
 import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.user.User;
@@ -17,10 +18,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -86,6 +84,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             LOGGER.debug("add %s to workspace table", title);
             newWorkspace.getSqlWorkspaceUser().add(sqlWorkspaceUser);
             session.save(newWorkspace);
+            session.save(sqlWorkspaceUser);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -167,15 +166,85 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     }
 
     @Override
-    public void deleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
-        // TODO this should probably be implemented
-        LOGGER.warn("deleteEntityFromWorkspace not implemented");
+    public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            SqlWorkspace sqlWorkspace = (SqlWorkspace) workspace;
+            Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
+            for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
+                sqlWorkspaceVertex.setVisible(false);
+            }
+            sqlWorkspace.setSqlWorkspaceVertices(sqlWorkspaceVertices);
+            session.update(sqlWorkspace);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
-        // TODO this should probably be implemented
-        LOGGER.warn("updateEntityOnWorkspace not implemented");
+        if (!doesUserHaveWriteAccess(workspace, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
+        }
+
+        if (workspace == null) {
+            throw new LumifyResourceNotFoundException("Could not find workspace: " + workspace.getId(), workspace.getId());
+        }
+
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            List vertices = session.createCriteria(SqlVertex.class).add(Restrictions.eq("vertexId", vertexId)).list();
+            SqlVertex sqlVertex;
+            if (vertices.size() > 1) {
+                throw new LumifyException("more than one vertex was returned");
+            } else if (vertices.size() == 0) {
+                sqlVertex = new SqlVertex();
+                sqlVertex.setVertexId(vertexId.toString());
+                session.save(sqlVertex);
+            } else {
+                sqlVertex = (SqlVertex) vertices.get(0);
+            }
+
+            Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
+
+            if (sqlWorkspaceVertices.size() < 1) {
+                session.save(sqlVertex);
+                SqlWorkspaceVertex workspaceVertex = new SqlWorkspaceVertex();
+                workspaceVertex.setVisible(visible);
+                workspaceVertex.setGraphPositionX(graphPositionX);
+                workspaceVertex.setGraphPositionY(graphPositionY);
+                workspaceVertex.setSqlWorkspace((SqlWorkspace)workspace);
+                workspaceVertex.setSqlVertex(sqlVertex);
+                session.save(workspaceVertex);
+                session.update(workspace);
+                session.update(sqlVertex);
+            } else {
+                for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
+                    if (sqlWorkspaceVertex.getSqlVertex().getVertexId().equals(vertexId)) {
+                        sqlWorkspaceVertex.setGraphPositionX(graphPositionX);
+                        sqlWorkspaceVertex.setGraphPositionY(graphPositionY);
+                        sqlWorkspaceVertex.setVisible(visible);
+                        session.update(sqlWorkspaceVertex);
+                    }
+                }
+                session.update(sqlWorkspaceVertices);
+            }
+            transaction.commit();
+
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -229,11 +298,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
             Set<SqlWorkspaceUser> sqlWorkspaceUsers = sqlWorkspace.getSqlWorkspaceUser();
             for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
                 if (sqlWorkspaceUser.getUser().getUserId().equals(userId)) {
-                    if (WorkspaceAccess.NONE == workspaceAccess) {
-                        sqlWorkspaceUsers.remove(sqlWorkspaceUser);
-                    } else {
-                        sqlWorkspaceUser.setWorkspaceAccess(workspaceAccess);
-                    }
+                    sqlWorkspaceUser.setWorkspaceAccess(workspaceAccess);
                 }
             }
             ((SqlWorkspace) workspace).setSqlWorkspaceUser(sqlWorkspaceUsers);
