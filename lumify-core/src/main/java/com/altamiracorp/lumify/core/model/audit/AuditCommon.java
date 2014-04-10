@@ -82,7 +82,7 @@ public class AuditCommon extends ColumnFamily {
 
     public AuditCommon setUser(User user, Visibility visibility) {
         setUserId(user.getUserId(), visibility);
-        setUserName(user.getDisplayName(), visibility);
+        setUserName(user.getUserName(), visibility);
         setActorType(user.getUserType(), visibility);
         return this;
     }

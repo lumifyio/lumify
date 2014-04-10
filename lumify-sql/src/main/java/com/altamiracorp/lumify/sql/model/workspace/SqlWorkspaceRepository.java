@@ -16,7 +16,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.Set;
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SqlWorkspaceRepository implements WorkspaceRepository {
+public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private SessionFactory sessionFactory;
 
@@ -87,8 +86,10 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
             LOGGER.debug("add %s to workspace table", title);
             newWorkspace.getSqlWorkspaceUser().add(sqlWorkspaceUser);
+            ((SqlUser)user).getSqlWorkspaceUsers().add(sqlWorkspaceUser);
             session.save(newWorkspace);
             session.save(sqlWorkspaceUser);
+            session.update(user);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -136,6 +137,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
 
     @Override
     public List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user) {
+        Session session = sessionFactory.getCurrentSession();
         if (!doesUserHaveWriteAccess(workspace, user) && !doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have access to workspace " + workspace.getId(), user, workspace.getId());
         }
@@ -150,7 +152,7 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
                 withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
             }
         }
-
+        session.close();
         return withAccess;
     }
 
@@ -302,9 +304,9 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
         if (doesUserHaveWriteAccess(workspace, user)) {
             return true;
         }
-        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
+        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlUser) user).getSqlWorkspaceUsers();
         for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
-            if (workspaceUser.getUser().getUserId().equals(user.getUserId()) &&
+            if (workspaceUser.getWorkspace().getId().equals(workspace.getId()) &&
                     workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.READ.toString())) {
                 return true;
             }
@@ -366,11 +368,6 @@ public class SqlWorkspaceRepository implements WorkspaceRepository {
     @Override
     public boolean hasWritePermissions(Workspace workspace, User user) {
         return false;
-    }
-
-    @Override
-    public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
-        return null;
     }
 
     @Inject

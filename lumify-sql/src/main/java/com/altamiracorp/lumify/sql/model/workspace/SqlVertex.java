@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "vertex")
 public class SqlVertex {
+    public static final long serialVersionUID = 1L;
     @Id
     @Column(name = "vertex_id", unique = true)
     private String vertexId;

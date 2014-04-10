@@ -30,7 +30,7 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toSet;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
+public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private Graph graph;
     private String workspaceConceptId;
     private String workspaceToEntityRelationshipId;
@@ -367,48 +367,6 @@ public class SecureGraphWorkspaceRepository implements WorkspaceRepository {
                 return new SecureGraphWorkspace(WorkspaceLumifyProperties.TITLE.getPropertyValue(vertex), vertex.getId().toString());
             }
         };
-    }
-
-    @Override
-    public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
-        try {
-            JSONObject workspaceJson = new JSONObject();
-            workspaceJson.put("workspaceId", workspace.getId());
-            workspaceJson.put("title", workspace.getDisplayTitle());
-            workspaceJson.put("createdBy", getCreatorUserId(workspace, user));
-            workspaceJson.put("isSharedToUser", !getCreatorUserId(workspace, user).equals(user.getUserId()));
-            workspaceJson.put("isEditable", hasWritePermissions(workspace, user));
-
-            JSONArray usersJson = new JSONArray();
-            for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace, user)) {
-                String userId = workspaceUser.getUserId();
-                JSONObject userJson = new JSONObject();
-                userJson.put("userId", userId);
-                userJson.put("access", workspaceUser.getWorkspaceAccess().toString().toLowerCase());
-                usersJson.put(userJson);
-            }
-            workspaceJson.put("users", usersJson);
-
-            if (includeVertices) {
-                JSONObject entitiesJson = new JSONObject();
-                for (WorkspaceEntity workspaceEntity : findEntities(workspace, user)) {
-                    if (!workspaceEntity.isVisible()) {
-                        continue;
-                    }
-                    JSONObject workspaceEntityJson = new JSONObject();
-                    JSONObject graphPositionJson = new JSONObject();
-                    graphPositionJson.put("x", workspaceEntity.getGraphPositionX());
-                    graphPositionJson.put("y", workspaceEntity.getGraphPositionY());
-                    workspaceEntityJson.put("graphPosition", graphPositionJson);
-                    entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
-                }
-                workspaceJson.put("entities", entitiesJson);
-            }
-
-            return workspaceJson;
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Inject

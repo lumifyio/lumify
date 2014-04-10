@@ -55,7 +55,7 @@ public class SqlUser implements User {
         this.externalId = externalId;
     }
 
-    public String getDisplayName () {
+    public String getUserName() {
         return userName;
     }
 

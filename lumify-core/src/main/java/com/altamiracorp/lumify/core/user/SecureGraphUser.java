@@ -32,7 +32,7 @@ public class SecureGraphUser implements User {
         return modelUserContext;
     }
 
-    public String getDisplayName() {
+    public String getUserName() {
         return displayName;
     }
 

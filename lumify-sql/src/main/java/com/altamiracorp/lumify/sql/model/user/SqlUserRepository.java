@@ -202,7 +202,7 @@ public class SqlUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
@@ -223,6 +223,8 @@ public class SqlUserRepository extends UserRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
         return sqlUser;
     }

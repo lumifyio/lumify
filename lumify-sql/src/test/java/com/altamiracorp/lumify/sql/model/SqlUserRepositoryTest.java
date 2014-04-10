@@ -43,14 +43,14 @@ public class SqlUserRepositoryTest {
     public void testAddUser() throws Exception {
         SqlUser sqlUser1 = (SqlUser) sqlUserRepository.addUser("abc", "test user1", "", new String[0]);
         assertEquals("abc", sqlUser1.getExternalId());
-        assertEquals("test user1", sqlUser1.getDisplayName());
+        assertEquals("test user1", sqlUser1.getUserName());
         assertEquals("OFFLINE", sqlUser1.getUserStatus());
 
         SqlUser sqlUser2 = (SqlUser) sqlUserRepository.addUser("def", "test user2", null, new String[0]);
         assertNull(sqlUser2.getPasswordHash());
         assertNull(sqlUser2.getPasswordSalt());
         assertEquals("def", sqlUser2.getExternalId());
-        assertEquals("test user2", sqlUser2.getDisplayName());
+        assertEquals("test user2", sqlUser2.getUserName());
         assertEquals(2, sqlUser2.getId());
         assertEquals("OFFLINE", sqlUser2.getUserStatus());
 
@@ -59,7 +59,7 @@ public class SqlUserRepositoryTest {
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("ghi", sqlUser3.getExternalId());
-        assertEquals("test user3", sqlUser3.getDisplayName());
+        assertEquals("test user3", sqlUser3.getUserName());
         assertEquals(3, sqlUser3.getId());
         assertEquals("OFFLINE", sqlUser3.getUserStatus());
     }
@@ -78,7 +78,7 @@ public class SqlUserRepositoryTest {
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("12345", user.getExternalId());
-        assertEquals("test user", user.getDisplayName());
+        assertEquals("test user", user.getUserName());
         assertEquals(1, user.getId());
         assertEquals("OFFLINE", user.getUserStatus());
 
@@ -93,7 +93,7 @@ public class SqlUserRepositoryTest {
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
         assertEquals("12345", user.getExternalId());
-        assertEquals("test user", user.getDisplayName());
+        assertEquals("test user", user.getUserName());
         assertEquals(1, user.getId());
         assertEquals("OFFLINE", user.getUserStatus());
 
