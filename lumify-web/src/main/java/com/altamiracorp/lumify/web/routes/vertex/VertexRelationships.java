@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -12,8 +13,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 
 public class VertexRelationships extends BaseRequestHandler {
     private final Graph graph;
@@ -66,8 +65,8 @@ public class VertexRelationships extends BaseRequestHandler {
             }
 
             JSONObject relationshipJson = new JSONObject();
-            relationshipJson.put("relationship", toJson(edge, workspaceId));
-            relationshipJson.put("vertex", toJson(otherVertex, workspaceId));
+            relationshipJson.put("relationship", JsonSerializer.toJson(edge, workspaceId));
+            relationshipJson.put("vertex", JsonSerializer.toJson(otherVertex, workspaceId));
             relationshipsJson.put(relationshipJson);
         }
         json.put("totalReferences", totalReferences);

@@ -5,7 +5,7 @@ import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -70,7 +70,7 @@ public class GraphRelatedVertices extends BaseRequestHandler {
         for (Vertex vertex : vertices) {
             if (limitConceptIds.size() == 0 || !isLimited(limitConceptIds, vertex)) {
                 if (count < maxVerticesToReturn) {
-                    verticesJson.put(GraphUtil.toJson(vertex, workspaceId));
+                    verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
                 }
                 count++;
             }

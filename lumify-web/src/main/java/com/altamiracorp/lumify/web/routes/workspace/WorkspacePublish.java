@@ -22,10 +22,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
-import com.altamiracorp.lumify.core.util.JSONUtil;
-import com.altamiracorp.lumify.core.util.LumifyLogger;
-import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.core.util.*;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -344,7 +341,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     modelSession.alterColumnsVisibility(detectedObjectModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
 
                     Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
-                    JSONObject artifactVertexWithDetectedObjects = GraphUtil.toJsonVertex(artifactVertex, workspaceId);
+                    JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
                     artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemUser, authorizations, workspaceId));
 
                     Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);

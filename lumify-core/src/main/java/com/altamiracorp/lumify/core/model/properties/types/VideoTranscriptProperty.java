@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.properties;
+package com.altamiracorp.lumify.core.model.properties.types;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class VideoTranscriptProperty extends LumifyProperty<VideoTranscript, StreamingPropertyValue> {
-    protected VideoTranscriptProperty(String inKey) {
+    public VideoTranscriptProperty(String inKey) {
         super(inKey);
     }
 

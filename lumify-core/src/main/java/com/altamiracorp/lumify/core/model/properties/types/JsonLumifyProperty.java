@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.properties;
+package com.altamiracorp.lumify.core.model.properties.types;
 
 import org.json.JSONObject;
 

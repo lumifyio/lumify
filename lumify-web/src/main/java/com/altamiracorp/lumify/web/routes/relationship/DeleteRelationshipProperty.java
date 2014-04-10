@@ -8,7 +8,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -64,7 +64,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, property.getDisplayName(),
-                oldValue, null,  edge, "", "", user, lumifyVisibility.getVisibility());
+                oldValue, null, edge, "", "", user, lumifyVisibility.getVisibility());
         edge.removeProperty(propertyName);
         graph.flush();
 
@@ -72,7 +72,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         for (Property p : edge.getProperties()) {
             properties.add(p);
         }
-        JSONObject resultsJson = GraphUtil.toJsonProperties(properties, workspaceId);
+        JSONObject resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         Messaging.broadcastPropertyChange(edgeId, propertyName, null, resultsJson);
         respondWithJson(response, resultsJson);
     }

@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.web.routes.graph;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -56,7 +56,7 @@ public class GraphFindPath extends BaseRequestHandler {
 
         Iterable<Path> paths = graph.findPaths(sourceVertex, destVertex, hops, authorizations);
         for (Path path : paths) {
-            JSONArray verticesJson = GraphUtil.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId);
+            JSONArray verticesJson = JsonSerializer.toJson(graph.getVerticesInOrder(path, authorizations), workspaceId);
             pathResults.put(verticesJson);
         }
 

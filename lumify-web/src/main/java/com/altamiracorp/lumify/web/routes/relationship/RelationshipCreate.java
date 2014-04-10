@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -18,14 +19,11 @@ import com.google.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
-
 public class RelationshipCreate extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RelationshipCreate.class);
 
     private final Graph graph;
     private final AuditRepository auditRepository;
-    private final OntologyRepository ontologyRepository;
     private final VisibilityTranslator visibilityTranslator;
 
     @Inject
@@ -39,7 +37,6 @@ public class RelationshipCreate extends BaseRequestHandler {
         super(userRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
-        this.ontologyRepository = ontologyRepository;
         this.visibilityTranslator = visibilityTranslator;
     }
 
@@ -75,9 +72,9 @@ public class RelationshipCreate extends BaseRequestHandler {
         graph.flush();
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Statement created:\n" + toJson(edge, workspaceId).toString(2));
+            LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId).toString(2));
         }
 
-        respondWithJson(response, toJson(edge, workspaceId));
+        respondWithJson(response, JsonSerializer.toJson(edge, workspaceId));
     }
 }

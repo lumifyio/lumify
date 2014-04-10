@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -95,7 +96,16 @@ public class VertexSetProperty extends BaseRequestHandler {
         }
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(graphVertex, propertyName, value, visibilitySource, workspaceId, this.visibilityTranslator, justificationText, sourceJson);
+        GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
+                graphVertex,
+                propertyName,
+                value,
+                visibilitySource,
+                workspaceId,
+                this.visibilityTranslator,
+                justificationText,
+                sourceJson,
+                user);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
         graphVertex = setPropertyResult.elementMutation.save();
         graph.flush();
@@ -104,7 +114,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
 
-        JSONObject result = GraphUtil.toJson(graphVertex, workspaceId);
+        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
         respondWithJson(response, result);
     }
