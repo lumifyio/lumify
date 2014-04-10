@@ -62,7 +62,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         LOGGER.info("changing edge (%s) visibility source to %s", graphEdge.getId().toString(), visibilitySource);
 
-        GraphUtil.updateElementVisibilitySource(this.graph, visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId);
+        GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId);
 
         this.graph.flush();
 

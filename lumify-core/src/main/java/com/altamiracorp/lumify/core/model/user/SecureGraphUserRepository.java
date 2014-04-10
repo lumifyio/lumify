@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SecureGraphUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphUserRepository.class);
@@ -166,10 +167,8 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public User setStatus(String userId, UserStatus status) {
         User user = findById(userId);
+        checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        if (user == null) {
-            throw new RuntimeException("Could not find user: " + userId);
-        }
         STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility());
         graph.flush();
         return user;

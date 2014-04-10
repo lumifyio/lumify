@@ -25,7 +25,6 @@ import com.altamiracorp.securegraph.type.GeoPoint;
  */
 public class EntityLumifyProperties {
     public static final IdentityLumifyProperty<GeoPoint> GEO_LOCATION = new IdentityLumifyProperty<GeoPoint>("http://lumify.io/dev#geolocation");
-    public static final TextLumifyProperty GEO_LOCATION_DESCRIPTION = TextLumifyProperty.all("http://lumify.io/dev#geoLocationDescription");
     public static final TextLumifyProperty SOURCE = TextLumifyProperty.all("http://lumify.io#source");
 
     private EntityLumifyProperties() {

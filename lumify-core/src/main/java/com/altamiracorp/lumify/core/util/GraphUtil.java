@@ -11,7 +11,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
-import com.altamiracorp.securegraph.type.GeoPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,9 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION;
-import static com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties.GEO_LOCATION_DESCRIPTION;
 
 public class GraphUtil {
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
@@ -80,7 +76,7 @@ public class GraphUtil {
         }
     }
 
-    public static void updateElementVisibilitySource(Graph graph, VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
+    public static void updateElementVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
         visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
@@ -114,7 +110,7 @@ public class GraphUtil {
         } else {
             propertyMetadata = new HashMap<String, Object>();
         }
-        ElementMutation<T> elementMutation = element.prepareMutation();
+        ExistingElementMutation<T> elementMutation = element.prepareMutation();
 
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(propertyMetadata);
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
@@ -138,13 +134,7 @@ public class GraphUtil {
             propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 
-        if (GEO_LOCATION.getKey().equals(propertyName)) {
-            GeoPoint geoPoint = (GeoPoint) value;
-            GEO_LOCATION.setProperty(elementMutation, geoPoint, propertyMetadata, lumifyVisibility.getVisibility());
-            GEO_LOCATION_DESCRIPTION.setProperty(elementMutation, "", propertyMetadata, lumifyVisibility.getVisibility());
-        } else {
-            elementMutation.setProperty(propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
-        }
+        elementMutation.setProperty(propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
     }
 
