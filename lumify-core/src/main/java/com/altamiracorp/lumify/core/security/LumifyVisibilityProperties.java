@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.core.security;
 
-import com.altamiracorp.lumify.core.model.properties.JsonLumifyProperty;
-import com.altamiracorp.lumify.core.model.properties.TextLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.JsonLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.TextLumifyProperty;
 
 // TODO convert to property types. See com.altamiracorp.lumify.core.model.properties.LumifyProperties
 public class LumifyVisibilityProperties {

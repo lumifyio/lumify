@@ -1,9 +1,9 @@
 package com.altamiracorp.lumify.web.routes.artifact;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.properties.IdentityLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.IdentityLumifyProperty;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.lumify.core.model.properties.StreamingLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.StreamingLumifyProperty;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;

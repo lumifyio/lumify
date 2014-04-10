@@ -1,8 +1,8 @@
 package com.altamiracorp.lumify.core.model.workspace;
 
-import com.altamiracorp.lumify.core.model.properties.BooleanLumifyProperty;
-import com.altamiracorp.lumify.core.model.properties.IntegerLumifyProperty;
-import com.altamiracorp.lumify.core.model.properties.TextLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.BooleanLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.IntegerLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.TextLumifyProperty;
 import com.altamiracorp.securegraph.TextIndexHint;
 
 public class WorkspaceLumifyProperties {

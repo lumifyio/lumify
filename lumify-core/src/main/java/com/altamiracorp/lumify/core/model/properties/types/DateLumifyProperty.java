@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.altamiracorp.lumify.core.model.properties;
+package com.altamiracorp.lumify.core.model.properties.types;
 
 import java.util.Date;
 

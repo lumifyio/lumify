@@ -16,6 +16,9 @@
 
 package com.altamiracorp.lumify.core.model.properties;
 
+import com.altamiracorp.lumify.core.model.properties.types.DateLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.StreamingLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.TextLumifyProperty;
 import com.altamiracorp.securegraph.TextIndexHint;
 
 /**

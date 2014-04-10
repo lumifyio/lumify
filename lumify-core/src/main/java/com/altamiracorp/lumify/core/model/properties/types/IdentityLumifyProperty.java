@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.altamiracorp.lumify.core.model.properties;
+package com.altamiracorp.lumify.core.model.properties.types;
 
 /**
  * A LumifyProperty whose raw and SecureGraph types are the same.

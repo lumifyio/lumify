@@ -15,6 +15,10 @@
  */
 package com.altamiracorp.lumify.core.model.properties;
 
+import com.altamiracorp.lumify.core.model.properties.types.IdentityLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.StreamingLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.TextLumifyProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,12 +1,8 @@
 package com.altamiracorp.lumify.core.model.user;
 
-import com.altamiracorp.lumify.core.model.properties.ByteArrayLumifyProperty;
-import com.altamiracorp.lumify.core.model.properties.TextLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.ByteArrayLumifyProperty;
+import com.altamiracorp.lumify.core.model.properties.types.TextLumifyProperty;
 import com.altamiracorp.securegraph.TextIndexHint;
-import com.altamiracorp.securegraph.Vertex;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public final class UserLumifyProperties {
     public static final TextLumifyProperty USERNAME = new TextLumifyProperty("http://lumify.io/user/username", TextIndexHint.EXACT_MATCH);
