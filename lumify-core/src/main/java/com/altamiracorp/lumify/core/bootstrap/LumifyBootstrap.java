@@ -112,7 +112,6 @@ public class LumifyBootstrap extends AbstractModule {
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
-        bind(OntologyRepository.class).to(SecureGraphOntologyRepository.class).in(Scopes.SINGLETON);
 
         bind(CuratorFramework.class)
                 .toProvider(new CuratorFrameworkProvider(configuration))
@@ -144,6 +143,9 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(AuthorizationRepository.class)
                 .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(OntologyRepository.class)
+                .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

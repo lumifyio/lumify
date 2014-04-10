@@ -35,6 +35,8 @@ public final class Configuration {
     public static final String USER_REPOSITORY = "user-repository";
     public static final String WORKSPACE_REPOSITORY = "workspace-repository";
     public static final String AUTHORIZATION_REPOSITORY = "authorization-repository";
+    public static final String ONTOLOGY_REPOSITORY = "ontology-repository";
+    public static final String AUDIT_REPOSITORY = "audit-repository";
 
     private Map<String, String> config = new HashMap<String, String>();
 
