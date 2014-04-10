@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.lumify.core.model.user.UserLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
@@ -10,7 +9,6 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,18 +32,18 @@ public class WorkspaceNew extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User authUser = getUser(request);
-        Vertex user = getUserRepository().findByUserName(authUser.getUsername());
+        User user = getUserRepository().findByUserName(authUser.getUserName());
 
         String title = getOptionalParameter(request, "title");
 
         Workspace workspace;
         if (title == null) {
-            title = DEFAULT_WORKSPACE_TITLE + " - " + UserLumifyProperties.USERNAME.getPropertyValue(user);
+            title = DEFAULT_WORKSPACE_TITLE + " - " + user.getUserName();
         }
         workspace = workspaceRepository.add(title, authUser);
 
-        LOGGER.info("Created workspace: %s, title: %s", workspace.getId(), workspace.getTitle());
+        LOGGER.info("Created workspace: %s, title: %s", workspace.getId(), workspace.getDisplayTitle());
 
-        respondWithJson(response, workspace.toJson(true));
+        respondWithJson(response, workspaceRepository.toJson(workspace, user, true));
     }
 }

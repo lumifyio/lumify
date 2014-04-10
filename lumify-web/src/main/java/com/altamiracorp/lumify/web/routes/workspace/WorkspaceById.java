@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
+import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -40,7 +41,7 @@ public class WorkspaceById extends BaseRequestHandler {
         } else {
             LOGGER.debug("Successfully found workspace");
             request.getSession().setAttribute("activeWorkspace", workspaceId);
-            final JSONObject resultJSON = workspace.toJson(true);
+            final JSONObject resultJSON = workspaceRepository.toJson(workspace, authUser, true);
             respondWithJson(response, resultJSON);
         }
 

@@ -26,11 +26,11 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.SecureGraphOntologyRepository;
 import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
-import com.altamiracorp.lumify.core.user.DefaultUserProvider;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.version.VersionService;
@@ -41,6 +41,7 @@ import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
+import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -107,12 +108,9 @@ public class LumifyBootstrap extends AbstractModule {
 
         MetricsManager metricsManager = new JmxMetricsManager();
 
-        bind(AuthorizationRepository.class).to(AccumuloAuthorizationRepository.class);
         bind(Configuration.class).toInstance(configuration);
         bind(MetricsManager.class).toInstance(metricsManager);
         bind(VersionServiceMXBean.class).to(VersionService.class);
-        bind(OntologyRepository.class).to(SecureGraphOntologyRepository.class).in(Scopes.SINGLETON);
-        bind(UserProvider.class).toInstance(new DefaultUserProvider()); // TODO read this from configuration
 
         bind(CuratorFramework.class)
                 .toProvider(new CuratorFrameworkProvider(configuration))
@@ -132,6 +130,18 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
         bind(VisibilityTranslator.class)
                 .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
+                .in(Scopes.SINGLETON);
+        bind(UserRepository.class)
+                .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(WorkspaceRepository.class)
+                .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(AuthorizationRepository.class)
+                .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(OntologyRepository.class)
+                .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
 
         injectProviders();

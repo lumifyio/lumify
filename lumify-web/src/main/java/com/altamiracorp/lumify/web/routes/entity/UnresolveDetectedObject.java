@@ -8,9 +8,9 @@ import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -18,6 +18,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.workspace.WorkspaceHelper;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -31,7 +32,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
     private final Graph graph;
     private final DetectedObjectRepository detectedObjectRepository;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -41,13 +42,12 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final DetectedObjectRepository detectedObjectRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final UserProvider userProvider,
             final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
         this.visibilityTranslator = visibilityTranslator;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
@@ -58,7 +58,7 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKey, modelUserContext);
         DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKey);
@@ -69,16 +69,25 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
         Object resolvedId = detectedObjectModel.getMetadata().getResolvedId();
 
         Vertex resolvedVertex = graph.getVertex(resolvedId, authorizations);
+        Edge edge = graph.getEdge(detectedObjectRowKey.getEdgeId(), authorizations);
 
-        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
-        if (sandboxStatus == SandboxStatus.PUBLIC) {
+        SandboxStatus vertexSandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
+        SandboxStatus edgeSandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC && edgeSandboxStatus == SandboxStatus.PUBLIC) {
             LOGGER.warn("Can not unresolve a public entity");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             chain.next(request, response);
             return;
         }
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        JSONObject visibilityJson;
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
+            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(edge);
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
+        } else {
+            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(resolvedVertex);
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
+        }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         JSONObject result = workspaceHelper.unresolveDetectedObject(resolvedVertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility,

@@ -1,8 +1,10 @@
 
-define([], function() {
+define(['util/withFormFieldErrors'], function(withFormFieldErrors) {
     'use strict';
 
     function withDropdown() {
+
+        withFormFieldErrors.call(this);
 
         this.defaultAttrs({
             canceButtonSelector: '.btn.cancel'
@@ -51,41 +53,6 @@ define([], function() {
 
         this.clearLoading = function() {
             this.$node.find('.btn:disabled').removeClass('loading').removeAttr('disabled');
-        };
-
-        this.markFieldErrors = function(error) {
-            var self = this,
-                messages = [],
-                cls = 'control-group error';
-
-            this.$node.find('.control-group.error')
-                .removeClass(cls);
-
-            if (!error) {
-                return;
-            }
-
-            try {
-                if (_.isString(error)) {
-                    error = JSON.parse(error);
-                }
-            } catch(e) { }
-
-            if (_.isObject(error)) {
-                _.keys(error).forEach(function(fieldName) {
-                    switch(fieldName) {
-                        case 'visibilitySource':
-                            self.$node.find('.visibility')
-                                .addClass(cls);
-                            messages.push(error[fieldName]);
-                            break;
-                    }
-                });
-            } else {
-                messages.push(error || 'Unknown error');
-            }
-
-            return messages;
         };
 
         this.manualOpen = function() {

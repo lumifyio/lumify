@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectModel;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
@@ -18,7 +19,6 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.util.IterableUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONObject;
@@ -108,7 +108,6 @@ public class WorkspaceHelper {
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
 
         modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
-        modelSession.flush();
 
         if (analyzedDetectedObject == null) {
             result.put("deleteTag", true);
@@ -129,9 +128,8 @@ public class WorkspaceHelper {
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
-        while (workspaceToVertex.hasNext()) {
-            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
+        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
+            graph.removeEdge(edge, systemAuthorization);
         }
 
         JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
@@ -158,6 +156,22 @@ public class WorkspaceHelper {
 
     public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
+
+        Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
+        while (rowKeys.hasNext()) {
+            Property rowKeyProperty = rowKeys.next();
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+            if (termMentionModel == null) {
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                if (detectedObjectModel == null) {
+                    continue;
+                } else {
+                    modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+                }
+            } else if (termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
+                modelSession.deleteRow(termMentionModel.getTableName(), termMentionModel.getRowKey());
+            }
+        }
 
         Messaging.broadcastEdgeDeletion(edge.getId().toString());
 

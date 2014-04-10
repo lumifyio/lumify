@@ -383,6 +383,9 @@ define([
 
         this.classesForVertex = function(vertex) {
             if (vertex.properties['http://lumify.io#glyphIcon']) return 'hasCustomGlyph';
+            if (~['video', 'image'].indexOf(vertex.concept.displayType)) {
+                return vertex.concept.displayType;
+            }
 
             return '';
         };
@@ -434,9 +437,10 @@ define([
                 cy.$(':selected').unselect();
 
                 var vertices = data.vertices,
-                    edges = data.edges;
+                    edges = data.edges,
+                    cyNodes;
                 if (vertices.length || edges.length) {
-                    cy.$( 
+                    cyNodes = cy.$( 
                         vertices.concat(edges).map(function(v) {
                             return '#' + toCyId(v);
                         }).join(',')
@@ -446,6 +450,10 @@ define([
                 setTimeout(function() {
                     this.ignoreCySelectionEvents = false;
                 }.bind(this), SELECTION_THROTTLE * 1.5);
+
+                if (cyNodes && cyNodes.length) {
+                    this.nodesToFitAfterGraphPadding = cyNodes;
+                }
             });
         };
 
@@ -723,7 +731,9 @@ define([
         };
 
         this.onGraphPaddingUpdated = function(e, data) {
-            var border = 20;
+            var self = this,
+                border = 20;
+
             this.graphPaddingRight = data.padding.r;
 
             var padding = $.extend({}, data.padding);
@@ -733,6 +743,15 @@ define([
             padding.t += border;
             padding.b += border;
             this.graphPadding = padding;
+
+            if (this.nodesToFitAfterGraphPadding) {
+                this.cytoscapeReady().done(function(cy) {
+                    cy.zoomOutToFit(self.nodesToFitAfterGraphPadding, {
+                        padding: self.paddingForZoomOut()
+                    });
+                    self.nodesToFitAfterGraphPadding = null;
+                });
+            }
         };
 
         this.onContextMenuLayout = function(layout, opts) {

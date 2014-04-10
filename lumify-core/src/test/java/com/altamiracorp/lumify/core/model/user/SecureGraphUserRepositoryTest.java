@@ -3,8 +3,7 @@ package com.altamiracorp.lumify.core.model.user;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.lumify.core.user.SecureGraphUser;
 import com.altamiracorp.securegraph.id.UUIDIdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;
@@ -22,9 +21,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserRepositoryTest {
-    private Graph graph;
-
+public class SecureGraphUserRepositoryTest {
     @Mock
     private OntologyRepository ontologyRepository;
 
@@ -32,25 +29,28 @@ public class UserRepositoryTest {
     private Concept userConcept;
 
     private AuthorizationRepository authorizationRepository;
-    private UserRepository userRepository;
+    private SecureGraphUserRepository secureGraphUserRepository;
 
     @Before
     public void setup() {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
-        graph = new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING.toString());
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
         when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
-        userRepository = new UserRepository(graph, ontologyRepository, authorizationRepository);
+        secureGraphUserRepository = new SecureGraphUserRepository();
+        secureGraphUserRepository.setAuthorizationRepository(authorizationRepository);
+        secureGraphUserRepository.setOntologyRepository(ontologyRepository);
+        secureGraphUserRepository.setGraph(new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())));
+        secureGraphUserRepository.init(config.getConfig());
     }
 
     @Test
     public void testAddUser() {
-        userRepository.addUser("testUser", "testPassword", new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", new String[]{"auth1", "auth2"});
 
-        Vertex userVertex = userRepository.findByUserName("testUser");
-        assertEquals("testUser", UserLumifyProperties.USERNAME.getPropertyValue(userVertex));
+        SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUserName("testUser");
+        assertEquals("testUser", secureGraphUser.getUserName());
     }
 }

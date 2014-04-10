@@ -12,21 +12,17 @@ import com.google.inject.Inject;
 import org.apache.accumulo.core.Constants;
 import org.apache.accumulo.core.security.Authorizations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
-    public static final String LOCK_NAME = "AuthorizationRepository";
-    private final Graph graph;
-    private final LockRepository lockRepository;
+    public static final String LOCK_NAME = "AccumuloAuthorizationRepository";
+    private Graph graph;
+    private LockRepository lockRepository;
 
-    @Inject
-    public AccumuloAuthorizationRepository(final Graph graph, final LockRepository lockRepository) {
-        this.graph = graph;
-        this.lockRepository = lockRepository;
+    @Override
+    public void init(Map config) {
+
     }
 
     public void addAuthorizationToGraph(final String auth) {
@@ -123,4 +119,10 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     public com.altamiracorp.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
         return new AccumuloAuthorizations(Iterables.toArray(authorizationsSet, String.class));
     }
+
+    @Inject
+    public void setGraph (Graph graph) { this.graph = graph; }
+
+    @Inject
+    public void setLockRepository (LockRepository lockRepository) { this.lockRepository = lockRepository; }
 }

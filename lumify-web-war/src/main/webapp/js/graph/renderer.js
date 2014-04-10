@@ -41,7 +41,7 @@ define([
      * Scale image to the size of the node
      */
 	Renderer.prototype.drawInscribedImage = function(context, img, node) {
-		var r = this,
+		var self = this,
             zoom = this.data.cy._private.zoom,
             nodeX = node._private.position.x,
             nodeY = node._private.position.y,
@@ -66,7 +66,7 @@ define([
 
         // Draw outline and clip to it based on node shape css
         if (node._private.style.shape.value !== 'none') {
-            var shapeName = r.getNodeShape(node),
+            var shapeName = self.getNodeShape(node),
                 shape = nodeShapes[shapeName];
 
             if (shape && shape.drawBackground) {

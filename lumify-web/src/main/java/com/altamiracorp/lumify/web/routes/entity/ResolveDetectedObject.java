@@ -82,7 +82,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUserName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;
@@ -96,7 +96,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         ElementMutation<Vertex> resolvedVertexMutation;
 
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
@@ -107,24 +107,23 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
             resolvedVertex = resolvedVertexMutation.save();
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
+            GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(resolvedVertexMutation, visibilityJson, lumifyVisibility.getVisibility());
+            resolvedVertex = resolvedVertexMutation.save();
+
+            graph.flush();
+
+            workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), null, null, null, user);
         } else {
-            resolvedVertexMutation = graph.getVertex(graphVertexId, authorizations).prepareMutation();
+            resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+            resolvedVertexMutation = resolvedVertex.prepareMutation();
         }
-
-        GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
-
-        resolvedVertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-        resolvedVertex = resolvedVertexMutation.save();
-
-        graph.flush();
-
-        workspaceRepository.updateEntityOnWorkspace(workspace, resolvedVertex.getId(), false, null, null, user);
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
-        edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, lumifyVisibility.getVisibility());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
@@ -137,7 +136,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
 
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), metadata, lumifyVisibility.getVisibility()).save();
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility()).save();
         resolvedVertexMutation.save();
 
         graph.flush();

@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphOntologyRepository.class);
-    private final Graph graph;
+    private Graph graph;
     private Authorizations authorizations;
     private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
@@ -54,13 +54,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
+    private AuthorizationRepository authorizationRepository;
 
-    @Inject
-    public SecureGraphOntologyRepository(
-            Graph graph,
-            AuthorizationRepository authorizationRepository) {
-        this.graph = graph;
-
+    @Override
+    public void init (Map config) {
         authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<String>();
@@ -347,13 +344,13 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     protected void findOrAddEdge(Vertex fromVertex, final Vertex toVertex, String edgeLabel) {
-        Iterator<Vertex> matchingEdges = new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
+        List<Vertex> matchingEdges = toList(new FilterIterable<Vertex>(fromVertex.getVertices(Direction.OUT, edgeLabel, getAuthorizations())) {
             @Override
             protected boolean isIncluded(Vertex vertex) {
                 return vertex.getId().equals(toVertex.getId());
             }
-        }.iterator();
-        if (matchingEdges.hasNext()) {
+        });
+        if (matchingEdges.size() > 0) {
             return;
         }
         fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
@@ -436,4 +433,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Authorizations getAuthorizations() {
         return authorizations;
     }
+
+    @Inject
+    public void setGraph (Graph graph) { this.graph = graph; }
+    
+    @Inject
+    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) {this.authorizationRepository = authorizationRepository; }
 }

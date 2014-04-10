@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -41,7 +42,8 @@ public class WorkspaceVertices extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
-        final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
+        Workspace workspace = workspaceRepository.findById(workspaceId, user);
+        final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         Iterable<Object> vertexIds = new LookAheadIterable<WorkspaceEntity, Object>() {
             @Override
             protected boolean isIncluded(WorkspaceEntity workspaceEntity, Object entityVertexId) {

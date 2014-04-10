@@ -53,7 +53,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         }
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUserName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;
@@ -66,7 +66,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
         this.graph.flush();
 
         JSONObject json = GraphUtil.toJson(graphEdge, workspaceId);
-        Messaging.broadcastPropertyChange(graphEdgeId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilitySource, json);
+        Messaging.broadcastPropertyChange(graphEdgeId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilitySource, json);
         respondWithJson(response, json);
     }
 }

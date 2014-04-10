@@ -74,7 +74,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUserName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;
@@ -101,6 +101,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         graph.flush();
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
+
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
 
         JSONObject result = GraphUtil.toJson(graphVertex, workspaceId);

@@ -90,7 +90,7 @@ define([
                     self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
                 ).done(function(properties) {
                     var propertiesList = [{
-                        title: '_visibilityJson',
+                        title: 'http://lumify.io#visibilityJson',
                         displayName: 'Visibility'
                     }];
 
@@ -107,8 +107,8 @@ define([
                     
                     propertiesList.sort(function(pa, pb) {
                         var a = pa.title, b = pb.title;
-                        if (a === '_visibilityJson') return -1;
-                        if (b === '_visibilityJson') return 1;
+                        if (a === 'http://lumify.io#visibilityJson') return -1;
+                        if (b === 'http://lumify.io#visibilityJson') return 1;
                         if (a === 'startDate' && b === 'endDate') return -1;
                         if (b === 'startDate' && a === 'endDate') return 1;
                         if (a === b) return 0;
@@ -161,7 +161,7 @@ define([
 
             var vertexProperty = this.attr.data.properties[propertyName],
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
-                visibilityValue = vertexProperty && vertexProperty._visibilityJson,
+                visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
                 isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
 
@@ -183,7 +183,7 @@ define([
                 .toggle(
                     (!!isExistingProperty) && 
                     sandboxStatus !== 'PUBLIC' &&
-                    propertyName !== '_visibilityJson'
+                    propertyName !== 'http://lumify.io#visibilityJson'
                 );
 
             var button = this.select('saveButtonSelector').text(isExistingProperty ? 'Update' : 'Add');
@@ -224,7 +224,7 @@ define([
                         self.checkValid();
                         self.manualOpen();
                     });
-                } else if (propertyName === '_visibilityJson') {
+                } else if (propertyName === 'http://lumify.io#visibilityJson') {
                     require([
                         'configuration/plugins/visibility/visibilityEditor'
                     ], function(Visibility) {

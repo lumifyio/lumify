@@ -16,7 +16,6 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 
 import static org.elasticsearch.common.base.Preconditions.checkNotNull;
 
@@ -38,10 +36,9 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceUndo.class);
     private final TermMentionRepository termMentionRepository;
     private final DetectedObjectRepository detectedObjectRepository;
-    private final UserRepository userRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -50,7 +47,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
                          final Configuration configuration,
                          final Graph graph,
                          final VisibilityTranslator visibilityTranslator,
-                         final UserProvider userProvider,
                          final UserRepository userRepository,
                          final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
@@ -58,7 +54,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.userProvider = userProvider;
         this.workspaceHelper = workspaceHelper;
         this.userRepository = userRepository;
     }
@@ -142,16 +137,14 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
     private JSONArray undoVertex(Vertex vertex, String workspaceId, Authorizations authorizations, User user) {
         JSONArray unresolved = new JSONArray();
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, workspaceId, LumifyVisibility.VISIBILITY_STRING);
-        String visibilityJsonString = (String) vertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), 0);
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJsonString);
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId, LumifyVisibility.VISIBILITY_STRING);
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
+        visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
-        Iterator<Property> rowKeys = vertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
-        while (rowKeys.hasNext()) {
-            Property rowKeyProperty = rowKeys.next();
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+        for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
             if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userProvider.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
                 } else {
@@ -174,9 +167,8 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
         Authorizations systemAuthorization = userRepository.getAuthorizations(user, WorkspaceRepository.VISIBILITY_STRING, workspaceId);
         Vertex workspaceVertex = graph.getVertex(workspaceId, systemAuthorization);
-        Iterator<Edge> workspaceToVertex = workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization).iterator();
-        while (workspaceToVertex.hasNext()) {
-            graph.removeEdge(workspaceToVertex.next(), systemAuthorization);
+        for (Edge edge : workspaceVertex.getEdges(vertex, Direction.BOTH, systemAuthorization)) {
+            graph.removeEdge(edge, systemAuthorization);
         }
 
         graph.removeVertex(vertex, authorizations);

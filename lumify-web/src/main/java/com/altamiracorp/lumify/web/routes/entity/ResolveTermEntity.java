@@ -35,7 +35,6 @@ import java.util.Map;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.properties.LumifyProperties.TITLE;
-import static com.altamiracorp.lumify.core.util.CollectionUtil.trySingle;
 
 public class ResolveTermEntity extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveTermEntity.class);
@@ -84,7 +83,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUsername());
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUserName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;
@@ -98,51 +97,50 @@ public class ResolveTermEntity extends BaseRequestHandler {
         JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementMutation<Vertex> vertexMutation;
+        Vertex vertex;
         if (graphVertexId != null) {
-            vertexMutation = graph.getVertex(id, authorizations).prepareMutation();
+            vertex = graph.getVertex(id, authorizations);
+            vertexMutation = vertex.prepareMutation();
         } else {
             vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
+            GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
+
+            Map<String, Object> metadata = new HashMap<String, Object>();
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, lumifyVisibility.getVisibility());
+
+            CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
+            TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
+
+            vertex = vertexMutation.save();
+
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
+
+            this.graph.flush();
+
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, null, user);
         }
 
-        GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
-
-        Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString());
-
-        vertexMutation.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
-
-        CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
-        TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
-
-        Vertex createdVertex = vertexMutation.save();
-
-        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, createdVertex, "", user, lumifyVisibility.getVisibility());
-
-        this.graph.flush();
-
-        workspaceRepository.updateEntityOnWorkspace(workspace, createdVertex.getId(), false, null, null, user);
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
-        Edge edge = trySingle(artifactVertex.getEdges(createdVertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), authorizations));
-        if (edge == null) {
-            edge = graph.addEdge(artifactVertex, createdVertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
-            edge.setProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString(), visibilityJson.toString(), lumifyVisibility.getVisibility());
+        Edge edge = graph.addEdge(artifactVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, lumifyVisibility.getVisibility());
 
-            // TODO: replace second "" when we implement commenting on ui
-            auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, createdVertex, edge, "", "", user, lumifyVisibility.getVisibility());
-        }
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
         String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId,propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
                 .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
                 .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
-                .setVertexId(createdVertex.getId().toString(), lumifyVisibility.getVisibility())
+                .setVertexId(vertex.getId().toString(), lumifyVisibility.getVisibility())
                 .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), lumifyVisibility.getVisibility());
         vertexMutation.save();
 
         this.graph.flush();

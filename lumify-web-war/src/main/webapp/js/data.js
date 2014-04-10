@@ -173,10 +173,18 @@ define([
         };
 
         this.onSocketMessage = function(evt, message) {
-            var self = this;
+            var self = this,
+                updated = null;
+
             switch (message.type) {
                 case 'propertiesChange':
-                    self.trigger('updateVertices', { vertices: [message.data.vertex]});
+                    // TODO: create edgesUpdated events
+                    if (!message.data.vertex.sourceVertexId) {
+                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
+                        if (updated) {
+                            self.trigger('verticesUpdated', { vertices: [updated] });
+                        }
+                    }
                     break;
                 case 'edgeDeletion':
                     if (_.findWhere(self.selectedEdges, { id: message.data.edgeId })) {
@@ -185,7 +193,10 @@ define([
                     self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
                     break;
                 case 'detectedObjectChange':
-                    self.trigger('updateVertices', { vertices: [message.data.artifactVertex]});
+                    updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
+                    if (updated) {
+                        self.trigger('verticesUpdated', { vertices: [updated] });
+                    }
                     break;
             }
         };
@@ -473,7 +484,6 @@ define([
                     vertices = self.vertices(vertices);
 
                     vertices.forEach(function(vertex) {
-                        vertex.properties._refreshedFromServer = true;
                         if (passedWorkspace[vertex.id]) {
                             vertex.workspace = $.extend(vertex.workspace, passedWorkspace[vertex.id]);
                         }
@@ -829,7 +839,6 @@ define([
                                 vertex.workspace = workspaceData;
 
                                 var cache = self.updateCacheWithVertex(vertex);
-                                cache.properties._refreshedFromServer = true;
                                 self.workspaceVertices[vertex.id] = cache.workspace;
 
                                 workspace.data.verticesById[vertex.id] = cache;

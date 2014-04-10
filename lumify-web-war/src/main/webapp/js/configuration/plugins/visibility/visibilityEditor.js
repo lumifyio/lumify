@@ -17,7 +17,8 @@ define([
 
         this.after('initialize', function() {
             this.$node.html(formTemplate({
-                value: $.trim(_.isUndefined(this.attr.value) ? '' : this.attr.value)
+                value: $.trim(_.isUndefined(this.attr.value) ? '' : this.attr.value),
+                readonly: this.attr.readonly
             }));
 
             this.on('visibilityclear', this.onClear);

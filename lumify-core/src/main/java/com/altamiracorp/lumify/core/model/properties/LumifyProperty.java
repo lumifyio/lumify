@@ -100,10 +100,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param metadata   the property metadata
      * @param visibility the property visibility
      */
-    public final void setProperty(final ElementMutation<?> mutation,
-                                  final TRaw value,
-                                  final Map<String, Object> metadata,
-                                  final Visibility visibility) {
+    public final void setProperty(final ElementMutation<?> mutation, final TRaw value, final Map<String, Object> metadata, final Visibility visibility) {
         mutation.setProperty(key, wrap(value), metadata, visibility);
     }
 
@@ -126,10 +123,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param metadata   the property metadata
      * @param visibility the property visibility
      */
-    public final void setProperty(final Element element,
-                                  final TRaw value,
-                                  final Map<String, Object> metadata,
-                                  final Visibility visibility) {
+    public final void setProperty(final Element element, final TRaw value, final Map<String, Object> metadata, final Visibility visibility) {
         element.setProperty(key, wrap(value), metadata, visibility);
     }
 
@@ -141,10 +135,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param value      the new property value
      * @param visibility the property visibility
      */
-    public final void addPropertyValue(final ElementMutation<?> mutation,
-                                       final String multiKey,
-                                       final TRaw value,
-                                       final Visibility visibility) {
+    public final void addPropertyValue(final ElementMutation<?> mutation, final String multiKey, final TRaw value, final Visibility visibility) {
         mutation.addPropertyValue(multiKey, key, wrap(value), visibility);
     }
 
@@ -190,6 +181,14 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     public boolean hasProperty(Element element, String propertyKey) {
         return element.getProperty(propertyKey, getKey()) != null;
+    }
+
+    public TRaw getMetadataValue(Map<String, Object> metadata) {
+        return unwrap(metadata.get(key));
+    }
+
+    public void setMetadata(Map<String, Object> metadata, TRaw value) {
+        metadata.put(key, wrap(value));
     }
 
     /**

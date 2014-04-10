@@ -14,7 +14,7 @@
                 data-date="<%= absoluteDate %>"><%= relativeDate %></span>
        </span>
        <span class="audit-to">
-         <% if (to && audit.propertyAudit.propertyName === '_visibilityJson') { %>
+         <% if (to && audit.propertyAudit.propertyName === 'http://lumify.io#visibilityJson') { %>
            <span class="visibility" data-visibility="<%= to %>"></span>
          <% } else { %>
            <%= to %>
@@ -48,11 +48,10 @@
        <span class="audit-message">
         <%= audit.data.action %>
         <span class="audit-to"><%= audit.relationshipAudit.label %></span>
-        <%= audit.data.type %> 
         <% if (currentVertexId === audit.relationshipAudit.sourceId) { %>
-          to <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'dest') %>" href="#v=<%= audit.relationshipAudit.destId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.destTitle %></a>
+          &#8594; <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'dest') %>" href="#v=<%= audit.relationshipAudit.destId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.destTitle %></a>
         <% } else { %>
-          from <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'source') %>" href="#v=<%= audit.relationshipAudit.sourceId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.sourceTitle %></a>
+          &#8592; <a data-info="<%= createInfoJsonFromAudit(audit.relationshipAudit, 'source') %>" href="#v=<%= audit.relationshipAudit.sourceId %>" class="audit-to entity resolved"><%= audit.relationshipAudit.sourceTitle %></a>
         <% } %>
        </span>
 

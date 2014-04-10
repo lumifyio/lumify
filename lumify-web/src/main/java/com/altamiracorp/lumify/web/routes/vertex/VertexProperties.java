@@ -5,7 +5,6 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -21,19 +20,18 @@ import javax.servlet.http.HttpServletResponse;
 public class VertexProperties extends BaseRequestHandler {
     private final Graph graph;
     private final DetectedObjectRepository detectedObjectRepository;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
 
     @Inject
     public VertexProperties(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
-            final DetectedObjectRepository detectedObjectRepository,
-            final UserProvider userProvider) {
+            final DetectedObjectRepository detectedObjectRepository) {
         super(userRepository, configuration);
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -41,8 +39,8 @@ public class VertexProperties extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
         String workspaceId = getActiveWorkspaceId(request);
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         Vertex vertex = graph.getVertex(graphVertexId, authorizations);
         if (vertex == null) {

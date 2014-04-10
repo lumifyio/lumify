@@ -2,11 +2,10 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,14 +17,15 @@ import java.security.cert.X509Certificate;
 public abstract class X509AuthenticationProvider extends AuthenticationProvider {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
     private static final String X509_USER_PASSWORD = "P1OpQsfZMFizHqqyt7lXNE56a6HSVQxdMJHClZ0hhZPhY1OrHvkfDwysDhvWrUIUZbIuEY09FH99qo9t0rjikwEaHK4u03yTLidY";
-    private final UserProvider userProvider;
     private final UserRepository userRepository;
+    private final Graph graph;
 
     protected abstract String getUsername(X509Certificate cert);
 
-    protected X509AuthenticationProvider(UserRepository userRepository, UserProvider userProvider) {
+    protected X509AuthenticationProvider(UserRepository userRepository,
+                                         final Graph graph) {
         this.userRepository = userRepository;
-        this.userProvider = userProvider;
+        this.graph = graph;
     }
 
     @Override
@@ -42,11 +42,10 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        Vertex userVertex = userRepository.findByUserName(username);
-        if (userVertex == null) {
-            userVertex = userRepository.addUser(username, X509_USER_PASSWORD, new String[0]);
+        User authUser = userRepository.findByUserName(username);
+        if (authUser == null) {
+            authUser = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, X509_USER_PASSWORD, new String[0]);
         }
-        User authUser = this.userProvider.createFromVertex(userVertex);
         setUser(request, authUser);
         chain.next(request, response);
     }

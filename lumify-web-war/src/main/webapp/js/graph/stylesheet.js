@@ -1,12 +1,14 @@
 
 define([
     'cytoscape',
-    'service/ontology',
     'util/retina'
-], function(cytoscape, OntologyService, retina) {
+], function(cytoscape, retina) {
     'use strict';
 
-    var ontologyService = new OntologyService(),
+    var GENERIC_SIZE = 30,
+        CUSTOM_IMAGE_SIZE = 50,
+        IMAGE_ASPECT_RATIO = 4 / 3,
+        VIDEO_ASPECT_RATIO = 19 / 9,
         style = cytoscape.stylesheet();
 
     return load;
@@ -23,15 +25,29 @@ define([
                 'text-valign': 'bottom',
                 color: '#999',
                 content: 'data(truncatedTitle)',
-                height: 30 * retina.devicePixelRatio,
+                height: GENERIC_SIZE * retina.devicePixelRatio,
                 shape: 'roundrectangle',
-                width: 30 * retina.devicePixelRatio,
+                width: GENERIC_SIZE * retina.devicePixelRatio,
+            })
+
+            .selector('node.video')
+            .css({
+                shape: 'movieStrip',
+                width: (CUSTOM_IMAGE_SIZE * retina.devicePixelRatio) * VIDEO_ASPECT_RATIO,
+                height: (CUSTOM_IMAGE_SIZE * retina.devicePixelRatio) / VIDEO_ASPECT_RATIO
+            })
+
+            .selector('node.image')
+            .css({
+                shape: 'rectangle',
+                width: (CUSTOM_IMAGE_SIZE * retina.devicePixelRatio) * IMAGE_ASPECT_RATIO,
+                height: (CUSTOM_IMAGE_SIZE * retina.devicePixelRatio) / IMAGE_ASPECT_RATIO
             })
 
             .selector('node.hasCustomGlyph')
             .css({
-                width: 60 * retina.devicePixelRatio,
-                height: 60 * retina.devicePixelRatio
+                width: CUSTOM_IMAGE_SIZE * retina.devicePixelRatio,
+                height: CUSTOM_IMAGE_SIZE * retina.devicePixelRatio
             })
 
             .selector('node.hover')

@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.util.FilterIterable;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
 import net.lingala.zip4j.core.ZipFile;
@@ -15,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.semanticweb.owlapi.model.IRI;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -22,8 +24,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class AdminUploadOntology extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AdminUploadOntology.class);
@@ -40,7 +43,9 @@ public class AdminUploadOntology extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        List<Part> files = new ArrayList<Part>(request.getParts());
+        String documentIRIString = getRequiredParameter(request, "documentIRI");
+
+        List<Part> files = toList(getFiles(request));
         if (files.size() != 1) {
             throw new RuntimeException("Wrong number of uploaded files. Expected 1 got " + files.size());
         }
@@ -49,8 +54,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
         File tempFile = File.createTempFile("ontologyUpload", ".bin");
         writeToTempFile(file, tempFile);
 
-        // TODO get document IRI from user
-        IRI documentIRI = IRI.create(tempFile.toURI().toString());
+        IRI documentIRI = IRI.create(documentIRIString);
 
         User user = getUser(request);
         writePackage(tempFile, documentIRI, user);
@@ -58,6 +62,15 @@ public class AdminUploadOntology extends BaseRequestHandler {
         tempFile.delete();
 
         respondWithPlaintext(response, "OK");
+    }
+
+    private Iterable<Part> getFiles(HttpServletRequest request) throws IOException, ServletException {
+        return new FilterIterable<Part>(request.getParts()) {
+            @Override
+            protected boolean isIncluded(Part part) {
+                return part.getName().equals("file");
+            }
+        };
     }
 
     private void writePackage(File file, IRI documentIRI, User user) throws Exception {

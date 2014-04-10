@@ -22,11 +22,10 @@ public class MeGet extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
-        Vertex userVertex = getUserRepository().findByUserName(user.getUsername());
-        if (userVertex == null) {
+        if (user == null) {
             respondWithNotFound(response);
             return;
         }
-        respondWithJson(response, getUserRepository().toJson(userVertex, user));
+        respondWithJson(response, getUserRepository().toJsonWithAuths(user));
     }
 }

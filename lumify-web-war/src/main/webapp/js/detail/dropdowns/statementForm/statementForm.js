@@ -146,10 +146,15 @@ define([
 
             _.defer(this.buttonLoading.bind(this));
 
-            this.relationshipService.createRelationship(parameters).done(function(data) {
-                _.defer(self.teardown.bind(self));
-                self.trigger(document, 'refreshRelationships');
-            });
+            this.relationshipService.createRelationship(parameters)
+                .fail(function(req, reason, status) {
+                    self.clearLoading();
+                    self.markFieldErrors(status);
+                })
+                .done(function(data) {
+                    _.defer(self.teardown.bind(self));
+                    self.trigger(document, 'refreshRelationships');
+                });
         };
 
         this.getRelationshipLabels = function() {

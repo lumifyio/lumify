@@ -31,6 +31,10 @@ define([
             }));
 
             this.updateRangeVisibility();
+            this.filterUpdated(
+                this.getValues(),
+                this.select('predicateSelector').val()
+            );
 
             this.on('change keyup', {
                     inputSelector: function() {

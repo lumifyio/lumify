@@ -269,6 +269,9 @@ define([
 
             if ($target.is('.header button')) return;
 
+            event.stopPropagation();
+            $target.blur();
+
             this.trigger(
                 'mark' + ($target.hasClass('publish') ? 'Publish' : 'Undo') + 'DiffItem',
                 { 

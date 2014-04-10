@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 public interface OntologyRepository {
     public static final String ENTITY_CONCEPT_IRI = "http://www.w3.org/2002/07/owl#Thing";
@@ -19,6 +20,8 @@ public interface OntologyRepository {
     public static final String TYPE_PROPERTY = "property";
     public static final String VISIBILITY_STRING = "ontology";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
+
+    void init (Map config);
 
     void clearCache();
 

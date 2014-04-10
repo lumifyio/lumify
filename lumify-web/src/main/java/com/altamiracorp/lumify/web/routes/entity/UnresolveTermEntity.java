@@ -11,7 +11,6 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -19,6 +18,7 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.workspace.WorkspaceHelper;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
@@ -32,7 +32,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
-    private final UserProvider userProvider;
+    private final UserRepository userRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
@@ -42,13 +42,12 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
-            final UserProvider userProvider,
             final WorkspaceHelper workspaceHelper) {
         super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.userProvider = userProvider;
+        this.userRepository = userRepository;
         this.workspaceHelper = workspaceHelper;
     }
 
@@ -75,19 +74,28 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        ModelUserContext modelUserContext = userProvider.getModelUserContext(authorizations, getActiveWorkspaceId(request));
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
 
         Vertex resolvedVertex = graph.getVertex(graphVertexId, authorizations);
+        Edge edge = graph.getEdge(edgeId, authorizations);
 
-        SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
-        if (sandboxStatus == SandboxStatus.PUBLIC) {
+        SandboxStatus vertexSandboxStatus = GraphUtil.getSandboxStatus(resolvedVertex, workspaceId);
+        SandboxStatus edgeSandboxStatus = GraphUtil.getSandboxStatus(edge, workspaceId);
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC && edgeSandboxStatus == SandboxStatus.PUBLIC) {
             LOGGER.warn("Can not unresolve a public entity");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             chain.next(request, response);
             return;
         }
 
-        JSONObject visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(resolvedVertex.getPropertyValue(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.toString()).toString(), workspaceId);
+        JSONObject visibilityJson;
+        if (vertexSandboxStatus == SandboxStatus.PUBLIC) {
+            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(edge);
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
+        } else {
+            visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(resolvedVertex);
+            visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromWorkspace(visibilityJson, workspaceId);
+        }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging

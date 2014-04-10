@@ -20,7 +20,6 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Authorizations;
@@ -85,7 +84,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     private Timer processingTimeTimer;
     private JmxMetricsManager metricsManager;
     protected WorkQueueRepository workQueueRepository;
-    private UserProvider userProvider;
     private User user;
     private Authorizations authorizations;
 
@@ -103,7 +101,7 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
 
         user = (User) stormConf.get("user");
         if (user == null) {
-            user = this.userProvider.getSystemUser();
+            user = userRepository.getSystemUser();
         }
         authorizations = userRepository.getAuthorizations(user);
 
@@ -355,11 +353,6 @@ public abstract class BaseLumifyBolt extends BaseRichBolt {
     @Inject
     public void setMetricsManager(JmxMetricsManager metricsManager) {
         this.metricsManager = metricsManager;
-    }
-
-    @Inject
-    public void setUserProvider(UserProvider userProvider) {
-        this.userProvider = userProvider;
     }
 
     protected boolean isArchive(final String fileName) {
