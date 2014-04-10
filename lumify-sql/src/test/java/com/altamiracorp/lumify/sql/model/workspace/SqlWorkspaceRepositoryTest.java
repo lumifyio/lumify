@@ -228,4 +228,20 @@ public class SqlWorkspaceRepositoryTest {
         List<WorkspaceEntity> workspaceEntities = sqlWorkspaceRepository.findEntities(sqlWorkspace, testUser);
         assertTrue(workspaceEntities.size() == 4);
     }
+
+    @Test
+    public void testCopy () throws Exception {
+        SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
+        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 1);
+
+        sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, "123", true, 0, 0, testUser);
+        sqlWorkspace = (SqlWorkspace)sqlWorkspaceRepository.findById("1", testUser);
+        Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
+        assertTrue(sqlWorkspaceVertexSet.size() == 1);
+
+        SqlWorkspace copySqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.copy(sqlWorkspace, testUser);
+        assertTrue(IterableUtils.count(sqlWorkspaceRepository.findAll(testUser)) == 2);
+        assertEquals("Copy of test", copySqlWorkspace.getDisplayTitle());
+        assertTrue(copySqlWorkspace.getSqlWorkspaceVertices().size() == 1);
+    }
 }

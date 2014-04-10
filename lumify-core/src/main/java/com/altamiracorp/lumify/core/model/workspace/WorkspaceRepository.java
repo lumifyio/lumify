@@ -33,8 +33,6 @@ public interface WorkspaceRepository {
     // change Workspace to workspace id?
     List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user);
 
-    List<WorkspaceEntity> findEntities(String workspaceId, User user);
-
     // change Workspace to workspace id?
     List<WorkspaceEntity> findEntities(Workspace workspace, User user);
 

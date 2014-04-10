@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
@@ -56,8 +57,8 @@ public class WorkspaceRelationships extends BaseRequestHandler {
         long startTime = System.nanoTime();
 
         JSONArray resultsJson = new JSONArray();
-
-        List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspaceId, user);
+        Workspace workspace = workspaceRepository.findById(workspaceId, user);
+        List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         List<Object> allIds = toList(new ConvertingIterable<WorkspaceEntity, Object>(workspaceEntities) {
             @Override
             protected Object convert(WorkspaceEntity workspaceEntity) {
