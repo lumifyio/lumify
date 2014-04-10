@@ -566,12 +566,9 @@ define([
                 if (ontologyProperty.dataType == 'date') {
                     value = formatters.date.dateString(parseInt(properties[name].value, 10));
                 } else if (ontologyProperty.dataType === 'geoLocation') {
-                    var descKey = 'http://lumify.io/dev#geoLocationDescription';
-
                     value = properties[name];
-                    value[descKey] = properties[descKey];
-                    if (value && value[descKey] && value[descKey].value) {
-                        stringValue = value[descKey].value;
+                    if (value && value.value && value.value.description) {
+                        stringValue = value.value.description;
                     }
                     if (!stringValue) {
                         stringValue = formatters.geoLocation.pretty(value && value.value)

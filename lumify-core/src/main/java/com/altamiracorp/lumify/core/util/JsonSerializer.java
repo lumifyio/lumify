@@ -124,6 +124,9 @@ public class JsonSerializer {
             if (geoPoint.getAltitude() != null) {
                 result.put("altitude", geoPoint.getAltitude());
             }
+            if (geoPoint.getDescription() != null) {
+                result.put("description", geoPoint.getDescription());
+            }
             return result;
         } else if (value instanceof Date) {
             return ((Date) value).getTime();
