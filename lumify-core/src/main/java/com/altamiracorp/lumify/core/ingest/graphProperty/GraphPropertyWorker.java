@@ -230,7 +230,9 @@ public abstract class GraphPropertyWorker {
                 auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), termMention.getVisibility());
             }
 
-            termMentionModel.getMetadata().setVertexId(vertex.getId().toString(), termMention.getVisibility());
+            termMentionModel.getMetadata()
+                    .setVertexId(vertex.getId().toString(), termMention.getVisibility())
+                    .setEdgeId(edge.getId().toString(), termMention.getVisibility());
         }
 
         termMentionRepository.save(termMentionModel, FlushFlag.NO_FLUSH);

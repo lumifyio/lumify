@@ -17,8 +17,8 @@ public class TermMentionMetadata extends ColumnFamily {
         return Value.toString(get(EDGE_ID));
     }
 
-    public TermMentionMetadata setEdgeId (String edgeId, Visibility visibility) {
-        set (EDGE_ID, edgeId, visibility.getVisibilityString());
+    public TermMentionMetadata setEdgeId(String edgeId, Visibility visibility) {
+        set(EDGE_ID, edgeId, visibility.getVisibilityString());
         return this;
     }
 
