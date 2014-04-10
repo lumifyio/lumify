@@ -120,10 +120,7 @@ public class Router extends HttpServlet {
             app.post("/workspace/publish", authenticator, WorkspacePublish.class);
             app.post("/workspace/undo", authenticator, WorkspaceUndo.class);
 
-            //app.get("/user/messages", authenticator, MessagesGet.class);
             app.get("/user/me", authenticator, MeGet.class);
-            app.post("/user/auth/add", authenticator, UserAddAuthorization.class);
-            app.post("/user/auth/remove", authenticator, UserRemoveAuthorization.class);
             app.get("/user", authenticator, UserList.class);
             app.get("/user/info", authenticator, UserInfo.class);
 
@@ -131,7 +128,12 @@ public class Router extends HttpServlet {
             app.get("/map/marker/image", MapMarkerImage.class);
             app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
+            // TODO refactor into WebAppPlugin: ontology admin
             app.post("/admin/uploadOntology", authenticator, AdminUploadOntology.class);
+
+            // TODO refactor into WebAppPlugin: dev
+            app.post("/user/auth/add", authenticator, UserAddAuthorization.class);
+            app.post("/user/auth/remove", authenticator, UserRemoveAuthorization.class);
 
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
