@@ -1,22 +1,20 @@
 package com.altamiracorp.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
-import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserType;
-import com.altamiracorp.lumify.core.model.workspace.Workspace;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
-import com.altamiracorp.securegraph.Vertex;
-import com.google.inject.Inject;
 
-import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.CURRENT_WORKSPACE;
-import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.USERNAME;
+import java.io.Serializable;
 
-public class SecureGraphUser implements User {
+public class SecureGraphUser implements User, Serializable {
+    private static final long serialVersionUID = 6688073934273514248L;
     private ModelUserContext modelUserContext;
     private String displayName;
     private String userId;
-    private WorkspaceRepository workspaceRepository;
-    private UserRepository userRepository;
+
+    // required for Serializable
+    protected SecureGraphUser() {
+
+    }
 
     public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext) {
         this.displayName = displayName;
@@ -43,15 +41,5 @@ public class SecureGraphUser implements User {
     @Override
     public String getUserStatus() {
         return null;
-    }
-
-    @Inject
-    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
-        this.workspaceRepository = workspaceRepository;
-    }
-
-    @Inject
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 }

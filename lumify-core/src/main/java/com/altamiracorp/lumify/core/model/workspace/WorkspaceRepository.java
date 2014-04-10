@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public abstract class WorkspaceRepository {
     public static String VISIBILITY_STRING = "workspace";
     public static LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
@@ -63,14 +65,19 @@ public abstract class WorkspaceRepository {
     public abstract boolean hasWritePermissions(Workspace workspace, User user);
 
     public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
+        checkNotNull(workspace, "workspace cannot be null");
+        checkNotNull(user, "user cannot be null");
+
         try {
             JSONObject workspaceJson = new JSONObject();
             workspaceJson.put("workspaceId", workspace.getId());
             workspaceJson.put("title", workspace.getDisplayTitle());
 
             String creatorUserId = getCreatorUserId(workspace, user);
-            workspaceJson.put("createdBy", creatorUserId);
-            workspaceJson.put("isSharedToUser", !creatorUserId.equals(user.getUserId()));
+            if (creatorUserId != null) {
+                workspaceJson.put("createdBy", creatorUserId);
+                workspaceJson.put("isSharedToUser", !creatorUserId.equals(user.getUserId()));
+            }
             workspaceJson.put("isEditable", hasWritePermissions(workspace, user));
 
             JSONArray usersJson = new JSONArray();
