@@ -95,13 +95,8 @@ define([
                     }];
 
                     properties.list.forEach(function(property) {
-                        if (/^[^_]/.test(property.title) && property.title !== 'boundingBox') {
-                            var data = {
-                                userVisible: property.userVisible,
-                                title: property.title,
-                                displayName: property.displayName
-                            };
-                            propertiesList.push(data);
+                        if (property.userVisible) {
+                            propertiesList.push($.extend({}, property));
                         }
                     });
                     
@@ -109,8 +104,6 @@ define([
                         var a = pa.title, b = pb.title;
                         if (a === 'http://lumify.io#visibilityJson') return -1;
                         if (b === 'http://lumify.io#visibilityJson') return 1;
-                        if (a === 'startDate' && b === 'endDate') return -1;
-                        if (b === 'startDate' && a === 'endDate') return 1;
                         if (a === b) return 0;
                         return a < b ? -1 : 1;
                     });
@@ -195,7 +188,24 @@ define([
 
             this.ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
-                if (propertyDetails) {
+                if (propertyName === 'http://lumify.io#visibilityJson') {
+                    require([
+                        'configuration/plugins/visibility/visibilityEditor'
+                    ], function(Visibility) {
+                        var val = vertexProperty && vertexProperty.value,
+                            source = (val && val.source) || (val && val.value && val.value.source);
+
+                        Visibility.attachTo(visibility, {
+                            value: source || ''
+                        });
+                        visibility.find('input').focus();
+                        self.settingVisibility = true;
+                        self.visibilitySource = { value: source, valid: true };
+
+                        self.checkValid();
+                        self.manualOpen();
+                    });
+                } else if (propertyDetails) {
                     require([
                         'fields/' + propertyDetails.dataType,
                         'detail/dropdowns/propertyForm/justification',
@@ -221,23 +231,6 @@ define([
                         });
 
                         self.settingVisibility = false;
-                        self.checkValid();
-                        self.manualOpen();
-                    });
-                } else if (propertyName === 'http://lumify.io#visibilityJson') {
-                    require([
-                        'configuration/plugins/visibility/visibilityEditor'
-                    ], function(Visibility) {
-                        var val = vertexProperty && vertexProperty.value,
-                            source = (val && val.source) || (val && val.value && val.value.source);
-
-                        Visibility.attachTo(visibility, {
-                            value: source || ''
-                        });
-                        visibility.find('input').focus();
-                        self.settingVisibility = true;
-                        self.visibilitySource = { value: source, valid: true };
-
                         self.checkValid();
                         self.manualOpen();
                     });

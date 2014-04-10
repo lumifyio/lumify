@@ -549,7 +549,18 @@ define([
                     properties['http://lumify.io#conceptType'].value === 'relationship',
                 isRelationshipType = name === 'relationshipType' && isEdge;
 
-            if (ontologyProperty) {
+            if (name === 'http://lumify.io#visibilityJson') {
+                value = properties[name].value;
+
+                if (value && _.isObject(value.value)) {
+                    value = value.value;
+                }
+
+                // TODO: call plugin
+                stringValue = (value && value.source) || 'public';
+
+                addProperty(properties[name], name, 'Visibility', null, value, stringValue);
+            } else if (ontologyProperty) {
                 displayName = ontologyProperty.displayName;
 
                 if (ontologyProperty.dataType == 'date') {
@@ -593,17 +604,6 @@ define([
                         properties[name]['http://lumify.io#visibilityJson']
                     );
                 }
-            } else if (name === 'http://lumify.io#visibilityJson') {
-                value = properties[name].value;
-
-                if (value && _.isObject(value.value)) {
-                    value = value.value;
-                }
-
-                // TODO: call plugin
-                stringValue = (value && value.source) || 'public';
-
-                addProperty(properties[name], name, 'Visibility', null, value, stringValue);
             } else if (isRelationshipType) {
                 addProperty(properties[name], name, 'Relationship type', null, properties[name].value);
             } else {
