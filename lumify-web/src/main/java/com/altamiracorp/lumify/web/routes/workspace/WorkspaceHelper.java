@@ -14,7 +14,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.Messaging;
@@ -132,7 +132,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, systemAuthorization);
         }
 
-        JSONObject artifactJson = GraphUtil.toJson(artifactVertex, workspaceId);
+        JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId);
         artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
         result.put("artifactVertex", artifactJson);
         return result;
@@ -145,10 +145,10 @@ public class WorkspaceHelper {
 
         List<Property> properties = toList(vertex.getProperties(property.getName()));
         JSONObject json = new JSONObject();
-        JSONObject propertiesJson = GraphUtil.toJsonProperties(properties, workspaceId);
+        JSONObject propertiesJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         json.put("properties", propertiesJson);
         json.put("deletedProperty", property.getName());
-        json.put("vertex", GraphUtil.toJson(vertex, workspaceId));
+        json.put("vertex", JsonSerializer.toJson(vertex, workspaceId));
 
         Messaging.broadcastPropertyChange(vertex.getId().toString(), vertex.getId().toString(), null, json);
         return json;

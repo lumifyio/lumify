@@ -4,7 +4,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
@@ -41,9 +41,9 @@ public class RelationshipProperties extends BaseRequestHandler {
         Vertex sourceVertex = edge.getVertex(Direction.OUT, authorizations);
         Vertex targetVertex = edge.getVertex(Direction.IN, authorizations);
 
-        JSONObject results = GraphUtil.toJson(edge, workspaceId);
-        results.put("source", GraphUtil.toJson(sourceVertex, workspaceId));
-        results.put("target", GraphUtil.toJson(targetVertex, workspaceId));
+        JSONObject results = JsonSerializer.toJson(edge, workspaceId);
+        results.put("source", JsonSerializer.toJson(sourceVertex, workspaceId));
+        results.put("target", JsonSerializer.toJson(targetVertex, workspaceId));
 
         respondWithJson(response, results);
     }

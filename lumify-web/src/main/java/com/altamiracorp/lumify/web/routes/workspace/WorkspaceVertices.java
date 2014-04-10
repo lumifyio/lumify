@@ -6,7 +6,7 @@ import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -49,7 +49,7 @@ public class WorkspaceVertices extends BaseRequestHandler {
         final List<WorkspaceEntity> workspaceEntities = workspaceRepository.findEntities(workspace, user);
         Iterable<Object> vertexIds = getVisibleWorkspaceEntityIds(workspaceEntities);
         Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
-        JSONArray results = GraphUtil.toJson(graphVertices, workspaceId);
+        JSONArray results = JsonSerializer.toJson(graphVertices, workspaceId);
         respondWithJson(response, results);
     }
 

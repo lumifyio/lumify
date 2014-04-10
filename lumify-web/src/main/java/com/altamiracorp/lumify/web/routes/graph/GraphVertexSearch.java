@@ -9,7 +9,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -134,7 +134,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         int count = 0;
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
-                vertices.put(GraphUtil.toJson(vertex, workspaceId));
+                vertices.put(JsonSerializer.toJson(vertex, workspaceId));
                 vertices.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
                 count++;
             }

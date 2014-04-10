@@ -3,7 +3,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -50,7 +50,7 @@ public class VertexMultiple extends BaseRequestHandler {
         JSONArray vertices = new JSONArray();
         results.put("vertices", vertices);
         for (Vertex v : graphVertices) {
-            vertices.put(GraphUtil.toJson(v, workspaceId));
+            vertices.put(JsonSerializer.toJson(v, workspaceId));
         }
 
         respondWithJson(response, results);

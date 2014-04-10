@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -64,7 +65,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         this.graph.flush();
 
-        JSONObject json = GraphUtil.toJson(graphVertex, workspaceId);
+        JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId);
         Messaging.broadcastPropertyChange(graphVertexId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilitySource, json);
         respondWithJson(response, json);
     }

@@ -9,6 +9,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -109,7 +110,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
-        JSONObject resultsJson = GraphUtil.toJsonProperties(edge.getProperties(), workspaceId);
+        JSONObject resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
         Messaging.broadcastPropertyChange(edgeId, propertyName, value, resultsJson);
         respondWithJson(response, resultsJson);
     }

@@ -18,10 +18,7 @@ import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
-import com.altamiracorp.lumify.core.util.LumifyLogger;
-import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.core.util.RowKeyHelper;
+import com.altamiracorp.lumify.core.util.*;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -45,7 +42,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.altamiracorp.lumify.core.util.GraphUtil.toJson;
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -139,7 +135,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.graph.flush();
         workQueueRepository.pushUserImageQueue(imageVertex.getId().toString());
 
-        respondWithJson(response, toJson(entityVertex, workspaceId));
+        respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId));
     }
 
     private JSONObject getLumifyVisibility(Vertex entityVertex, String workspaceId) {

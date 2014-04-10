@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.model.workspace.diff;
 
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.securegraph.Element;
 import com.altamiracorp.securegraph.Property;
 import org.json.JSONObject;
@@ -24,9 +24,9 @@ public class PropertyDiffItem extends DiffItem {
         json.put("name", workspaceProperty.getName());
         json.put("key", workspaceProperty.getKey());
         if (existingProperty != null) {
-            json.put("old", GraphUtil.toJsonProperty(existingProperty));
+            json.put("old", JsonSerializer.toJsonProperty(existingProperty));
         }
-        json.put("new", GraphUtil.toJsonProperty(workspaceProperty));
+        json.put("new", JsonSerializer.toJsonProperty(workspaceProperty));
         return json;
     }
 }

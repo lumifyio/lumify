@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
@@ -113,7 +114,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
 
-        JSONObject result = GraphUtil.toJson(graphVertex, workspaceId);
+        JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
         respondWithJson(response, result);
     }

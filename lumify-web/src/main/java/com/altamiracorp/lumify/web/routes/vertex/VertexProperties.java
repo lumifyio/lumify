@@ -5,7 +5,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.util.GraphUtil;
+import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
@@ -47,7 +47,7 @@ public class VertexProperties extends BaseRequestHandler {
             respondWithNotFound(response);
             return;
         }
-        JSONObject json = GraphUtil.toJson(vertex, workspaceId);
+        JSONObject json = JsonSerializer.toJson(vertex, workspaceId);
 
         json.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
 
