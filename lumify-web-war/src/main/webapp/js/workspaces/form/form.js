@@ -75,13 +75,17 @@ define([
         });
 
         var timeout;
-        this.saveWorkspace = function(immediate, changes) {
+        this.saveWorkspace = function(immediate, options) {
             var self = this,
+                changes = options.changes,
+                revert = options.revert,
                 d = $.Deferred(),
                 save = function() {
                     self.trigger(document, 'workspaceSaving', self.attr.data);
                     return self.workspaceService.save(self.attr.data.workspaceId, changes)
                         .fail(function() {
+                            self.attr.data = revert;
+                            self.trigger(document, 'workspaceSaved', revert);
                             d.reject();
                         })
                         .done(function(workspace) {
@@ -156,7 +160,8 @@ define([
         };
 
         this.onChangeTitle = function(event) {
-            var $target = $(event.target),
+            var self = this,
+                $target = $(event.target),
                 val = $target.val();
 
             if ($.trim(val).length === 0) {
@@ -164,9 +169,19 @@ define([
             }
 
             if (val !== this.attr.data.title) {
+                if (!this.titleRevert) {
+                    this.titleRevert = $.extend(true, {}, this.attr.data);
+                }
                 this.attr.data.title = val;
                 this.saveWorkspace(false, {
-                    title: val
+                    changes: {
+                        title: val
+                    },
+                    revert: this.titleRevert
+                }).fail(function() {
+                    $target.val(self.titleRevert.title);
+                }).always(function() {
+                    self.titleRevert = null;
                 });
             }
         };
@@ -182,10 +197,14 @@ define([
                 user = _.findWhere(this.attr.data.users, { userId: userId });
 
             if (user) {
+                var revert = $.extend(true, {}, this.attr.data);
                 user.access = newPermissions;
                 badge.popover('disable').addClass('loading');
                 this.saveWorkspace(true, {
-                    userUpdates: [user]
+                    changes: {
+                        userUpdates: [user]
+                    },
+                    revert: revert
                 })
                     .done(function() {
                         var newUserRow = $(shareRowTemplate(self.shareRowDataForPermission(user)));
@@ -236,13 +255,17 @@ define([
                 list = $(event.target).closest('.permissions-list'),
                 row = list.data('userRow'),
                 userId = row.data('userId'),
-                badge = row.find('.permissions').popover('disable').addClass('loading');
+                badge = row.find('.permissions').popover('disable').addClass('loading'),
+                revert = $.extend(true, {}, this.attr.data);
 
             this.attr.data.users = _.reject(this.attr.data.users, function(user) {
                 return user.userId === userId;
             });
             this.saveWorkspace(true, {
-                userDeletes: [userId]
+                changes: {
+                    userDeletes: [userId]
+                },
+                revert: revert
             })
                 .fail(function() {
                     var originalHtml = badge.html();
@@ -265,13 +288,17 @@ define([
                     access: 'READ'
                 },
                 row = $(shareRowTemplate(this.shareRowDataForPermission(user))).insertBefore(form),
-                badge = row.find('.permissions');
+                badge = row.find('.permissions'),
+                revert = $.extend(true, {}, this.attr.data);
 
             this.attr.data.users.push(user);
 
             badge.addClass('loading');
             this.saveWorkspace(true, {
-                userUpdates: [user]
+                changes: {
+                    userUpdates: [user]
+                },
+                revert: revert
             })
                 .always(function() {
                     badge.removeClass('loading');
