@@ -580,10 +580,7 @@ define([
                     value = properties[name].value;
                 }
 
-                if (// Ignore underscore leading property names
-                    /^[^_]/.test(name) &&
-
-                    ontologyProperty.userVisible &&
+                if (ontologyProperty.userVisible &&
 
                     // Showing the source and target for an edge is redundant (shown in title)
                     (!isEdge || !_.contains(['source', 'target'], name)) &&
