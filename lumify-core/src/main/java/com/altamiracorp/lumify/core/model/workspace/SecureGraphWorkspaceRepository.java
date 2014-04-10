@@ -16,14 +16,14 @@ import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.altamiracorp.securegraph.util.VerticesToEdgeIdsIterable;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.altamiracorp.securegraph.util.IterableUtils.toSet;
@@ -39,7 +39,12 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private AuthorizationRepository authorizationRepository;
     private WorkspaceDiff workspaceDiff;
     private OntologyRepository ontologyRepository;
-
+    private Cache<String, Boolean> usersWithReadAccessCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
+    private Cache<String, Boolean> usersWithWriteAccessCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
 
     @Override
     public void init(Map map) {
@@ -131,7 +136,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     public List<WorkspaceUser> findUsersWithAccess(final Workspace workspace, final User user) {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex workspaceVertex = graph.getVertex(workspace.getId(), authorizations);
-        Iterable<Edge> userEdges = workspaceVertex.query(authorizations).edges(WORKSPACE_TO_USER_RELATIONSHIP_NAME);
+        Iterable<Edge> userEdges = workspaceVertex.getEdges(Direction.BOTH, WORKSPACE_TO_USER_RELATIONSHIP_NAME, authorizations);
         return toList(new ConvertingIterable<Edge, WorkspaceUser>(userEdges) {
             @Override
             protected WorkspaceUser convert(Edge edge) {
@@ -157,7 +162,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Vertex workspaceVertex = graph.getVertex(workspace.getId(), authorizations);
-        Iterable<Edge> entityEdges = workspaceVertex.query(authorizations).edges(WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME);
+        Iterable<Edge> entityEdges = workspaceVertex.getEdges(Direction.BOTH, WORKSPACE_TO_ENTITY_RELATIONSHIP_NAME, authorizations);
         return toList(new ConvertingIterable<Edge, WorkspaceEntity>(entityEdges) {
             @Override
             protected WorkspaceEntity convert(Edge edge) {
@@ -277,9 +282,16 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+        String cacheKey = workspace.getId() + user.getUserId();
+        Boolean hasWriteAccess = usersWithWriteAccessCache.getIfPresent(cacheKey);
+        if (hasWriteAccess != null && hasWriteAccess) {
+            return true;
+        }
+
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId()) && userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE) {
+                usersWithWriteAccessCache.put(cacheKey, true);
                 return true;
             }
         }
@@ -287,6 +299,12 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     private boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+        String cacheKey = workspace.getId() + user.getUserId();
+        Boolean hasReadAccess = usersWithReadAccessCache.getIfPresent(cacheKey);
+        if (hasReadAccess != null && hasReadAccess) {
+            return true;
+        }
+
         List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId())

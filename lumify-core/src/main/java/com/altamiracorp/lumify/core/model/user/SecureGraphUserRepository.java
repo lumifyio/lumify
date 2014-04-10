@@ -13,6 +13,8 @@ import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.VertexBuilder;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
@@ -32,9 +35,12 @@ public class SecureGraphUserRepository extends UserRepository {
     private com.altamiracorp.securegraph.Authorizations authorizations;
     private AuthorizationRepository authorizationRepository;
     private OntologyRepository ontologyRepository;
+    private Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
 
     @Override
-    public void init (Map config) {
+    public void init(Map config) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
@@ -55,8 +61,8 @@ public class SecureGraphUserRepository extends UserRepository {
         String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
 
-        String userName =  USERNAME.getPropertyValue(user);
-        String userId = (String)user.getId();
+        String userName = USERNAME.getPropertyValue(user);
+        String userId = (String) user.getId();
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
         return new SecureGraphUser(userId, userName, modelUserContext);
     }
@@ -183,6 +189,7 @@ public class SecureGraphUserRepository extends UserRepository {
         String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
         graph.flush();
+        userAuthorizationCache.invalidate(user.getUserId());
     }
 
     @Override
@@ -196,12 +203,19 @@ public class SecureGraphUserRepository extends UserRepository {
         String authorizationsString = StringUtils.join(authorizations, ",");
         AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
         graph.flush();
+        userAuthorizationCache.invalidate(user.getUserId());
     }
 
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        Set<String> authorizationsSet = getAuthorizations(userVertex);
+        Set<String> userAuthorizations = userAuthorizationCache.getIfPresent(user.getUserId());
+        if (userAuthorizations == null) {
+            Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+            userAuthorizations = getAuthorizations(userVertex);
+            userAuthorizationCache.put(user.getUserId(), userAuthorizations);
+        }
+
+        Set<String> authorizationsSet = new HashSet<String>(userAuthorizations);
         Collections.addAll(authorizationsSet, additionalAuthorizations);
         return authorizationRepository.createAuthorizations(authorizationsSet);
     }
@@ -228,11 +242,17 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Inject
-    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) { this.authorizationRepository = authorizationRepository; }
+    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
+        this.authorizationRepository = authorizationRepository;
+    }
 
     @Inject
-    public void setGraph (Graph graph) { this.graph = graph; }
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
 
     @Inject
-    public void setOntologyRepository (OntologyRepository ontologyRepository) { this.ontologyRepository = ontologyRepository; }
+    public void setOntologyRepository(OntologyRepository ontologyRepository) {
+        this.ontologyRepository = ontologyRepository;
+    }
 }
