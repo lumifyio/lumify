@@ -28,6 +28,8 @@ public class LumifyProperties {
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
     public static final TextLumifyProperty TITLE = TextLumifyProperty.all("http://lumify.io#title");
+    public static final DateLumifyProperty MODIFIED_DATE = new DateLumifyProperty("http://lumify.io#modifiedDate");
+    public static final TextLumifyProperty MODIFIED_BY = new TextLumifyProperty("http://lumify.io#modifiedBy", TextIndexHint.EXACT_MATCH);
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

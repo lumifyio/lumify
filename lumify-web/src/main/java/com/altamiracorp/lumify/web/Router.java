@@ -119,6 +119,7 @@ public class Router extends HttpServlet {
             app.post("/user/auth/add", authenticator, UserAddAuthorization.class);
             app.post("/user/auth/remove", authenticator, UserRemoveAuthorization.class);
             app.get("/user", authenticator, UserList.class);
+            app.get("/user/info", authenticator, UserInfo.class);
 
             app.get("/map/map-init.js", MapInitHandler.class);
             app.get("/map/marker/image", MapMarkerImage.class);

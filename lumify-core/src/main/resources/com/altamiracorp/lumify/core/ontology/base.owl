@@ -126,7 +126,24 @@
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
+    <!-- http://lumify.io#modifiedDate -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;modifiedDate">
+        <rdfs:label xml:lang="en">Modified Date</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
+    <!-- http://lumify.io#modifiedBy -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;modifiedBy">
+        <rdfs:label xml:lang="en">Modified By</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io#fileName -->

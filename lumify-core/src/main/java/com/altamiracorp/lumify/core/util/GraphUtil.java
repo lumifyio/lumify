@@ -3,10 +3,6 @@ package com.altamiracorp.lumify.core.util;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.lumify.core.model.workspace.Workspace;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
-import com.altamiracorp.lumify.core.model.workspace.WorkspaceUser;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
@@ -17,8 +13,6 @@ import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -239,7 +233,8 @@ public class GraphUtil {
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
             String justificationText,
-            JSONObject sourceObject) {
+            JSONObject sourceObject,
+            User user) {
         Property oldProperty = element.getProperty(propertyName);
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
@@ -255,6 +250,8 @@ public class GraphUtil {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(propertyMetadata);
         visibilityJson = updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+        LumifyProperties.MODIFIED_DATE.setMetadata(propertyMetadata, new Date());
+        LumifyProperties.MODIFIED_BY.setMetadata(propertyMetadata, user.getUserId());
 
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
