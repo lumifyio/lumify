@@ -15,7 +15,6 @@ import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
-import com.altamiracorp.lumify.core.user.UserProvider;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.TeeInputStream;
@@ -49,7 +48,6 @@ public class GraphPropertyBolt extends BaseRichBolt {
     private Graph graph;
     private OutputCollector collector;
     private User user;
-    private UserProvider userProvider;
     private UserRepository userRepository;
     private Authorizations authorizations;
 
@@ -139,7 +137,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
     private void prepareUser(Map stormConf) {
         this.user = (User) stormConf.get("user");
         if (this.user == null) {
-            this.user = this.userProvider.getSystemUser();
+            this.user = this.userRepository.getSystemUser();
         }
         this.authorizations = this.userRepository.getAuthorizations(this.user);
     }
@@ -312,11 +310,6 @@ public class GraphPropertyBolt extends BaseRichBolt {
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields(JSON_OUTPUT_FIELD));
-    }
-
-    @Inject
-    public void setUserProvider(UserProvider userProvider) {
-        this.userProvider = userProvider;
     }
 
     @Inject
