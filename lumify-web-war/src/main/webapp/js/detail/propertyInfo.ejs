@@ -1,10 +1,25 @@
 <table class="table">
-  <% /* SWITCH TO RIGHT ALIGNED WHEN MORE */ %>
+
+  <% var modifiedDate =  property.metadata['http://lumify.io#modifiedDate'];
+     if (modifiedDate) { %>
+  <tr>
+    <td class="property-name">Modified</td>
+    <td class="property-value"><%= sf('{0:yyyy-MM-dd HH:mm}', new Date(modifiedDate)) %></td>
+  </tr>
+  <% } %>
+
+  <% var modifiedBy =  property.metadata['http://lumify.io#modifiedBy'];
+     if (modifiedBy) { %>
+  <tr>
+    <td class="property-name">Modified By</td>
+    <td class="property-value property-modifiedBy"><span class="badge loading" style="float: left;"></span></td>
+  </tr>
+  <% } %>
 
   <% if (property.metadata.sandboxStatus === 'PRIVATE') { %>
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value">Unpublished</td>
+    <td class="property-value property-status">Unpublished</td>
   </tr>
   <% } %>
 

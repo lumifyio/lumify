@@ -256,34 +256,6 @@ define([
                     });
     };
 
-    var memoizedMap = {};
-    OntologyService.prototype.memoizeFunctions = function(toMemoize) {
-        var self = this;
-        toMemoize.forEach(function(f) {
-            var cachedFunction = self[f],
-            hashFunction = self[f].memoizeHashFunction;
-            self[f] = function() {
-                var key = hashFunction && hashFunction.apply(self, arguments);
-                if (!key && arguments.length) key = arguments[0];
-                if (!key) key = '(noargs)';
-                key = f + key;
-
-                var result = memoizedMap[key];
-
-                if (result && result.statusText != 'abort') {
-                    return result;
-                }
-                memoizedMap[key] = result = cachedFunction.apply(self, arguments);
-                if (result.fail) {
-                    result.fail(function() {
-                        delete memoizedMap[key];
-                    })
-                }
-                return result;
-            }
-        });
-    }
-
     function buildPropertiesByTitle(properties) {
         var result = {};
         properties.forEach(function(property) {

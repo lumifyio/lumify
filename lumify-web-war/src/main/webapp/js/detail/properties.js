@@ -442,6 +442,8 @@ define([
                                     $(document).off('.propertyInfo');
                                 }
                             });
+
+                            self.trigger(content, 'willDisplayPropertyInfo');
                         });
 
                         var popover = $this.data('popover'),
@@ -617,7 +619,14 @@ define([
                 displayName: displayName || name,
                 displayType: displayType || 'string',
                 visibility: visibility,
-                metadata: _.pick(property, 'sandboxStatus', '_justificationMetadata', '_sourceMetadata')
+                metadata: _.pick(
+                    property, 
+                    '_justificationMetadata',
+                    '_sourceMetadata',
+                    'http://lumify.io#modifiedBy',
+                    'http://lumify.io#modifiedDate',
+                    'sandboxStatus'
+                )
             });
         }
     }
