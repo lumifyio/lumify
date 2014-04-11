@@ -1,6 +1,5 @@
 package com.altamiracorp.lumify.core.model.workspace;
 
-import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Relationship;
@@ -13,7 +12,6 @@ import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.id.QueueIdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
-import com.altamiracorp.securegraph.inmemory.InMemoryEdge;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;
 import com.altamiracorp.securegraph.search.DefaultSearchIndex;
@@ -24,11 +22,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static com.altamiracorp.lumify.core.util.CollectionUtil.toList;
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +86,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         when(workspaceToUserRelationship.getIRI()).thenReturn("workspaceToUserRelationshipId");
         when(ontologyRepository.getOrCreateRelationshipType(eq(workspaceConcept), eq(rootConcept), eq(WorkspaceRepository.WORKSPACE_TO_USER_RELATIONSHIP_NAME), anyString())).thenReturn(workspaceToUserRelationship);
 
-        workspaceRepository = new SecureGraphWorkspaceRepository();
+        workspaceRepository = new SecureGraphWorkspaceRepository(ontologyRepository, graph, userRepository, authorizationRepository, workspaceDiff);
 
         String user1Id = "USER_testUser1";
         when(user1.getUserId()).thenReturn(user1Id);
