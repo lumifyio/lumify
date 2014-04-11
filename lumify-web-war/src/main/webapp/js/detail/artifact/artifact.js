@@ -157,8 +157,10 @@ define([
                 properties = vertex && vertex.properties;
 
             if (properties) {
-                this.videoTranscript = ('http://lumify.io#videoTranscript' in properties) ? properties['http://lumify.io#videoTranscript'].value : {};
-                this.videoDuration = ('http://lumify.io#videoDuration' in properties) ? properties['http://lumify.io#videoDuration'].value : 0;
+                this.videoTranscript = ('http://lumify.io#videoTranscript' in properties) ?
+                    properties['http://lumify.io#videoTranscript'].value : {};
+                this.videoDuration = ('http://lumify.io#videoDuration' in properties) ?
+                    properties['http://lumify.io#videoDuration'].value : 0;
             }
 
             vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b) {

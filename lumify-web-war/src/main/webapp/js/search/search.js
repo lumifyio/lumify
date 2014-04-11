@@ -209,8 +209,8 @@ define([
                         var results = {},
                             sortVerticesIntoResults = function(v) {
                                 var props = v.properties;
-                                if(!props['http://lumify.io#conceptType']) {
-                                    console.error("found vertex without a concept", v);
+                                if (!props['http://lumify.io#conceptType']) {
+                                    console.error('found vertex without a concept', v);
                                     return;
                                 }
 
