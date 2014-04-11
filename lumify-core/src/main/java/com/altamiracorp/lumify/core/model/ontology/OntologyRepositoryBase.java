@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -192,48 +193,51 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible);
 
-    private Relationship importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
+    private void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + uri);
         LOGGER.info("Importing ontology object property " + uri + " (label: " + label + ")");
 
-        Concept domain = getDomainConcept(o, objectProperty);
-        Concept range = getRangeConcept(o, objectProperty);
-
-        return getOrCreateRelationshipType(domain, range, uri, label);
+        for (Concept domain : getDomainsConcepts(o, objectProperty)) {
+            for (Concept range : getRangesConcepts(o, objectProperty)) {
+                getOrCreateRelationshipType(domain, range, uri, label);
+            }
+        }
     }
 
-    private Concept getRangeConcept(OWLOntology o, OWLObjectProperty objectProperty) {
+    private Iterable<Concept> getRangesConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
-        if (objectProperty.getRanges(o).size() != 1) {
+        if (objectProperty.getRanges(o).size() == 0) {
             throw new LumifyException("Invalid number of range properties on " + uri);
         }
 
+        List<Concept> ranges = new ArrayList<Concept>();
         for (OWLClassExpression rangeClassExpr : objectProperty.getRanges(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
             Concept ontologyClass = getConceptByIRI(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
-            return ontologyClass;
+            ranges.add(ontologyClass);
         }
-        throw new LumifyException("Invalid number of range properties on " + uri);
+        return ranges;
     }
 
-    private Concept getDomainConcept(OWLOntology o, OWLObjectProperty objectProperty) {
+    private Iterable<Concept> getDomainsConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
-        if (objectProperty.getRanges(o).size() != 1) {
+        if (objectProperty.getDomains(o).size() == 0) {
             throw new LumifyException("Invalid number of domain properties on " + uri);
         }
 
+        List<Concept> domains = new ArrayList<Concept>();
         for (OWLClassExpression rangeClassExpr : objectProperty.getDomains(o)) {
             OWLClass rangeClass = rangeClassExpr.asOWLClass();
             String rangeClassUri = rangeClass.getIRI().toString();
             Concept ontologyClass = getConceptByIRI(rangeClassUri);
             checkNotNull(ontologyClass, "Could not find class with uri: " + rangeClassUri);
-            return ontologyClass;
+            domains.add(ontologyClass);
         }
-        throw new LumifyException("Invalid number of domain properties on " + uri);
+        return domains;
     }
 
     private PropertyType getPropertyType(OWLOntology o, OWLDataProperty dataTypeProperty) {

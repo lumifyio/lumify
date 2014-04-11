@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Property;
 import com.google.common.collect.ImmutableMap;
 import org.json.JSONObject;
 
@@ -35,6 +36,10 @@ public abstract class WorkQueueRepository {
     public void pushUserImageQueue(final String graphVertexId) {
         checkNotNull(graphVertexId);
         writeToQueue(USER_IMAGE_QUEUE_NAME, FlushFlag.DEFAULT, ImmutableMap.<String, String>of(KEY_GRAPH_VERTEX_ID, graphVertexId));
+    }
+
+    public void pushGraphPropertyQueue(final Object graphVertexId, final Property property) {
+        pushGraphPropertyQueue(graphVertexId, property.getKey(), property.getName());
     }
 
     public void pushGraphPropertyQueue(final Object graphVertexId, final String propertyKey, final String propertyName) {
