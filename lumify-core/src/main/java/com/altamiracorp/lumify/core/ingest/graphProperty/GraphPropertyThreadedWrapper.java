@@ -68,6 +68,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                         workResults.notifyAll();
                     }
                 } catch (Exception ex) {
+                    LOGGER.error("failed to complete work", ex);
                     totalErrorCounter.inc();
                     synchronized (workResults) {
                         workResults.add(new WorkResult(ex));
