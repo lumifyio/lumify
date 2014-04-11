@@ -41,7 +41,6 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     private UserRepository userRepository;
     private AuthorizationRepository authorizationRepository;
     private WorkspaceDiff workspaceDiff;
-    private OntologyRepository ontologyRepository;
     private Cache<String, Boolean> usersWithReadAccessCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
@@ -56,15 +55,11 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             UserRepository userRepository,
             AuthorizationRepository authorizationRepository,
             WorkspaceDiff workspaceDiff) {
-        this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.userRepository = userRepository;
         this.authorizationRepository = authorizationRepository;
         this.workspaceDiff = workspaceDiff;
-    }
 
-    @Override
-    public void init(Map map) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 

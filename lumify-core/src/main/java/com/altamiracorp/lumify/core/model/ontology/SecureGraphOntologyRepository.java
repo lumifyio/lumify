@@ -54,10 +54,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
-    private AuthorizationRepository authorizationRepository;
 
-    @Override
-    public void init (Map config) {
+    @Inject
+    public SecureGraphOntologyRepository (final Graph graph,
+                                          final AuthorizationRepository authorizationRepository) {
+        this.graph = graph;
+
         authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
 
         Set<String> authorizationsSet = new HashSet<String>();
@@ -433,10 +435,4 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Authorizations getAuthorizations() {
         return authorizations;
     }
-
-    @Inject
-    public void setGraph (Graph graph) { this.graph = graph; }
-    
-    @Inject
-    public void setAuthorizationRepository (AuthorizationRepository authorizationRepository) {this.authorizationRepository = authorizationRepository; }
 }

@@ -21,8 +21,6 @@ public interface OntologyRepository {
     public static final String VISIBILITY_STRING = "ontology";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
 
-    void init (Map config);
-
     void clearCache();
 
     Iterable<Relationship> getRelationshipLabels();

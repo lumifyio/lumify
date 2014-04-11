@@ -20,8 +20,6 @@ public abstract class WorkspaceRepository {
     public static String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
     public static String WORKSPACE_ID_PREFIX = "WORKSPACE_";
 
-    public abstract void init(Map map);
-
     // change Workspace to workspace id?
     public abstract void delete(Workspace workspace, User user);
 
