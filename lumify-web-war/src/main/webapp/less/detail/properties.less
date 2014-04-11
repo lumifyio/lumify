@@ -15,19 +15,18 @@
       }
   }
 
+  .visibility {
+    display:block;
+    color: #666; 
+    font-style: italic;
+    font-size: 90%;
+    &:empty { display: none; }
+  }
+
   .property-value {
     width: 100%;
     padding: 0.25em 1em 0.25em 0.5em;
     word-break: break-word;
-
-    .visibility {
-      display:block;
-      color: #666; 
-      font-style: italic;
-      font-size: 90%;
-      margin-bottom: 0.5em;
-      &:empty { display: none; }
-    }
 
     .entity-visibility {
       display:inline;
@@ -133,8 +132,5 @@
     padding: 0;
   }
 
-  .table .audit-list {
-    margin: 0 0 2em 0;
-    padding: 0.25em 1em;
-  }
+  @import "audit";
 }

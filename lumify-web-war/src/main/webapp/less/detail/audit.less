@@ -1,0 +1,72 @@
+
+& > table, 
+.entity_audit_events > table {
+  border-collapse: separate;
+  border-spacing: 0 1em;
+  .entity {
+    border-bottom: 0 !important;
+  }
+
+  tr.audit-row {
+    td {
+      color: #777;
+      vertical-align:top;   
+
+      &.audit-subtitle, &.audit-date {
+        text-align: right; 
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        .disable-text-selection;
+
+        span {    
+          white-space: nowrap;
+          font-size: 80%;
+          font-style: italic;
+        }
+      }
+
+      &.audit-to, &.audit-message {      
+        border-left: 1px solid mix(@blue-color, @pane-background, 30%);      
+        width: 100%;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        span {
+          font-size: 90%;
+        }
+      }
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+  
+  .show-all-button-row button {
+    padding: 0; 
+    margin: 0;
+  }
+
+}
+
+.entity_audit_events {
+  background: darken(@pane-background, 3%);
+  
+  & > table {
+    .show-all-button-row button {
+      margin: 0 1em;
+    }
+    tr.audit-row td {
+      &.audit-to, &.audit-message {      
+        border-left: 0;
+        span {
+          font-size: 85%;
+        }
+      }
+    }
+  }
+}
+
+
+.audit-only-property .property-value {
+  text-decoration: line-through;
+}

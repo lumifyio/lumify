@@ -1,0 +1,21 @@
+<% if (audits.length) { %>
+
+  <% audits.forEach(function(audit, i) { %>
+      <% var shouldHide = i >= MAX_TO_DISPLAY; %>
+      <% include detail/audit/audit-item %>
+  <% }); %>
+
+  <% if (audits.length > MAX_TO_DISPLAY) { %>
+    <tr class="show-all-button-row">
+      <td>&nbsp;</td>
+      <td colspan="2">
+        <button class="btn btn-link btn-small">Show all...</button>
+      </td>
+    </tr>
+  <% } %>
+
+<% } else { %>
+
+  <tr><td colspan="3">No audit events</td></tr>
+
+<% } %>
