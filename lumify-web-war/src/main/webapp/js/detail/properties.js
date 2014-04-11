@@ -277,6 +277,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
+                    $.extend(self.attr.data.properties, vertex.properties);
                     self.displayProperties(vertex.properties);
                 }
             });
