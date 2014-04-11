@@ -80,14 +80,11 @@ public class JsonSerializer {
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
         for (int i = 0; i < propertiesList.size(); i++) {
             Property property = propertiesList.get(i);
-            if (property.getValue() instanceof StreamingPropertyValue) {
-                continue;
-            }
             JSONObject propertyJson = toJsonProperty(property);
             propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
             resultsJson.put(property.getName(), propertyJson);
 
-            // TODO remove me and fix JavaScript to use full name
+            // TODO remove me and fix JavaScript to use full IRI name instead of just "title"
             if (LumifyProperties.TITLE.getKey().equals(property.getName())) {
                 resultsJson.put("title", propertyJson);
             }
@@ -97,8 +94,15 @@ public class JsonSerializer {
 
     public static JSONObject toJsonProperty(Property property) {
         JSONObject result = new JSONObject();
+        result.put("key", property.getKey());
+        result.put("name", property.getName());
 
-        result.put("value", toJsonValue(property.getValue()));
+        Object propertyValue = property.getValue();
+        if (propertyValue instanceof StreamingPropertyValue) {
+            result.put("streamingPropertyValue", true);
+        } else {
+            result.put("value", toJsonValue(propertyValue));
+        }
 
         if (property.getVisibility() != null) {
             result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), property.getVisibility().toString());

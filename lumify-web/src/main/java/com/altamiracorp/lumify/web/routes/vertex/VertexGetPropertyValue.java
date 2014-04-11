@@ -82,8 +82,10 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     private void handle(HttpServletResponse response, Vertex vertex, Property property, PlaybackOptions playbackOptions) throws IOException {
         String fileName = getFileName(vertex);
 
-        String mimeType = getMimeType(vertex, property);
-        response.setContentType(mimeType);
+        String mimeType = getMimeType(property);
+        if (mimeType != null) {
+            response.setContentType(mimeType);
+        }
 
         setFileNameHeaders(response, fileName, playbackOptions);
 
@@ -167,16 +169,11 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
         response.flushBuffer();
     }
 
-    private String getMimeType(Vertex vertex, Property property) {
+    private String getMimeType(Property property) {
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType != null) {
             return mimeType;
         }
-
-        mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(vertex);
-        if (mimeType == null || mimeType.isEmpty()) {
-            mimeType = "application/octet-stream";
-        }
-        return mimeType;
+        return null;
     }
 }
