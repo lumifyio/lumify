@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.securegraph.*;
@@ -84,19 +85,10 @@ public class JsonSerializer {
         JSONObject resultsJson = new JSONObject();
         List<Property> propertiesList = toList(properties);
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
-        VideoTranscript allVideoTranscripts = new VideoTranscript(); // TODO remove this when the front end supports multiple video transcript properties
+        VideoTranscript allVideoTranscripts = new VideoTranscript();
         for (int i = 0; i < propertiesList.size(); i++) {
             Property property = propertiesList.get(i);
-            if (property.getValue() instanceof StreamingPropertyValue && property.getName().equals(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey())) {
-                try {
-                    String videoTranscriptJsonString = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
-                    JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
-                    VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
-                    allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
-                } catch (IOException ex) {
-                    LOGGER.error("Could not read video transcript from property %s", property.toString());
-                }
-            }
+            allVideoTranscripts = mergePropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
             JSONObject propertyJson = toJsonProperty(property);
             propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
             resultsJson.put(property.getName(), propertyJson);
@@ -114,6 +106,62 @@ public class JsonSerializer {
         }
 
         return resultsJson;
+    }
+
+    // TODO remove this when the front end supports multiple video transcript properties
+    private static VideoTranscript mergePropertyIntoTranscript(List<Property> propertiesList, Property property, VideoTranscript allVideoTranscripts) {
+        if (property.getValue() instanceof StreamingPropertyValue) {
+            try {
+                if (property.getName().equals(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey())) {
+                    allVideoTranscripts = mergeVideoTranscriptPropertyIntoTranscript(property, allVideoTranscripts);
+                } else if (property.getName().equals(RawLumifyProperties.TEXT.getKey())) {
+                    mergeTextPropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
+                }
+            } catch (IOException ex) {
+                LOGGER.error("Could not read video transcript from property %s", property.toString());
+            }
+        }
+        return allVideoTranscripts;
+    }
+
+    private static void mergeTextPropertyIntoTranscript(List<Property> propertiesList, Property property, VideoTranscript allVideoTranscripts) throws IOException {
+        String[] nameParts = RowKeyHelper.splitOnMajorFieldSeperator(property.getKey());
+        if (nameParts.length != 3) {
+            return;
+        }
+
+        String refPropertyName = nameParts[1];
+        String refPropertyKey = nameParts[2];
+        Property refProperty = findProperty(propertiesList, refPropertyName, refPropertyKey);
+        if (refProperty == null) {
+            return;
+        }
+
+        Long videoFrameStartTime = (Long) refProperty.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
+        if (videoFrameStartTime == null) {
+            return;
+        }
+
+        VideoTranscript.Time time = new VideoTranscript.Time(videoFrameStartTime, null);
+        String text = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
+        allVideoTranscripts.add(time, text);
+    }
+
+    private static VideoTranscript mergeVideoTranscriptPropertyIntoTranscript(Property property, VideoTranscript allVideoTranscripts) throws IOException {
+        String videoTranscriptJsonString = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
+        JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
+        VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
+        allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
+        return allVideoTranscripts;
+    }
+
+    private static Property findProperty(Iterable<Property> properties, String propertyName, String propertyKey) {
+        for (Property property : properties) {
+            if (property.getName().equals(propertyName) && property.getKey().equals(propertyKey)) {
+                return property;
+            }
+        }
+        return null;
     }
 
     public static JSONObject toJsonProperty(Property property) {

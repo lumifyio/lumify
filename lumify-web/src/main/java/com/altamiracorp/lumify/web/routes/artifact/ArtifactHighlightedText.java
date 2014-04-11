@@ -72,10 +72,11 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
     }
 
     private String getText(Vertex artifactVertex) throws IOException {
-        StreamingPropertyValue textPropertyValue = TEXT.getPropertyValue(artifactVertex);
-        if (textPropertyValue == null) {
-            return "";
+        StringBuilder result = new StringBuilder();
+        Iterable<StreamingPropertyValue> textPropertyValues = TEXT.getPropertyValues(artifactVertex);
+        for (StreamingPropertyValue textPropertyValue : textPropertyValues) {
+            result.append(IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8"));
         }
-        return IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8");
+        return result.toString();
     }
 }
