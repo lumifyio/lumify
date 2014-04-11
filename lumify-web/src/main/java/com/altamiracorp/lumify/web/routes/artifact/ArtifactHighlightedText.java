@@ -3,6 +3,9 @@ package com.altamiracorp.lumify.web.routes.artifact;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.EntityHighlighter;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
+import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -19,8 +22,6 @@ import org.apache.commons.io.IOUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static com.altamiracorp.lumify.core.model.properties.RawLumifyProperties.TEXT;
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
     private final Graph graph;
@@ -73,10 +74,16 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
 
     private String getText(Vertex artifactVertex) throws IOException {
         StringBuilder result = new StringBuilder();
-        Iterable<StreamingPropertyValue> textPropertyValues = TEXT.getPropertyValues(artifactVertex);
+        Iterable<StreamingPropertyValue> textPropertyValues = RawLumifyProperties.TEXT.getPropertyValues(artifactVertex);
         for (StreamingPropertyValue textPropertyValue : textPropertyValues) {
             result.append(IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8"));
         }
+
+        Iterable<VideoTranscript> videoTranscripts = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValues(artifactVertex);
+        for (VideoTranscript videoTranscript : videoTranscripts) {
+            result.append(videoTranscript.toString());
+        }
+
         return result.toString();
     }
 }
