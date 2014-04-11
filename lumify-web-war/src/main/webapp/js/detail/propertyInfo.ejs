@@ -4,7 +4,7 @@
      if (modifiedDate) { %>
   <tr>
     <td class="property-name">Modified</td>
-    <td class="property-value"><%= sf('{0:yyyy-MM-dd HH:mm}', new Date(modifiedDate)) %></td>
+    <td class="property-value"><%= formatters.date.dateTimeString(modifiedDate) %></td>
   </tr>
   <% } %>
 
