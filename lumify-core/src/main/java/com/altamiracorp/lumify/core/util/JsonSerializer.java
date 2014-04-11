@@ -1,17 +1,21 @@
 package com.altamiracorp.lumify.core.util;
 
+import com.altamiracorp.lumify.core.ingest.video.VideoTranscript;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.model.properties.MediaLumifyProperties;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.altamiracorp.securegraph.type.GeoPoint;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +23,8 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class JsonSerializer {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JsonSerializer.class);
+
     public static JSONArray toJson(Iterable<? extends Element> elements, String workspaceId) {
         JSONArray result = new JSONArray();
         for (Element element : elements) {
@@ -78,8 +84,19 @@ public class JsonSerializer {
         JSONObject resultsJson = new JSONObject();
         List<Property> propertiesList = toList(properties);
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
+        VideoTranscript allVideoTranscripts = new VideoTranscript(); // TODO remove this when the front end supports multiple video transcript properties
         for (int i = 0; i < propertiesList.size(); i++) {
             Property property = propertiesList.get(i);
+            if (property.getValue() instanceof StreamingPropertyValue && property.getName().equals(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey())) {
+                try {
+                    String videoTranscriptJsonString = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
+                    JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
+                    VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
+                    allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
+                } catch (IOException ex) {
+                    LOGGER.error("Could not read video transcript from property %s", property.toString());
+                }
+            }
             JSONObject propertyJson = toJsonProperty(property);
             propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
             resultsJson.put(property.getName(), propertyJson);
@@ -89,6 +106,13 @@ public class JsonSerializer {
                 resultsJson.put("title", propertyJson);
             }
         }
+
+        if (allVideoTranscripts.getEntries().size() > 0) {
+            JSONObject videoTranscriptJson = new JSONObject();
+            videoTranscriptJson.put("value", allVideoTranscripts.toJson());
+            resultsJson.put(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey(), videoTranscriptJson);
+        }
+
         return resultsJson;
     }
 
