@@ -49,6 +49,20 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
 
+    @Inject
+    public SecureGraphWorkspaceRepository(
+            OntologyRepository ontologyRepository,
+            Graph graph,
+            UserRepository userRepository,
+            AuthorizationRepository authorizationRepository,
+            WorkspaceDiff workspaceDiff) {
+        this.ontologyRepository = ontologyRepository;
+        this.graph = graph;
+        this.userRepository = userRepository;
+        this.authorizationRepository = authorizationRepository;
+        this.workspaceDiff = workspaceDiff;
+    }
+
     @Override
     public void init(Map map) {
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
@@ -397,30 +411,5 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 return new SecureGraphWorkspace(workspaceVertex);
             }
         };
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Inject
-    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
-        this.authorizationRepository = authorizationRepository;
-    }
-
-    @Inject
-    public void setWorkspaceDiff(WorkspaceDiff workspaceDiff) {
-        this.workspaceDiff = workspaceDiff;
     }
 }

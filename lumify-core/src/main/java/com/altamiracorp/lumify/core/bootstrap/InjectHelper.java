@@ -33,6 +33,13 @@ public class InjectHelper {
         return injector.getInstance(clazz);
     }
 
+    public static <T> T getInstance(Class<? extends T> clazz) {
+        if (injector == null) {
+            throw new RuntimeException("Could not find injector");
+        }
+        return injector.getInstance(clazz);
+    }
+
     public static interface ModuleMaker {
         Module createModule();
     }

@@ -23,8 +23,6 @@ import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.SecureGraphOntologyRepository;
-import com.altamiracorp.lumify.core.model.user.AccumuloAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -41,10 +39,8 @@ import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
-import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -234,16 +230,6 @@ public class LumifyBootstrap extends AbstractModule {
         private final Class<? extends T> clazz;
 
         /**
-         * The Constructor to invoke.
-         */
-        private final Constructor<? extends T> constructor;
-
-        /**
-         * The constructor arguments.
-         */
-        private final Object[] constructorArgs;
-
-        /**
          * The init method.
          */
         private final Method initMethod;
@@ -258,26 +244,7 @@ public class LumifyBootstrap extends AbstractModule {
         }
 
         public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config, final User user) {
-            Constructor con;
-            Object[] conArgs;
-            boolean checkInit;
-            try {
-                con = clazz.getConstructor(Configuration.class);
-                conArgs = new Object[]{config};
-                checkInit = false;
-            } catch (NoSuchMethodException nsme) {
-                try {
-                    con = clazz.getConstructor();
-                    conArgs = null;
-                    checkInit = true;
-                } catch (NoSuchMethodException nsme1) {
-                    throw new BootstrapException("Unable to find <ctor>(Configuration) or <ctor>() for class %s.", clazz.getName());
-                } catch (SecurityException se) {
-                    throw new BootstrapException(se, "Error accessing <ctor>() in class %s.", clazz.getName());
-                }
-            } catch (SecurityException se) {
-                throw new BootstrapException(se, "Error accessing <ctor>(Configuration) in class %s.", clazz.getName());
-            }
+            boolean checkInit = true;
             Method init = null;
             Object[] initArgs = null;
             if (checkInit) {
@@ -296,17 +263,12 @@ public class LumifyBootstrap extends AbstractModule {
                             init = findInit(clazz, Map.class);
                             if (init != null) {
                                 initArgs = new Object[]{config.toMap()};
-                            } else {
-                                throw new BootstrapException("Unable to locate init(Configuration, User), init(Map, User), " +
-                                        "init(Configuration) or init(Map) in %s.", clazz.getName());
                             }
                         }
                     }
                 }
             }
             this.clazz = clazz;
-            this.constructor = con;
-            this.constructorArgs = conArgs;
             this.initMethod = init;
             this.initMethodArgs = initArgs;
         }
@@ -330,15 +292,11 @@ public class LumifyBootstrap extends AbstractModule {
             Throwable error;
             try {
                 LOGGER.debug("creating %s", this.clazz.getName());
-                T impl = constructor.newInstance(constructorArgs);
-                InjectHelper.inject(impl);
+                T impl = InjectHelper.getInstance(this.clazz);
                 if (initMethod != null) {
                     initMethod.invoke(impl, initMethodArgs);
                 }
                 return impl;
-            } catch (InstantiationException ie) {
-                LOGGER.error("Error instantiating %s.", clazz.getName(), ie);
-                error = ie;
             } catch (IllegalAccessException iae) {
                 LOGGER.error("Unable to access default constructor for %s", clazz.getName(), iae);
                 error = iae;
