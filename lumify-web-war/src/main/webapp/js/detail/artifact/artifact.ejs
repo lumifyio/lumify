@@ -32,8 +32,8 @@
   <div class="currentTranscript"></div>
 <% } %>
 
-<div class='detected-object-labels' style="display:none">
-  <% (vertex.detectedObjects).forEach(function(object) {
+<div class='detected-object-labels' style="display:none"><%
+  (vertex.detectedObjects).forEach(function(object) {
     if (object.graphVertexId) {
         var conceptType = object['http://lumify.io#conceptType'];
         var title = object.title;
@@ -45,8 +45,7 @@
     <span class="detected-object-tag">
         <a class="label label-info detected-object opens-dropdown" data-info="<%= JSON.stringify(object) %>" href="#"><%= object.classifierConcept %></a>
     </span>
-  <% }}); %>
-</div>
+  <% }}); %></div>
 
 <div class="artifact-header">
   <div class="properties">
