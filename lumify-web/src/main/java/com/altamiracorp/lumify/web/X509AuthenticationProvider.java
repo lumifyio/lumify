@@ -15,6 +15,8 @@ import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 
 public abstract class X509AuthenticationProvider extends AuthenticationProvider {
+    public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
+
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
     private static final String X509_USER_PASSWORD = "P1OpQsfZMFizHqqyt7lXNE56a6HSVQxdMJHClZ0hhZPhY1OrHvkfDwysDhvWrUIUZbIuEY09FH99qo9t0rjikwEaHK4u03yTLidY";
     private final UserRepository userRepository;
@@ -50,7 +52,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         chain.next(request, response);
     }
 
-    private boolean isInvalid(X509Certificate cert) {
+    protected boolean isInvalid(X509Certificate cert) {
         if (cert == null) {
             return true;
         }
@@ -67,15 +69,15 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         return true;
     }
 
-    private X509Certificate extractCertificate(HttpServletRequest request) {
-        X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+    protected X509Certificate extractCertificate(HttpServletRequest request) {
+        X509Certificate[] certs = (X509Certificate[]) request.getAttribute(CERTIFICATE_REQUEST_ATTRIBUTE);
         if (null != certs && certs.length > 0) {
             return certs[0];
         }
         return null;
     }
 
-    private void respondWithAuthenticationFailure(HttpServletResponse response) throws IOException {
+    protected void respondWithAuthenticationFailure(HttpServletResponse response) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }
