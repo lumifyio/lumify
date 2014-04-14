@@ -13,7 +13,6 @@ import org.apache.hadoop.fs.RemoteIterator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashSet;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
@@ -68,17 +67,14 @@ public class HdfsLibCacheLoader extends LibLoader {
             throw new LumifyException(String.format("Could not sync directory %s. Directory does not exist.", source));
         }
 
-        HashSet<String> foundFiles = addFilesFromHdfs(fs, source, dest);
-        removeOldFiles(dest, foundFiles);
+        addFilesFromHdfs(fs, source, dest);
     }
 
-    private static HashSet<String> addFilesFromHdfs(FileSystem fs, Path source, File dest) throws IOException {
-        HashSet<String> foundFiles = new HashSet<String>();
+    private static void addFilesFromHdfs(FileSystem fs, Path source, File dest) throws IOException {
         RemoteIterator<LocatedFileStatus> sourceFiles = fs.listFiles(source, true);
         while (sourceFiles.hasNext()) {
             LocatedFileStatus sourceFile = sourceFiles.next();
             String relativePath = sourceFile.getPath().toString().substring(source.toString().length());
-            foundFiles.add(relativePath);
             File destFile = new File(dest, relativePath);
             if (sourceFile.isDirectory()) {
                 destFile.mkdirs();
@@ -87,37 +83,6 @@ public class HdfsLibCacheLoader extends LibLoader {
                 new File(destFile.getParent(), "." + destFile.getName() + ".crc").deleteOnExit();
             }
             destFile.deleteOnExit();
-        }
-        return foundFiles;
-    }
-
-    private static void removeOldFiles(File file, HashSet<String> foundFiles) {
-        if (file.isHidden() || file.getAbsolutePath().startsWith(".")) {
-            return;
-        }
-
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files == null) {
-                throw new LumifyException(String.format("Could not list files of directory %s", file.getAbsolutePath()));
-            }
-            for (File f : files) {
-                removeOldFiles(f, foundFiles);
-            }
-            return;
-        }
-
-        boolean foundFile = false;
-        for (String f : foundFiles) {
-            if (file.getAbsolutePath().endsWith(f)) {
-                foundFile = true;
-                break;
-            }
-        }
-
-        if (!foundFile) {
-            LOGGER.info("Removing old libcache file: %s", file.getAbsolutePath());
-            file.delete();
         }
     }
 }
