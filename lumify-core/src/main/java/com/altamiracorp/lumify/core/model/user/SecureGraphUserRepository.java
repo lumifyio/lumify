@@ -17,6 +17,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
@@ -29,19 +30,24 @@ import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperti
 import static com.altamiracorp.lumify.core.model.user.UserLumifyProperties.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Singleton
 public class SecureGraphUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphUserRepository.class);
+    private final AuthorizationRepository authorizationRepository;
     private Graph graph;
     private String userConceptId;
     private com.altamiracorp.securegraph.Authorizations authorizations;
-    private AuthorizationRepository authorizationRepository;
-    private OntologyRepository ontologyRepository;
-    private Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
+    private final Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
 
-    @Override
-    public void init(Map config) {
+    @Inject
+    public SecureGraphUserRepository (final AuthorizationRepository authorizationRepository,
+                                      final Graph graph,
+                                      final OntologyRepository ontologyRepository) {
+        this.authorizationRepository = authorizationRepository;
+        this.graph = graph;
+
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
 
@@ -238,20 +244,5 @@ public class SecureGraphUserRepository extends UserRepository {
             authorizations.add(s);
         }
         return authorizations;
-    }
-
-    @Inject
-    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
-        this.authorizationRepository = authorizationRepository;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
-    @Inject
-    public void setOntologyRepository(OntologyRepository ontologyRepository) {
-        this.ontologyRepository = ontologyRepository;
     }
 }

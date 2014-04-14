@@ -9,11 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class NoOpAuthorizationRepository implements AuthorizationRepository {
-
-    public void init(Map config) {
-
-    }
-
     @Override
     public void addAuthorizationToGraph(String auth) {
         // do nothing

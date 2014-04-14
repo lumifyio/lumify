@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,14 +24,17 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Singleton
 public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
-    private SessionFactory sessionFactory;
-    private AuthorizationRepository authorizationRepository;
+    private final SessionFactory sessionFactory;
+    private final AuthorizationRepository authorizationRepository;
 
-    @Override
-    public void init(Map config) {
-
+    @Inject
+    public SqlUserRepository (final AuthorizationRepository authorizationRepository,
+                              final SessionFactory sessionFactory){
+        this.authorizationRepository = authorizationRepository;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -240,15 +244,5 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         return authorizationRepository.createAuthorizations(new HashSet<String>());
-    }
-
-    @Inject
-    public void setAuthorizationRepository(AuthorizationRepository authorizationRepository) {
-        this.authorizationRepository = authorizationRepository;
-    }
-
-    @Inject
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
 import com.altamiracorp.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,19 +20,20 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+@Singleton
 public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
-    @Override
-    public void init(Map map) {
+    @Inject
+    public SqlWorkspaceRepository(final SessionFactory sessionFactory) {
 
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
             LOGGER.debug("add %s to workspace table", title);
             newWorkspace.getSqlWorkspaceUser().add(sqlWorkspaceUser);
-            ((SqlUser)user).getSqlWorkspaceUsers().add(sqlWorkspaceUser);
+            ((SqlUser) user).getSqlWorkspaceUsers().add(sqlWorkspaceUser);
             session.save(newWorkspace);
             session.save(sqlWorkspaceUser);
             session.update(user);
@@ -368,10 +370,5 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     @Override
     public boolean hasWritePermissions(Workspace workspace, User user) {
         return false;
-    }
-
-    @Inject
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

@@ -34,12 +34,17 @@ module.exports = function(grunt) {
     },
 
     less: {
+        options: {
+            paths: ['less'],
+            sourceMap: true,
+            sourceMapFilename: 'css/lumify.css.map',
+            sourceMapURL: 'lumify.css.map',
+            sourceMapRootpath: '/',
+            dumpLineNumbers: 'all'
+        },
         development: {
             files: {
                 'css/lumify.css': 'less/lumify.less'
-            },
-            options: {
-                paths: ['less']
             }
         },
         production: {
@@ -47,13 +52,7 @@ module.exports = function(grunt) {
                 'css/lumify.css': 'less/lumify.less'
             },
             options: {
-                paths: ['less'],
-                compress: true,
-                sourceMap: true,
-                sourceMapFilename: 'css/lumify.css.map',
-                sourceMapURL: 'lumify.css.map',
-                sourceMapRootpath: '/',
-                dumpLineNumbers: 'all'
+                compress: true
             }
         }
     },
@@ -168,30 +167,30 @@ module.exports = function(grunt) {
                 grunt.log.ok('The watch finished in ' + (time / 1000).toFixed(2) + 's. Waiting...');
             },
             spawn: false,
-            interrupt: true,
-            livereload: {
-                port: 35729,
-                key: grunt.file.read('test/localhost.key'),
-                cert: grunt.file.read('test/localhost.cert')
-            }
+            interrupt: false
         },
         css: {
             files: ['less/**/*.less', 'libs/**/*.css', 'libs/**/*.less'],
-            tasks: ['less:development', 'notify:css'],
+            tasks: ['less:development', 'notify:css']
         },
         scripts: {
             files: ['js/**/*.js', 'js/**/*.ejs'],
             tasks: ['requirejs:development', 'notify:js'],
+            options: {
+                livereload: {
+                    port: 35729,
+                    key: grunt.file.read('test/localhost.key'),
+                    cert: grunt.file.read('test/localhost.cert')
+                }
+            }
         },
         lint: {
             files: ['js/**/*.js'],
-            tasks: ['jshint:development'],
-            options: { livereload: false }
+            tasks: ['jshint:development']
         },
         jscs: {
             files: [ 'js/**/*.js' ],
-            tasks: ['jscs:development'],
-            options: { livereload: false }
+            tasks: ['jscs:development']
         }
     },
 

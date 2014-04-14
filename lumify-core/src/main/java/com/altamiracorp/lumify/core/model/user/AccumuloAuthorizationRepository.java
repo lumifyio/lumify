@@ -20,11 +20,6 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     private Graph graph;
     private LockRepository lockRepository;
 
-    @Override
-    public void init(Map config) {
-
-    }
-
     public void addAuthorizationToGraph(final String auth) {
         LOGGER.info("adding authorization [%s] for secure graph user", auth);
         synchronized (graph) {

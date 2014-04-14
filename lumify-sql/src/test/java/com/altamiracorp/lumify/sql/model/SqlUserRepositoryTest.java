@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.sql.model;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.user.User;
@@ -16,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mock;
 
 import static org.junit.Assert.*;
 
@@ -27,16 +29,17 @@ public class SqlUserRepositoryTest {
     private static org.hibernate.cfg.Configuration configuration;
     private static SessionFactory sessionFactory;
 
+    @Mock
+    private AuthorizationRepository authorizationRepository;
+
     @Before
     public void setup() {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository();
-        sqlWorkspaceRepository.setSessionFactory(sessionFactory);
-        sqlUserRepository = new SqlUserRepository();
-        sqlUserRepository.setSessionFactory(sessionFactory);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
+        sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
     }
 
     @Test

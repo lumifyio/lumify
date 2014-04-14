@@ -16,11 +16,6 @@ public class InMemoryAuthorizationRepository implements AuthorizationRepository 
     private List<String> authorizations = new ArrayList<String>();
 
     @Override
-    public void init(Map config) {
-
-    }
-
-    @Override
     public void addAuthorizationToGraph(String auth) {
         LOGGER.info("Adding authorization to graph user %s", auth);
         authorizations.add(auth);

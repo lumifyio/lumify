@@ -9,7 +9,7 @@ define([
     './dropdowns/propertyForm/propForm',
     'tpl!./properties',
     'tpl!./propertiesItem',
-    'tpl!./audit-list',
+    'tpl!./audit/audit-list',
     'data',
     'sf'
 ], function(
@@ -31,7 +31,7 @@ define([
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
-        MAX_AUDIT_ITEMS = 5,
+        MAX_AUDIT_ITEMS = 3,
         CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
         alreadyWarnedAboutMissingOntology = {};
 
@@ -48,7 +48,7 @@ define([
         this.defaultAttrs({
             addNewPropertiesSelector: '.add-new-properties',
             entityAuditsSelector: '.entity_audit_events',
-            auditShowAllSelector: '.audit-list button',
+            auditShowAllSelector: '.show-all-button-row button',
             auditDateSelector: '.audit-date',
             auditUserSelector: '.audit-user',
             auditEntitySelector: '.resolved',
@@ -87,7 +87,10 @@ define([
         });
 
         this.onAuditShowAll = function(event) {
-            $(event.target).closest('.audit-list').addClass('showAll');
+            var row = $(event.target).closest('tr');
+            
+            row.prevUntil('.property').removeClass('hidden');
+            row.remove();
         };
 
         this.onEntitySelected = function(event) {
@@ -150,14 +153,18 @@ define([
                                 return a.propertyAudit ? 'property' : 'other';
                             });
 
-                        self.select('entityAuditsSelector').html(auditsListTemplate({
-                            audits: auditGroups.other || [],
-                            formatters: formatters,
-                            formatValue: self.formatValue.bind(self),
-                            currentVertexId: self.attr.data.id,
-                            createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
-                            MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
-                        }));
+                        self.select('entityAuditsSelector')
+                            .empty()
+                            .append('<table></table>')
+                            .find('table')
+                            .append(auditsListTemplate({
+                                audits: auditGroups.other || [],
+                                formatters: formatters,
+                                formatValue: self.formatValue.bind(self),
+                                currentVertexId: self.attr.data.id,
+                                createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
+                                MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
+                            }));
 
                         if (auditGroups.property) {
                             self.updatePropertyAudits(auditGroups.property);
@@ -169,8 +176,9 @@ define([
                     });
             } else {
                 auditsEl.hide();
-                this.$node.find('.audit-list').remove();
+                this.$node.find('.audit-row').remove();
                 this.$node.find('.audit-only-property').remove();
+                this.$node.find('.show-all-button-row').remove();
             }
         };
 
@@ -234,9 +242,7 @@ define([
                         console.warn(propertyName + " in audit record doesn't exist in ontology");
                     }
                 }
-                propLi.after('<tr><td colspan=2></td></tr>')
-                    .next('tr').find('td')
-                    .append(auditsListTemplate({
+                propLi.after(auditsListTemplate({
                         audits: auditsByProperty[propertyName],
                         formatters: formatters,
                         formatValue: self.formatValue.bind(self),
@@ -382,7 +388,7 @@ define([
 
             if (propertyRow && propertyRow.length) {
                 root.appendTo(
-                    $('<tr><td colspan=2></td></tr>')
+                    $('<tr><td colspan=3></td></tr>')
                         .insertAfter(propertyRow)
                         .find('td')
                 );

@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceAccess;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceEntity;
@@ -15,6 +16,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
@@ -32,16 +34,17 @@ public class SqlWorkspaceRepositoryTest {
 
     private SqlUser testUser;
 
+    @Mock
+    private AuthorizationRepository authorizationRepository;
+
     @Before
     public void setUp() throws Exception {
         configuration = new org.hibernate.cfg.Configuration();
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlUserRepository = new SqlUserRepository();
-        sqlUserRepository.setSessionFactory(sessionFactory);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository();
-        sqlWorkspaceRepository.setSessionFactory(sessionFactory);
+        sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
 
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }

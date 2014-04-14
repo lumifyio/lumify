@@ -115,6 +115,9 @@
 
   .detected-object-labels {
     padding: 0.5em 0 2em 0;
+    &:empty {
+      display:none;
+    }
     .label.detected-object-tag.loading {
         background: #efefef;
         a {

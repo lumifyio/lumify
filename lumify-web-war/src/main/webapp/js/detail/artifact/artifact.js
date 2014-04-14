@@ -175,7 +175,7 @@ define([
                 formatters: formatters
             }));
 
-            this.select('detectedObjectLabelsSelector').show();
+            this.select('detectedObjectLabelsSelector').toggle(vertex.detectedObjects.length > 0);
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
