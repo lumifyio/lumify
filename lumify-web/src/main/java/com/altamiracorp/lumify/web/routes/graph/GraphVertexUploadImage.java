@@ -133,7 +133,6 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, null, user);
 
         graph.flush();
-        workQueueRepository.pushUserImageQueue(artifactVertex.getId().toString());
         workQueueRepository.pushGraphPropertyQueue(artifactVertex.getId(), ElementMutation.DEFAULT_KEY, RawLumifyProperties.RAW.getKey());
 
         respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId));

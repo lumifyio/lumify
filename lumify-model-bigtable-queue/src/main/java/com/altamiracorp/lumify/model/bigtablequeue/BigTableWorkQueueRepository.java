@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.model.bigtablequeue;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.config.Configurable;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -11,6 +12,7 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItem;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
+import com.altamiracorp.securegraph.Graph;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -20,12 +22,19 @@ import java.util.Map;
 
 public class BigTableWorkQueueRepository extends WorkQueueRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableWorkQueueRepository.class);
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     public static final String DEFAULT_TABLE_PREFIX = "atc_accumuloqueue_";
-    private ModelSession modelSession;
+    private final ModelSession modelSession;
     private Map<String, QueueItemRepository> queues = new HashMap<String, QueueItemRepository>();
     private String tablePrefix;
     private User user;
+
+    @Inject
+    public BigTableWorkQueueRepository(Graph graph, UserRepository userRepository, ModelSession modelSession) {
+        super(graph);
+        this.userRepository = userRepository;
+        this.modelSession = modelSession;
+    }
 
     @Override
     public void init(Map config) {
@@ -39,6 +48,11 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     public static String getTablePrefix(Map config) {
         return (String) config.get(Configuration.WORK_QUEUE_REPOSITORY + ".tableprefix");
+    }
+
+    @Configurable(name = "tableprefix", defaultValue = DEFAULT_TABLE_PREFIX)
+    public void setTablePrefix(String tablePrefix) {
+        this.tablePrefix = tablePrefix;
     }
 
     @Override
@@ -95,15 +109,5 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     public static String getTableName(String tablePrefix, String queueName) {
         return tablePrefix + queueName;
-    }
-
-    @Inject
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Inject
-    public void setModelSession(ModelSession modelSession) {
-        this.modelSession = modelSession;
     }
 }
