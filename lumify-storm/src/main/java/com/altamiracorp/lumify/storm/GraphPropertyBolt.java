@@ -198,7 +198,8 @@ public class GraphPropertyBolt extends BaseRichBolt {
             property = vertex.getProperty(propertyKey, propertyName);
         }
         if (property == null) {
-            throw new LumifyException("Could not find property " + propertyKey + ":" + propertyName + " on vertex with id " + graphVertexId);
+            LOGGER.error("Could not find property [%s]:[%s] on vertex with id %s", propertyKey, propertyName, graphVertexId);
+            return;
         }
         safeExecute(vertex, property);
     }
