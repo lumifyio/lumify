@@ -174,7 +174,7 @@ module.exports = function(grunt) {
             tasks: ['less:development', 'notify:css']
         },
         scripts: {
-            files: ['js/**/*.js', 'js/**/*.ejs'],
+            files: ['js/**/*.js', 'js/**/*.ejs', 'js/**/*.hbs'],
             tasks: ['requirejs:development', 'notify:js'],
             options: {
                 livereload: {
