@@ -164,8 +164,9 @@ define([
                 ) || cache.properties['http://lumify.io#conceptType'];
 
             if (!conceptType) {
-                cache.properties['http://lumify.io#conceptType'] = {};
-                conceptType = cache.properties['http://lumify.io#conceptType'].value = 'http://www.w3.org/2002/07/owl#Thing';
+                cache.properties['http://lumify.io#conceptType'] = {
+                    value: (conceptType = 'http://www.w3.org/2002/07/owl#Thing')
+                };
             }
 
             cache.concept = this.cachedConcepts.byId[conceptType];
