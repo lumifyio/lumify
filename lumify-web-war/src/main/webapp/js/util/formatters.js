@@ -114,7 +114,7 @@ define([
         },
         geoLocation: {
             parse: function(str) {
-                var m = str && str.match(/point\[(.*?),(.*?)\]/);
+                var m = str && str.match(/\s*point(?:\[|\()(.*?),(.*?)(?:\]|\))\s*/i);
                 if (m) {
                     var latitude = m[1], longitude = m[2];
                     return {
@@ -136,7 +136,12 @@ define([
                 }
 
                 if (geo && geo.latitude && geo.longitude) {
-                    return geo.latitude.toFixed(3) + ', ' + geo.longitude.toFixed(3);
+                    return (
+                        _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
+                    ).toFixed(3) + ', ' +
+                    (
+                        _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
+                    ).toFixed(3);
                 }
             }
         },
