@@ -141,7 +141,11 @@ public final class Configuration {
                     val = config.get(name);
                 } else {
                     if ("__FAIL__".equals(defaultValue)) {
-                        throw new LumifyException("Could not find property " + name + " for " + o.getClass().getName() + " and no default value was specified.");
+                        if (configurableAnnotation.required()) {
+                            throw new LumifyException("Could not find property " + name + " for " + o.getClass().getName() + " and no default value was specified.");
+                        } else {
+                            continue;
+                        }
                     }
                     val = defaultValue;
                 }

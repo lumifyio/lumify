@@ -11,4 +11,6 @@ public @interface Configurable {
     String name();
 
     String defaultValue() default "__FAIL__";
+
+    boolean required() default true;
 }
