@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.common.io.Files;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
@@ -28,7 +29,7 @@ public class HdfsLibCacheLoader extends LibLoader {
         }
 
         FileSystem hdfsFileSystem = getFileSystem(configuration);
-        File libCacheDirectory = ensureLocalLibCacheDirectory(configuration);
+        File libCacheDirectory = ensureLocalLibCacheDirectory();
 
         try {
             syncLibCache(hdfsFileSystem, new Path(hdfsLibCacheDirectory), libCacheDirectory);
@@ -39,8 +40,9 @@ public class HdfsLibCacheLoader extends LibLoader {
         addLibDirectory(libCacheDirectory);
     }
 
-    private File ensureLocalLibCacheDirectory(Configuration configuration) {
-        File libCacheDirectory = new File(configuration.get(Configuration.LIB_CACHE_DIRECTORY, "/opt/lumify/libcache"));
+    private File ensureLocalLibCacheDirectory() {
+        File libCacheDirectory = Files.createTempDir();
+        libCacheDirectory.deleteOnExit();
         if (!libCacheDirectory.exists()) {
             if (!libCacheDirectory.mkdirs()) {
                 throw new LumifyException("Could not mkdir " + libCacheDirectory.getAbsolutePath());
@@ -81,14 +83,10 @@ public class HdfsLibCacheLoader extends LibLoader {
             if (sourceFile.isDirectory()) {
                 destFile.mkdirs();
             } else {
-                if (destFile.exists()) {
-                    destFile.delete();
-                }
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
-                if (!destFile.setWritable(true, false)) {
-                    LOGGER.error("Could not setWritable %s", destFile.getAbsolutePath());
-                }
+                new File(destFile.getParent(), "." + destFile.getName() + ".crc").deleteOnExit();
             }
+            destFile.deleteOnExit();
         }
         return foundFiles;
     }
