@@ -85,6 +85,9 @@ public class HdfsLibCacheLoader extends LibLoader {
                     destFile.delete();
                 }
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
+                if (!destFile.setWritable(true, false)) {
+                    LOGGER.error("Could not setWritable %s", destFile.getAbsolutePath());
+                }
             }
         }
         return foundFiles;
