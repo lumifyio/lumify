@@ -140,6 +140,9 @@ public final class Configuration {
                 if (config.containsKey(name)) {
                     val = config.get(name);
                 } else {
+                    if ("__FAIL__".equals(defaultValue)) {
+                        throw new LumifyException("Could not find property " + name + " for " + o.getClass().getName() + " and no default value was specified.");
+                    }
                     val = defaultValue;
                 }
                 try {

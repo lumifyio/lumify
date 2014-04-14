@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface Configurable {
     String name();
 
-    String defaultValue();
+    String defaultValue() default "__FAIL__";
 }
