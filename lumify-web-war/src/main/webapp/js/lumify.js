@@ -61,7 +61,11 @@ require([
     'scrollStop',
     'bootstrap-datepicker',
     'util/jquery.flight',
-    'util/jquery.removePrefixedClasses'
+    'util/jquery.removePrefixedClasses',
+
+    // Handlebar helpers
+    'util/handlebars/eachWithLimit',
+    'util/handlebars/date'
 ],
 function(jQuery,
          jQueryui,

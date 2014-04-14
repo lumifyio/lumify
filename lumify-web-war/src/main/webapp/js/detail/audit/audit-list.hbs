@@ -1,0 +1,20 @@
+{{#eachWithLimit audits limit=MAX_TO_DISPLAY}}
+
+  <tr class="audit-row {{#if @hidden}}hidden{{/if}}">
+    {{>detail/audit/audit-item}}
+  </tr>
+
+  {{#if @showButton}}
+    <tr class="show-all-button-row">
+      <td>&nbsp;</td>
+      <td colspan="2">
+        <button class="btn btn-link btn-small">Show all...</button>
+      </td>
+    </tr>
+  {{/if}}
+
+{{else}}
+
+  <tr><td colspan="3">No audit events</td></tr>
+
+{{/eachWithLimit}}
