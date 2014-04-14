@@ -81,6 +81,9 @@ public class HdfsLibCacheLoader extends LibLoader {
             if (sourceFile.isDirectory()) {
                 destFile.mkdirs();
             } else {
+                if (destFile.exists()) {
+                    destFile.delete();
+                }
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
             }
         }
