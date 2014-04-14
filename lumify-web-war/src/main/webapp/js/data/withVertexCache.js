@@ -138,6 +138,7 @@ define([
             if (!cache.workspace) cache.workspace = {};
 
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
+
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
             
             $.extend(cache, _.pick(vertex, [
@@ -157,12 +158,17 @@ define([
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            cache.concept = this.cachedConcepts.byId[
-                (
-                    cache.properties['http://lumify.io#conceptType'] &&
+            var conceptType = (
+                cache.properties['http://lumify.io#conceptType'] &&
                     cache.properties['http://lumify.io#conceptType'].value
-                ) || cache.properties['http://lumify.io#conceptType']
-            ];
+                ) || cache.properties['http://lumify.io#conceptType'];
+
+            if (!conceptType) {
+                cache.properties['http://lumify.io#conceptType'] = {};
+                conceptType = cache.properties['http://lumify.io#conceptType'].value = 'http://www.w3.org/2002/07/owl#Thing';
+            }
+
+            cache.concept = this.cachedConcepts.byId[conceptType];
             if (cache.concept) {
                 setPreviewsForVertex(cache, this.workspaceId);
             } else {
