@@ -82,6 +82,11 @@ public class LumifyBootstrap extends AbstractModule {
             public Module createModule() {
                 return LumifyBootstrap.bootstrap(configuration);
             }
+
+            @Override
+            public Configuration getConfiguration() {
+                return configuration;
+            }
         };
     }
 
