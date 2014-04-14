@@ -18,14 +18,28 @@
         <!-- Builds the Tools Uber-JAR -->
         <profile>
             <id>tools-jar</id>
-            <properties>
-                <lumify.tool.mainClass>com.altamiracorp.lumify.tools.Import</lumify.tool.mainClass>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.altamiracorp.lumify.tools.Import</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
