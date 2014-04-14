@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.model.bigtablequeue;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.config.Configurable;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -47,6 +48,11 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
 
     public static String getTablePrefix(Map config) {
         return (String) config.get(Configuration.WORK_QUEUE_REPOSITORY + ".tableprefix");
+    }
+
+    @Configurable(name = "tableprefix", defaultValue = DEFAULT_TABLE_PREFIX)
+    public void setTablePrefix(String tablePrefix) {
+        this.tablePrefix = tablePrefix;
     }
 
     @Override
