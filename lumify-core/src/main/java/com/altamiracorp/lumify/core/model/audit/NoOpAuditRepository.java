@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 @Singleton
-public class NoOptAuditRepository extends AuditRepository {
+public class NoOpAuditRepository extends AuditRepository {
     @Inject
-    public NoOptAuditRepository(@Nullable final ModelSession modelSession) {
+    public NoOpAuditRepository(@Nullable final ModelSession modelSession) {
         super(modelSession);
     }
 
@@ -72,6 +72,11 @@ public class NoOptAuditRepository extends AuditRepository {
 
     @Override
     public void auditEdgeElementMutation(AuditAction action, ElementMutation<Edge> edgeElementMutation, Edge edge, Vertex sourceVertex, Vertex destVertex, String process, User user, Visibility visibility) {
+        throw new RuntimeException("not supported");
+    }
+
+    @Override
+    public void updateColumnVisibility(Audit audit, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
         throw new RuntimeException("not supported");
     }
 }

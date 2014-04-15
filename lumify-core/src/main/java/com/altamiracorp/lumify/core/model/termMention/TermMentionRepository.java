@@ -1,37 +1,28 @@
 package com.altamiracorp.lumify.core.model.termMention;
 
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
+import com.altamiracorp.lumify.core.model.audit.Audit;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-@Singleton
-public class TermMentionRepository extends Repository<TermMentionModel> {
-    private TermMentionBuilder termMentionBuilder = new TermMentionBuilder();
-
+public abstract class TermMentionRepository extends Repository<TermMentionModel>{
     @Inject
     public TermMentionRepository(final ModelSession modelSession) {
         super(modelSession);
     }
 
-    @Override
-    public TermMentionModel fromRow(Row row) {
-        return termMentionBuilder.fromRow(row);
-    }
+    public abstract TermMentionModel fromRow(Row row);
 
-    @Override
-    public Row toRow(TermMentionModel obj) {
-        return obj;
-    }
+    public abstract Row toRow(TermMentionModel obj);
 
-    @Override
-    public String getTableName() {
-        return termMentionBuilder.getTableName();
-    }
+    public abstract String getTableName();
 
-    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext) {
-        return findByRowStartsWith(graphVertexId + TermMentionRowKey.ROW_KEY_SEP, modelUserContext);
-    }
+    public abstract Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext);
+
+    public abstract void updateColumnVisibility (TermMentionModel termMentionModel, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag);
 }

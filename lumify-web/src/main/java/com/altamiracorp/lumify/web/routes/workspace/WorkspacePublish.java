@@ -45,7 +45,6 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
-    private final ModelSession modelSession;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
 
@@ -56,7 +55,6 @@ public class WorkspacePublish extends BaseRequestHandler {
                             final DetectedObjectRepository detectedObjectRepository,
                             final Configuration configuration,
                             final Graph graph,
-                            final ModelSession modelSession,
                             final VisibilityTranslator visibilityTranslator,
                             final OntologyRepository ontologyRepository) {
         super(userRepository, configuration);
@@ -65,7 +63,6 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.auditRepository = auditRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
-        this.modelSession = modelSession;
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
     }
@@ -245,7 +242,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
 
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
-            modelSession.alterColumnsVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+            auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
     }
 
@@ -328,7 +325,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
-            modelSession.alterColumnsVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+            auditRepository.updateColumnVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
 
         for (Property rowKeyProperty : destVertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
@@ -338,7 +335,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", sourceVertex.getId());
                 } else {
-                    modelSession.alterColumnsVisibility(detectedObjectModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                    detectedObjectRepository.updateColumnVisibility(detectedObjectModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
 
                     Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
                     JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
@@ -347,7 +344,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
                 }
             } else {
-                modelSession.alterColumnsVisibility(termMentionModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
     }
