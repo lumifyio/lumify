@@ -100,4 +100,12 @@ public abstract class UserRepository {
     {
         return new SystemUser(getModelUserContext(new String[0]));
     }
+
+    public User findOrAddUser(String username, String displayName, String password, String[] authorizations) {
+        User authUser = findByUserName(username);
+        if (authUser == null) {
+            authUser = addUser(username, displayName, password, authorizations);
+        }
+        return authUser;
+    }
 }

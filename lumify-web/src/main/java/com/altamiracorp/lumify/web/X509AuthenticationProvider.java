@@ -21,7 +21,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
     public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
-    private static final String X509_USER_PASSWORD = "N/A";
+    protected static final String X509_USER_PASSWORD = "N/A";
     private final UserRepository userRepository;
     private final Graph graph;
 
@@ -38,25 +38,21 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
             return;
         }
 
-        String username = getUsername(cert);
-        if (username == null || username.trim().equals("")) {
+        User user = getUser(request, cert);
+        if(user == null){
             respondWithAuthenticationFailure(response);
             return;
         }
-
-        User authUser = userRepository.findByUserName(username);
-        if (authUser == null) {
-            authUser = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, X509_USER_PASSWORD, new String[0]);
-        }
-
-        modifyUser(authUser, cert, request);
-
-        setUser(request, authUser);
+        setUser(request, user);
         chain.next(request, response);
     }
 
-    protected void modifyUser(User authUser, X509Certificate cert, HttpServletRequest request) {
-        // others may want to do something here to the authenticated user
+    protected User getUser(HttpServletRequest request, X509Certificate cert) {
+        String username = getUsername(cert);
+        if (username == null || username.trim().equals("")) {
+            return null;
+        }
+        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {
