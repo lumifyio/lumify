@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -20,6 +21,10 @@ public abstract class WorkQueueRepository {
     @Inject
     protected WorkQueueRepository(Graph graph) {
         this.graph = graph;
+    }
+
+    public void pushGraphPropertyQueue(final Object graphVertexId, final Property property) {
+        pushGraphPropertyQueue(graphVertexId, property.getKey(), property.getName());
     }
 
     public void pushGraphPropertyQueue(final Object graphVertexId, final String propertyKey, final String propertyName) {

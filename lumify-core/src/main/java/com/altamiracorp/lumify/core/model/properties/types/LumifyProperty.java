@@ -16,7 +16,9 @@
 
 package com.altamiracorp.lumify.core.model.properties.types;
 
+import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.securegraph.Element;
+import com.altamiracorp.securegraph.Property;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.common.base.Function;
@@ -189,6 +191,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
 
     public void setMetadata(Map<String, Object> metadata, TRaw value) {
         metadata.put(key, wrap(value));
+    }
+
+    public Property getProperty(Element element) {
+        return element.getProperty(getKey());
     }
 
     /**
