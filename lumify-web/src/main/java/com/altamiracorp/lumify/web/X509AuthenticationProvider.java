@@ -7,6 +7,9 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Graph;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,14 +21,11 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
     public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
-    private static final String X509_USER_PASSWORD = "P1OpQsfZMFizHqqyt7lXNE56a6HSVQxdMJHClZ0hhZPhY1OrHvkfDwysDhvWrUIUZbIuEY09FH99qo9t0rjikwEaHK4u03yTLidY";
+    private static final String X509_USER_PASSWORD = "N/A";
     private final UserRepository userRepository;
     private final Graph graph;
 
-    protected abstract String getUsername(X509Certificate cert);
-
-    protected X509AuthenticationProvider(UserRepository userRepository,
-                                         final Graph graph) {
+    protected X509AuthenticationProvider(UserRepository userRepository, final Graph graph) {
         this.userRepository = userRepository;
         this.graph = graph;
     }
@@ -48,8 +48,15 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         if (authUser == null) {
             authUser = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, X509_USER_PASSWORD, new String[0]);
         }
+
+        modifyUser(authUser, cert, request);
+
         setUser(request, authUser);
         chain.next(request, response);
+    }
+
+    protected void modifyUser(User authUser, X509Certificate cert, HttpServletRequest request) {
+        // others may want to do something here to the authenticated user
     }
 
     protected boolean isInvalid(X509Certificate cert) {
@@ -77,7 +84,35 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         return null;
     }
 
+    protected String getUsername(X509Certificate cert) {
+        String dn = cert.getSubjectX500Principal().getName();
+        try {
+            return getCn(dn);
+        } catch (InvalidNameException e) {
+            LOGGER.error("Unable to parse CN from X509 certificate DN: %s", dn);
+            return null;
+        }
+    }
+
+    private String getCn(String dn) throws InvalidNameException {
+        LdapName ldapDN = new LdapName(dn);
+        for (Rdn rdn : ldapDN.getRdns()) {
+            if (rdn.getType().equalsIgnoreCase("CN")) {
+                return rdn.getValue().toString();
+            }
+        }
+        return null;
+    }
+
     protected void respondWithAuthenticationFailure(HttpServletResponse response) throws IOException {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
+    }
+
+    protected UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    protected Graph getGraph() {
+        return graph;
     }
 }
