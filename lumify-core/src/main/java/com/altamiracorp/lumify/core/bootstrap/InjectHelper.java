@@ -51,8 +51,11 @@ public class InjectHelper {
 
     private static void ensureInjectorCreated(ModuleMaker moduleMaker) {
         if (injector == null) {
+            LOGGER.info("Loading libs");
             for (LibLoader libLoader : ServiceLoader.load(LibLoader.class)) {
+                LOGGER.info("Loading libs using: %s", libLoader.getClass().getName());
                 libLoader.loadLibs(moduleMaker.getConfiguration());
+                LOGGER.debug("%s completed loading libs", libLoader.getClass().getName());
             }
             injector = Guice.createInjector(moduleMaker.createModule(), new ObjectMapperModule());
         }
