@@ -73,6 +73,7 @@ public abstract class LibLoader {
             }
             method.setAccessible(true);
             method.invoke(classLoader, f.toURI().toURL());
+            LOGGER.debug("added %s to classloader %s", f.getAbsolutePath(), classLoader.getClass().getName());
             return true;
         } catch (Throwable t) {
             LOGGER.error("Error, could not add URL " + f.getAbsolutePath() + " to classloader: " + classLoaderClass.getName(), t);
