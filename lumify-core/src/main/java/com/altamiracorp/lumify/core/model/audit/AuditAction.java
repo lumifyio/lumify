@@ -4,7 +4,8 @@ public enum  AuditAction {
     UPDATE("update"),
     DELETE("delete"),
     CREATE("create"),
-    PUBLISH("publish");
+    PUBLISH("publish"),
+    UNRESOLVE("unresolved");
 
     private final String action;
 
