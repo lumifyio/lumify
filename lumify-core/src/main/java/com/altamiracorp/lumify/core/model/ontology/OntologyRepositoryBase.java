@@ -2,9 +2,16 @@ package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import com.google.common.io.Files;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import net.lingala.zip4j.core.ZipFile;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -21,6 +28,44 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
+
+    public void defineOntology() {
+        Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
+
+        Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
+
+        addEntityGlyphIcon(entityConcept);
+        importBaseOwlFile();
+    }
+
+    private void importBaseOwlFile() {
+        InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
+        try {
+            importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
+        } catch (Exception e) {
+            throw new LumifyException("Could not import ontology file", e);
+        } finally {
+            try {
+                baseOwlFile.close();
+            } catch (IOException ex) {
+                throw new LumifyException("Could not close file", ex);
+            }
+        }
+    }
+
+    public abstract void addEntityGlyphIcon(Concept entityConcept);
+
+    public boolean isOntologyDefined() {
+        try {
+            Concept concept = getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
+            return concept != null; // todo should check for more
+        } catch (Exception e) {
+            if (e.getMessage() != null && e.getMessage().contains(OntologyLumifyProperties.ONTOLOGY_TITLE.getKey())) {
+                return false;
+            }
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void importFile(File inFile, IRI documentIRI) throws Exception {
@@ -105,7 +150,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return null;
     }
 
-    private Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
+    protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
         String uri = ontologyClass.getIRI().toString();
         if ("http://www.w3.org/2002/07/owl#Thing".equals(uri)) {
             return getEntityConcept();
@@ -148,7 +193,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return result;
     }
 
-    private Concept getParentConcept(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
+    protected Concept getParentConcept(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
         Set<OWLClassExpression> superClasses = ontologyClass.getSuperClasses(o);
         if (superClasses.size() == 0) {
             return getEntityConcept();
@@ -171,7 +216,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    private void importDataProperty(OWLOntology o, OWLDataProperty dataTypeProperty) {
+    protected void importDataProperty(OWLOntology o, OWLDataProperty dataTypeProperty) {
         String propertyIRI = dataTypeProperty.getIRI().toString();
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
@@ -193,7 +238,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible);
 
-    private void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
+    protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
         checkNotNull(label, "label cannot be null or empty for " + uri);
@@ -240,7 +285,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return domains;
     }
 
-    private PropertyType getPropertyType(OWLOntology o, OWLDataProperty dataTypeProperty) {
+    protected PropertyType getPropertyType(OWLOntology o, OWLDataProperty dataTypeProperty) {
         Set<OWLDataRange> ranges = dataTypeProperty.getRanges(o);
         if (ranges.size() == 0) {
             return null;
@@ -285,7 +330,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         throw new LumifyException("Unhandled property type " + iri);
     }
 
-    private String getLabel(OWLOntology o, OWLEntity owlEntity) {
+    protected String getLabel(OWLOntology o, OWLEntity owlEntity) {
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().isLabel()) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();
@@ -295,20 +340,20 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return null;
     }
 
-    private String getColor(OWLOntology o, OWLEntity owlEntity) {
+    protected String getColor(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#color");
     }
 
-    private String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
+    protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#displayType");
     }
 
-    private boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
+    protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#userVisible");
         return val == null || Boolean.parseBoolean(val);
     }
 
-    private String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
+    protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#glyphIconFileName");
     }
 
@@ -317,6 +362,39 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (annotation.getProperty().getIRI().toString().equals(uri)) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();
                 return value.getLiteral();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void writePackage(File file, IRI documentIRI) throws Exception {
+        ZipFile zipped = new ZipFile(file);
+        if (zipped.isValidZipFile()) {
+            File tempDir = Files.createTempDir();
+            try {
+                LOGGER.info("Extracting: %s to %s", file.getAbsoluteFile(), tempDir.getAbsolutePath());
+                zipped.extractAll(tempDir.getAbsolutePath());
+
+                File owlFile = findOwlFile(tempDir);
+                importFile(owlFile, documentIRI);
+            } finally {
+                FileUtils.deleteDirectory(tempDir);
+            }
+        } else {
+            importFile(file, documentIRI);
+        }
+    }
+
+    protected File findOwlFile(File dir) {
+        for (File child : dir.listFiles()) {
+            if (child.isDirectory()) {
+                File found = findOwlFile(child);
+                if (found != null) {
+                    return found;
+                }
+            } else if (child.getName().toLowerCase().endsWith(".owl")) {
+                return child;
             }
         }
         return null;

@@ -9,10 +9,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.util.FilterIterable;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
-import net.lingala.zip4j.core.ZipFile;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.semanticweb.owlapi.model.IRI;
 
@@ -57,7 +54,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
         IRI documentIRI = IRI.create(documentIRIString);
 
         User user = getUser(request);
-        writePackage(tempFile, documentIRI, user);
+        ontologyRepository.writePackage(tempFile, documentIRI);
 
         tempFile.delete();
 
@@ -71,38 +68,6 @@ public class AdminUploadOntology extends BaseRequestHandler {
                 return part.getName().equals("file");
             }
         };
-    }
-
-    private void writePackage(File file, IRI documentIRI, User user) throws Exception {
-        ZipFile zipped = new ZipFile(file);
-        if (zipped.isValidZipFile()) {
-            File tempDir = Files.createTempDir();
-            try {
-                LOGGER.info("Extracting: %s to %s", file.getAbsoluteFile(), tempDir.getAbsolutePath());
-                zipped.extractAll(tempDir.getAbsolutePath());
-
-                File owlFile = findOwlFile(tempDir);
-                ontologyRepository.importFile(owlFile, documentIRI);
-            } finally {
-                FileUtils.deleteDirectory(tempDir);
-            }
-        } else {
-            ontologyRepository.importFile(file, documentIRI);
-        }
-    }
-
-    private File findOwlFile(File dir) {
-        for (File child : dir.listFiles()) {
-            if (child.isDirectory()) {
-                File found = findOwlFile(child);
-                if (found != null) {
-                    return found;
-                }
-            } else if (child.getName().toLowerCase().endsWith(".owl")) {
-                return child;
-            }
-        }
-        return null;
     }
 
     private void writeToTempFile(Part file, File tempFile) throws IOException {

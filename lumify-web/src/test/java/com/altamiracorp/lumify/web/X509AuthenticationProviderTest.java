@@ -37,8 +37,6 @@ public class X509AuthenticationProviderTest {
     @Mock
     private WebApp app;
     @Mock
-    private ModelSession modelSession;
-    @Mock
     private UserRepository userRepository;
     @Mock
     private Graph graph;

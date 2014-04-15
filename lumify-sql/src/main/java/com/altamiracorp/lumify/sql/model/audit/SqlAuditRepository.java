@@ -11,11 +11,13 @@ import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
+import com.google.inject.Inject;
 
 import java.util.List;
 import java.util.Map;
 
 public class SqlAuditRepository extends AuditRepository {
+    @Inject
     public SqlAuditRepository(ModelSession modelSession) {
         super(modelSession);
     }

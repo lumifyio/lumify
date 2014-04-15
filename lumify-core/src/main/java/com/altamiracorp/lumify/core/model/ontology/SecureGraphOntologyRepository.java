@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -15,6 +16,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,10 +24,7 @@ import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -56,8 +55,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             .build();
 
     @Inject
-    public SecureGraphOntologyRepository (final Graph graph,
-                                          final AuthorizationRepository authorizationRepository) {
+    public SecureGraphOntologyRepository(final Graph graph,
+                                         final AuthorizationRepository authorizationRepository) {
         this.graph = graph;
 
         authorizationRepository.addAuthorizationToGraph(SecureGraphOntologyRepository.VISIBILITY_STRING);
@@ -65,6 +64,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
+        if (!isOntologyDefined()) {
+            LOGGER.info("Base ontology not defined. Creating a new ontology.");
+            defineOntology();
+        } else {
+            LOGGER.info("Base ontology already defined.");
+        }
     }
 
     @Override
@@ -74,6 +79,25 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         this.allPropertiesCache.invalidateAll();
         this.conceptsCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();
+    }
+
+    @Override
+    public void addEntityGlyphIcon(Concept entityConcept) {
+        InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
+
+        try {
+            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
+            IOUtils.copy(entityGlyphIconInputStream, imgOut);
+
+            byte[] rawImg = imgOut.toByteArray();
+
+            StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
+            raw.searchIndex(false);
+            entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
+            graph.flush();
+        } catch (IOException e) {
+            throw new LumifyException("invalid stream for glyph icon");
+        }
     }
 
     @Override
