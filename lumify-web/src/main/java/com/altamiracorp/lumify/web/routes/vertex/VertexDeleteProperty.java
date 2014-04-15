@@ -77,6 +77,6 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             return;
         }
 
-        respondWithJson(response, workspaceHelper.deleteProperty(graphVertex, property, workspaceId));
+        respondWithJson(response, workspaceHelper.deleteProperty(graphVertex, property, workspaceId, user));
     }
 }

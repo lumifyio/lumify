@@ -24,6 +24,8 @@ define([], function() {
         return this; 
     }
 
+    ServiceBase.prototype.memoizeFunctions = function()  { }
+
     ServiceBase.prototype._ajaxRequests = function(url) {
         return _ajaxRequests[url];
     }

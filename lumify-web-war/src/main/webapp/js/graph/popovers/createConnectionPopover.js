@@ -5,17 +5,24 @@ define([
     'service/vertex',
     'service/ontology',
     'service/relationship',
-    'util/withFormFieldErrors'
+    'util/withFormFieldErrors',
+    'util/withTeardown'
 ], function(
     defineComponent,
     withVertexPopover,
     VertexService,
     OntologyService,
     RelationshipService,
-    withFormFieldErrors) {
+    withFormFieldErrors,
+    withTeardown) {
     'use strict';
 
-    return defineComponent(CreateConnectionPopover, withVertexPopover, withFormFieldErrors);
+    return defineComponent(
+        CreateConnectionPopover,
+        withVertexPopover,
+        withFormFieldErrors,
+        withTeardown
+    );
 
     function CreateConnectionPopover() {
 
@@ -44,9 +51,12 @@ define([
                     button = this.popover.find('button');
                 
                 select.html('<option>Loading...</option>');
-                button.text('Connect').attr('disabled', true).focus();
+                button.text('Connect').attr('disabled', true);
 
+                this.visibilitySource = { value: '', valid: true };
                 this.on('visibilitychange', this.onVisibilityChange);
+                this.on('justificationchange', this.onJustificationChange);
+                this.on('justificationanimationend', this.onJustificationAnimationEnd);
 
                 this.getRelationshipLabels(
                     cy.getElementById(this.attr.edge.data('source')),
@@ -62,10 +72,14 @@ define([
                             }).join('')
                         ).siblings('button').removeAttr('disabled');
 
-                        require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                        require([
+                            'configuration/plugins/visibility/visibilityEditor',
+                            'detail/dropdowns/propertyForm/justification',
+                        ], function(Visibility, Justification) {
                             Visibility.attachTo(self.$node.find('.visibility'), {
                                 value: ''
                             });
+                            Justification.attachTo(self.$node.find('.justification'));
                             self.positionDialog();
                         });
                     } else {
@@ -78,8 +92,28 @@ define([
         });
 
         this.onVisibilityChange = function(event, data) {
-            this.visibilitySource = data.value;
+            this.visibilitySource = data;
+            this.checkValid();
         };
+
+        this.onJustificationChange = function(event, data) {
+            this.justification = data;
+            this.checkValid();
+        };
+
+        this.onJustificationAnimationEnd = function() {
+        };
+
+        this.checkValid = function() {
+            var button = this.popover.find('button');
+
+            if (this.visibilitySource && this.visibilitySource.valid &&
+               this.justification && this.justification.valid) {
+                button.removeAttr('disabled');
+            } else {
+                button.attr('disabled', true);
+            }
+        }
 
         this.onCreateConnection = function(e) {
             var self = this,
@@ -90,12 +124,18 @@ define([
                     sourceGraphVertexId: this.attr.sourceVertexId,
                     destGraphVertexId: this.attr.targetVertexId,
                     predicateLabel: $target.siblings('select').val(),
-                    visibilitySource: this.visibilitySource
+                    visibilitySource: this.visibilitySource.value
                 },
                 inputs = this.$node.find('select, input')
                     .attr('disabled', true);
 
             this.attr.teardownOnTap = false;
+
+            if (this.justification.sourceInfo) {
+                parameters.sourceInfo = JSON.stringify(this.justification.sourceInfo);
+            } else if (this.justification.justificationText) {
+                parameters.justificationText = this.justification.justificationText;
+            }
 
             this.relationshipService.createRelationship(parameters)
                 .always(function() {

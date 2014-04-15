@@ -22,6 +22,7 @@ module.exports = function(config) {
 
       // Templates
       {pattern: 'js/**/*.ejs', included: false},
+      {pattern: 'js/**/*.hbs', included: false},
 
       // Images
       {pattern: 'img/**/*.*', included: false},

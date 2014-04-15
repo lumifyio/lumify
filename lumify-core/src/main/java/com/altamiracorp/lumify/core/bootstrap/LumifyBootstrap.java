@@ -223,7 +223,7 @@ public class LumifyBootstrap extends AbstractModule {
     private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
                                                     final User user, final boolean required) {
         Class<? extends T> configuredClass = BootstrapUtils.getConfiguredClass(config, key, required);
-        return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, user) : new NullProvider<T>();
+        return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, key, user) : new NullProvider<T>();
     }
 
     private static class NullProvider<T> implements Provider<T> {
@@ -234,26 +234,15 @@ public class LumifyBootstrap extends AbstractModule {
     }
 
     private static class ConfigurableProvider<T> implements Provider<T> {
-        /**
-         * The class to instantiate.
-         */
         private final Class<? extends T> clazz;
-
-        /**
-         * The init method.
-         */
         private final Method initMethod;
-
-        /**
-         * The init args.
-         */
         private final Object[] initMethodArgs;
+        private final Configuration config;
+        private final String keyPrefix;
 
-        public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config) {
-            this(clazz, config, null);
-        }
-
-        public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config, final User user) {
+        public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config, String keyPrefix, final User user) {
+            this.config = config;
+            this.keyPrefix = keyPrefix;
             boolean checkInit = true;
             Method init = null;
             Object[] initArgs = null;
@@ -306,6 +295,7 @@ public class LumifyBootstrap extends AbstractModule {
                 if (initMethod != null) {
                     initMethod.invoke(impl, initMethodArgs);
                 }
+                config.setConfigurables(impl, this.keyPrefix);
                 return impl;
             } catch (IllegalAccessException iae) {
                 LOGGER.error("Unable to access default constructor for %s", clazz.getName(), iae);

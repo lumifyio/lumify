@@ -44,5 +44,4 @@ public abstract class AuditRepository extends Repository<Audit> {
 
     public abstract void auditEdgeElementMutation(AuditAction action, ElementMutation<Edge> edgeElementMutation, Edge edge, Vertex sourceVertex, Vertex destVertex, String process,
                                                   User user, Visibility visibility);
-
 }

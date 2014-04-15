@@ -108,7 +108,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             Map<String, Object> metadata = new HashMap<String, Object>();
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
 
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, lumifyVisibility.getVisibility());
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
             TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());

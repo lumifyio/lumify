@@ -6,6 +6,8 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.securegraph.Graph;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import kafka.javaapi.producer.Producer;
 import kafka.javaapi.producer.ProducerData;
@@ -22,6 +24,11 @@ public class KafkaWorkQueueRepository extends WorkQueueRepository {
     public static final String KAFKA_PATH_PREFIX = "/kafka";
     private static final Object kafkaProducerLock = new Object();
     private static Producer<String, JSONObject> kafkaProducer;
+
+    @Inject
+    public KafkaWorkQueueRepository(Graph graph) {
+        super(graph);
+    }
 
     @Override
     public void init(Map config) {

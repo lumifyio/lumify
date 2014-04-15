@@ -135,7 +135,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         }
         audit.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        if (metadata != null || !metadata.isEmpty()) {
+        if (metadata != null && !metadata.isEmpty()) {
             audit.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
         }
 

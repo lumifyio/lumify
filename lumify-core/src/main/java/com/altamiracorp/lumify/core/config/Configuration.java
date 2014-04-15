@@ -1,11 +1,14 @@
 package com.altamiracorp.lumify.core.config;
 
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -38,7 +41,6 @@ public final class Configuration {
     public static final String ONTOLOGY_REPOSITORY = "ontology-repository";
     public static final String AUDIT_REPOSITORY = "audit-repository";
     public static final String LIB_DIRECTORY = "lib-directory";
-    public static final String LIB_CACHE_DIRECTORY = "libcache-directory";
     public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs-libcache-directory";
 
     private Map<String, String> config = new HashMap<String, String>();
@@ -102,6 +104,58 @@ public final class Configuration {
             subset.put(newKey, entry.getValue());
         }
         return subset;
+    }
+
+    public void setConfigurables(Object o, String keyPrefix) {
+        Map<String, String> subset = getSubset(keyPrefix);
+        setConfigurables(o, subset);
+    }
+
+    public void setConfigurables(Object o, Map<String, String> config) {
+        ConvertUtilsBean convertUtilsBean = new ConvertUtilsBean();
+
+        for (Method m : o.getClass().getMethods()) {
+            Configurable configurableAnnotation = m.getAnnotation(Configurable.class);
+            if (configurableAnnotation != null) {
+                if (m.getParameterTypes().length != 1) {
+                    throw new LumifyException("Invalid method to be configurable. Expected 1 argument. Found " + m.getParameterTypes().length + " arguments");
+                }
+
+                String propName = m.getName().substring("set".length());
+                if (propName.length() > 1) {
+                    propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
+                }
+
+                String name;
+                String defaultValue;
+                if (configurableAnnotation.name() != null) {
+                    name = configurableAnnotation.name();
+                    defaultValue = configurableAnnotation.defaultValue();
+                } else {
+                    name = propName;
+                    defaultValue = null;
+                }
+                String val;
+                if (config.containsKey(name)) {
+                    val = config.get(name);
+                } else {
+                    if ("__FAIL__".equals(defaultValue)) {
+                        if (configurableAnnotation.required()) {
+                            throw new LumifyException("Could not find property " + name + " for " + o.getClass().getName() + " and no default value was specified.");
+                        } else {
+                            continue;
+                        }
+                    }
+                    val = defaultValue;
+                }
+                try {
+                    Object convertedValue = convertUtilsBean.convert(val, m.getParameterTypes()[0]);
+                    m.invoke(o, convertedValue);
+                } catch (Exception ex) {
+                    throw new LumifyException("Could not set property " + m.getName() + " on " + o.getClass().getName());
+                }
+            }
+        }
     }
 
     public Map toMap() {

@@ -1,0 +1,69 @@
+<td>&nbsp;</td>
+
+{{#if propertyAudit}}
+
+  {{#with propertyAudit}}
+    <td class="audit-to">
+      <span>
+        {{#if isVisibility}}
+          <span class="visibility" 
+            data-visibility="{{formattedValue}}"></span>
+        {{else}}
+          {{formattedValue}}
+          <span class="visibility" 
+            data-visibility="{{visibilityValue}}"></span>
+        {{/if}}
+      </span>
+    </td>
+  {{/with}}
+{{else}}
+
+  {{#if relationshipAudit}}
+
+      <td class="audit-message">
+        <span>
+        {{data.action}}
+
+        {{#with relationshipAudit}}
+          {{label}}
+          {{#if sourceIsCurrent}}
+            &#8594; 
+            <a data-info="{{destInfo}}" 
+              href="#v={{destId}}" 
+              class="audit-to entity resolved">{{destTitle}}</a>
+          {{else}}
+            &#8592; 
+            <a data-info="{{sourceInfo}}" 
+              href="#v={{sourceId}}" 
+              class="audit-to entity resolved">{{sourceTitle}}</a>
+          {{/if}}
+        {{/with}}
+        </span>
+      </td>
+
+  {{else}}
+
+    <td class="audit-message">
+      <span>{{data.action}}
+        {{#if data.displayType}}
+          {{data.displayType}}
+        {{else}}
+          data.type
+        {{/if}}
+      </span>
+    </td>
+
+  {{/if}}
+
+{{/if}}
+
+
+<td class="audit-subtitle">
+  <span class="audit-user" 
+    data-user-id="{{data.userId}}">{{data.userName}}</span>,
+  <span class="audit-date"
+    data-date-relative="{{relativedate dateTime}}" 
+    data-date="{{date dateTime}}">
+    {{relativedate dateTime}}
+  </span>
+</td>
