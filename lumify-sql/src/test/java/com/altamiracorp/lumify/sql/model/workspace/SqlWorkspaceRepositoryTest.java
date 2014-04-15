@@ -199,7 +199,7 @@ public class SqlWorkspaceRepositoryTest {
         Set<SqlWorkspaceVertex> sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
-        assertEquals("1234", sqlWorkspaceVertex.getSqlVertex().getVertexId());
+        assertEquals("1234", sqlWorkspaceVertex.getVertexId());
         assertEquals(0, sqlWorkspaceVertex.getGraphPositionX());
         assertEquals(0, sqlWorkspaceVertex.getGraphPositionY());
         assertTrue(sqlWorkspaceVertex.isVisible());
@@ -210,7 +210,7 @@ public class SqlWorkspaceRepositoryTest {
         sqlWorkspaceVertexSet = sqlWorkspace.getSqlWorkspaceVertices();
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
-        assertEquals("1234", sqlWorkspaceVertex.getSqlVertex().getVertexId());
+        assertEquals("1234", sqlWorkspaceVertex.getVertexId());
         assertEquals(1, sqlWorkspaceVertex.getGraphPositionX());
         assertEquals(10, sqlWorkspaceVertex.getGraphPositionY());
         assertFalse(sqlWorkspaceVertex.isVisible());

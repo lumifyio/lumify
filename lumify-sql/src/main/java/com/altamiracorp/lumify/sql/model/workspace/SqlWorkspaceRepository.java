@@ -32,7 +32,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Inject
     public SqlWorkspaceRepository(final SessionFactory sessionFactory) {
-
         this.sessionFactory = sessionFactory;
     }
 
@@ -168,7 +167,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         return toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
             @Override
             protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
-                Object vertexId = sqlWorkspaceVertex.getSqlVertex().getVertexId();
+                Object vertexId = sqlWorkspaceVertex.getVertexId();
 
                 int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
                 int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
@@ -220,70 +219,38 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyResourceNotFoundException("Could not find workspace: " + workspace.getId(), workspace.getId());
         }
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            List vertices = session.createCriteria(SqlVertex.class).add(Restrictions.eq("vertexId", vertexId)).list();
-            SqlVertex sqlVertex;
+            List vertices = session.createCriteria(SqlWorkspaceVertex.class)
+                    .add(Restrictions.eq("vertexId", vertexId))
+                    .add(Restrictions.eq("workspace.workspaceId", Integer.valueOf(workspace.getId())))
+                    .list();
+            SqlWorkspaceVertex sqlWorkspaceVertex;
             if (vertices.size() > 1) {
                 throw new LumifyException("more than one vertex was returned");
             } else if (vertices.size() == 0) {
-                sqlVertex = new SqlVertex();
-                sqlVertex.setVertexId(vertexId.toString());
-                session.save(sqlVertex);
+                sqlWorkspaceVertex = new SqlWorkspaceVertex();
+                sqlWorkspaceVertex.setVertexId(vertexId.toString());
+                sqlWorkspaceVertex.setWorkspace((SqlWorkspace) workspace);
+                ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(sqlWorkspaceVertex);
+                session.update(workspace);
             } else {
-                sqlVertex = (SqlVertex) vertices.get(0);
+                sqlWorkspaceVertex = (SqlWorkspaceVertex) vertices.get(0);
             }
-
-            Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
-
-            if (sqlWorkspaceVertices.size() < 1) {
-                addNewWorkspaceVertex(workspace, visible, graphPositionX, graphPositionY, sqlVertex);
-            } else {
-                boolean updated = false;
-                for (SqlWorkspaceVertex sqlWorkspaceVertex : sqlWorkspaceVertices) {
-                    if (sqlWorkspaceVertex.getSqlVertex().getVertexId().equals(vertexId)) {
-                        sqlWorkspaceVertex.setGraphPositionX(graphPositionX);
-                        sqlWorkspaceVertex.setGraphPositionY(graphPositionY);
-                        sqlWorkspaceVertex.setVisible(visible);
-                        session.update(sqlWorkspaceVertex);
-                        updated = true;
-                    }
-                }
-                if (!updated) {
-                    addNewWorkspaceVertex(workspace, visible, graphPositionX, graphPositionY, sqlVertex);
-                }
-            }
+            sqlWorkspaceVertex.setVisible(visible);
+            sqlWorkspaceVertex.setGraphPositionX(graphPositionX);
+            sqlWorkspaceVertex.setGraphPositionY(graphPositionY);
+            session.saveOrUpdate(sqlWorkspaceVertex);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
-        }
-    }
-
-    private void addNewWorkspaceVertex(Workspace workspace, boolean visible,
-                                       int graphPositionX, int graphPositionY, SqlVertex sqlVertex) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            SqlWorkspaceVertex workspaceVertex = new SqlWorkspaceVertex();
-            workspaceVertex.setVisible(visible);
-            workspaceVertex.setGraphPositionX(graphPositionX);
-            workspaceVertex.setGraphPositionY(graphPositionY);
-            workspaceVertex.setSqlWorkspace((SqlWorkspace) workspace);
-            workspaceVertex.setSqlVertex(sqlVertex);
-
-            ((SqlWorkspace) workspace).getSqlWorkspaceVertices().add(workspaceVertex);
-            sqlVertex.getSqlWorkspaceVertices().add(workspaceVertex);
-            session.update(workspace);
-            session.update(sqlVertex);
-        } catch (HibernateException e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
     }
 

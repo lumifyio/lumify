@@ -22,7 +22,7 @@ public class SqlWorkspace implements Workspace {
     private SqlUser creator;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")
     public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
-    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceVertexId.workspace")
+    @OneToMany (fetch = FetchType.LAZY)
     private Set<SqlWorkspaceVertex> sqlWorkspaceVertices = new HashSet<SqlWorkspaceVertex>(0);
 
     public String getId() {

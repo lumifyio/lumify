@@ -18,7 +18,5 @@
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser"/>
         <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceVertex"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceVertexId"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlVertex"/>
     </session-factory>
 </hibernate-configuration>

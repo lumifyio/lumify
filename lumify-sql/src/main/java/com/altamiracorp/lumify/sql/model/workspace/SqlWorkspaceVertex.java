@@ -5,26 +5,23 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "workspace_vertex")
-@AssociationOverrides({@AssociationOverride(name = "sqlWorkspaceVertexId.vertex", joinColumns = @JoinColumn(name = "vertex_id")),
-        @AssociationOverride(name = "sqlWorkspaceVertexId.workspace", joinColumns = @JoinColumn(name = "workspace_id"))})
 public class SqlWorkspaceVertex implements Serializable {
     public static final long serialVersionUID = 1L;
-    @EmbeddedId
-    private SqlWorkspaceVertexId sqlWorkspaceVertexId = new SqlWorkspaceVertexId();
-    @Column(name = "graphPositionX")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "workspace_vertex_id", unique = true)
+    private int workspaceVertexId;
+    @Column(name = "graph_position_x")
     private int graphPositionX;
-    @Column(name = "graphPositionY")
+    @Column(name = "graph_position_y")
     private int graphPositionY;
     @Column(name = "visible", columnDefinition = "TINYINT(1)")
     private boolean visible;
-
-    public SqlWorkspaceVertexId getSqlWorkspaceVertexId() {
-        return sqlWorkspaceVertexId;
-    }
-
-    public void setSqlWorkspaceVertexId(SqlWorkspaceVertexId sqlWorkspaceVertexId) {
-        this.sqlWorkspaceVertexId = sqlWorkspaceVertexId;
-    }
+    @Column(name = "vertex_id")
+    private String vertexId;
+    @ManyToOne
+    @PrimaryKeyJoinColumn (name="workspace_id")
+    private SqlWorkspace workspace;
 
     public int getGraphPositionY() {
         return graphPositionY;
@@ -50,21 +47,27 @@ public class SqlWorkspaceVertex implements Serializable {
         this.visible = visible;
     }
 
-    @Transient
-    public SqlVertex getSqlVertex() {
-        return getSqlWorkspaceVertexId().getVertex();
+    public SqlWorkspace getWorkspace() {
+        return workspace;
     }
 
-    public void setSqlVertex(SqlVertex sqlVertex) {
-        getSqlWorkspaceVertexId().setVertex(sqlVertex);
+    public void setWorkspace(SqlWorkspace workspace) {
+        this.workspace = workspace;
     }
 
-    @Transient
-    public SqlWorkspace getSqlWorkspace() {
-        return getSqlWorkspaceVertexId().getWorkspace();
+    public String getVertexId() {
+        return vertexId;
     }
 
-    public void setSqlWorkspace(SqlWorkspace sqlWorkspace) {
-        getSqlWorkspaceVertexId().setWorkspace(sqlWorkspace);
+    public void setVertexId(String vertexId) {
+        this.vertexId = vertexId;
+    }
+
+    public int getWorkspaceVertexId() {
+        return workspaceVertexId;
+    }
+
+    public void setWorkspaceVertexId(int workspaceVertexId) {
+        this.workspaceVertexId = workspaceVertexId;
     }
 }
