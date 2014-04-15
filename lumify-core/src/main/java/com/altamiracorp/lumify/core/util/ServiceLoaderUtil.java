@@ -17,14 +17,18 @@ public class ServiceLoaderUtil {
         String fullName = PREFIX + clazz.getName();
         LOGGER.debug("loading services for class %s", fullName);
         try {
-            Enumeration<URL> configs = ClassLoader.getSystemResources(fullName);
-            while (configs.hasMoreElements()) {
-                URL config = configs.nextElement();
-                InputStream in = config.openStream();
-                try {
-                    LOGGER.debug("%s:\n%s", config.toString(), IOUtils.toString(in));
-                } finally {
-                    in.close();
+            Enumeration<URL> configs = Thread.currentThread().getContextClassLoader().getResources(fullName);
+            if (!configs.hasMoreElements()) {
+                LOGGER.debug("Could not find any services for %s", fullName);
+            } else {
+                while (configs.hasMoreElements()) {
+                    URL config = configs.nextElement();
+                    InputStream in = config.openStream();
+                    try {
+                        LOGGER.debug("%s:\n%s", config.toString(), IOUtils.toString(in));
+                    } finally {
+                        in.close();
+                    }
                 }
             }
 
