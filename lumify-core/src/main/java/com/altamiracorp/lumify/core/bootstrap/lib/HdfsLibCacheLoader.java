@@ -19,7 +19,7 @@ public class HdfsLibCacheLoader extends LibLoader {
 
     @Override
     public void loadLibs(Configuration configuration) {
-        LOGGER.debug("Loading libs using %s", HdfsLibCacheLoader.class.getName());
+        LOGGER.info("Loading libs using %s", HdfsLibCacheLoader.class.getName());
 
         String hdfsLibCacheDirectory = configuration.get(Configuration.HDFS_LIB_CACHE_DIRECTORY, null);
         if (hdfsLibCacheDirectory == null) {
