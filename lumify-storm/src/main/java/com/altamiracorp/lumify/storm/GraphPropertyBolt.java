@@ -17,6 +17,7 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.core.util.ServiceLoaderUtil;
 import com.altamiracorp.lumify.core.util.TeeInputStream;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
@@ -36,7 +37,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
@@ -81,7 +81,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 this.user,
                 this.authorizations,
                 InjectHelper.getInjector());
-        List<GraphPropertyWorker> workers = toList(ServiceLoader.load(GraphPropertyWorker.class));
+        List<GraphPropertyWorker> workers = toList(ServiceLoaderUtil.load(GraphPropertyWorker.class));
         this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
         for (GraphPropertyWorker worker : workers) {
             InjectHelper.inject(worker);
@@ -122,7 +122,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 InjectHelper.getInjector()
         );
 
-        List<TermMentionFilter> termMentionFilters = toList(ServiceLoader.load(TermMentionFilter.class));
+        List<TermMentionFilter> termMentionFilters = toList(ServiceLoaderUtil.load(TermMentionFilter.class));
         for (TermMentionFilter termMentionFilter : termMentionFilters) {
             InjectHelper.inject(termMentionFilter);
             try {
