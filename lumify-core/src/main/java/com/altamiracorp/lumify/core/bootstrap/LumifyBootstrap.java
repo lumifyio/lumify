@@ -22,6 +22,7 @@ import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
@@ -144,6 +145,10 @@ public class LumifyBootstrap extends AbstractModule {
         bind(OntologyRepository.class)
                 .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
+        bind(AuditRepository.class)
+                .toProvider(getConfigurableProvider(AuditRepository.class, configuration, Configuration.AUDIT_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+
 
         injectProviders();
     }

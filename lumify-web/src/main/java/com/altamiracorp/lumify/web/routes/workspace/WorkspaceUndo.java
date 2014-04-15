@@ -124,7 +124,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
                 Property property = vertex.getProperty(data.getString("key"), data.getString("name"));
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId));
+                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user));
                 successArray.put(responseResult);
             }
         }

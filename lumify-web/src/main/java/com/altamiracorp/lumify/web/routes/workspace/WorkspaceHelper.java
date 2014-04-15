@@ -1,5 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
@@ -91,6 +92,8 @@ public class WorkspaceHelper {
 
             graph.flush();
 
+            auditRepository.auditVertex(AuditAction.UNRESOLVE,vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+
             if (deleteEdge) {
                 result.put("deleteEdge", deleteEdge);
                 result.put("edgeId", edgeId);
@@ -104,6 +107,7 @@ public class WorkspaceHelper {
                                               LumifyVisibility visibility, String workspaceId,
                                               ModelUserContext modelUserContext, User user,
                                               Authorizations authorizations) {
+
         JSONObject result = new JSONObject();
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
 
@@ -132,13 +136,17 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, systemAuthorization);
         }
 
+        auditRepository.auditVertex(AuditAction.UNRESOLVE,vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+
         JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId);
         artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
         result.put("artifactVertex", artifactJson);
         return result;
     }
 
-    public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId) {
+    public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user) {
+        auditRepository.auditEntityProperty(AuditAction.DELETE,vertex.getId(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
+
         vertex.removeProperty(property.getKey(), property.getName());
 
         graph.flush();

@@ -50,6 +50,7 @@ define([
             if (event.type === 'paste') {
                 _.defer(function() {
                     var val = self.select('fieldSelector').val();
+                    self.animate = true;
                     if (!self.setReferenceWithValue(val)) {
                         self.trigger('justificationchange', { 
                             justificationText: val,
@@ -162,6 +163,7 @@ define([
                         self.fromPaste = false;
                         self.trigger('justificationfrompaste');
                     }
+                    self.trigger('justificationanimationend');
                 });
                 node.css({
                     height: node.find('.animationwrap').outerHeight(true) + 'px'

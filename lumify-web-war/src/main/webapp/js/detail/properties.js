@@ -9,7 +9,7 @@ define([
     './dropdowns/propertyForm/propForm',
     'tpl!./properties',
     'tpl!./propertiesItem',
-    'tpl!./audit/audit-list',
+    'hbs!./audit/audit-list',
     'data',
     'sf'
 ], function(
@@ -39,6 +39,7 @@ define([
     return component;
 
     function Properties() {
+        var self = this;
 
         this.ontologyService = new OntologyService();
         this.vertexService = new VertexService();
@@ -56,6 +57,7 @@ define([
         });
 
         this.after('initialize', function() {
+
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
                 auditDateSelector: this.onAuditDateClicked,
@@ -150,7 +152,30 @@ define([
                                         a.data.displayType = concept.displayName;
                                     }
                                 }
-                                return a.propertyAudit ? 'property' : 'other';
+
+                                if (a.propertyAudit) {
+                                    a.propertyAudit.isVisibility = 
+                                        a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
+                                    a.propertyAudit.visibilityValue = 
+                                        a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
+                                    a.propertyAudit.formattedValue = self.formatValue(
+                                        a.propertyAudit.newValue,
+                                        a.propertyAudit.propertyName
+                                    );
+
+                                    return 'property';
+                                }
+
+                                if (a.relationshipAudit) {
+                                    a.relationshipAudit.sourceIsCurrent = 
+                                        a.relationshipAudit.sourceId === self.attr.data.id;
+                                    a.relationshipAudit.sourceInfo = 
+                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
+                                    a.relationshipAudit.destInfo = 
+                                        self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
+                                }
+
+                                return 'other';
                             });
 
                         self.select('entityAuditsSelector')
@@ -159,10 +184,6 @@ define([
                             .find('table')
                             .append(auditsListTemplate({
                                 audits: auditGroups.other || [],
-                                formatters: formatters,
-                                formatValue: self.formatValue.bind(self),
-                                currentVertexId: self.attr.data.id,
-                                createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
                                 MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
                             }));
 
@@ -189,9 +210,7 @@ define([
             switch (dataType) {
                 case 'date': return formatters.date.dateString(v);
                 case 'number': return formatters.number.pretty(v);
-                case 'geoLocation':
-                    var geo = formatters.geoLocation.parse(v);
-                    return geo ? (geo.latitude + ',' + geo.longitude) : v;
+                case 'geoLocation': return formatters.geoLocation.pretty(v);
                 default:
                     return v;
             }
@@ -237,17 +256,13 @@ define([
                                 },
                                 popout: false
                             })
-                        ).addClass('audit-only-property').prependTo(self.$node.find('table tbody'));
+                        ).addClass('audit-only-property').insertBefore(self.$node.find('table tbody .buttons-row'));
                     } else if (_.isUndefined(property)) {
                         console.warn(propertyName + " in audit record doesn't exist in ontology");
                     }
                 }
                 propLi.after(auditsListTemplate({
                         audits: auditsByProperty[propertyName],
-                        formatters: formatters,
-                        formatValue: self.formatValue.bind(self),
-                        currentVertexId: self.attr.data.id,
-                        createInfoJsonFromAudit: self.createInfoJsonFromAudit.bind(self),
                         MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
                     }));
             });

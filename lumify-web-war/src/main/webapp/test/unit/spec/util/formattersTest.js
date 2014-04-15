@@ -63,11 +63,25 @@ define(['util/formatters'], function(f) {
                 result.should.have.property('longitude').equal('-43.66')
             })
 
+            it('should be able to parse uppercase', function() {
+                var result = f.geoLocation.parse('POINT(39.968720,-77.341100)')
+
+                expect(result).to.exist
+
+                result.should.have.property('latitude').equal('39.968720')
+                result.should.have.property('longitude').equal('-77.341100')
+            })
+
+            it('should be pretty', function() {
+                var result = f.geoLocation.pretty('POINT(39.968720,-77.341100)')
+
+                result.should.equal('39.969, -77.341')
+            })
+
             it('should return undefined if no match', function() {
                 expect(f.geoLocation.parse('geoPoint')).to.be.undefined;
             })
         })
-
 
         describe('for dates', function() {
 

@@ -41,6 +41,7 @@ define([
             }));
             
             this.on('visibilitychange', this.onVisibilityChange);
+            this.on('justificationchange', this.onJustificationChange);
 
             this.applyTermClasses(this.attr.sourceTerm, this.select('sourceTermSelector'));
             this.applyTermClasses(this.attr.destTerm, this.select('destTermSelector'));
@@ -76,7 +77,25 @@ define([
         }
 
         this.onVisibilityChange = function(event, data) {
-            this.visibilitySource = data.value;
+            this.visibilitySource = data;
+            this.checkValid();
+        };
+
+        this.onJustificationChange = function(event, data) {
+            this.justification = data;
+            this.checkValid();
+        };
+
+        this.checkValid = function() {
+            var button = this.select('createStatementButtonSelector');
+
+            if (this.visibilitySource && this.visibilitySource.valid &&
+                this.justification && this.justification.valid &&
+                this.select('relationshipSelector').val().length) {
+                button.removeAttr('disabled');
+            } else {
+                button.attr('disabled', true);
+            }
         };
 
         this.applyTermClasses = function(el, applyToElement) {
@@ -101,13 +120,8 @@ define([
         };
 
         this.onSelection = function(e) {
-            if (this.select('relationshipSelector').val().length === 0) {
-                this.select('createStatementButtonSelector')
-                    .attr('disabled', true);
-                return;
-            }
-            this.select('createStatementButtonSelector')
-                .attr('disabled', false);
+            this.realtionshipTypeSelection = this.select('relationshipSelector').val();
+            this.checkValid();
         };
 
         this.onOpened = function() {
@@ -135,13 +149,19 @@ define([
                     destGraphVertexId: this.attr.destTerm.data('info').graphVertexId ||
                         this.attr.destTerm.data('vertex-id'),
                     predicateLabel: this.select('relationshipSelector').val(),
-                    visibilitySource: this.visibilitySource
+                    visibilitySource: this.visibilitySource.value
                 };
 
             if (this.select('formSelector').hasClass('invert')) {
                 var swap = parameters.sourceGraphVertexId;
                 parameters.sourceGraphVertexId = parameters.destGraphVertexId;
                 parameters.destGraphVertexId = swap;
+            }
+
+            if (this.justification.sourceInfo) {
+                parameters.sourceInfo = JSON.stringify(this.justification.sourceInfo);
+            } else if (this.justification.justificationText) {
+                parameters.justificationText = this.justification.justificationText;
             }
 
             _.defer(this.buttonLoading.bind(this));
@@ -170,6 +190,8 @@ define([
 
         this.displayRelationships = function(relationships) {
             var self = this;
+
+            this.visibilitySource = { source: '', valid: true };
             self.ontologyService.relationships().done(function(ontologyRelationships) {
                 var relationshipsTpl = [];
 
@@ -192,10 +214,16 @@ define([
                 });
 
                 if (relationships.length) {
-                    require(['configuration/plugins/visibility/visibilityEditor'], function(Visibility) {
+                    require([
+                        'configuration/plugins/visibility/visibilityEditor',
+                        'detail/dropdowns/propertyForm/justification',
+                    ], function(Visibility, Justification) {
+
                         Visibility.attachTo(self.$node.find('.visibility'), {
                             value: ''
                         });
+
+                        Justification.attachTo(self.$node.find('.justification'));
                     });
                 } else self.$node.find('.visibility').teardownAllComponents().empty();
 
