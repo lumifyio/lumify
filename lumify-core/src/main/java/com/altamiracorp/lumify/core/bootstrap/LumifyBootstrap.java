@@ -119,7 +119,7 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
 
         bind(ModelSession.class)
-                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))
+                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, false))
                 .in(Scopes.SINGLETON);
         bind(FileSystemSession.class)
                 .toProvider(getConfigurableProvider(FileSystemSession.class, configuration, Configuration.FILESYSTEM_PROVIDER, true))

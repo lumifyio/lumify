@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.core;
 
 import com.altamiracorp.bigtable.model.ModelSession;
-import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.ModelUtil;
 import com.google.inject.Injector;
@@ -15,7 +14,6 @@ public class FrameworkUtils {
         checkNotNull(user);
 
         final ModelSession modelSession = injector.getInstance(ModelSession.class);
-        injector.getInstance(OntologyRepository.class);
 
         ModelUtil.initializeTables(modelSession, user);
     }

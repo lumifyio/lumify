@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.sql.model.audit;
+package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
@@ -11,14 +11,17 @@ import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
+import com.beust.jcommander.internal.Nullable;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.List;
 import java.util.Map;
 
-public class SqlAuditRepository extends AuditRepository {
+@Singleton
+public class NoOptAuditRepository extends AuditRepository {
     @Inject
-    public SqlAuditRepository(ModelSession modelSession) {
+    public NoOptAuditRepository(@Nullable final ModelSession modelSession) {
         super(modelSession);
     }
 

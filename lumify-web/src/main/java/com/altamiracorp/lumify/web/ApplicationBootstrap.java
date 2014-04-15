@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.FrameworkUtils;
 import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.bootstrap.LumifyBootstrap;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -41,8 +42,11 @@ public final class ApplicationBootstrap implements ServletContextListener {
 
                 // Store the injector in the context for a servlet to access later
                 context.setAttribute(Injector.class.getName(), InjectHelper.getInjector());
+                if (!config.get(Configuration.MODEL_PROVIDER).equals(Configuration.UNKNOWN_STRING)) {
+                    FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
+                }
 
-                FrameworkUtils.initializeFramework(InjectHelper.getInjector(), userRepository.getSystemUser());
+                InjectHelper.getInjector().getInstance(OntologyRepository.class);
 
                 LOGGER.warn("JavaScript / Less modifications will not be reflected on server. Run `grunt watch` from webapp directory in development");
             } else {
