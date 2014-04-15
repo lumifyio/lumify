@@ -100,10 +100,33 @@ define([
                     {el: $anchor, offset: selection.anchorOffset}, 
                     {el: $focus, offset: selection.focusOffset}
                 ].forEach(function(node) {
-                    var offset = 
-                        (node.el.parent('.entity').data('info') || {}).start || 
-                        (node.el.prev('.entity').data('info') || {}).end || 
-                        0;
+                    var parentInfo = node.el.closest('.entity').data('info'),
+                        offset = 0;
+
+                    if (parentInfo) {
+                        offset = parentInfo.start;
+                    } else {
+                        var previousEntity = node.el.prevAll('.entity').first(), 
+                        previousInfo = previousEntity.data('info'),
+                        dom = previousInfo ? 
+                            previousEntity.get(0) :
+                            node.el.closest('.text')[0].childNodes[0],
+                        el = node.el.get(0);
+
+                        if (previousInfo) {
+                            offset = previousInfo.end;
+                            dom = dom.nextSibling;
+                        }
+
+                        while (dom && dom !== el) {
+                            if (dom.nodeType === 3) {
+                                offset += dom.length;
+                            } else {
+                                offset += dom.textContent.length;
+                            }
+                            dom = dom.nextSibling;
+                        }
+                    }
 
                     offsets.push(offset + node.offset);
                 });
@@ -181,13 +204,20 @@ define([
 
             this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(vertex.id))
                 .done(function(artifactText, status, xhr) {
-                    var displayType = vertex.concept.displayType;
+                    var displayType = vertex.concept.displayType,
+                        textElement = self.select('textSelector');
+
                     if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
-                        self.select('textSelector').html(alertTemplate({ error: 'No Text Available' }));
+                        textElement.html(alertTemplate({ error: 'No Text Available' }));
                     } else {
-                        self.select('textSelector').html(!artifactText ?
+                        textElement.html(!artifactText ?
                              '' :
-                             artifactText.replace(/[\n]+/g, '<br><br>\n'));
+                             artifactText
+                                .replace(/(\n+)/g, '<br><br>$1'));
+
+                        if (self.attr.focusOffsets) {
+                            rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
+                        }
                     }
                     self.updateEntityAndArtifactDraggables();
                     if (self[displayType + 'Setup']) {

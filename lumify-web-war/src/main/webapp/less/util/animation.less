@@ -56,6 +56,23 @@
   .animation-fill-mode(both);
 }
 
+.fade-keyframe() {
+    0%, 20%, 100% {background:inherit;}
+    10%, 30%, 70% {background:fadeout(@blue-color, 80%);}
+}
+@-webkit-keyframes fade {.fade-keyframe;}
+@-moz-keyframes fade {.fade-keyframe;}
+@-ms-keyframes fade {.fade-keyframe;}
+@-o-keyframes fade {.fade-keyframe;}
+@keyframes fade {.fade-keyframe;}
+
+.fade(@duration:1s) {
+  .animation-duration(@duration);
+  .animation-iteration-count(1);
+  .animation-name(fade);
+  .animation-fill-mode(both);
+}
+
 .keyframe-animation(@name, @duration:1s, @iteration:1, @fill:both) {
   .animation-duration(@duration);
   .animation-iteration-count(@iteration);
@@ -96,6 +113,10 @@
   .scale(0.1);
   .opacity(0);
   .transition(~"all ease-in 0.5s");
+}
+
+.fade-slow {
+  .fade(4s);
 }
 
 .pop-fast {

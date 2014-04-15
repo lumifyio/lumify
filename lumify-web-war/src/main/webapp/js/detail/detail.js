@@ -101,7 +101,8 @@ define([
             ], function(Module) {
                 Module.attachTo(self.select('detailTypeContentSelector'), {
                     data: moduleData,
-                    highlightStyle: self.attr.highlightStyle
+                    highlightStyle: self.attr.highlightStyle,
+                    focusOffsets: data.focus && data.focus.offsets
                 });
             });
         };

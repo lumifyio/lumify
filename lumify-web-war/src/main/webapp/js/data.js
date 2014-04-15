@@ -695,6 +695,8 @@ define([
                     var info = self.workspaceVertices[id];
                     info.selected = selectedIds.indexOf(id) >= 0;
                 });
+                
+                $.extend(selected, _.pick(data || {}, 'focus'));
 
                 self.trigger('objectsSelected', selected);
             })

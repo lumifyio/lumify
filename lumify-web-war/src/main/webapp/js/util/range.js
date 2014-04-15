@@ -1,7 +1,8 @@
 
 define([
     'rangy',
-    'rangy-text'
+    'rangy-text',
+    'rangy-highlighter'
 ], function(
     rangy,
     rangyText
@@ -13,6 +14,78 @@ define([
 
         clearSelection: function() {
             rangy.getSelection().removeAllRanges();
+        },
+
+        highlightOffsets: function(textElement, offsets) {
+            textElement.normalize();
+
+            var childNodes = textElement.childNodes,
+                len = childNodes.length,
+                node,
+                startOffset = 0,
+                endOffset = 0,
+                startContainer = null, 
+                endContainer = null,
+                i = 0;
+             
+            for (; i < len; i++) {
+                node = childNodes[i];
+                
+                var toAdd = 0;
+                if (node.nodeType === node.TEXT_NODE) {
+                    toAdd = node.length;
+                } else {
+                    toAdd = node.textContent.length;
+                    node = node.childNodes[0];
+                }
+
+                if (!startContainer) {
+                    if ((startOffset + toAdd) >= offsets[0]) {        
+                        startContainer = node;
+                        if (endContainer) break;
+                    } else startOffset += toAdd;    
+                }
+                if (!endContainer) {
+                    if ((endOffset + toAdd) > offsets[1]) {        
+                        endContainer = node;
+                        if (startContainer) break;
+                    } else endOffset += toAdd;    
+                }                
+            } 
+
+            var range = rangy.createRange(),    
+                highlighter = rangy.createHighlighter();
+                
+            highlighter.addClassApplier(rangy.createCssClassApplier('highlight', {
+                ignoreWhiteSpace: true,
+                tagNames: ['span']
+            }));
+                
+            range.setStart(startContainer, offsets[0] - startOffset);
+            range.setEnd(endContainer, offsets[1] - endOffset)
+            range.select()
+
+            var highlight = highlighter.highlightSelection('highlight');
+
+            rangy.getSelection().removeAllRanges()
+
+            var newEl = highlight[0].getHighlightElements()[0],
+                $newEl = $(newEl),
+                scrollParent = $newEl.scrollParent(),
+                scrollTo = newEl.offsetTop;
+                
+            scrollParent.clearQueue().animate({ 
+                scrollTop: scrollTo - 100 
+            }, {
+                duration: 'fast',
+                easing: 'easeInOutQuad',
+                complete: function() {
+                    $newEl.on(ANIMATION_END, function(e) {
+                        highlighter.removeAllHighlights();
+                    });
+                    $newEl.addClass('fade-slow');
+                }
+            });
         },
 
         expandRangeByWords: function(range, numberWords, splitBeforeAfterOutput) {
