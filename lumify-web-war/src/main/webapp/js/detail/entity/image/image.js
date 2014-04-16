@@ -3,16 +3,26 @@ define([
     'flight/lib/component',
     'tpl!./image',
     'data',
-    'util/retina'
-], function(defineComponent, template, appData, retina) {
+    'util/retina',
+    'util/withFileDrop',
+    'service/vertex'
+], function(
+    defineComponent,
+    template,
+    appData,
+    retina, 
+    withFileDrop,
+    VertexService) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
     var MAX_PREVIEW_FILE_SIZE = 1024 * 1024; 
 
-    return defineComponent(ImageView);
+    return defineComponent(ImageView, withFileDrop);
 
     function ImageView() {
+
+        var vertexService = new VertexService();
 
         this.defaultAttrs({
             canvasSelector: 'canvas',
@@ -47,22 +57,6 @@ define([
                     $(this).removeClass('file-hover'); 
                 }
             });
-            this.node.ondragover = function() {
-                $(this).addClass('file-hover'); return false; 
-            };
-            this.node.ondragenter = function() {
-                $(this).addClass('file-hover'); return false; 
-            };
-            this.node.ondragleave = function() {
-                $(this).removeClass('file-hover'); return false; 
-            };
-            this.node.ondrop = function(e) {
-                e.preventDefault();
-
-                if (self.$node.hasClass('uploading')) return;
-
-                self.handleFilesDropped(e.dataTransfer.files);
-            };
         });
 
         this.srcForGlyphIconUrl = function(url) {
@@ -81,6 +75,9 @@ define([
         };
 
         this.handleFilesDropped = function(files) {
+            if (this.$node.hasClass('uploading')) {
+                return;
+            }
             this.$node.removeClass('file-hover');
             if (files.length === 1) {
                 var file = files[0];
@@ -123,40 +120,21 @@ define([
         };
 
         this.uploadFile = function(file) {
-            var self = this,
-                formData = new FormData();
-
-            formData.append('file', file);
-
-            // TODO: move to vertexService
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'graph/vertex/uploadImage?graphVertexId=' + this.attr.data.id);
-            xhr.setRequestHeader('Lumify-Workspace-Id', appData.workspaceId);
-            xhr.onload = function(event) {
-                if (xhr.status === 200) {
-                    var result = JSON.parse(xhr.responseText),
-                        vertex = appData.updateCacheWithVertex(result);
-                    self.trigger('filecomplete', { vertex: vertex });
-                } else {
-                    self.trigger('fileerror', { status: xhr.status, response: xhr.responseText });
-                }
-            };
-            xhr.onerror = function() {
-                console.error(arguments);
-            };
-
-            xhr.upload.onprogress = function(event) {
-                if (event.lengthComputable) {
-                    var complete = (event.loaded / event.total || 0);
-                    if (complete < 1.0) {
-                        self.trigger('fileprogress', { complete: complete });
-                    }
-                }
-            };
+            var self = this;
 
             this.manualAnimation = false;
             this.firstProgressUpdate = true;
-            xhr.send(formData);
+
+            vertexService.uploadImage(this.attr.data.id, file)
+                .progress(function(complete) {
+                    self.trigger('fileprogress', { complete: complete });
+                })
+                .fail(function(xhr, message, error) {
+                    self.trigger('fileerror', { status: xhr.status, response: error });
+                })
+                .done(function(vertex) {
+                    self.trigger('filecomplete', { vertex: vertex });
+                });
         };
 
         this.handleFileDrop = function(file) {

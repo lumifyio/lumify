@@ -15,7 +15,9 @@ define([
     'map/map',
     'help/help',
     'util/mouseOverlay',
-    'service/user'
+    'util/withFileDrop',
+    'service/user',
+    'service/vertex'
 ], function(
     defineComponent,
     appTemplate,
@@ -32,15 +34,19 @@ define([
     Map,
     Help,
     MouseOverlay,
-    UserService) {
+    withFileDrop,
+    UserService,
+    VertexService) {
     'use strict';
 
-    return defineComponent(App);
+    return defineComponent(App, withFileDrop);
 
     function App() {
         var Graph3D,
             MAX_RESIZE_TRIGGER_INTERVAL = 250,
-            DATA_MENUBAR_NAME = 'menubar-name';
+            DATA_MENUBAR_NAME = 'menubar-name',
+            userService = new UserService(),
+            vertexService = new VertexService();
 
         this.onError = function(evt, err) {
             alert('Error: ' + err.message); // TODO better error handling
@@ -194,6 +200,28 @@ define([
             }
         });
 
+        this.handleFilesDropped = function(files) {
+            var self = this;
+            
+            vertexService.importFiles(files)
+                .progress(function(complete) {
+                    console.log('Upload progress:', (complete * 100).toFixed(1) + '%');
+                })
+                .fail(function(xhr, m, error) {
+                    if (error !== 'abort') {
+                        self.trigger('displayInformation', { message: error });
+                    }
+                })
+                .done(function(result) {
+                    self.trigger('displayInformation', { message: 'Finished uploading' });
+
+                    vertexService.getMultiple(result.vertexIds)
+                        .done(function(v) {
+                            self.trigger('addVertices', v);
+                        });
+                });
+        };
+
         this.toggleSearchPane = function() {
             this.trigger(document, 'menubarToggleDisplay', { name: 'search' });
         };
@@ -289,7 +317,7 @@ define([
 
             this.trigger('willLogout');
 
-            new UserService().logout()
+            userService.logout()
                 .fail(function() {
                     require(['login'], function(Login) {
                         $(document.body)

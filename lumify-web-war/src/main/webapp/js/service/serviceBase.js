@@ -111,6 +111,52 @@ define(['atmosphere'],
             return this._ajaxGet(options);
         };
 
+        ServiceBase.prototype._ajaxUpload = function(options) {
+            // We must use this xhr
+            delete options.xhr;
+
+            var xhr = null,
+                progressHandler = null,
+                deferred = $.Deferred(),
+                request = this._ajaxGet($.extend({
+                        type: 'POST',
+                        xhr: function() {
+                            xhr = $.ajaxSettings.xhr();
+                            if (xhr.upload) {
+                                xhr.upload.addEventListener('progress', (progressHandler = function(event) {
+                                    if (event.lengthComputable) {
+                                        var complete = (event.loaded / event.total || 0);
+                                        if (complete < 1.0) {
+                                            deferred.notify(complete);
+                                        }
+                                    }
+                                }), false);
+                            }
+                            return xhr;
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }, options))
+                        .always(function() {
+                            if (xhr && progressHandler) {
+                                xhr.removeEventListener('progress', progressHandler);
+                            }
+                        })
+                        .fail(function(xhr, m, error) {
+                            deferred.reject(xhr, m, error);
+                        })
+                        .done(function(result) {
+                            deferred.resolve(result);
+                        }),
+                promise = deferred.promise();
+                
+            promise.abort = function() {
+                request.abort();
+            };
+            return promise;
+        };
+
         ServiceBase.prototype._ajaxDelete = function(options) {
             options.type = options.type || 'DELETE';
             return this._ajaxGet(options);

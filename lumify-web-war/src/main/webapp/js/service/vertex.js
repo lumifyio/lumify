@@ -51,6 +51,32 @@ define([
         });
     };
 
+    VertexService.prototype.uploadImage = function(vertexId, imageFile) {
+        var formData = new FormData();
+
+        formData.append('file', imageFile);
+
+        return this._ajaxUpload({
+            url: 'graph/vertex/uploadImage?' + $.param({
+                graphVertexId: vertexId
+            }),
+            data: formData
+        });
+    };
+
+    VertexService.prototype.importFiles = function(files) {
+        var formData = new FormData();
+
+        _.forEach(files, function(f) { 
+            formData.append('file', f);
+        });
+
+        return this._ajaxUpload({
+            url: 'artifact/import',
+            data: formData
+        });
+    };
+
     VertexService.prototype.getMultiple = function(vertexIds) {
         return this._ajaxPost({
             url: 'vertex/multiple',
