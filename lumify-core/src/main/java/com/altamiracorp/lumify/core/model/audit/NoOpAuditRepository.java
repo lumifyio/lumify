@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.sql.model.audit;
+package com.altamiracorp.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
@@ -11,12 +11,17 @@ import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
+import com.beust.jcommander.internal.Nullable;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.List;
 import java.util.Map;
 
-public class SqlAuditRepository extends AuditRepository {
-    public SqlAuditRepository(ModelSession modelSession) {
+@Singleton
+public class NoOpAuditRepository extends AuditRepository {
+    @Inject
+    public NoOpAuditRepository(@Nullable final ModelSession modelSession) {
         super(modelSession);
     }
 
@@ -67,6 +72,11 @@ public class SqlAuditRepository extends AuditRepository {
 
     @Override
     public void auditEdgeElementMutation(AuditAction action, ElementMutation<Edge> edgeElementMutation, Edge edge, Vertex sourceVertex, Vertex destVertex, String process, User user, Visibility visibility) {
+        throw new RuntimeException("not supported");
+    }
+
+    @Override
+    public void updateColumnVisibility(Audit audit, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
         throw new RuntimeException("not supported");
     }
 }

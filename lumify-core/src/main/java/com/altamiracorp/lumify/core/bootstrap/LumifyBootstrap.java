@@ -22,8 +22,11 @@ import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.fs.FileSystemSession;
 import com.altamiracorp.lumify.core.metrics.JmxMetricsManager;
 import com.altamiracorp.lumify.core.metrics.MetricsManager;
+import com.altamiracorp.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
@@ -120,7 +123,7 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
 
         bind(ModelSession.class)
-                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, true))
+                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, false))
                 .in(Scopes.SINGLETON);
         bind(FileSystemSession.class)
                 .toProvider(getConfigurableProvider(FileSystemSession.class, configuration, Configuration.FILESYSTEM_PROVIDER, true))
@@ -149,7 +152,15 @@ public class LumifyBootstrap extends AbstractModule {
         bind(AuditRepository.class)
                 .toProvider(getConfigurableProvider(AuditRepository.class, configuration, Configuration.AUDIT_REPOSITORY, true))
                 .in(Scopes.SINGLETON);
-
+        bind(TermMentionRepository.class)
+                .toProvider(getConfigurableProvider(TermMentionRepository.class, configuration, Configuration.TERM_MENTION_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(DetectedObjectRepository.class)
+                .toProvider(getConfigurableProvider(DetectedObjectRepository.class, configuration, Configuration.DETECTED_OBJECT_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
+        bind(ArtifactThumbnailRepository.class)
+                .toProvider(getConfigurableProvider(ArtifactThumbnailRepository.class, configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY, true))
+                .in(Scopes.SINGLETON);
 
         injectProviders();
     }

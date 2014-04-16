@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
-import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
@@ -32,7 +31,6 @@ import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 @Singleton
 public class WorkspaceHelper {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceHelper.class);
-    private final ModelSession modelSession;
     private final TermMentionRepository termMentionRepository;
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
@@ -40,13 +38,11 @@ public class WorkspaceHelper {
     private final Graph graph;
 
     @Inject
-    public WorkspaceHelper(final ModelSession modelSession,
-                           final TermMentionRepository termMentionRepository,
+    public WorkspaceHelper(final TermMentionRepository termMentionRepository,
                            final AuditRepository auditRepository,
                            final UserRepository userRepository,
                            final DetectedObjectRepository detectedObjectRepository,
                            final Graph graph) {
-        this.modelSession = modelSession;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
@@ -83,7 +79,7 @@ public class WorkspaceHelper {
                 }
             }
 
-            modelSession.deleteRow(termMention.getTableName(), termMention.getRowKey());
+            termMentionRepository.delete(termMention.getRowKey());
 
             if (analyzedTermMention != null) {
                 TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(analyzedTermMention);
@@ -92,7 +88,7 @@ public class WorkspaceHelper {
 
             graph.flush();
 
-            auditRepository.auditVertex(AuditAction.UNRESOLVE,vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+            auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
 
             if (deleteEdge) {
                 result.put("deleteEdge", deleteEdge);
@@ -111,7 +107,7 @@ public class WorkspaceHelper {
         JSONObject result = new JSONObject();
         Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
 
-        modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+        detectedObjectRepository.delete(detectedObjectModel.getRowKey());
 
         if (analyzedDetectedObject == null) {
             result.put("deleteTag", true);
@@ -136,7 +132,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, systemAuthorization);
         }
 
-        auditRepository.auditVertex(AuditAction.UNRESOLVE,vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+        auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
 
         JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId);
         artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));
@@ -145,7 +141,7 @@ public class WorkspaceHelper {
     }
 
     public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user) {
-        auditRepository.auditEntityProperty(AuditAction.DELETE,vertex.getId(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
+        auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
 
         vertex.removeProperty(property.getKey(), property.getName());
 
@@ -174,10 +170,10 @@ public class WorkspaceHelper {
                 if (detectedObjectModel == null) {
                     continue;
                 } else {
-                    modelSession.deleteRow(detectedObjectModel.getTableName(), detectedObjectModel.getRowKey());
+                    detectedObjectRepository.delete(detectedObjectModel.getRowKey());
                 }
             } else if (termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
-                modelSession.deleteRow(termMentionModel.getTableName(), termMentionModel.getRowKey());
+                termMentionRepository.delete(termMentionModel.getRowKey());
             }
         }
 

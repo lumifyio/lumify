@@ -40,8 +40,12 @@ public final class Configuration {
     public static final String AUTHORIZATION_REPOSITORY = "authorization-repository";
     public static final String ONTOLOGY_REPOSITORY = "ontology-repository";
     public static final String AUDIT_REPOSITORY = "audit-repository";
+    public static final String TERM_MENTION_REPOSITORY = "term-mention-repository";
+    public static final String DETECTED_OBJECT_REPOSITORY = "detected-object-repository";
+    public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "artifact-thumbnail-repository";
     public static final String LIB_DIRECTORY = "lib-directory";
     public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs-libcache-directory";
+    public static final String ONTOLOGY_REPOSITORY_OWL = "ontology-repository.owl";
 
     private Map<String, String> config = new HashMap<String, String>();
 

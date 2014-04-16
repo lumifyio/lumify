@@ -29,6 +29,7 @@ public class MapMarkerImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MapMarkerImage.class);
 
     private final OntologyRepository ontologyRepository;
+    private ArtifactThumbnailRepository artifactThumbnailRepository;
     private final Cache<String, byte[]> imageCache = CacheBuilder.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build();
@@ -37,9 +38,11 @@ public class MapMarkerImage extends BaseRequestHandler {
     public MapMarkerImage(
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final ArtifactThumbnailRepository artifactThumbnailRepository) {
         super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
+        this.artifactThumbnailRepository = artifactThumbnailRepository;
     }
 
     @Override
@@ -111,13 +114,13 @@ public class MapMarkerImage extends BaseRequestHandler {
         Graphics2D g = image.createGraphics();
         if (isMapGlyphIcon) {
             int[] boundary = new int[]{backgroundImage.getWidth(), backgroundImage.getHeight()};
-            int[] scaledDims = ArtifactThumbnailRepository.getScaledDimension(resourceImageDim, boundary);
+            int[] scaledDims = artifactThumbnailRepository.getScaledDimension(resourceImageDim, boundary);
             g.drawImage(resourceImage, 0, 0, scaledDims[0], scaledDims[1], null);
         } else {
             g.drawImage(backgroundImage, 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight(), null);
             int size = image.getWidth() * 2 / 3;
             int[] boundary = new int[]{size, size};
-            int[] scaledDims = ArtifactThumbnailRepository.getScaledDimension(resourceImageDim, boundary);
+            int[] scaledDims = artifactThumbnailRepository.getScaledDimension(resourceImageDim, boundary);
             int x = (backgroundImage.getWidth() - scaledDims[0]) / 2;
             int y = (backgroundImage.getWidth() - scaledDims[1]) / 2;
             g.drawImage(resourceImage, x, y, scaledDims[0], scaledDims[1], null);

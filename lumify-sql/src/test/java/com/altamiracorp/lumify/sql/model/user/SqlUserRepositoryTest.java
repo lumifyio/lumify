@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.sql.model;
+package com.altamiracorp.lumify.sql.model.user;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;

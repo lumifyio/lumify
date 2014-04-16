@@ -1,7 +1,7 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.lumify.core.user.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.semanticweb.owlapi.model.IRI;
@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 public interface OntologyRepository {
     public static final String ENTITY_CONCEPT_IRI = "http://www.w3.org/2002/07/owl#Thing";
@@ -58,4 +57,6 @@ public interface OntologyRepository {
     void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception;
 
     void exportOntology(OutputStream out, IRI documentIRI) throws Exception;
+
+    void writePackage(File file, IRI documentIRI) throws Exception;
 }
