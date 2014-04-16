@@ -54,7 +54,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    if (importFile(f, queueDuplicates, visibility, authorizations)) {
+                    if (importFile(f, queueDuplicates, visibility, authorizations) != null) {
                         importedFileCount++;
                     }
                 } catch (Exception ex) {
@@ -78,7 +78,7 @@ public class FileImport {
         return false;
     }
 
-    public boolean importFile(File f, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws Exception {
+    public Vertex importFile(File f, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws Exception {
         ensureInitialized();
 
         String hash = calculateFileHash(f);
@@ -89,7 +89,7 @@ public class FileImport {
             if (queueDuplicates) {
                 pushOnQueue(vertex);
             }
-            return false;
+            return vertex;
         }
 
         List<FileImportSupportingFileHandler.AddSupportingFilesResult> addSupportingFilesResults = new ArrayList<FileImportSupportingFileHandler.AddSupportingFilesResult>();
@@ -118,7 +118,7 @@ public class FileImport {
             graph.flush();
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
             pushOnQueue(vertex);
-            return true;
+            return vertex;
         } finally {
             fileInputStream.close();
             for (FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult : addSupportingFilesResults) {
