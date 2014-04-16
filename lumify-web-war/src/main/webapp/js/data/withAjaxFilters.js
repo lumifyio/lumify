@@ -7,6 +7,7 @@ define([], function() {
         
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
             /^audit/,
+            /^artifact\/import/,
             /^user/,
             /^configuration$/,
             /^workspaces?$/,
@@ -14,6 +15,7 @@ define([], function() {
             /^workspace\/diff/,
             /^workspace\/relationships/,
             /^workspace\/update/,
+            /^login/,
             /^vertex\/relationships/,
             /^entity/,
         ],
