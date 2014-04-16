@@ -32,13 +32,13 @@ public class WorkspaceNew extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User authUser = getUser(request);
-        User user = getUserRepository().findByUserName(authUser.getUserName());
+        User user = getUserRepository().findByUsername(authUser.getDisplayName());
 
         String title = getOptionalParameter(request, "title");
 
         Workspace workspace;
         if (title == null) {
-            title = DEFAULT_WORKSPACE_TITLE + " - " + user.getUserName();
+            title = DEFAULT_WORKSPACE_TITLE + " - " + user.getDisplayName();
         }
         workspace = workspaceRepository.add(title, authUser);
 

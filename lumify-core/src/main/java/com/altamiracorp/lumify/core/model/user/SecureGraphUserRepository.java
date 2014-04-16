@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +74,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User findByUserName(String username) {
+    public User findByUsername(String username) {
         return createFromVertex(Iterables.getFirst(graph.query(authorizations)
                 .has(USERNAME.getKey(), username)
                 .has(CONCEPT_TYPE.getKey(), userConceptId)
@@ -100,8 +99,8 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String userId, String displayName, String password, String[] userAuthorizations) {
-        User existingUser = findByUserName(displayName);
+    public User addUser(String userId, String username, String password, String[] userAuthorizations) {
+        User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new RuntimeException("");
         }
@@ -113,7 +112,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
         userId = "USER_" + userId;
         VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY.getVisibility(), this.authorizations);
-        USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
+        USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());

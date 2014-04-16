@@ -12,20 +12,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
 
-    public abstract User findByUserName(String username);
+    public abstract User findByUsername(String username);
 
     public abstract Iterable<User> findAll();
 
     public abstract User findById(String userId);
 
-    public abstract User addUser(String externalId, String displayName, String password, String[] userAuthorizations);
+    public abstract User addUser(String username, String displayName, String password, String[] userAuthorizations);
 
     public abstract void setPassword(User user, String password);
 
@@ -60,7 +59,7 @@ public abstract class UserRepository {
         try {
             JSONObject json = new JSONObject();
             json.put("id", user.getUserId());
-            json.put("userName", user.getUserName());
+            json.put("userName", user.getDisplayName());
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
             return json;
@@ -102,10 +101,10 @@ public abstract class UserRepository {
     }
 
     public User findOrAddUser(String username, String displayName, String password, String[] authorizations) {
-        User authUser = findByUserName(username);
-        if (authUser == null) {
-            authUser = addUser(username, displayName, password, authorizations);
+        User user = findByUsername(username);
+        if (user == null) {
+            user = addUser(username, displayName, password, authorizations);
         }
-        return authUser;
+        return user;
     }
 }

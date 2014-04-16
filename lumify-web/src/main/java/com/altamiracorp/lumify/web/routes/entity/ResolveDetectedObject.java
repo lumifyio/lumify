@@ -82,7 +82,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         Authorizations authorizations = getAuthorizations(request, user);
 
         if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getUserName());
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
             return;

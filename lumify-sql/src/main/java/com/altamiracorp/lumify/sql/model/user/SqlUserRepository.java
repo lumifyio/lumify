@@ -20,7 +20,6 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -38,9 +37,9 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User findByUserName(String userName) {
+    public User findByUsername(String username) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("userName", userName)).list();
+        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("username", username)).list();
         session.close();
         if (users.size() == 0) {
             return null;
@@ -79,9 +78,9 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String externalId, String displayName, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
-        if (findByUserName(displayName) != null) {
+        if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
         }
 
@@ -97,7 +96,7 @@ public class SqlUserRepository extends UserRepository {
                 newUser.setPasswordSalt(salt);
                 newUser.setPasswordHash(passwordHash);
             }
-            newUser.setExternalId(externalId);
+            newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);

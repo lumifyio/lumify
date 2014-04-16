@@ -20,10 +20,10 @@ public class SqlUser implements User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", unique = true)
     private int id;
-    @Column(name = "external_id", unique = true)
-    private String externalId;
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username", unique = true)
+    private String username;
+    @Column(name = "display_name")
+    private String displayName;
     @Column(name = "password_salt")
     private byte[] passwordSalt;
     @Column(name = "password_hash")
@@ -47,20 +47,20 @@ public class SqlUser implements User {
         this.id = id;
     }
 
-    public String getExternalId() {
-        return externalId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public void setDisplayName(String userName) {
-        this.userName = userName;
+        this.displayName = userName;
     }
 
     public SqlWorkspace getCurrentWorkspace() {
