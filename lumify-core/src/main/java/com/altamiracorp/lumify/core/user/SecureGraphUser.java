@@ -42,4 +42,9 @@ public class SecureGraphUser implements User, Serializable {
     public String getUserStatus() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "SecureGraphUser{userId='" + getUserId() + "', displayName='" + getDisplayName() + "'}";
+    }
 }

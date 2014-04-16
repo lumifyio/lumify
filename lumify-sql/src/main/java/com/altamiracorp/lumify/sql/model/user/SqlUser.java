@@ -31,7 +31,7 @@ public class SqlUser implements User {
     @Column(name = "user_status")
     private String userStatus;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn (name="workspace_id")
+    @PrimaryKeyJoinColumn(name = "workspace_id")
     private SqlWorkspace currentWorkspace;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.user", cascade = CascadeType.ALL)
     private Set<SqlWorkspaceUser> sqlWorkspaceUsers = new HashSet<SqlWorkspaceUser>(0);
@@ -119,5 +119,10 @@ public class SqlUser implements User {
     @Transient
     public UserType getUserType() {
         return UserType.USER;
+    }
+
+    @Override
+    public String toString() {
+        return "SqlUser{userId='" + getUserId() + "', displayName='" + getDisplayName() + "'}";
     }
 }
