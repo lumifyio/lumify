@@ -64,6 +64,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
+
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
             defineOntology();

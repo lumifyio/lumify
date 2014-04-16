@@ -39,7 +39,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private void importBaseOwlFile() {
-        InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/ontology/base.owl");
+        InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/model/ontology/base.owl");
         try {
             importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
         } catch (Exception e) {
