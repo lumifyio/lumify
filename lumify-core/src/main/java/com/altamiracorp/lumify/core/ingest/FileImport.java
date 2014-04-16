@@ -30,14 +30,15 @@ public class FileImport {
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
 
-    public void importDirectory(String dataDir, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws IOException {
+    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws IOException {
         ensureInitialized();
 
+        ArrayList<Vertex> results = new ArrayList<Vertex>();
+
         LOGGER.debug("Importing files from %s", dataDir);
-        File dataDirFile = new File(dataDir);
-        File[] files = dataDirFile.listFiles();
+        File[] files = dataDir.listFiles();
         if (files == null || files.length == 0) {
-            return;
+            return results;
         }
 
         int totalFileCount = files.length;
@@ -54,9 +55,9 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    if (importFile(f, queueDuplicates, visibility, authorizations) != null) {
-                        importedFileCount++;
-                    }
+                    Vertex vertex = importFile(f, queueDuplicates, visibility, authorizations);
+                    results.add(vertex);
+                    importedFileCount++;
                 } catch (Exception ex) {
                     LOGGER.error("Could not import %s", f.getAbsolutePath(), ex);
                 }
@@ -66,7 +67,8 @@ public class FileImport {
             graph.flush();
         }
 
-        LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDirFile));
+        LOGGER.debug(String.format("Imported %d, skipped %d files from %s", importedFileCount, fileCount - importedFileCount, dataDir));
+        return results;
     }
 
     private boolean isSupportingFile(File f) {

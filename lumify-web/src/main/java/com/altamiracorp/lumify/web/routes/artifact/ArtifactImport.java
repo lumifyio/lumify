@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,10 +75,14 @@ public class ArtifactImport extends BaseRequestHandler {
             copyToFile(file, f);
             try {
                 LOGGER.debug("Processing uploaded file: %s", fileName);
-                Vertex vertex = fileImport.importFile(f, true, visibility, authorizations);
+                List<Vertex> vertices = fileImport.importDirectory(tempDir, true, visibility, authorizations);
+                JSONArray vertexIdsJson = new JSONArray();
+                for (Vertex v : vertices) {
+                    vertexIdsJson.put(v.getId().toString());
+                }
 
                 JSONObject json = new JSONObject();
-                json.put("vertexId", vertex.getId().toString());
+                json.put("vertexIds", vertexIdsJson);
                 respondWithJson(response, json);
             } finally {
                 f.delete();

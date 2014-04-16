@@ -8,6 +8,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import java.io.File;
+
 public class Import extends CommandLineBase {
     private static final String CMD_OPT_DATADIR = "datadir";
     private static final String CMD_OPT_QUEUE_DUPLICATES = "queuedups";
@@ -45,7 +47,7 @@ public class Import extends CommandLineBase {
 
     @Override
     protected int run(CommandLine cmd) throws Exception {
-        String dataDir = cmd.getOptionValue(CMD_OPT_DATADIR);
+        File dataDir = new File(cmd.getOptionValue(CMD_OPT_DATADIR));
         boolean queueDuplicates = cmd.hasOption(CMD_OPT_QUEUE_DUPLICATES);
         Visibility visibility = new Visibility("");
         fileImport.importDirectory(dataDir, queueDuplicates, visibility, getAuthorizations());
