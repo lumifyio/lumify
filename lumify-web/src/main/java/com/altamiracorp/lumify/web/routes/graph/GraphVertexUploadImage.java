@@ -3,10 +3,10 @@ package com.altamiracorp.lumify.web.routes.graph;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.audit.AuditAction;
 import com.altamiracorp.lumify.core.model.audit.AuditRepository;
+import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.LabelName;
 import com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
-import com.altamiracorp.lumify.core.model.ontology.PropertyType;
 import com.altamiracorp.lumify.core.model.properties.EntityLumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
@@ -59,6 +59,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
+    private final String conceptIRI;
 
     @Inject
     public GraphVertexUploadImage(
@@ -77,6 +78,10 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.workQueueRepository = workQueueRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
+
+        conceptIRI = configuration.get(Configuration.IRI_ENTITY_IMAGE);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
+        checkNotNull(concept, "Could not find image concept: " + conceptIRI);
     }
 
     @Override
@@ -115,7 +120,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
-        // TO-DO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
+        // TODO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
         entityVertexMutation.setProperty(LumifyProperties.GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
@@ -169,10 +174,6 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.searchIndex(false);
         rawValue.store(true);
 
-        // TODO PropertyType.IMAGE is wrong and will fail. This needs to be converted to a configuration parameter
-        String conceptId = ontologyRepository.getConceptByIRI(PropertyType.IMAGE.toString()).getTitle();
-        checkNotNull(conceptId, "Could not find image concept: " + PropertyType.IMAGE.toString());
-
         ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(vertexBuilder, title, metadata, lumifyVisibility.getVisibility());
@@ -181,7 +182,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), metadata, lumifyVisibility.getVisibility());
         RawLumifyProperties.MIME_TYPE.setProperty(vertexBuilder, mimeType, metadata, lumifyVisibility.getVisibility());
         RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, metadata, lumifyVisibility.getVisibility());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptId, metadata, lumifyVisibility.getVisibility());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptIRI, metadata, lumifyVisibility.getVisibility());
         EntityLumifyProperties.SOURCE.setProperty(vertexBuilder, SOURCE_UPLOAD, metadata, lumifyVisibility.getVisibility());
         LumifyProperties.PROCESS.setProperty(vertexBuilder, PROCESS, metadata, lumifyVisibility.getVisibility());
         return vertexBuilder;
