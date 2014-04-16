@@ -23,7 +23,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
             // MOCKS
             'service/serviceBase': '../test/unit/mocks/serviceBase',
-            'testutils': '../test/unit/utils'
+            testutils: '../test/unit/utils'
         },
 
         shim: {
@@ -35,7 +35,10 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             'sinon', 
             '../libs/es5-shim/es5-shim',
             '../libs/es5-shim/es5-sham',
-            '../libs/underscore/underscore'
+            '../libs/underscore/underscore',
+
+            'util/handlebars/eachWithLimit',
+            'util/handlebars/date'
         ],
 
         callback: function(chai, sinon) {

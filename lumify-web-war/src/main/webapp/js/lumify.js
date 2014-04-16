@@ -63,7 +63,7 @@ require([
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses',
 
-    // Handlebar helpers
+    // Handlebar helpers (also add to test/unit/runner/testRunner.js)
     'util/handlebars/eachWithLimit',
     'util/handlebars/date'
 ],
