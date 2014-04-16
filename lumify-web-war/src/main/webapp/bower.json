@@ -14,7 +14,6 @@
     "jquery.easing": "~1.3.0",
     "jquery-scrollstop": "git://github.com/ssorallen/jquery-scrollstop.git",
     "jquery-ui": "~1.10.3",
-    "less.js": "~1.5.0",
     "openlayers": "~2.13.1",
     "requirejs": "~2.1.9",
     "requirejs-domready": "~2.0.1",
@@ -22,7 +21,7 @@
     "requirejs-text": "~2.0.10",
     "sf": "git://github.com/joeferner/node-sf.git",
     "threejs": "*",
-    "underscore": "~1.5.1",
+    "underscore": "~1.6.0",
     "video.js": "~4.3.0",
     "PathFinding.js": "*",
     "requirejs-plugins": "~1.0.2",
@@ -31,10 +30,10 @@
     "require-handlebars-plugin": "~0.8.0"
   },
   "devDependencies": {
-    "sinon": "~1.7.1",
-    "sinon-chai": "~2.4.0",
-    "mocha": "~1.14.0",
-    "chai": "~1.8.1",
+    "sinon": "~1.9.0",
+    "sinon-chai": "~2.5.0",
+    "mocha": "~1.18.0",
+    "chai": "~1.9.0",
     "mocha-flight": "~0.3.0"
   }
 }
