@@ -55,6 +55,8 @@ var require = {
         'pathfinding': { exports: 'PF' },
         'rangy-text': { deps:['rangy']},
         'rangy-highlighter': { deps:['rangy', 'rangy-cssclassapplier', 'rangy-serializer']},
+        'rangy-cssclassapplier': { deps:['rangy'] },
+        'rangy-serializer': { deps:['rangy'] },
         'scrollStop': { exports: 'jQuery', deps:['jquery'] },
         'three': { exports: 'THREE' },
         'underscore': { exports: '_' },
