@@ -62,7 +62,7 @@ define([
 
     VertexService.prototype.deleteEdge = function(sourceId, targetId, label, edgeId) {
         return this._ajaxPost({
-            url: '/vertex/removeRelationship',
+            url: 'vertex/removeRelationship',
             data: {
                 sourceId: sourceId,
                 targetId: targetId,
