@@ -62,6 +62,7 @@ define(['atmosphere'],
                     },
                     onClientTimeout: function() {
                         console.error('timeout');
+                        self.subscribe(config);
                     },
                     onClose: function(req) {
                         console.error('closed', req.reasonPhrase, req.error);
