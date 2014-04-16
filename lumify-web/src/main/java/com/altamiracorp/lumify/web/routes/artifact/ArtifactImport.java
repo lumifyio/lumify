@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,37 +60,42 @@ public class ArtifactImport extends BaseRequestHandler {
 
         final List<Part> files = Lists.newArrayList(request.getParts());
 
-        if (files.size() != 1) {
-            throw new LumifyException("Wrong number of uploaded files. Expected 1 got " + files.size());
-        }
-
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         Visibility visibility = new Visibility(""); // TODO fill this in with request parameter
 
-        final Part file = files.get(0);
-        final String fileName = getFilename(file);
+        List<Vertex> vertices;
+        File tempDir = copyToTempDirectory(files);
+        try {
+            LOGGER.debug("Processing upload: %s", tempDir);
+            vertices = fileImport.importDirectory(tempDir, true, visibility, authorizations);
+        } finally {
+            FileUtils.deleteDirectory(tempDir);
+        }
+
+        JSONArray vertexIdsJson = new JSONArray();
+        for (Vertex v : vertices) {
+            vertexIdsJson.put(v.getId().toString());
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("vertexIds", vertexIdsJson);
+        respondWithJson(response, json);
+    }
+
+    private File copyToTempDirectory(List<Part> files) throws IOException {
         File tempDir = Files.createTempDir();
         try {
-            File f = new File(tempDir, fileName);
-            copyToFile(file, f);
-            try {
-                LOGGER.debug("Processing uploaded file: %s", fileName);
-                List<Vertex> vertices = fileImport.importDirectory(tempDir, true, visibility, authorizations);
-                JSONArray vertexIdsJson = new JSONArray();
-                for (Vertex v : vertices) {
-                    vertexIdsJson.put(v.getId().toString());
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("vertexIds", vertexIdsJson);
-                respondWithJson(response, json);
-            } finally {
-                f.delete();
+            for (Part filePart : files) {
+                String fileName = getFilename(filePart);
+                File f = new File(tempDir, fileName);
+                copyToFile(filePart, f);
             }
-        } finally {
-            tempDir.delete();
+        } catch (Exception ex) {
+            FileUtils.deleteDirectory(tempDir);
+            throw new LumifyException("Could not copy files to temp directory: " + tempDir.getAbsolutePath(), ex);
         }
+        return tempDir;
     }
 
     private void copyToFile(Part part, File outFile) throws IOException {
