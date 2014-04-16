@@ -25,3 +25,10 @@ ul {
 }
 
 
+
+::selection {
+	background: fadeout(@blue-color, 75%); /* Safari */
+}
+::-moz-selection {
+	background: fadeout(@blue-color, 75%); /* Firefox */
+}

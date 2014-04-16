@@ -4,6 +4,7 @@ import com.altamiracorp.lumify.core.bootstrap.lib.LibLoader;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.core.util.ServiceLoaderUtil;
 import com.fasterxml.jackson.module.guice.ObjectMapperModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -51,7 +52,8 @@ public class InjectHelper {
 
     private static void ensureInjectorCreated(ModuleMaker moduleMaker) {
         if (injector == null) {
-            for (LibLoader libLoader : ServiceLoader.load(LibLoader.class)) {
+            LOGGER.info("Loading libs...");
+            for (LibLoader libLoader : ServiceLoaderUtil.load(LibLoader.class)) {
                 libLoader.loadLibs(moduleMaker.getConfiguration());
             }
             injector = Guice.createInjector(moduleMaker.createModule(), new ObjectMapperModule());

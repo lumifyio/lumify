@@ -89,7 +89,7 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        User user = this.userRepository.findByUserName(this.username);
+        User user = this.userRepository.findByUsername(this.username);
 
         if (cmd.hasOption("reset")) {
             if (user == null) {

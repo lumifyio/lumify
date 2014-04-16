@@ -88,7 +88,7 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findByUserName(eq(TEST_USERNAME))).thenReturn(user);
+        when(userRepository.findByUsername(eq(TEST_USERNAME))).thenReturn(user);
         when(userVertex.getId()).thenReturn("userId");
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);

@@ -246,11 +246,13 @@ public final class Configuration {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        Iterator<String> keys = getKeys().iterator();
-        String key;
-        while (keys.hasNext()) {
-            key = keys.next();
-            sb.append(key).append(": ").append(get(key)).append("\n");
+        SortedSet<String> keys = new TreeSet<String>(this.config.keySet());
+        for (String key : keys) {
+            if (key.toLowerCase().contains("password")) {
+                sb.append(key).append(": ********\n");
+            } else {
+                sb.append(key).append(": ").append(get(key)).append("\n");
+            }
         }
 
         return sb.toString();

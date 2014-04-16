@@ -12,7 +12,7 @@ public interface User extends Serializable {
 
     public ModelUserContext getModelUserContext();
 
-    public String getUserName();
+    public String getDisplayName();
 
     public UserType getUserType();
 

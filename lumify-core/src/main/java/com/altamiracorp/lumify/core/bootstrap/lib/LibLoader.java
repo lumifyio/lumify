@@ -8,7 +8,6 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLClassLoader;
 
 public abstract class LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LibLoader.class);
@@ -50,18 +49,46 @@ public abstract class LibLoader {
         }
         LOGGER.info("adding lib: %s", f.getAbsolutePath());
 
-        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-        if (!(systemClassLoader instanceof URLClassLoader)) {
-            throw new LumifyException("Could not modify system class loader. Expected " + URLClassLoader.class.getName() + " found " + systemClassLoader.getClass().getName());
+        ClassLoader classLoader = LibLoader.class.getClassLoader();
+        while (classLoader != null) {
+            if (tryAddUrl(classLoader, f)) {
+                return;
+            }
+            classLoader = classLoader.getParent();
         }
-        Class urlClassLoaderClass = URLClassLoader.class;
+        if (tryAddUrl(ClassLoader.getSystemClassLoader(), f)) {
+            return;
+        }
+        throw new LumifyException("Could not add file to classloader");
+    }
+
+    private static boolean tryAddUrl(ClassLoader classLoader, File f) {
+        Class<? extends ClassLoader> classLoaderClass = classLoader.getClass();
         try {
             Class[] parameters = new Class[]{URL.class};
-            Method method = urlClassLoaderClass.getDeclaredMethod("addURL", parameters);
+            Method method = findMethod(classLoaderClass, "addURL", parameters);
+            if (method == null) {
+                LOGGER.debug("Could not find addURL on classloader: %s", classLoaderClass.getName());
+                return false;
+            }
             method.setAccessible(true);
-            method.invoke(systemClassLoader, f.toURI().toURL());
+            method.invoke(classLoader, f.toURI().toURL());
+            LOGGER.debug("added %s to classloader %s", f.getAbsolutePath(), classLoader.getClass().getName());
+            return true;
         } catch (Throwable t) {
-            throw new LumifyException("Error, could not add URL " + f.getAbsolutePath() + " to system classloader", t);
+            LOGGER.error("Error, could not add URL " + f.getAbsolutePath() + " to classloader: " + classLoaderClass.getName(), t);
+            return false;
         }
+    }
+
+    private static Method findMethod(Class clazz, String methodName, Class[] parameters) {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredMethod(methodName, parameters);
+            } catch (NoSuchMethodException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
     }
 }

@@ -32,7 +32,7 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
         final String username = UrlUtils.urlDecode(request.getParameter("username"));
         final String password = UrlUtils.urlDecode(request.getParameter("password"));
 
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUsername(username);
         if (user != null && userRepository.isPasswordValid(user, password)) {
             setUser(request, user);
             return true;

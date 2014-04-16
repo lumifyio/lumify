@@ -36,7 +36,7 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
     public boolean login(HttpServletRequest request) {
         final String username = UrlUtils.urlDecode(request.getParameter("username"));
 
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, new String[0]);
         }

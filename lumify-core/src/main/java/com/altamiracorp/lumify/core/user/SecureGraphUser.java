@@ -30,7 +30,7 @@ public class SecureGraphUser implements User, Serializable {
         return modelUserContext;
     }
 
-    public String getUserName() {
+    public String getDisplayName() {
         return displayName;
     }
 

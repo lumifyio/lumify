@@ -74,9 +74,12 @@ define([
         };
 
         this.setReferenceWithValue = function(val) {
-            var clipboard = appData.copiedDocumentText();
+            var clipboard = appData.copiedDocumentText(),
+                normalizeWhiteSpace = function(str) {
+                    return str.replace(/\s/g, ' ');
+                };
 
-            if (clipboard && clipboard.text === val) {
+            if (clipboard && normalizeWhiteSpace(clipboard.text) === normalizeWhiteSpace(val)) {
                 this.setValue(Object.freeze(clipboard));
                 return true;
             }

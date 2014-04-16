@@ -3,6 +3,7 @@ package com.altamiracorp.lumify.web;
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.altamiracorp.lumify.core.util.ServiceLoaderUtil;
 import com.altamiracorp.lumify.web.routes.admin.AdminList;
 import com.altamiracorp.lumify.web.routes.admin.AdminUploadOntology;
 import com.altamiracorp.lumify.web.routes.artifact.*;
@@ -34,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
@@ -55,7 +55,7 @@ public class Router extends HttpServlet {
 
             final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
 
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoader.load(WebAppPlugin.class));
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
 
             app = new WebApp(config, injector);
 

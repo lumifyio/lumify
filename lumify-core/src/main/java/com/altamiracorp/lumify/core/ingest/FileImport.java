@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.core.util.RowKeyHelper;
+import com.altamiracorp.lumify.core.util.ServiceLoaderUtil;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
@@ -16,7 +17,10 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
@@ -125,7 +129,7 @@ public class FileImport {
 
     private void ensureInitialized() {
         if (fileImportSupportingFileHandlers == null) {
-            fileImportSupportingFileHandlers = toList(ServiceLoader.load(FileImportSupportingFileHandler.class));
+            fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class));
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : fileImportSupportingFileHandlers) {
                 InjectHelper.inject(fileImportSupportingFileHandler);
             }
