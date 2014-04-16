@@ -16,9 +16,9 @@
     </appender>
 
     <appender name="log" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="&logDir;/lumify.log" />
-        <param name="MaxFileSize" value="64MB" />
-        <param name="MaxBackupIndex" value="3" />
+        <param name="File" value="&logDir;/lumify${logFileSuffix}.log" />
+        <param name="MaxFileSize" value="32MB" />
+        <param name="MaxBackupIndex" value="2" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="&pattern;" />
         </layout>

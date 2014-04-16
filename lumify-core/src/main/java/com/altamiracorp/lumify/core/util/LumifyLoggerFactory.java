@@ -5,6 +5,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,9 @@ public class LumifyLoggerFactory {
     private static void ensureInitialized() {
         synchronized (logMap) {
             if (!initialized) {
+                if (System.getProperty("logFileSuffix") == null) {
+                    System.setProperty("logFileSuffix", "-" + getPid());
+                }
                 String log4jFile = Configuration.CONFIGURATION_LOCATION + "log4j.xml";
                 if (!new File(log4jFile).exists()) {
                     throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
@@ -31,6 +35,15 @@ public class LumifyLoggerFactory {
                 logger.info("Using log4j.xml: %s", log4jFile);
             }
         }
+    }
+
+    private static String getPid() {
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        int i = name.indexOf('@');
+        if (i > 0) {
+            name = name.substring(0, i);
+        }
+        return name;
     }
 
     private static LumifyLogger getLogger(String name) {
