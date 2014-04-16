@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
@@ -99,10 +100,10 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String userId, String username, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
         User existingUser = findByUsername(username);
         if (existingUser != null) {
-            throw new RuntimeException("");
+            throw new LumifyException("duplicate username");
         }
 
         String authorizationsString = StringUtils.join(userAuthorizations, ",");
@@ -110,9 +111,9 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        userId = "USER_" + userId;
-        VertexBuilder userBuilder = graph.prepareVertex(userId, VISIBILITY.getVisibility(), this.authorizations);
-        USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
+        username = "USER_" + username;
+        VertexBuilder userBuilder = graph.prepareVertex(username, VISIBILITY.getVisibility(), this.authorizations);
+        USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
