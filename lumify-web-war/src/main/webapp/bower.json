@@ -10,7 +10,7 @@
     "flight": "~1.1.1",
     "intercom": "~0.1.4",
     "jquery": "~2.0.3",
-    "atmosphere-jquery": "2.0.9",
+    "atmosphere-jquery": "git@github.com:Atmosphere/bower-jquery-atmosphere.git#2.1.5",
     "jquery.easing": "~1.3.0",
     "jquery-scrollstop": "git://github.com/ssorallen/jquery-scrollstop.git",
     "jquery-ui": "~1.10.3",
