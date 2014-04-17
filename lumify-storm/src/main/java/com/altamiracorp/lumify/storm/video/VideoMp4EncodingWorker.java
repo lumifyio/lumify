@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.video;
+package com.altamiracorp.lumify.storm.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,24 +17,42 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoAudioExtractWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoAudioExtractWorker.class.getName();
+public class VideoMp4EncodingWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp3File = File.createTempFile("audio_extract_", ".mp3");
+        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
+        File mp4ReloactedFile = File.createTempFile("relocated_mp4_", ".mp4");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
+                            "-y", // overwrite output files
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vn",
-                            "-ar", "44100",
-                            "-ab", "320k",
-                            "-f", "mp3",
-                            "-y",
-                            mp3File.getAbsolutePath()
+                            "-vcodec", "libx264",
+                            "-vprofile", "high",
+                            "-preset", "slow",
+                            "-b:v", "500k",
+                            "-maxrate", "500k",
+                            "-bufsize", "1000k",
+                            "-vf", "scale=720:480",
+                            "-threads", "0",
+                            "-acodec", "libfdk_aac",
+                            "-b:a", "128k",
+                            "-f", "mp4",
+                            mp4File.getAbsolutePath()
+                    },
+                    null,
+                    data.getLocalFile().getAbsolutePath() + ": "
+            );
+
+            processRunner.execute(
+                    "qt-faststart",
+                    new String[]{
+                            mp4File.getAbsolutePath(),
+                            mp4ReloactedFile.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
@@ -42,22 +60,20 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
 
-            InputStream mp3FileIn = new FileInputStream(mp3File);
+            InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
             try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(mp3FileIn, byte[].class);
+                StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
-                MediaLumifyProperties.AUDIO_MP3.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
+                MediaLumifyProperties.VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
-                getGraph().flush();
-
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
             } finally {
-                mp3FileIn.close();
+                mp4RelocatedFileIn.close();
             }
         } finally {
-            mp3File.delete();
+            mp4File.delete();
+            mp4ReloactedFile.delete();
         }
     }
 
@@ -71,7 +87,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.AUDIO_MP3.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

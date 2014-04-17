@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.video;
+package com.altamiracorp.lumify.storm.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,51 +17,47 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoPosterFrameWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoPosterFrameWorker.class.getName();
+public class VideoAudioExtractWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoAudioExtractWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
+        File mp3File = File.createTempFile("audio_extract_", ".mp3");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
-                            "-itsoffset", "-4",
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "png",
-                            "-vframes", "1",
-                            "-an",
-                            "-f", "rawvideo",
-                            "-s", "720x480",
+                            "-vn",
+                            "-ar", "44100",
+                            "-ab", "320k",
+                            "-f", "mp3",
                             "-y",
-                            videoPosterFrameFile.getAbsolutePath()
+                            mp3File.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            if (videoPosterFrameFile.length() == 0) {
-                throw new RuntimeException("Poster frame not created. Zero length file detected. (from: " + data.getLocalFile().getAbsolutePath() + ")");
-            }
+            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
 
-            InputStream videoPosterFrameFileIn = new FileInputStream(videoPosterFrameFile);
+            InputStream mp3FileIn = new FileInputStream(mp3File);
             try {
-                ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
-
-                StreamingPropertyValue spv = new StreamingPropertyValue(videoPosterFrameFileIn, byte[].class);
+                StreamingPropertyValue spv = new StreamingPropertyValue(mp3FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
-                MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
+                MediaLumifyProperties.AUDIO_MP3.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
                 getGraph().flush();
+
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
             } finally {
-                videoPosterFrameFileIn.close();
+                mp3FileIn.close();
             }
         } finally {
-            videoPosterFrameFile.delete();
+            mp3File.delete();
         }
     }
 
@@ -72,6 +68,10 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         }
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType == null || !mimeType.startsWith("video")) {
+            return false;
+        }
+
+        if (MediaLumifyProperties.AUDIO_MP3.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

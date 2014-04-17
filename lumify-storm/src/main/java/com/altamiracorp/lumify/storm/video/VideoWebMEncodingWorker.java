@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.video;
+package com.altamiracorp.lumify.storm.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,42 +17,32 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoMp4EncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoMp4EncodingWorker.class.getName();
+public class VideoWebMEncodingWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoWebMEncodingWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
-        File mp4ReloactedFile = File.createTempFile("relocated_mp4_", ".mp4");
+        File webmFile = File.createTempFile("encode_webm_", ".webm");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
                             "-y", // overwrite output files
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libx264",
-                            "-vprofile", "high",
-                            "-preset", "slow",
-                            "-b:v", "500k",
+                            "-vcodec", "libvpx",
+                            "-b:v", "600k",
+                            "-qmin", "10",
+                            "-qmax", "42",
                             "-maxrate", "500k",
                             "-bufsize", "1000k",
+                            "-threads", "2",
                             "-vf", "scale=720:480",
-                            "-threads", "0",
-                            "-acodec", "libfdk_aac",
-                            "-b:a", "128k",
-                            "-f", "mp4",
-                            mp4File.getAbsolutePath()
-                    },
-                    null,
-                    data.getLocalFile().getAbsolutePath() + ": "
-            );
-
-            processRunner.execute(
-                    "qt-faststart",
-                    new String[]{
-                            mp4File.getAbsolutePath(),
-                            mp4ReloactedFile.getAbsolutePath()
+                            "-acodec", "libvorbis",
+                            "-map", "0", // process all streams
+                            "-map", "-0:s", // ignore subtitles
+                            "-f", "webm",
+                            webmFile.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
@@ -60,20 +50,19 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
 
-            InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
+            InputStream webmFileIn = new FileInputStream(webmFile);
             try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(mp4RelocatedFileIn, byte[].class);
+                StreamingPropertyValue spv = new StreamingPropertyValue(webmFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
-                MediaLumifyProperties.VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
+                MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
-                mp4RelocatedFileIn.close();
+                webmFileIn.close();
             }
         } finally {
-            mp4File.delete();
-            mp4ReloactedFile.delete();
+            webmFile.delete();
         }
     }
 
@@ -87,7 +76,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.VIDEO_WEBM.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

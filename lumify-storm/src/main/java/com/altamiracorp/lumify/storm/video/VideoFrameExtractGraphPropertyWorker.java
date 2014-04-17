@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.video;
+package com.altamiracorp.lumify.storm.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;

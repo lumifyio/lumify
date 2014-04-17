@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.video;
+package com.altamiracorp.lumify.storm.audio;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,32 +17,21 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoWebMEncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = VideoWebMEncodingWorker.class.getName();
+public class AudioOggEncodingWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = AudioOggEncodingWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File webmFile = File.createTempFile("encode_webm_", ".webm");
+        File mp4File = File.createTempFile("encode_ogg_", ".ogg");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
                             "-y", // overwrite output files
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libvpx",
-                            "-b:v", "600k",
-                            "-qmin", "10",
-                            "-qmax", "42",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-threads", "2",
-                            "-vf", "scale=720:480",
                             "-acodec", "libvorbis",
-                            "-map", "0", // process all streams
-                            "-map", "-0:s", // ignore subtitles
-                            "-f", "webm",
-                            webmFile.getAbsolutePath()
+                            mp4File.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
@@ -50,19 +39,19 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
 
             ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
 
-            InputStream webmFileIn = new FileInputStream(webmFile);
+            InputStream mp4FileIn = new FileInputStream(mp4File);
             try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(webmFileIn, byte[].class);
+                StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
-                MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
+                MediaLumifyProperties.AUDIO_OGG.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
-                webmFileIn.close();
+                mp4FileIn.close();
             }
         } finally {
-            webmFile.delete();
+            mp4File.delete();
         }
     }
 
@@ -71,12 +60,13 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
+
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
-        if (mimeType == null || !mimeType.startsWith("video")) {
+        if (mimeType == null || !mimeType.startsWith("audio")) {
             return false;
         }
 
-        if (MediaLumifyProperties.VIDEO_WEBM.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.AUDIO_OGG.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
 

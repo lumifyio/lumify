@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.audio;
+package com.altamiracorp.lumify.storm.audio;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,20 +17,20 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AudioOggEncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = AudioOggEncodingWorker.class.getName();
+public class AudioMp4EncodingWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = AudioMp4EncodingWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp4File = File.createTempFile("encode_ogg_", ".ogg");
+        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
                             "-y", // overwrite output files
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-acodec", "libvorbis",
+                            "-acodec", "libfdk_aac",
                             mp4File.getAbsolutePath()
                     },
                     null,
@@ -44,8 +44,8 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
-                MediaLumifyProperties.AUDIO_OGG.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_MP4);
+                MediaLumifyProperties.AUDIO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
                 mp4FileIn.close();
@@ -60,15 +60,15 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
-
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
         if (mimeType == null || !mimeType.startsWith("audio")) {
             return false;
         }
 
-        if (MediaLumifyProperties.AUDIO_OGG.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.AUDIO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
             return false;
         }
+
 
         return true;
     }

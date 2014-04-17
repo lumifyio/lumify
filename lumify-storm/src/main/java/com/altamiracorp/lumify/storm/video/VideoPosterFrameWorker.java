@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.ingest.audio;
+package com.altamiracorp.lumify.storm.video;
 
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import com.altamiracorp.lumify.core.ingest.graphProperty.GraphPropertyWorker;
@@ -17,41 +17,51 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AudioMp4EncodingWorker extends GraphPropertyWorker {
-    private static final String PROPERTY_KEY = AudioMp4EncodingWorker.class.getName();
+public class VideoPosterFrameWorker extends GraphPropertyWorker {
+    private static final String PROPERTY_KEY = VideoPosterFrameWorker.class.getName();
     private ProcessRunner processRunner;
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        File mp4File = File.createTempFile("encode_mp4_", ".mp4");
+        File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
         try {
             processRunner.execute(
                     "ffmpeg",
                     new String[]{
-                            "-y", // overwrite output files
+                            "-itsoffset", "-4",
                             "-i", data.getLocalFile().getAbsolutePath(),
-                            "-acodec", "libfdk_aac",
-                            mp4File.getAbsolutePath()
+                            "-vcodec", "png",
+                            "-vframes", "1",
+                            "-an",
+                            "-f", "rawvideo",
+                            "-s", "720x480",
+                            "-y",
+                            videoPosterFrameFile.getAbsolutePath()
                     },
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+            if (videoPosterFrameFile.length() == 0) {
+                throw new RuntimeException("Poster frame not created. Zero length file detected. (from: " + data.getLocalFile().getAbsolutePath() + ")");
+            }
 
-            InputStream mp4FileIn = new FileInputStream(mp4File);
+            InputStream videoPosterFrameFileIn = new FileInputStream(videoPosterFrameFile);
             try {
-                StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
+                ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+
+                StreamingPropertyValue spv = new StreamingPropertyValue(videoPosterFrameFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_AUDIO_MP4);
-                MediaLumifyProperties.AUDIO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
+                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
+                MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
+                getGraph().flush();
             } finally {
-                mp4FileIn.close();
+                videoPosterFrameFileIn.close();
             }
         } finally {
-            mp4File.delete();
+            videoPosterFrameFile.delete();
         }
     }
 
@@ -61,14 +71,9 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
         String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
-        if (mimeType == null || !mimeType.startsWith("audio")) {
+        if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }
-
-        if (MediaLumifyProperties.AUDIO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
-            return false;
-        }
-
 
         return true;
     }
