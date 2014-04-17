@@ -103,9 +103,6 @@ module.exports = function(grunt) {
         development: {
             files: {
                 src: ['js/**/*\.js']
-            },
-            options: {
-                reporter: require('jshint-stylish')
             }
         },
         ci: {

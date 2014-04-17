@@ -32,8 +32,7 @@
     "grunt-mocha-selenium": "git://github.com/jharwig/grunt-mocha-selenium",
     "grunt-karma": "~0.8.2",
     "grunt-jscs-checker": "~0.4.1",
-    "grunt-plato": "~1.0.0",
-    "jshint-stylish": "~0.1.5"
+    "grunt-plato": "~1.0.0"
   },
   "scripts": {
     "test": "karma start --single-run"
