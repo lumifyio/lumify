@@ -22,7 +22,7 @@ public class LumifyLoggerFactory {
         synchronized (logMap) {
             if (!initialized) {
                 if (System.getProperty("logFileSuffix") == null) {
-                    System.setProperty("logFileSuffix", "-" + getPid());
+                    System.setProperty("logFileSuffix", "-" + System.getProperty("user.name") + "-" + getPid());
                 }
                 String log4jFile = Configuration.CONFIGURATION_LOCATION + "log4j.xml";
                 if (!new File(log4jFile).exists()) {
