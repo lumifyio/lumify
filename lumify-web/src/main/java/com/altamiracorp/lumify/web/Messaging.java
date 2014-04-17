@@ -6,7 +6,6 @@ import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.apache.commons.lang.StringUtils;
@@ -221,7 +220,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
-    public static void broadcastEdgeDeletion (String edgeId) {
+    public static void broadcastEdgeDeletion(String edgeId) {
         try {
             JSONObject dataJson = new JSONObject();
             if (edgeId != null) {
@@ -239,7 +238,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
-    public static void broadcastDetectedObjectChange (String artifactVertexId, JSONObject artifactVertexWithDetectedObjects) {
+    public static void broadcastDetectedObjectChange(String artifactVertexId, JSONObject artifactVertexWithDetectedObjects) {
         try {
             JSONObject dataJson = new JSONObject();
             if (artifactVertexWithDetectedObjects != null) {
