@@ -95,9 +95,8 @@ public abstract class UserRepository {
         return new AccumuloUserContext(new Authorizations(authorizations));
     }
 
-    public User getSystemUser ()
-    {
-        return new SystemUser(getModelUserContext(new String[0]));
+    public User getSystemUser() {
+        return new SystemUser(getModelUserContext(LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
     }
 
     public User findOrAddUser(String username, String displayName, String password, String[] authorizations) {

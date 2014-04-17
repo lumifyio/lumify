@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.tools;
 
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.ingest.FileImport;
-import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -13,6 +12,7 @@ import java.io.File;
 public class Import extends CommandLineBase {
     private static final String CMD_OPT_DATADIR = "datadir";
     private static final String CMD_OPT_QUEUE_DUPLICATES = "queuedups";
+    private static final String CMD_OPT_VISIBILITY_SOURCE = "visibilitysource";
     private FileImport fileImport;
 
     public static void main(String[] args) throws Exception {
@@ -42,6 +42,14 @@ public class Import extends CommandLineBase {
                         .create()
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_VISIBILITY_SOURCE)
+                        .withDescription("The visibility source data.")
+                        .hasArg()
+                        .create()
+        );
+
         return opts;
     }
 
@@ -49,8 +57,8 @@ public class Import extends CommandLineBase {
     protected int run(CommandLine cmd) throws Exception {
         File dataDir = new File(cmd.getOptionValue(CMD_OPT_DATADIR));
         boolean queueDuplicates = cmd.hasOption(CMD_OPT_QUEUE_DUPLICATES);
-        Visibility visibility = new Visibility("");
-        fileImport.importDirectory(dataDir, queueDuplicates, visibility, getAuthorizations());
+        String visibilitySource = cmd.getOptionValue(CMD_OPT_VISIBILITY_SOURCE, "");
+        fileImport.importDirectory(dataDir, queueDuplicates, visibilitySource, null, getAuthorizations());
         return 0;
     }
 

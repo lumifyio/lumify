@@ -23,7 +23,10 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.google.inject.Inject;
 import org.json.JSONObject;
@@ -82,7 +85,9 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         Authorizations authorizations = getAuthorizations(request, user);
 
-        if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        LumifyVisibility visibility = this.visibilityTranslator.toVisibility(visibilityJson);
+        if (!graph.isVisibilityValid(visibility.getVisibility(), authorizations)) {
             LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
             respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
             chain.next(request, response);
@@ -94,7 +99,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
-        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;

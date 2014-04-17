@@ -43,7 +43,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
 
         List<TermMention> termMentions = new ArrayList<TermMention>();
         while (matcher.find()) {
-            TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVertex().getVisibility());
+            TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVisibility());
             termMentions.add(termMention);
         }
         saveTermMentions(data.getVertex(), termMentions);

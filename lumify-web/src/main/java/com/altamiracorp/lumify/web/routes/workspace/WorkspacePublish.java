@@ -1,7 +1,6 @@
 package com.altamiracorp.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
-import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
@@ -239,7 +238,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
-        ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
 
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
             auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
@@ -323,7 +322,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
-        ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.VISIBILITY_STRING);
+        ModelUserContext systemUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(edge.getId().toString(), systemUser)) {
             auditRepository.updateColumnVisibility(row, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }

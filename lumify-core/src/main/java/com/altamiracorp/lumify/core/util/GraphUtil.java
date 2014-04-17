@@ -200,8 +200,10 @@ public class GraphUtil {
 
         json.put(VisibilityTranslator.JSON_SOURCE, visibilitySource);
 
-        JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
-        JSONUtil.addToJSONArrayIfDoesNotExist(workspacesJsonArray, workspaceId);
+        if (workspaceId != null) {
+            JSONArray workspacesJsonArray = JSONUtil.getOrCreateJSONArray(json, VisibilityTranslator.JSON_WORKSPACES);
+            JSONUtil.addToJSONArrayIfDoesNotExist(workspacesJsonArray, workspaceId);
+        }
 
         return json;
     }

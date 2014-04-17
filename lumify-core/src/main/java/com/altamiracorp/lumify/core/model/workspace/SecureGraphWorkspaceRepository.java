@@ -60,7 +60,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         this.workspaceDiff = workspaceDiff;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
-        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
 
         Concept rootConcept = ontologyRepository.getConceptByIRI(OntologyRepository.ROOT_CONCEPT_IRI);
 
@@ -80,7 +80,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, LumifyVisibility.VISIBILITY_STRING, workspace.getId());
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, LumifyVisibility.SUPER_USER_VISIBILITY_STRING, workspace.getId());
         Vertex workspaceVertex = getVertexFromWorkspace(workspace, authorizations);
         graph.removeVertex(workspaceVertex, authorizations);
         graph.flush();

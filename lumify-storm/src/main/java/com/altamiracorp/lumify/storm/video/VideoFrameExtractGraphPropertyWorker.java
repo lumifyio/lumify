@@ -18,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -53,10 +52,10 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", frameStartTime);
-                    Map<String, Object> metadata = new HashMap<String, Object>();
+                    Map<String, Object> metadata = data.getPropertyMetadata();
                     metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
-                    MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVertex().getVisibility());
+                    MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
                     propertyKeys.add(key);
                     mutation.save();
                 } finally {

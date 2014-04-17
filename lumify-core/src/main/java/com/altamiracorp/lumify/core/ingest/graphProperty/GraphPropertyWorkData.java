@@ -1,9 +1,12 @@
 package com.altamiracorp.lumify.core.ingest.graphProperty;
 
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
+import com.altamiracorp.securegraph.*;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GraphPropertyWorkData {
     private final Vertex vertex;
@@ -29,5 +32,32 @@ public class GraphPropertyWorkData {
 
     public File getLocalFile() {
         return localFile;
+    }
+
+    public Visibility getVisibility() {
+        return getVertex().getVisibility();
+    }
+
+    public Map<String, Object> getPropertyMetadata() {
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        if (visibilityJson != null) {
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        }
+        return metadata;
+    }
+
+    public void setVisibilityJsonOnElement(ElementBuilder builder) {
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        if (visibilityJson != null) {
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(builder, visibilityJson, getVisibility());
+        }
+    }
+
+    public void setVisibilityJsonOnElement(Element element) {
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        if (visibilityJson != null) {
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(element, visibilityJson, getVisibility());
+        }
     }
 }

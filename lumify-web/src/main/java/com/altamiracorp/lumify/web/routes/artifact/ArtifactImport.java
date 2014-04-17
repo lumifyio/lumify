@@ -11,7 +11,6 @@ import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
@@ -53,8 +52,8 @@ public class ArtifactImport extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         if (!ServletFileUpload.isMultipartContent(request)) {
-            LOGGER.warn("Could not process request without multipart content");
-            respondWithBadRequest(response, "file", "Could not process request without multipart content");
+            LOGGER.warn("Could not process request without multi-part content");
+            respondWithBadRequest(response, "file", "Could not process request without multi-part content");
             return;
         }
 
@@ -62,13 +61,14 @@ public class ArtifactImport extends BaseRequestHandler {
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        Visibility visibility = new Visibility(""); // TODO fill this in with request parameter
+        String visibilitySource = ""; // TODO fill this in with request parameter
+        String workspaceId = getActiveWorkspaceId(request);
 
         List<Vertex> vertices;
         File tempDir = copyToTempDirectory(files);
         try {
             LOGGER.debug("Processing upload: %s", tempDir);
-            vertices = fileImport.importDirectory(tempDir, true, visibility, authorizations);
+            vertices = fileImport.importDirectory(tempDir, true, visibilitySource, workspaceId, authorizations);
         } finally {
             FileUtils.deleteDirectory(tempDir);
         }

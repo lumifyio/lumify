@@ -4,33 +4,37 @@ import com.altamiracorp.lumify.core.bootstrap.InjectHelper;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.properties.RawLumifyProperties;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.core.util.LumifyLogger;
-import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.lumify.core.util.RowKeyHelper;
-import com.altamiracorp.lumify.core.util.ServiceLoaderUtil;
+import com.altamiracorp.lumify.core.security.LumifyVisibility;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
+import com.altamiracorp.lumify.core.util.*;
 import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.altamiracorp.securegraph.util.IterableUtils.toList;
 
 public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);
+    private final VisibilityTranslator visibilityTranslator;
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws IOException {
+    @Inject
+    public FileImport(VisibilityTranslator visibilityTranslator) {
+        this.visibilityTranslator = visibilityTranslator;
+    }
+
+    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, String workspaceId, Authorizations authorizations) throws IOException {
         ensureInitialized();
 
         ArrayList<Vertex> results = new ArrayList<Vertex>();
@@ -55,7 +59,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibility, authorizations);
+                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspaceId, authorizations);
                     results.add(vertex);
                     importedFileCount++;
                 } catch (Exception ex) {
@@ -80,7 +84,7 @@ public class FileImport {
         return false;
     }
 
-    public Vertex importFile(File f, boolean queueDuplicates, Visibility visibility, Authorizations authorizations) throws Exception {
+    public Vertex importFile(File f, boolean queueDuplicates, String visibilitySource, String workspaceId, Authorizations authorizations) throws Exception {
         ensureInitialized();
 
         String hash = calculateFileHash(f);
@@ -101,13 +105,20 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+            LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
+            Visibility visibility = lumifyVisibility.getVisibility();
+            Map<String, Object> propertyMetadata = new HashMap<String, Object>();
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
+
             VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility, authorizations);
-            RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, visibility);
-            LumifyProperties.TITLE.setProperty(vertexBuilder, f.getName(), visibility);
-            LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, visibility);
-            RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), visibility);
-            RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), visibility);
-            RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(f.lastModified()), visibility);
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, visibility);
+            RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, propertyMetadata, visibility);
+            LumifyProperties.TITLE.setProperty(vertexBuilder, f.getName(), propertyMetadata, visibility);
+            LumifyProperties.ROW_KEY.setProperty(vertexBuilder, hash, propertyMetadata, visibility);
+            RawLumifyProperties.FILE_NAME.setProperty(vertexBuilder, f.getName(), propertyMetadata, visibility);
+            RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(f.getName()), propertyMetadata, visibility);
+            RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(f.lastModified()), propertyMetadata, visibility);
 
             for (FileImportSupportingFileHandler fileImportSupportingFileHandler : this.fileImportSupportingFileHandlers) {
                 FileImportSupportingFileHandler.AddSupportingFilesResult addSupportingFilesResult = fileImportSupportingFileHandler.addSupportingFiles(vertexBuilder, f, visibility);

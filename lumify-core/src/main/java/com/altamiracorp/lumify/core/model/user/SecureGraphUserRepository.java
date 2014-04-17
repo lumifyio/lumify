@@ -7,6 +7,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.SecureGraphUser;
+import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -42,21 +43,21 @@ public class SecureGraphUserRepository extends UserRepository {
             .build();
 
     @Inject
-    public SecureGraphUserRepository (final AuthorizationRepository authorizationRepository,
-                                      final Graph graph,
-                                      final OntologyRepository ontologyRepository) {
+    public SecureGraphUserRepository(final AuthorizationRepository authorizationRepository,
+                                     final Graph graph,
+                                     final OntologyRepository ontologyRepository) {
         this.authorizationRepository = authorizationRepository;
         this.graph = graph;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
-        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING);
+        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
 
         Concept userConcept = ontologyRepository.getOrCreateConcept(null, LUMIFY_USER_CONCEPT_ID, "lumifyUser");
         userConceptId = userConcept.getTitle();
 
         Set<String> authorizationsSet = new HashSet<String>();
         authorizationsSet.add(VISIBILITY_STRING);
-        authorizationsSet.add(LumifyVisibility.VISIBILITY_STRING);
+        authorizationsSet.add(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         this.authorizations = authorizationRepository.createAuthorizations(authorizationsSet);
     }
 
@@ -213,7 +214,13 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
-        Set<String> userAuthorizations = userAuthorizationCache.getIfPresent(user.getUserId());
+        Set<String> userAuthorizations;
+        if (user instanceof SystemUser) {
+            userAuthorizations = new HashSet<String>();
+            userAuthorizations.add(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
+        } else {
+            userAuthorizations = userAuthorizationCache.getIfPresent(user.getUserId());
+        }
         if (userAuthorizations == null) {
             Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
             userAuthorizations = getAuthorizations(userVertex);

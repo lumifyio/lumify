@@ -35,7 +35,7 @@ public class SecureGraphUserRepositoryTest {
     public void setup() {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
         authorizationRepository = new InMemoryAuthorizationRepository();
-        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.VISIBILITY_STRING.toString());
+        authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING.toString());
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
         when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
