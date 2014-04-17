@@ -457,6 +457,8 @@ define([
                     added = [],
                     existing = [],
                     addingVerticesRelatedTo = !!(data.options && data.options.addingVerticesRelatedTo),
+                    addingVerticesFileDrop = !!(data.options && data.options.fileDropPosition),
+                    shouldBeSelected = (addingVerticesFileDrop || addingVerticesRelatedTo),
                     // Check if vertices are missing properties (from search results)
                     needsRefreshing = data.vertices.filter(function(v) { 
                         var cached = self.vertex(v.id);
@@ -469,7 +471,7 @@ define([
 
                 data.vertices.forEach(function(v) {
                     v.workspace = v.workspace || {};
-                    v.workspace.selected = addingVerticesRelatedTo;
+                    v.workspace.selected = shouldBeSelected;
                     passedWorkspace[v.id] = self.copy(v.workspace);
                 });
 
@@ -523,7 +525,7 @@ define([
 
                     if (!data.remoteEvent) self.trigger('saveWorkspace', { entityUpdates: added, adding: true });
                     if (added.length) {
-                        if (addingVerticesRelatedTo) {
+                        if (shouldBeSelected) {
                             self.trigger('selectObjects');
                         }
                         ws.data.vertices = ws.data.vertices.concat(added);
@@ -532,7 +534,7 @@ define([
                             remoteEvent: data.remoteEvent,
                             options: data.options || {}
                         });
-                        if (addingVerticesRelatedTo) {
+                        if (shouldBeSelected) {
                             self.trigger('selectObjects', { vertices: added })
                         }
                     }

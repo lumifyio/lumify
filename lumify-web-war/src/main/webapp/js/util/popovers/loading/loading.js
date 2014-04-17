@@ -16,7 +16,7 @@ define([
         });
 
         this.before('initialize', function(node, config) {
-            config.template = 'loading/loading';
+            config.template = 'loading/template';
             config.message = config.message || 'Loading...';
             config.teardownOnTap = false;
         });

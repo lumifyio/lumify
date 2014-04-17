@@ -1,0 +1,30 @@
+<div class="fileImportPopover popover top collapseVisibility">
+  <div class="popover-title">
+    Import {{pluralString}}
+  </div>
+  <div class="arrow"></div>
+  <div class="popover-content">
+
+    <div class="errors"></div>
+
+    <div class="visibility single"></div>
+
+    {{#if multipleFiles}}
+    <label class="checkbox">
+      <input class="copyVisibility" type="checkbox" checked> Apply to all files
+    </label>
+    {{/if}}
+
+    <div class="individual-visibility">
+      {{#each formattedFiles}}
+      <h1 title="{{name}}">{{name}}</h1>
+      <h2>{{size}}</h2>
+      <div class="visibility" data-file-index="@index"></div>
+      {{/each}}
+  </div>
+
+    <div>
+      <button class="btn btn-primary">Import</button>
+    </div>
+  </div>
+</div>

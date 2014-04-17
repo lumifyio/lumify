@@ -95,6 +95,33 @@ define([
                 } else return FORMATTERS.number.pretty(number);
             }
         },
+        bytes: {
+            pretty: function(bytes, precision) {
+                var k = 1024,
+                    m = k * 1024,
+                    g = m * 1024,
+                    t = g * 1024;
+	
+                if ((bytes >= 0) && (bytes < k)) {
+                    return bytes + ' B';
+
+                } else if ((bytes >= k) && (bytes < m)) {
+                    return (bytes / k).toFixed(precision) + ' KB';
+
+                } else if ((bytes >= m) && (bytes < g)) {
+                    return (bytes / m).toFixed(precision) + ' MB';
+
+                } else if ((bytes >= g) && (bytes < t)) {
+                    return (bytes / g).toFixed(precision) + ' GB';
+
+                } else if (bytes >= t) {
+                    return (bytes / t).toFixed(precision) + ' TB';
+
+                } else {
+                    return bytes + ' B';
+                }
+            }
+        },
         className: {
             from: function(className) {
                 var original = fromClassNameMap[className];

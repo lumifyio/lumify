@@ -252,7 +252,18 @@ define([
 
                 if (options.animate) container.removeClass('animateinstart').addClass('animatein');
 
-                nextAvailablePosition.y += yInc;
+                if (options.fileDropPosition) {
+                    var projectedPosition = cy.renderer().projectIntoViewport(
+                        options.fileDropPosition.x,
+                        options.fileDropPosition.y
+                    );
+                    nextAvailablePosition = retina.pixelsToPoints({
+                        x: projectedPosition[0],
+                        y: projectedPosition[1]
+                    });
+                } else {
+                    nextAvailablePosition.y += yInc;
+                }
 
                 var maxWidth = Math.max(availableSpaceBox.w, xInc * 10),
                     startX = nextAvailablePosition.x,
@@ -1064,25 +1075,43 @@ define([
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
 
-            if (!data || !data.vertexId) {
+            if (!data || (!data.vertexId && !data.page)) {
                 return console.error('Registering for position events requires a vertexId');
             }
 
+            //this.onUnregisterForPositionChanges();
+
             this.cytoscapeReady().done(function(cy) {
 
-                var cyNode = cy.getElementById(toCyId(data.vertexId));
+                event.stopPropagation();
+
+                var cyNode = data.vertexId && cy.getElementById(toCyId(data.vertexId)),
+                    offset = self.$node.offset(),
+                    cyPosition = data.page && cy.renderer().projectIntoViewport(
+                        data.page.x + offset.left,
+                        data.page.y + offset.top
+                    );
                 
                 if (!self.onViewportChangesForPositionChanges) {
                     self.onViewportChangesForPositionChanges = function() {
-                        var positionInNode = retina.pixelsToPoints(cyNode.renderedPosition());
-                            offset = self.$node.offset();
+                        var position;
 
-                        self.trigger(event.target, 'positionChanged', {
-                            position: {
+                        if (data.vertexId) {
+                            var positionInNode = retina.pixelsToPoints(cyNode.renderedPosition());
+
+                            position = {
                                 x: positionInNode.x + offset.left,
                                 y: positionInNode.y + offset.top,
-                            }
-                        })
+                            };
+
+                        } else if (data.page) {
+                            position = retina.pixelsToPoints({
+                                x: cyPosition[0] * cy.zoom() + cy.pan().x,
+                                y: cyPosition[1] * cy.zoom() + cy.pan().y
+                            });
+                        }
+
+                        self.trigger(event.target, 'positionChanged', { position: position });
                     };
                 }
 
@@ -1094,8 +1123,9 @@ define([
         this.onUnregisterForPositionChanges = function(event, data) {
             var self = this;
             this.cytoscapeReady().done(function(cy) {
-                if (this.onViewportChangesForPositionChanges) {
-                    cy.off('pan zoom position', this.onViewportChangesForPositionChanges);
+                if (self.onViewportChangesForPositionChanges) {
+                    cy.off('pan zoom position', self.onViewportChangesForPositionChanges);
+                    self.onViewportChangesForPositionChanges = null;
                 }
             });
         };

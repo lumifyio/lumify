@@ -98,6 +98,8 @@ define([
 
             this.triggerPaneResized = _.debounce(this.triggerPaneResized.bind(this), 10);
 
+            this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
+
             this.on(document, 'error', this.onError);
             this.on(document, 'menubarToggleDisplay', this.toggleDisplay);
             this.on(document, 'chatMessage', this.onChatMessage);
@@ -200,26 +202,31 @@ define([
             }
         });
 
-        this.handleFilesDropped = function(files) {
+        this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
-            
-            vertexService.importFiles(files)
-                .progress(function(complete) {
-                    console.log('Upload progress:', (complete * 100).toFixed(1) + '%');
-                })
-                .fail(function(xhr, m, error) {
-                    if (error !== 'abort') {
-                        self.trigger('displayInformation', { message: error });
-                    }
-                })
-                .done(function(result) {
-                    self.trigger('displayInformation', { message: 'Finished uploading' });
 
-                    vertexService.getMultiple(result.vertexIds)
-                        .done(function(v) {
-                            self.trigger('addVertices', v);
-                        });
+            if (data && data.page) {
+                this.trigger(event.target, 'positionChanged', {
+                    position: data.page
                 });
+            }
+        };
+
+        this.handleFilesDropped = function(files, event) {
+            var self = this;
+
+            require(['util/popovers/fileImport/fileImport'], function(FileImport) {
+                FileImport.attachTo(event.target, {
+                    files: files,
+                    anchorTo: {
+                        page: {
+                            x: event.pageX,
+                            y: event.pageY
+                        }
+                    }
+                });
+            });
+
         };
 
         this.toggleSearchPane = function() {

@@ -1,0 +1,51 @@
+
+.fileImportPopover {
+
+  h1, h2 {
+    font-size: 85%;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    line-height: 1.4em;
+    float: left;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  h2 {
+    font-size: 80%; 
+    float: right;  
+    text-align: right;
+    width: 30%;
+    color: #888;
+  }
+
+  .errors button {
+    display: none;
+  }
+  
+  .checkbox {
+    margin-bottom: 1em;
+  }
+
+
+  .visibility.single {
+    display: none;
+  }
+  .individual-visibility {
+    max-height: 200px;
+    overflow: auto;
+    margin: 0 -1em 1em;
+    padding: 0 1em;
+  }
+
+  &.collapseVisibility {
+    .visibility.single {
+      display: block;
+    }
+    .individual-visibility {
+      display: none;
+    }
+  }
+}

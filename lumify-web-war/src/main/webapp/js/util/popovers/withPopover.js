@@ -23,12 +23,14 @@ define([
 
         this.after('initialize', function() {
             var t = this.attr.template || 'noTemplate',
-                path = 'tpl!util/popovers/' + t;
+                path = 'hbs!util/popovers/' + t;
 
             require([path], this.setupWithTemplate.bind(this));
         });
 
         this.setupWithTemplate = function(tpl) {
+            var self = this;
+
             this.dialog = $('<div class="dialog-popover">')
                 .css({position: 'absolute'})
                 .html(tpl(this.attr))
@@ -36,18 +38,16 @@ define([
 
             this.popover = this.dialog.find('.popover');
 
-            if (this.attr.teardownOnTap !== false) {
-                var self = this;
-                $(document).off('.popoverclose').on('click.popoverclose', function(e) {
+            $(document).off('.popoverclose').on('click.popoverclose', function(e) {
+                if (self.attr.teardownOnTap !== false) {
                     if ($(e.target).closest(self.popover).length) {
                         return;
                     }
                     self.teardown();
-                })
-            }
+                }
+            })
 
             this.registerAnchorTo();
-            this.trigger('popoverInitialize');
         };
 
         this.registerAnchorTo = function() {

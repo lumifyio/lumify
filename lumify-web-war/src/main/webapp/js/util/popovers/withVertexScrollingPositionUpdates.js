@@ -20,6 +20,8 @@ define([], function() {
                 return console.error('Registering for position events requires a vertexId');
             }
 
+            event.stopPropagation();
+
             var self = this,
                 $target = $(event.target),
                 scroller = $target.scrollParent(),

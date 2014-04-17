@@ -5,12 +5,13 @@ define(['tpl!./alert'], function(alertTemplate) {
 
     function withFormFieldErrors() {
 
-        this.markFieldErrors = function(error) {
+        this.markFieldErrors = function(error, root) {
             var self = this,
-            messages = [],
-            cls = 'control-group error';
+                rootEl = root || this.$node,
+                messages = [],
+                cls = 'control-group error';
 
-            this.$node.find('.control-group.error')
+            rootEl.find('.control-group.error')
                 .removeClass(cls);
 
             if (!error) {
@@ -27,7 +28,7 @@ define(['tpl!./alert'], function(alertTemplate) {
                 _.keys(error).forEach(function(fieldName) {
                     switch(fieldName) {
                         case 'visibilitySource':
-                            self.$node.find('.visibility')
+                            rootEl.find('.visibility')
                         .addClass(cls);
                         messages.push(error[fieldName]);
                         break;
@@ -37,7 +38,7 @@ define(['tpl!./alert'], function(alertTemplate) {
                 messages.push(error || 'Unknown error');
             }
 
-            var errorsContainer = this.$node.find('.errors');
+            var errorsContainer = rootEl.find('.errors');
             
             if (errorsContainer.length) {
                 errorsContainer.html(
