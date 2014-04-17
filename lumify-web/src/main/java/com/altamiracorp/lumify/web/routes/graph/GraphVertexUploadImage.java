@@ -81,13 +81,18 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         conceptIRI = configuration.get(Configuration.IRI_ENTITY_IMAGE);
         Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
-        checkNotNull(concept, "Could not find image concept: " + conceptIRI);
+        if (concept == null) {
+            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIRI, Configuration.IRI_ENTITY_IMAGE);
+        }
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, ATTR_GRAPH_VERTEX_ID);
         final List<Part> files = Lists.newArrayList(request.getParts());
+
+        Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
+        checkNotNull(concept, "Could not find image concept: " + conceptIRI);
 
         if (files.size() != 1) {
             throw new RuntimeException("Wrong number of uploaded files. Expected 1 got " + files.size());
