@@ -14,13 +14,6 @@
     <name>Lumify: Model: BigTable Queue</name>
 
     <profiles>
-        <!-- Use this profile to build when deploying to a clustered environment. -->
-        <profile>
-            <id>cluster</id>
-            <properties>
-                <cluster.dependency.scope>provided</cluster.dependency.scope>
-            </properties>
-        </profile>
         <profile>
             <id>uber-jar</id>
             <build>
@@ -51,11 +44,12 @@
             <groupId>com.altamiracorp.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>storm</groupId>
             <artifactId>storm</artifactId>
-            <scope>${cluster.dependency.scope}</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.bigtable</groupId>

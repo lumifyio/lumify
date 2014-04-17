@@ -7,13 +7,6 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
 
-    <!--  Added this section to the standard 'jar-with-dependencies' assembly to merge services entries -->
-    <containerDescriptorHandlers>
-        <containerDescriptorHandler>
-            <handlerName>metaInf-services</handlerName>
-        </containerDescriptorHandler>
-    </containerDescriptorHandlers>
-
     <dependencySets>
         <dependencySet>
             <outputDirectory>/</outputDirectory>
