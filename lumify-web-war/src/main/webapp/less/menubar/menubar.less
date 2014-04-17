@@ -116,18 +116,20 @@ background: @menubar-background;
     a {
       &:before {
         .spinning-image('white/glyphicons_019_cogwheel@2x', 18px, -4px, -4px);
+        .spin(4s, forward);
       }
 
       &:after {
         .spinning-image('white/glyphicons_019_cogwheel@2x', 14px, 6px, 6px);
+        .spin(4s, reverse);
       }
     }
 
     &.animating a:before {
-      .spin(4s, forward);
+      .animation-play-state(running);
     }
     &.animating a:after { 
-      .spin(4s, reverse);
+      .animation-play-state(running);
     }
   }
 

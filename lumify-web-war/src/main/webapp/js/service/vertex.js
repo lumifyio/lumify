@@ -1,6 +1,7 @@
 define([
-    'service/serviceBase'
-], function(ServiceBase) {
+    'service/serviceBase',
+    'util/formatters'
+], function(ServiceBase, formatters) {
     'use strict';
 
     function VertexService() {
@@ -65,13 +66,18 @@ define([
     };
 
     VertexService.prototype.importFiles = function(files) {
-        var formData = new FormData();
+        var formData = new FormData(),
+            pluralString = formatters.string.plural(files.length, 'file');
 
         _.forEach(files, function(f) { 
             formData.append('file', f);
         });
 
         return this._ajaxUpload({
+            activityMessages: [
+                'Importing ' + pluralString,
+                'Imported ' + pluralString
+            ],
             url: 'artifact/import',
             data: formData
         });

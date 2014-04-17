@@ -118,8 +118,10 @@ define(['atmosphere'],
             var xhr = null,
                 progressHandler = null,
                 deferred = $.Deferred(),
-                request = this._ajaxGet($.extend({
+                config = null,
+                request = this._ajaxGet(config = $.extend({
                         type: 'POST',
+                        wrappedPromise: deferred.promise(),
                         xhr: function() {
                             xhr = $.ajaxSettings.xhr();
                             if (xhr.upload) {
@@ -143,12 +145,8 @@ define(['atmosphere'],
                                 xhr.removeEventListener('progress', progressHandler);
                             }
                         })
-                        .fail(function(xhr, m, error) {
-                            deferred.reject(xhr, m, error);
-                        })
-                        .done(function(result) {
-                            deferred.resolve(result);
-                        }),
+                        .fail(deferred.reject)
+                        .done(deferred.resolve),
                 promise = deferred.promise();
                 
             promise.abort = function() {
