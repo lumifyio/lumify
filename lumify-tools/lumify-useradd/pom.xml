@@ -15,23 +15,9 @@
 
     <name>Lumify: Tools: UserAdd</name>
 
-    <profiles>
-        <!-- Builds the Tools Uber-JAR -->
-        <profile>
-            <id>tools-jar</id>
-			<properties>
-				<lumify.tool.mainClass>com.altamiracorp.lumify.tools.UserAdd</lumify.tool.mainClass>
-			</properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <properties>
+        <lumify.tool.mainClass>com.altamiracorp.lumify.tools.UserAdd</lumify.tool.mainClass>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -77,6 +63,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
