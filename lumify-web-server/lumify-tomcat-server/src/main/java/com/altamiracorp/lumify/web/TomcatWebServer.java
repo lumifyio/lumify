@@ -28,9 +28,11 @@ public class TomcatWebServer extends WebServer {
         httpsConnector.setPort(super.getHttpsPort());
         httpsConnector.setSecure(true);
         httpsConnector.setScheme("https");
-        httpsConnector.setAttribute("keystorePass", super.getKeyStorePassword());
         httpsConnector.setAttribute("keystoreFile", super.getKeyStorePath());
-        httpsConnector.setAttribute("clientAuth", "false");
+        httpsConnector.setAttribute("keystorePass", super.getKeyStorePassword());
+        httpsConnector.setAttribute("truststoreFile", super.getTrustStorePath());
+        httpsConnector.setAttribute("truststorePass", super.getTrustStorePassword());
+        httpsConnector.setAttribute("clientAuth", super.getRequireClientCert() ? "true" : "false");
         httpsConnector.setAttribute("sslProtocol", "TLS");
         httpsConnector.setAttribute("SSLEnabled", true);
 

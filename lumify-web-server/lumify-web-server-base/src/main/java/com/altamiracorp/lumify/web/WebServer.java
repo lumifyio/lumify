@@ -10,12 +10,18 @@ public abstract class WebServer extends CommandLineBase {
     private static final String HTTPS_PORT_OPTION_VALUE = "httpsPort";
     private static final String KEY_STORE_PATH_OPTION_VALUE = "keyStorePath";
     private static final String KEY_STORE_PASSWORD_OPTION_VALUE = "keyStorePassword";
+    private static final String TRUST_STORE_PATH_OPTION_VALUE = "trustStorePath";
+    private static final String TRUST_STORE_PASSWORD_OPTION_VALUE = "trustStorePassword";
+    private static final String REQUIRE_CLIENT_CERT_OPTION_VALUE = "requireClientCert";
     private static final int DEFAULT_SERVER_PORT = 8080;
     private static final int DEFAULT_HTTPS_SERVER_PORT = 8443;
     private int httpPort;
     private int httpsPort;
     private String keyStorePath;
     private String keyStorePassword;
+    private String trustStorePath;
+    private String trustStorePassword;
+    private boolean requireClientCert = false;
 
     public int getHttpPort() {
         return httpPort;
@@ -32,6 +38,24 @@ public abstract class WebServer extends CommandLineBase {
     public String getKeyStorePassword() {
         return keyStorePassword;
     }
+
+    public String getTrustStorePath() {
+        if (trustStorePath != null && trustStorePath.trim().length() > 0) {
+            return trustStorePath;
+        } else {
+            return keyStorePath;
+        }
+    }
+
+    public String getTrustStorePassword() {
+        if (trustStorePassword != null && trustStorePassword.trim().length() > 0) {
+            return trustStorePassword;
+        } else {
+            return keyStorePassword;
+        }
+    }
+
+    public boolean getRequireClientCert() { return requireClientCert; }
 
     @Override
     protected Options getOptions() {
@@ -75,6 +99,31 @@ public abstract class WebServer extends CommandLineBase {
                         .create()
         );
 
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(TRUST_STORE_PATH_OPTION_VALUE)
+                        .withDescription("Path to the JKS truststore used for SSL")
+                        .withArgName("trust_store_path")
+                        .hasArg()
+                        .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(TRUST_STORE_PASSWORD_OPTION_VALUE)
+                        .withDescription("JKS truststore password")
+                        .withArgName("trust_store_password")
+                        .hasArg()
+                        .create()
+        );
+
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt(REQUIRE_CLIENT_CERT_OPTION_VALUE)
+                        .withDescription("require client certificate")
+                        .create()
+        );
+
         return options;
     }
 
@@ -96,5 +145,10 @@ public abstract class WebServer extends CommandLineBase {
         } else {
             httpsPort = Integer.parseInt(securePort);
         }
+
+        trustStorePath = cmd.getOptionValue(TRUST_STORE_PATH_OPTION_VALUE);
+        trustStorePassword = cmd.getOptionValue(TRUST_STORE_PASSWORD_OPTION_VALUE);
+
+        requireClientCert = cmd.hasOption(REQUIRE_CLIENT_CERT_OPTION_VALUE);
     }
 }

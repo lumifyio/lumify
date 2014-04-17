@@ -31,8 +31,9 @@ public class JettyWebServer extends WebServer {
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(super.getKeyStorePath());
         sslContextFactory.setKeyStorePassword(super.getKeyStorePassword());
-        sslContextFactory.setTrustStore(super.getKeyStorePath());
-        sslContextFactory.setTrustStorePassword(super.getKeyStorePassword());
+        sslContextFactory.setTrustStore(super.getTrustStorePath());
+        sslContextFactory.setTrustStorePassword(super.getTrustStorePassword());
+        sslContextFactory.setNeedClientAuth(super.getRequireClientCert());
         SslSelectChannelConnector httpsConnector = new SslSelectChannelConnector(sslContextFactory);
         httpsConnector.setPort(super.getHttpsPort());
 
