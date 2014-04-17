@@ -19,17 +19,12 @@ package com.altamiracorp.lumify.core.version;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Singleton;
-import java.io.FileNotFoundException;
+
+import javax.management.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.Properties;
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
 
 /**
  * This implementation of the LumifyVersionService loads its configuration
@@ -77,33 +72,33 @@ public class VersionService implements VersionServiceMXBean {
     private final Long unixBuildTime;
 
     public VersionService() {
-        String ver = null;
-        String buildNum = null;
-        Long buildTime = null;
+        String version = "Unavailable";
+        String scmBuildNumber = "Unavailable";
+        Long unixBuildTime = 0L;
         try {
             Properties props = new Properties();
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(LUMIFY_BUILD_PROPERTIES);
             if (is == null) {
-                throw new FileNotFoundException(String.format("Property file [%s] not found in the classpath.",
-                        LUMIFY_BUILD_PROPERTIES));
-            }
-            props.load(is);
-            ver = props.getProperty(LUMIFY_VERSION_PROPERTY);
-            buildNum = props.getProperty(SCM_BUILD_NUMBER_PROPERTY);
-            String strTime = props.getProperty(BUILD_TIME_PROPERTY);
-            if (strTime != null) {
-                try {
-                    buildTime = Long.parseLong(strTime);
-                } catch (NumberFormatException nfe) {
-                    LOGGER.warn("Invalid build timestamp [%s].", strTime);
+                LOGGER.warn("Property file [%s] not found in the classpath. Version information will be unavailable.", LUMIFY_BUILD_PROPERTIES);
+            } else {
+                props.load(is);
+                version = props.getProperty(LUMIFY_VERSION_PROPERTY);
+                scmBuildNumber = props.getProperty(SCM_BUILD_NUMBER_PROPERTY);
+                String strTime = props.getProperty(BUILD_TIME_PROPERTY);
+                if (strTime != null) {
+                    try {
+                        unixBuildTime = Long.parseLong(strTime);
+                    } catch (NumberFormatException nfe) {
+                        LOGGER.warn("Invalid build timestamp [%s].", strTime);
+                    }
                 }
             }
         } catch (IOException ioe) {
-            LOGGER.error("Unable to read Lumify version properties.", ioe);
+            LOGGER.error("Unable to read Lumify version properties. Version information will be unavailable.", ioe);
         }
-        this.version = ver;
-        this.scmBuildNumber = buildNum;
-        this.unixBuildTime = buildTime;
+        this.version = version;
+        this.scmBuildNumber = scmBuildNumber;
+        this.unixBuildTime = unixBuildTime;
 
         try {
             registerJmxBean();

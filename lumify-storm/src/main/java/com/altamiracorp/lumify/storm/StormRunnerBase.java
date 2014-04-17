@@ -120,7 +120,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
     protected Config createConfig(CommandLine cmd) {
         Config conf = new Config();
-        conf.put("topology.kryo.factory", "com.altamiracorp.lumify.storm.DefaultKryoFactory");
+        conf.put("topology.kryo.factory", DefaultKryoFactory.class.getName());
         for (String key : getConfiguration().getKeys()) {
             conf.put(key, getConfiguration().get(key));
         }
