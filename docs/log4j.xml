@@ -24,8 +24,8 @@
         </layout>
     </appender>
 
-    <logger name="com.altamiracorp.lumify">
-        <level value="INFO" />
+    <logger name="com.altamiracorp">
+        <level value="DEBUG" />
         <appender-ref ref="log" />
     </logger>
 
