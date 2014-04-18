@@ -83,8 +83,8 @@ define([
 
         this.onAjaxComplete = function(event, xhr, settings) {
             // Automatically call diff after every POST
-            if (/post/i.test(settings.type)) {
-                this.updateDiffBadge();
+            if (/post/i.test(settings.type) && settings.url !== 'vertex/multiple') {
+                xhr.done(this.updateDiffBadge.bind(this));
             }
         };
 
