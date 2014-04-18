@@ -71,11 +71,12 @@ define([
 
         _.forEach(files, function(f) { 
             formData.append('file', f);
+            if (_.isString(visibilitySource)) {
+                formData.append('visibilitySource', visibilitySource);
+            }
         });
 
-        if (_.isString(visibilitySource)) {
-            formData.append('visibilitySource', visibilitySource);
-        } else if (_.isArray(visibilitySource)) {
+        if (_.isArray(visibilitySource)) {
             _.forEach(visibilitySource, function(v) {
                 formData.append('visibilitySource', v);
             });
