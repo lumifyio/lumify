@@ -29,8 +29,21 @@ define(['tpl!./alert'], function(alertTemplate) {
                     switch(fieldName) {
                         case 'visibilitySource':
                             rootEl.find('.visibility')
-                        .addClass(cls);
-                        messages.push(error[fieldName]);
+                                .each(function() {
+                                    var $this = $(this),
+                                        vis = $this.data('visibility')
+
+                                    if (error.invalidValues && vis) {
+                                        $this.toggleClass(cls, 
+                                             _.any(error.invalidValues, function(v) {
+                                                 return _.isEqual(v, vis.value);
+                                             })
+                                        );
+                                    } else {
+                                        $this.addClass(cls);
+                                    }
+                                });
+                            messages.push(error[fieldName]);
                         break;
                     }
                 });

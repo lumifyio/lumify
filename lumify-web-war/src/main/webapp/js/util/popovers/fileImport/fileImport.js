@@ -29,18 +29,37 @@ define([
 
         this.before('initialize', function(node, config) {
             config.template = 'fileImport/template';
+            config.rolledUp = [{
+                name: config.files.length === 1 ?
+                    config.files[0].name :
+                    formatters.string.plural(config.files.length, 'file'),
+                size: formatters.bytes.pretty(
+                    _.chain(config.files)
+                        .map(_.property('size'))
+                        .reduce(function(memo, num) { 
+                            return memo + num; 
+                        }, 0)
+                        .value()
+                ), 
+                index: 'collapsed'
+            }];
             config.multipleFiles = config.files.length > 1;
-            config.formattedFiles = _.map(config.files, function(f) {
+            config.formattedFiles = _.map(config.files, function(f, i) {
                 return {
                     name: f.name,
-                    size: formatters.bytes.pretty(f.size, 0)
+                    size: formatters.bytes.pretty(f.size, 0),
+                    index: i
                 };
             })
             config.pluralString = formatters.string.plural(config.files.length, 'file');
-            //config.teardownOnTap = false;
 
             this.after('setupWithTemplate', function() {
                 var self = this;
+
+                this.visibilitySource = null;
+                this.visibilitySources = new Array(config.files.length);
+
+                this.on(this.popover, 'visibilitychange', this.onVisibilityChange);
 
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
@@ -54,7 +73,7 @@ define([
 
                 this.on(this.popover, 'keyup', {
                     visibilityInputSelector: function(e) {
-                        if ($(e.target).closest('.visibility.single').length &&
+                        if ($(e.target).closest('.single').length &&
                             e.which === $.ui.keyCode.ENTER) {
                             this.onImport();
                         }
@@ -77,16 +96,54 @@ define([
             _.delay(this.positionDialog.bind(this), 50);
         };
 
+        this.onVisibilityChange = function(event, data) {
+            var index = $(event.target)
+                .data('visibility', data)
+                .data('fileIndex');
+
+            if (index === 'collapsed') {
+                this.visibilitySource = data;
+            } else {
+                this.visibilitySources[index] = data;
+            }
+        };
+
+        this.checkValid = function() {
+            var collapsed = this.isVisibilityCollapsed(),
+                isValid = collapsed ?
+                    (this.visibilitySource && this.visibilitySource.valid) :
+                    _.every(this.visibilitySources, _.property('valid'));
+
+            if (isValid) {
+                this.popover.find('button').removeAttr('disabled');
+            } else {
+                this.popover.find('button').attr('disabled', true);
+            }
+
+            return isValid;
+        };
+
+        this.isVisibilityCollapsed = function() {
+            return this.popover.find('.checkbox input').is(':checked');
+        }
+
         this.onImport = function() {
+            if (!this.checkValid()) {
+                return false;
+            }
+
             var self = this,
                 button = this.popover.find('button')
                     .addClass('loading')
                     .attr('disabled', true),
-                originalText = button.text();
+                collapsed = this.isVisibilityCollapsed(),
+                visibilityValue = collapsed ?
+                    this.visibilitySource.value :
+                    _.map(this.visibilitySources, _.property('value'));
 
             this.attr.teardownOnTap = false;
 
-            vertexService.importFiles(this.attr.files)
+            vertexService.importFiles(this.attr.files, visibilityValue)
                 .progress(function(complete) {
                     var percent = Math.round(complete * 100);
                     button.text(percent + '% Importing...');
@@ -94,8 +151,8 @@ define([
                 .fail(function(xhr, m, error) {
                     self.attr.teardownOnTap = true;
                     self.markFieldErrors(error, self.popover);
-                    self.positionDialog();
-                    button.text(originalText)
+                    _.defer(self.positionDialog.bind(self));
+                    button.text('Import')
                         .removeClass('loading')
                         .removeAttr('disabled')
                 })

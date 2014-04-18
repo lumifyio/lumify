@@ -65,13 +65,21 @@ define([
         });
     };
 
-    VertexService.prototype.importFiles = function(files) {
+    VertexService.prototype.importFiles = function(files, visibilitySource) {
         var formData = new FormData(),
             pluralString = formatters.string.plural(files.length, 'file');
 
         _.forEach(files, function(f) { 
             formData.append('file', f);
         });
+
+        if (_.isString(visibilitySource)) {
+            formData.append('visibilitySource', visibilitySource);
+        } else if (_.isArray(visibilitySource)) {
+            _.forEach(visibilitySource, function(v) {
+                formData.append('visibilitySource', v);
+            });
+        }
 
         return this._ajaxUpload({
             activityMessages: [

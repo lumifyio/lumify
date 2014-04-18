@@ -7,7 +7,11 @@
 
     <div class="errors"></div>
 
-    <div class="visibility single"></div>
+    <div class="single">
+      {{#each rolledUp}}
+      {{> util/popovers/fileImport/formattedFile }}
+      {{/each}}
+    </div>
 
     {{#if multipleFiles}}
     <label class="checkbox">
@@ -17,9 +21,7 @@
 
     <div class="individual-visibility">
       {{#each formattedFiles}}
-      <h1 title="{{name}}">{{name}}</h1>
-      <h2>{{size}}</h2>
-      <div class="visibility" data-file-index="@index"></div>
+      {{> util/popovers/fileImport/formattedFile }}
       {{/each}}
   </div>
 

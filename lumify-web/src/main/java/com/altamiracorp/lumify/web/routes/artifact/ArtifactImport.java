@@ -10,7 +10,9 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.inject.Inject;
@@ -29,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,15 +40,18 @@ public class ArtifactImport extends BaseRequestHandler {
 
     private static final String PARAMS_FILENAME = "filename";
     private static final String UNKNOWN_FILENAME = "unknown_filename";
+    private final Graph graph;
 
     private final FileImport fileImport;
 
     @Inject
     public ArtifactImport(
+            final Graph graph,
             final FileImport fileImport,
             final UserRepository userRepository,
             final Configuration configuration) {
         super(userRepository, configuration);
+        this.graph = graph;
         this.fileImport = fileImport;
     }
 
@@ -57,11 +63,35 @@ public class ArtifactImport extends BaseRequestHandler {
             return;
         }
 
-        final List<Part> files = Lists.newArrayList(request.getParts());
+        final List<Part> files = new ArrayList<Part>();
+        final List<String> visibilitySources = new ArrayList<String>();
+        final List<String> invalidVisibilities = new ArrayList<String>();
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
-        String visibilitySource = ""; // TODO fill this in with request parameter
+
+        for (Part part : request.getParts()) {
+            if (part.getName().equals("file")) {
+                files.add(part);
+            } else if (part.getName().equals("visibilitySource")) {
+                String visibilitySource = IOUtils.toString(part.getInputStream(), "UTF8");
+                if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
+                    invalidVisibilities.add(visibilitySource);
+                }
+                visibilitySources.add(visibilitySource);
+            }
+        }
+
+        if (invalidVisibilities.size() > 0) {
+            LOGGER.warn("%s is not a valid visibility for %s user", invalidVisibilities.toString(), user.getDisplayName());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"), invalidVisibilities);
+            chain.next(request, response);
+            return;
+        }
+
+
+        // TODO support multiple visibilities
+        String visibilitySource = visibilitySources.size() > 0 ? visibilitySources.get(0) : "";
         String workspaceId = getActiveWorkspaceId(request);
 
         List<Vertex> vertices;

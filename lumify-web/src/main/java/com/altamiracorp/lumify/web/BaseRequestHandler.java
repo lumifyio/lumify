@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -198,11 +200,49 @@ public abstract class BaseRequestHandler implements Handler {
      * @param response
      * @param parameterName
      * @param errorMessage
+     * @param invalidValue
      */
-    protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage) throws IOException {
+    protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage, final String invalidValue) throws IOException {
+        List<String> values = null;
+
+        if (invalidValue != null) {
+            values = new ArrayList<String>();
+            values.add(invalidValue);
+        }
+        respondWithBadRequest(response, parameterName, errorMessage, values);
+    }
+
+
+    /**
+     * Send a Bad Request response with JSON object mapping field error messages
+     *
+     * @param response
+     * @param parameterName
+     * @param errorMessage
+     * @param invalidValues
+     */
+    protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage, final List<String> invalidValues) throws IOException {
         JSONObject error = new JSONObject();
         error.put(parameterName, errorMessage);
+        if (invalidValues != null) {
+            JSONArray values = new JSONArray();
+            for (String v : invalidValues) {
+                values.put(v);
+            }
+            error.put("invalidValues", values);
+        }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, error.toString());
+    }
+
+    /**
+     * Send a Bad Request response with JSON object mapping field error messages
+     *
+     * @param response
+     * @param parameterName
+     * @param errorMessage
+     */
+    protected void respondWithBadRequest(final HttpServletResponse response, final String parameterName, final String errorMessage) throws IOException {
+        respondWithBadRequest(response, parameterName, errorMessage, new ArrayList<String>());
     }
 
     /**
