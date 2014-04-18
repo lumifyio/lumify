@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.audit;
+package com.altamiracorp.lumify.securegraph.model.audit;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
@@ -6,6 +6,7 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.PropertyJustificationMetadata;
 import com.altamiracorp.lumify.core.model.PropertySourceMetadata;
+import com.altamiracorp.lumify.core.model.audit.*;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.version.VersionService;

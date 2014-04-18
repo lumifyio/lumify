@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.workspace;
+package com.altamiracorp.lumify.securegraph.model.workspace;
 
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.InMemoryAuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.InMemoryUser;
 import com.altamiracorp.lumify.core.model.user.InMemoryUserRepository;
+import com.altamiracorp.lumify.core.model.workspace.*;
 import com.altamiracorp.lumify.core.model.workspace.diff.WorkspaceDiff;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.securegraph.Authorizations;

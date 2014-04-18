@@ -1,12 +1,16 @@
-package com.altamiracorp.lumify.core.model.user;
+package com.altamiracorp.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.UserPasswordUtil;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.lumify.core.user.SecureGraphUser;
+import com.altamiracorp.lumify.securegraph.model.user.SecureGraphUser;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;

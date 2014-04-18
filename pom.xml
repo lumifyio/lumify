@@ -47,6 +47,7 @@
         <module>lumify-tools</module>
         <module>lumify-ontology-dev</module>
         <module>lumify-web-dev-tools</module>
+        <module>lumify-model-securegraph</module>
     </modules>
 
     <repositories>

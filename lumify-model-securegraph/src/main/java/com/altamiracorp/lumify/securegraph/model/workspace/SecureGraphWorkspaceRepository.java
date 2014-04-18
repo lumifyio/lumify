@@ -1,4 +1,4 @@
-package com.altamiracorp.lumify.core.model.workspace;
+package com.altamiracorp.lumify.securegraph.model.workspace;
 
 import com.altamiracorp.lumify.core.exception.LumifyAccessDeniedException;
 import com.altamiracorp.lumify.core.exception.LumifyResourceNotFoundException;
@@ -8,6 +8,7 @@ import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.ontology.Relationship;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workspace.*;
 import com.altamiracorp.lumify.core.model.workspace.diff.DiffItem;
 import com.altamiracorp.lumify.core.model.workspace.diff.WorkspaceDiff;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;

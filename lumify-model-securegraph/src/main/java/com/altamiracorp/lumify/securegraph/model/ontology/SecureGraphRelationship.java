@@ -1,5 +1,6 @@
-package com.altamiracorp.lumify.core.model.ontology;
+package com.altamiracorp.lumify.securegraph.model.ontology;
 
+import com.altamiracorp.lumify.core.model.ontology.Relationship;
 import com.altamiracorp.securegraph.Vertex;
 
 import static com.altamiracorp.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;

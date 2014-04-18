@@ -1,7 +1,8 @@
-package com.altamiracorp.lumify.core.user;
+package com.altamiracorp.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.lumify.core.model.user.UserType;
+import com.altamiracorp.lumify.core.user.User;
 
 import java.io.Serializable;
 

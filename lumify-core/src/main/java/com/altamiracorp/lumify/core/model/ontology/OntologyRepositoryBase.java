@@ -2,14 +2,10 @@ package com.altamiracorp.lumify.core.model.ontology;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.lingala.zip4j.core.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -31,15 +27,15 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     public void defineOntology() {
         Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
-
         Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
-
         addEntityGlyphIcon(entityConcept);
         importBaseOwlFile();
     }
 
     private void importBaseOwlFile() {
-        InputStream baseOwlFile = getClass().getResourceAsStream("/com/altamiracorp/lumify/core/model/ontology/base.owl");
+        InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream("base.owl");
+        checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource("base.owl"));
+
         try {
             importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
         } catch (Exception e) {
@@ -53,7 +49,23 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    public abstract void addEntityGlyphIcon(Concept entityConcept);
+    private void addEntityGlyphIcon(Concept entityConcept) {
+        InputStream entityGlyphIconInputStream = OntologyRepositoryBase.class.getResourceAsStream("entity.png");
+        checkNotNull(entityGlyphIconInputStream, "Could not load resource " + OntologyRepositoryBase.class.getResource("entity.png"));
+
+        try {
+            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
+            IOUtils.copy(entityGlyphIconInputStream, imgOut);
+
+            byte[] rawImg = imgOut.toByteArray();
+
+            addEntityGlyphIconToEntityConcept(entityConcept, rawImg);
+        } catch (IOException e) {
+            throw new LumifyException("invalid stream for glyph icon");
+        }
+    }
+
+    protected abstract void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg);
 
     public boolean isOntologyDefined() {
         try {

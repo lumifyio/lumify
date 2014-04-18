@@ -95,10 +95,6 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.securegraph</groupId>
-            <artifactId>securegraph-elasticsearch</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.altamiracorp.securegraph</groupId>
             <artifactId>securegraph-accumulo</artifactId>
         </dependency>
         <dependency>

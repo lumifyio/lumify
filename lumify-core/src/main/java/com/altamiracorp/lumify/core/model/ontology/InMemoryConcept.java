@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class InMemConcept extends Concept {
+public class InMemoryConcept extends Concept {
     private String title;
     private String color;
     private String displayName;
@@ -16,7 +16,7 @@ public class InMemConcept extends Concept {
     private String conceptIRI;
     private InputStream glyphIconInputStream;
 
-    protected InMemConcept(String conceptIRI, String parentIRI, Collection<OntologyProperty> properties) {
+    protected InMemoryConcept(String conceptIRI, String parentIRI, Collection<OntologyProperty> properties) {
         super(parentIRI, properties);
         this.conceptIRI = conceptIRI;
         this.properties = (ArrayList<OntologyProperty>) properties;

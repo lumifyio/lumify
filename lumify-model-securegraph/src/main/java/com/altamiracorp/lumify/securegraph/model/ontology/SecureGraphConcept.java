@@ -1,5 +1,7 @@
-package com.altamiracorp.lumify.core.model.ontology;
+package com.altamiracorp.lumify.securegraph.model.ontology;
 
+import com.altamiracorp.lumify.core.model.ontology.Concept;
+import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.securegraph.Vertex;
 import com.altamiracorp.securegraph.Visibility;
 import com.altamiracorp.securegraph.property.StreamingPropertyValue;

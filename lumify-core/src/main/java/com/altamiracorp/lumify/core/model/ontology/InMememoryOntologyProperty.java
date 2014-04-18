@@ -1,6 +1,6 @@
 package com.altamiracorp.lumify.core.model.ontology;
 
-public class InMemOntologyProperty extends OntologyProperty {
+public class InMememoryOntologyProperty extends OntologyProperty {
     private String title;
     private boolean userVisible;
     private String displayName;

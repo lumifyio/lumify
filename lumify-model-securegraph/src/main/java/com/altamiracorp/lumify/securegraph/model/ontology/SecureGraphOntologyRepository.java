@@ -1,6 +1,7 @@
-package com.altamiracorp.lumify.core.model.ontology;
+package com.altamiracorp.lumify.securegraph.model.ontology;
 
 import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.ontology.*;
 import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -16,7 +17,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,22 +83,11 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public void addEntityGlyphIcon(Concept entityConcept) {
-        InputStream entityGlyphIconInputStream = this.getClass().getResourceAsStream("entity.png");
-
-        try {
-            ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-            IOUtils.copy(entityGlyphIconInputStream, imgOut);
-
-            byte[] rawImg = imgOut.toByteArray();
-
-            StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
-            raw.searchIndex(false);
-            entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
-            graph.flush();
-        } catch (IOException e) {
-            throw new LumifyException("invalid stream for glyph icon");
-        }
+    protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
+        StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
+        raw.searchIndex(false);
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
+        graph.flush();
     }
 
     @Override

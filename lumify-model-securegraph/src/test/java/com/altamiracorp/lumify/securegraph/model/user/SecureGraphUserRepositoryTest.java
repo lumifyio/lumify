@@ -1,9 +1,11 @@
-package com.altamiracorp.lumify.core.model.user;
+package com.altamiracorp.lumify.securegraph.model.user;
 
 import com.altamiracorp.lumify.core.model.ontology.Concept;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
+import com.altamiracorp.lumify.core.model.user.AuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.InMemoryAuthorizationRepository;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.lumify.core.user.SecureGraphUser;
 import com.altamiracorp.securegraph.id.UUIDIdGenerator;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraph;
 import com.altamiracorp.securegraph.inmemory.InMemoryGraphConfiguration;

@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>lumify</artifactId>
         <groupId>com.altamiracorp.lumify</groupId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-model-bigtable-queue</artifactId>
-    <name>Lumify: Model: BigTable Queue</name>
+    <artifactId>lumify-model-securegraph</artifactId>
+    <name>Lumify: Model: Secure Graph</name>
 
     <dependencies>
         <dependency>
@@ -20,17 +20,20 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>storm</groupId>
-            <artifactId>storm</artifactId>
-            <scope>provided</scope>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.bigtable</groupId>
-            <artifactId>bigtable-api</artifactId>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-inmemory</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.altamiracorp.securegraph</groupId>
+            <artifactId>securegraph-accumulo</artifactId>
         </dependency>
     </dependencies>
 

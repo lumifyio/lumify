@@ -1,5 +1,7 @@
-package com.altamiracorp.lumify.core.model.workspace;
+package com.altamiracorp.lumify.securegraph.model.workspace;
 
+import com.altamiracorp.lumify.core.model.workspace.Workspace;
+import com.altamiracorp.lumify.core.model.workspace.WorkspaceLumifyProperties;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
 import com.altamiracorp.securegraph.Vertex;
