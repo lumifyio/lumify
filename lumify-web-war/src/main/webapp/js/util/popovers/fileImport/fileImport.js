@@ -22,9 +22,16 @@ define([
         var vertexService = new VertexService();
 
         this.defaultAttrs({
-            buttonSelector: 'button',
+            importSelector: '.btn-primary',
+            cancelSelector: '.btn-default',
             checkboxSelector: '.checkbox',
             visibilityInputSelector: '.visibility'
+        });
+
+        this.after('teardown', function() {
+            if (this.request) {
+                this.request.abort();
+            }
         });
 
         this.before('initialize', function(node, config) {
@@ -64,7 +71,8 @@ define([
                 VisibilityEditor.attachTo(this.popover.find('.visibility'));
 
                 this.on(this.popover, 'click', {
-                    buttonSelector: this.onImport
+                    importSelector: this.onImport,
+                    cancelSelector: this.onCancel
                 });
 
                 this.on(this.popover, 'change', {
@@ -125,7 +133,11 @@ define([
 
         this.isVisibilityCollapsed = function() {
             return this.popover.find('.checkbox input').is(':checked');
-        }
+        };
+
+        this.onCancel = function() {
+            this.teardown();
+        };
 
         this.onImport = function() {
             if (!this.checkValid()) {
@@ -133,9 +145,10 @@ define([
             }
 
             var self = this,
-                button = this.popover.find('button')
-                    .addClass('loading')
+                button = this.popover.find('.btn-primary')
+                    .text('Importing...')
                     .attr('disabled', true),
+                cancelButton = this.popover.find('.btn-default').show(),
                 collapsed = this.isVisibilityCollapsed(),
                 visibilityValue = collapsed ?
                     this.visibilitySource.value :
@@ -143,7 +156,7 @@ define([
 
             this.attr.teardownOnTap = false;
 
-            vertexService.importFiles(this.attr.files, visibilityValue)
+            this.request = vertexService.importFiles(this.attr.files, visibilityValue)
                 .progress(function(complete) {
                     var percent = Math.round(complete * 100);
                     button.text(percent + '% Importing...');
@@ -151,10 +164,12 @@ define([
                 .fail(function(xhr, m, error) {
                     self.attr.teardownOnTap = true;
                     self.markFieldErrors(error, self.popover);
-                    _.defer(self.positionDialog.bind(self));
+                    cancelButton.hide();
                     button.text('Import')
                         .removeClass('loading')
                         .removeAttr('disabled')
+
+                    _.defer(self.positionDialog.bind(self));
                 })
                 .done(function(result) {
 

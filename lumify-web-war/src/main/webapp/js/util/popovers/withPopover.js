@@ -88,7 +88,7 @@ define([
                     };
                 
                 if (this.dialogPosition.y < height) {
-                    proposed.top = this.dialogPosition.y;
+                    proposed.top = Math.min(maxTop, this.dialogPosition.y);
                     this.popover.removeClass('top').addClass('bottom');
                 } else {
                     this.popover.removeClass('bottom').addClass('top');
