@@ -22,8 +22,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ReadOnlyInMemOntologyRepository extends OntologyRepositoryBase {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemOntologyRepository.class);
+public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
     private Cache<String, InMemoryConcept> conceptsCache = CacheBuilder.newBuilder()
             .build();
     private Cache<String, InMememoryOntologyProperty> propertiesCache = CacheBuilder.newBuilder()
@@ -219,7 +219,7 @@ public class ReadOnlyInMemOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getEntityConcept() {
-        return conceptsCache.asMap().get(ReadOnlyInMemOntologyRepository.ENTITY_CONCEPT_IRI);
+        return conceptsCache.asMap().get(ReadOnlyInMemoryOntologyRepository.ENTITY_CONCEPT_IRI);
     }
 
     @Override
