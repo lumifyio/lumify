@@ -10,7 +10,6 @@ import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
-import com.altamiracorp.lumify.securegraph.model.user.SecureGraphUser;
 import com.altamiracorp.lumify.core.user.SystemUser;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -101,7 +100,11 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User findById(String userId) {
-        return createFromVertex(graph.getVertex(userId, authorizations));
+        return createFromVertex(findByIdUserVertex(userId));
+    }
+
+    public Vertex findByIdUserVertex(String userId) {
+        return graph.getVertex(userId, authorizations);
     }
 
     @Override
