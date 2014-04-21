@@ -343,7 +343,12 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        Vertex otherUserVertex = ((SecureGraphUserRepository) userRepository).findByIdUserVertex(userId);
+        Vertex otherUserVertex;
+        if (userRepository instanceof SecureGraphUserRepository) {
+            otherUserVertex = ((SecureGraphUserRepository) userRepository).findByIdUserVertex(userId);
+        } else {
+            otherUserVertex = graph.getVertex(userId, authorizations);
+        }
         if (otherUserVertex == null) {
             throw new LumifyResourceNotFoundException("Could not find user: " + userId, userId);
         }
