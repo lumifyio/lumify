@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermExtractionResult;
 import com.altamiracorp.lumify.core.ingest.term.extraction.TermMention;
@@ -40,6 +41,7 @@ public abstract class GraphPropertyWorker {
     private AuditRepository auditRepository;
     private TermMentionRepository termMentionRepository;
     private GraphPropertyWorkerPrepareData workerPrepareData;
+    private Configuration configuration;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
@@ -93,7 +95,7 @@ public abstract class GraphPropertyWorker {
     }
 
     @Inject
-    public void setAuditRepository(AuditRepository auditRepository) {
+    public final void setAuditRepository(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
     }
 
@@ -104,6 +106,15 @@ public abstract class GraphPropertyWorker {
     @Inject
     public void setTermMentionRepository(TermMentionRepository termMentionRepository) {
         this.termMentionRepository = termMentionRepository;
+    }
+
+    protected Configuration getConfiguration() {
+        return configuration;
+    }
+
+    @Inject
+    public final void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
