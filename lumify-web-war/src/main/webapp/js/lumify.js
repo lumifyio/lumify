@@ -36,7 +36,7 @@ window.gremlins = function() {
             }))
         .gremlin(gremlins.species.typer())
         .mogwai(gremlins.mogwais.fps())
-        .unleash({nb:1000});
+        .unleash({nb: 1000});
     })
 }
 
