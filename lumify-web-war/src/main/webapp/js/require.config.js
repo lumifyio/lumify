@@ -17,6 +17,7 @@ var require = {
         'es5sham': '../libs/es5-shim/es5-sham',
         'flight': '../libs/flight',
         'goog': '../libs/requirejs-plugins/src/goog',
+        'gremlins': '../libs/gremlins.js/gremlins.min',
         'hbs': '../libs/require-handlebars-plugin/hbs',
         'handlebars': '../libs/require-handlebars-plugin/hbs/handlebars',
         'intercom': '../libs/intercom/intercom',

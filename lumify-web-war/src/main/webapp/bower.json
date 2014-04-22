@@ -34,6 +34,7 @@
     "sinon-chai": "~2.5.0",
     "mocha": "~1.18.0",
     "chai": "~1.9.0",
-    "mocha-flight": "~0.3.0"
+    "mocha-flight": "~0.3.0",
+    "gremlins.js": "~0.1.0"
   }
 }

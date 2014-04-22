@@ -22,6 +22,23 @@ if ('localStorage' in window) {
         enableLiveReload(true);
     }
 }
+window.gremlins = function() {
+    require(['gremlins'], function(gremlins) {
+        gremlins.createHorde()
+        .gremlin(gremlins.species.formFiller())
+        .gremlin(gremlins.species.clicker())
+        .gremlin(
+            gremlins.species.clicker()
+            .clickTypes(['click'])
+            .canClick(function(element) {
+                return $(element).is('button,a,li') &&
+                    $(element).closest('.logout').length === 0;
+            }))
+        .gremlin(gremlins.species.typer())
+        .mogwai(gremlins.mogwais.fps())
+        .unleash({nb:1000});
+    })
+}
 
 window.requestAnimationFrame =
     typeof window === 'undefined' ?
