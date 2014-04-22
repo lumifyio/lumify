@@ -1,6 +1,7 @@
 package com.altamiracorp.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.user.UserType;
 import com.altamiracorp.lumify.core.user.User;
 
@@ -11,16 +12,18 @@ public class SecureGraphUser implements User, Serializable {
     private ModelUserContext modelUserContext;
     private String displayName;
     private String userId;
+    private String userStatus;
 
     // required for Serializable
     protected SecureGraphUser() {
 
     }
 
-    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext) {
+    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext, String userStatus) {
         this.displayName = displayName;
         this.modelUserContext = modelUserContext;
         this.userId = userId;
+        this.userStatus = userStatus;
     }
 
     public String getUserId() {
@@ -41,7 +44,11 @@ public class SecureGraphUser implements User, Serializable {
 
     @Override
     public String getUserStatus() {
-        return null;
+        return userStatus;
+    }
+
+    public void setUserStatus (String status) {
+        this.userStatus = status;
     }
 
     @Override

@@ -74,8 +74,9 @@ public class SecureGraphUserRepository extends UserRepository {
 
         String userName = USERNAME.getPropertyValue(user);
         String userId = (String) user.getId();
+        String userStatus = STATUS.getPropertyValue(user);
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext);
+        return new SecureGraphUser(userId, userName, modelUserContext, userStatus);
     }
 
     @Override
@@ -180,11 +181,12 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        User user = findById(userId);
+        SecureGraphUser user = (SecureGraphUser)findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility());
         graph.flush();
+        user.setUserStatus(status.toString());
         return user;
     }
 
