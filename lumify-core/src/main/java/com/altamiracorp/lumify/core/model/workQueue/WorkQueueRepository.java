@@ -2,6 +2,10 @@ package com.altamiracorp.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.config.Configuration;
+import com.altamiracorp.lumify.core.exception.LumifyException;
+import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -50,9 +54,68 @@ public abstract class WorkQueueRepository {
         broadcastPropertyChange(edge, propertyKey, propertyName);
     }
 
-    protected abstract void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName);
+    public void pushEdgeDeletion(Edge edge) {
+        broadcastEdgeDeletion(edge);
+    }
 
-    protected abstract void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName);
+    protected void broadcastEdgeDeletion(Edge edge) {
+        JSONObject dataJson = new JSONObject();
+        if (edge != null) {
+            dataJson.put("edgeId", edge.getId());
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "edgeDeletion");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
+    public void pushDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
+        broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
+    }
+
+    protected void broadcastDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
+        JSONObject dataJson = new JSONObject();
+        if (artifactVertexWithDetectedObjects != null) {
+            dataJson = artifactVertexWithDetectedObjects;
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "detectedObjectChange");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
+    public void pushUserStatusChange(User user, UserStatus status) {
+        broadcastUserStatusChange(user, status);
+    }
+
+    protected void broadcastUserStatusChange(User user, UserStatus status) {
+        JSONObject json = new JSONObject();
+        json.put("type", "userStatusChange");
+        json.put("data", UserRepository.toJson(user));
+        broadcastJson(json);
+    }
+
+    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
+        try {
+            JSONObject json = getBroadcastPropertyChangeJson(edge, propertyKey, propertyName);
+            broadcastJson(json);
+        } catch (Exception ex) {
+            throw new LumifyException("Could not broadcast property change", ex);
+        }
+    }
+
+    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
+        try {
+            JSONObject json = getBroadcastPropertyChangeJson(graphVertex, propertyKey, propertyName);
+            broadcastJson(json);
+        } catch (Exception ex) {
+            throw new LumifyException("Could not broadcast property change", ex);
+        }
+    }
+
+    protected abstract void broadcastJson(JSONObject json);
 
     protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName) {
         JSONObject dataJson = new JSONObject();

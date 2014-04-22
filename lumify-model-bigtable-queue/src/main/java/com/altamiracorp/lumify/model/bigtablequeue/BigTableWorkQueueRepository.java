@@ -89,13 +89,8 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
-        LOGGER.error("broadcastPropertyChange not supported");
-    }
-
-    @Override
-    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
-        LOGGER.error("broadcastPropertyChange not supported");
+    protected void broadcastJson(JSONObject json) {
+        LOGGER.error("broadcastJson not supported");
     }
 
     @Override

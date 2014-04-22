@@ -55,7 +55,7 @@ public abstract class UserRepository {
         return json;
     }
 
-    public JSONObject toJson(User user) {
+    public static JSONObject toJson(User user) {
         try {
             JSONObject json = new JSONObject();
             json.put("id", user.getUserId());

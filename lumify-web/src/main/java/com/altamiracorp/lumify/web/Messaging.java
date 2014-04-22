@@ -5,6 +5,7 @@ import com.altamiracorp.lumify.core.model.user.UserStatus;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
+import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.google.inject.Inject;
@@ -17,8 +18,6 @@ import org.atmosphere.cpr.*;
 import org.atmosphere.interceptor.AtmosphereResourceLifecycleInterceptor;
 import org.atmosphere.interceptor.BroadcastOnPostAtmosphereInterceptor;
 import org.atmosphere.interceptor.HeartbeatInterceptor;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -187,53 +186,14 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
-            com.altamiracorp.lumify.core.user.User user = userRepository.setStatus(authUser.getUserId(), status);
+            User user = userRepository.setStatus(authUser.getUserId(), status);
 
-            JSONObject json = new JSONObject();
-            json.put("type", "userStatusChange");
-            json.put("data", userRepository.toJson(user));
-            resource.getBroadcaster().broadcast(json.toString());
+            this.workQueueRepository.pushUserStatusChange(user, status);
         } catch (Exception ex) {
             LOGGER.error("Could not update status", ex);
         } finally {
             // TODO session is held open by getAppSession
             // session.close();
-        }
-    }
-
-    public static void broadcastEdgeDeletion(String edgeId) {
-        try {
-            JSONObject dataJson = new JSONObject();
-            if (edgeId != null) {
-                dataJson.put("edgeId", edgeId);
-            }
-
-            JSONObject json = new JSONObject();
-            json.put("type", "edgeDeletion");
-            json.put("data", dataJson);
-            if (broadcaster != null) {
-                broadcaster.broadcast(json.toString());
-            }
-        } catch (JSONException ex) {
-            throw new RuntimeException("Could not create json", ex);
-        }
-    }
-
-    public static void broadcastDetectedObjectChange(String artifactVertexId, JSONObject artifactVertexWithDetectedObjects) {
-        try {
-            JSONObject dataJson = new JSONObject();
-            if (artifactVertexWithDetectedObjects != null) {
-                dataJson = artifactVertexWithDetectedObjects;
-            }
-
-            JSONObject json = new JSONObject();
-            json.put("type", "detectedObjectChange");
-            json.put("data", dataJson);
-            if (broadcaster != null) {
-                broadcaster.broadcast(json.toString());
-            }
-        } catch (JSONException ex) {
-            throw new RuntimeException("Could not create json", ex);
         }
     }
 

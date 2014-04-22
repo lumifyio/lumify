@@ -24,6 +24,7 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,9 +47,10 @@ public class SecureGraphUserRepository extends UserRepository {
             .build();
 
     @Inject
-    public SecureGraphUserRepository(final AuthorizationRepository authorizationRepository,
-                                     final Graph graph,
-                                     final OntologyRepository ontologyRepository) {
+    public SecureGraphUserRepository(
+            final AuthorizationRepository authorizationRepository,
+            final Graph graph,
+            final OntologyRepository ontologyRepository) {
         this.authorizationRepository = authorizationRepository;
         this.graph = graph;
 
@@ -181,7 +183,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User setStatus(String userId, UserStatus status) {
-        SecureGraphUser user = (SecureGraphUser)findById(userId);
+        SecureGraphUser user = (SecureGraphUser) findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility());

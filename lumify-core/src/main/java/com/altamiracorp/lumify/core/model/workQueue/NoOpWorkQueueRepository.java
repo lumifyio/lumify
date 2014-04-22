@@ -2,10 +2,7 @@ package com.altamiracorp.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.lumify.core.config.Configuration;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Element;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -16,12 +13,7 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
-    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
+    protected void broadcastJson(JSONObject json) {
         throw new RuntimeException("not supported");
     }
 

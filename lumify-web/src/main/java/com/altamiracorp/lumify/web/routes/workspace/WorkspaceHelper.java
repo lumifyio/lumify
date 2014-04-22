@@ -182,7 +182,7 @@ public class WorkspaceHelper {
             }
         }
 
-        Messaging.broadcastEdgeDeletion(edge.getId().toString());
+        this.workQueueRepository.pushEdgeDeletion(edge);
 
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.DELETE, sourceVertex, destVertex, edge, "", "", user, new LumifyVisibility().getVisibility());

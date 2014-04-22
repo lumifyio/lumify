@@ -10,6 +10,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
@@ -20,7 +21,6 @@ import com.altamiracorp.lumify.core.util.GraphUtil;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
@@ -39,16 +39,19 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final UserRepository userRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final WorkspaceHelper workspaceHelper;
 
     @Inject
-    public WorkspaceUndo(final TermMentionRepository termMentionRepository,
-                         final DetectedObjectRepository detectedObjectRepository,
-                         final Configuration configuration,
-                         final Graph graph,
-                         final VisibilityTranslator visibilityTranslator,
-                         final UserRepository userRepository,
-                         final WorkspaceHelper workspaceHelper) {
+    public WorkspaceUndo(
+            final TermMentionRepository termMentionRepository,
+            final DetectedObjectRepository detectedObjectRepository,
+            final Configuration configuration,
+            final Graph graph,
+            final VisibilityTranslator visibilityTranslator,
+            final UserRepository userRepository,
+            final WorkspaceHelper workspaceHelper,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.detectedObjectRepository = detectedObjectRepository;
@@ -56,6 +59,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceHelper = workspaceHelper;
         this.userRepository = userRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -154,7 +158,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                                     detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
                     DetectedObjectModel analyzedDetectedModel = detectedObjectRepository.findByRowKey(analyzedDetectedObjectRK.getRowKey(), modelUserContext);
                     JSONObject artifactVertexWithDetectedObjects = workspaceHelper.unresolveDetectedObject(vertex, detectedObjectModel.getMetadata().getEdgeId(), detectedObjectModel, analyzedDetectedModel, lumifyVisibility, workspaceId, modelUserContext, user, authorizations);
-                    Messaging.broadcastDetectedObjectChange(detectedObjectRowKey.getArtifactId(), artifactVertexWithDetectedObjects);
+                    this.workQueueRepository.pushDetectedObjectChange(artifactVertexWithDetectedObjects);
                     unresolved.put(artifactVertexWithDetectedObjects);
                 }
             } else {

@@ -6,9 +6,7 @@ import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
@@ -30,30 +28,15 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
+    protected void broadcastJson(JSONObject json) {
         try {
             if (!declaredQueues.contains(BROADCAST_EXCHANGE_NAME)) {
                 channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
                 declaredQueues.add(BROADCAST_EXCHANGE_NAME);
             }
-            JSONObject json = getBroadcastPropertyChangeJson(edge, propertyKey, propertyName);
             channel.basicPublish(BROADCAST_EXCHANGE_NAME, "", null, json.toString().getBytes());
-        } catch (Exception ex) {
-            throw new LumifyException("Could not broadcast property change", ex);
-        }
-    }
-
-    @Override
-    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
-        try {
-            if (!declaredQueues.contains(BROADCAST_EXCHANGE_NAME)) {
-                channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
-                declaredQueues.add(BROADCAST_EXCHANGE_NAME);
-            }
-            JSONObject json = getBroadcastPropertyChangeJson(graphVertex, propertyKey, propertyName);
-            channel.basicPublish(BROADCAST_EXCHANGE_NAME, "", null, json.toString().getBytes());
-        } catch (Exception ex) {
-            throw new LumifyException("Could not broadcast property change", ex);
+        } catch (IOException ex) {
+            throw new LumifyException("Could not broadcast json", ex);
         }
     }
 

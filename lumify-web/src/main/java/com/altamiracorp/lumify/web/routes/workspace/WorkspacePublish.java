@@ -16,6 +16,7 @@ import com.altamiracorp.lumify.core.model.properties.LumifyProperties;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.diff.SandboxStatus;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
@@ -46,18 +47,21 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final OntologyRepository ontologyRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
 
     @Inject
-    public WorkspacePublish(final TermMentionRepository termMentionRepository,
-                            final AuditRepository auditRepository,
-                            final UserRepository userRepository,
-                            final DetectedObjectRepository detectedObjectRepository,
-                            final Configuration configuration,
-                            final Graph graph,
-                            final VisibilityTranslator visibilityTranslator,
-                            final OntologyRepository ontologyRepository) {
+    public WorkspacePublish(
+            final TermMentionRepository termMentionRepository,
+            final AuditRepository auditRepository,
+            final UserRepository userRepository,
+            final DetectedObjectRepository detectedObjectRepository,
+            final Configuration configuration,
+            final Graph graph,
+            final VisibilityTranslator visibilityTranslator,
+            final OntologyRepository ontologyRepository,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
@@ -66,6 +70,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -348,7 +353,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
                     artifactVertexWithDetectedObjects.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, systemUser, authorizations, workspaceId));
 
-                    Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
+                    this.workQueueRepository.pushDetectedObjectChange(artifactVertexWithDetectedObjects);
                 }
             } else {
                 termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
