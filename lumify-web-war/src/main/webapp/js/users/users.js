@@ -45,7 +45,7 @@ define([
         this.onStartChat = function(event, data) {
 
             if (data.userId !== this.currentUserId &&
-                this.$node.find('.user-' + data.userId).is('.online')) 
+                this.$node.find('.user-' + data.userId).is('.online'))
             {
 
                 this.trigger(document, 'userSelected', {
@@ -79,8 +79,9 @@ define([
 
         this.onNewUserOnline = function(evt, userData) {
             var $usersList = this.select('usersListSelector'),
-                html = userListItemTemplate({ user: userData });
-            $usersList.find('li.status-' + userData.status).after(html);
+                html = userListItemTemplate({ user: userData }),
+                className = 'status-' + userData.status.toLowerCase();
+            $usersList.find('li.' + className).after(html);
         };
 
         this.onChatCreated = function(evt, chat) {

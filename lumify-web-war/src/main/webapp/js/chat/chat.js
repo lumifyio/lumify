@@ -67,22 +67,28 @@ define([
         };
 
         this.createChatWindowAndFocus = function(chat) {
+            var id = chat.rowKey === currentUser.id ?
+                chat.users[0].id : chat.rowKey;
+
             if (!chat.windowCreated) {
-                var html = $(chatWindowTemplate({ chat: chat }));
+                var html = $(chatWindowTemplate({
+                    id: id,
+                    chat: chat
+                }));
                 html.hide().appendTo(this.$node);
                 chat.windowCreated = true;
             }
 
             this.select('chatWindowSelector').hide();
-            this.focusMessage(chat.rowKey);
+            this.focusMessage(id);
         };
 
         this.addMessage = function(messageData) {
             if (messageData.tempId) {
                 $('#' + messageData.tempId).remove();
             }
-            if (messageData.chatRowKey === currentUser.rowKey) {
-                messageData.chatRowKey = messageData.from.rowKey;
+            if (messageData.chatRowKey === currentUser.id) {
+                messageData.chatRowKey = messageData.from.id;
             }
             this.checkChatWindow(messageData);
 
