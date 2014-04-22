@@ -699,24 +699,17 @@ define([
                                         this,
                                         [formatters.vertex.prop(item, 'title')]
                                     ),
-                                icon = '',
                                 concept = _.find(self.allConcepts, function(c) {
                                     return item.properties && c.id === 
                                         item.properties['http://lumify.io#conceptType'].value;
                                 });
 
-                            if (item.properties) {
-                                icon = item['http://lumify.io#glyphIcon'] ||
-                                    (item.properties['http://lumify.io#glyphIcon'] &&
-                                     item.properties['http://lumify.io#glyphIcon'].value) ||
-                                     concept.glyphIconHref;
-                            }
                             return entityTemplate({
                                 html: html,
                                 item: item,
                                 properties: item.properties &&
                                     Properties.filterPropertiesForDisplay(item.properties, ontologyProperties),
-                                iconSrc: icon,
+                                iconSrc: item.imageSrc,
                                 concept: concept
                             });
                         }
