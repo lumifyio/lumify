@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
@@ -17,10 +18,7 @@ import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
 import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
+import com.altamiracorp.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -35,6 +33,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public VertexSetProperty(
@@ -44,13 +43,15 @@ public class VertexSetProperty extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final UserRepository userRepository,
             final Configuration configuration,
-            final WorkspaceRepository workspaceRepository) {
+            final WorkspaceRepository workspaceRepository,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -113,6 +114,9 @@ public class VertexSetProperty extends BaseRequestHandler {
         Workspace workspace = workspaceRepository.findById(workspaceId, user);
 
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
+
+        Property propertyToPutOnQueue = graphVertex.getProperty(propertyName);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex.getId(), propertyToPutOnQueue);
 
         JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
         Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
