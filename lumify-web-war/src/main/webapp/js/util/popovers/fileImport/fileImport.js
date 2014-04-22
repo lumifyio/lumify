@@ -114,6 +114,8 @@ define([
             } else {
                 this.visibilitySources[index] = data;
             }
+
+            this.checkValid();
         };
 
         this.checkValid = function() {
@@ -132,7 +134,9 @@ define([
         };
 
         this.isVisibilityCollapsed = function() {
-            return this.popover.find('.checkbox input').is(':checked');
+            var checkbox = this.popover.find('.checkbox input');
+
+            return checkbox.length === 0 || checkbox.is(':checked');
         };
 
         this.onCancel = function() {
