@@ -56,11 +56,6 @@ public final class Configuration {
      */
     public static final String UNKNOWN_STRING = "Unknown";
 
-    /**
-     * Default value for a {@link Integer} property that could not be parsed
-     */
-    private static final int UNKNOWN_INT = -999;
-
     public Configuration(final Map<?, ?> config) {
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
@@ -80,8 +75,12 @@ public final class Configuration {
         return defaultValue;
     }
 
+    public Integer getInt(String propertyKey, Integer defaultValue) {
+        return Integer.parseInt(get(propertyKey, defaultValue == null ? null : defaultValue.toString()));
+    }
+
     public Integer getInt(String propertyKey) {
-        return Integer.parseInt(get(propertyKey, Integer.toString(UNKNOWN_INT)));
+        return getInt(propertyKey, null);
     }
 
     public Class getClass(String propertyKey, String defaultClassName) throws ClassNotFoundException {

@@ -13,12 +13,12 @@ public class NoOpWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra) {
+    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         throw new RuntimeException("not supported");
     }
 
     @Override
-    public Object createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime) {
+    public Object createSpout(Configuration configuration, String queueName) {
         throw new RuntimeException("not supported");
     }
 

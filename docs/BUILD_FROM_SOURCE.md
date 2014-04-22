@@ -10,7 +10,7 @@ Lumify has several required dependencies to build from source. Please ensure tha
 * [Accumulo 1.5](http://accumulo.apache.org/downloads/)
 * [Elastic Search 0.90.0](http://www.elasticsearch.org/downloads/0-90-0/)
 * [Storm 0.8.1](http://storm-project.net/downloads.html)
-* [Kafka 0.7.2](http://kafka.apache.org/downloads.html)
+* [RabbitMQ 3.3.0](http://www.rabbitmq.com/download.html)
 * [NodeJS 0.10.21](http://blog.nodejs.org/2013/10/18/node-v0-10-21-stable/)
 * [Bower 1.2.7](https://npmjs.org/package/bower)
 * [Grunt-cli 0.1.11](https://npmjs.org/package/grunt-cli)

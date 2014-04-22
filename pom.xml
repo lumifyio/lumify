@@ -39,7 +39,6 @@
         <module>lumify-sql</module>
         <module>lumify-fs-hdfs</module>
         <module>lumify-model-bigtable-queue</module>
-        <module>lumify-model-kafka</module>
         <module>lumify-storm</module>
         <module>lumify-web</module>
         <module>lumify-web-server</module>
@@ -48,6 +47,7 @@
         <module>lumify-ontology-dev</module>
         <module>lumify-web-dev-tools</module>
         <module>lumify-model-securegraph</module>
+        <module>lumify-model-rabbitmq</module>
     </modules>
 
     <repositories>
