@@ -2,7 +2,6 @@ package com.altamiracorp.lumify.sql.model.workspace;
 
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.sql.model.user.SqlUser;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,11 +17,11 @@ public class SqlWorkspace implements Workspace {
     @Column(name = "display_title")
     private String displayTitle;
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn (name="user_id")
+    @PrimaryKeyJoinColumn(name = "user_id")
     private SqlUser creator;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")
     public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
-    @OneToMany (fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<SqlWorkspaceVertex> sqlWorkspaceVertices = new HashSet<SqlWorkspaceVertex>(0);
 
     public String getId() {
