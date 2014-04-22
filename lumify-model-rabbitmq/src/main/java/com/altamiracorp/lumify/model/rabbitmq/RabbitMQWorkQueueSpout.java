@@ -13,6 +13,7 @@ import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.exception.LumifyException;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
+import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 import org.json.JSONObject;
@@ -92,6 +93,7 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
         }
     }
 
+    @Inject
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
