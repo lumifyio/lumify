@@ -132,6 +132,13 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
     protected abstract StormTopology createTopology(int parallelismHint);
 
+<<<<<<< HEAD
+=======
+    protected boolean isLocal() {
+        return local;
+    }
+
+>>>>>>> 6462bef... remove kafka and add rabbitmq
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
         return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName);
     }
