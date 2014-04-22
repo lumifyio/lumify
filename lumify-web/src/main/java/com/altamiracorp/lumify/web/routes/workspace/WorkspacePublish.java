@@ -242,8 +242,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
-        ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
+        auditRepository.auditVertex(AuditAction.PUBLISH, vertex.getId(), "", "", user, FlushFlag.FLUSH, lumifyVisibility.getVisibility());
 
+        ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
         for (Audit row : auditRepository.findByRowStartsWith(vertex.getId().toString(), systemModelUser)) {
             auditRepository.updateColumnVisibility(row, originalVertexVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
         }
@@ -320,8 +321,11 @@ public class WorkspacePublish extends BaseRequestHandler {
             publishProperty(edgeExistingElementMutation, property, workspaceId, user);
         }
 
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeExistingElementMutation, visibilityJson, lumifyVisibility.getVisibility());
         auditRepository.auditEdgeElementMutation(AuditAction.PUBLISH, edgeExistingElementMutation, edge, sourceVertex, destVertex, "", user, lumifyVisibility.getVisibility());
+
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeExistingElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         edge = edgeExistingElementMutation.save();
 
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());

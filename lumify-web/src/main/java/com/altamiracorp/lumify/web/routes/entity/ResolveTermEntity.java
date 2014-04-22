@@ -129,7 +129,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = graph.addEdge(artifactVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());

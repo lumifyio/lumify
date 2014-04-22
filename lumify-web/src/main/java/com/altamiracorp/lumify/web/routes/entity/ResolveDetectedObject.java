@@ -109,8 +109,10 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
             GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
             resolvedVertex = resolvedVertexMutation.save();
+
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             graph.flush();
 
@@ -120,14 +122,10 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             resolvedVertexMutation = resolvedVertex.prepareMutation();
         }
 
-        auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
-
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, LabelName.RAW_CONTAINS_IMAGE_OF_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
-
-        // TODO: index the new vertex
 
         DetectedObjectModel detectedObjectModel = detectedObjectRepository.saveDetectedObject
                 (artifactId, edge.getId(), resolvedVertex.getId(), conceptId, Double.parseDouble(x1), Double.parseDouble(y1), Double.parseDouble(x2),
