@@ -26,5 +26,3 @@ Lumify has several required dependencies to build from source. Please ensure tha
 5. Deploy storm topology jar files
 6. Deploy web war
 
-If you would like to see an example of the ingest capability Lumify has, please refer to our [open source Twitter ingest example](https://github.com/altamiracorp/lumify-twitter) and follow the instructions there.
-
