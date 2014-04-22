@@ -12,6 +12,7 @@ define([], function() {
             /^configuration$/,
             /^workspaces?$/,
             /^workspace\?/,
+            /^workspace\/new/,
             /^workspace\/diff/,
             /^workspace\/relationships/,
             /^workspace\/update/,
