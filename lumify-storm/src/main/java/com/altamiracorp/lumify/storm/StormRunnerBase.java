@@ -132,10 +132,6 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
     protected abstract StormTopology createTopology(int parallelismHint);
 
-    protected boolean isLocal() {
-        return local;
-    }
-
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
         return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName);
     }
