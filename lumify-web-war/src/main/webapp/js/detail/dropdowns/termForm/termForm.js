@@ -146,8 +146,8 @@ define([
 
             if (newGraphVertexId) {
                 this.vertexService.getVertexProperties(newGraphVertexId)
-                    .done(function() {
-                        self.updateResolveImageIcon();
+                    .done(function(v) {
+                        self.updateResolveImageIcon(v);
                     });
             } else this.updateResolveImageIcon();
 
@@ -448,9 +448,6 @@ define([
             var self = this,
                 info = $(self.attr.mentionNode).data('info') ||
                     (this.attr.existing ? this.attr.dataInfo : '');
-            if (vertex) {
-                $.extend(vertex, {}, vertex.properties);
-            }
 
             if (!vertex && (info || conceptId)) {
                 self.deferredConcepts.done(function(allConcepts) {
