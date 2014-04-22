@@ -159,9 +159,10 @@ define([
                                     a.propertyAudit.visibilityValue = 
                                         a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
                                     a.propertyAudit.formattedValue = self.formatValue(
-                                        a.propertyAudit.newValue,
+                                        a.propertyAudit.newValue || a.propertyAudit.previousValue,
                                         a.propertyAudit.propertyName
                                     );
+                                    a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
 
                                     return 'property';
                                 }
@@ -241,16 +242,21 @@ define([
                             }
                         }
 
+                        var stringValue = value;
+
                         if (property.dataType === 'geoLocation') {
-                            value = formatters.geoLocation.parse(value);
+                            stringValue = formatters.geoLocation.pretty(value);
+                            value = { value: formatters.geoLocation.parse(value) };
                         }
 
                         propLi = $(
                             propertiesItemTemplate({
                                 formatters: formatters,
                                 property: {
+                                    displayType: property.dataType,
                                     key: property.title,
                                     displayName: property.displayName,
+                                    stringValue: stringValue,
                                     value: value || 'deleted',
                                     metadata: {}
                                 },
