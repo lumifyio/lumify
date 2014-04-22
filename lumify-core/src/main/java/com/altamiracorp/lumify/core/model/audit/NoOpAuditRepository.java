@@ -76,7 +76,7 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
-    public void updateColumnVisibility(Audit audit, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
+    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
         throw new RuntimeException("not supported");
     }
 }

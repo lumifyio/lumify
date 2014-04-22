@@ -344,8 +344,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public void updateColumnVisibility(Audit audit, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
-        getModelSession().alterColumnsVisibility(audit, originalEdgeVisibility, visibilityString, flushFlag);
+    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
+        getModelSession().alterColumnsVisibility(audit, orVisibility(originalEdgeVisibility).getVisibilityString(), visibilityString, flushFlag);
     }
 
     private JSONObject jsonMetadata(Map<String, Object> metadata) {

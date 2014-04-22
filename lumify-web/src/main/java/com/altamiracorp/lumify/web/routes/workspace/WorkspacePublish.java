@@ -216,7 +216,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
 
         LOGGER.debug("publishing vertex %s(%s)", vertex.getId().toString(), vertex.getVisibility().toString());
-        String originalVertexVisibility = vertex.getVisibility().getVisibilityString();
+        Visibility originalVertexVisibility = vertex.getVisibility();
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
         JSONArray workspaceJsonArray = JSONUtil.getOrCreateJSONArray(visibilityJson, VisibilityTranslator.JSON_WORKSPACES);
         if (!JSONUtil.arrayContains(workspaceJsonArray, workspaceId)) {
@@ -314,7 +314,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Edge> edgeExistingElementMutation = edge.prepareMutation();
-        String originalEdgeVisibility = edge.getVisibility().getVisibilityString();
+        Visibility originalEdgeVisibility = edge.getVisibility();
         edgeExistingElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : edge.getProperties()) {
@@ -342,7 +342,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 if (detectedObjectModel == null) {
                     LOGGER.warn("No term mention or detected objects found for vertex, %s", sourceVertex.getId());
                 } else {
-                    detectedObjectRepository.updateColumnVisibility(detectedObjectModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                    detectedObjectRepository.updateColumnVisibility(detectedObjectModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
 
                     Vertex artifactVertex = graph.getVertex(detectedObjectModel.getRowKey().getArtifactId(), authorizations);
                     JSONObject artifactVertexWithDetectedObjects = JsonSerializer.toJsonVertex(artifactVertex, workspaceId);
@@ -351,7 +351,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     Messaging.broadcastDetectedObjectChange(artifactVertex.getId().toString(), artifactVertexWithDetectedObjects);
                 }
             } else {
-                termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility, lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
+                termMentionRepository.updateColumnVisibility(termMentionModel, originalEdgeVisibility.getVisibilityString(), lumifyVisibility.getVisibility().getVisibilityString(), FlushFlag.FLUSH);
             }
         }
     }
