@@ -28,4 +28,31 @@ public class SqlWorkspaceUserId implements Serializable{
     public void setWorkspace(SqlWorkspace sqlWorkspace) {
         this.workspace = sqlWorkspace;
     }
+
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SqlWorkspaceUserId sqlWorkspaceUserId = (SqlWorkspaceUserId) o;
+        if (user != null ? !user.equals(sqlWorkspaceUserId.user) : sqlWorkspaceUserId.user != null) {
+            return false;
+        }
+
+        if (workspace != null ? !workspace.equals(sqlWorkspaceUserId.workspace) : sqlWorkspaceUserId.workspace != null) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode () {
+        int result;
+        result = (user != null ? user.hashCode() : 0);
+        result = 31 * result + (workspace != null ? workspace.hashCode() : 0);
+        return result;
+    }
 }

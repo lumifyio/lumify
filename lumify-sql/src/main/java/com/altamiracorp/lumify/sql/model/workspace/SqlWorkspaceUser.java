@@ -53,4 +53,24 @@ public class SqlWorkspaceUser implements Serializable{
     public void setUser(SqlUser user) {
         getSqlWorkspaceUserId().setUser(user);
     }
+
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        SqlWorkspaceUser sqlWorkspaceUser = (SqlWorkspaceUser) o;
+        if (getSqlWorkspaceUserId() != null ? !getSqlWorkspaceUserId().equals(sqlWorkspaceUser.getSqlWorkspaceUserId()) : sqlWorkspaceUser.getSqlWorkspaceUserId() != null) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode () {
+        return (getSqlWorkspaceUserId() != null ? getSqlWorkspaceUserId().hashCode() : 0);
+    }
 }
