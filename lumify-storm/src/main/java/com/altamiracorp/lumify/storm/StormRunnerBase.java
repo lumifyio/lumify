@@ -8,7 +8,6 @@ import backtype.storm.topology.IRichSpout;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.lumify.core.cmdline.CommandLineBase;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
-import com.altamiracorp.lumify.model.LumifyKafkaSpout;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
@@ -140,19 +139,8 @@ public abstract class StormRunnerBase extends CommandLineBase {
 
     protected abstract StormTopology createTopology(int parallelismHint);
 
-    protected boolean isLocal() {
-        return local;
-    }
-
-    public Long getQueueStartOffsetTime() {
-        if (this.reprocessAllQueues) {
-            return LumifyKafkaSpout.KAFKA_START_OFFSET_TIME_EARLIEST;
-        }
-        return null;
-    }
-
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
-        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName, getQueueStartOffsetTime());
+        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName, 0L);
     }
 
     @Inject
