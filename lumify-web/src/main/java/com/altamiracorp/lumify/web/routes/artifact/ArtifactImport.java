@@ -101,6 +101,7 @@ public class ArtifactImport extends BaseRequestHandler {
     }
 
     private List<FileAndVisibility> getFileAndVisibilities(HttpServletRequest request, HttpServletResponse response, HandlerChain chain, File tempDir, Authorizations authorizations, User user) throws Exception {
+        List<String> invalidVisibilities = new ArrayList<String>();
         List<FileAndVisibility> files = new ArrayList<FileAndVisibility>();
         int visibilitySourceIndex = 0;
         int fileIndex = 0;
@@ -113,14 +114,19 @@ public class ArtifactImport extends BaseRequestHandler {
             } else if (part.getName().equals("visibilitySource")) {
                 String visibilitySource = IOUtils.toString(part.getInputStream(), "UTF8");
                 if (!graph.isVisibilityValid(new Visibility(visibilitySource), authorizations)) {
-                    LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
-                    respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"), visibilitySource);
-                    chain.next(request, response);
-                    return null;
+                    invalidVisibilities.add(visibilitySource);
                 }
                 addVisibilityToFilesList(files, visibilitySourceIndex++, visibilitySource);
             }
         }
+
+        if (invalidVisibilities.size() > 0) {
+            LOGGER.warn("%s is not a valid visibility for %s user", invalidVisibilities.toString(), user.getDisplayName());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"), invalidVisibilities);
+            chain.next(request, response);
+            return null;
+        }
+
         return files;
     }
 
