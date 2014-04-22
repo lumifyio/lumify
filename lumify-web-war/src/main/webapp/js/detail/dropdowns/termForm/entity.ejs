@@ -11,13 +11,11 @@
       <span class="concept-type">(<%= concept.flattenedDisplayName %>)</span>
     <% } %>
 
-    <% properties.forEach(function(property) {
-        if (property.key !== 'title') { %>
+    <% properties.forEach(function(property) { %>
           <div class="property property-<%= property.key %>">
             <strong><%= property.displayName %></strong><span class="value"><%= property.stringValue %></span>
           </div>
-    <%  }
-      }); %>
+    <% }); %>
   </div>
 
 <% } else { %>
