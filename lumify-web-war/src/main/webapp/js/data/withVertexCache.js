@@ -137,6 +137,8 @@ define([
             if (!cache.properties) cache.properties = {};
             if (!cache.workspace) cache.workspace = {};
 
+            verifyVisibility(vertex);
+
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
 
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
@@ -183,6 +185,30 @@ define([
 
             return (options && options.returnNullIfNotChanged === true && !hasChanged) ? null : cache;
         };
+
+        function verifyVisibility(vertex) {
+            if (!vertex) return;
+
+            var key = 'http://lumify.io#visibilityJson',
+                defaultJson = {
+                    source: '',
+                    _addedToPreventErrors: ''
+                };
+
+            if (!(key in vertex)) {
+                vertex[key] = defaultJson;
+            }
+
+            if (vertex.properties) {
+                _.keys(vertex.properties).forEach(function(propertyKey) {
+                    var property = vertex.properties[propertyKey];
+
+                    if (!(key in property)) {
+                        property[key] = defaultJson;
+                    }
+                });
+            }
+        }
 
         function setPreviewsForVertex(vertex, currentWorkspace) {
             var params = {
