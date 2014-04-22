@@ -239,7 +239,7 @@ public class WorkspacePublish extends BaseRequestHandler {
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
         vertexElementMutation.save();
 
         ModelUserContext systemModelUser = userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING);

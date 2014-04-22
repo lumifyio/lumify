@@ -100,6 +100,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;
         if (graphVertexId != null) {
@@ -109,10 +111,6 @@ public class ResolveTermEntity extends BaseRequestHandler {
             vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
             GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
-
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
             TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
@@ -120,6 +118,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
             vertex = vertexMutation.save();
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
+
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
             this.graph.flush();
 
@@ -144,7 +144,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
                 .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save();
 
         this.graph.flush();
