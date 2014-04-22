@@ -56,7 +56,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public Object createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime) {
+    public Object createSpout(Configuration configuration, String queueName) {
         return new BigtableWorkQueueSpout(configuration, queueName);
     }
 
@@ -82,7 +82,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
     }
 
     @Override
-    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra) {
+    public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         String tableName = getTableName(this.tablePrefix, queueName);
 
         if (this.user == null) {
@@ -99,7 +99,7 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("push on queue %s: %s", tableName, json.toString(2));
         }
-        QueueItem queueItem = createQueueItem(tableName, json, extra);
+        QueueItem queueItem = createQueueItem(tableName, json);
         queue.save(queueItem, flushFlag);
     }
 

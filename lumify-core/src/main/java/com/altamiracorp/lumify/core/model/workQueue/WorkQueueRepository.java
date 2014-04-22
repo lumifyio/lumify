@@ -40,7 +40,7 @@ public abstract class WorkQueueRepository {
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
     }
 
-    public abstract void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json, String... extra);
+    public abstract void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json);
 
     public void init(Map map) {
 
@@ -48,7 +48,7 @@ public abstract class WorkQueueRepository {
 
     // TODO this is pretty awful but returning backtype.storm.topology.IRichSpout causes a dependency hell problem because it requires storm jar
     //      one possibility would be to return a custom type but this just pushes the problem
-    public abstract Object createSpout(Configuration configuration, String queueName, Long queueStartOffsetTime);
+    public abstract Object createSpout(Configuration configuration, String queueName);
 
     public abstract void flush();
 

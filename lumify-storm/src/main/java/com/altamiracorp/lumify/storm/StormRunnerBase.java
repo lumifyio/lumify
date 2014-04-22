@@ -65,13 +65,6 @@ public abstract class StormRunnerBase extends CommandLineBase {
                         .create("ph")
         );
 
-        opts.addOption(
-                OptionBuilder
-                        .withLongOpt(CMD_OPT_REPROCESS_ALL_QUEUES)
-                        .withDescription("Tells kafka spouts to start from earliest offset.")
-                        .create("raq")
-        );
-
         return opts;
     }
 
@@ -140,7 +133,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
     protected abstract StormTopology createTopology(int parallelismHint);
 
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
-        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName, 0L);
+        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName);
     }
 
     @Inject

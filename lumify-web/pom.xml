@@ -44,12 +44,12 @@
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-securegraph</artifactId>
+            <artifactId>lumify-model-rabbitmq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.altamiracorp.lumify</groupId>
-            <artifactId>lumify-model-kafka</artifactId>
+            <artifactId>lumify-model-securegraph</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
