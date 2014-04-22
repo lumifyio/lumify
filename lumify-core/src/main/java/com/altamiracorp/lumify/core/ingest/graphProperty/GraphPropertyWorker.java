@@ -17,6 +17,8 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRowKey;
 import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
+import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
+import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
@@ -24,9 +26,11 @@ import com.altamiracorp.securegraph.*;
 import com.altamiracorp.securegraph.mutation.ElementMutation;
 import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
 import com.google.inject.Inject;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -204,14 +208,20 @@ public abstract class GraphPropertyWorker {
                             .vertices());
                 }
             }
+            JSONObject visibilityJson = new JSONObject();
+            visibilityJson.put(VisibilityTranslator.JSON_SOURCE, termMention.getVisibility().toString());
+
+            Map<String, Object> metadata = new HashMap<String, Object>();
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+
             if (vertex == null) {
                 if (termMention.getId() != null) {
                     vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility(), getAuthorizations());
                 } else {
                     vertexElementMutation = graph.prepareVertex(termMention.getVisibility(), getAuthorizations());
                 }
-                LumifyProperties.TITLE.setProperty(vertexElementMutation, title, termMention.getVisibility());
-                OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), termMention.getVisibility());
+                LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, termMention.getVisibility());
+                OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
             } else {
                 vertexElementMutation = vertex.prepareMutation();
             }
@@ -222,7 +232,7 @@ public abstract class GraphPropertyWorker {
                     // TODO should we wrap these properties in secure graph Text classes?
                     // GS - No.  Leave it up to the property generator to provide Text objects if they
                     // want index control; see CLAVIN for example
-                    vertexElementMutation.setProperty(key, properties.get(key), termMention.getVisibility());
+                    vertexElementMutation.setProperty(key, properties.get(key), metadata, termMention.getVisibility());
                 }
             }
 
