@@ -4,16 +4,24 @@
 
   {{#with propertyAudit}}
     <td class="audit-to">
-      <span>
-        {{#if isVisibility}}
-          <span class="visibility" 
-            data-visibility="{{formattedValue}}"></span>
+        {{#if isDeleted}}
+          <span class="deleted">
+            {{formattedValue}}
+            <span class="visibility" 
+              data-visibility="{{visibilityValue}}"></span>
+          </span>
         {{else}}
-          {{formattedValue}}
-          <span class="visibility" 
-            data-visibility="{{visibilityValue}}"></span>
+          <span>
+            {{#if isVisibility}}
+              <span class="visibility" 
+                data-visibility="{{formattedValue}}"></span>
+            {{else}}
+              {{formattedValue}}
+              <span class="visibility" 
+                data-visibility="{{visibilityValue}}"></span>
+            {{/if}}
+          </span>
         {{/if}}
-      </span>
     </td>
   {{/with}}
 {{else}}

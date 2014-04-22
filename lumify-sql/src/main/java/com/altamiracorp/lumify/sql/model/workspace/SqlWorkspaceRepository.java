@@ -41,7 +41,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -52,6 +52,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
     }
 
@@ -59,6 +61,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     public Workspace findById(String workspaceId, User user) {
         Session session = sessionFactory.openSession();
         List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", Integer.parseInt(workspaceId))).list();
+        session.close();
         if (workspaces.size() == 0) {
             return null;
         } else if (workspaces.size() > 1) {
@@ -70,7 +73,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public Workspace add(String title, User user) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
 
         Transaction transaction = null;
         SqlWorkspace newWorkspace;
@@ -97,6 +100,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
         return newWorkspace;
     }
@@ -116,11 +121,11 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void setTitle(Workspace workspace, String title, User user) {
+        Session session = sessionFactory.openSession();
         if (!doesUserHaveWriteAccess(workspace, user)) {
+            session.close();
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
-
-        Session session = sessionFactory.getCurrentSession();
 
         Transaction transaction = null;
         try {
@@ -133,27 +138,32 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user) {
-        Session session = sessionFactory.getCurrentSession();
         if (!doesUserHaveWriteAccess(workspace, user) && !doesUserHaveReadAccess(workspace, user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
+        Session session = sessionFactory.openSession();
         List<WorkspaceUser> withAccess = new ArrayList<WorkspaceUser>();
+        try {
+            List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUsers((SqlWorkspace) workspace);
 
-        for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
-            if (!sqlWorkspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.NONE.toString())) {
-                String userId = sqlWorkspaceUser.getUser().getUserId();
-                boolean isCreator = ((SqlWorkspace) workspace).getCreator().getUserId().equals(userId);
-                withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
+            for (SqlWorkspaceUser sqlWorkspaceUser : sqlWorkspaceUsers) {
+                if (!sqlWorkspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.NONE.toString())) {
+                    String userId = sqlWorkspaceUser.getUser().getUserId();
+                    boolean isCreator = ((SqlWorkspace) workspace).getCreator().getUserId().equals(userId);
+                    withAccess.add(new WorkspaceUser(userId, WorkspaceAccess.valueOf(sqlWorkspaceUser.getWorkspaceAccess()), isCreator));
+                }
             }
+        } finally {
+            session.close();
         }
-        session.close();
         return withAccess;
     }
 
@@ -163,19 +173,26 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
-        return toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
-            @Override
-            protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
-                Object vertexId = sqlWorkspaceVertex.getVertexId();
+        Session session = sessionFactory.openSession();
+        List<WorkspaceEntity> workspaceEntities = new ArrayList<WorkspaceEntity>();
+        try {
+            Set<SqlWorkspaceVertex> sqlWorkspaceVertices = ((SqlWorkspace) workspace).getSqlWorkspaceVertices();
+            workspaceEntities = toList(new ConvertingIterable<SqlWorkspaceVertex, WorkspaceEntity>(sqlWorkspaceVertices) {
+                @Override
+                protected WorkspaceEntity convert(SqlWorkspaceVertex sqlWorkspaceVertex) {
+                    Object vertexId = sqlWorkspaceVertex.getVertexId();
 
-                int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
-                int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
-                boolean visible = sqlWorkspaceVertex.isVisible();
+                    int graphPositionX = sqlWorkspaceVertex.getGraphPositionX();
+                    int graphPositionY = sqlWorkspaceVertex.getGraphPositionY();
+                    boolean visible = sqlWorkspaceVertex.isVisible();
 
-                return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
-            }
-        });
+                    return new WorkspaceEntity(vertexId, visible, graphPositionX, graphPositionY);
+                }
+            });
+        } finally {
+            session.close();
+        }
+        return workspaceEntities;
     }
 
     @Override
@@ -191,7 +208,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -206,6 +223,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
     }
 
@@ -260,7 +279,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     }
 
     private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
-        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlWorkspace) workspace).getSqlWorkspaceUser();
+        List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUsers((SqlWorkspace) workspace);
         for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
             if (workspaceUser.getUser().getUserId().equals(user.getUserId()) && workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.WRITE.toString())) {
                 return true;
@@ -273,7 +292,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         if (doesUserHaveWriteAccess(workspace, user)) {
             return true;
         }
-        Set<SqlWorkspaceUser> sqlWorkspaceUsers = ((SqlUser) user).getSqlWorkspaceUsers();
+        List<SqlWorkspaceUser> sqlWorkspaceUsers = getSqlWorkspaceUsers((SqlWorkspace) workspace);
         for (SqlWorkspaceUser workspaceUser : sqlWorkspaceUsers) {
             if (workspaceUser.getWorkspace().getId().equals(workspace.getId()) &&
                     workspaceUser.getWorkspaceAccess().equals(WorkspaceAccess.READ.toString())) {
@@ -296,10 +315,10 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
-        Session session = sessionFactory.getCurrentSession();
-
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
+
             transaction = session.beginTransaction();
             SqlWorkspace sqlWorkspace = (SqlWorkspace) workspace;
             Set<SqlWorkspaceUser> sqlWorkspaceUsers = sqlWorkspace.getSqlWorkspaceUser();
@@ -316,6 +335,8 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        } finally {
+            session.close();
         }
     }
 
@@ -337,5 +358,27 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     @Override
     public boolean hasWritePermissions(Workspace workspace, User user) {
         return false;
+    }
+
+    protected List<SqlWorkspaceUser> getSqlWorkspaceUsers(SqlWorkspace workspace) {
+        Session session = sessionFactory.openSession();
+        List<SqlWorkspaceUser> sqlWorkspaceUsers;
+        try {
+            sqlWorkspaceUsers = session.createCriteria(SqlWorkspaceUser.class).add(Restrictions.eq("sqlWorkspaceUserId.workspace.id", Integer.parseInt(workspace.getId()))).list();
+        } finally {
+            session.close();
+        }
+        return sqlWorkspaceUsers;
+    }
+
+    protected List<SqlWorkspaceVertex> getSqlWorkspaceVertices(SqlWorkspace sqlWorkspace) {
+        Session session = sessionFactory.openSession();
+        List<SqlWorkspaceVertex> sqlWorkspaceVertices;
+        try {
+            sqlWorkspaceVertices = session.createCriteria(SqlWorkspaceVertex.class).add(Restrictions.eq("workspace.id", Integer.parseInt(sqlWorkspace.getId()))).list();
+        } finally {
+            session.close();
+        }
+        return sqlWorkspaceVertices;
     }
 }

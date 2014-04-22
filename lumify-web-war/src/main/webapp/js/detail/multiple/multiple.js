@@ -237,6 +237,9 @@ define([
                     if (ontology && ~NO_HISTOGRAM_DATATYPES.indexOf(ontology.dataType)) {
                         return false;
                     }
+                    if (propertyName === 'http://lumify.io#title') {
+                        return false;
+                    }
                     return !!(ontology && ontology.userVisible); 
                 }
             }
