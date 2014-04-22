@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace;
 import com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,9 +26,9 @@ public class SqlUser implements User {
     @Column(name = "display_name")
     private String displayName;
     @Column(name = "password_salt")
-    private byte[] passwordSalt;
+    private String passwordSalt;
     @Column(name = "password_hash")
-    private byte[] passwordHash;
+    private String passwordHash;
     @Column(name = "user_status")
     private String userStatus;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -68,19 +69,19 @@ public class SqlUser implements User {
     }
 
     public byte[] getPasswordHash() {
-        return passwordHash;
+        return Base64.decodeBase64(passwordHash);
     }
 
     public void setPasswordHash(byte[] passwordHash) {
-        this.passwordHash = passwordHash;
+        this.passwordHash = Base64.encodeBase64String(passwordHash);
     }
 
     public byte[] getPasswordSalt() {
-        return passwordSalt;
+        return Base64.decodeBase64(passwordSalt);
     }
 
     public void setPasswordSalt(byte[] passwordSalt) {
-        this.passwordSalt = passwordSalt;
+        this.passwordSalt = Base64.encodeBase64String(passwordSalt);
     }
 
     public String getUserStatus() {
