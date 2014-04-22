@@ -52,7 +52,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
                 m.save();
                 getGraph().flush();
 
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
             } finally {
                 mp3FileIn.close();
             }

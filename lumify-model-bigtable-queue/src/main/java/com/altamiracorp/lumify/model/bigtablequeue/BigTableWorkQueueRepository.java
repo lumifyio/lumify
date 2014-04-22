@@ -12,7 +12,9 @@ import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItem;
 import com.altamiracorp.lumify.model.bigtablequeue.model.QueueItemRepository;
+import com.altamiracorp.securegraph.Edge;
 import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -79,6 +81,21 @@ public class BigTableWorkQueueRepository extends WorkQueueRepository {
             }
         }
         LOGGER.debug("END format");
+    }
+
+    @Override
+    public void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer) {
+        LOGGER.error("subscribeToBroadcastMessages not supported");
+    }
+
+    @Override
+    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
+        LOGGER.error("broadcastPropertyChange not supported");
+    }
+
+    @Override
+    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
+        LOGGER.error("broadcastPropertyChange not supported");
     }
 
     @Override

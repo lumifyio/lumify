@@ -11,6 +11,7 @@ import com.altamiracorp.lumify.core.model.termMention.TermMentionModel;
 import com.altamiracorp.lumify.core.model.termMention.TermMentionRepository;
 import com.altamiracorp.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
@@ -35,6 +36,7 @@ public class WorkspaceHelper {
     private final AuditRepository auditRepository;
     private final UserRepository userRepository;
     private final DetectedObjectRepository detectedObjectRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
 
     @Inject
@@ -42,11 +44,13 @@ public class WorkspaceHelper {
                            final AuditRepository auditRepository,
                            final UserRepository userRepository,
                            final DetectedObjectRepository detectedObjectRepository,
+                           final WorkQueueRepository workQueueRepository,
                            final Graph graph) {
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
         this.detectedObjectRepository = detectedObjectRepository;
+        this.workQueueRepository = workQueueRepository;
         this.graph = graph;
     }
 
@@ -154,7 +158,8 @@ public class WorkspaceHelper {
         json.put("deletedProperty", property.getName());
         json.put("vertex", JsonSerializer.toJson(vertex, workspaceId));
 
-        Messaging.broadcastPropertyChange(vertex.getId().toString(), vertex.getId().toString(), null, json);
+        workQueueRepository.pushGraphPropertyQueue(vertex, property);
+
         return json;
     }
 

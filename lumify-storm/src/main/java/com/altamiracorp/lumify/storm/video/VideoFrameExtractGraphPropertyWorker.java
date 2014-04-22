@@ -66,7 +66,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             getGraph().flush();
 
             for (String propertyKey : propertyKeys) {
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex().getId(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
             }
         } finally {
             FileUtils.deleteDirectory(tempDir);

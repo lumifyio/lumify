@@ -16,9 +16,11 @@ import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.Visibility;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -115,11 +117,9 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
 
-        Property propertyToPutOnQueue = graphVertex.getProperty(propertyName);
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex.getId(), propertyToPutOnQueue);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName);
 
         JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
-        Messaging.broadcastPropertyChange(graphVertexId, propertyName, value, result);
         respondWithJson(response, result);
     }
 }

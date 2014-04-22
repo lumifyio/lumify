@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web.routes.vertex;
 
 import com.altamiracorp.lumify.core.config.Configuration;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibilityProperties;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
@@ -10,7 +11,6 @@ import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Graph;
@@ -26,16 +26,19 @@ public class VertexSetVisibility extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetVisibility.class);
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public VertexSetVisibility(
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
-            final VisibilityTranslator visibilityTranslator) {
+            final VisibilityTranslator visibilityTranslator,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -65,8 +68,9 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         this.graph.flush();
 
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey());
+
         JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId);
-        Messaging.broadcastPropertyChange(graphVertexId, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilitySource, json);
         respondWithJson(response, json);
     }
 }

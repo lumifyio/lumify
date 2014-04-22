@@ -6,11 +6,11 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.LumifyVisibility;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
@@ -28,6 +28,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
     private final Graph graph;
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public DeleteRelationshipProperty(
@@ -35,11 +36,13 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
             final Graph graph,
             final AuditRepository auditRepository,
             final UserRepository userRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -72,8 +75,10 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         for (Property p : edge.getProperties()) {
             properties.add(p);
         }
+
+        workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
+
         JSONObject resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
-        Messaging.broadcastPropertyChange(edgeId, propertyName, null, resultsJson);
         respondWithJson(response, resultsJson);
     }
 }

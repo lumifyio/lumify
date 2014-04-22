@@ -151,7 +151,7 @@ public class FileImport {
 
     private void pushOnQueue(Vertex vertex) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex.getId(), ElementMutation.DEFAULT_KEY, RawLumifyProperties.RAW.getKey());
+        this.workQueueRepository.pushGraphPropertyQueue(vertex, ElementMutation.DEFAULT_KEY, RawLumifyProperties.RAW.getKey());
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {

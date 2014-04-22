@@ -6,6 +6,7 @@ import com.altamiracorp.lumify.core.model.audit.AuditRepository;
 import com.altamiracorp.lumify.core.model.ontology.OntologyProperty;
 import com.altamiracorp.lumify.core.model.ontology.OntologyRepository;
 import com.altamiracorp.lumify.core.model.user.UserRepository;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.security.VisibilityTranslator;
 import com.altamiracorp.lumify.core.user.User;
 import com.altamiracorp.lumify.core.util.GraphUtil;
@@ -13,7 +14,6 @@ import com.altamiracorp.lumify.core.util.JsonSerializer;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
 import com.altamiracorp.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.lumify.web.BaseRequestHandler;
-import com.altamiracorp.lumify.web.Messaging;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.securegraph.Authorizations;
 import com.altamiracorp.securegraph.Edge;
@@ -32,6 +32,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     private final OntologyRepository ontologyRepository;
     private final AuditRepository auditRepository;
     private VisibilityTranslator visibilityTranslator;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public SetRelationshipProperty(
@@ -40,12 +41,14 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final VisibilityTranslator visibilityTranslator,
             final UserRepository userRepository,
-            final Configuration configuration) {
+            final Configuration configuration,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -110,8 +113,9 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
+        this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
+
         JSONObject resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
-        Messaging.broadcastPropertyChange(edgeId, propertyName, value, resultsJson);
         respondWithJson(response, resultsJson);
     }
 }

@@ -2,6 +2,7 @@ package com.altamiracorp.lumify.web;
 
 import com.altamiracorp.lumify.core.model.user.UserRepository;
 import com.altamiracorp.lumify.core.model.user.UserStatus;
+import com.altamiracorp.lumify.core.model.workQueue.WorkQueueRepository;
 import com.altamiracorp.lumify.core.model.workspace.Workspace;
 import com.altamiracorp.lumify.core.model.workspace.WorkspaceRepository;
 import com.altamiracorp.lumify.core.util.LumifyLogger;
@@ -41,11 +42,12 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     //      we always get null when trying to get the default broadcaster
     private static Broadcaster broadcaster;
     private WorkspaceRepository workspaceRepository;
+    private WorkQueueRepository workQueueRepository;
+    private boolean subscribedToBroadcast = false;
 
     @Override
     public void onRequest(AtmosphereResource resource) throws IOException {
         ensureInitialized(resource);
-        broadcaster = resource.getBroadcaster();
 
         String requestData = org.apache.commons.io.IOUtils.toString(resource.getRequest().getInputStream());
         try {
@@ -70,6 +72,18 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             Injector injector = (Injector) resource.getAtmosphereConfig().getServletContext().getAttribute(Injector.class.getName());
             injector.injectMembers(this);
         }
+        if (!subscribedToBroadcast) {
+            this.workQueueRepository.subscribeToBroadcastMessages(new WorkQueueRepository.BroadcastConsumer() {
+                @Override
+                public void broadcastReceived(JSONObject json) {
+                    if (broadcaster != null) {
+                        broadcaster.broadcast(json.toString());
+                    }
+                }
+            });
+            subscribedToBroadcast = true;
+        }
+        broadcaster = resource.getBroadcaster();
     }
 
     @Override
@@ -187,39 +201,6 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
     }
 
-    public static void broadcastPropertyChange(String graphVertexId, String propertyName, Object value, JSONObject vertexJson) {
-        try {
-            JSONObject dataJson = new JSONObject();
-            if (value != null) {
-                JSONObject propertyJson = new JSONObject();
-                propertyJson.put("graphVertexId", graphVertexId);
-                propertyJson.put("propertyName", propertyName);
-                propertyJson.put("value", value.toString());
-
-                JSONArray propertiesJson = new JSONArray();
-                propertiesJson.put(propertyJson);
-
-                dataJson.put("properties", propertiesJson);
-            }
-            if (vertexJson != null) {
-                if (value == null) {
-                    dataJson = vertexJson;
-                } else {
-                    dataJson.put("vertex", vertexJson);
-                }
-            }
-
-            JSONObject json = new JSONObject();
-            json.put("type", "propertiesChange");
-            json.put("data", dataJson);
-            if (broadcaster != null) {
-                broadcaster.broadcast(json.toString());
-            }
-        } catch (JSONException ex) {
-            throw new RuntimeException("Could not create json", ex);
-        }
-    }
-
     public static void broadcastEdgeDeletion(String edgeId) {
         try {
             JSONObject dataJson = new JSONObject();
@@ -264,5 +245,10 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     @Inject
     public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
         this.workspaceRepository = workspaceRepository;
+    }
+
+    @Inject
+    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
+        this.workQueueRepository = workQueueRepository;
     }
 }
