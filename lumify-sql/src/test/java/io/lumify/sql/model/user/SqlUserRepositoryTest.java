@@ -1,13 +1,12 @@
 package io.lumify.sql.model.user;
 
+import com.altamiracorp.securegraph.util.IterableUtils;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
-import io.lumify.sql.model.workspace.SqlWorkspaceRepository;
-import com.altamiracorp.securegraph.util.IterableUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
@@ -23,7 +22,6 @@ import static org.junit.Assert.*;
 public class SqlUserRepositoryTest {
     private final String HIBERNATE_IN_MEM_CFG_XML = "hibernateInMem.cfg.xml";
     private SqlUserRepository sqlUserRepository;
-    private SqlWorkspaceRepository sqlWorkspaceRepository;
     private static org.hibernate.cfg.Configuration configuration;
     private static SessionFactory sessionFactory;
 
@@ -36,7 +34,6 @@ public class SqlUserRepositoryTest {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
         sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
     }
 
