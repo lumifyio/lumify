@@ -4,7 +4,7 @@ define([
 ], function(defineComponent) {
     'use strict';
 
-    var MINIMUM_ANIMATION_DURATION_SECONDS = 2, 
+    var MINIMUM_ANIMATION_DURATION_SECONDS = 1, 
 
         // Add activity start/end events that are triggered on document
         // * start/end events are required, 
