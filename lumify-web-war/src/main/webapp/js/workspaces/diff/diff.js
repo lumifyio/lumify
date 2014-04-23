@@ -166,7 +166,7 @@ define([
 
                     diffs.forEach(function(diff) {
                         switch(diff.type) {
-                            case 'VertexDiffItem': 
+                            case 'VertexDiffItem':
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {
                                     outputItem.title = formatters.vertex.prop(outputItem.vertex, 'title');
@@ -274,7 +274,7 @@ define([
 
             this.trigger(
                 'mark' + ($target.hasClass('publish') ? 'Publish' : 'Undo') + 'DiffItem',
-                { 
+                {
                     diffId: $row.data('diffId'),
                     state: !($target.hasClass('btn-success') || $target.hasClass('btn-danger'))
                 }
@@ -383,7 +383,7 @@ define([
 
                 publish.toggle(markedAsPublish > 0)
                        .text('Publish ' + formatters.string.plural(markedAsPublish, 'change'));
-                
+
                 undo.toggle(markedAsUndo > 0)
                     .text('Undo ' + formatters.string.plural(markedAsUndo, 'change'));
             }
@@ -418,7 +418,7 @@ define([
                     deps.forEach(function(diffId) {
                         self.trigger('markUndoDiffItem', { diffId: diffId, state: state });
                     })
-                    
+
                     break;
 
                 case 'PropertyDiffItem':
