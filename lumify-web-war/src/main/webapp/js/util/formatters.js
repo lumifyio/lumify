@@ -101,6 +101,8 @@ define([
                     m = k * 1024,
                     g = m * 1024,
                     t = g * 1024;
+
+                precision = _.isUndefined(precision) ? 1 : precision;
 	
                 if ((bytes >= 0) && (bytes < k)) {
                     return bytes + ' B';

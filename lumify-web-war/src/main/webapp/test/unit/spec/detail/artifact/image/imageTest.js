@@ -1,5 +1,4 @@
 
-
 describeComponent('detail/artifact/image/image', function() {
 
     var SRC = '/base/img/lumify.png',
@@ -30,7 +29,7 @@ describeComponent('detail/artifact/image/image', function() {
 
     describe('image', function() {
 
-        it("should set image src", function() {
+        it('should set image src', function() {
             var img = this.component.select('imageSelector');
             img.attr('src').should.equal(SRC)
             img.css('width').should.equal('300px')
@@ -80,24 +79,28 @@ describeComponent('detail/artifact/image/image', function() {
 
             this.component.currentlyEditing.should.equal(VERTEX_ID)
 
-            checkFacebox(this.$facebox, { visible:false })
-            checkFacebox(this.$faceboxEdit, { visible:true, disabled:true, left:'0px'})
+            checkFacebox(this.$facebox, { visible: false })
+            checkFacebox(this.$faceboxEdit, { visible: true, disabled: true, left: '0px'})
 
             this.$node.trigger('DetectedObjectEnter', {
-                'http://lumify.io#rowKey': ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
+                'http://lumify.io#rowKey': ROW_KEY_2,
+                x1: EXPECTED_WIDTH / 2,
+                y1: 0,
+                x2: EXPECTED_WIDTH,
+                y2: EXPECTED_WIDTH
             })
             this.$facebox.css('left').should.not.equal('0px')
 
-            checkFacebox(this.$faceboxEdit, { visible:true })
+            checkFacebox(this.$faceboxEdit, { visible: true })
 
             this.$node.trigger('DetectedObjectLeave', { })
-            checkFacebox(this.$faceboxEdit, { visible:true, left:'0px'})
+            checkFacebox(this.$faceboxEdit, { visible: true, left: '0px'})
 
-            this.$node.trigger('DetectedObjectLeave', { id:VERTEX_ID })
-            checkFacebox(this.$faceboxEdit, { visible:true, left:'0px'})
+            this.$node.trigger('DetectedObjectLeave', { id: VERTEX_ID })
+            checkFacebox(this.$faceboxEdit, { visible: true, left: '0px'})
 
             this.$node.trigger('DetectedObjectDoneEditing')
-            checkFacebox(this.$faceboxEdit, { visible:false })
+            checkFacebox(this.$faceboxEdit, { visible: false })
         })
 
         it('should show facebox for unresolved entity', function() {
@@ -108,22 +111,26 @@ describeComponent('detail/artifact/image/image', function() {
 
             this.component.currentlyEditing.should.equal(ROW_KEY)
 
-            checkFacebox(this.$facebox, { visible:false })
-            checkFacebox(this.$faceboxEdit, { visible:true, disabled:false, left:'0px'})
+            checkFacebox(this.$facebox, { visible: false })
+            checkFacebox(this.$faceboxEdit, { visible: true, disabled: false, left: '0px'})
 
             this.$node.trigger('DetectedObjectEnter', {
-                'http://lumify.io#rowKey': ROW_KEY_2, x1: EXPECTED_WIDTH / 2, y1: 0, x2: EXPECTED_WIDTH, y2: EXPECTED_WIDTH
+                'http://lumify.io#rowKey': ROW_KEY_2,
+                x1: EXPECTED_WIDTH / 2,
+                y1: 0,
+                x2: EXPECTED_WIDTH,
+                y2: EXPECTED_WIDTH
             })
             checkFacebox(this.$facebox, { visible: true })
             this.$facebox.css('left').should.not.equal('0px')
 
-            checkFacebox(this.$faceboxEdit, { visible:true })
+            checkFacebox(this.$faceboxEdit, { visible: true })
 
             this.$node.trigger('DetectedObjectLeave', { })
-            checkFacebox(this.$faceboxEdit, { visible:true, left:'0px'})
+            checkFacebox(this.$faceboxEdit, { visible: true, left: '0px'})
 
             this.$node.trigger('DetectedObjectDoneEditing')
-            checkFacebox(this.$faceboxEdit, { visible:false })
+            checkFacebox(this.$faceboxEdit, { visible: false })
         })
 
         function checkFacebox(box, options) {
@@ -141,8 +148,3 @@ describeComponent('detail/artifact/image/image', function() {
     })
 
 })
-
-
-/*
-
-*/

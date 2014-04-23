@@ -36,6 +36,24 @@ define(['util/formatters'], function(f) {
             })
         });
 
+        describe('for bytes', function() {
+
+            it('should be able to format byte numbers', function() {
+                f.bytes.pretty(1023).should.equal('1023 B');
+                f.bytes.pretty(1024).should.equal('1.0 KB');
+                f.bytes.pretty(1024 * 1024).should.equal('1.0 MB');
+                f.bytes.pretty(1024 * 1024 * 1.1).should.equal('1.1 MB');
+
+                f.bytes.pretty(1024 * 1024 * 1024).should.equal('1.0 GB');
+                f.bytes.pretty(1024 * 1024 * 1024 * 1024).should.equal('1.0 TB');
+                f.bytes.pretty(1024 * 1024 * 1024 * 1024 * 1024).should.equal('1024.0 TB');
+            })
+
+            it('should be able to format byte numbers with precision', function() {
+                f.bytes.pretty(1024, 0).should.equal('1 KB');
+            })
+        });
+
         describe('for strings', function() {
 
             it('should be able to format plural phrases with plural provided', function() {
@@ -86,9 +104,9 @@ define(['util/formatters'], function(f) {
         describe('for dates', function() {
 
             it('should format to prefered format', function() {
-                var now = new Date();
+                var now = new Date(),
+                    month = String(now.getMonth() + 1);
 
-                var month = String(now.getMonth() + 1);
                 if (month.length === 1) month = '0' + month;
 
                 var day = String(now.getDate());
@@ -101,21 +119,43 @@ define(['util/formatters'], function(f) {
                 f.date.dateString(now).should.equal(now.getFullYear() + '-' + month + '-' + day);
             })
 
-            shouldBeRelative({seconds:30}, 'moments ago')
-            shouldBeRelative({seconds:59}, 'moments ago')
-            shouldBeRelative({seconds:60}, 'a minute ago')
-            shouldBeRelative({minutes:2}, '2 minutes ago')
-            shouldBeRelative({minutes:60}, 'an hour ago')
-            shouldBeRelative({minutes:110}, 'an hour ago')
-            shouldBeRelative({hours:2}, '2 hours ago')
-            shouldBeRelative({hours:23}, '23 hours ago')
-            shouldBeRelative({hours:24}, 'a day ago')
-            shouldBeRelative({days:2}, '2 days ago')
-            shouldBeRelative({days:40}, 'a month ago')
-            shouldBeRelative({days:60}, '2 months ago')
-            shouldBeRelative({days:363}, '12 months ago')
-            shouldBeRelative({days:367}, 'a year ago')
-            shouldBeRelative({days:366*2}, '2 years ago')
+            it('should format to prefered format with time', function() {
+                var now = new Date(),
+                    originalTime = now.getTime();
+
+                //now.addHours(now.getTimezoneOffset());
+                now.setMinutes(now.getMinutes() + now.getTimezoneOffset())
+
+                var month = String(now.getMonth() + 1),
+                    day = String(now.getDate()),
+                    hours = String(now.getHours()),
+                    minutes = String(now.getMinutes());
+
+                if (month.length === 1) month = '0' + month;
+                if (day.length === 1) day = '0' + day;
+                if (hours.length === 1) hours = '0' + hours;
+                if (minutes.length === 1) minutes = '0' + minutes;
+
+                f.date.dateTimeString(originalTime).should.equal(
+                    now.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes
+                );
+            })
+
+            shouldBeRelative({seconds: 30}, 'moments ago')
+            shouldBeRelative({seconds: 59}, 'moments ago')
+            shouldBeRelative({seconds: 60}, 'a minute ago')
+            shouldBeRelative({minutes: 2}, '2 minutes ago')
+            shouldBeRelative({minutes: 60}, 'an hour ago')
+            shouldBeRelative({minutes: 110}, 'an hour ago')
+            shouldBeRelative({hours: 2}, '2 hours ago')
+            shouldBeRelative({hours: 23}, '23 hours ago')
+            shouldBeRelative({hours: 24}, 'a day ago')
+            shouldBeRelative({days: 2}, '2 days ago')
+            shouldBeRelative({days: 40}, 'a month ago')
+            shouldBeRelative({days: 60}, '2 months ago')
+            shouldBeRelative({days: 363}, '12 months ago')
+            shouldBeRelative({days: 367}, 'a year ago')
+            shouldBeRelative({days: 366 * 2}, '2 years ago')
 
             function shouldBeRelative(time, string) {
                 var unit = _.keys(time)[0],
@@ -130,10 +170,12 @@ define(['util/formatters'], function(f) {
                 it('should format ' + time[unit] + ' ' + unit + ' relative to now as ' + string, function() {
                     var now = new Date(),
                         nowUtc = f.date.utc(now),
-                        older = new Date(nowUtc.getTime() - (mult[unit] * time[unit]));
+                        older = new Date(nowUtc.getTime() - (mult[unit] * time[unit])),
+                        old = Date.now;
 
-                    var old = Date.now;
-                    Date.now = function() {return now;}
+                    Date.now = function() { 
+                        return now;
+                    }
                     f.date.relativeToNow(older).should.equal(string)
                     Date.now = old;
                 })
