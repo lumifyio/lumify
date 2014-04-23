@@ -1,20 +1,21 @@
 package io.lumify.core.cmdline;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.google.inject.Inject;
+import com.netflix.curator.framework.CuratorFramework;
 import io.lumify.core.FrameworkUtils;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import com.google.inject.Inject;
-import com.netflix.curator.framework.CuratorFramework;
 import org.apache.commons.cli.*;
 import org.apache.hadoop.fs.FileSystem;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
 
 import java.net.URI;
 
@@ -29,6 +30,7 @@ public abstract class CommandLineBase {
     private User user;
     private CuratorFramework curatorFramework;
     private Graph graph;
+    private WorkQueueRepository workQueueRepository;
 
     public int run(String[] args) throws Exception {
         final Thread mainThread = Thread.currentThread();
@@ -78,11 +80,17 @@ public abstract class CommandLineBase {
     }
 
     protected void shutdown() {
-        if (curatorFramework != null) {
-            curatorFramework.close();
+        if (this.curatorFramework != null) {
+            LOGGER.debug("shutting down %s", this.curatorFramework.getClass().getName());
+            this.curatorFramework.close();
         }
         if (graph != null) {
-            graph.shutdown();
+            LOGGER.debug("shutting down %s", this.graph.getClass().getName());
+            this.graph.shutdown();
+        }
+        if (this.workQueueRepository != null) {
+            LOGGER.debug("shutting down %s", this.workQueueRepository.getClass().getName());
+            this.workQueueRepository.shutdown();
         }
     }
 
@@ -164,17 +172,34 @@ public abstract class CommandLineBase {
     }
 
     @Inject
-    public void setUserRepository(UserRepository userRepository) {
+    public final void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Inject
-    public void setCuratorFramework(CuratorFramework curatorFramework) {
-        this.curatorFramework = curatorFramework;
+    public final void setGraph(Graph graph) {
+        this.graph = graph;
     }
 
     @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
+    public final void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
+        this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public final void setCuratorFramework(CuratorFramework curatorFramework) {
+        this.curatorFramework = curatorFramework;
+    }
+
+    public Graph getGraph() {
+        return graph;
+    }
+
+    public WorkQueueRepository getWorkQueueRepository() {
+        return workQueueRepository;
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
 }

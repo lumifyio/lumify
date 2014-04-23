@@ -18,10 +18,7 @@ public abstract class StormRunnerBase extends CommandLineBase {
     private static final String CMD_OPT_TASKS_PER_BOLT = "tasksperbolt";
     private static final String CMD_OPT_NUM_WORKERS = "workers";
     private static final String CMD_OPT_PARALLELISM_HINT = "parallelismhint";
-    private static final String CMD_OPT_REPROCESS_ALL_QUEUES = "reprocessallqueues";
     private boolean local;
-    private boolean reprocessAllQueues;
-    private WorkQueueRepository workQueueRepository;
 
     public StormRunnerBase() {
         initFramework = true;
@@ -71,7 +68,6 @@ public abstract class StormRunnerBase extends CommandLineBase {
     @Override
     protected int run(CommandLine cmd) throws Exception {
         local = cmd.hasOption(CMD_OPT_LOCAL);
-        reprocessAllQueues = cmd.hasOption(CMD_OPT_REPROCESS_ALL_QUEUES);
 
         int parallelismHint = 1;
         if (cmd.hasOption(CMD_OPT_PARALLELISM_HINT)) {
@@ -133,11 +129,6 @@ public abstract class StormRunnerBase extends CommandLineBase {
     protected abstract StormTopology createTopology(int parallelismHint);
 
     protected IRichSpout createWorkQueueRepositorySpout(String queueName) {
-        return (IRichSpout) this.workQueueRepository.createSpout(getConfiguration(), queueName);
-    }
-
-    @Inject
-    public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
-        this.workQueueRepository = workQueueRepository;
+        return (IRichSpout) getWorkQueueRepository().createSpout(getConfiguration(), queueName);
     }
 }

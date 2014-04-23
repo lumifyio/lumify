@@ -12,7 +12,6 @@ import java.io.File;
 
 public class OwlImport extends CommandLineBase {
     private OntologyRepository ontologyRepository;
-    private Graph graph;
     private String inFileName;
     private String documentIRIString;
 
@@ -62,7 +61,7 @@ public class OwlImport extends CommandLineBase {
         File inFile = new File(this.inFileName);
         IRI documentIRI = IRI.create(this.documentIRIString);
         ontologyRepository.importFile(inFile, documentIRI);
-        graph.flush();
+        getGraph().flush();
         ontologyRepository.clearCache();
         return 0;
     }
@@ -70,10 +69,5 @@ public class OwlImport extends CommandLineBase {
     @Inject
     public void setOntologyRepository(OntologyRepository ontologyRepository) {
         this.ontologyRepository = ontologyRepository;
-    }
-
-    @Inject
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 }

@@ -1,20 +1,15 @@
 package io.lumify.tools;
 
 import io.lumify.core.cmdline.CommandLineBase;
-import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
-import org.securegraph.Graph;
-import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 public class UserAdd extends CommandLineBase {
-    private UserRepository userRepository;
     private String username;
     private String password;
     private String[] authorizations;
-    private Graph graph;
 
     public static void main(String[] args) throws Exception {
         int res = new UserAdd().run(args);
@@ -89,32 +84,24 @@ public class UserAdd extends CommandLineBase {
 
         System.out.println("Adding user: " + this.username);
 
-        User user = this.userRepository.findByUsername(this.username);
+        User user = getUserRepository().findByUsername(this.username);
 
         if (cmd.hasOption("reset")) {
             if (user == null) {
                 System.err.println("password reset requested but user not found");
                 return 4;
             }
-            this.userRepository.setPassword(user, this.password);
+            getUserRepository().setPassword(user, this.password);
             System.out.println("User password reset: " + user.getUserId());
         } else {
             if (user != null) {
                 System.err.println("username already exists");
                 return 3;
             }
-            user = this.userRepository.addUser(graph.getIdGenerator().nextId().toString(), this.username, this.password, this.authorizations);
+            user = getUserRepository().addUser(getGraph().getIdGenerator().nextId().toString(), this.username, this.password, this.authorizations);
             System.out.println("User added: " + user.getUserId());
         }
 
         return 0;
     }
-
-    @Inject
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Inject
-    public void setGraph (Graph graph) { this.graph = graph; }
 }
