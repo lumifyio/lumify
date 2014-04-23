@@ -930,11 +930,7 @@ define([
                 dy = p.y - originalPosition.y,
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance === 0) return;
             if (distance < 5) {
-                if (!event.originalEvent.shiftKey) {
-                    event.cy.$(':selected').unselect();
-                }
                 event.cyTarget.select();
             }
 
