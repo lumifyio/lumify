@@ -3,7 +3,7 @@ package io.lumify.core.model.workspace;
 import io.lumify.core.model.properties.types.BooleanLumifyProperty;
 import io.lumify.core.model.properties.types.IntegerLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
-import com.altamiracorp.securegraph.TextIndexHint;
+import org.securegraph.TextIndexHint;
 
 public class WorkspaceLumifyProperties {
     public static final TextLumifyProperty TITLE = new TextLumifyProperty(WorkspaceRepository.WORKSPACE_CONCEPT_NAME + "/title", TextIndexHint.ALL);

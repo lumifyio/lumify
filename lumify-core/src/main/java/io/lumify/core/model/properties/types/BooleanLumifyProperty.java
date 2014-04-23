@@ -1,6 +1,6 @@
 package io.lumify.core.model.properties.types;
 
-import com.altamiracorp.securegraph.Element;
+import org.securegraph.Element;
 
 public class BooleanLumifyProperty extends IdentityLumifyProperty<Boolean> {
     public BooleanLumifyProperty(String key) {

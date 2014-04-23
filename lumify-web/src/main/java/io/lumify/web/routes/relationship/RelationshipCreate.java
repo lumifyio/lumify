@@ -13,7 +13,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import org.securegraph.*;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;

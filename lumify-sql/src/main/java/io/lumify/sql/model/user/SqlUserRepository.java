@@ -9,7 +9,7 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
+import org.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
@@ -241,7 +241,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
+    public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         return authorizationRepository.createAuthorizations(new HashSet<String>());
     }
 }

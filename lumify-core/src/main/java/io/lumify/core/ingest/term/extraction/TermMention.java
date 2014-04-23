@@ -1,6 +1,6 @@
 package io.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 import java.util.*;
 

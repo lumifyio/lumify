@@ -5,7 +5,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;

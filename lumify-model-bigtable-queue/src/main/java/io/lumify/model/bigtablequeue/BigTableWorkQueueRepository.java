@@ -12,7 +12,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.model.bigtablequeue.model.QueueItem;
 import io.lumify.model.bigtablequeue.model.QueueItemRepository;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 

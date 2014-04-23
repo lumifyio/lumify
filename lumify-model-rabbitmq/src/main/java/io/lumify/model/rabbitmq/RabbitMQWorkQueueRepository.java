@@ -6,7 +6,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;

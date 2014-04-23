@@ -22,9 +22,9 @@ import io.lumify.core.util.*;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.*;
+import org.securegraph.mutation.ElementMutation;
+import org.securegraph.property.StreamingPropertyValue;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {

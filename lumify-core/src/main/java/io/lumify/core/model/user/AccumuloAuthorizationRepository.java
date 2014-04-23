@@ -4,9 +4,9 @@ import io.lumify.core.model.lock.Lock;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.accumulo.AccumuloAuthorizations;
-import com.altamiracorp.securegraph.accumulo.AccumuloGraph;
+import org.securegraph.Graph;
+import org.securegraph.accumulo.AccumuloAuthorizations;
+import org.securegraph.accumulo.AccumuloGraph;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import org.apache.accumulo.core.Constants;
@@ -111,7 +111,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
         }
     }
 
-    public com.altamiracorp.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
+    public org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
         return new AccumuloAuthorizations(Iterables.toArray(authorizationsSet, String.class));
     }
 

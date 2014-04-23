@@ -1,7 +1,7 @@
 package io.lumify.core.ingest;
 
-import com.altamiracorp.securegraph.VertexBuilder;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.VertexBuilder;
+import org.securegraph.Visibility;
 
 import java.io.File;
 

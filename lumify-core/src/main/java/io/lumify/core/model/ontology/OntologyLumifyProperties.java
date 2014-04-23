@@ -2,7 +2,7 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.model.properties.types.BooleanLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
-import com.altamiracorp.securegraph.TextIndexHint;
+import org.securegraph.TextIndexHint;
 
 /**
  * LumifyProperty values used for storage of Ontology concepts.

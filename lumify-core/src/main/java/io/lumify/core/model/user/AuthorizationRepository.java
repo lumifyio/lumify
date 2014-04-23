@@ -11,5 +11,5 @@ public interface AuthorizationRepository {
 
     List<String> getGraphAuthorizations();
 
-    com.altamiracorp.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet);
+    org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet);
 }

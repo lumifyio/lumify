@@ -8,9 +8,9 @@ import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibilityProperties;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
-import com.altamiracorp.securegraph.type.GeoPoint;
+import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.type.GeoPoint;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class JsonSerializer {

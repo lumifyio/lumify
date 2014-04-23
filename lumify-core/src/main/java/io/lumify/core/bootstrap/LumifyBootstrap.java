@@ -22,7 +22,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.version.VersionService;
 import io.lumify.core.version.VersionServiceMXBean;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.*;
 import com.netflix.curator.RetryPolicy;
 import com.netflix.curator.framework.CuratorFramework;
@@ -150,7 +150,7 @@ public class LumifyBootstrap extends AbstractModule {
     }
 
     private Provider<? extends Graph> getGraphProvider(Configuration configuration, String configurationPrefix) {
-        // TODO change to use com.altamiracorp.securegraph.GraphFactory
+        // TODO change to use org.securegraph.GraphFactory
         String graphClassName = configuration.get(configurationPrefix);
         final Map<String, String> configurationSubset = configuration.getSubset(configurationPrefix);
 

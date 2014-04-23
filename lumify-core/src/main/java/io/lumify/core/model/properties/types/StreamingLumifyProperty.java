@@ -1,6 +1,6 @@
 package io.lumify.core.model.properties.types;
 
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.property.StreamingPropertyValue;
 
 /**
  * An IdentityLumifyProperty for StreamingPropertyValues.

@@ -2,8 +2,8 @@ package io.lumify.core.model.user;
 
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
+import org.securegraph.Authorizations;
+import org.securegraph.inmemory.InMemoryAuthorizations;
 
 import java.util.ArrayList;
 import java.util.Collections;

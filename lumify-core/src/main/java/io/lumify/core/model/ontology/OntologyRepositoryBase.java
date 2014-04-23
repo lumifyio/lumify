@@ -4,7 +4,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.property.StreamingPropertyValue;
 import com.google.common.io.Files;
 import net.lingala.zip4j.core.ZipFile;
 import org.apache.commons.io.FileUtils;

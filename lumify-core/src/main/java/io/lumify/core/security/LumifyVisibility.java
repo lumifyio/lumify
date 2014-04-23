@@ -1,6 +1,6 @@
 package io.lumify.core.security;
 
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 public class LumifyVisibility {
     public static final String SUPER_USER_VISIBILITY_STRING = "lumify";

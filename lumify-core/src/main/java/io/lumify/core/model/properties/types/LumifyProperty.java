@@ -1,9 +1,9 @@
 package io.lumify.core.model.properties.types;
 
-import com.altamiracorp.securegraph.Element;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Visibility;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
+import org.securegraph.Element;
+import org.securegraph.Property;
+import org.securegraph.Visibility;
+import org.securegraph.mutation.ElementMutation;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 

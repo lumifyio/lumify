@@ -2,7 +2,7 @@ package io.lumify.core.model.audit;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 

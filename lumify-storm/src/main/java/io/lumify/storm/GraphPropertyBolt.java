@@ -19,11 +19,11 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.util.TeeInputStream;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Property;
+import org.securegraph.Vertex;
+import org.securegraph.property.StreamingPropertyValue;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 import com.google.inject.Inject;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class GraphPropertyBolt extends BaseRichBolt {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyBolt.class);

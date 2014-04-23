@@ -9,7 +9,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.user.SqlUser;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
+import org.securegraph.util.ConvertingIterable;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton

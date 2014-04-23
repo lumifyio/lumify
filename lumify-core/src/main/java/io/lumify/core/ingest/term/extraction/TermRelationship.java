@@ -1,6 +1,6 @@
 package io.lumify.core.ingest.term.extraction;
 
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 /**
  * A relationship between two mentioned terms.

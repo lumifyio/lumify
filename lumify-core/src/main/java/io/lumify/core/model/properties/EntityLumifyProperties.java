@@ -2,7 +2,7 @@ package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.IdentityLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
-import com.altamiracorp.securegraph.type.GeoPoint;
+import org.securegraph.type.GeoPoint;
 
 /**
  * LumifyProperties that apply to both raw and resolved entities stored in the Lumify system.

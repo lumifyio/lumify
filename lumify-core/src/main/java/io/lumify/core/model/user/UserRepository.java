@@ -41,7 +41,7 @@ public abstract class UserRepository {
 
     public abstract void removeAuthorization(User userUser, String auth);
 
-    public abstract com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
+    public abstract org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 
     public JSONObject toJsonWithAuths(User user) {
         JSONObject json = toJson(user);
@@ -68,7 +68,7 @@ public abstract class UserRepository {
         }
     }
 
-    public ModelUserContext getModelUserContext(com.altamiracorp.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
+    public ModelUserContext getModelUserContext(org.securegraph.Authorizations authorizations, String... additionalAuthorizations) {
         ArrayList<String> auths = new ArrayList<String>();
 
         if (authorizations.getAuthorizations() != null) {

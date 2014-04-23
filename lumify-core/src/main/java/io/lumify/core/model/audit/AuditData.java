@@ -3,7 +3,7 @@ package io.lumify.core.model.audit;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 public class AuditData extends ColumnFamily {
     public static final String NAME = "data";

@@ -1,8 +1,8 @@
 package io.lumify.core.model.workspace.diff;
 
 import io.lumify.core.util.JsonSerializer;
-import com.altamiracorp.securegraph.Element;
-import com.altamiracorp.securegraph.Property;
+import org.securegraph.Element;
+import org.securegraph.Property;
 import org.json.JSONObject;
 
 public class PropertyDiffItem extends DiffItem {

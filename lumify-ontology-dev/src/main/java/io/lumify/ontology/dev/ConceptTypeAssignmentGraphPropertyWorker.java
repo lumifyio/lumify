@@ -7,9 +7,9 @@ import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Property;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
+import org.securegraph.Property;
+import org.securegraph.Vertex;
+import org.securegraph.mutation.ElementMutation;
 
 import java.io.InputStream;
 

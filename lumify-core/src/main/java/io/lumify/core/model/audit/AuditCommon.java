@@ -4,7 +4,7 @@ import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
 import io.lumify.core.model.user.UserType;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 import org.json.JSONException;
 import org.json.JSONObject;
 

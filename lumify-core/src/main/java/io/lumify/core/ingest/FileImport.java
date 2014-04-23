@@ -8,9 +8,9 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.util.*;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.*;
+import org.securegraph.mutation.ElementMutation;
+import org.securegraph.property.StreamingPropertyValue;
 import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
@@ -20,7 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class FileImport {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(FileImport.class);

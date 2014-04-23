@@ -2,7 +2,7 @@ package io.lumify.core.model.properties.types;
 
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.video.VideoTranscript;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.property.StreamingPropertyValue;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 

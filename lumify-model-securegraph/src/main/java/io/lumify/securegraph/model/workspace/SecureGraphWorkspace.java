@@ -2,9 +2,9 @@ package io.lumify.securegraph.model.workspace;
 
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceLumifyProperties;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
 
 public class SecureGraphWorkspace implements Workspace {
     private static final long serialVersionUID = -1692706831716776578L;

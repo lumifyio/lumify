@@ -18,7 +18,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.*;
+import org.securegraph.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
 public class WorkspaceHelper {

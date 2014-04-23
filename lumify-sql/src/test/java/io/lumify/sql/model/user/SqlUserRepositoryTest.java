@@ -7,7 +7,7 @@ import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import io.lumify.sql.model.workspace.SqlWorkspaceRepository;
-import com.altamiracorp.securegraph.util.IterableUtils;
+import org.securegraph.util.IterableUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;

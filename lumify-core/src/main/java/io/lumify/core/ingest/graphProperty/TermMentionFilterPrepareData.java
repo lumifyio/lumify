@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Authorizations;
+import org.securegraph.Authorizations;
 import com.google.inject.Injector;
 import org.apache.hadoop.fs.FileSystem;
 

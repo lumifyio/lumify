@@ -16,10 +16,10 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.securegraph.model.user.SecureGraphUserRepository;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
-import com.altamiracorp.securegraph.util.VerticesToEdgeIdsIterable;
+import org.securegraph.*;
+import org.securegraph.mutation.ElementMutation;
+import org.securegraph.util.ConvertingIterable;
+import org.securegraph.util.VerticesToEdgeIdsIterable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
@@ -28,8 +28,8 @@ import com.google.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
-import static com.altamiracorp.securegraph.util.IterableUtils.toSet;
+import static org.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toSet;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton

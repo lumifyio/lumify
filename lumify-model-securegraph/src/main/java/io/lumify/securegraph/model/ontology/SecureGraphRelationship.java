@@ -1,7 +1,7 @@
 package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.Relationship;
-import com.altamiracorp.securegraph.Vertex;
+import org.securegraph.Vertex;
 
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;

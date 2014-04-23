@@ -1,7 +1,7 @@
 package io.lumify.core.model.workspace.diff;
 
 import io.lumify.core.model.properties.LumifyProperties;
-import com.altamiracorp.securegraph.Vertex;
+import org.securegraph.Vertex;
 import org.json.JSONObject;
 
 public class VertexDiffItem extends DiffItem {

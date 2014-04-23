@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class Router extends HttpServlet {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Router.class);

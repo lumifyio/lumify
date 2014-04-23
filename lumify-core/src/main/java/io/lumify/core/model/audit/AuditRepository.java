@@ -5,10 +5,10 @@ import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Repository;
 import com.altamiracorp.bigtable.model.Row;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
+import org.securegraph.Edge;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
+import org.securegraph.mutation.ElementMutation;
 
 import java.util.List;
 import java.util.Map;

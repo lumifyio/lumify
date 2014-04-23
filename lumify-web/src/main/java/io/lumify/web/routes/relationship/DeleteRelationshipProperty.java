@@ -12,10 +12,10 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Edge;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Property;
+import org.securegraph.Authorizations;
+import org.securegraph.Edge;
+import org.securegraph.Graph;
+import org.securegraph.Property;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 

@@ -8,9 +8,9 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.mutation.ElementMutation;
-import com.altamiracorp.securegraph.mutation.ExistingElementMutation;
+import org.securegraph.*;
+import org.securegraph.mutation.ElementMutation;
+import org.securegraph.mutation.ExistingElementMutation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

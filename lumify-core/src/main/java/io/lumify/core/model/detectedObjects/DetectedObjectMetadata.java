@@ -2,7 +2,7 @@ package io.lumify.core.model.detectedObjects;
 
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 public class DetectedObjectMetadata extends ColumnFamily {
     public static final String NAME = "Metadata";

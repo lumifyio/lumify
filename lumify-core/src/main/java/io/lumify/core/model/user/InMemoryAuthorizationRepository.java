@@ -2,8 +2,8 @@ package io.lumify.core.model.user;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.inmemory.InMemoryAuthorizations;
+import org.securegraph.Authorizations;
+import org.securegraph.inmemory.InMemoryAuthorizations;
 import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;

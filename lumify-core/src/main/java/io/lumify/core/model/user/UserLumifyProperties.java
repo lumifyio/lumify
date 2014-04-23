@@ -2,7 +2,7 @@ package io.lumify.core.model.user;
 
 import io.lumify.core.model.properties.types.ByteArrayLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
-import com.altamiracorp.securegraph.TextIndexHint;
+import org.securegraph.TextIndexHint;
 
 public final class UserLumifyProperties {
     public static final TextLumifyProperty USERNAME = new TextLumifyProperty("http://lumify.io/user/username", TextIndexHint.EXACT_MATCH);

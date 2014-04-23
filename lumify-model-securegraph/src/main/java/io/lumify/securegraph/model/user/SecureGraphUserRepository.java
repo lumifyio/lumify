@@ -14,10 +14,10 @@ import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.VertexBuilder;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
+import org.securegraph.VertexBuilder;
+import org.securegraph.util.ConvertingIterable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
@@ -40,7 +40,7 @@ public class SecureGraphUserRepository extends UserRepository {
     private final AuthorizationRepository authorizationRepository;
     private Graph graph;
     private String userConceptId;
-    private com.altamiracorp.securegraph.Authorizations authorizations;
+    private org.securegraph.Authorizations authorizations;
     private final Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
@@ -223,7 +223,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public com.altamiracorp.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
+    public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         Set<String> userAuthorizations;
         if (user instanceof SystemUser) {
             userAuthorizations = new HashSet<String>();

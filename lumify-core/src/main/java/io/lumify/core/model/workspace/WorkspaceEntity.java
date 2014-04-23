@@ -1,9 +1,9 @@
 package io.lumify.core.model.workspace;
 
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Graph;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
+import org.securegraph.util.ConvertingIterable;
 
 public class WorkspaceEntity {
     private final Object entityVertexId;

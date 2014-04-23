@@ -1,7 +1,7 @@
 package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.security.LumifyVisibilityProperties;
-import com.altamiracorp.securegraph.*;
+import org.securegraph.*;
 import org.json.JSONObject;
 
 import java.io.File;

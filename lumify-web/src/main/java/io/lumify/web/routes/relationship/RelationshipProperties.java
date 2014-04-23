@@ -7,7 +7,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.securegraph.*;
+import org.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 

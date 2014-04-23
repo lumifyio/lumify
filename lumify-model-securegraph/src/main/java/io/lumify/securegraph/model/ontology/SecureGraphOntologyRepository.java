@@ -7,10 +7,10 @@ import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
-import com.altamiracorp.securegraph.*;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
-import com.altamiracorp.securegraph.util.ConvertingIterable;
-import com.altamiracorp.securegraph.util.FilterIterable;
+import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.util.ConvertingIterable;
+import org.securegraph.util.FilterIterable;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
@@ -33,7 +33,7 @@ import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 import static io.lumify.core.util.CollectionUtil.single;
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton

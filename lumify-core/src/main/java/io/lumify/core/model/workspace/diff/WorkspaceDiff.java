@@ -6,13 +6,13 @@ import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
-import com.altamiracorp.securegraph.*;
+import org.securegraph.*;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.altamiracorp.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspaceDiff {
     private final Graph graph;

@@ -1,7 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 import org.atteo.evo.inflector.English;
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -2,8 +2,8 @@ package io.lumify.core.model.properties.types;
 
 import static com.google.common.base.Preconditions.*;
 
-import com.altamiracorp.securegraph.Text;
-import com.altamiracorp.securegraph.TextIndexHint;
+import org.securegraph.Text;
+import org.securegraph.TextIndexHint;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

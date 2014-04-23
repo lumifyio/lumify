@@ -6,7 +6,7 @@ import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
-import com.altamiracorp.securegraph.Authorizations;
+import org.securegraph.Authorizations;
 import com.google.common.base.Preconditions;
 import org.json.JSONArray;
 import org.json.JSONObject;

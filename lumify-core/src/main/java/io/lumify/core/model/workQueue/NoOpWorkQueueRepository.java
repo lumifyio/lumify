@@ -2,7 +2,7 @@ package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import io.lumify.core.config.Configuration;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 

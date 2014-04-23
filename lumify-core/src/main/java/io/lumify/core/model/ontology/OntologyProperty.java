@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import com.altamiracorp.securegraph.type.GeoPoint;
+import org.securegraph.type.GeoPoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

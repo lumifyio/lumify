@@ -1,7 +1,7 @@
 package io.lumify.core.model.workspace.diff;
 
-import com.altamiracorp.securegraph.Direction;
-import com.altamiracorp.securegraph.Edge;
+import org.securegraph.Direction;
+import org.securegraph.Edge;
 import org.json.JSONObject;
 
 public class EdgeDiffItem extends DiffItem {

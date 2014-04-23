@@ -1,6 +1,6 @@
 package io.lumify.core.model.termMention;
 
-import com.altamiracorp.securegraph.util.LookAheadIterable;
+import org.securegraph.util.LookAheadIterable;
 
 import java.util.Iterator;
 

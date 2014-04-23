@@ -3,7 +3,7 @@ package io.lumify.core.model.properties;
 import io.lumify.core.model.properties.types.DateLumifyProperty;
 import io.lumify.core.model.properties.types.StreamingLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
-import com.altamiracorp.securegraph.TextIndexHint;
+import org.securegraph.TextIndexHint;
 
 /**
  * LumifyProperties specific to Raw entities (e.g. documents, images, video, etc.).

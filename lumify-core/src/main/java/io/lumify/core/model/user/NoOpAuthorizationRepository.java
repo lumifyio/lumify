@@ -1,7 +1,7 @@
 package io.lumify.core.model.user;
 
-import com.altamiracorp.securegraph.Authorizations;
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Authorizations;
+import org.securegraph.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;

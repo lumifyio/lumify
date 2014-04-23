@@ -3,7 +3,7 @@ package io.lumify.tools;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.Inject;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;

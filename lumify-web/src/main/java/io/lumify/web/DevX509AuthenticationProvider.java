@@ -3,7 +3,7 @@ package io.lumify.web;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.securegraph.Graph;
+import org.securegraph.Graph;
 import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;

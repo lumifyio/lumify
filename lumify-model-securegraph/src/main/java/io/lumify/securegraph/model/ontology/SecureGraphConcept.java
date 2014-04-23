@@ -2,9 +2,9 @@ package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyProperty;
-import com.altamiracorp.securegraph.Vertex;
-import com.altamiracorp.securegraph.Visibility;
-import com.altamiracorp.securegraph.property.StreamingPropertyValue;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
+import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.InputStream;
 import java.util.Collection;

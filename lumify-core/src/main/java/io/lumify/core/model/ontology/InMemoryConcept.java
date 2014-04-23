@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import com.altamiracorp.securegraph.Visibility;
+import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.util.ArrayList;
