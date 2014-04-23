@@ -3,10 +3,13 @@
   <thead>
     <tr>
       <th colspan="3">
-        <!--div class="btn-group actions" style="float:right">
-          <button class="btn btn-mini">Publish All</button>
-          <button class="btn btn-mini">Undo All</button>
-        </div-->
+        <div class="select-actions">
+          <span>Select All</span>
+          <div class="btn-group actions">
+            <button data-action="publish" class="btn btn-mini select-all-publish">Publish</button>
+            <button data-action="undo" class="btn btn-mini select-all-undo">Undo</button>
+          </div>
+        </div>
         <h1 class="header">
           <button class="btn btn-small publish-all btn-success"></button>
           <button class="btn btn-small undo-all btn-danger"></button>
@@ -35,12 +38,12 @@
     <% diff.properties.forEach(function(property) { %>
     <tr class="<%= property.className %>" data-diff-id="<%= property.id %>">
       <td class="property-label"><%= formatLabel(property.name) %></td>
-      <td class="property-value"><% 
-        if (property.old && property.new) { %>  
-        <%= formatValue(property.name, property.new) %> 
-        <div style="text-decoration:line-through"><%= formatValue(property.name, property.old) %></div>  
-        <% } else if (property.new) { %> 
-        <%= formatValue(property.name, property.new) %> 
+      <td class="property-value"><%
+        if (property.old && property.new) { %>
+        <%= formatValue(property.name, property.new) %>
+        <div style="text-decoration:line-through"><%= formatValue(property.name, property.old) %></div>
+        <% } else if (property.new) { %>
+        <%= formatValue(property.name, property.new) %>
         <% } %>
       </td>
       <% include workspaces/diff/actions %>

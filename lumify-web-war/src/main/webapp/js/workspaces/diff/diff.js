@@ -22,6 +22,7 @@ define([
             buttonSelector: 'button',
             headerButtonSelector: '.header button',
             rowSelector: 'tr',
+            selectAllButtonSelector: '.select-all-publish,.select-all-undo'
         })
 
         this.after('initialize', function() {
@@ -70,9 +71,10 @@ define([
             // DEBUG $('.workspace-overlay .badge').popover('show')
 
             self.on('click', {
+                selectAllButtonSelector: self.onSelectAll,
                 buttonSelector: self.onButtonClick,
                 headerButtonSelector: self.onApplyAll,
-                rowSelector: self.onRowClick,
+                rowSelector: self.onRowClick
             });
             self.on('diffsChanged', function(event, data) {
                 self.processDiffs(data.diffs).done(function(processDiffs) {
@@ -269,7 +271,11 @@ define([
             var $target = $(event.target),
                 $row = $target.closest('tr');
 
-            if ($target.is('.header button')) return;
+            if ($target.is('.header button') || $target.closest('.select-actions').length) {
+                return;
+            }
+
+            this.$node.find('.select-actions .actions button').removeClass('btn-danger btn-success');
 
             event.stopPropagation();
             $target.blur();
@@ -281,6 +287,37 @@ define([
                     state: !($target.hasClass('btn-success') || $target.hasClass('btn-danger'))
                 }
             );
+        };
+
+        this.onSelectAll = function(event) {
+            var target = $(event.target),
+                action = target.data('action'),
+                cls = action === 'publish' ? 'success' : 'danger';
+
+            event.stopPropagation();
+            target.blur();
+
+            if (target.hasClass('btn-' + cls)) {
+                target.removeClass('btn-' + cls);
+                this.$node.find('.mark-' + action + ' button.' + action)
+                    .each(function() {
+                        if ($(this).closest('tr.mark-' + action).length) {
+                            $(this).click();
+                        }
+                    });
+            } else {
+
+                this.$node.find('button.' + action)
+                    .each(function() {
+                        if ($(this).closest('tr.mark-' + action).length === 0) {
+                            $(this).click()
+                        }
+                    });
+
+                this.$node.find('.select-all-publish').removeClass('btn-success');
+                this.$node.find('.select-all-undo').removeClass('btn-danger');
+                this.$node.find('.select-all-' + action).addClass('btn-' + cls);
+            }
         };
 
         this.onApplyAll = function(event) {
