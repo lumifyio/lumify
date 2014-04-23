@@ -20,7 +20,7 @@
     <tr class="vertex-row <%= diff.className %>" data-diff-id="<%= diff.id %>" data-vertex-id="<%= diff.vertexId %>">
         <th class="vertex-label" colspan="2">
           <div class="img" <% if (diff.vertex) { %> style="background-image:url(<%= diff.vertex.imageSrc %>)"<% } %>></div>
-          <h1><%= diff.title %></h1>
+          <h1 data-vertex-id="<%= diff.vertexId %>"><%= diff.title %></h1>
           <% if (diff.action.type !== 'update') { %>
           <span class="label action-type"><%= diff.action.display %></span>
           <% } %>

@@ -64,6 +64,7 @@ define([
                     formatters: formatters
                 }));
                 self.updateHeader();
+                self.updateDraggables();
             });
 
             // DEBUG $('.workspace-overlay .badge').popover('show')
@@ -113,6 +114,7 @@ define([
                         }
                     });
                     self.updateHeader(self.$node.closest('.popover:visible').length > 0);
+                    self.updateDraggables();
                     self.$node.find('.diffs-list').scrollTop(previousScroll);
                 });
             })
@@ -354,6 +356,30 @@ define([
                             .appendTo(header);
                     }
                 });
+        };
+
+        this.updateDraggables = function() {
+            this.$node.find('.vertex-label h1')
+                .draggable({
+                    appendTo: 'body',
+                    helper: 'clone',
+                    revert: 'invalid',
+                    revertDuration: 250,
+                    scroll: false,
+                    zIndex: 100,
+                    distance: 10,
+                    start: function(event, ui) {
+                        ui.helper.css({
+                            paddingLeft: $(this).css('padding-left'),
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            margin: 0,
+                            fontSize: $(this).css('font-size')
+                        })
+                    }
+                });
+
+            this.$node.droppable({ tolerance: 'pointer', accept: '*' });
         };
 
         this.updateHeader = function(showSuccess) {
