@@ -907,7 +907,7 @@ define([
                 dup = true, // CY is sending multiple "free" events, prevent that...
                 vertices = this.grabbedVertices;
 
-            if (!vertices) return;
+            if (!vertices || vertices.length === 0) return;
             vertices.each(function(i, e) {
                 var p = retina.pixelsToPoints(this.position());
                 if (!e.data('freed')) {
@@ -923,8 +923,8 @@ define([
 
             // If the user didn't drag more than a few pixels, select the
             // object, it could be an accidental mouse move
-            var target = event.cyTarget, 
-                p = retina.pixelsToPoints(target.position()),
+            var target = vertices[0],
+                p = target.data('targetPosition'),
                 originalPosition = target.data('originalPosition'),
                 dx = p.x - originalPosition.x,
                 dy = p.y - originalPosition.y,
@@ -935,7 +935,7 @@ define([
                 if (!event.originalEvent.shiftKey) {
                     event.cy.$(':selected').unselect();
                 }
-                target.select();
+                event.cyTarget.select();
             }
 
             // Cache these positions since data attr could be overidden
