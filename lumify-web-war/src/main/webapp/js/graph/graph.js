@@ -169,7 +169,7 @@ define([
             if (!this.$node.is(':visible')) return;
             this.cytoscapeReady(function(cy) {
                 var self = this,
-                    vertices = data.vertices, 
+                    vertices = data.vertices,
                     toFitTo = [],
                     toAnimateTo = [],
                     toRemove = [],
@@ -269,8 +269,8 @@ define([
                     startX = nextAvailablePosition.x,
                     vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) {
-                        return vertexIds.indexOf(fromCyId(n.id())) >= 0; 
-                    }), 
+                        return vertexIds.indexOf(fromCyId(n.id())) >= 0;
+                    }),
                     customLayout = $.Deferred();
 
                 if (options.layout) {
@@ -408,7 +408,7 @@ define([
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + '...';
             }
 
-            var merged = $.extend(data, 
+            var merged = $.extend(data,
                 _.pick(vertex.properties,
                    'http://lumify.io#rowKey',
                    'http://lumify.io#conceptType',
@@ -426,9 +426,9 @@ define([
             this.cytoscapeReady(function(cy) {
 
                 if (data.vertices.length) {
-                    cy.$( 
+                    cy.$(
                         data.vertices.map(function(v) {
-                        return '#' + toCyId(v); 
+                        return '#' + toCyId(v);
                     }).join(',')).remove();
 
                     this.setWorkspaceDirty();
@@ -451,7 +451,7 @@ define([
                     edges = data.edges,
                     cyNodes;
                 if (vertices.length || edges.length) {
-                    cyNodes = cy.$( 
+                    cyNodes = cy.$(
                         vertices.concat(edges).map(function(v) {
                             return '#' + toCyId(v);
                         }).join(',')
@@ -495,21 +495,21 @@ define([
         this.animateFromToNode = function(cyFromNode, cyToNode, delay) {
             var self = this,
                 cy = cyFromNode.cy();
-            
+
             if (cyToNode && cyToNode.length) {
                 cyFromNode
                     .css('opacity', 1.0)
                     .stop(true)
                     .delay(delay)
                     .animate(
-                        { 
-                            position: cyToNode.position() 
-                        }, 
-                        { 
+                        {
+                            position: cyToNode.position()
+                        },
+                        {
                             duration: 500,
                             easing: 'easeOutBack',
                             complete: function() {
-                                cyFromNode.remove(); 
+                                cyFromNode.remove();
                             }
                         }
                     );
@@ -584,7 +584,7 @@ define([
                 if(cy.elements().size() === 0){
                     cy.reset();
                 } else if (self.graphPadding) {
-                    // Temporarily adjust max zoom 
+                    // Temporarily adjust max zoom
                     // prevents extreme closeup when one vertex
                     var maxZoom = cy._private.maxZoom;
                     cy._private.maxZoom *= 0.5;
@@ -596,8 +596,8 @@ define([
         };
 
         this.verticesForGraphIds = function(cy, vertexIds, type) {
-            var selector = vertexIds.map(function(vId) { 
-                return '#' + toCyId(vId); 
+            var selector = vertexIds.map(function(vId) {
+                return '#' + toCyId(vId);
             }).join(',');
 
             return cy[type || 'nodes'](selector);
@@ -628,49 +628,49 @@ define([
                                 // Opacity         1 -> .75
                                 // borderWidth start -> end
                                 opacity: 1 - (
-                                    (options.animateValue - options.start) / 
+                                    (options.animateValue - options.start) /
                                     (options.end - options.start) * 0.25
                                 )
-                            }, 
+                            },
                             elementsLength = elements.length;
 
                         css[options.animateProperty] = options.animateValue;
 
                         elements.animate({
-                            css: css 
-                        }, { 
+                            css: css
+                        }, {
                             duration: 1200,
                             easing: 'easeInOutCirc',
                             complete: function() {
                                 if (--elementsLength === 0) {
-                                    options.animateValue = options.animateValue === options.start ? 
+                                    options.animateValue = options.animateValue === options.start ?
                                         options.end : options.start;
                                     animate(elements, options)
                                 }
-                            } 
+                            }
                         });
                     }
 
                     if (nodes.length) {
-                        animate(nodes, { 
+                        animate(nodes, {
                             start: 1 * retina.devicePixelRatio,
                             end: 30 * retina.devicePixelRatio,
                             animateProperty: 'borderWidth',
-                            reset: { 
+                            reset: {
                                 borderWidth: 0,
-                                opacity: 1 
-                            } 
+                                opacity: 1
+                            }
                         });
                     }
                     if (edges.length) {
-                        animate(edges, { 
+                        animate(edges, {
                             start: 1.5 * retina.devicePixelRatio,
                             end: 4.5 * retina.devicePixelRatio,
                             animateProperty: 'width',
-                            reset: { 
+                            reset: {
                                 width: 1.5 * retina.devicePixelRatio,
-                                opacity: 1 
-                            } 
+                                opacity: 1
+                            }
                         });
                     }
                 }.bind(this), HOVER_FOCUS_DELAY_SECONDS * 1000);
@@ -693,7 +693,7 @@ define([
                 paths.forEach(function(path, i) {
                     var vertexIds = _.chain(path)
                                 .filter(function(v) {
-                                    return v.id !== sourceId && v.id !== targetId; 
+                                    return v.id !== sourceId && v.id !== targetId;
                                 })
                                 .pluck('id')
                                 .value(),
@@ -710,7 +710,7 @@ define([
                                     data: {
                                         source: node1.id(),
                                         target: node2.id(),
-                                        label: count ? 
+                                        label: count ?
                                             formatters.string.plural(count, 'vertex', 'vertices') : ''
                                     }
                                 });
@@ -907,7 +907,7 @@ define([
                 dup = true, // CY is sending multiple "free" events, prevent that...
                 vertices = this.grabbedVertices;
 
-            if (!vertices) return;
+            if (!vertices || vertices.length === 0) return;
             vertices.each(function(i, e) {
                 var p = retina.pixelsToPoints(this.position());
                 if (!e.data('freed')) {
@@ -923,19 +923,15 @@ define([
 
             // If the user didn't drag more than a few pixels, select the
             // object, it could be an accidental mouse move
-            var target = event.cyTarget, 
-                p = retina.pixelsToPoints(target.position()),
+            var target = vertices[0],
+                p = target.data('targetPosition'),
                 originalPosition = target.data('originalPosition'),
                 dx = p.x - originalPosition.x,
                 dy = p.y - originalPosition.y,
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance === 0) return;
             if (distance < 5) {
-                if (!event.originalEvent.shiftKey) {
-                    event.cy.$(':selected').unselect();
-                }
-                target.select();
+                event.cyTarget.select();
             }
 
             // Cache these positions since data attr could be overidden
@@ -998,7 +994,7 @@ define([
                 });
                 loading.addClass('hidden');
                 _.delay(function() {
-                    loading.remove(); 
+                    loading.remove();
                 }, 2000);
             }
         };
@@ -1008,14 +1004,14 @@ define([
             this.isWorkspaceEditable = workspace.isEditable;
             if (workspace.data.vertices.length) {
                 var newWorkspace = !this.previousWorkspace || this.previousWorkspace != workspace.workspaceId;
-                this.addVertices(workspace.data.vertices, { 
+                this.addVertices(workspace.data.vertices, {
                     fit: newWorkspace,
                     animate: false
                 });
             } else {
                 this.hideLoading();
                 this.checkEmptyGraph();
-            } 
+            }
 
             this.previousWorkspace = workspace.workspaceId;
         };
@@ -1091,7 +1087,7 @@ define([
                         data.page.x + offset.left,
                         data.page.y + offset.top
                     );
-                
+
                 if (!self.onViewportChangesForPositionChanges) {
                     self.onViewportChangesForPositionChanges = function() {
                         var position;
@@ -1261,11 +1257,11 @@ define([
                             })
                         };
 
-                    self.on('zoomIn', function(e) { 
-                        zoom(zoomFactor); 
+                    self.on('zoomIn', function(e) {
+                        zoom(zoomFactor);
                     });
                     self.on('zoomOut', function(e) {
-                        zoom(zoomFactor * -1); 
+                        zoom(zoomFactor * -1);
                     });
                 },
                 done: function() {
