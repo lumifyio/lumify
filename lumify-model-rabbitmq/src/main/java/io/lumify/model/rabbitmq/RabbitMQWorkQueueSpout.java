@@ -7,15 +7,16 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
+import com.google.inject.Inject;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.QueueingConsumer;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.google.inject.Inject;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.QueueingConsumer;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
     private Channel channel;
     private SpoutOutputCollector collector;
     private QueueingConsumer consumer;
+    private Connection connection;
 
     public RabbitMQWorkQueueSpout(String queueName) {
         this.queueName = queueName;
@@ -44,13 +46,27 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(conf)));
 
         try {
-            this.channel = RabbitMQUtils.openChannel(configuration);
+            this.connection = RabbitMQUtils.openConnection(configuration);
+            this.channel = RabbitMQUtils.openChannel(this.connection);
             this.collector = collector;
             this.channel.queueDeclare(queueName, false, false, false, null);
             this.consumer = new QueueingConsumer(channel);
             this.channel.basicConsume(this.queueName, false, consumer);
         } catch (IOException ex) {
             throw new LumifyException("Could not startup RabbitMQ", ex);
+        }
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        try {
+            LOGGER.debug("Closing RabbitMQ channel");
+            this.channel.close();
+            LOGGER.debug("Closing RabbitMQ connection");
+            this.connection.close();
+        } catch (IOException ex) {
+            LOGGER.error("Could not close RabbitMQ connection and channel", ex);
         }
     }
 

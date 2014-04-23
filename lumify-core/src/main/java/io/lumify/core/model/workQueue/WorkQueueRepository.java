@@ -1,6 +1,7 @@
 package io.lumify.core.model.workQueue;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
@@ -9,13 +10,12 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -178,6 +178,10 @@ public abstract class WorkQueueRepository {
     }
 
     public abstract void subscribeToBroadcastMessages(BroadcastConsumer broadcastConsumer);
+
+    public void shutdown() {
+
+    }
 
     public static abstract class BroadcastConsumer {
         public abstract void broadcastReceived(JSONObject json);

@@ -1,16 +1,17 @@
 package io.lumify.model.rabbitmq;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.google.inject.Inject;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.QueueingConsumer;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.Graph;
-import com.google.inject.Inject;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.QueueingConsumer;
 import org.json.JSONObject;
+import org.securegraph.Graph;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -19,12 +20,14 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RabbitMQWorkQueueRepository.class);
     private static final String BROADCAST_EXCHANGE_NAME = "exBroadcast";
     private final Channel channel;
+    private final Connection connection;
     private HashSet<String> declaredQueues = new HashSet<String>();
 
     @Inject
     public RabbitMQWorkQueueRepository(Graph graph, Configuration configuration) throws IOException {
         super(graph);
-        this.channel = RabbitMQUtils.openChannel(configuration);
+        this.connection = RabbitMQUtils.openConnection(configuration);
+        this.channel = RabbitMQUtils.openChannel(this.connection);
     }
 
     @Override
@@ -60,6 +63,19 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
 
     @Override
     public void flush() {
+    }
+
+    @Override
+    public void shutdown() {
+        super.shutdown();
+        try {
+            LOGGER.debug("Closing RabbitMQ channel");
+            this.channel.close();
+            LOGGER.debug("Closing RabbitMQ connection");
+            this.connection.close();
+        } catch (IOException e) {
+            LOGGER.error("Could not close RabbitMQ channel", e);
+        }
     }
 
     @Override
@@ -99,6 +115,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
                     }
                 }
             });
+            t.setName("rabbitmq-subscribe-" + broadcastConsumer.getClass().getName());
             t.setDaemon(true);
             t.start();
         } catch (IOException e) {
