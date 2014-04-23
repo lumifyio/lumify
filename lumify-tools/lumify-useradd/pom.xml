@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.altamiracorp.lumify</groupId>
+        <groupId>io.lumify</groupId>
         <artifactId>lumify-tools</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
@@ -16,32 +16,32 @@
     <name>Lumify: Tools: UserAdd</name>
 
     <properties>
-        <lumify.tool.mainClass>com.altamiracorp.lumify.tools.UserAdd</lumify.tool.mainClass>
+        <lumify.tool.mainClass>io.lumify.tools.UserAdd</lumify.tool.mainClass>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-fs-hdfs</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-model-bigtable-queue</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-model-rabbitmq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-model-securegraph</artifactId>
             <version>${project.version}</version>
         </dependency>

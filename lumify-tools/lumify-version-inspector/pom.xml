@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.altamiracorp.lumify</groupId>
+        <groupId>io.lumify</groupId>
         <artifactId>lumify-tools</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
@@ -16,12 +16,12 @@
     <name>Lumify: Tools: Version Inspector</name>
 
     <properties>
-        <lumify.tool.mainClass>com.altamiracorp.lumify.tools.version.VersionInspector</lumify.tool.mainClass>
+        <lumify.tool.mainClass>io.lumify.tools.version.VersionInspector</lumify.tool.mainClass>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.altamiracorp.lumify</groupId>
+            <groupId>io.lumify</groupId>
             <artifactId>lumify-core</artifactId>
             <version>${project.version}</version>
         </dependency>

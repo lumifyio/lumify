@@ -1,0 +1,87 @@
+package io.lumify.web.routes.vertex;
+
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.User;
+import io.lumify.web.BaseRequestHandler;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Property;
+import com.altamiracorp.securegraph.Vertex;
+import com.google.inject.Inject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class VertexGetPropertyTermMentions extends BaseRequestHandler {
+    private final Graph graph;
+    private final UserRepository userRepository;
+    private final TermMentionRepository termMentionRepository;
+
+    @Inject
+    public VertexGetPropertyTermMentions(
+            Graph graph,
+            UserRepository userRepository,
+            Configuration configuration,
+            TermMentionRepository termMentionRepository) {
+        super(userRepository, configuration);
+        this.graph = graph;
+        this.userRepository = userRepository;
+        this.termMentionRepository = termMentionRepository;
+    }
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
+        String propertyName = UrlUtils.urlDecode(getAttributeString(request, "propertyName"));
+        String propertyKey = UrlUtils.urlDecode(getAttributeString(request, "propertyKey"));
+
+        User user = getUser(request);
+        Authorizations authorizations = getAuthorizations(request, user);
+        ModelUserContext modelUserContext = getModelUserContext(request, authorizations);
+
+        Vertex vertex = graph.getVertex(graphVertexId, authorizations);
+        if (vertex == null) {
+            respondWithNotFound(response, String.format("vertex %s not found", graphVertexId));
+            return;
+        }
+
+        Property property = vertex.getProperty(propertyKey, propertyName);
+        if (property == null) {
+            respondWithNotFound(response, String.format("property %s:%s not found on vertex %s", propertyKey, propertyName, vertex.getId()));
+            return;
+        }
+
+        Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(vertex.getId().toString(), modelUserContext);
+        JSONObject json = new JSONObject();
+        JSONArray termMentionsJson = termMentionsToJson(termMentions);
+        json.put("termMentions", termMentionsJson);
+        respondWithJson(response, json);
+    }
+
+    private ModelUserContext getModelUserContext(HttpServletRequest request, Authorizations authorizations) {
+        String workspaceId = getWorkspaceIdOrDefault(request);
+        ModelUserContext modelUserContext;
+        if (workspaceId == null) {
+            modelUserContext = userRepository.getModelUserContext(authorizations);
+        } else {
+            modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
+        }
+        return modelUserContext;
+    }
+
+    private JSONArray termMentionsToJson(Iterable<TermMentionModel> termMentions) {
+        JSONArray termMentionsJson = new JSONArray();
+        for (TermMentionModel termMention : termMentions) {
+            termMentionsJson.put(termMention.toJson());
+        }
+        return termMentionsJson;
+    }
+}

@@ -1,0 +1,155 @@
+package io.lumify.web.routes.entity;
+
+import io.lumify.core.config.Configuration;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditRepository;
+import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.LabelName;
+import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.termMention.TermMentionRepository;
+import io.lumify.core.model.termMention.TermMentionRowKey;
+import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.security.LumifyVisibilityProperties;
+import io.lumify.core.security.VisibilityTranslator;
+import io.lumify.core.user.User;
+import io.lumify.core.util.GraphUtil;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.BaseRequestHandler;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.securegraph.Authorizations;
+import com.altamiracorp.securegraph.Edge;
+import com.altamiracorp.securegraph.Graph;
+import com.altamiracorp.securegraph.Vertex;
+import com.altamiracorp.securegraph.mutation.ElementMutation;
+import com.google.inject.Inject;
+import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
+import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.TITLE;
+
+public class ResolveTermEntity extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ResolveTermEntity.class);
+    private final Graph graph;
+    private final AuditRepository auditRepository;
+    private final OntologyRepository ontologyRepository;
+    private final VisibilityTranslator visibilityTranslator;
+    private final TermMentionRepository termMentionRepository;
+    private final WorkspaceRepository workspaceRepository;
+
+    @Inject
+    public ResolveTermEntity(
+            final Graph graphRepository,
+            final AuditRepository auditRepository,
+            final OntologyRepository ontologyRepository,
+            final UserRepository userRepository,
+            final VisibilityTranslator visibilityTranslator,
+            final Configuration configuration,
+            final TermMentionRepository termMentionRepository,
+            final WorkspaceRepository workspaceRepository) {
+        super(userRepository, configuration);
+        this.graph = graphRepository;
+        this.auditRepository = auditRepository;
+        this.ontologyRepository = ontologyRepository;
+        this.visibilityTranslator = visibilityTranslator;
+        this.termMentionRepository = termMentionRepository;
+        this.workspaceRepository = workspaceRepository;
+    }
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        final String artifactId = getRequiredParameter(request, "artifactId");
+        final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
+        final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
+        final String title = getRequiredParameter(request, "sign");
+        final String conceptId = getRequiredParameter(request, "conceptId");
+        final String visibilitySource = getRequiredParameter(request, "visibilitySource");
+        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
+        final String justificationText = getOptionalParameter(request, "justificationText");
+        final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+
+        User user = getUser(request);
+        String workspaceId = getActiveWorkspaceId(request);
+        Workspace workspace = workspaceRepository.findById(workspaceId, user);
+
+        Authorizations authorizations = getAuthorizations(request, user);
+
+        JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+        LumifyVisibility visibility = this.visibilityTranslator.toVisibility(visibilityJson);
+        if (!graph.isVisibilityValid(visibility.getVisibility(), authorizations)) {
+            LOGGER.warn("%s is not a valid visibility for %s user", visibilitySource, user.getDisplayName());
+            respondWithBadRequest(response, "visibilitySource", STRINGS.getString("visibility.invalid"));
+            chain.next(request, response);
+            return;
+        }
+
+        Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
+
+        Concept concept = ontologyRepository.getConceptByIRI(conceptId);
+
+        final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
+        LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
+        ElementMutation<Vertex> vertexMutation;
+        Vertex vertex;
+        if (graphVertexId != null) {
+            vertex = graph.getVertex(id, authorizations);
+            vertexMutation = vertex.prepareMutation();
+        } else {
+            vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
+            GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
+
+
+            CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
+            TITLE.setProperty(vertexMutation, title, metadata, lumifyVisibility.getVisibility());
+
+            vertex = vertexMutation.save();
+
+            auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
+
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
+
+            this.graph.flush();
+
+            workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, null, user);
+        }
+
+
+        // TODO: a better way to check if the same edge exists instead of looking it up every time?
+        Edge edge = graph.addEdge(artifactVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
+
+        // TODO: replace second "" when we implement commenting on ui
+        auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
+        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
+        termMention.getMetadata()
+                .setSign(title, lumifyVisibility.getVisibility())
+                .setOntologyClassUri(concept.getDisplayName(), lumifyVisibility.getVisibility())
+                .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
+                .setVertexId(vertex.getId().toString(), lumifyVisibility.getVisibility())
+                .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
+        termMentionRepository.save(termMention);
+
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.save();
+
+        this.graph.flush();
+
+        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
+        respondWithJson(response, offsetItem.toJson());
+    }
+}

@@ -16,10 +16,10 @@
         <property name="hibernate.c3p0.timeout">300</property>
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
-        <mapping class="com.altamiracorp.lumify.sql.model.user.SqlUser"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspace"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceUser"/>
-        <mapping class="com.altamiracorp.lumify.sql.model.workspace.SqlWorkspaceVertex"/>
+        <mapping class="io.lumify.sql.model.user.SqlUser"/>
+        <mapping class="io.lumify.sql.model.workspace.SqlWorkspace"/>
+        <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUserId"/>
+        <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceUser"/>
+        <mapping class="io.lumify.sql.model.workspace.SqlWorkspaceVertex"/>
     </session-factory>
 </hibernate-configuration>

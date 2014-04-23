@@ -1,0 +1,60 @@
+package io.lumify.core.bootstrap;
+
+import io.lumify.core.bootstrap.lib.LibLoader;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ServiceLoaderUtil;
+import com.fasterxml.jackson.module.guice.ObjectMapperModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+
+public class InjectHelper {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InjectHelper.class);
+    private static Injector injector;
+
+    public static void inject(Object o, ModuleMaker moduleMaker) {
+        ensureInjectorCreated(moduleMaker);
+        inject(o);
+    }
+
+    public static void inject(Object o) {
+        if (injector == null) {
+            throw new RuntimeException("Could not find injector");
+        }
+        injector.injectMembers(o);
+    }
+
+    public static Injector getInjector() {
+        return injector;
+    }
+
+    public static <T> T getInstance(Class<T> clazz, ModuleMaker moduleMaker) {
+        ensureInjectorCreated(moduleMaker);
+        return injector.getInstance(clazz);
+    }
+
+    public static <T> T getInstance(Class<? extends T> clazz) {
+        if (injector == null) {
+            throw new RuntimeException("Could not find injector");
+        }
+        return injector.getInstance(clazz);
+    }
+
+    public static interface ModuleMaker {
+        Module createModule();
+
+        Configuration getConfiguration();
+    }
+
+    private static void ensureInjectorCreated(ModuleMaker moduleMaker) {
+        if (injector == null) {
+            LOGGER.info("Loading libs...");
+            for (LibLoader libLoader : ServiceLoaderUtil.load(LibLoader.class)) {
+                libLoader.loadLibs(moduleMaker.getConfiguration());
+            }
+            injector = Guice.createInjector(moduleMaker.createModule(), new ObjectMapperModule());
+        }
+    }
+}

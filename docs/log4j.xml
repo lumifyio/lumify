@@ -24,7 +24,11 @@
         </layout>
     </appender>
 
-    <logger name="com.altamiracorp">
+    <logger name="com.altamiracorp" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="log" />
+    </logger>
+    <logger name="io.lumify" additivity="false">
         <level value="DEBUG" />
         <appender-ref ref="log" />
     </logger>

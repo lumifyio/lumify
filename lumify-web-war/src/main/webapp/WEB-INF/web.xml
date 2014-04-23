@@ -12,7 +12,7 @@
     </context-param>
 
     <listener>
-        <listener-class>com.altamiracorp.lumify.web.ApplicationBootstrap</listener-class>
+        <listener-class>io.lumify.web.ApplicationBootstrap</listener-class>
     </listener>
 
     <servlet>
@@ -23,7 +23,7 @@
         <load-on-startup>0</load-on-startup>
         <init-param>
             <param-name>org.atmosphere.cpr.AtmosphereHandler</param-name>
-            <param-value>com.altamiracorp.lumify.web.Messaging</param-value>
+            <param-value>io.lumify.web.Messaging</param-value>
         </init-param>
         <init-param>
             <param-name>org.atmosphere.cpr.sessionSupport</param-name>
@@ -31,7 +31,7 @@
         </init-param>
         <init-param>
             <param-name>org.atmosphere.cpr.broadcastFilterClasses</param-name>
-            <param-value>com.altamiracorp.lumify.web.MessagingFilter</param-value>
+            <param-value>io.lumify.web.MessagingFilter</param-value>
         </init-param>
         <init-param>
             <param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
@@ -65,7 +65,7 @@
 
     <servlet>
         <servlet-name>lumify</servlet-name>
-        <servlet-class>com.altamiracorp.lumify.web.Router</servlet-class>
+        <servlet-class>io.lumify.web.Router</servlet-class>
         <init-param>
             <param-name>env</param-name>
             <param-value>dev</param-value>
@@ -78,7 +78,7 @@
 
     <filter>
         <filter-name>debug</filter-name>
-        <filter-class>com.altamiracorp.lumify.web.RequestDebugFilter</filter-class>
+        <filter-class>io.lumify.web.RequestDebugFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
 
