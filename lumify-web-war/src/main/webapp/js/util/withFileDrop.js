@@ -22,12 +22,14 @@ define([], function() {
                 $(this).removeClass('file-hover'); return false; 
             };
             this.node.ondrop = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                if (e.dataTransfer && e.dataTransfer.files) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                if (self.$node.hasClass('uploading')) return;
+                    if (self.$node.hasClass('uploading')) return;
 
-                self.handleFilesDropped(e.dataTransfer.files, event);
+                    self.handleFilesDropped(e.dataTransfer.files, event);
+                }
             };
         });
     }
