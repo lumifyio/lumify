@@ -1,9 +1,10 @@
-<div class="entity_audit_events"/>
-<% if (properties) { %>
+<div class="entity_audit_events"></div>
+
+{{#if properties}}
   <table class="table">
-    <% properties.forEach(function(property) { %>
-      <% include detail/propertiesItem %>
-    <% }); %>
+    {{#each properties}}
+      {{> detail/properties/item }}
+    {{/each}}
 
     <tr class="buttons-row">
       <td colspan="3" class="buttons">
@@ -11,6 +12,6 @@
       </td>
     </tr>
   </table>
-<% } else { %>
+{{else}}
   <div class="nav-header">Properties<span class="badge loading"/></div>
-<% } %>
+{{/if}}

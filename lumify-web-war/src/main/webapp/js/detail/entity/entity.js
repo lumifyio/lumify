@@ -3,7 +3,7 @@ define([
     'flight/lib/component',
     'data',
     './image/image',
-    '../properties',
+    '../properties/properties',
     '../withTypeContent',
     '../withHighlighting',
     'tpl!./entity',
