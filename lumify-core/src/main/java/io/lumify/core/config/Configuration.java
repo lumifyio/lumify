@@ -23,6 +23,7 @@ public final class Configuration {
     public static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs.libcacheDirectory";
+    public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
@@ -40,9 +41,8 @@ public final class Configuration {
     public static final String DETECTED_OBJECT_REPOSITORY = "repository.detectedObject";
     public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "repository.artifactThumbnail";
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
-    public static final String LIB_DIRECTORY = "lib-directory";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
-    public static final String IRI_ENTITY_IMAGE = "iri.entityImage";
+    public static final String ONTOLOGY_IRI_ENTITY_IMAGE = "ontology.iri.entityImage";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";

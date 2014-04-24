@@ -79,10 +79,10 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        conceptIRI = configuration.get(Configuration.IRI_ENTITY_IMAGE);
+        conceptIRI = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
         Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
         if (concept == null) {
-            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIRI, Configuration.IRI_ENTITY_IMAGE);
+            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIRI, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
         }
     }
 
