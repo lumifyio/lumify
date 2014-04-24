@@ -436,19 +436,18 @@ define([
             if (showSuccess) {
                 publish.hide();
                 undo.hide();
-                header.show().text(headerText + ' (updated)');
+                header.show();
                 this.updateHeaderDelay = _.delay(function() {
-                    header.text(headerText);
                     self.updateHeader();
                 }, SHOW_CHANGES_TEXT_SECONDS * 1000);
             } else {
                 header.toggle(markedAsPublish === 0 && markedAsUndo === 0);
 
                 publish.toggle(markedAsPublish > 0)
-                       .text('Publish ' + formatters.string.plural(markedAsPublish, 'change'));
+                    .attr('data-count', formatters.number.pretty(markedAsPublish));
 
                 undo.toggle(markedAsUndo > 0)
-                    .text('Undo ' + formatters.string.plural(markedAsUndo, 'change'));
+                    .attr('data-count', formatters.number.pretty(markedAsUndo));
             }
         }
 

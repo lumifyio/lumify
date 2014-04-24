@@ -62,12 +62,10 @@ public class SqlModelSession extends ModelSession {
 
     @Override
     public void initializeTable(String s, ModelUserContext modelUserContext) {
-        throw new RuntimeException("Not Implemented");
     }
 
     @Override
     public void deleteTable(String s, ModelUserContext modelUserContext) {
-        throw new RuntimeException("Not Implemented");
     }
 
     @Override

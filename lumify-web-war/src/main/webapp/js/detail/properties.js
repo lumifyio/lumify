@@ -90,7 +90,7 @@ define([
 
         this.onAuditShowAll = function(event) {
             var row = $(event.target).closest('tr');
-            
+
             row.prevUntil('.property').removeClass('hidden');
             row.remove();
         };
@@ -142,8 +142,8 @@ define([
                         this.ontologyService.ontology(),
                         this.auditRequest = this.auditService.getAudits(this.attr.data.id)
                     ).done(function(ontology, auditResponse) {
-                        var audits = _.sortBy(auditResponse[0].auditHistory, function(a) { 
-                                return new Date(a.dateTime).getTime() * -1; 
+                        var audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
+                                return new Date(a.dateTime).getTime() * -1;
                             }),
                             auditGroups = _.groupBy(audits, function(a) {
                                 if (a.entityAudit) {
@@ -154,9 +154,9 @@ define([
                                 }
 
                                 if (a.propertyAudit) {
-                                    a.propertyAudit.isVisibility = 
+                                    a.propertyAudit.isVisibility =
                                         a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
-                                    a.propertyAudit.visibilityValue = 
+                                    a.propertyAudit.visibilityValue =
                                         a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
                                     a.propertyAudit.formattedValue = self.formatValue(
                                         a.propertyAudit.newValue || a.propertyAudit.previousValue,
@@ -168,11 +168,11 @@ define([
                                 }
 
                                 if (a.relationshipAudit) {
-                                    a.relationshipAudit.sourceIsCurrent = 
+                                    a.relationshipAudit.sourceIsCurrent =
                                         a.relationshipAudit.sourceId === self.attr.data.id;
-                                    a.relationshipAudit.sourceInfo = 
+                                    a.relationshipAudit.sourceInfo =
                                         self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
-                                    a.relationshipAudit.destInfo = 
+                                    a.relationshipAudit.destInfo =
                                         self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
                                 }
 
@@ -191,7 +191,7 @@ define([
                         if (auditGroups.property) {
                             self.updatePropertyAudits(auditGroups.property);
                         }
-                        auditsEl.show();                        
+                        auditsEl.show();
 
                         self.trigger('updateDraggables');
                         self.updateVisibility();
@@ -219,8 +219,8 @@ define([
 
         this.updatePropertyAudits = function(audits) {
             var self = this,
-                auditsByProperty = _.groupBy(audits, function(a) { 
-                    return a.propertyAudit.propertyName; 
+                auditsByProperty = _.groupBy(audits, function(a) {
+                    return a.propertyAudit.propertyName;
                 });
 
             Object.keys(auditsByProperty).forEach(function(propertyName) {
@@ -242,10 +242,9 @@ define([
                             }
                         }
 
-                        var stringValue = value;
+                        var stringValue = self.formatValue(value, propertyName);
 
                         if (property.dataType === 'geoLocation') {
-                            stringValue = formatters.geoLocation.pretty(value);
                             value = { value: formatters.geoLocation.parse(value) };
                         }
 
@@ -378,7 +377,7 @@ define([
             }
 
         };
-        
+
         this.requestFailure = function(request, message, error) {
             var target = this.$node.find('.underneath');
             if (_.isElement(request)) {
@@ -463,7 +462,7 @@ define([
                             $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
                                 var $target = $(event.target);
 
-                                if (!$target.is($this) && 
+                                if (!$target.is($this) &&
                                     $target.closest('.popover').length === 0) {
 
                                     $this.popover('hide');
@@ -484,7 +483,7 @@ define([
                         };
 
                         content.teardownAllComponents();
-                        PropertyInfo.attachTo(content, { 
+                        PropertyInfo.attachTo(content, {
                             property: $this.data('property')
                         })
                     } else {
@@ -571,11 +570,11 @@ define([
         });
 
         keys.forEach(function(name) {
-            var displayName, 
+            var displayName,
                 value,
                 stringValue,
                 ontologyProperty = ontologyProperties.byTitle[name],
-                isEdge = properties['http://lumify.io#conceptType'] && 
+                isEdge = properties['http://lumify.io#conceptType'] &&
                     properties['http://lumify.io#conceptType'].value === 'relationship',
                 isRelationshipType = name === 'relationshipType' && isEdge;
 
@@ -648,7 +647,7 @@ define([
                 displayType: displayType || 'string',
                 visibility: visibility,
                 metadata: _.pick(
-                    property, 
+                    property,
                     '_justificationMetadata',
                     '_sourceMetadata',
                     'http://lumify.io#modifiedBy',

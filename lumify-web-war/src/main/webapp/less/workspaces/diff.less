@@ -16,7 +16,6 @@
     bottom: 0;
     right: 0;
     width: 100%;
-    overflow: auto;
     padding: 0;
     margin: 0;
 
@@ -24,9 +23,73 @@
       font-size: 95%;
       font-weight: normal;
       margin: 0;
-      padding: 0;    
+      padding: 0;
     }
 
+    .header {
+      line-height: 2em;
+      font-size: 110%;
+      white-space: nowrap;
+
+      .alert {
+        margin: 0.5em 0 0 0;
+      }
+
+      button {
+        &.btn-danger:after {
+          background: #bd362f;
+        }
+        &.btn-success:after {
+          background: #51a351;
+        }
+        &:after {
+        content: attr(data-count);
+        border-radius: 30px;
+        width: 15px;
+        height: 15px;
+        font-size: 85%;
+        margin-left: 0.5em;
+        margin-right: -0.5em;
+        padding: 1px 6px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+
+        }
+      }
+    }
+
+    .select-actions {
+      float: right;
+      margin-top: 3px;
+      span {
+        font-weight: normal;
+        vertical-align: middle;
+        font-size: 95%;
+        margin-right: 0.25em;
+      }
+    }
+
+    .diff-header {
+      background: white;
+      padding: 0.5em;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2.2em;
+      z-index:1;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      border-bottom: 1px solid #ccc;
+    }
+    .diff-content {
+      overflow: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin-top: 3.3em;
+    }
 
     table {
       margin: 0;
@@ -54,25 +117,7 @@
         }
       }
 
-      .header {
-          line-height: 2em;
-          font-size: 120%;
 
-          .alert {
-            margin: 0.5em 0 0 0;
-          }
-      }
-      
-      .select-actions {
-        float: right;
-        margin-top: 3px;
-        span {
-          font-weight: normal;
-          vertical-align: middle;
-          font-size: 95%;
-          margin-right: 0.25em;
-        }
-      }
 
       tr td {
         padding-top: 0.4em;
@@ -99,7 +144,8 @@
         text-align: right;
       }
       tbody .actions button {
-        .opacity(30)
+        .opacity(30);
+        z-index: 2;
       }
       tbody tr:hover .actions button {
         .opacity(100);
