@@ -6,6 +6,7 @@ import io.lumify.core.model.SaveFileResults;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.RowKeyHelper;
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.UUID;
-import org.apache.commons.io.IOUtils;
 
 public class HdfsSession implements FileSystemSession {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsSession.class);
@@ -47,7 +47,7 @@ public class HdfsSession implements FileSystemSession {
             throw new RuntimeException("could not save file to HDFS", ioe);
         }
     }
-    
+
     @Override
     public SaveFileResults saveFile(InputStream in) {
         try {

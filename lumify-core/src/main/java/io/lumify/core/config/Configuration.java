@@ -83,16 +83,16 @@ public final class Configuration {
         return getInt(propertyKey, null);
     }
 
-    public Class getClass(String propertyKey, String defaultClassName) throws ClassNotFoundException {
-        String className = get(propertyKey, defaultClassName);
+    public Class getClass(String propertyKey) {
+        String className = get(propertyKey, null);
         if (className == null) {
-            return null;
+            throw new LumifyException("Could not find required property " + propertyKey);
         }
-        return Class.forName(className);
-    }
-
-    public Class getClass(String propertyKey) throws ClassNotFoundException {
-        return getClass(propertyKey, null);
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new LumifyException("Could not load class " + className + " for property " + propertyKey);
+        }
     }
 
     public Map<String, String> getSubset(String keyPrefix) {

@@ -1,6 +1,11 @@
 package io.lumify.core.bootstrap;
 
 import com.altamiracorp.bigtable.model.ModelSession;
+import com.google.inject.*;
+import com.netflix.curator.RetryPolicy;
+import com.netflix.curator.framework.CuratorFramework;
+import com.netflix.curator.framework.CuratorFrameworkFactory;
+import com.netflix.curator.retry.ExponentialBackoffRetry;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.fs.FileSystemSession;
@@ -23,11 +28,6 @@ import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.version.VersionService;
 import io.lumify.core.version.VersionServiceMXBean;
 import org.securegraph.Graph;
-import com.google.inject.*;
-import com.netflix.curator.RetryPolicy;
-import com.netflix.curator.framework.CuratorFramework;
-import com.netflix.curator.framework.CuratorFrameworkFactory;
-import com.netflix.curator.retry.ExponentialBackoffRetry;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -107,43 +107,43 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
 
         bind(ModelSession.class)
-                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER, false))
+                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(FileSystemSession.class)
-                .toProvider(getConfigurableProvider(FileSystemSession.class, configuration, Configuration.FILESYSTEM_PROVIDER, true))
+                .toProvider(getConfigurableProvider(FileSystemSession.class, configuration, Configuration.FILESYSTEM_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(Graph.class)
                 .toProvider(getGraphProvider(configuration, Configuration.GRAPH_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(WorkQueueRepository.class)
-                .toProvider(getConfigurableProvider(WorkQueueRepository.class, configuration, Configuration.WORK_QUEUE_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(WorkQueueRepository.class, configuration, Configuration.WORK_QUEUE_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(VisibilityTranslator.class)
-                .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR, true))
+                .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR))
                 .in(Scopes.SINGLETON);
         bind(UserRepository.class)
-                .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(WorkspaceRepository.class)
-                .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(AuthorizationRepository.class)
-                .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(OntologyRepository.class)
-                .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(AuditRepository.class)
-                .toProvider(getConfigurableProvider(AuditRepository.class, configuration, Configuration.AUDIT_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(AuditRepository.class, configuration, Configuration.AUDIT_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(TermMentionRepository.class)
-                .toProvider(getConfigurableProvider(TermMentionRepository.class, configuration, Configuration.TERM_MENTION_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(TermMentionRepository.class, configuration, Configuration.TERM_MENTION_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(DetectedObjectRepository.class)
-                .toProvider(getConfigurableProvider(DetectedObjectRepository.class, configuration, Configuration.DETECTED_OBJECT_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(DetectedObjectRepository.class, configuration, Configuration.DETECTED_OBJECT_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
-                .toProvider(getConfigurableProvider(ArtifactThumbnailRepository.class, configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY, true))
+                .toProvider(getConfigurableProvider(ArtifactThumbnailRepository.class, configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
                 .in(Scopes.SINGLETON);
 
         injectProviders();
@@ -211,15 +211,9 @@ public class LumifyBootstrap extends AbstractModule {
         }
     }
 
-    private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
-                                                    final boolean required) {
-        return getConfigurableProvider(clazz, config, key, null, required);
-    }
-
-    private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key,
-                                                    final User user, final boolean required) {
-        Class<? extends T> configuredClass = BootstrapUtils.getConfiguredClass(config, key, required);
-        return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, key, user) : new NullProvider<T>();
+    private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key) {
+        Class<? extends T> configuredClass = config.getClass(key);
+        return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, key, null) : new NullProvider<T>();
     }
 
     private static class NullProvider<T> implements Provider<T> {
