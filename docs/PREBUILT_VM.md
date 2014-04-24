@@ -1,6 +1,6 @@
 # Pre-built VM Instructions
 
-The Pre-built VM comes pre-installed with a sample dataset. To re-import the data please see [Re-importing data](#re-importing-data).
+The Pre-built VM comes pre-installed with a sample dataset.
 
 ## System Requirements
 
