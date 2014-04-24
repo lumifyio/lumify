@@ -119,6 +119,10 @@ define(['util/formatters'], function(f) {
                 f.date.dateString(now).should.equal(now.getFullYear() + '-' + month + '-' + day);
             })
 
+            it('should format dates when string thats actually a time millis', function() {
+                f.date.dateString('1396310400000').should.equal('2014-04-01')
+            })
+
             it('should format to prefered format with time', function() {
                 var now = new Date(),
                     originalTime = now.getTime();

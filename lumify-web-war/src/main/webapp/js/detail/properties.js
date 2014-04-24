@@ -242,10 +242,9 @@ define([
                             }
                         }
 
-                        var stringValue = value;
+                        var stringValue = self.formatValue(value, propertyName);
 
                         if (property.dataType === 'geoLocation') {
-                            stringValue = formatters.geoLocation.pretty(value);
                             value = { value: formatters.geoLocation.parse(value) };
                         }
 
