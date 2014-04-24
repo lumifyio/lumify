@@ -3,7 +3,7 @@ define([
     'service/vertex',
     'util/formatters'
 ], function(VertexService, formatters) {
-                
+
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
         'http://lumify.io#visibility',
         'http://lumify.io#visibilityJson',
@@ -105,7 +105,7 @@ define([
 
         this.getVertexTitle = function(vertexId) {
             var deferredTitle = $.Deferred(),
-                v, 
+                v,
                 vertexTitle;
 
             v = this.vertex(vertexId);
@@ -126,7 +126,7 @@ define([
             var id = vertex.id,
                 cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id }),
                 hasChanged = !_.isEqual(
-                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)), 
+                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)),
                     _.pick.apply(_, [vertex].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES))
                 );
 
@@ -139,10 +139,13 @@ define([
 
             verifyVisibility(vertex);
 
+            if (vertex.properties) {
+                // TODO: change to actually support multivalue
+                vertex.properties = _.indexBy(vertex.properties, 'name');
+            }
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
-
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
-            
+
             $.extend(cache, _.pick(vertex, [
                 'http://lumify.io#visibility',
                 'http://lumify.io#visibilityJson',
@@ -226,12 +229,12 @@ define([
             } else {
                 switch (vertex.concept.displayType) {
 
-                    case 'image': 
+                    case 'image':
                         vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
                         vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         break;
 
-                    case 'video': 
+                    case 'video':
                         vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
                         vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
@@ -248,9 +251,9 @@ define([
         this.resolvedSourceForProperties = function(p) {
             var source = p.source && p.source.value,
                 author = p.author && p.author.value;
-            
-            return source ? 
-                author ? ([source,author].join(' / ')) : source : 
+
+            return source ?
+                author ? ([source,author].join(' / ')) : source :
                 author ? author : '';
         }
     }
