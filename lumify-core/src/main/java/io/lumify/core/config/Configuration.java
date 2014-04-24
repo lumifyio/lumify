@@ -21,32 +21,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     public static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
+
     public static final String HADOOP_URL = "hadoop.url";
+    public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs-libcache-directory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
-    public static final String WORK_QUEUE_REPOSITORY = "work-queue-repository";
-    public static final String MIME_TYPE_MAPPER = "mime-type-mapper";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
-    public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
-    public static final String GRAPH_PROVIDER = "graph";
     public static final String AUTHENTICATION_PROVIDER = "authentication.provider";
     public static final String MAP_PROVIDER = "map.provider";
     public static final String MAP_ACCESS_KEY = "map.apiKey";
     public static final String MAP_TILE_SERVER_HOST = "map.tileServer.hostName";
     public static final String MAP_TILE_SERVER_PORT = "map.tileServer.port";
-    public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
-    public static final String USER_REPOSITORY = "user-repository";
-    public static final String WORKSPACE_REPOSITORY = "workspace-repository";
-    public static final String AUTHORIZATION_REPOSITORY = "authorization-repository";
-    public static final String ONTOLOGY_REPOSITORY = "ontology-repository";
-    public static final String AUDIT_REPOSITORY = "audit-repository";
-    public static final String TERM_MENTION_REPOSITORY = "term-mention-repository";
-    public static final String DETECTED_OBJECT_REPOSITORY = "detected-object-repository";
-    public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "artifact-thumbnail-repository";
+    public static final String USER_REPOSITORY = "repository.user";
+    public static final String WORKSPACE_REPOSITORY = "repository.workspace";
+    public static final String AUTHORIZATION_REPOSITORY = "repository.authorization";
+    public static final String ONTOLOGY_REPOSITORY = "repository.ontology";
+    public static final String AUDIT_REPOSITORY = "repository.audit";
+    public static final String TERM_MENTION_REPOSITORY = "repository.termMention";
+    public static final String DETECTED_OBJECT_REPOSITORY = "repository.detectedObject";
+    public static final String ARTIFACT_THUMBNAIL_REPOSITORY = "repository.artifactThumbnail";
+    public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
     public static final String LIB_DIRECTORY = "lib-directory";
-    public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs-libcache-directory";
-    public static final String ONTOLOGY_REPOSITORY_OWL = "ontology-repository.owl";
+    public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String IRI_ENTITY_IMAGE = "iri.entityImage";
+    public static final String GRAPH_PROVIDER = "graph";
+    public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
+    public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
 
     private Map<String, String> config = new HashMap<String, String>();
 
