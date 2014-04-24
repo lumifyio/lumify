@@ -3,25 +3,24 @@ package io.lumify.core.util;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibilityProperties;
-import org.securegraph.*;
-import org.securegraph.property.StreamingPropertyValue;
-import org.securegraph.type.GeoPoint;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.type.GeoPoint;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class JsonSerializer {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(JsonSerializer.class);
@@ -81,8 +80,8 @@ public class JsonSerializer {
         return json;
     }
 
-    public static JSONObject toJsonProperties(Iterable<Property> properties, String workspaceId) {
-        JSONObject resultsJson = new JSONObject();
+    public static JSONArray toJsonProperties(Iterable<Property> properties, String workspaceId) {
+        JSONArray resultsJson = new JSONArray();
         List<Property> propertiesList = toList(properties);
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
         VideoTranscript allVideoTranscripts = new VideoTranscript();
@@ -91,18 +90,13 @@ public class JsonSerializer {
             allVideoTranscripts = mergePropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
             JSONObject propertyJson = toJsonProperty(property);
             propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
-            resultsJson.put(property.getName(), propertyJson);
-
-            // TODO remove me and fix JavaScript to use full IRI name instead of just "title"
-            if (LumifyProperties.TITLE.getKey().equals(property.getName())) {
-                resultsJson.put("title", propertyJson);
-            }
+            resultsJson.put(propertyJson);
         }
 
         if (allVideoTranscripts.getEntries().size() > 0) {
             JSONObject videoTranscriptJson = new JSONObject();
             videoTranscriptJson.put("value", allVideoTranscripts.toJson());
-            resultsJson.put(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey(), videoTranscriptJson);
+            resultsJson.put(videoTranscriptJson);
         }
 
         return resultsJson;

@@ -12,6 +12,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
@@ -78,7 +79,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
         workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
 
-        JSONObject resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
+        JSONArray resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         respondWithJson(response, resultsJson);
     }
 }

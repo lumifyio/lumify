@@ -18,6 +18,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONArray;
 import org.securegraph.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -152,7 +153,7 @@ public class WorkspaceHelper {
 
         List<Property> properties = toList(vertex.getProperties(property.getName()));
         JSONObject json = new JSONObject();
-        JSONObject propertiesJson = JsonSerializer.toJsonProperties(properties, workspaceId);
+        JSONArray propertiesJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         json.put("properties", propertiesJson);
         json.put("deletedProperty", property.getName());
         json.put("vertex", JsonSerializer.toJson(vertex, workspaceId));

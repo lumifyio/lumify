@@ -15,6 +15,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
@@ -115,7 +116,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
 
         this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
 
-        JSONObject resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
+        JSONArray resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
         respondWithJson(response, resultsJson);
     }
 }
