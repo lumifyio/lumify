@@ -4,7 +4,6 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.util.RowKeyHelper;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Audit extends Row<AuditRowKey> {
@@ -68,9 +67,9 @@ public class Audit extends Row<AuditRowKey> {
             }
             String[] rowKey = RowKeyHelper.splitOnMinorFieldSeperator(getRowKey().toString());
             json.put("graphVertexID", rowKey[0]);
-            json.put("dateTime", rowKey[1]);
+            json.put("dateTime", AuditRowKey.dateFormat.parse(rowKey[1]).getTime());
             return json;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

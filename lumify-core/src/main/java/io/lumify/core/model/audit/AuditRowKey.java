@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class AuditRowKey extends RowKey {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public AuditRowKey(String rowKey) {
         super(rowKey);
@@ -20,7 +20,7 @@ public class AuditRowKey extends RowKey {
         return new AuditRowKey(RowKeyHelper.buildMinor(vertexId.toString(), dateFormat.format(date)));
     }
 
-    public static AuditRowKey build (Object sourceId, Object destId) {
+    public static AuditRowKey build(Object sourceId, Object destId) {
         Date date = new Date();
         String prefix = sourceId + ":" + destId;
         return new AuditRowKey(RowKeyHelper.buildMinor(prefix, dateFormat.format(date)));
