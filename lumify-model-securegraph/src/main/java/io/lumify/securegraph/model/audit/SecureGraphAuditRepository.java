@@ -3,13 +3,17 @@ package io.lumify.securegraph.model.audit;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
+import org.json.JSONObject;
 import org.securegraph.Edge;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -17,18 +21,17 @@ import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
-import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
+import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 
 public class SecureGraphAuditRepository extends AuditRepository {
     private final AuditBuilder auditBuilder = new AuditBuilder();
@@ -121,7 +124,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 String val = String.format("POINT(%f,%f)", ((GeoPoint) oldValue).getLatitude(), ((GeoPoint) oldValue).getLongitude());
                 audit.getAuditProperty().setPreviousValue(val, visibility);
             } else {
-                audit.getAuditProperty().setPreviousValue(oldValue.toString(), visibility);
+                String convertedValue = checkAndConvertForDateType(propertyName, oldValue);
+                audit.getAuditProperty().setPreviousValue(convertedValue != null ? convertedValue : oldValue.toString(), visibility);
             }
         }
         if (action == AuditAction.DELETE) {
@@ -131,7 +135,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 String val = String.format("POINT(%f,%f)", ((GeoPoint) newValue).getLatitude(), ((GeoPoint) newValue).getLongitude());
                 audit.getAuditProperty().setNewValue(val, visibility);
             } else {
-                audit.getAuditProperty().setNewValue(newValue.toString(), visibility);
+                String convertedValue = checkAndConvertForDateType(propertyName, newValue);
+                audit.getAuditProperty().setNewValue(convertedValue != null ? convertedValue : newValue.toString(), visibility);
             }
         }
         audit.getAuditProperty().setPropertyName(propertyName, visibility);
@@ -241,19 +246,27 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
         if (oldValue != null && !oldValue.equals("")) {
-            auditDestSource.getAuditProperty().setPreviousValue(oldValue, visibility);
-            auditSourceDest.getAuditProperty().setPreviousValue(oldValue, visibility);
-            auditEdge.getAuditProperty().setPreviousValue(oldValue, visibility);
+            String convertedValue = checkAndConvertForDateType(propertyName, oldValue);
+            if (convertedValue != null) {
+                oldValue = convertedValue;
+            }
+            auditDestSource.getAuditProperty().setPreviousValue(oldValue.toString(), visibility);
+            auditSourceDest.getAuditProperty().setPreviousValue(oldValue.toString(), visibility);
+            auditEdge.getAuditProperty().setPreviousValue(oldValue.toString(), visibility);
         }
         if (action == AuditAction.DELETE) {
             auditDestSource.getAuditProperty().setNewValue("", visibility);
             auditSourceDest.getAuditProperty().setNewValue("", visibility);
             auditEdge.getAuditProperty().setNewValue("", visibility);
         } else {
+            String convertedValue = checkAndConvertForDateType(propertyName, newValue);
+            if (convertedValue != null) {
+                newValue = convertedValue;
+            }
             // TODO handle multi-valued properties
-            auditDestSource.getAuditProperty().setNewValue(newValue, visibility);
-            auditSourceDest.getAuditProperty().setNewValue(newValue, visibility);
-            auditEdge.getAuditProperty().setNewValue(newValue, visibility);
+            auditDestSource.getAuditProperty().setNewValue(newValue.toString(), visibility);
+            auditSourceDest.getAuditProperty().setNewValue(newValue.toString(), visibility);
+            auditEdge.getAuditProperty().setNewValue(newValue.toString(), visibility);
         }
         auditDestSource.getAuditProperty().setPropertyName(propertyName, visibility);
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
@@ -371,5 +384,17 @@ public class SecureGraphAuditRepository extends AuditRepository {
             return new Visibility("(" + auditVisibility + "|" + visibility.toString() + ")");
         }
         return visibility;
+    }
+
+    private String checkAndConvertForDateType(String propertyName, Object value) {
+        if (ontologyRepository.getProperty(propertyName).getDataType() == PropertyType.DATE) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyy");
+            try {
+                return String.valueOf(dateFormat.parse(value.toString()).getTime());
+            } catch (ParseException e) {
+                throw new RuntimeException("could not parse date");
+            }
+        }
+        return null;
     }
 }
