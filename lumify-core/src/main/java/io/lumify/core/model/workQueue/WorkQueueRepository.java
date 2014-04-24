@@ -16,6 +16,7 @@ import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
+import org.securegraph.mutation.ElementMutation;
 
 import java.util.Map;
 
@@ -35,8 +36,12 @@ public abstract class WorkQueueRepository {
         pushGraphPropertyQueue(graphVertex, property.getKey(), property.getName());
     }
 
-    public void pushGraphPropertyQueue(final Vertex graphVertex, final String propertyKey, final String propertyName) {
+    public void pushGraphPropertyQueue(final Vertex graphVertex, String propertyKey, final String propertyName) {
         getGraph().flush();
+
+        if (propertyKey == null) {
+            propertyKey = ElementMutation.DEFAULT_KEY;
+        }
 
         checkNotNull(graphVertex);
         checkNotNull(propertyKey);
