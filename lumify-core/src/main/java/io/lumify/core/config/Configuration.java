@@ -21,9 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
     public static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
-
     public static final String HADOOP_URL = "hadoop.url";
-    public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs-libcache-directory";
+    public static final String HDFS_LIB_CACHE_DIRECTORY = "hdfs.libcacheDirectory";
     public static final String ZK_SERVERS = "zookeeper.serverNames";
     public static final String MODEL_PROVIDER = "model.provider";
     public static final String FILESYSTEM_PROVIDER = "fs.provider";
@@ -49,7 +48,6 @@ public final class Configuration {
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
 
     private Map<String, String> config = new HashMap<String, String>();
-
 
     /**
      * Default value for a {@link String} property that could not be parsed
