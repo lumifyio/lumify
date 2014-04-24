@@ -28,6 +28,10 @@
         <level value="DEBUG" />
         <appender-ref ref="log" />
     </logger>
+    <logger name="org.securegraph" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="log" />
+    </logger>
     <logger name="io.lumify" additivity="false">
         <level value="DEBUG" />
         <appender-ref ref="log" />
