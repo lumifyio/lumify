@@ -47,6 +47,7 @@ public class Router extends HttpServlet {
     private static final String JETTY_MULTIPART_CONFIG_ELEMENT = "org.eclipse.multipartConfig";
     private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement(System.getProperty("java.io.tmpdir"));
     private WebApp app;
+    private UserAgentFilter userAgentFilter = new UserAgentFilter();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -62,7 +63,7 @@ public class Router extends HttpServlet {
             AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
             Class<? extends Handler> authenticator = authenticatorInstance.getClass();
 
-            app.get("/", new StaticFileHandler(config, "/index.html"));
+            app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
             app.post("/login", Login.class);
             app.post("/logout", Logout.class);
 
