@@ -360,6 +360,7 @@ define([
         this.onSaveWorkspace = function(evt, data) {
             var self = this,
                 updates = this.throttledUpdatesByVertex,
+                stateByVertex = {},
                 vertexToEntityUpdate = function(vertex, updateType) {
                     if (~updateType.indexOf('Deletes')) {
                         return vertex.id;
@@ -367,7 +368,10 @@ define([
 
                     return {
                         vertexId: vertex.id,
-                        graphPosition: vertex.workspace.graphPosition
+                        graphPosition: {
+                            x: Math.floor(vertex.workspace.graphPosition.x),
+                            y: Math.floor(vertex.workspace.graphPosition.y)
+                        }
                     };
                 },
                 uniqueVertices = function(v) {
@@ -381,13 +385,24 @@ define([
             _.keys(data).forEach(function(key) {
                 if (_.isArray(data[key])) {
                     data[key].forEach(function(vertex) {
+                        var json = vertexToEntityUpdate(vertex, key);
+                        stateByVertex[vertex.id] = json;
+
                         updates[vertex.id] = {
                             updateType: key,
-                            updateJson: vertexToEntityUpdate(vertex, key)
+                            updateJson: json
                         }
                     });
                 }
             });
+
+            if (_.isEqual(
+                stateByVertex, 
+                _.pick.apply(_, [this.currentVertexState].concat(_.keys(stateByVertex)))
+            )) {
+                return;
+            }
+            $.extend(true, this.currentVertexState, stateByVertex);
 
             this.refreshRelationships();
             this.onSaveWorkspaceInternal();
@@ -834,6 +849,12 @@ define([
 
                         _.each(_.values(self.cachedVertices), resetWorkspace);
                         self.workspaceVertices = {};
+                        self.currentVertexState = _.indexBy(_.keys(workspace.entities).map(function(vId) {
+                            return {
+                                vertexId: vId,
+                                graphPosition: workspace.entities[vId].graphPosition
+                            };
+                        }), 'vertexId');
 
                         var serverVertices = vertexResponse[0],
                             vertices = serverVertices.map(function(vertex) {
