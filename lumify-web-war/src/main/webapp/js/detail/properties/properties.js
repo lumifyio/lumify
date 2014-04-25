@@ -335,11 +335,10 @@ define([
 
         this.onAddProperty = function(event, data) {
             var self = this,
-                conceptType = this.attr.data.properties['http://lumify.io#conceptType'],
-                isEdge = !(conceptType && conceptType.value !== 'relationship'),
+                isEdge = F.vertex.isEdge(this.attr.data),
                 done = isEdge ? function(edge) {
-                    var properties = $.extend(self.attr.data.properties, edge.properties)
-                    self.displayProperties(properties);
+                    self.attr.data.properties = edge.properties;
+                    self.displayProperties(edge.properties);
                 } : function() { };
 
             if (data.property.name === 'http://lumify.io#visibilityJson') {
@@ -419,7 +418,6 @@ define([
 
             PropertyForm.teardownAll();
             PropertyForm.attachTo(root, {
-                service: this.ontologyService,
                 data: this.attr.data,
                 property: property
             });

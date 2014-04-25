@@ -13,20 +13,30 @@ define([
     });
 
     return vertexFormatters;
-    
+
     function vertexFormatters(F) {
         var V = {
 
             propName: function(name) {
-                return (/^http:\/\/lumify.io/).test(name) ?
-                    name :
-                    ('http://lumify.io#' + name);
+                var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?
+                        name : ('http://lumify.io#' + name),
+                    ontologyProperty = properties && (
+
+                        properties.byTitle[name] ||
+                        properties.byTitle[autoExpandedName]
+                    ),
+
+                    resolvedName = ontologyProperty && (
+                        ontologyProperty.title === name ? name : autoExpandedName
+                    ) || name;
+
+                return resolvedName;
             },
 
             displayProp: function(property, name) {
-                var fullName = V.propName(name),
-                    value = V.prop(property, fullName),
-                    ontologyProperty = properties && properties.byTitle[fullName];
+                var autoExpandedName = V.propName(name),
+                    value = V.prop(property, autoExpandedName),
+                    ontologyProperty = properties && properties.byTitle[autoExpandedName];
 
                 if (!ontologyProperty) {
                     return value;
@@ -40,24 +50,33 @@ define([
                 }
             },
 
+            props: function(vertex, name) {
+                var autoExpandedName = V.propName(name),
+                    foundProperties = _.where(vertex.properties, { name: autoExpandedName });
+
+                return foundProperties;
+            },
+
             // TODO: support looking for underscore properties like _source?
             prop: function(vertexOrProperty, name, defaultValue) {
-                var fullName = V.propName(name),
+                var autoExpandedName = V.propName(name),
 
-                    ontologyProperty = properties && properties.byTitle[fullName],
+                    ontologyProperty = properties && properties.byTitle[autoExpandedName],
 
                     displayName = (ontologyProperty && ontologyProperty.displayName) ||
-                        fullName,
+                        autoExpandedName,
 
                     foundProperties = vertexOrProperty.properties ?
-                        _.where(vertexOrProperty.properties, { name: fullName }) :
+                        _.where(vertexOrProperty.properties, { name: autoExpandedName }) :
                         [vertexOrProperty],
 
                     hasValue = foundProperties &&
                         foundProperties.length &&
                         !_.isUndefined(foundProperties[0].value);
 
-                if (!hasValue && fullName !== 'http://lumify.io#title' && _.isUndefined(defaultValue)) {
+                if (!hasValue &&
+                    autoExpandedName !== 'http://lumify.io#title' &&
+                    _.isUndefined(defaultValue)) {
                     return undefined;
                 }
 
