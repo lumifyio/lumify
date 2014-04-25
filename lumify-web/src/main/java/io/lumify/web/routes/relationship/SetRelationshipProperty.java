@@ -1,5 +1,7 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -14,14 +16,12 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Visibility;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,6 +55,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String propertyName = getRequiredParameter(request, "propertyName");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
@@ -100,6 +101,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(
                 edge,
                 propertyName,
+                propertyKey,
                 value,
                 visibilitySource,
                 workspaceId,

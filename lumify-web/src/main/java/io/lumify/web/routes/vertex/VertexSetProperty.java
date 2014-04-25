@@ -60,6 +60,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
@@ -102,6 +103,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
                 graphVertex,
                 propertyName,
+                propertyKey,
                 value,
                 visibilitySource,
                 workspaceId,

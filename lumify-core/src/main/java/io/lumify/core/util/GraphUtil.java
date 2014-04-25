@@ -8,11 +8,11 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -93,6 +93,7 @@ public class GraphUtil {
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
             T element,
             String propertyName,
+            String propertyKey,
             Object value,
             String visibilitySource,
             String workspaceId,
@@ -100,12 +101,12 @@ public class GraphUtil {
             String justificationText,
             JSONObject sourceObject,
             User user) {
-        Property oldProperty = element.getProperty(propertyName);
+        Property oldProperty = element.getProperty(propertyKey, propertyName);
         Map<String, Object> propertyMetadata;
         if (oldProperty != null) {
             propertyMetadata = oldProperty.getMetadata();
             if (oldProperty.getName().equals(propertyName) && oldProperty.getValue().equals(value)) {
-                element.removeProperty(propertyName);
+                element.removeProperty(propertyKey, propertyName);
             }
         } else {
             propertyMetadata = new HashMap<String, Object>();
@@ -134,7 +135,7 @@ public class GraphUtil {
             propertyMetadata.put(PropertySourceMetadata.PROPERTY_SOURCE_METADATA, sourceMetadata);
         }
 
-        elementMutation.setProperty(propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
+        elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
     }
 
