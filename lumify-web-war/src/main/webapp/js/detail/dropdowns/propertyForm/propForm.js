@@ -152,11 +152,12 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = property.key ? F.vertex.propForKey(this.attr.data, property.key) : undefined;
+            var vertexProperty = property.key ?
+                    F.vertex.propForKey(this.attr.data, property.key) : undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
-                isExistingProperty = (typeof vertexProperty) !== 'undefined';
+                isExistingProperty = typeof vertexProperty !== 'undefined';
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
@@ -336,7 +337,7 @@ define([
         this.onDelete = function() {
             _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
-                property: this.currentProperty.title
+                key: this.currentProperty.key
             });
         };
 
@@ -344,6 +345,7 @@ define([
             if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
+                propertyKey = this.currentProperty.key,
                 propertyName = this.currentProperty.title,
                 value = this.currentValue,
                 justification = _.pick(this.justification || {}, 'sourceInfo', 'justificationText');
@@ -359,6 +361,7 @@ define([
 
                 this.trigger('addProperty', {
                     property: $.extend({
+                            key: propertyKey,
                             name: propertyName,
                             value: value,
                             visibilitySource: this.visibilitySource.value

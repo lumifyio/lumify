@@ -313,7 +313,7 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (self.attr.data.properties['http://lumify.io#conceptType'].value === 'relationship') {
+            if (F.vertex.isEdge(this.attr.data)) {
                 self.relationshipService.deleteProperty(
                         data.property.name,
                         this.attr.data.properties.source.value,
@@ -326,9 +326,7 @@ define([
                 });
 
             } else {
-                this.vertexService.deleteProperty(
-                    this.attr.data.id,
-                    data.property)
+                this.vertexService.deleteProperty(this.attr.data.id, data.key)
                     .fail(this.requestFailure.bind(this, event.target))
             }
         };
@@ -367,7 +365,7 @@ define([
 
                 this.vertexService.setProperty(
                         this.attr.data.id,
-                        data.property.propertyKey,
+                        data.property.key,
                         data.property.name,
                         data.property.value,
                         data.property.visibilitySource,
