@@ -402,7 +402,7 @@ define([
             var button = this.select('addNewPropertiesSelector'),
                 root = $('<div class="underneath">'),
                 property = data && data.property,
-                propertyRow = property && this.$node.find('.property-' + F.className.to(property.key));
+                propertyRow = property && $(evt.target).closest('tr')
 
             this.$node.find('button.info').popover('hide');
 
