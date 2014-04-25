@@ -99,7 +99,7 @@ define([
                             propertiesList.push($.extend({}, property));
                         }
                     });
-                    
+
                     propertiesList.sort(function(pa, pb) {
                         var a = pa.title, b = pb.title;
                         if (a === 'http://lumify.io#visibilityJson') return -1;
@@ -174,7 +174,7 @@ define([
                     sandboxStatus === 'PUBLIC_CHANGED' ?  'Undo' : ''
                 )
                 .toggle(
-                    (!!isExistingProperty) && 
+                    (!!isExistingProperty) &&
                     sandboxStatus !== 'PUBLIC' &&
                     propertyName !== 'http://lumify.io#visibilityJson'
                 );
@@ -290,7 +290,7 @@ define([
             if (this.settingVisibility) {
                 this.valid = this.visibilitySource && this.visibilitySource.valid;
             } else {
-                this.valid = !this.propertyInvalid && 
+                this.valid = !this.propertyInvalid &&
                     (this.visibilitySource && this.visibilitySource.valid) &&
                     (this.justification && this.justification.valid);
             }
@@ -353,8 +353,8 @@ define([
             this.$node.find('input').tooltip('hide')
 
             this.$node.find('.errors').hide();
-            if (propertyName.length && 
-                (this.settingVisibility || 
+            if (propertyName.length &&
+                (this.settingVisibility ||
                  (((_.isString(value) && value.length) || value)))) {
 
                 this.trigger('addProperty', {
