@@ -538,25 +538,22 @@ define([
     }
 
     function filterPropertiesForDisplay(properties, ontologyProperties) {
-        var visibilityJsonKey = 'http://lumify.io#visibilityJson',
-            visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonKey, {source: ''}),
+        var visibilityJsonName = 'http://lumify.io#visibilityJson',
+            visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonName, {source: ''}),
             visibilityOntology = ontologyProperties.byTitle['http://lumify.io#visibility'],
             displayProperties = [],
             visibilityProperty = {
                 isVisibility: true,
-                key: visibilityJsonKey,
+                name: visibilityJsonName,
                 value: visibilityValue,
-                cls: F.className.to(visibilityJsonKey),
+                cls: F.className.to(visibilityJsonName),
                 displayName: (visibilityOntology && visibilityOntology.displayName) ||
                     'Visibility',
                 visibilityJson: JSON.stringify(visibilityValue),
                 metadata: _.pick(
-                    _.findWhere(properties, {name: visibilityJsonKey}) || {},
-                    '_justificationMetadata',
-                    '_sourceMetadata',
+                    _.findWhere(properties, {name: visibilityJsonName}) || {},
                     'http://lumify.io#modifiedBy',
-                    'http://lumify.io#modifiedDate',
-                    'sandboxStatus'
+                    'http://lumify.io#modifiedDate'
                 )
             };
 

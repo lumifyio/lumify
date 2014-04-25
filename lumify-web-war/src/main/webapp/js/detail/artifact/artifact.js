@@ -7,7 +7,7 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     'detail/dropdowns/termForm/termForm',
-    'detail/properties',
+    'detail/properties/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'tpl!util/alert',

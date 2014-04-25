@@ -7,7 +7,7 @@ define([
     'service/relationship',
     'service/vertex',
     'service/ontology',
-    'detail/properties',
+    'detail/properties/properties',
     'util/formatters',
     'sf'
 ], function(

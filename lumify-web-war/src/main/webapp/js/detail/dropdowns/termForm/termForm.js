@@ -1,7 +1,7 @@
 define([
     'flight/lib/component',
     '../withDropdown',
-    'detail/properties',
+    'detail/properties/properties',
     'tpl!./termForm',
     'tpl!./concept-options',
     'tpl!./entity',
