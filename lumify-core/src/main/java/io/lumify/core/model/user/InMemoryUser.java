@@ -1,12 +1,10 @@
 package io.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import io.lumify.core.user.Roles;
 import io.lumify.core.user.User;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryUser implements User {
     private final String userId;
@@ -14,13 +12,15 @@ public class InMemoryUser implements User {
     private final String displayName;
     private final String password;
     private final List<String> authorizations;
+    private final int roles;
 
-    public InMemoryUser(String username, String displayName, String password, String[] authorizations) {
+    public InMemoryUser(String username, String displayName, String password, Collection<Roles> roles, String[] authorizations) {
         this.userId = UUID.randomUUID().toString();
         this.username = username;
         this.displayName = displayName;
         this.password = password;
         this.authorizations = new ArrayList<String>();
+        this.roles = Roles.toBits(roles);
         Collections.addAll(this.authorizations, authorizations);
     }
 
@@ -47,6 +47,10 @@ public class InMemoryUser implements User {
     @Override
     public String getUserStatus() {
         throw new RuntimeException("not implemented");
+    }
+
+    public Set<Roles> getRoles() {
+        return Roles.toSet(this.roles);
     }
 
     public String[] getAuthorizations() {

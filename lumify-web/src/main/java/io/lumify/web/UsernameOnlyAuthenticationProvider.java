@@ -1,11 +1,12 @@
 package io.lumify.web;
 
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
-import org.securegraph.Graph;
 import com.google.inject.Inject;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.Roles;
+import io.lumify.core.user.User;
+import org.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +39,7 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, new String[0]);
+            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, Roles.NONE, new String[0]);
         }
         setUser(request, user);
         return true;

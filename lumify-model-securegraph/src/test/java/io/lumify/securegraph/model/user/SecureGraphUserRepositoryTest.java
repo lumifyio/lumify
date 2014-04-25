@@ -6,15 +6,16 @@ import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.security.LumifyVisibility;
-import org.securegraph.id.UUIDIdGenerator;
-import org.securegraph.inmemory.InMemoryGraph;
-import org.securegraph.inmemory.InMemoryGraphConfiguration;
-import org.securegraph.search.DefaultSearchIndex;
+import io.lumify.core.user.Roles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.id.UUIDIdGenerator;
+import org.securegraph.inmemory.InMemoryGraph;
+import org.securegraph.inmemory.InMemoryGraphConfiguration;
+import org.securegraph.search.DefaultSearchIndex;
 
 import java.util.HashMap;
 
@@ -48,7 +49,7 @@ public class SecureGraphUserRepositoryTest {
 
     @Test
     public void testAddUser() {
-        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", Roles.ALL, new String[]{"auth1", "auth2"});
 
         SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUsername("testUser");
         assertEquals("testUser", secureGraphUser.getDisplayName());

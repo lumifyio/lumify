@@ -11,6 +11,12 @@ import io.lumify.core.model.user.InMemoryUserRepository;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiff;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.user.Roles;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
@@ -20,21 +26,16 @@ import org.securegraph.inmemory.InMemoryEdge;
 import org.securegraph.inmemory.InMemoryGraph;
 import org.securegraph.inmemory.InMemoryGraphConfiguration;
 import org.securegraph.search.DefaultSearchIndex;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.securegraph.util.IterableUtils.toList;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
+import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecureGraphWorkspaceRepositoryTest {
@@ -78,10 +79,10 @@ public class SecureGraphWorkspaceRepositoryTest {
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         InMemoryUserRepository userRepository = new InMemoryUserRepository();
-        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
+        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", Roles.ALL, new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
 
-        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
+        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", Roles.ALL, new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
         when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);

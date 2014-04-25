@@ -1,15 +1,16 @@
 package io.lumify.web;
 
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.Roles;
+import io.lumify.core.user.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,7 +88,7 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findOrAddUser(TEST_USERNAME, TEST_USERNAME, X509AuthenticationProvider.X509_USER_PASSWORD, new String[0])).thenReturn(user);
+        when(userRepository.findOrAddUser(TEST_USERNAME, TEST_USERNAME, X509AuthenticationProvider.X509_USER_PASSWORD, Roles.NONE, new String[0])).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
         verify(httpSession).setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);

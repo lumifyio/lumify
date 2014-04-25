@@ -1,13 +1,13 @@
 package io.lumify.core.model.user;
 
 import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.user.Roles;
+import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryUserRepository extends UserRepository {
     private final List<InMemoryUser> users = new ArrayList<InMemoryUser>();
@@ -28,8 +28,8 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(username, displayName, password, userAuthorizations);
+    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
+        InMemoryUser user = new InMemoryUser(username, displayName, password, roles, userAuthorizations);
         users.add(user);
         return user;
     }
@@ -75,5 +75,13 @@ public class InMemoryUserRepository extends UserRepository {
         Collections.addAll(auths, ((InMemoryUser) user).getAuthorizations());
         Collections.addAll(auths, additionalAuthorizations);
         return new InMemoryAuthorizations(auths.toArray(new String[auths.size()]));
+    }
+
+    @Override
+    public Set<Roles> getRoles(User user) {
+        if (user instanceof SystemUser) {
+            return Roles.ALL;
+        }
+        return ((InMemoryUser) user).getRoles();
     }
 }

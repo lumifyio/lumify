@@ -35,7 +35,6 @@
 	</build>
 	
 	<modules>
-		<module>lumify-useradd</module>
 		<module>lumify-version-inspector</module>
         <module>lumify-import</module>
     </modules>

@@ -1,25 +1,25 @@
 package io.lumify.sql.model.user;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.user.Roles;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.util.ConvertingIterable;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.securegraph.util.ConvertingIterable;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,8 +30,8 @@ public class SqlUserRepository extends UserRepository {
     private final AuthorizationRepository authorizationRepository;
 
     @Inject
-    public SqlUserRepository (final AuthorizationRepository authorizationRepository,
-                              final SessionFactory sessionFactory){
+    public SqlUserRepository(final AuthorizationRepository authorizationRepository,
+                             final SessionFactory sessionFactory) {
         this.authorizationRepository = authorizationRepository;
         this.sessionFactory = sessionFactory;
     }
@@ -78,7 +78,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -98,6 +98,7 @@ public class SqlUserRepository extends UserRepository {
             }
             newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
+            newUser.setRoles(Roles.toBits(roles));
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
             transaction.commit();
@@ -243,5 +244,10 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations) {
         return authorizationRepository.createAuthorizations(new HashSet<String>());
+    }
+
+    @Override
+    public Set<Roles> getRoles(User user) {
+        return EnumSet.of(Roles.READ);
     }
 }

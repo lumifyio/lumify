@@ -3,6 +3,7 @@ package io.lumify.sql.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserType;
 import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.user.Roles;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import io.lumify.sql.model.workspace.SqlWorkspaceUser;
@@ -17,20 +18,30 @@ import java.util.Set;
 public class SqlUser implements User {
     @Transient
     private ModelUserContext modelUserContext;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", unique = true)
     private int id;
+
     @Column(name = "username", unique = true)
     private String username;
+
     @Column(name = "display_name")
     private String displayName;
+
     @Column(name = "password_salt")
     private String passwordSalt;
+
     @Column(name = "password_hash")
     private String passwordHash;
+
     @Column(name = "user_status")
     private String userStatus;
+
+    @Column(name = "roles")
+    private int roles;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "workspace_id")
     private SqlWorkspace currentWorkspace;
@@ -86,6 +97,14 @@ public class SqlUser implements User {
 
     public String getUserStatus() {
         return userStatus;
+    }
+
+    public Set<Roles> getRoles() {
+        return Roles.toSet(this.roles);
+    }
+
+    public void setRoles(int roles) {
+        this.roles = roles;
     }
 
     public void setCurrentWorkspace(Workspace currentWorkspace) {

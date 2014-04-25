@@ -1,6 +1,11 @@
 package io.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -10,29 +15,26 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.user.Roles;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.util.ConvertingIterable;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import org.apache.commons.lang.StringUtils;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 import static io.lumify.core.model.user.UserLumifyProperties.*;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class SecureGraphUserRepository extends UserRepository {
@@ -42,6 +44,9 @@ public class SecureGraphUserRepository extends UserRepository {
     private String userConceptId;
     private org.securegraph.Authorizations authorizations;
     private final Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .build();
+    private final Cache<String, Set<Roles>> userRolesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
 
@@ -76,8 +81,9 @@ public class SecureGraphUserRepository extends UserRepository {
         String userName = USERNAME.getPropertyValue(user);
         String userId = (String) user.getId();
         String userStatus = STATUS.getPropertyValue(user);
+        Set<Roles> roles = Roles.toSet(ROLES.getPropertyValue(user, Roles.toBits(Roles.NONE)));
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext, userStatus);
+        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, roles);
     }
 
     @Override
@@ -110,7 +116,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
         User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new LumifyException("duplicate username");
@@ -129,6 +135,7 @@ public class SecureGraphUserRepository extends UserRepository {
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
+        ROLES.setProperty(userBuilder, (int) Roles.toBits(roles), VISIBILITY.getVisibility());
         User user = createFromVertex(userBuilder.save());
         graph.flush();
         return user;
@@ -157,10 +164,8 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public User setCurrentWorkspace(String userId, Workspace workspace) {
         User user = findById(userId);
+        checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        if (user == null) {
-            throw new RuntimeException("Could not find user: " + userId);
-        }
         CURRENT_WORKSPACE.setProperty(userVertex, workspace.getId(), VISIBILITY.getVisibility());
         graph.flush();
         return user;
@@ -169,14 +174,10 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public String getCurrentWorkspaceId(String userId) {
         User user = findById(userId);
+        checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        if (user == null) {
-            throw new RuntimeException("Could not find user: " + userId);
-        }
         String workspaceId = CURRENT_WORKSPACE.getPropertyValue(userVertex);
-        if (workspaceId == null) {
-            throw new RuntimeException("Could not find current workspace: " + workspaceId);
-        }
+        checkNotNull(workspaceId, "Could not find current workspace");
         return workspaceId;
     }
 
@@ -261,5 +262,25 @@ public class SecureGraphUserRepository extends UserRepository {
             authorizations.add(s);
         }
         return authorizations;
+    }
+
+    @Override
+    public Set<Roles> getRoles(User user) {
+        Set<Roles> roles;
+        if (user instanceof SystemUser) {
+            return Roles.ALL;
+        } else {
+            roles = userRolesCache.getIfPresent(user.getUserId());
+        }
+        if (roles == null) {
+            Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+            roles = getRoles(userVertex);
+            userRolesCache.put(user.getUserId(), roles);
+        }
+        return roles;
+    }
+
+    private Set<Roles> getRoles(Vertex userVertex) {
+        return Roles.toSet(ROLES.getPropertyValue(userVertex, Roles.toBits(Roles.NONE)));
     }
 }
