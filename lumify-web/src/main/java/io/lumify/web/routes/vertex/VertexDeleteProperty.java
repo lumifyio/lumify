@@ -51,13 +51,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        // TODO refactor this to call graphVertex.getProperties when secure graph supports propertyKey in getProperties call
-        List<Property> properties = toList(new FilterIterable<Property>(graphVertex.getProperties(propertyName)) {
-            @Override
-            protected boolean isIncluded(Property o) {
-                return propertyKey.equals(o.getKey());
-            }
-        });
+        List<Property> properties = toList(graphVertex.getProperties(propertyKey, propertyName));
 
         if (properties.size() == 0) {
             LOGGER.warn("Could not find property: %s", propertyName);
