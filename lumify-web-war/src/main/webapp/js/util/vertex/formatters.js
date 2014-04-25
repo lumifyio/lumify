@@ -17,6 +17,10 @@ define([
     function vertexFormatters(F) {
         var V = {
 
+            sandboxStatus: function(vertex) {
+                return (/^private$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
+            },
+
             propName: function(name) {
                 var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?
                         name : ('http://lumify.io#' + name),
@@ -55,6 +59,10 @@ define([
                     foundProperties = _.where(vertex.properties, { name: autoExpandedName });
 
                 return foundProperties;
+            },
+
+            propForKey: function(vertex, key) {
+                return _.findWhere(vertex.properties, { key: key });
             },
 
             // TODO: support looking for underscore properties like _source?

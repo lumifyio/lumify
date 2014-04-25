@@ -82,10 +82,10 @@ define([
             if (this.attr.property) {
                 this.trigger('propertyselected', {
                     property: _.chain(this.attr.property)
-                        .pick('displayName key value visibility'.split(' '))
+                        .pick('displayName key name value visibility'.split(' '))
                         .tap(function(p) {
-                            p.title = p.key;
-                            delete p.key;
+                            p.title = p.name;
+                            delete p.name;
                         })
                         .value()
                 });
@@ -152,13 +152,7 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = _.find(F.vertex.props(this.attr.data, propertyName), function(p) {
-                    if (_.isUndefined(data.property.value)) {
-                        return true;
-                    }
-                    return _.isEqual(data.property.value, p.value) &&
-                        _.isEqual(data.property.visibility, p['http://lumify.io#visibilityJson']);
-                }),
+            var vertexProperty = property.key ? F.vertex.propForKey(this.attr.data, property.key) : undefined;
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,

@@ -19,7 +19,7 @@ define([
     entityTemplate,
     VertexService,
     OntologyService,
-    formatters,
+    F,
     alertTemplate) {
     'use strict';
 
@@ -115,7 +115,7 @@ define([
                 var conceptType = (info && (
                     (info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) ||
                         info['http://lumify.io#conceptType'] ||
-                        (info.properties && 
+                        (info.properties &&
                          info.properties['http://lumify.io#conceptType'] &&
                          info.properties['http://lumify.io#conceptType'].value)
                     )) || '';
@@ -562,7 +562,7 @@ define([
                 .then(function(response) {
                     badge.removeClass('loading');
                     return _.filter(response.vertices, function(v) {
-                        return ~formatters.vertex.prop(v, 'title').toLowerCase().indexOf(query.toLowerCase());
+                        return ~F.vertex.prop(v, 'title').toLowerCase().indexOf(query.toLowerCase());
                     });
                 }).done(this.updateQueryCountBadge.bind(this));
 
@@ -587,13 +587,13 @@ define([
                             var all = _.map(entities, function(e) {
                                 return $.extend({
                                     toLowerCase: function() {
-                                        return formatters.vertex.prop(e, 'title').toLowerCase();
+                                        return F.vertex.prop(e, 'title').toLowerCase();
                                     },
                                     toString: function() {
                                         return e.id;
                                     },
                                     indexOf: function(s) {
-                                        return formatters.vertex.prop(e, 'title').indexOf(s);
+                                        return F.vertex.prop(e, 'title').indexOf(s);
                                     }
                                 }, e);
                             });
@@ -670,8 +670,8 @@ define([
 
                             if (matchingItem && matchingItem.length) {
                                 graphVertexId = item;
-                                label = matchingItem[0].properties ? 
-                                    formatters.vertex.prop(matchingItem[0], 'title') :
+                                label = matchingItem[0].properties ?
+                                    F.vertex.prop(matchingItem[0], 'title') :
                                     matchingItem;
 
                                 if (graphVertexId == createNewText) {
@@ -691,19 +691,19 @@ define([
                         highlighter: function(item) {
 
                             var html = (item === createNewText) ?
-                                    item : 
+                                    item :
                                     Object.getPrototypeOf(this).highlighter.apply(
                                         this,
-                                        [formatters.vertex.prop(item, 'title')]
+                                        [F.vertex.prop(item, 'title')]
                                     ),
                                 concept = _.find(self.allConcepts, function(c) {
-                                    return item.properties && c.id === 
-                                        item.properties['http://lumify.io#conceptType'].value;
+                                    return item.properties && c.id === F.vertex.prop(item, 'conceptType');
                                 });
 
                             return entityTemplate({
                                 html: html,
                                 item: item,
+                                F: F,
                                 properties: item.properties &&
                                     Properties.filterPropertiesForDisplay(item.properties, ontologyProperties),
                                 iconSrc: item.imageSrc,
