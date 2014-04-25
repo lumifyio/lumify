@@ -110,7 +110,7 @@ define([
         this.onDelete = function(e) {
             var button = this.select('deleteButtonSelector').addClass('loading').attr('disabled', true);
             this.trigger('deleteProperty', {
-                property: this.attr.property.key
+                property: _.pick(this.attr.property, 'name', 'key')
             });
         };
     }
