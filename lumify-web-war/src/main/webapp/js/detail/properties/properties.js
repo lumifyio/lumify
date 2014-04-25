@@ -367,6 +367,7 @@ define([
 
                 this.vertexService.setProperty(
                         this.attr.data.id,
+                        data.property.propertyKey,
                         data.property.name,
                         data.property.value,
                         data.property.visibilitySource,
@@ -445,9 +446,9 @@ define([
                 infos.each(function() {
                     var $this = $(this),
                     property = $this.data('property'),
-                    ontologyProperty = self.ontologyProperties.byTitle[property.key];
+                    ontologyProperty = self.ontologyProperties.byTitle[property.name];
 
-                    if (property.key === 'http://lumify.io#visibilityJson' || ontologyProperty) {
+                    if (property.name === 'http://lumify.io#visibilityJson' || ontologyProperty) {
                         $this.popover('destroy');
                         $this.popover({
                             trigger: 'click',
@@ -542,7 +543,8 @@ define([
         var visibilityJsonKey = 'http://lumify.io#visibilityJson',
             visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonKey, {source: ''}),
             visibilityOntology = ontologyProperties.byTitle['http://lumify.io#visibility'],
-            displayProperties = [{
+            displayProperties = [],
+            visibilityProperty = {
                 isVisibility: true,
                 key: visibilityJsonKey,
                 value: visibilityValue,
@@ -558,8 +560,10 @@ define([
                     'http://lumify.io#modifiedDate',
                     'sandboxStatus'
                 )
-            }];
-        displayProperties[0].json = JSON.stringify(displayProperties[0]);
+            };
+
+        displayProperties.push(visibilityProperty);
+        visibilityProperty.json = JSON.stringify(visibilityProperty);
 
         _.sortBy(properties, 'name').forEach(function(property) {
             var value = property.value,
@@ -573,10 +577,13 @@ define([
                 isRelationshipType = name === 'relationshipType' && isEdge,
                 propertyView;
 
+            console.log(property)
+
             // TODO add vertex visibility
             if (ontologyProperty && ontologyProperty.userVisible) {
                 propertyView = {
-                    key: name,
+                    name: name,
+                    key: property.key,
                     value: value,
                     cls: F.className.to(name),
                     stringValue: _.isUndefined(stringValue) ? value : stringValue,

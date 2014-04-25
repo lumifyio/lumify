@@ -13,6 +13,7 @@ define([
 
     VertexService.prototype.setProperty = function(
         vertexId,
+        propertyKey,
         propertyName,
         value,
         visibilitySource,
@@ -21,14 +22,18 @@ define([
     ) {
         return this._ajaxPost({
             url: 'vertex/property/set',
-            data: {
+            data: _.tap({
                 graphVertexId: vertexId,
                 propertyName: propertyName,
                 value: value,
                 visibilitySource: visibilitySource,
                 justificationText: justificationText,
                 sourceInfo: JSON.stringify(sourceInfo)
-            }
+            }, function(o) {
+                if (propertyKey) {
+                    o.propertyKey = propertyKey
+                }
+            })
         });
     };
 
