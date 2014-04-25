@@ -208,13 +208,7 @@ define([
 
                         var results = {},
                             sortVerticesIntoResults = function(v) {
-                                var props = v.properties;
-                                if (!props['http://lumify.io#conceptType']) {
-                                    console.error('found vertex without a concept', v);
-                                    return;
-                                }
-
-                                var conceptType = props['http://lumify.io#conceptType'].value,
+                                var conceptType = F.vertex.prop(v, 'conceptType'),
                                     addToSearchResults = function(conceptType) {
                                         if (!results[conceptType]) results[conceptType] = [];
 
@@ -229,6 +223,10 @@ define([
                                         }
                                     },
                                     vertexConcept = concepts.byId[conceptType];
+
+                                if (!conceptType) {
+                                    throw new Error('Found vertex without a conceptType: ', v);
+                                }
 
                                 while (vertexConcept) {
                                     addToSearchResults(vertexConcept.id, v);
