@@ -1031,13 +1031,11 @@ define([
                         var info = a.data('info') || a.closest('li').data('info');
                         if (info && (info.graphVertexId || info.id)) {
 
-                            var properties = {};
-                            _.keys(info).forEach(function(key) {
-                                if ((/^(start|end|graphVertexId|type)$/).test(key)) return;
-                                properties[key] = {
-                                    value: info[key]
-                                };
-                            });
+                            var properties = [
+                                { name: 'http://lumify.io#title', value: info.title },
+                                { name: 'http://lumify.io#conceptType', value: info['http://lumify.io#conceptType'] },
+                            ];
+
                             self.updateCacheWithVertex({
                                 id: info.graphVertexId || info.id,
                                 properties: properties
