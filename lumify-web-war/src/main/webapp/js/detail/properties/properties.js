@@ -326,7 +326,7 @@ define([
                 });
 
             } else {
-                this.vertexService.deleteProperty(this.attr.data.id, data.key)
+                this.vertexService.deleteProperty(this.attr.data.id, data.property)
                     .fail(this.requestFailure.bind(this, event.target))
             }
         };

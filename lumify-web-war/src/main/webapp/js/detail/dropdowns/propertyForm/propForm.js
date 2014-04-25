@@ -83,9 +83,8 @@ define([
                 this.trigger('propertyselected', {
                     property: _.chain(this.attr.property)
                         .pick('displayName key name value visibility'.split(' '))
-                        .tap(function(p) {
-                            p.title = p.name;
-                            delete p.name;
+                        .extend({
+                            title: this.attr.property.name
                         })
                         .value()
                 });
@@ -337,7 +336,7 @@ define([
         this.onDelete = function() {
             _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
-                key: this.currentProperty.key
+                property: _.pick(this.currentProperty, 'key', 'name')
             });
         };
 

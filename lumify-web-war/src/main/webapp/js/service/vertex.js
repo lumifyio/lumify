@@ -47,12 +47,13 @@ define([
         });
     };
 
-    VertexService.prototype.deleteProperty = function(vertexId, propertyKey) {
+    VertexService.prototype.deleteProperty = function(vertexId, property) {
         return this._ajaxPost({
             url: 'vertex/property/delete',
             data: {
                 graphVertexId: vertexId,
-                propertyKey: propertyKey
+                propertyName: property.name,
+                propertyKey: property.key
             }
         });
     };
