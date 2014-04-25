@@ -561,7 +561,13 @@ define([
         displayProperties.push(visibilityProperty);
         visibilityProperty.json = JSON.stringify(visibilityProperty);
 
-        _.sortBy(properties, 'name').forEach(function(property) {
+        _.sortBy(properties, function(p) {
+            var ontologyProperty = ontologyProperties.byTitle[p.name];
+            if (ontologyProperty) {
+                return ontologyProperty.displayName;
+            }
+            return p.name;
+        }).forEach(function(property) {
             var value = property.value,
                 name = property.name,
                 stringValue = F.vertex.displayProp(property, name),
