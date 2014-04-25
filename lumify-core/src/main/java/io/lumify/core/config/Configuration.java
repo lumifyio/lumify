@@ -67,10 +67,7 @@ public final class Configuration {
     }
 
     public String get(String propertyKey, String defaultValue) {
-        if (config.containsKey(propertyKey)) {
-            return config.get(propertyKey);
-        }
-        return defaultValue;
+        return config.containsKey(propertyKey) ? config.get(propertyKey) : defaultValue;
     }
 
     public Integer getInt(String propertyKey, Integer defaultValue) {
