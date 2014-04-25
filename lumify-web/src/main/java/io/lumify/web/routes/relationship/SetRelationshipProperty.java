@@ -55,7 +55,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String propertyName = getRequiredParameter(request, "propertyName");
-        final String propertyKey = getRequiredParameter(request, "propertyKey");
+        String propertyKey = getOptionalParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
@@ -71,6 +71,10 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             sourceJson = new JSONObject(sourceInfo);
         } else {
             sourceJson = new JSONObject();
+        }
+
+        if (propertyKey == null) {
+            propertyKey = this.graph.getIdGenerator().nextId().toString();
         }
 
         User user = getUser(request);

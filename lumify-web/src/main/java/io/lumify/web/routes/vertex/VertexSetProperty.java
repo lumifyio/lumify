@@ -1,5 +1,7 @@
 package io.lumify.web.routes.vertex;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -16,13 +18,11 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +60,7 @@ public class VertexSetProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
-        final String propertyKey = getRequiredParameter(request, "propertyKey");
+        String propertyKey = getOptionalParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
@@ -74,6 +74,10 @@ public class VertexSetProperty extends BaseRequestHandler {
             sourceJson = new JSONObject(sourceInfo);
         } else {
             sourceJson = new JSONObject();
+        }
+
+        if (propertyKey == null) {
+            propertyKey = this.graph.getIdGenerator().nextId().toString();
         }
 
         Authorizations authorizations = getAuthorizations(request, user);
