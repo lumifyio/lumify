@@ -21,7 +21,7 @@ define([
     VertexService,
     OntologyService,
     VertexList,
-    formatters,
+    F,
     Filters,
     template,
     conceptItemTemplate,
@@ -55,7 +55,7 @@ define([
         this.onEntitySearchResultsForConcept = function(
             $searchResultsSummary,
             concept,
-            entities, 
+            entities,
             count,
             parentPropertyListElements
         ) {
@@ -136,8 +136,8 @@ define([
             return this.$node.find('.' + this.classSafeConceptId(conceptId) + ' .badge')
                 .removeClass('loading')
                 .data('count', count)
-                .attr('title', formatters.number.pretty(count))
-                .text(formatters.number.prettyApproximate(count));
+                .attr('title', F.number.pretty(count))
+                .text(F.number.prettyApproximate(count));
         };
 
         this.popoutIfNeeded = function() {
@@ -220,7 +220,7 @@ define([
 
                                         // Check for an existing result with the same id
                                         var resultFound = results[conceptType].some(function(result) {
-                                            return result.id === v.id; 
+                                            return result.id === v.id;
                                         });
 
                                         // Only store unique results
@@ -441,7 +441,7 @@ define([
 
         this.onInfiniteScrollRequest = function(evt, data) {
             var query = this.select('querySelector').val(),
-                trigger = this.trigger.bind(this, 
+                trigger = this.trigger.bind(this,
                    this.select('resultsSelector').find('.content'),
                    'addInfiniteVertices'
                 );
@@ -471,12 +471,12 @@ define([
         this.onFiltersChange = function(evt, data) {
             this.filters = data.propertyFilters;
             this.entityFilters = data.entityFilters;
-        
+
             var filterInfo = this.select('filtersInfoSelector'),
                 numberOfFilters = this.filters.length + _.keys(this.entityFilters).length,
                 query = this.select('querySelector').val();
 
-            filterInfo.find('.message').text(formatters.string.plural(numberOfFilters, 'filter') + ' applied');
+            filterInfo.find('.message').text(F.string.plural(numberOfFilters, 'filter') + ' applied');
             filterInfo.toggle(numberOfFilters > 0);
 
             if (!query && !this.entityFilters.relatedToVertexId) {
