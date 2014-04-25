@@ -192,13 +192,13 @@ define([
                     graphVertexId: vertex.id
                 },
                 artifactUrl = _.template('artifact/{ type }?' + $.param(params)),
-                glyphIconHref = F.vertex.prop('glyphIcon');
+                glyphIconHref = F.vertex.prop(vertex, 'glyphIcon');
 
             vertex.imageSrcIsFromConcept = false;
 
             if (glyphIconHref) {
-                var sep = glyphIconHref.value.indexOf('?') > 0 ? '&' : '?';
-                vertex.imageSrc = glyphIconHref.value + sep + $.param({workspaceId: currentWorkspace});
+                var sep = glyphIconHref.indexOf('?') > 0 ? '&' : '?';
+                vertex.imageSrc = glyphIconHref + sep + $.param({workspaceId: currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 
