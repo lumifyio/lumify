@@ -23,7 +23,7 @@ define([
     OntologyService,
     retina,
     Controls,
-    formatters,
+    F,
     withAsyncQueue,
     withContextMenu) {
     'use strict';
@@ -68,7 +68,7 @@ define([
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
                 var $this = $(this), command = $this.text();
-                $this.text(formatters.string.shortcut($this.text()));
+                $this.text(F.string.shortcut($this.text()));
             });
 
             this.on(document, 'mapShow', this.onMapShow);
@@ -250,19 +250,17 @@ define([
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
                 geoLocations = this.ontologyProperties.byDataType.geoLocation,
-                geoLocationProperty = geoLocations.length && geoLocations[0],
-                geoLocation = geoLocationProperty && vertex.properties[geoLocationProperty.title],
-                conceptType = vertex.properties['http://lumify.io#conceptType'].value,
-                heading = vertex.properties.heading && vertex.properties.heading.value,
+                geoLocationProperty = _.first(geoLocations),
+                geoLocation = geoLocationProperty && F.vertex.prop(vertex, geoLocationProperty.title),
+                conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
                 iconUrl =  '/map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
                 });
 
-            if (!geoLocation || !geoLocation.value.latitude || !geoLocation.value.longitude) return;
+            if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
 
-            if (heading) iconUrl += '&heading=' + heading;
             if (selected) iconUrl += '&selected';
 
             if (!feature) {
@@ -275,7 +273,7 @@ define([
 
             if (!feature) {
                 feature = new ol.Feature.Vector(
-                    point(geoLocation.value.latitude, geoLocation.value.longitude),
+                    point(geoLocation.latitude, geoLocation.longitude),
                     { vertex: vertex },
                     {
                         graphic: true,
@@ -293,8 +291,7 @@ define([
                 if (feature.style.externalGraphic !== iconUrl) {
                     feature.style.externalGraphic = iconUrl;
                 }
-                feature.move(latLon(geoLocation.value.latitude, geoLocation.value.longitude));
-                // TODO: update heading
+                feature.move(latLon(geoLocation.latitude, geoLocation.longitude));
             }
 
             return feature;
