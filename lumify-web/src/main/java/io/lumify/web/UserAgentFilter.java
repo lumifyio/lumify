@@ -38,6 +38,7 @@ public class UserAgentFilter implements Handler {
     public void handle(HttpServletRequest request, HttpServletResponse httpServletResponse, HandlerChain handlerChain) throws Exception {
         String message = isUnsupported(request.getHeader("User-Agent"));
         if (!message.equals("")) {
+            httpServletResponse.setContentType("text/plain");
             PrintWriter writer = httpServletResponse.getWriter();
             writer.println(message);
             writer.close();
@@ -58,9 +59,6 @@ public class UserAgentFilter implements Handler {
     }
 
     private String isUnsupported(ReadableUserAgent userAgent) {
-        LOGGER.debug("userAgent.getName() = %s", userAgent.getName());
-        LOGGER.debug("userAgent.getVersionNumber().getMajor() = %s", userAgent.getVersionNumber().getMajor());
-
         if (MINIMUM_VERSION_BROWSERS.containsKey(userAgent.getName())) {
             VersionNumber minimumVersion = MINIMUM_VERSION_BROWSERS.get(userAgent.getName());
             if (userAgent.getVersionNumber().compareTo(minimumVersion) < 0) {

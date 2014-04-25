@@ -101,14 +101,10 @@ module.exports = function(grunt) {
             jshintrc: true
         },
         development: {
-            files: {
-                src: ['js/**/*\.js']
-            }
+            src: ['js/**/*\.js']
         },
         ci: {
-            files: {
-                src: ['js/**/*\.js']
-            },
+            src: ['js/**/*\.js'],
             options: {
                 reporter: 'checkstyle',
                 reporterOutput: 'build/jshint-checkstyle.xml'
@@ -120,7 +116,7 @@ module.exports = function(grunt) {
         options: {
             config: '.jscs.json'
         },
-        development: { 
+        development: {
             src: [
                 'js/**/*.js',
                 '!js/**/three-plugins/*.js',
@@ -207,7 +203,7 @@ module.exports = function(grunt) {
     },
 
     mochaSelenium: {
-        options: { 
+        options: {
             screenshotAfterEach: true,
             screenshotDir: 'test/reports',
             reporter: 'spec', // doc for html
@@ -249,36 +245,36 @@ module.exports = function(grunt) {
 
   // Speed up jscs and jshint by only checking changed files
   // ensure we still ignore files though
-  var initialJscsSrc = grunt.config('jscs.development.src');
+  var initialJscsSrc = grunt.config('jscs.development.src'),
+      initialHintSrc = grunt.config('jshint.development.src');
   grunt.event.on('watch', function(action, filepath) {
-      grunt.config('jshint.development.src', filepath);
-      initialJscsSrc.forEach(function(path) {
-          if (path !== ('!' + filepath)) {
-              grunt.config('jscs.development.src', filepath);
-          }
-      })
+      var matchingHint = grunt.file.match(initialHintSrc, filepath),
+          matchingJscs = grunt.file.match(initialJscsSrc, filepath);
+
+      grunt.config('jshint.development.src', matchingHint);
+      grunt.config('jscs.development.src', matchingJscs);
   });
 
-  grunt.registerTask('deps', 'Install Webapp Dependencies', 
+  grunt.registerTask('deps', 'Install Webapp Dependencies',
      ['bower:install', 'bower:prune', 'exec']);
 
-  grunt.registerTask('test:functional:chrome', 'Run JavaScript Functional Tests in Chrome', 
+  grunt.registerTask('test:functional:chrome', 'Run JavaScript Functional Tests in Chrome',
      ['mochaSelenium:chrome']);
-  grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox', 
+  grunt.registerTask('test:functional:firefox', 'Run JavaScript Functional Tests in Firefox',
      ['mochaSelenium:firefox']);
-  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests', 
+  grunt.registerTask('test:functional', 'Run JavaScript Functional Tests',
      ['test:functional:chrome', 'test:functional:firefox']);
 
-  grunt.registerTask('test:unit', 'Run JavaScript Unit Tests', 
+  grunt.registerTask('test:unit', 'Run JavaScript Unit Tests',
      ['karma']);
-  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports', 
+  grunt.registerTask('test:style', 'Run JavaScript CodeStyle reports',
      ['jshint:ci', 'plato:ci', 'jscs:ci']);
-  grunt.registerTask('style:development', 'Run JavaScript CodeStyle reports', 
+  grunt.registerTask('style:development', 'Run JavaScript CodeStyle reports',
     ['jshint:development', 'jscs:development']);
 
-  grunt.registerTask('development', 'Build js/less for development', 
+  grunt.registerTask('development', 'Build js/less for development',
      ['less:development', 'requirejs:development']);
-  grunt.registerTask('production', 'Build js/less for production', 
+  grunt.registerTask('production', 'Build js/less for production',
      ['less:production', 'requirejs:production']);
 
   grunt.registerTask('default', ['development', 'style:development', 'watch']);
