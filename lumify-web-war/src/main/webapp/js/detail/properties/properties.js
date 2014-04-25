@@ -577,8 +577,6 @@ define([
                 isRelationshipType = name === 'relationshipType' && isEdge,
                 propertyView;
 
-            console.log(property)
-
             // TODO add vertex visibility
             if (ontologyProperty && ontologyProperty.userVisible) {
                 propertyView = {
