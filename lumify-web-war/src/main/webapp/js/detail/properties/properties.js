@@ -259,8 +259,7 @@ define([
                                     stringValue: stringValue,
                                     value: value || 'deleted',
                                     metadata: {}
-                                },
-                                popout: false
+                                }
                             })
                         ).addClass('audit-only-property').insertBefore(self.$node.find('table tbody .buttons-row'));
                     } else if (_.isUndefined(property)) {
@@ -511,8 +510,10 @@ define([
                     }
 
                     var props = $(propertiesTemplate({
-                        properties: filtered,
-                        popout: popoutEnabled
+                        properties: _.map(filtered, function(p) {
+                            p.popout = popoutEnabled;
+                            return p;
+                        })
                     }));
                     self.$node.html(props);
                     self.updateVisibility();
