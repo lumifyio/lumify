@@ -105,10 +105,6 @@
         </dependency>
         <dependency>
             <groupId>net.sf.uadetector</groupId>
-            <artifactId>uadetector-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.uadetector</groupId>
             <artifactId>uadetector-resources</artifactId>
         </dependency>
     </dependencies>
