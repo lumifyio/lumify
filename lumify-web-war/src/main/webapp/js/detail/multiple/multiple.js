@@ -8,7 +8,8 @@ define([
     'sf',
     'tpl!./multiple',
     'tpl!./histogram',
-    'util/vertex/list'
+    'util/vertex/list',
+    'util/formatters'
 ], function(
     defineComponent,
     registry,
@@ -19,7 +20,8 @@ define([
     sf,
     template,
     histogramTemplate,
-    VertexList) {
+    VertexList,
+    F) {
     'use strict';
 
     var NO_HISTOGRAM_DATATYPES = [
@@ -41,10 +43,7 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                vertices = this.attr.data.filter(function(v) {
-                    return !v.properties['http://lumify.io#conceptType'] ||
-                        v.properties['http://lumify.io#conceptType'] != 'relationship';
-                }),
+                vertices = _.reject(this.attr.data, F.vertex.isEdge),
                 ids = _.pluck(vertices, 'id');
 
             this.$node.html(template({
@@ -68,7 +67,7 @@ define([
                 VertexList.attachTo(self.select('vertexListSelector'), {
                     vertices: vertices
                 });
-                
+
                 self.select('histogramSelector').remove();
                 self.drawHistograms(vertices, concepts, properties);
             });
@@ -115,13 +114,12 @@ define([
             require([
                 'detail/' + moduleName + '/' + moduleName,
             ], function(Module) {
-                Module.attachTo(detailsContent, { 
+                Module.attachTo(detailsContent, {
                     data: first
                 });
                 self.$node.find('.vertices-list').show();
             });
         };
-        
 
         this.drawHistograms = function(vertices, concepts, properties) {
             var self = this,
@@ -144,9 +142,9 @@ define([
                         .on('mouseenter mouseleave', 'g', self.histogramHover.bind(self))
                         .on('click', 'g', self.histogramClick.bind(self)),
                     data = Object.keys(byProperty[name])
-                        .map(function(key) { 
-                            return { 
-                                key: key, 
+                        .map(function(key) {
+                            return {
+                                key: key,
                                 number: byProperty[name][key].length,
                                 vertexIds: _.pluck(byProperty[name][key], 'id')
                             };
@@ -155,12 +153,12 @@ define([
                     height = data.length * 30,
                     x = d3.scale.linear()
                         .domain([0, d3.sum(data, function(d) {
-                            return d.number; 
+                            return d.number;
                         })])
                         .range([0, 100]),
                     y = d3.scale.ordinal()
                         .domain(data.map(function(v) {
-                            return v.key; 
+                            return v.key;
                         }))
                         .rangeRoundBands([0, height], 0.1),
                     svg = d3.select(container[0]).append('svg')
@@ -171,26 +169,26 @@ define([
                         .enter()
                         .append('g')
                         .attr('data-info', function(d) {
-                            return JSON.stringify($.extend({ property: name }, d)); 
+                            return JSON.stringify($.extend({ property: name }, d));
                         });
 
                 svg.append('rect')
                     .attr('class', 'bar')
                     .attr('x', 0)
-                    .attr('y', function(d, i) { 
-                        return y(d.key); 
+                    .attr('y', function(d, i) {
+                        return y(d.key);
                     })
                     .attr('width', function(d) {
-                        return x(d.number) + '%'; 
+                        return x(d.number) + '%';
                     })
                     .attr('height', function(d) {
-                        return y.rangeBand(); 
+                        return y.rangeBand();
                     });
 
                 svg.append('text')
                     .attr('class', 'text')
-                    .text(function(d) { 
-                        return fn.getPropertyValueDisplay(name, d.key); 
+                    .text(function(d) {
+                        return fn.getPropertyValueDisplay(name, d.key);
                     })
                     .each(function() {
                         var height = this.getBBox().height;
@@ -198,7 +196,7 @@ define([
                     })
                 .attr('x', 0)
                     .attr('y', function(d, i) {
-                        return y(d.key); 
+                        return y(d.key);
                     })
                     .attr('dx','10px')
                     .attr('fill', '#fff')
@@ -211,10 +209,10 @@ define([
                         return x(d.number) + '%';
                     })
                     .attr('y', function(d, i) {
-                        return y(d.key); 
+                        return y(d.key);
                     })
                     .text(function(d) {
-                        return d.number; 
+                        return d.number;
                     })
                     .each(function() {
                         var height = this.getBBox().height;
@@ -240,7 +238,7 @@ define([
                     if (propertyName === 'http://lumify.io#title') {
                         return false;
                     }
-                    return !!(ontology && ontology.userVisible); 
+                    return !!(ontology && ontology.userVisible);
                 }
             }
 
@@ -268,11 +266,10 @@ define([
                 if (propertyName == 'http://lumify.io#conceptType' && concepts.byId[propertyValue]) {
                     propertyValueDisplay = concepts.byId[propertyValue].displayName;
                 } else if (properties.byTitle[propertyName]) {
-                    switch (properties.byTitle[propertyName].dataType) {
-                        case 'date':
-                            propertyValueDisplay = sf('{0:yyyy/MM/dd}', new Date(parseInt(propertyValue)));
-                            break;
-                    }
+                    propertyValueDisplay = F.vertex.displayProp({
+                        name: propertyName,
+                        value: propertyValue
+                    });
                 }
                 if (propertyValueDisplay === '') return '[ blank ]';
                 return propertyValueDisplay;
@@ -281,11 +278,11 @@ define([
             function calculateByProperty(vertices) {
                 var byProperty = {};
                 vertices.forEach(function(v) {
-                    Object.keys(v.properties).forEach(function(propertyName) {
-                        if (!byProperty[propertyName]) {
-                            byProperty[propertyName] = {};
+                    v.properties.forEach(function(property) {
+                        if (!byProperty[property.name]) {
+                            byProperty[property.name] = {};
                         }
-                        appendBin(byProperty[propertyName], v.properties[propertyName].value, v);
+                        appendBin(byProperty[property.name], property.value, v);
                     });
                 });
                 return byProperty;

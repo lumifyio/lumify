@@ -37,10 +37,9 @@ define([
                 return resolvedName;
             },
 
-            displayProp: function(property, name) {
-                var autoExpandedName = V.propName(name),
-                    value = V.prop(property, autoExpandedName),
-                    ontologyProperty = properties && properties.byTitle[autoExpandedName];
+            displayProp: function(property) {
+                var value = V.prop(property, property.name),
+                    ontologyProperty = properties && properties.byTitle[property.name];
 
                 if (!ontologyProperty) {
                     return value;

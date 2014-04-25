@@ -570,7 +570,7 @@ define([
         }).forEach(function(property) {
             var value = property.value,
                 name = property.name,
-                stringValue = F.vertex.displayProp(property, name),
+                stringValue = F.vertex.displayProp(property),
                 ontologyProperty = ontologyProperties.byTitle[name],
                 displayName = ontologyProperty && ontologyProperty.displayName,
                 displayType = ontologyProperty && ontologyProperty.dataType,
