@@ -81,10 +81,13 @@ define([
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
-                    property: {
-                        displayName: this.attr.property.displayName,
-                        title: this.attr.property.key
-                    }
+                    property: _.chain(this.attr.property)
+                        .pick('displayName key value visibility'.split(' '))
+                        .tap(function(p) {
+                            p.title = p.key;
+                            delete p.key;
+                        })
+                        .value()
                 });
             } else {
                 (F.vertex.isEdge(vertex) ?
@@ -149,7 +152,13 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = _.first(F.vertex.props(this.attr.data, propertyName)),
+            var vertexProperty = _.find(F.vertex.props(this.attr.data, propertyName), function(p) {
+                    if (_.isUndefined(data.property.value)) {
+                        return true;
+                    }
+                    return _.isEqual(data.property.value, p.value) &&
+                        _.isEqual(data.property.visibility, p['http://lumify.io#visibilityJson']);
+                }),
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
