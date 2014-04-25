@@ -1,23 +1,21 @@
 package io.lumify.web;
 
-import io.lumify.core.config.Configuration;
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
-import org.securegraph.Authorizations;
 import com.google.common.base.Preconditions;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.Roles;
+import io.lumify.core.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Represents the base behavior that a {@link Handler} must support
@@ -186,12 +184,20 @@ public abstract class BaseRequestHandler implements Handler {
         return getUserRepository().getAuthorizations(user);
     }
 
+    protected Set<Roles> getRoles(User user) {
+        return getUserRepository().getRoles(user);
+    }
+
     protected void respondWithNotFound(final HttpServletResponse response) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     protected void respondWithNotFound(final HttpServletResponse response, String message) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
+    }
+
+    protected void respondWithAccessDenied(final HttpServletResponse response, String message) throws IOException {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, message);
     }
 
     /**

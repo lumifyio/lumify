@@ -22,6 +22,7 @@ public class UserAgentFilter implements Handler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UserAgentFilter.class);
 
     private static final Map<String, VersionNumber> MINIMUM_VERSION_BROWSERS = new HashMap<String, VersionNumber>();
+
     static {
         MINIMUM_VERSION_BROWSERS.put("IE", new VersionNumber("10"));
         MINIMUM_VERSION_BROWSERS.put("Firefox", new VersionNumber("17"));

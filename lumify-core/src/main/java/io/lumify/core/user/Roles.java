@@ -1,5 +1,6 @@
 package io.lumify.core.user;
 
+import com.google.common.base.Joiner;
 import org.json.JSONArray;
 
 import java.util.*;
@@ -70,5 +71,18 @@ public enum Roles {
             }
         }
         return Roles.valueOf(rolesStringPart);
+    }
+
+    public static String toString(Set<Roles> requiredRoles) {
+        return Joiner.on(",").join(requiredRoles);
+    }
+
+    public static boolean hasAll(Set<Roles> userRoles, Set<Roles> requiredRoles) {
+        for (Roles role : requiredRoles) {
+            if (!userRoles.contains(role)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
