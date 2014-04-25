@@ -541,26 +541,29 @@ define([
     }
 
     function filterPropertiesForDisplay(properties, ontologyProperties) {
-        var displayProperties = [];
-        //if (!('http://lumify.io#visibilityJson' in properties)) {
-            //properties = $.extend({}, properties);
-            /*
-            properties['http://lumify.io#visibilityJson'] = [{
-                value: {
-                    source: ''
-                }
+        var visibilityJsonKey = 'http://lumify.io#visibilityJson',
+            visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonKey, {source: ''}),
+            visibilityOntology = ontologyProperties.byTitle['http://lumify.io#visibility'],
+            displayProperties = [{
+                isVisibility: true,
+                key: visibilityJsonKey,
+                value: visibilityValue,
+                cls: F.className.to(visibilityJsonKey),
+                displayName: (visibilityOntology && visibilityOntology.displayName) ||
+                    'Visibility',
+                visibilityJson: JSON.stringify(visibilityValue),
+                metadata: _.pick(
+                    _.findWhere(properties, {name: visibilityJsonKey}) || {},
+                    '_justificationMetadata',
+                    '_sourceMetadata',
+                    'http://lumify.io#modifiedBy',
+                    'http://lumify.io#modifiedDate',
+                    'sandboxStatus'
+                )
             }];
-            */
-        //}
+        displayProperties[0].json = JSON.stringify(displayProperties[0]);
 
-        properties.sort(function(a,b) {
-            if (a.name === 'http://lumify.io#visibilityJson') return -1;
-            if (b.name === 'http://lumify.io#visibilityJson') return 1;
-
-            return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-        });
-
-        properties.forEach(function(property) {
+        _.sortBy(properties, 'name').forEach(function(property) {
             var value = property.value,
                 name = property.name,
                 stringValue = F.vertex.displayProp(property, name),

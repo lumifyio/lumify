@@ -4,13 +4,18 @@
 
   <td class="property-value" colspan="2">
 
-    {{#if geoLocation}}
-      {{> detail/properties/types/geoLocation }}
+    {{#if isVisibility}}
+        {{> detail/properties/types/visibility }}
+        <button data-property="{{json}}" class="info"></button>
     {{else}}
-      {{stringValue}}
+      {{#if geoLocation}}
+        {{> detail/properties/types/geoLocation }}
+      {{else}}
+        {{stringValue}}
+      {{/if}}
+      <button data-property="{{json}}" class="info"></button>
+      <span class="visibility" data-visibility="{{visibilityJson}}"></span>
     {{/if}}
 
-    <button data-property="{{json}}" class="info"></button>
-    <span class="visibility" data-visibility="{{visibilityJson}}"></span>
   </td>
 </tr>
