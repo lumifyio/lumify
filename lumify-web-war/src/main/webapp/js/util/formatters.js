@@ -79,8 +79,6 @@ define([
 
     var FORMATTERS = {
 
-        vertex: vertexFormatters,
-
         number: {
             pretty: function(number) {
                 return sf('{0:#,###,###,###}', number);
@@ -279,7 +277,9 @@ define([
                 return time + ' ago';
             }
         }
-    }
+    };
+
+    FORMATTERS.vertex = vertexFormatters(FORMATTERS);
 
     return FORMATTERS;
 });

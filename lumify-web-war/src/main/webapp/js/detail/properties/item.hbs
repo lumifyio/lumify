@@ -3,7 +3,12 @@
   <td class="property-name"><strong>{{displayName}}</strong></td>
 
   <td class="property-value" colspan="2">
-    {{stringValue}}
+
+    {{#if geoLocation}}
+      {{> detail/properties/types/geoLocation }}
+    {{else}}
+      {{stringValue}}
+    {{/if}}
 
     <button data-property="{{json}}" class="info"></button>
     <span class="visibility" data-visibility="{{visibilityJson}}"></span>

@@ -562,8 +562,8 @@ define([
 
         properties.forEach(function(property) {
             var value = property.value,
-                stringValue = value,
                 name = property.name,
+                stringValue = F.vertex.displayProp(property, name),
                 ontologyProperty = ontologyProperties.byTitle[name],
                 displayName = ontologyProperty && ontologyProperty.displayName,
                 displayType = ontologyProperty && ontologyProperty.dataType,
@@ -592,11 +592,12 @@ define([
                         'sandboxStatus'
                     )
                 }
+                propertyView[displayType] = true;
                 propertyView.json = JSON.stringify(propertyView);
                 displayProperties.push(propertyView);
             }
         });
-        console.log(displayProperties)
+
         return displayProperties;
     }
 });
