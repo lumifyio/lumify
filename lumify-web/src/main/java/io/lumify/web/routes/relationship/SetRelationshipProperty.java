@@ -117,7 +117,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
 
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
         this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);

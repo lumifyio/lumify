@@ -51,7 +51,7 @@ public class VertexDeleteProperty extends BaseRequestHandler {
         String workspaceId = getActiveWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        List<Property> properties = toList(graphVertex.getProperties(propertyKey, propertyName));
+        List<Property> properties = toList(graphVertex.getProperties(propertyKey));
 
         if (properties.size() == 0) {
             LOGGER.warn("Could not find property: %s", propertyName);

@@ -145,7 +145,7 @@ public class WorkspaceHelper {
     }
 
     public JSONObject deleteProperty(Vertex vertex, Property property, String workspaceId, User user) {
-        auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
+        auditRepository.auditEntityProperty(AuditAction.DELETE, vertex.getId(), property.getKey(), property.getName(), property.getValue(), null, "", "", property.getMetadata(), user, property.getVisibility());
 
         vertex.removeProperty(property.getKey(), property.getName());
 

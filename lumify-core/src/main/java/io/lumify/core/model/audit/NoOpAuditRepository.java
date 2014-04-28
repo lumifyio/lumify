@@ -38,17 +38,13 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility) {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
     public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
         throw new RuntimeException("not supported");
     }
 
     @Override
-    public Audit auditEntityProperty(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue, String process, String comment, Map<String, Object> metadata, User user, Visibility visibility) {
+    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue,
+                                     Object newValue, String process, String comment, Map<String, Object> metadata, User user, Visibility visibility) {
         throw new RuntimeException("not supported");
     }
 
@@ -58,7 +54,8 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
-    public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyName, Object oldValue, Object newValue, Edge edge, String process, String comment, User user, Visibility visibility) {
+    public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyKey,
+                                                 String propertyName, Object oldValue, Object newValue, Edge edge, String process, String comment, User user, Visibility visibility) {
         throw new RuntimeException("not supported");
     }
 

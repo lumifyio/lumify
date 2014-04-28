@@ -12,6 +12,7 @@ public class AuditProperty extends ColumnFamily {
     public static final String NEW_VALUE = "newValue";
     public static final String PROPERTY_NAME = "propertyName";
     public static final String PROPERTY_METADATA = "propertyMetadata";
+    public static final String PROPERTY_KEY = "propertyKey";
 
     public AuditProperty() {
         super(NAME);
@@ -32,6 +33,13 @@ public class AuditProperty extends ColumnFamily {
 
     public AuditProperty setNewValue(Object newValue, Visibility visibility) {
         set(NEW_VALUE, newValue, visibility.getVisibilityString());
+        return this;
+    }
+
+    public String getPropertyKey () { return Value.toString(get(PROPERTY_KEY)); }
+
+    public AuditProperty setPropertyKey (Object propertyKey, Visibility visibility) {
+        set (PROPERTY_KEY, propertyKey, visibility.getVisibilityString());
         return this;
     }
 
@@ -57,9 +65,10 @@ public class AuditProperty extends ColumnFamily {
     public JSONObject toJson() {
         try {
             JSONObject json = new JSONObject();
+            json.put(PROPERTY_KEY, this.getPropertyKey());
+            json.put(PROPERTY_NAME, this.getPropertyName());
             json.put(PREVIOUS_VALUE, this.getPreviousValue());
             json.put(NEW_VALUE, this.getNewValue());
-            json.put(PROPERTY_NAME, this.getPropertyName());
             if (this.getPropertyMetadata() != null) {
                 json.put(PROPERTY_METADATA, this.getPropertyMetadata());
             }
