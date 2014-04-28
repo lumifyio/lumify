@@ -3,6 +3,8 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    clean: ['jsc', 'css'],
+
     bower: {
       install: {
           options: {
@@ -233,6 +235,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
@@ -277,5 +280,5 @@ module.exports = function(grunt) {
   grunt.registerTask('production', 'Build js/less for production',
      ['less:production', 'requirejs:production']);
 
-  grunt.registerTask('default', ['development', 'style:development', 'watch']);
+  grunt.registerTask('default', ['clean', 'development', 'style:development', 'watch']);
 };
