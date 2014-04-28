@@ -1,16 +1,16 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.util.ConvertingIterable;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -101,7 +101,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(rawImg);
-        ((InMemoryConcept)entityConcept).setGlyphIconInputStream(inputStream);
+        ((InMemoryConcept) entityConcept).setGlyphIconInputStream(inputStream);
     }
 
     @Override
@@ -138,14 +138,14 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible) {
+    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
 
-    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
+    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
@@ -153,6 +153,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setUserVisible(userVisible);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
+            }
+            if (possibleValues.size() > 0) {
+                property.setPossibleValues (possibleValues);
             }
             propertiesCache.put(propertyName, property);
         }
