@@ -225,7 +225,7 @@ define([
                                     vertexConcept = concepts.byId[conceptType];
 
                                 if (!conceptType) {
-                                    log.error('Found vertex without a conceptType: ', v);
+                                    console.error('Found vertex without a conceptType: ', v);
                                 }
 
                                 while (vertexConcept) {
