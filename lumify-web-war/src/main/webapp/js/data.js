@@ -368,10 +368,10 @@ define([
 
                     return {
                         vertexId: vertex.id,
-                        graphPosition: {
+                        graphPosition: vertex.workspace.graphPosition ? {
                             x: Math.floor(vertex.workspace.graphPosition.x),
                             y: Math.floor(vertex.workspace.graphPosition.y)
-                        }
+                        } : undefined
                     };
                 },
                 uniqueVertices = function(v) {
