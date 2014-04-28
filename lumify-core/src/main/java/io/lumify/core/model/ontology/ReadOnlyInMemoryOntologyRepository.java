@@ -26,9 +26,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
     private Cache<String, InMemoryConcept> conceptsCache = CacheBuilder.newBuilder()
             .build();
-    private Cache<String, InMememoryOntologyProperty> propertiesCache = CacheBuilder.newBuilder()
+    private Cache<String, InMemoryOntologyProperty> propertiesCache = CacheBuilder.newBuilder()
             .build();
-    private Cache<String, InMememoryRelationship> relationshipsCache = CacheBuilder.newBuilder()
+    private Cache<String, InMemoryRelationship> relationshipsCache = CacheBuilder.newBuilder()
             .build();
     private Cache<String, byte[]> fileCache = CacheBuilder.newBuilder()
             .build();
@@ -139,15 +139,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible) {
         checkNotNull(concept, "concept was null");
-        InMememoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
 
-    private InMememoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
-        InMememoryOntologyProperty property = (InMememoryOntologyProperty) getProperty(propertyName);
+    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
+        InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
-            property = new InMememoryOntologyProperty();
+            property = new InMemoryOntologyProperty();
             property.setDataType(dataType);
             property.setUserVisible(userVisible);
             if (displayName != null && !displayName.trim().isEmpty()) {
@@ -164,9 +164,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Iterable<Relationship> getRelationshipLabels() {
-        return new ConvertingIterable<InMememoryRelationship, Relationship>(relationshipsCache.asMap().values()) {
+        return new ConvertingIterable<InMemoryRelationship, Relationship>(relationshipsCache.asMap().values()) {
             @Override
-            protected Relationship convert(InMememoryRelationship InMemRelationship) {
+            protected Relationship convert(InMemoryRelationship InMemRelationship) {
                 return InMemRelationship;
             }
         };
@@ -174,9 +174,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Iterable<OntologyProperty> getProperties() {
-        return new ConvertingIterable<InMememoryOntologyProperty, OntologyProperty>(propertiesCache.asMap().values()) {
+        return new ConvertingIterable<InMemoryOntologyProperty, OntologyProperty>(propertiesCache.asMap().values()) {
             @Override
-            protected OntologyProperty convert(InMememoryOntologyProperty ontologyProperty) {
+            protected OntologyProperty convert(InMemoryOntologyProperty ontologyProperty) {
                 return ontologyProperty;
             }
         };
@@ -289,7 +289,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         if (concept != null) {
             return concept;
         }
-        InMememoryOntologyProperty inMememoryOntologyProperty = new InMememoryOntologyProperty();
+        InMemoryOntologyProperty inMememoryOntologyProperty = new InMemoryOntologyProperty();
         inMememoryOntologyProperty.setDisplayName(displayName);
         Collection<OntologyProperty> ontologyProperties = new ArrayList<OntologyProperty>();
         ontologyProperties.add(inMememoryOntologyProperty);
@@ -313,7 +313,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        InMememoryRelationship inMemRelationship = new InMememoryRelationship(relationshipIRI, displayName, ((InMemoryConcept) from).getConceptIRI(), ((InMemoryConcept) to).getConceptIRI());
+        InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, ((InMemoryConcept) from).getConceptIRI(), ((InMemoryConcept) to).getConceptIRI());
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
     }

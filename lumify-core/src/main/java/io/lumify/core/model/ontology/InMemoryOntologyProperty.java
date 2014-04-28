@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-public class InMememoryOntologyProperty extends OntologyProperty {
+public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;
     private boolean userVisible;
     private String displayName;
