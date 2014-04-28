@@ -184,7 +184,7 @@ define([
 
                                 var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
                                 if (ontologyProperty && ontologyProperty.userVisible) {
-                                    diff.id = vertexId + diff.name;
+                                    diff.id = vertexId + diff.name + diff.key;
                                     addDiffDependency(diff.elementId, diff);
 
                                     if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
