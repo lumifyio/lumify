@@ -1,10 +1,9 @@
 
 define([], function() {
 
-        
     var // keypaths to vertices objects in ajax responses
         VERTICES_RESPONSE_KEYPATHS = ['vertices', 'data.vertices'],
-        
+
         IGNORE_NO_CONVERTER_FOUND_REGEXS = [
             /^audit/,
             /^artifact\/import/,
@@ -29,7 +28,7 @@ define([], function() {
             function vertexProperties(json, updated) {
                 if (!json.sourceVertexId &&
                     _.isString(json.id) &&
-                    _.isObject(json.properties) && 
+                    _.isObject(json.properties) &&
                     _.keys(json.properties).length) {
                     updated.push(
                         this.updateCacheWithVertex(json, { returnNullIfNotChanged: true })
@@ -45,8 +44,8 @@ define([], function() {
                     json.relationships.forEach(function(relationship) {
                         if (relationship.vertex) {
                             updated.push(
-                                self.updateCacheWithVertex(relationship.vertex, { 
-                                    returnNullIfNotChanged: true 
+                                self.updateCacheWithVertex(relationship.vertex, {
+                                    returnNullIfNotChanged: true
                                 })
                             );
                         }
@@ -167,7 +166,7 @@ define([], function() {
                         updated = _.compact(updated);
                         if (updated.length) {
                             _.defer(function() {
-                                self.trigger('verticesUpdated', { 
+                                self.trigger('verticesUpdated', {
                                     vertices: updated
                                 });
                             });

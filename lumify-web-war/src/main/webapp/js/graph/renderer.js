@@ -36,7 +36,6 @@ define([
 		return shape;
 	};
 
-	
     /**
      * Scale image to the size of the node
      */
@@ -49,7 +48,7 @@ define([
             nodeHeight = this.getNodeHeight(node),
             ratioImage = img.width / img.height,
             ratioNode = nodeWidth / nodeHeight,
-            fitW, 
+            fitW,
             fitH;
 
         // Fit inside node preserving aspect ratio of original image
@@ -79,7 +78,7 @@ define([
             context.clip();
         }
 
-		context.drawImage(img, 
+		context.drawImage(img,
 				nodeX - fitW / 2,
 				nodeY - fitH / 2,
 				fitW,

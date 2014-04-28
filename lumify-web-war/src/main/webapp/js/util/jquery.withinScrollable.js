@@ -9,7 +9,7 @@
 define(['jquery'], function() {
 
     'use strict';
-  
+
     $.fn.withinScrollable = function(scrollable) {
         var elems = [],
             width = scrollable.outerWidth(true),
@@ -28,5 +28,5 @@ define(['jquery'], function() {
     function withinScrollable(element, top, left, width, height) {
         return (element.offsetTop + element.offsetHeight) >= top && element.offsetTop <= top + height;
     }
-  
+
 });

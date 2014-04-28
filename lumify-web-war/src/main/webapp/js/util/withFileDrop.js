@@ -13,13 +13,13 @@ define([], function() {
             }
 
             this.node.ondragover = function() {
-                $(this).addClass('file-hover'); return false; 
+                $(this).addClass('file-hover'); return false;
             };
             this.node.ondragenter = function() {
-                $(this).addClass('file-hover'); return false; 
+                $(this).addClass('file-hover'); return false;
             };
             this.node.ondragleave = function() {
-                $(this).removeClass('file-hover'); return false; 
+                $(this).removeClass('file-hover'); return false;
             };
             this.node.ondrop = function(e) {
                 if (e.dataTransfer && e.dataTransfer.files) {

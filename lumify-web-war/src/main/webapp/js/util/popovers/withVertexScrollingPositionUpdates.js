@@ -34,7 +34,7 @@ define([], function() {
                         }
                     })
                 };
-            
+
             this.positionChangeScroller = scroller;
             this.sendPositionChange = sendPositionChange;
 

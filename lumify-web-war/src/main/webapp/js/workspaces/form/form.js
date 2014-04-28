@@ -337,7 +337,7 @@ define([
                                     return regex.test(user.userName);
                                 }),
                                 names = _.pluck(search, 'userName');
-                                
+
                             self.currentUsers = users;
                             callback(names);
                         });

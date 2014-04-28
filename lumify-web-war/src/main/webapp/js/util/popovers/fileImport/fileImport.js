@@ -43,11 +43,11 @@ define([
                 size: formatters.bytes.pretty(
                     _.chain(config.files)
                         .map(_.property('size'))
-                        .reduce(function(memo, num) { 
-                            return memo + num; 
+                        .reduce(function(memo, num) {
+                            return memo + num;
                         }, 0)
                         .value()
-                ), 
+                ),
                 index: 'collapsed'
             }];
             config.multipleFiles = config.files.length > 1;

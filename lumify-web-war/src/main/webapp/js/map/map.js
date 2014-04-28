@@ -118,8 +118,8 @@ define([
                 this.on('pan', function(e, data) {
                     e.stopPropagation();
                     map.pan(
-                        data.pan.x * -1, 
-                        data.pan.y * -1, 
+                        data.pan.x * -1,
+                        data.pan.y * -1,
                         { animate: false }
                     );
                 });
@@ -132,10 +132,10 @@ define([
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
                 this.on('zoomIn', function() {
-                    slowZoomIn(); 
+                    slowZoomIn();
                 });
                 this.on('zoomOut', function() {
-                    slowZoomOut(); 
+                    slowZoomOut();
                 });
             });
         };
@@ -183,7 +183,7 @@ define([
             this.updateOrAddVertices(data.vertices);
         };
 
-        this.onVerticesDeleted = function(evt, data) { 
+        this.onVerticesDeleted = function(evt, data) {
             this.mapReady(function(map) {
                 var featuresLayer = map.featuresLayer,
                     toRemove = [],
@@ -239,7 +239,7 @@ define([
 
                 var sf = this.clusterStrategy.selectedFeatures = {};
                 selectedIds.forEach(function(sId) {
-                    sf[sId] = true; 
+                    sf[sId] = true;
                 });
 
                 featuresLayer.redraw();
@@ -346,7 +346,7 @@ define([
                     viewportHeight = this.$node.height() - padding.t - padding.b,
 
                     // Figure out ideal resolution based on available realestate
-                    idealResolution = Math.max( 
+                    idealResolution = Math.max(
                         dataExtent.getWidth()  / viewportWidth,
                         dataExtent.getHeight() / viewportHeight
                     ),
@@ -361,7 +361,7 @@ define([
                     offsetY = padding.t - padding.b,
                     lon = offsetX * actualResolution / 2,
                     lat = offsetY * actualResolution / 2;
-                  
+
                 // If there is only one feature don't zoom in so close
                 if (map.featuresLayer.features.length === 1) {
                     zoom = Math.min(5, zoom);
@@ -396,7 +396,6 @@ define([
 
         this.handleContextMenu = function(event) {
             event.originalEvent = event.originalEvent || event;
-            
 
             this.mapReady(function(map) {
                 var feature = map.featuresLayer.getFeatureFromEvent(event);
@@ -515,7 +514,7 @@ define([
                     map.addLayer(layer);
 
                     var modify = new ol.Control.ModifyFeature(layer);
-                    modify.mode = ol.Control.ModifyFeature.RESIZE | 
+                    modify.mode = ol.Control.ModifyFeature.RESIZE |
                                   ol.Control.ModifyFeature.DRAG;
                     map.addControl(modify);
                     modify.activate();
@@ -588,7 +587,7 @@ define([
                         enableKinetic: true
                     }
                 }),
-                map = new ol.Map({ 
+                map = new ol.Map({
                     zoomDuration: 0,
                     numZoomLevels: 18,
                     theme: null,
@@ -599,7 +598,7 @@ define([
                     numZoomLevels: 20,
                     wrapDateLine: false
                 }),
-                cluster = new ClusterStrategy({ 
+                cluster = new ClusterStrategy({
                     distance: 45,
                     threshold: 2,
                     animationMethod: ol.Easing.Expo.easeOut,
@@ -656,7 +655,7 @@ define([
             map.featuresLayer.events.on({
                 featureselected: function(featureEvents) {
                     var vertices = _.map(featureEvents.feature.cluster || [featureEvents.feature], function(feature) {
-                            return feature.data.vertex; 
+                            return feature.data.vertex;
                         });
                     self.trigger('selectObjects', {vertices: vertices});
                 }
@@ -683,7 +682,7 @@ define([
 
             // Prevent map shake on initialize while catching up with vertexAdd
             // events
-           
+
             this.ontologyService.properties()
                 .done(function(p) {
                     self.ontologyProperties = p;

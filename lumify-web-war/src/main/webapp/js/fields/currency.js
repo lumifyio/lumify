@@ -7,7 +7,7 @@ define([
     'use strict';
 
     return defineComponent(CurrencyField, withPropertyField);
-       
+
     function makeNumber(v) {
         return parseFloat(v.replace(/[$,]/g, ''), 10);
     }
@@ -26,7 +26,7 @@ define([
 
                     this.filterUpdated(
                         this.getValues().map(function(v) {
-                            return makeNumber(v); 
+                            return makeNumber(v);
                         }),
                         this.select('predicateSelector').val()
                     );

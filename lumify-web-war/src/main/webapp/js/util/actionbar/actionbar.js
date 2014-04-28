@@ -46,7 +46,7 @@ define([
             });
 
             tooltip.tooltip('show');
-                    
+
             this.$tip = tooltip.data('tooltip').$tip
                 .addClass('actionbar')
                 .on('click', '.actionbarbutton', this.onActionClick.bind(this));
@@ -66,7 +66,7 @@ define([
         this.onActionClick = function(event) {
             var self = this,
                 $target = $(event.target).blur();
-                
+
             this.$tip.hide();
 
             _.defer(function() {
@@ -131,7 +131,7 @@ define([
 
             this.$tip.css({
                 left: (alignment === 'center' && rects.length === 1) ?
-                    box.left + box.width / 2 - this.$tip.width() / 2 : 
+                    box.left + box.width / 2 - this.$tip.width() / 2 :
                     box.left + box.width - this.$tip.width() / 2,
                 top: box.top + box.height,
                 opacity: box.top < TOP_HIDE_THRESHOLD ? '0' : '1'

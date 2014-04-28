@@ -169,7 +169,7 @@ define([
                                             STATES: STATES,
                                             state: state,
                                             concept: concept,
-                                            colorjs: colorjs 
+                                            colorjs: colorjs
                                         });
                                     };
 
@@ -177,7 +177,7 @@ define([
                                     return;
                                 }
 
-                                // Dim 
+                                // Dim
                                 // (when dropdown is opened and it wasn't this entity)
                                 stylesheet.addRule(
                                     '.highlight-' + style.selector + ' .dropdown .' + className + ',' +
@@ -185,7 +185,7 @@ define([
                                     '.highlight-' + style.selector + ' .drag-focus .' + className,
                                     definition(STATES.DIM)
                                 );
-                                
+
                                 stylesheet.addRule(
                                    '.highlight-' + style.selector + ' .' + className,
                                    definition(STATES.TERM)
@@ -255,7 +255,7 @@ define([
                  $(selection.focusNode).parents('.underneath').length) {
                 return;
             }
-            
+
             if ($(selection.anchorNode).closest('.text').length === 0) return;
 
             // Ignore if mouse cursor still down
@@ -279,7 +279,7 @@ define([
                 var anchor = $(sel.anchorNode),
                     focus = $(sel.focusNode),
                     is = '.detail-pane .text';
-                
+
                 // Ignore outside content text
                 if (anchor.parents(is).length === 0 || focus.parents(is).length === 0) {
                     return;
@@ -302,12 +302,12 @@ define([
                 }
 
                 var self = this,
-                    selection = sel && { 
+                    selection = sel && {
                         anchor: sel.anchorNode,
                         focus: sel.focusNode,
                         anchorOffset: sel.anchorOffset,
                         focusOffset: sel.focusOffset,
-                        range: sel.rangeCount && sel.getRangeAt(0).cloneRange() 
+                        range: sel.rangeCount && sel.getRangeAt(0).cloneRange()
                     };
 
                 // Don't show action bar if dropdown opened
@@ -382,7 +382,7 @@ define([
             if ($target.is('.underneath') || $target.parents('.underneath').length) {
                 return;
             }
-            
+
             require(['util/actionbar/actionbar'], function(ActionBar) {
                 ActionBar.teardownAll();
                 self.off('.actionbar');
@@ -400,9 +400,9 @@ define([
                     self.on('open.actionbar', function() {
 
                             self.trigger('selectObjects', {
-                                vertices: [ 
-                                    { 
-                                        id: $target.data('info').graphVertexId 
+                                vertices: [
+                                    {
+                                        id: $target.data('info').graphVertexId
                                     }
                                 ]
                             });

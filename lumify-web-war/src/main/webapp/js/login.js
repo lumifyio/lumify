@@ -51,7 +51,7 @@ define([
             var invalid = this.select('usernameSelector').val().length === 0 ||
                           this.select('passwordSelector').val().length === 0,
                 button = this.select('loginButtonSelector')
-                
+
             if (button.hasClass('loading')) return;
 
             button.attr('disabled', invalid);
@@ -67,7 +67,7 @@ define([
                 password = self.select('passwordSelector');
 
             new UserService().login(user.val(), password.val())
-                
+
                 .done(function() {
                     if ((/^#?v=/).test(location.hash)) {
                         window.location.reload();
@@ -88,7 +88,7 @@ define([
                     button.removeClass('loading').attr('disabled', false);
 
                     switch (err.status) {
-                        case 403: 
+                        case 403:
                             error.text('Invalid Username or Password');
                             password.focus().get(0).select();
                             break;

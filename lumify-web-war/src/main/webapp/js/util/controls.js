@@ -80,7 +80,7 @@ define([
             if (isNaN(pan.x) || isNaN(pan.y)){
                 return;
             }
-						
+
             var self = this;
             this.panInterval = setInterval(function() {
                 self.trigger('pan', { pan: pan });

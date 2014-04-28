@@ -163,7 +163,7 @@ define([
 
             this.on('mousemove', {
                 scrubbingLineSelector: function(e) {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                 }
             });
             this.$node

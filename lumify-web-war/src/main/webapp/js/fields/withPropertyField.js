@@ -43,10 +43,10 @@ define(['util/withTeardown'], function(withTeardown) {
             if (!_.isFunction(this.isValid) || this.isValid()) {
 
                 if (
-                    (!this._previousValues || 
+                    (!this._previousValues ||
                         (this._previousValues && !_.isEqual(this._previousValues, values))) ||
 
-                    (!this._previousPredicate || 
+                    (!this._previousPredicate ||
                          (this._previousPredicate && !_.isEqual(this._previousPredicate, predicate)))
                 ) {
 

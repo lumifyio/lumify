@@ -72,8 +72,8 @@ define([
                         verticesNotSourceDest = vertices.filter(function(v) {
                             return v.id !== src && v.id !== dest;
                         }),
-                        notInWorkspace = vertices.filter(function(v) { 
-                            return !appData.workspaceVertices[v.id]; 
+                        notInWorkspace = vertices.filter(function(v) {
+                            return !appData.workspaceVertices[v.id];
                         }),
                         pathsFoundText = formatters.string.plural(paths.length, 'path') + ' found';
 
@@ -145,7 +145,7 @@ define([
             var vertices = this.verticesToAdd;
 
             this.trigger('finishedVertexConnection');
-            this.trigger('addVertices', { 
+            this.trigger('addVertices', {
                 vertices: vertices,
                 options: {
                     layout: {
@@ -164,7 +164,7 @@ define([
             if ($target.closest('.disabled').length) return;
 
             var list = $target.closest('ul')
-            
+
             list.siblings('.dropdown-toggle').html($target.data('displayText') + ' <span class="caret"/>');
             list.find('.disabled').removeClass('disabled');
             $target.closest('li').addClass('disabled');

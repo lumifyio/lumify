@@ -7,7 +7,7 @@ define([
 
     var requestAnimationFrame = window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame || 
+        window.webkitRequestAnimationFrame ||
         window.msRequestAnimationFrame;
 
     function GraphRenderer(domElement, options) {
@@ -45,7 +45,7 @@ define([
 
         var scene = this._scene;
         scene.children.forEach(function(n) {
-            if (n.geometry) n.geometry.dispose(); 
+            if (n.geometry) n.geometry.dispose();
             if (n.material) n.material.dispose();
             scene.remove(n);
         });
@@ -142,7 +142,7 @@ define([
                 var dir = vector.sub(camera.position).normalize(),
                     distance = -camera.position.z / dir.z,
                     pos = camera.position.clone().add(dir.multiplyScalar(distance));
-            
+
                 dragging.layout = {};
                 dragging.position.x = pos.x;
                 dragging.position.y = pos.y;
@@ -151,10 +151,10 @@ define([
             }
         }
 
-        function downHandler(e) { 
+        function downHandler(e) {
             self.mousedown = true;
         }
-        function upHandler(e) { 
+        function upHandler(e) {
             if (self.dragging) {
                 self.graph.removeNode(self.dragging);
                 self.dragging = undefined;
@@ -163,7 +163,7 @@ define([
             self.mousedown = false;
             //self.dispatchEvent( { type: 'node_mouseup', content: self.currentNodeId } );
         }
-        function clickHandler(e) { 
+        function clickHandler(e) {
             controls.noZoom = controls.noRotate = controls.noZoom = false;
             self.mousedown = false;
             self.checkPick = true;
@@ -224,7 +224,7 @@ define([
                 1,
                 gl.RGBA,
                 gl.UNSIGNED_BYTE,
-                pixelBuffer 
+                pixelBuffer
             );
 
             //interpret the pixel as an ID
@@ -236,13 +236,13 @@ define([
                     self.currentNodeId = nodeId;
                     self.dispatchEvent({
                         type: 'node_click',
-                        content: self.currentNodeId 
+                        content: self.currentNodeId
                     });
                 } else {
                     self.currentNodeId = undefined;
                     self.dispatchEvent({
                         type: 'node_click',
-                        content: null 
+                        content: null
                     });
                 }
             }
@@ -330,14 +330,14 @@ define([
         if (this._pickingParticleSystem) {
             this._pickingScene.remove(this._pickingParticleSystem);
         }
-        var pickingMaterial = new THREE.ParticleBasicMaterial({ 
+        var pickingMaterial = new THREE.ParticleBasicMaterial({
             size: 200,
             vertexColors: true
         });
 
-        this._pickingParticleSystem = new THREE.ParticleSystem( 
+        this._pickingParticleSystem = new THREE.ParticleSystem(
             pickingGeometry,
-            pickingMaterial 
+            pickingMaterial
         );
         this._pickingScene.add(this._pickingParticleSystem);
 
@@ -384,7 +384,7 @@ define([
             sprite = new THREE.Sprite(spriteMaterial);
 
         sprite.name = node.data.label;
-        sprite.scale.set(node.data.iconWidth, node.data.iconHeight, 1.0); 
+        sprite.scale.set(node.data.iconWidth, node.data.iconHeight, 1.0);
         sprite.position = node.position;
 
         var canvas = document.createElement('canvas');
@@ -402,12 +402,12 @@ define([
         context.fillStyle = 'rgba(128, 128, 128, 1.0)';
         context.fillText(node.data.label, canvas.width / 2 - textWidth / 2, canvas.height - fontsize * 0.5);
 
-        var textTexture = new THREE.Texture(canvas); 
+        var textTexture = new THREE.Texture(canvas);
         textTexture.needsUpdate = true;
 
         var textSpriteMaterial = new THREE.SpriteMaterial({
                 map: textTexture,
-                color: 0xffffff  
+                color: 0xffffff
             }),
             textSprite = new THREE.Sprite(textSpriteMaterial);
 

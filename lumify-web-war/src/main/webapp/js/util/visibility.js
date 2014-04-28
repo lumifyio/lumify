@@ -21,8 +21,8 @@ define([
         };
 
         this.observeHidden = function() {
-            var hidden, visibilityChange; 
-            if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support 
+            var hidden, visibilityChange;
+            if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
                 hidden = 'hidden';
                 visibilityChange = 'visibilitychange';
             } else if (typeof document.mozHidden !== 'undefined') {
@@ -45,7 +45,7 @@ define([
         this.onVisibilityChange = function(event) {
             this.trigger('window-visibility-change', {
                 visible: this.isVisible(),
-                hidden: this.isHidden() 
+                hidden: this.isHidden()
             });
         };
     }

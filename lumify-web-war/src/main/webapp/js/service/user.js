@@ -33,7 +33,7 @@ define([
     };
 
     UserService.prototype.login = function(username, password) {
-        return this._ajaxPost({ 
+        return this._ajaxPost({
             url: 'login',
             data: {
                 username: username,

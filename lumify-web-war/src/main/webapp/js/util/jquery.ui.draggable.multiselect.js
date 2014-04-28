@@ -7,7 +7,7 @@ define(['jquery', 'jqueryui'], function() {
         create: function(e, ui) {
             var inst = this.data('ui-draggable'),
                 container = this.closest('ul');
-    
+
             if (container.data('initialized') !== true) {
                 container
                     .data('initialized', true)
@@ -162,10 +162,10 @@ define(['jquery', 'jqueryui'], function() {
 
             if (!inst.reverted && inst.options.otherDraggables) {
                 inst.options.otherDraggables.call(
-                    inst.element, 
-                    ev, 
-                    $.extend(inst._uiHash(), { 
-                        otherDraggables: inst.alsoDragging 
+                    inst.element,
+                    ev,
+                    $.extend(inst._uiHash(), {
+                        otherDraggables: inst.alsoDragging
                     }));
             }
 

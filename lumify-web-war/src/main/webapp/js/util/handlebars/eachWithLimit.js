@@ -4,7 +4,7 @@ define(['hbs/handlebars'], function(Handlebars) {
     // Modified version of handlebars `each`
 
     return Handlebars.registerHelper('eachWithLimit', function(context, options) {
-        var fn = options.fn, 
+        var fn = options.fn,
             inverse = options.inverse,
             limit = options.hash.limit,
             i = 0,

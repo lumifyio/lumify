@@ -7,7 +7,7 @@ define([
     'use strict';
 
     return defineComponent(DoubleField, withPropertyField);
-       
+
     function makeNumber(v) {
         return parseFloat(v, 10);
     }
@@ -26,7 +26,7 @@ define([
 
                     this.filterUpdated(
                         this.getValues().map(function(v) {
-                            return makeNumber(v); 
+                            return makeNumber(v);
                         }),
                         this.select('predicateSelector').val()
                     );

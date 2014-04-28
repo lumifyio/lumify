@@ -104,7 +104,7 @@ define([
                 instance.teardown();
                 return self.trigger(document, 'paneResized');
             }
-            
+
             WorkspaceForm.teardownAll();
             WorkspaceForm.attachTo(form, {
                 data: data
@@ -184,10 +184,10 @@ define([
                     // Sort section because title might be renamed
                     var lis = this.getWorkspaceListItemsInSection(data.isSharedToUser),
                         titleGetter = function() {
-                            return $(this).data('title'); 
+                            return $(this).data('title');
                         },
                         lowerCase = function(s) {
-                            return s.toLowerCase(); 
+                            return s.toLowerCase();
                         },
                         titles = _.sortBy(lis.map(titleGetter).get(), lowerCase),
                         insertIndex = _.indexOf(titles, data.title),
@@ -269,7 +269,7 @@ define([
                        var users = usersResponse[0].users || [],
                            workspaces = workspaceResponse[0].workspaces || [],
                            usersById = _.indexBy(users, function(u) {
-                               return u.id; 
+                               return u.id;
                            });
 
                         self.usersById = usersById;
@@ -279,9 +279,9 @@ define([
                                 results: _.chain(workspaces)
                                     .map(self.workspaceDataForItemRow.bind(self))
                                     .sortBy(function(w) {
-                                        return w.title.toLowerCase() 
+                                        return w.title.toLowerCase()
                                     })
-                                    .groupBy(function(w) { 
+                                    .groupBy(function(w) {
                                         return w.isSharedToUser ? 'shared' : 'mine';
                                     })
                                     .value(),

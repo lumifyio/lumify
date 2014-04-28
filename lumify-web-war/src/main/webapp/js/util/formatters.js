@@ -22,9 +22,9 @@ define([
                 escape: isMac ? '⎋' : 'esc',
                 'delete': isMac ? '⌫' : null,
                 backspace: isMac ? '⌦' : null,
-                up: '↑', 
+                up: '↑',
                 down: '↓',
-                left: '←', 
+                left: '←',
                 right: '→',
                 drag: isMac ? (isFirefox ? null : '') : null
             }
@@ -101,7 +101,7 @@ define([
                     t = g * 1024;
 
                 precision = _.isUndefined(precision) ? 1 : precision;
-	
+
                 if ((bytes >= 0) && (bytes < k)) {
                     return bytes + ' B';
 

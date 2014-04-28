@@ -47,6 +47,7 @@
     "disallowSpacesInsideParentheses": true,
     "disallowQuotedKeysInObjects": "allButReserved",
     "disallowSpaceAfterObjectKeys": true,
+    "disallowTrailingWhitespace": true,
     "requireCommaBeforeLineBreak": true,
     "requireOperatorBeforeLineBreak": [
         "?",

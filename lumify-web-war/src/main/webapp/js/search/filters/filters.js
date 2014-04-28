@@ -158,7 +158,7 @@ define([
         };
 
         this.teardownField = function(node) {
-            var self = this, 
+            var self = this,
                 instanceInfo = registry.findInstanceInfoByNode(node[0]);
             if (instanceInfo && instanceInfo.length) {
                 instanceInfo.forEach(function(info) {
@@ -177,10 +177,10 @@ define([
             var self = this;
 
             this.ontologyService.properties().done(function(properties) {
-                self.properties = _.filter(properties.list, function(p) { 
-                    if (p.title === 'boundingBox') return false; 
+                self.properties = _.filter(properties.list, function(p) {
+                    if (p.title === 'boundingBox') return false;
                     if (/^_/.test(p.title)) return false;
-                    return true; 
+                    return true;
                 });
                 self.$node.find('.prop-filter-header').after(itemTemplate({}));
                 FieldSelection.attachTo(self.select('fieldSelectionSelector'), {

@@ -23,7 +23,7 @@ define([
             },
 
             // Which cannot both be active
-            MUTALLY_EXCLUSIVE_SWITCHES = [ 
+            MUTALLY_EXCLUSIVE_SWITCHES = [
                 { names: ['dashboard', 'graph','map'], options: { allowCollapse: false } },
                 { names: ['workspaces', 'search'], options: { } }
             ],
@@ -69,20 +69,20 @@ define([
         });
 
         this.defaultAttrs(attrs);
-        
+
         this.after('initialize', function() {
             this.$node.html(template({}));
 
             var self = this;
             Object.keys(TOOLTIPS).forEach(function(selectorClass) {
-                self.$node.find('.' + selectorClass).tooltip({ 
+                self.$node.find('.' + selectorClass).tooltip({
                     placement: 'right',
                     html: true,
                     title: TOOLTIPS[selectorClass].html || TOOLTIPS[selectorClass],
                     delay: { show: 250, hide: 0 }
                 });
             });
-            
+
             Activity.attachTo(this.select('activityIconSelector'));
 
             this.on('click', events);
@@ -122,7 +122,7 @@ define([
                                         if (otherIcon.hasClass('active')) {
                                             self.trigger(document, 'menubarToggleDisplay', {
                                                 name: name,
-                                                isSwitchButCollapse: true 
+                                                isSwitchButCollapse: true
                                             });
                                         }
                                     } else icon.addClass('active');

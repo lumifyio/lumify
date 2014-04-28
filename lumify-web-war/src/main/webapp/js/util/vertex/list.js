@@ -80,7 +80,7 @@ define([
 
             this.$node
                 .addClass('vertex-list')
-                .html(template({ 
+                .html(template({
                     vertices: this.attr.vertices,
                     infiniteScrolling: this.attr.infiniteScrolling && this.attr.total !== this.attr.vertices.length,
                     classNamesForVertex: this.classNameMapForVertices(this.attr.vertices),
@@ -281,13 +281,13 @@ define([
             lisVisible.each(function() {
                 var li = $(this),
                     vertex = appData.vertex(li.data('vertexId'));
-                
+
                 if (vertex && !vertex.imageSrcIsFromConcept && !li.data('previewLoaded')) {
 
                     var preview = li.data('previewLoaded', true)
                                     .find('.preview');
 
-                    if (vertex.imageFramesSrc) { 
+                    if (vertex.imageFramesSrc) {
                         VideoScrubber.attachTo(preview, {
                             posterFrameUrl: vertex.imageSrc,
                             videoPreviewImageUrl: vertex.imageFramesSrc
@@ -399,8 +399,8 @@ define([
 
             var self = this,
                 ids = _.chain(data.vertices)
-                    .map(function(v) { 
-                        return '.' + self.vertexIdToClassName(v.id); 
+                    .map(function(v) {
+                        return '.' + self.vertexIdToClassName(v.id);
                     })
                     .value().join(',');
 

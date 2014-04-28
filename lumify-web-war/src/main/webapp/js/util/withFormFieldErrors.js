@@ -34,7 +34,7 @@ define(['tpl!./alert'], function(alertTemplate) {
                                         vis = $this.data('visibility')
 
                                     if (error.invalidValues && vis) {
-                                        $this.toggleClass(cls, 
+                                        $this.toggleClass(cls,
                                              _.any(error.invalidValues, function(v) {
                                                  return _.isEqual(v, vis.value);
                                              })
@@ -52,7 +52,7 @@ define(['tpl!./alert'], function(alertTemplate) {
             }
 
             var errorsContainer = rootEl.find('.errors');
-            
+
             if (errorsContainer.length) {
                 errorsContainer.html(
                     alertTemplate({
@@ -62,7 +62,7 @@ define(['tpl!./alert'], function(alertTemplate) {
             } else {
                 console.warn(
                     'No <div class="errors"/> container found ' +
-                    'to display error messages for component "' + 
+                    'to display error messages for component "' +
                     this.describe + '"'
                 );
             }

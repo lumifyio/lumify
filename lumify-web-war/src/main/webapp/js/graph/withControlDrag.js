@@ -23,10 +23,10 @@ define([], function() {
             this.mouseDragHandler = self.onControlDragMouseMove.bind(this);
 
             this.on(document, 'controlKey', function() {
-                controlKeyPressed = true; 
+                controlKeyPressed = true;
             });
             this.on(document, 'controlKeyUp', function() {
-                controlKeyPressed = false; 
+                controlKeyPressed = false;
             });
             this.on(document, 'mouseup', function() {
                 if (state === STATE_STARTED) {
@@ -78,7 +78,7 @@ define([], function() {
             if (state > STATE_NONE) {
                 e.stopPropagation();
             }
-                
+
             if (state === STATE_CONNECTED) {
                 this.trigger('finishedVertexConnection');
             }
@@ -135,12 +135,12 @@ define([], function() {
 
                 var edge = currentEdgeId && cy.getElementById(currentEdgeId),
                     target = edge && cy.getElementById(edge.data('target'));
-                    
+
                 if (!target || target.hasClass('temp')) {
                     return this.trigger('finishedVertexConnection');
                 }
 
-                var componentName = { 
+                var componentName = {
                     CreateConnection: 'createConnectionPopover',
                     FindPath: 'findPathPopover'
                 }[connectionType] ||   'controlDragPopover';

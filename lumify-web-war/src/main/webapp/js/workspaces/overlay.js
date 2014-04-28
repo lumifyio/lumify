@@ -192,7 +192,7 @@ define([
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
-                
+
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')
                     .insertAfter(node)
@@ -221,7 +221,7 @@ define([
                     self.previousDiff = diffsWithoutVisibleProperty;
 
                     var vertexDiffsById = _.indexBy(diffs, function(diff) {
-                            return diff.vertexId;    
+                            return diff.vertexId;
                         }),
                         countOfTitleChanges = 0,
                         filteredDiffs = _.filter(diffs, function(diff) {
@@ -233,9 +233,9 @@ define([
                                 countOfTitleChanges++;
                             }
                             return true;
-                        }), 
+                        }),
                         count = filteredDiffs.length - countOfTitleChanges,
-                        formattedCount = formatters.number.pretty(count); 
+                        formattedCount = formatters.number.pretty(count);
 
                     self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
                         return diff.vertexId || diff.elementId || diff.edgeId;
@@ -320,7 +320,7 @@ define([
             if (animateTimer) {
                 clearTimeout(animateTimer);
                 animateTimer = _.delay(
-                    badgeReset.bind(null, previousWidth), 
+                    badgeReset.bind(null, previousWidth),
                     SHOW_UNPUBLUSHED_CHANGES_SECONDS * 1000
                 );
                 return badge.html(html).css({ width: findWidth() })
@@ -388,7 +388,7 @@ define([
             var name = this.select('nameSelector'),
                 tooltip = name.data('tooltip'),
                 tip = tooltip && tooltip.tip(),
-                text = 'Vertices: ' + formatters.number.pretty(this.verticesCount || 0) + 
+                text = 'Vertices: ' + formatters.number.pretty(this.verticesCount || 0) +
                     ', Edges: ' + formatters.number.pretty(this.edgesCount || 0)
 
             if (tip && tip.is(':visible')) {

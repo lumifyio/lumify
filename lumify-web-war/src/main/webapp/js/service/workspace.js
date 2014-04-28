@@ -104,7 +104,7 @@ function(ServiceBase) {
         if (_.isEmpty(changes)) {
             console.warn('Workspace update called with no changes');
         }
-        
+
         if (changes) {
             options.data.data = JSON.stringify($.extend(options.data.data, changes));
         }

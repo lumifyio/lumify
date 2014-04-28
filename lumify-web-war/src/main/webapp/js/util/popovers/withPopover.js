@@ -3,8 +3,8 @@ define([
 ], function() {
     'use strict';
 
-    var ERROR_NO_POSITION_RESPONSE = 
-            'Unable to attach popover, ' + 
+    var ERROR_NO_POSITION_RESPONSE =
+            'Unable to attach popover, ' +
             'nothing responded to registerForPositionChanges';
 
     return withPopover;
@@ -82,18 +82,18 @@ define([
                     maxTop = windowHeight - height,
                     calcLeft = this.dialogPosition.x - (width / 2),
                     calcTop = this.dialogPosition.y - height,
-                    proposed = { 
-                        left: Math.max(0, Math.min(maxLeft, calcLeft)), 
-                        top: Math.max(0, Math.min(maxTop, calcTop)),  
+                    proposed = {
+                        left: Math.max(0, Math.min(maxLeft, calcLeft)),
+                        top: Math.max(0, Math.min(maxTop, calcTop)),
                     };
-                
+
                 if (this.dialogPosition.y < height) {
                     proposed.top = Math.min(maxTop, this.dialogPosition.y);
                     this.popover.removeClass('top').addClass('bottom');
                 } else {
                     this.popover.removeClass('bottom').addClass('top');
                 }
-                
+
                 this.dialog.css(proposed);
                 this.popover.show();
             }

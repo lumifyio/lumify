@@ -31,7 +31,7 @@ define([
                         var target = $(e.target);
                         target.attr('placeholder', PLACEHOLDER)
                     })
-                    .on('click', function(e) { 
+                    .on('click', function(e) {
                         var target = $(e.target);
 
                         if (target.val()) {
@@ -56,22 +56,22 @@ define([
                         items: 100,
                         source: _.chain(this.attr.properties)
                             .filter(function(p) {
-                                return p.userVisible; 
+                                return p.userVisible;
                             })
-                            .map(function(p) { 
-                                return p.displayName || p.title; 
+                            .map(function(p) {
+                                return p.displayName || p.title;
                             })
-                            .sortBy(function(name) { 
-                                return name.toLowerCase(); 
+                            .sortBy(function(name) {
+                                return name.toLowerCase();
                             })
                             .uniq()
                             .value(),
                         matcher: function(item) {
                             if (this.query === ' ') return -1;
                             if (
-                                this.query && 
+                                this.query &&
                                 self.currentProperty &&
-                                    (self.currentProperty.displayName === this.query || 
+                                    (self.currentProperty.displayName === this.query ||
                                      self.currentProperty.title === this.query)
                             ) {
                                 return 1;

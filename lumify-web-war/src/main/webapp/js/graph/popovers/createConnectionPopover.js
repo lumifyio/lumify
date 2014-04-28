@@ -49,7 +49,7 @@ define([
                     cy = this.attr.cy,
                     select = this.popover.find('select'),
                     button = this.popover.find('button');
-                
+
                 select.html('<option>Loading...</option>');
                 button.text('Connect').attr('disabled', true);
 

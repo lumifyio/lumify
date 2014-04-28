@@ -75,7 +75,7 @@ define([
         var formData = new FormData(),
             pluralString = formatters.string.plural(files.length, 'file');
 
-        _.forEach(files, function(f) { 
+        _.forEach(files, function(f) {
             formData.append('file', f);
             if (_.isString(visibilitySource)) {
                 formData.append('visibilitySource', visibilitySource);

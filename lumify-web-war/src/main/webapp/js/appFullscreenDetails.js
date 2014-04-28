@@ -102,7 +102,7 @@ define([
                     verts <= 4 ? 'vertices-' + verts : 'vertices-many',
                     'entities-' + entities,
                     'entity-cols-' + _.find([4,3,2,1], function(i) {
-                        return entities % i === 0; 
+                        return entities % i === 0;
                     }),
                     entities ? 'has-entities' : '',
                     'artifacts-' + artifacts,
@@ -138,18 +138,18 @@ define([
 
                 // Sort by title
                 descriptors.push(formatters.vertex.prop(v, 'title'));
-                return descriptors.join(''); 
+                return descriptors.join('');
             });
 
             // Find vertices not found and insert at beginning
             var notFoundIds = _.difference(this.attr.graphVertexIds, _.pluck(this.vertices, 'id')),
                 notFound = _.map(notFoundIds, function(nId) {
-                    return { 
+                    return {
                         id: nId,
                         notFound: true,
                         properties: {
                             title: '?'
-                        } 
+                        }
                     };
                 });
 
@@ -239,7 +239,7 @@ define([
                 this.timer = setTimeout(function f() {
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
-                            document.title = '"' + 
+                            document.title = '"' +
                                 formatters.vertex.prop(newVerticesById[newVertexIds[0]], 'title') +
                                 '" added';
                         } else {
@@ -260,11 +260,11 @@ define([
             if (!this.vertices || this.vertices.length === 0) {
                 return 'Loading...';
             }
-            
+
             var sorted = _.sortBy(this.vertices, function(v) {
                 return v.notFound ? 1 : -1;
             });
-            
+
             if (sorted.length === 1) {
                 return formatters.vertex.prop(sorted[0], 'title');
             } else {
@@ -287,7 +287,7 @@ define([
                                 title: self.titleForVertices(),
                                 identifier: self.fullscreenIdentifier
                             })
-                        }); 
+                        });
                     };
 
                 intercom.on('addVertices', function(data) {

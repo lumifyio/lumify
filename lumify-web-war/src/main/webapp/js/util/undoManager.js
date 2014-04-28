@@ -23,8 +23,8 @@ define([], function() {
     }
 
     UndoManager.prototype.performedAction = function(name, options) {
-        if (name && 
-             options && 
+        if (name &&
+             options &&
              typeof options.undo === 'function' &&
              typeof options.redo === 'function') {
 
@@ -62,16 +62,16 @@ define([], function() {
     UndoManager.prototype._isUndo = function(character, event) {
         return (
             // Windows
-            (character === 'Z' && event.ctrlKey) || 
+            (character === 'Z' && event.ctrlKey) ||
             // Mac
             (character === 'Z' && event.metaKey && !event.shiftKey)
         );
     };
 
     UndoManager.prototype._isRedo = function(character, event) {
-        return ( 
+        return (
             // Windows
-            (character === 'Y' && event.ctrlKey) || 
+            (character === 'Y' && event.ctrlKey) ||
             // Mac
             (character === 'Z' && event.metaKey && event.shiftKey)
         );

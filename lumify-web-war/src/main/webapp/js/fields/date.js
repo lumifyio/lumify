@@ -52,12 +52,12 @@ define([
 
                 self.datepicker('hide');
                 self[0].select();
-                
+
                 _.delay(function() {
                     var pasted = self.val();
 
                     if (pasted) {
-                        var date = chrono.parseDate(pasted) 
+                        var date = chrono.parseDate(pasted)
                         if (date) {
                             self.val(formatters.date.dateString(date));
                             self.datepicker('setDate', date)

@@ -21,7 +21,7 @@ define([
             this.onViewportChanges = _.throttle(this.onViewportChanges.bind(this), 1000 / 30);
             this.onTap = this.onTap.bind(this);
 
-            require(['tpl!graph/popovers/' + (this.attr.template || 'noTemplate')], 
+            require(['tpl!graph/popovers/' + (this.attr.template || 'noTemplate')],
                     this.setupWithTemplate.bind(this));
         });
 
