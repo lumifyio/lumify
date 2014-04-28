@@ -159,10 +159,10 @@ define([
                                         a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
                                     a.propertyAudit.visibilityValue =
                                         a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
-                                    a.propertyAudit.formattedValue = self.formatValue(
-                                        a.propertyAudit.newValue || a.propertyAudit.previousValue,
-                                        a.propertyAudit.propertyName
-                                    );
+                                    a.propertyAudit.formattedValue = F.vertex.displayProp({
+                                        name: a.propertyAudit.propertyName,
+                                        value: a.propertyAudit.newValue || a.propertyAudit.previousValue
+                                    });
                                     a.propertyAudit.isDeleted = a.propertyAudit.newValue === '';
 
                                     return 'property';
@@ -205,71 +205,56 @@ define([
             }
         };
 
-        this.formatValue = function(v, propertyName, audit) {
-            var property = this.ontologyProperties.byTitle[propertyName],
-                dataType = property && property.dataType || 'string';
-
-            switch (dataType) {
-                case 'date': return F.date.dateString(v);
-                case 'number': return F.number.pretty(v);
-                case 'geoLocation': return F.geoLocation.pretty(v);
-                default:
-                    return v;
-            }
-        };
-
         this.updatePropertyAudits = function(itemTemplate, audits) {
             var self = this,
                 auditsByProperty = _.groupBy(audits, function(a) {
-                    return a.propertyAudit.propertyName;
+                    return a.propertyAudit.propertyName + a.propertyAudit.propertyKey;
                 });
 
-            Object.keys(auditsByProperty).forEach(function(propertyName) {
-                if ((/^_/).test(propertyName) && propertyName !== 'http://lumify.io#visibilityJson') {
-                    return;
-                }
+            Object.keys(auditsByProperty).forEach(function(propertyNameAndKey) {
+                var propLi = self.$node.find('.property-' + F.className.to(propertyNameAndKey)),
+                    audits = auditsByProperty[propertyNameAndKey],
+                    propertyKey = audits[0].propertyAudit.propertyKey,
+                    propertyName = audits[0].propertyAudit.propertyName;
 
-                var propLi = self.$node.find('.property-' + F.className.to(propertyName));
                 if (!propLi.length) {
                     var property = self.ontologyProperties.byTitle[propertyName],
                         value;
 
                     if (property && property.userVisible) {
-                        for (var i = 0; i < auditsByProperty[propertyName].length; i++) {
-                            var propAudit = auditsByProperty[propertyName][i].propertyAudit;
+                        for (var i = 0; i < audits.length; i++) {
+                            var propAudit = audits[i].propertyAudit;
                             value = propAudit.newValue || propAudit.previousValue;
                             if (value) {
                                 break;
                             }
                         }
 
-                        var stringValue = self.formatValue(value, propertyName);
-
-                        if (property.dataType === 'geoLocation') {
-                            value = { value: F.geoLocation.parse(value) };
-                        }
+                        var stringValue = F.vertex.displayProp({
+                            name: propertyName,
+                            value: value
+                        }),
 
                         propLi = $(
                             itemTemplate({
-                                formatters: F,
-                                property: {
-                                    displayType: property.dataType,
-                                    key: property.title,
-                                    displayName: property.displayName,
-                                    stringValue: stringValue,
-                                    value: value || 'deleted',
-                                    metadata: {}
-                                }
+                                displayType: property.dataType,
+                                name: propertyName,
+                                key: propertyKey,
+                                displayName: property.displayName,
+                                stringValue: stringValue,
+                                value: value || 'deleted',
+                                metadata: {}
                             })
                         ).addClass('audit-only-property').insertBefore(self.$node.find('table tbody .buttons-row'));
                     } else if (_.isUndefined(property)) {
                         console.warn(propertyName + " in audit record doesn't exist in ontology");
                     }
                 }
+
                 propLi.after(auditsListTemplate({
-                        audits: auditsByProperty[propertyName],
-                        MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
-                    }));
+                    audits: audits,
+                    MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
+                }));
             });
 
             this.updatePopovers();
@@ -579,13 +564,12 @@ define([
                 isRelationshipType = name === 'relationshipType' && isEdge,
                 propertyView;
 
-            // TODO add vertex visibility
             if (ontologyProperty && ontologyProperty.userVisible) {
                 propertyView = {
                     name: name,
                     key: property.key,
                     value: value,
-                    cls: F.className.to(name),
+                    cls: F.className.to(name + property.key),
                     stringValue: _.isUndefined(stringValue) ? value : stringValue,
                     displayName: displayName || name,
                     displayType: displayType || 'string',
