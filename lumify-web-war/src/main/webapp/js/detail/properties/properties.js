@@ -230,18 +230,16 @@ define([
                             }
                         }
 
-                        var stringValue = F.vertex.displayProp({
-                            name: propertyName,
-                            value: value
-                        }),
-
                         propLi = $(
                             itemTemplate({
                                 displayType: property.dataType,
                                 name: propertyName,
                                 key: propertyKey,
                                 displayName: property.displayName,
-                                stringValue: stringValue,
+                                stringValue: F.vertex.displayProp({
+                                    name: propertyName,
+                                    value: value
+                                }),
                                 value: value || 'deleted',
                                 metadata: {}
                             })
