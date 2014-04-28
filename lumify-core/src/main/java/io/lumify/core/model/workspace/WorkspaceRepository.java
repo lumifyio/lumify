@@ -28,37 +28,37 @@ public abstract class WorkspaceRepository {
 
     public abstract Iterable<Workspace> findAll(User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract void setTitle(Workspace workspace, String title, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract List<WorkspaceEntity> findEntities(Workspace workspace, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract Workspace copy(Workspace workspace, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract List<DiffItem> getDiff(Workspace workspace, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract String getCreatorUserId(Workspace workspace, User user);
 
-    // change Workspace to workspace id?
+    // TODO change Workspace to workspace id?
     public abstract boolean hasWritePermissions(Workspace workspace, User user);
 
     public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
