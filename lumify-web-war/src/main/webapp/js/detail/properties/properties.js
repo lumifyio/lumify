@@ -406,18 +406,6 @@ define([
             });
         };
 
-        this.onPropertyChange = function(propertyChangeData) {
-            if (propertyChangeData.id != this.attr.data.id) {
-                return;
-            }
-            if (propertyChangeData.propertyName == 'title') {
-                this.select('titleSelector').html(propertyChangeData.value);
-            }
-            this.select('propertiesSelector')
-                .find('.property-' + F.className.to(propertyChangeData.propertyName) + ' .value')
-                .html(propertyChangeData.value);
-        };
-
         this.updatePopovers = function() {
             var self = this;
 
