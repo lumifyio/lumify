@@ -100,7 +100,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
-        // TODO add this image to the concept
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(rawImg);
+        ((InMemoryConcept)entityConcept).setGlyphIconInputStream(inputStream);
     }
 
     @Override
