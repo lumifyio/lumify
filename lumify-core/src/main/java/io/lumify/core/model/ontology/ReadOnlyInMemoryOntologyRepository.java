@@ -139,15 +139,13 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
-        // TODO: fix to use implement possiblevalue
-
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
 
-    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
+    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
@@ -155,6 +153,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setUserVisible(userVisible);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
+            }
+            if (possibleValues.size() > 0) {
+                property.setPossibleValues (possibleValues);
             }
             propertiesCache.put(propertyName, property);
         }

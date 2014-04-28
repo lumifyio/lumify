@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryOntologyProperty extends OntologyProperty {
@@ -7,6 +8,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private boolean userVisible;
     private String displayName;
     private PropertyType dataType;
+    private ArrayList<PossibleValueType> possibleValues;
 
     @Override
     public String getTitle() {
@@ -29,9 +31,8 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     }
 
     @Override
-    public List<PossibleValueType> getPossibleValues() {
-        //TODO: implement!!
-        return null;
+    public ArrayList<PossibleValueType> getPossibleValues() {
+        return possibleValues;
     }
 
     public void setTitle(String title) {
@@ -48,5 +49,9 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setDataType(PropertyType dataType) {
         this.dataType = dataType;
+    }
+
+    public void setPossibleValues(ArrayList<PossibleValueType> possibleValues) {
+        this.possibleValues = possibleValues;
     }
 }

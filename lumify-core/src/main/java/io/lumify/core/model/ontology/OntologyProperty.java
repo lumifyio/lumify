@@ -46,7 +46,7 @@ public abstract class OntologyProperty {
             json.put("displayName", getDisplayName());
             json.put("userVisible", getUserVisible());
             json.put("dataType", getDataType().toString());
-            if (getPossibleValues().size() > 0) {
+            if (getPossibleValues() != null && getPossibleValues().size() > 0) {
                 JSONArray possibleValues = new JSONArray();
                 for (PossibleValueType possibleValueProperty : getPossibleValues()) {
                     possibleValues.put(new JSONObject().put(possibleValueProperty.getKey(), possibleValueProperty.getValue()));
