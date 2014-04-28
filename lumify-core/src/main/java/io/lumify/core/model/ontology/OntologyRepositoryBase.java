@@ -1,15 +1,15 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.io.Files;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.property.StreamingPropertyValue;
-import com.google.common.io.Files;
 import net.lingala.zip4j.core.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
+import org.securegraph.property.StreamingPropertyValue;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
@@ -244,11 +245,13 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             checkNotNull(domainConcept, "Could not find class with uri: " + domainClassUri);
 
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, userVisible);
+
+            ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, userVisible);
         }
     }
 
-    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible);
+    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -367,6 +370,26 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#glyphIconFileName");
+    }
+
+    protected ArrayList<PossibleValueType> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValuesByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getKey());
+    }
+
+    private ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+        ArrayList<PossibleValueType> possibleValueTypes = new ArrayList<PossibleValueType>();
+        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
+            if (annotation.getProperty().getIRI().toString().equals(uri)) {
+                OWLLiteral value = (OWLLiteral) annotation.getValue();
+                String[] possibleValues = value.getLiteral().split(",");
+                for (String possibleValue : possibleValues) {
+                    String[] parsedValue = possibleValue.split(":");
+                    checkArgument(parsedValue.length == 2, "Possible values must be in the format mapping:value");
+                    possibleValueTypes.add(new PossibleValueType(parsedValue[0], parsedValue[1]));
+                }
+            }
+        }
+        return possibleValueTypes;
     }
 
     private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {

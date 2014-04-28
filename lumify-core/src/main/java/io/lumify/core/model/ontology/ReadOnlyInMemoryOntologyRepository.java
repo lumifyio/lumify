@@ -1,16 +1,16 @@
 package io.lumify.core.model.ontology;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import org.securegraph.util.ConvertingIterable;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
@@ -101,7 +101,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(rawImg);
-        ((InMemoryConcept)entityConcept).setGlyphIconInputStream(inputStream);
+        ((InMemoryConcept) entityConcept).setGlyphIconInputStream(inputStream);
     }
 
     @Override
@@ -138,7 +138,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible) {
+    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+        // TODO: fix to use implement possiblevalue
+
         checkNotNull(concept, "concept was null");
         InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);

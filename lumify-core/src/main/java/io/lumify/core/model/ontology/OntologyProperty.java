@@ -1,12 +1,13 @@
 package io.lumify.core.model.ontology;
 
-import org.securegraph.type.GeoPoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.type.GeoPoint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,8 @@ public abstract class OntologyProperty {
 
     public abstract PropertyType getDataType();
 
+    public abstract List<PossibleValueType> getPossibleValues();
+
     public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
         for (OntologyProperty property : properties) {
@@ -43,6 +46,13 @@ public abstract class OntologyProperty {
             json.put("displayName", getDisplayName());
             json.put("userVisible", getUserVisible());
             json.put("dataType", getDataType().toString());
+            if (getPossibleValues().size() > 0) {
+                JSONArray possibleValues = new JSONArray();
+                for (PossibleValueType possibleValueProperty : getPossibleValues()) {
+                    possibleValues.put(new JSONObject().put(possibleValueProperty.getKey(), possibleValueProperty.getValue()));
+                }
+                json.put("possibleValues", possibleValues);
+            }
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);
