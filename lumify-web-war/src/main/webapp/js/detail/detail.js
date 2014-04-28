@@ -61,14 +61,19 @@ define([
             if (!vertices.length && !edges.length) {
                 var pane = this.$node.closest('.detail-pane');
 
+                this.cancelTransitionTeardown = false;
+
                 return pane.on(TRANSITION_END, function(e) {
                     if (/transform/.test(e.originalEvent && e.originalEvent.propertyName)) {
-                        self.teardownComponents();
+                        if (self.cancelTransitionTeardown !== true) {
+                            self.teardownComponents();
+                        }
                         pane.off(TRANSITION_END);
                     }
                 });
             }
 
+            this.cancelTransitionTeardown = true;
             this.teardownComponents();
             this.$node.addClass('loading');
 
