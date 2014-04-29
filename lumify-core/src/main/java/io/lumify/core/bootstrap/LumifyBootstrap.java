@@ -111,43 +111,43 @@ public class LumifyBootstrap extends AbstractModule {
                 .in(Scopes.SINGLETON);
 
         bind(ModelSession.class)
-                .toProvider(getConfigurableProvider(ModelSession.class, configuration, Configuration.MODEL_PROVIDER))
+                .toProvider(this.<ModelSession>getConfigurableProvider(configuration, Configuration.MODEL_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(FileSystemSession.class)
-                .toProvider(getConfigurableProvider(FileSystemSession.class, configuration, Configuration.FILESYSTEM_PROVIDER))
+                .toProvider(this.<FileSystemSession>getConfigurableProvider(configuration, Configuration.FILESYSTEM_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(Graph.class)
                 .toProvider(getGraphProvider(configuration, Configuration.GRAPH_PROVIDER))
                 .in(Scopes.SINGLETON);
         bind(WorkQueueRepository.class)
-                .toProvider(getConfigurableProvider(WorkQueueRepository.class, configuration, Configuration.WORK_QUEUE_REPOSITORY))
+                .toProvider(this.<WorkQueueRepository>getConfigurableProvider(configuration, Configuration.WORK_QUEUE_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(VisibilityTranslator.class)
-                .toProvider(getConfigurableProvider(VisibilityTranslator.class, configuration, Configuration.VISIBILITY_TRANSLATOR))
+                .toProvider(this.<VisibilityTranslator>getConfigurableProvider(configuration, Configuration.VISIBILITY_TRANSLATOR))
                 .in(Scopes.SINGLETON);
         bind(UserRepository.class)
-                .toProvider(getConfigurableProvider(UserRepository.class, configuration, Configuration.USER_REPOSITORY))
+                .toProvider(this.<UserRepository>getConfigurableProvider(configuration, Configuration.USER_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(WorkspaceRepository.class)
-                .toProvider(getConfigurableProvider(WorkspaceRepository.class, configuration, Configuration.WORKSPACE_REPOSITORY))
+                .toProvider(this.<WorkspaceRepository>getConfigurableProvider(configuration, Configuration.WORKSPACE_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(AuthorizationRepository.class)
-                .toProvider(getConfigurableProvider(AuthorizationRepository.class, configuration, Configuration.AUTHORIZATION_REPOSITORY))
+                .toProvider(this.<AuthorizationRepository>getConfigurableProvider(configuration, Configuration.AUTHORIZATION_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(OntologyRepository.class)
-                .toProvider(getConfigurableProvider(OntologyRepository.class, configuration, Configuration.ONTOLOGY_REPOSITORY))
+                .toProvider(this.<OntologyRepository>getConfigurableProvider(configuration, Configuration.ONTOLOGY_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(AuditRepository.class)
-                .toProvider(getConfigurableProvider(AuditRepository.class, configuration, Configuration.AUDIT_REPOSITORY))
+                .toProvider(this.<AuditRepository>getConfigurableProvider(configuration, Configuration.AUDIT_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(TermMentionRepository.class)
-                .toProvider(getConfigurableProvider(TermMentionRepository.class, configuration, Configuration.TERM_MENTION_REPOSITORY))
+                .toProvider(this.<TermMentionRepository>getConfigurableProvider(configuration, Configuration.TERM_MENTION_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(DetectedObjectRepository.class)
-                .toProvider(getConfigurableProvider(DetectedObjectRepository.class, configuration, Configuration.DETECTED_OBJECT_REPOSITORY))
+                .toProvider(this.<DetectedObjectRepository>getConfigurableProvider(configuration, Configuration.DETECTED_OBJECT_REPOSITORY))
                 .in(Scopes.SINGLETON);
         bind(ArtifactThumbnailRepository.class)
-                .toProvider(getConfigurableProvider(ArtifactThumbnailRepository.class, configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
+                .toProvider(this.<ArtifactThumbnailRepository>getConfigurableProvider(configuration, Configuration.ARTIFACT_THUMBNAIL_REPOSITORY))
                 .in(Scopes.SINGLETON);
 
         injectProviders();
@@ -160,6 +160,7 @@ public class LumifyBootstrap extends AbstractModule {
 
         final Class<?> graphClass;
         try {
+            LOGGER.debug("Loading graph class \"%s\"", graphClassName);
             graphClass = Class.forName(graphClassName);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Could not find graph class with name: " + graphClassName, e);
@@ -176,6 +177,7 @@ public class LumifyBootstrap extends AbstractModule {
             @Override
             public Graph get() {
                 try {
+                    LOGGER.debug("creating graph");
                     return (Graph) createMethod.invoke(null, configurationSubset);
                 } catch (Exception e) {
                     throw new RuntimeException("Could not create graph " + graphClass.getName(), e);
@@ -215,7 +217,7 @@ public class LumifyBootstrap extends AbstractModule {
         }
     }
 
-    private <T> Provider<T> getConfigurableProvider(final Class<T> usedToSetTemplateTType, final Configuration config, final String key) {
+    private <T> Provider<T> getConfigurableProvider(final Configuration config, final String key) {
         Class<? extends T> configuredClass = config.getClass(key);
         return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, key, null) : new NullProvider<T>();
     }
@@ -273,7 +275,7 @@ public class LumifyBootstrap extends AbstractModule {
                 for (Class<?> pc : paramTypes) {
                     paramNames.add(pc.getSimpleName());
                 }
-                throw new BootstrapException(se, "Error accessing init(%s) method in %s.", paramNames, clazz.getName());
+                throw new LumifyException(String.format("Error accessing init(%s) method in %s.", paramNames, clazz.getName()), se);
             }
         }
 
@@ -298,7 +300,7 @@ public class LumifyBootstrap extends AbstractModule {
                 LOGGER.error("Error initializing instance of %s.", clazz.getName(), ite);
                 error = ite;
             }
-            throw new BootstrapException(error, "Unable to initialize instance of %s", clazz.getName());
+            throw new LumifyException(String.format("Unable to initialize instance of %s", clazz.getName()), error);
         }
     }
 }

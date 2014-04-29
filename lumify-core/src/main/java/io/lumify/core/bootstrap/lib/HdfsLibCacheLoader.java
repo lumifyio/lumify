@@ -1,10 +1,10 @@
 package io.lumify.core.bootstrap.lib;
 
+import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.google.common.io.Files;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
@@ -77,7 +77,9 @@ public class HdfsLibCacheLoader extends LibLoader {
             String relativePath = sourceFile.getPath().toString().substring(source.toString().length());
             File destFile = new File(dest, relativePath);
             if (sourceFile.isDirectory()) {
-                destFile.mkdirs();
+                if (!destFile.mkdirs()) {
+                    LOGGER.debug("Could not make directory %s", destFile.getAbsolutePath());
+                }
             } else {
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
                 new File(destFile.getParent(), "." + destFile.getName() + ".crc").deleteOnExit();

@@ -2,6 +2,7 @@ package io.lumify.core.bootstrap.lib;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 
@@ -66,29 +67,18 @@ public abstract class LibLoader {
         Class<? extends ClassLoader> classLoaderClass = classLoader.getClass();
         try {
             Class[] parameters = new Class[]{URL.class};
-            Method method = findMethod(classLoaderClass, "addURL", parameters);
+            Method method = ClassUtil.findMethod(classLoaderClass, "addURL", parameters);
             if (method == null) {
                 LOGGER.debug("Could not find addURL on classloader: %s", classLoaderClass.getName());
                 return false;
             }
             method.setAccessible(true);
             method.invoke(classLoader, f.toURI().toURL());
-            LOGGER.debug("added %s to classloader %s", f.getAbsolutePath(), classLoader.getClass().getName());
+            LOGGER.debug("added %s to classLoader %s", f.getAbsolutePath(), classLoader.getClass().getName());
             return true;
         } catch (Throwable t) {
             LOGGER.error("Error, could not add URL " + f.getAbsolutePath() + " to classloader: " + classLoaderClass.getName(), t);
             return false;
         }
-    }
-
-    private static Method findMethod(Class clazz, String methodName, Class[] parameters) {
-        while (clazz != null) {
-            try {
-                return clazz.getDeclaredMethod(methodName, parameters);
-            } catch (NoSuchMethodException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
     }
 }

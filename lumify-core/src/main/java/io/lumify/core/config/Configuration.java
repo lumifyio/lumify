@@ -1,6 +1,7 @@
 package io.lumify.core.config;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.util.ClassUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
@@ -79,16 +80,16 @@ public final class Configuration {
         return getInt(propertyKey, null);
     }
 
-    public Class getClass(String propertyKey) {
+    public <T> Class<? extends T> getClass(String propertyKey) {
         String className = get(propertyKey, null);
         if (className == null) {
             throw new LumifyException("Could not find required property " + propertyKey);
         }
         try {
             LOGGER.debug("found class \"%s\" for configuration \"%s\"", className, propertyKey);
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new LumifyException("Could not load class " + className + " for property " + propertyKey);
+            return ClassUtil.forName(className);
+        } catch (LumifyException e) {
+            throw new LumifyException("Could not load class " + className + " for property " + propertyKey, e);
         }
     }
 
