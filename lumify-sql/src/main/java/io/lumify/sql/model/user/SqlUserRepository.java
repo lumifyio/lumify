@@ -8,7 +8,7 @@ import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -78,7 +78,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -98,7 +98,7 @@ public class SqlUserRepository extends UserRepository {
             }
             newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
-            newUser.setRoles(Roles.toBits(roles));
+            newUser.setPrivileges(Privilege.toBits(privileges));
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
             transaction.commit();
@@ -247,7 +247,31 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public Set<Roles> getRoles(User user) {
-        return EnumSet.of(Roles.READ);
+    public Set<Privilege> getPrivileges(User user) {
+        return EnumSet.of(Privilege.READ);
+    }
+
+    @Override
+    public void delete(User user) {
+        Session session = sessionFactory.openSession();
+
+        Transaction transaction = null;
+        SqlUser sqlUser;
+        try {
+            transaction = session.beginTransaction();
+            sqlUser = (SqlUser) findById(user.getUserId());
+            if (sqlUser == null) {
+                throw new LumifyException("User does not exist");
+            }
+            session.delete(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        } finally {
+            session.close();
+        }
     }
 }

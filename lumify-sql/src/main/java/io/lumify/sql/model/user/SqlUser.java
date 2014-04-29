@@ -3,7 +3,7 @@ package io.lumify.sql.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserType;
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import io.lumify.sql.model.workspace.SqlWorkspaceUser;
@@ -39,8 +39,8 @@ public class SqlUser implements User {
     @Column(name = "user_status")
     private String userStatus;
 
-    @Column(name = "roles")
-    private int roles;
+    @Column(name = "privileges")
+    private int privileges;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "workspace_id")
@@ -99,12 +99,12 @@ public class SqlUser implements User {
         return userStatus;
     }
 
-    public Set<Roles> getRoles() {
-        return Roles.toSet(this.roles);
+    public Set<Privilege> getPrivileges() {
+        return Privilege.toSet(this.privileges);
     }
 
-    public void setRoles(int roles) {
-        this.roles = roles;
+    public void setPrivileges(int privileges) {
+        this.privileges = privileges;
     }
 
     public void setCurrentWorkspace(Workspace currentWorkspace) {

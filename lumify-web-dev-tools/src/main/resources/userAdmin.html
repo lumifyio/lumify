@@ -8,13 +8,30 @@
 <body>
 <h1>Lumify: User Admin</h1>
 
+<h3>Me</h3>
+
+<div id="me-user-id"></div>
+<div id="me-user-name"></div>
+
 <h3>User ID</h3>
 
 <div id="user-id"></div>
 
 <h3>User name</h3>
 
-<div id="user-name"></div>
+<form method="GET">
+    <input type="text" name="user-name" id="user-name"/>
+    <input type="submit" value="Load User"/>
+</form>
+
+<h3>Privileges</h3>
+
+<ul>
+    <li><input type="checkbox" id="privilege-read"> Read</li>
+    <li><input type="checkbox" id="privilege-edit"> Edit</li>
+    <li><input type="checkbox" id="privilege-publish"> Publish</li>
+    <li><input type="checkbox" id="privilege-admin"> Admin</li>
+</ul>
 
 <h3>Authorizations</h3>
 
@@ -26,6 +43,8 @@
     Value: <input type="text" id="new-auth"/>
     <button id="add">Add Auth</button>
 </form>
+
+<button onclick="deleteUser()">Delete User</button>
 
 <script type="text/javascript">
     $(function () {
@@ -54,17 +73,48 @@
     });
 
     function reload() {
+        var url = '/user/me';
+        var userNameParameter = getURLParameter('user-name');
+        if(userNameParameter) {
+            url = '/user?user-name=' + encodeURIComponent(userNameParameter);
+        }
+
+        $.ajax({
+            url: url,
+            success: function (data) {
+                console.log(data);
+                $('#user-id').html(data.id);
+                $('#user-name').val(data.userName);
+                var html = ejs.render(document.authorizationsTemplate, data);
+                $('#authorizations').html(html);
+                $('#privilege-read').attr('checked', data.privileges.indexOf('READ') >= 0);
+                $('#privilege-edit').attr('checked', data.privileges.indexOf('EDIT') >= 0);
+                $('#privilege-publish').attr('checked', data.privileges.indexOf('PUBLISH') >= 0);
+                $('#privilege-admin').attr('checked', data.privileges.indexOf('ADMIN') >= 0);
+            },
+            dataType: 'json'
+        });
+
         $.ajax({
             url: '/user/me',
             success: function (data) {
                 console.log(data);
-                $('#user-id').html(data.id);
-                $('#user-name').html(data.userName);
-                var html = ejs.render(document.authorizationsTemplate, data);
-                $('#authorizations').html(html);
+                $('#me-user-id').html(data.id);
+                $('#me-user-name').html(data.userName);
             },
             dataType: 'json'
         });
+    }
+
+    function deleteUser() {
+        var userNameParameter = getURLParameter('user-name');
+        if(confirm("Are you sure you want to delete: " + userNameParameter)) {
+            $.post()
+        }
+    }
+
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
     }
 
     function removeAuth(auth) {

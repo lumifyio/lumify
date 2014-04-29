@@ -2,11 +2,10 @@ package io.lumify.securegraph.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserType;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 
 public class SecureGraphUser implements User, Serializable {
@@ -15,19 +14,19 @@ public class SecureGraphUser implements User, Serializable {
     private String displayName;
     private String userId;
     private String userStatus;
-    private int roles;
+    private Set<Privilege> privileges;
 
     // required for Serializable
     protected SecureGraphUser() {
 
     }
 
-    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext, String userStatus, Collection<Roles> roles) {
+    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext, String userStatus, Set<Privilege> privileges) {
         this.displayName = displayName;
         this.modelUserContext = modelUserContext;
         this.userId = userId;
         this.userStatus = userStatus;
-        this.roles = Roles.toBits(roles);
+        this.privileges = privileges;
     }
 
     public String getUserId() {
@@ -51,8 +50,8 @@ public class SecureGraphUser implements User, Serializable {
         return userStatus;
     }
 
-    public Set<Roles> getRoles() {
-        return Roles.toSet(this.roles);
+    public Set<Privilege> getPrivileges() {
+        return this.privileges;
     }
 
     public void setUserStatus(String status) {
@@ -61,6 +60,6 @@ public class SecureGraphUser implements User, Serializable {
 
     @Override
     public String toString() {
-        return "SecureGraphUser{userId='" + getUserId() + "', displayName='" + getDisplayName() + "', roles=" + getRoles() + "}";
+        return "SecureGraphUser{userId='" + getUserId() + "', displayName='" + getDisplayName() + "', privileges=" + getPrivileges() + "}";
     }
 }

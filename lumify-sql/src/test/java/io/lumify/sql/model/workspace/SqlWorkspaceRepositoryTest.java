@@ -7,7 +7,7 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.SessionFactory;
@@ -46,7 +46,7 @@ public class SqlWorkspaceRepositoryTest {
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
         sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
-        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, Roles.ALL, new String[0]);
+        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, Privilege.ALL, new String[0]);
     }
 
     @Test
@@ -148,7 +148,7 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
-        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", Roles.ALL, new String[0]);
+        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", Privilege.ALL, new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
         workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser2);
         assertTrue(workspaceUsers.size() == 2);

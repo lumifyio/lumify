@@ -6,7 +6,7 @@ import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class SecureGraphUserRepositoryTest {
 
     @Test
     public void testAddUser() {
-        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", Roles.ALL, new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", Privilege.ALL, new String[]{"auth1", "auth2"});
 
         SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUsername("testUser");
         assertEquals("testUser", secureGraphUser.getDisplayName());

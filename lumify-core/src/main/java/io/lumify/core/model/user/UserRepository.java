@@ -4,7 +4,7 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import org.apache.accumulo.core.security.Authorizations;
@@ -27,7 +27,7 @@ public abstract class UserRepository {
 
     public abstract User findById(String userId);
 
-    public abstract User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations);
+    public abstract User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations);
 
     public abstract void setPassword(User user, String password);
 
@@ -46,7 +46,7 @@ public abstract class UserRepository {
 
     public abstract org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 
-    public abstract Set<Roles> getRoles(User user);
+    public abstract Set<Privilege> getPrivileges(User user);
 
     public JSONObject toJsonWithAuths(User user) {
         JSONObject json = toJson(user);
@@ -57,8 +57,8 @@ public abstract class UserRepository {
         }
         json.put("authorizations", authorizations);
 
-        Set<Roles> roles = getRoles(user);
-        json.put("roles", Roles.toJson(roles));
+        Set<Privilege> privileges = getPrivileges(user);
+        json.put("privileges", Privilege.toJson(privileges));
 
         return json;
     }
@@ -107,11 +107,13 @@ public abstract class UserRepository {
         return new SystemUser(getModelUserContext(LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
     }
 
-    public User findOrAddUser(String username, String displayName, String password, Collection<Roles> roles, String[] authorizations) {
+    public User findOrAddUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] authorizations) {
         User user = findByUsername(username);
         if (user == null) {
-            user = addUser(username, displayName, password, roles, authorizations);
+            user = addUser(username, displayName, password, privileges, authorizations);
         }
         return user;
     }
+
+    public abstract void delete(User user);
 }

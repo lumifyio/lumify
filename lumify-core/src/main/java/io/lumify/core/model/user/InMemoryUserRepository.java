@@ -1,7 +1,7 @@
 package io.lumify.core.model.user;
 
 import io.lumify.core.model.workspace.Workspace;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import org.securegraph.Authorizations;
@@ -28,8 +28,8 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(username, displayName, password, roles, userAuthorizations);
+    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
+        InMemoryUser user = new InMemoryUser(username, displayName, password, privileges, userAuthorizations);
         users.add(user);
         return user;
     }
@@ -78,10 +78,15 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public Set<Roles> getRoles(User user) {
+    public Set<Privilege> getPrivileges(User user) {
         if (user instanceof SystemUser) {
-            return Roles.ALL;
+            return Privilege.ALL;
         }
-        return ((InMemoryUser) user).getRoles();
+        return ((InMemoryUser) user).getPrivileges();
+    }
+
+    @Override
+    public void delete(User user) {
+        this.users.remove(user);
     }
 }

@@ -1,7 +1,7 @@
 package io.lumify.web;
 
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -56,7 +56,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         if (username == null || username.trim().equals("")) {
             return null;
         }
-        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, Roles.NONE, new String[0]);
+        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, Privilege.NONE, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {

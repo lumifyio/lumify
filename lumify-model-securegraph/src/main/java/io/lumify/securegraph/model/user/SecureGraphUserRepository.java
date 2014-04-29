@@ -15,7 +15,7 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -46,7 +46,7 @@ public class SecureGraphUserRepository extends UserRepository {
     private final Cache<String, Set<String>> userAuthorizationCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
-    private final Cache<String, Set<Roles>> userRolesCache = CacheBuilder.newBuilder()
+    private final Cache<String, Set<Privilege>> userPrivilegesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
 
@@ -81,9 +81,9 @@ public class SecureGraphUserRepository extends UserRepository {
         String userName = USERNAME.getPropertyValue(user);
         String userId = (String) user.getId();
         String userStatus = STATUS.getPropertyValue(user);
-        Set<Roles> roles = Roles.toSet(ROLES.getPropertyValue(user, Roles.toBits(Roles.NONE)));
+        Set<Privilege> privileges = Privilege.stringToPrivileges(PRIVILEGES.getPropertyValue(user));
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, roles);
+        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, privileges);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Roles> roles, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
         User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new LumifyException("duplicate username");
@@ -135,7 +135,7 @@ public class SecureGraphUserRepository extends UserRepository {
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
-        ROLES.setProperty(userBuilder, (int) Roles.toBits(roles), VISIBILITY.getVisibility());
+        PRIVILEGES.setProperty(userBuilder, Privilege.toBits(privileges), VISIBILITY.getVisibility());
         User user = createFromVertex(userBuilder.save());
         graph.flush();
         return user;
@@ -265,22 +265,28 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public Set<Roles> getRoles(User user) {
-        Set<Roles> roles;
+    public Set<Privilege> getPrivileges(User user) {
+        Set<Privilege> privileges;
         if (user instanceof SystemUser) {
-            return Roles.ALL;
+            return Privilege.ALL;
         } else {
-            roles = userRolesCache.getIfPresent(user.getUserId());
+            privileges = userPrivilegesCache.getIfPresent(user.getUserId());
         }
-        if (roles == null) {
+        if (privileges == null) {
             Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-            roles = getRoles(userVertex);
-            userRolesCache.put(user.getUserId(), roles);
+            privileges = getPrivileges(userVertex);
+            userPrivilegesCache.put(user.getUserId(), privileges);
         }
-        return roles;
+        return privileges;
     }
 
-    private Set<Roles> getRoles(Vertex userVertex) {
-        return Roles.toSet(ROLES.getPropertyValue(userVertex, Roles.toBits(Roles.NONE)));
+    @Override
+    public void delete(User user) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        graph.removeVertex(userVertex, authorizations);
+    }
+
+    private Set<Privilege> getPrivileges(Vertex userVertex) {
+        return Privilege.stringToPrivileges(PRIVILEGES.getPropertyValue(userVertex));
     }
 }

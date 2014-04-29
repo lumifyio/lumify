@@ -8,10 +8,9 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
-import io.lumify.web.roleFilters.AdminRoleFilter;
-import io.lumify.web.roleFilters.EditRoleFilter;
-import io.lumify.web.roleFilters.PublishRoleFilter;
-import io.lumify.web.roleFilters.ReadRoleFilter;
+import io.lumify.web.privilegeFilters.*;
+import io.lumify.web.privilegeFilters.EditPrivilegeFilter;
+import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.artifact.*;
@@ -75,70 +74,71 @@ public class Router extends HttpServlet {
             app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
             app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
 
-            app.get("/ontology", authenticator, ReadRoleFilter.class, Ontology.class);
+            app.get("/ontology", authenticator, ReadPrivilegeFilter.class, Ontology.class);
 
-            app.get("/audit", authenticator, ReadRoleFilter.class, VertexAudit.class);
+            app.get("/audit", authenticator, ReadPrivilegeFilter.class, VertexAudit.class);
 
-            app.get("/resource", authenticator, ReadRoleFilter.class, ResourceGet.class);
+            app.get("/resource", authenticator, ReadPrivilegeFilter.class, ResourceGet.class);
 
-            app.get("/artifact/highlightedText", authenticator, ReadRoleFilter.class, ArtifactHighlightedText.class);
-            app.get("/artifact/raw", authenticator, ReadRoleFilter.class, ArtifactRaw.class);
-            app.get("/artifact/thumbnail", authenticator, ReadRoleFilter.class, ArtifactThumbnail.class);
-            app.get("/artifact/poster-frame", authenticator, ReadRoleFilter.class, ArtifactPosterFrame.class);
-            app.get("/artifact/video-preview", authenticator, ReadRoleFilter.class, ArtifactVideoPreviewImage.class);
-            app.post("/artifact/import", authenticator, EditRoleFilter.class, ArtifactImport.class);
+            app.get("/artifact/highlightedText", authenticator, ReadPrivilegeFilter.class, ArtifactHighlightedText.class);
+            app.get("/artifact/raw", authenticator, ReadPrivilegeFilter.class, ArtifactRaw.class);
+            app.get("/artifact/thumbnail", authenticator, ReadPrivilegeFilter.class, ArtifactThumbnail.class);
+            app.get("/artifact/poster-frame", authenticator, ReadPrivilegeFilter.class, ArtifactPosterFrame.class);
+            app.get("/artifact/video-preview", authenticator, ReadPrivilegeFilter.class, ArtifactVideoPreviewImage.class);
+            app.post("/artifact/import", authenticator, EditPrivilegeFilter.class, ArtifactImport.class);
 
-            app.post("/entity/resolveTerm", authenticator, EditRoleFilter.class, ResolveTermEntity.class);
-            app.post("/entity/unresolveTerm", authenticator, EditRoleFilter.class, UnresolveTermEntity.class);
-            app.post("/entity/resolveDetectedObject", authenticator, EditRoleFilter.class, ResolveDetectedObject.class);
-            app.post("/entity/unresolveDetectedObject", authenticator, EditRoleFilter.class, UnresolveDetectedObject.class);
+            app.post("/entity/resolveTerm", authenticator, EditPrivilegeFilter.class, ResolveTermEntity.class);
+            app.post("/entity/unresolveTerm", authenticator, EditPrivilegeFilter.class, UnresolveTermEntity.class);
+            app.post("/entity/resolveDetectedObject", authenticator, EditPrivilegeFilter.class, ResolveDetectedObject.class);
+            app.post("/entity/unresolveDetectedObject", authenticator, EditPrivilegeFilter.class, UnresolveDetectedObject.class);
 
-            app.post("/vertex/property/set", authenticator, EditRoleFilter.class, VertexSetProperty.class);
-            app.post("/vertex/property/delete", authenticator, EditRoleFilter.class, VertexDeleteProperty.class);
-            app.get("/vertex/property/termMentions", authenticator, ReadRoleFilter.class, VertexGetPropertyTermMentions.class);
-            app.get("/vertex/property", authenticator, ReadRoleFilter.class, VertexGetPropertyValue.class);
-            app.post("/vertex/visibility/set", authenticator, EditRoleFilter.class, VertexSetVisibility.class);
-            app.get("/vertex/properties", authenticator, ReadRoleFilter.class, VertexProperties.class);
-            app.get("/vertex/relationships", authenticator, ReadRoleFilter.class, VertexRelationships.class);
-            app.post("/vertex/removeRelationship", authenticator, EditRoleFilter.class, VertexRelationshipRemoval.class);
-            app.post("/vertex/multiple", authenticator, ReadRoleFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
+            app.post("/vertex/property/set", authenticator, EditPrivilegeFilter.class, VertexSetProperty.class);
+            app.post("/vertex/property/delete", authenticator, EditPrivilegeFilter.class, VertexDeleteProperty.class);
+            app.get("/vertex/property/termMentions", authenticator, ReadPrivilegeFilter.class, VertexGetPropertyTermMentions.class);
+            app.get("/vertex/property", authenticator, ReadPrivilegeFilter.class, VertexGetPropertyValue.class);
+            app.post("/vertex/visibility/set", authenticator, EditPrivilegeFilter.class, VertexSetVisibility.class);
+            app.get("/vertex/properties", authenticator, ReadPrivilegeFilter.class, VertexProperties.class);
+            app.get("/vertex/relationships", authenticator, ReadPrivilegeFilter.class, VertexRelationships.class);
+            app.post("/vertex/removeRelationship", authenticator, EditPrivilegeFilter.class, VertexRelationshipRemoval.class);
+            app.post("/vertex/multiple", authenticator, ReadPrivilegeFilter.class, VertexMultiple.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
 
-            app.post("/relationship/property/set", authenticator, EditRoleFilter.class, SetRelationshipProperty.class);
-            app.post("/relationship/property/delete", authenticator, EditRoleFilter.class, DeleteRelationshipProperty.class);
-            app.post("/relationship/create", authenticator, EditRoleFilter.class, RelationshipCreate.class);
-            app.get("/relationship/properties", authenticator, ReadRoleFilter.class, RelationshipProperties.class);
-            app.post("/relationship/visibility/set", authenticator, EditRoleFilter.class, RelationshipSetVisibility.class);
+            app.post("/relationship/property/set", authenticator, EditPrivilegeFilter.class, SetRelationshipProperty.class);
+            app.post("/relationship/property/delete", authenticator, EditPrivilegeFilter.class, DeleteRelationshipProperty.class);
+            app.post("/relationship/create", authenticator, EditPrivilegeFilter.class, RelationshipCreate.class);
+            app.get("/relationship/properties", authenticator, ReadPrivilegeFilter.class, RelationshipProperties.class);
+            app.post("/relationship/visibility/set", authenticator, EditPrivilegeFilter.class, RelationshipSetVisibility.class);
 
-            app.get("/graph/findPath", authenticator, ReadRoleFilter.class, GraphFindPath.class);
-            app.get("/graph/relatedVertices", authenticator, ReadRoleFilter.class, GraphRelatedVertices.class);
-            app.get("/graph/vertex/search", authenticator, ReadRoleFilter.class, GraphVertexSearch.class);
-            app.get("/graph/vertex/geoLocationSearch", authenticator, ReadRoleFilter.class, GraphGeoLocationSearch.class);
-            app.post("/graph/vertex/uploadImage", authenticator, EditRoleFilter.class, GraphVertexUploadImage.class);
+            app.get("/graph/findPath", authenticator, ReadPrivilegeFilter.class, GraphFindPath.class);
+            app.get("/graph/relatedVertices", authenticator, ReadPrivilegeFilter.class, GraphRelatedVertices.class);
+            app.get("/graph/vertex/search", authenticator, ReadPrivilegeFilter.class, GraphVertexSearch.class);
+            app.get("/graph/vertex/geoLocationSearch", authenticator, ReadPrivilegeFilter.class, GraphGeoLocationSearch.class);
+            app.post("/graph/vertex/uploadImage", authenticator, EditPrivilegeFilter.class, GraphVertexUploadImage.class);
 
-            app.get("/workspaces", authenticator, ReadRoleFilter.class, WorkspaceList.class);
-            app.post("/workspace/new", authenticator, ReadRoleFilter.class, WorkspaceNew.class);
-            app.get("/workspace/diff", authenticator, ReadRoleFilter.class, WorkspaceDiff.class);
-            app.get("/workspace/relationships", authenticator, ReadRoleFilter.class, WorkspaceRelationships.class);
-            app.post("/workspace/relationships", authenticator, ReadRoleFilter.class, WorkspaceRelationships.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
-            app.get("/workspace/vertices", authenticator, ReadRoleFilter.class, WorkspaceVertices.class);
-            app.post("/workspace/update", authenticator, ReadRoleFilter.class, WorkspaceUpdate.class);
-            app.get("/workspace", authenticator, ReadRoleFilter.class, ReadRoleFilter.class, WorkspaceById.class);
-            app.delete("/workspace", authenticator, ReadRoleFilter.class, WorkspaceDelete.class);
-            app.post("/workspace/publish", authenticator, PublishRoleFilter.class, WorkspacePublish.class);
-            app.post("/workspace/undo", authenticator, EditRoleFilter.class, WorkspaceUndo.class);
+            app.get("/workspaces", authenticator, ReadPrivilegeFilter.class, WorkspaceList.class);
+            app.post("/workspace/new", authenticator, ReadPrivilegeFilter.class, WorkspaceNew.class);
+            app.get("/workspace/diff", authenticator, ReadPrivilegeFilter.class, WorkspaceDiff.class);
+            app.get("/workspace/relationships", authenticator, ReadPrivilegeFilter.class, WorkspaceRelationships.class);
+            app.post("/workspace/relationships", authenticator, ReadPrivilegeFilter.class, WorkspaceRelationships.class); // this is a post method to allow large data (ie data larger than would fit in the URL)
+            app.get("/workspace/vertices", authenticator, ReadPrivilegeFilter.class, WorkspaceVertices.class);
+            app.post("/workspace/update", authenticator, ReadPrivilegeFilter.class, WorkspaceUpdate.class);
+            app.get("/workspace", authenticator, ReadPrivilegeFilter.class, ReadPrivilegeFilter.class, WorkspaceById.class);
+            app.delete("/workspace", authenticator, ReadPrivilegeFilter.class, WorkspaceDelete.class);
+            app.post("/workspace/publish", authenticator, PublishPrivilegeFilter.class, WorkspacePublish.class);
+            app.post("/workspace/undo", authenticator, EditPrivilegeFilter.class, WorkspaceUndo.class);
 
             app.get("/user/me", authenticator, MeGet.class);
-            app.get("/user", authenticator, UserList.class);
+            app.get("/user", authenticator, AdminPrivilegeFilter.class, UserGet.class);
+            app.get("/users", authenticator, UserList.class);
             app.get("/user/info", authenticator, UserInfo.class);
 
             app.get("/map/map-init.js", MapInitHandler.class);
             app.get("/map/marker/image", MapMarkerImage.class);
             app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
-            app.get("/admin", authenticator, AdminRoleFilter.class, AdminList.class);
+            app.get("/admin", authenticator, AdminPrivilegeFilter.class, AdminList.class);
 
             app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
-            app.post("/admin/uploadOntology", authenticator, AdminRoleFilter.class, AdminUploadOntology.class);
+            app.post("/admin/uploadOntology", authenticator, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());

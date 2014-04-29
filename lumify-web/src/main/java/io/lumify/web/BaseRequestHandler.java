@@ -6,7 +6,7 @@ import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.common.base.Preconditions;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -184,8 +184,8 @@ public abstract class BaseRequestHandler implements Handler {
         return getUserRepository().getAuthorizations(user);
     }
 
-    protected Set<Roles> getRoles(User user) {
-        return getUserRepository().getRoles(user);
+    protected Set<Privilege> getPrivileges(User user) {
+        return getUserRepository().getPrivileges(user);
     }
 
     protected void respondWithNotFound(final HttpServletResponse response) throws IOException {

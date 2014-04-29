@@ -4,12 +4,13 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.Roles;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import org.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
     private static final String PASSWORD = "8XXuk2tQ523b";
@@ -39,7 +40,8 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, Roles.NONE, new String[0]);
+            Set<Privilege> privileges = Privilege.ALL; // TODO set this to something else?
+            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, privileges, new String[0]);
         }
         setUser(request, user);
         return true;
