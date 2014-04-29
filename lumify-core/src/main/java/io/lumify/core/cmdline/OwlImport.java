@@ -1,8 +1,7 @@
 package io.lumify.core.cmdline;
 
-import io.lumify.core.model.ontology.OntologyRepository;
-import org.securegraph.Graph;
 import com.google.inject.Inject;
+import io.lumify.core.model.ontology.OntologyRepository;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;

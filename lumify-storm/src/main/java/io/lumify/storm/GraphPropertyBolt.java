@@ -246,6 +246,9 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 interestedWorkerWrappers.get(i).enqueueWork(teeInputStream.getTees()[i], workData);
             }
             teeInputStream.loopUntilTeesAreClosed();
+            for (GraphPropertyThreadedWrapper interestedWorkerWrapper : interestedWorkerWrappers) {
+                interestedWorkerWrapper.dequeueResult();
+            }
         } finally {
             if (tempFile != null) {
                 if (!tempFile.delete()) {

@@ -256,7 +256,7 @@ public abstract class GraphPropertyWorker {
                     .setEdgeId(edge.getId().toString(), termMention.getVisibility());
         }
 
-        termMentionRepository.save(termMentionModel, FlushFlag.NO_FLUSH);
+        getTermMentionRepository().save(termMentionModel, FlushFlag.NO_FLUSH);
         return new TermMentionWithGraphVertex(termMentionModel, vertex);
     }
 

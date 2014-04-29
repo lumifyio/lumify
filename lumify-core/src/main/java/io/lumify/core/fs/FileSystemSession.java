@@ -6,10 +6,8 @@ import java.io.InputStream;
 
 public interface FileSystemSession {
     void saveFile(String path, InputStream in);
-    
-    SaveFileResults saveFile (InputStream in);
 
-    InputStream loadFile (String path);
+    SaveFileResults saveFile(InputStream in);
 
-    long getFileLength (String path);
+    InputStream loadFile(String path);
 }

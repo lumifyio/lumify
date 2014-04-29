@@ -32,14 +32,6 @@ public class TermExtractionResult {
         this.relationships.addAll(relationships);
     }
 
-    public void mergeFrom(TermExtractionResult result) {
-        checkNotNull(result);
-        checkNotNull(result.termMentions);
-
-        termMentions.addAll(result.termMentions);
-        relationships.addAll(result.relationships);
-    }
-
     public List<TermMention> getTermMentions() {
         return termMentions;
     }
@@ -103,9 +95,6 @@ public class TermExtractionResult {
         if (this.termMentions != other.termMentions && (this.termMentions == null || !this.termMentions.equals(other.termMentions))) {
             return false;
         }
-        if (this.relationships != other.relationships && (this.relationships == null || !this.relationships.equals(other.relationships))) {
-            return false;
-        }
-        return true;
+        return !(this.relationships != other.relationships && (this.relationships == null || !this.relationships.equals(other.relationships)));
     }
 }

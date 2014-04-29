@@ -90,13 +90,4 @@ public class HdfsSession implements FileSystemSession {
             throw new RuntimeException(ex);
         }
     }
-
-    @Override
-    public long getFileLength(String path) {
-        try {
-            return this.hdfsFileSystem.getFileStatus(new Path(path)).getLen();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 }

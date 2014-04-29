@@ -185,10 +185,10 @@ public class VideoTranscript implements Serializable {
                 return "";
             }
             return String.format("%02d:%02d:%02d.%03d",
-                    t.longValue() / 60 / 60 / 1000,
-                    (t.longValue() / 60 / 1000) % 60,
-                    (t.longValue() / 1000) % 60,
-                    t.longValue() % 1000);
+                    t / 60 / 60 / 1000,
+                    (t / 60 / 1000) % 60,
+                    (t / 1000) % 60,
+                    t % 1000);
         }
 
         public Long getStart() {

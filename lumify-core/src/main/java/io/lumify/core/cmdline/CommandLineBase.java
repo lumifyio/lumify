@@ -145,14 +145,6 @@ public abstract class CommandLineBase {
         return FileSystem.get(new URI(hdfsRootDir), hadoopConfiguration, "hadoop");
     }
 
-    protected Class loadClass(String className) {
-        try {
-            return this.getClass().getClassLoader().loadClass(className);
-        } catch (Exception e) {
-            throw new RuntimeException("Could not find class '" + className + "'", e);
-        }
-    }
-
     protected User getUser() {
         if (this.user == null) {
             this.user = userRepository.getSystemUser();

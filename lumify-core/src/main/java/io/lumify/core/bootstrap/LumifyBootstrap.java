@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * The LumifyBootstrap is a Guice Module that configures itself by
  * discovering all available implementations of BootstrapBindingProvider
@@ -96,6 +98,7 @@ public class LumifyBootstrap extends AbstractModule {
     protected void configure() {
         LOGGER.info("Configuring LumifyBootstrap.");
 
+        checkNotNull(configuration, "configuration cannot be null");
         bind(Configuration.class).toInstance(configuration);
 
         LOGGER.debug("binding %s", JmxMetricsManager.class.getName());

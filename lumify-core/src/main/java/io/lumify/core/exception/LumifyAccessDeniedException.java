@@ -6,10 +6,6 @@ public class LumifyAccessDeniedException extends LumifyException {
     private final User user;
     private final Object resourceId;
 
-    public LumifyAccessDeniedException(String message) {
-        this(message, null, null);
-    }
-
     public LumifyAccessDeniedException(String message, User user, Object resourceId) {
         super(message);
         this.user = user;

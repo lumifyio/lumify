@@ -58,12 +58,20 @@ public class ArtifactDetectedObject {
         this.concept = concept;
     }
 
-    public String getId () { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId (String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getProcess () { return process; }
+    public String getProcess() {
+        return process;
+    }
 
-    public void setProcess (String process) { this.process = process; }
+    public void setProcess(String process) {
+        this.process = process;
+    }
 
 }
