@@ -59,6 +59,9 @@ public enum Privilege {
         String[] privilegesStringParts = privilegesString.split(",");
         Set<Privilege> privileges = new HashSet<Privilege>();
         for (String privilegesStringPart : privilegesStringParts) {
+            if (privilegesStringPart.trim().length() == 0) {
+                continue;
+            }
             privileges.add(stringToPrivilege(privilegesStringPart));
         }
         return privileges;
