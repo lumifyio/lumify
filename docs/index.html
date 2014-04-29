@@ -1,0 +1,137 @@
+---
+layout: page
+title: Lumify Documentation
+description: Start here for all Lumify-related documentation.
+keywords: big data, analytics, graph, visualization
+---
+<p>
+  Lumify is an open source project to create a big data fusion, analysis, and
+  visualization platform designed for anyone to use. Its intuitive web-based
+  interface helps users discover connections and explore relationships in their
+  data via a suite of analytic options, including 2D and 3D graph
+  visualizations, full-text faceted search, dynamic histograms, interactive
+  geographic maps, and collaborative workspaces shared in real-time.
+</p>
+
+<h2>Concepts</h2>
+<p>
+  Understanding a couple key concepts will greatly help in making sense of what
+  Lumify does and how it does it.
+</p>
+<ul>
+  <li>
+    <strong>Ontology</strong> - An ontology is the structure for organizing
+    information you care to analyze in Lumify. Basically, it's your data model.
+    The entities, relationships, and properties that make up Lumify's graph are
+    entirely specified by you using OWL.
+  </li>
+  <li>
+    <strong>Entity</strong> - An entity is any "thing" you want to represent in
+    Lumify. It could be a person, place, event, etc. Entities have properties
+    and relationships to other entities.
+  </li>
+  <li>
+    <strong>Relationship</strong> - A relationship is a link between two
+    entities. For example, Joe (entity) works with (relationship) Susan
+    (entity). Lumify can be configured to understand and enforce valid
+    relationships between entities.
+  </li>
+  <li>
+    <strong>Properties</strong> - Properties are data about an entity. For
+    example, a person entity may have properties for first name, last name,
+    date of birth, height, weight, etc. Lumify will track whatever properties
+    you define in your ontology.
+  </li>
+  <li>
+    <strong>Graph</strong> - The data model within Lumify is stored as a graph
+    of entities, or things, and the relationships between those entities. For
+    the technologists out there, these are usually referred to as vertices
+    (entities) and edges (relationships). Entities and relationships can have
+    one or more associated properties.
+  </li>
+</ul>
+
+<h2>Features</h2>
+<p>
+  As an open source project, Lumify features are evolving all the time. Below
+  is an explanation of the primary ones.
+</p>
+<ul>
+  <li>
+    <strong>Search</strong> - Lumify provides a full-text search over
+    everything in your graph. You can also use custom filters built from
+    properties defined in your ontology.
+  </li>
+  <li>
+    <strong>Graph Visualization</strong> - The primary feature of Lumify is the
+    graph visualization. Lumify provides both 2D and 3D graph visualizations
+    with a variety of automatic layouts to help you tame a crowded graph.
+  </li>
+  <li>
+    <strong>Link Analysis</strong> - Lumify provides a variety of options for
+    analyzing the links between entities on the graph. A right click menu on
+    any entity allows you to display all related entities, find paths to another
+    entity, and establish a new relationship (i.e. connect) to another entity.
+  </li>
+  <li>
+    <strong>Geospatial Analysis</strong> - Lumify provides the ability to
+    integrate any Open Layers-compatible mapping system, such as Google Maps or
+    ESRI, for geospatial analysis. Any data tagged with location information
+    can be aggregated and viewed on a map.
+  </li>
+  <li>
+    <strong>Multimedia Analysis</strong> - Data comes in all shapes and sizes.
+    Out of the box, Lumify comes with specific ingest processing and interface
+    elements for textual content, images, and videos.
+  </li>
+  <li>
+    <strong>Collaboration</strong> - Lumify's spaces feature allows you to
+    organize work into a set of projects, or workspaces. Each space can be
+    individually shared in read-only or edit mode with other Lumify users.
+    Changes to the space are immediately propagated to everyone sharing the
+    workspace without needing to refresh browser windows.
+  </li>
+</ul>
+
+<h2>Why use Lumify?</h2>
+<p>
+  The challenge of making sense of the ever-increasing volumes of data isn't
+  going away any time soon. The ability to effectively deal with this
+  data-deluge will be a key differentiator for businesses moving forward. Eric
+  Schmidt, executive chairman of Google, was recently quoted as saying that
+  "the biggest disrupter (of 2014) that we're sure about is the arrival of big
+  data and machine intelligence everywhere". Lumify can serve as that platform.
+  It is
+</p>
+<ul>
+  <li>
+    <strong>Free</strong> - Lumify is completely free. There are no licensing or
+    usage fees whatsoever for the software.
+  </li>
+  <li>
+    <strong>Permissively Licensed</strong> - All Lumify code is licensed under
+    the Apache 2 license, giving you the freedom to use it commercially, modify,
+    and redistribute.
+  </li>
+  <li>
+    <strong>Open Source</strong> - All Lumify source code is open and available.
+    You can go see it right now. With that openness comes the ability to change
+    and adapt it to your needs.
+  </li>
+  <li>
+    <strong>Scalable</strong> - We didn't attempt to reinvent the wheel with
+    Lumify. It's built on proven, scalable, open source big data technologies
+    including Apache Hadoop and Apache Accumulo.
+  </li>
+  <li>
+    <strong>Secure</strong> - Lumify is built on top of Accumulo and leverages
+    its cell-level security features to individually control access to entities,
+    properties, and relationships.
+  </li>
+  <li>
+    <strong>Supported</strong> - Altamira is committed to building an open
+    source big data analysis and visualization platform for its customers and
+    the wider open source community. We've dedicated a full-time development
+    team to making this a success.
+  </li>
+</ul>

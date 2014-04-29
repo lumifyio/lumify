@@ -136,16 +136,21 @@ footer .social {
   padding-bottom: 1em;
 }
 
-#blog {
+#page {
   background-color: #ddd;
   padding: 30px;
   margin-top: 4em;
 }
 
-#blog > h2 {
+#page > h2 {
   margin: 0 0 30px 0;
   padding: 0;
   font-weight: bold;
+}
+
+#page-content {
+  padding: 3em;
+  background-color: white;
 }
 
 .post {
