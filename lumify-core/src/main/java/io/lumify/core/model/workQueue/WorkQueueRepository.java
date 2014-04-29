@@ -98,7 +98,9 @@ public abstract class WorkQueueRepository {
     protected void broadcastUserStatusChange(User user, UserStatus status) {
         JSONObject json = new JSONObject();
         json.put("type", "userStatusChange");
-        json.put("data", UserRepository.toJson(user));
+        JSONObject data = UserRepository.toJson(user);
+        data.put("status", status.toString());
+        json.put("data", data);
         broadcastJson(json);
     }
 

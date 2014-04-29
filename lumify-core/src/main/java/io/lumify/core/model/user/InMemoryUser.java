@@ -8,17 +8,13 @@ import java.util.*;
 
 public class InMemoryUser implements User {
     private final String userId;
-    private final String username;
     private final String displayName;
-    private final String password;
     private final List<String> authorizations;
     private Set<Privilege> privileges;
 
-    public InMemoryUser(String username, String displayName, String password, Set<Privilege> privileges, String[] authorizations) {
+    public InMemoryUser(String displayName, Set<Privilege> privileges, String[] authorizations) {
         this.userId = UUID.randomUUID().toString();
-        this.username = username;
         this.displayName = displayName;
-        this.password = password;
         this.authorizations = new ArrayList<String>();
         this.privileges = privileges;
         Collections.addAll(this.authorizations, authorizations);

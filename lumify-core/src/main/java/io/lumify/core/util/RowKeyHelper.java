@@ -22,16 +22,6 @@ public class RowKeyHelper {
         return StringUtils.join(parts, MAJOR_FIELD_SEPARATOR);
     }
 
-    public static String buildSHA256KeyStringNoUrn(byte[] bytes) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] sha = digest.digest(bytes);
-            return Hex.encodeHexString(sha);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static String buildSHA256KeyString(byte[] bytes) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -85,13 +75,5 @@ public class RowKeyHelper {
 
     public static String jsonEncode(String rowKey) {
         return rowKey.replaceAll("\\x1f", "\\\\x1F");
-    }
-
-    public static String padLong(long l) {
-        return padLong(l, 16);
-    }
-
-    public static String padLong(long l, int width) {
-        return StringUtils.leftPad(Long.toString(l), width, '0');
     }
 }

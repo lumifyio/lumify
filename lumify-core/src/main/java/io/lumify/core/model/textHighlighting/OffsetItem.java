@@ -104,6 +104,10 @@ public abstract class OffsetItem implements Comparable {
             return 1;
         }
 
+        if (getGraphVertexId() == null /* implied: && other.getGraphVertexId() == null */) {
+            return 0;
+        }
+
         return getGraphVertexId().compareTo(other.getGraphVertexId());
     }
 }

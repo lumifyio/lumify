@@ -24,8 +24,6 @@ public abstract class DetectedObjectRepository extends Repository<DetectedObject
 
     public abstract String getTableName();
 
-    public abstract Iterable<DetectedObjectModel> findByGraphVertexId(String vertexId, ModelUserContext modelUserContext);
-
     // TODO clean this method signature up. Takes way too many parameters.
     public abstract DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId, String concept,
                                            double x1, double y1, double x2, double y2, boolean resolved,

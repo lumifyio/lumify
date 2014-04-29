@@ -1,7 +1,6 @@
 package io.lumify.core.model.ontology;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;

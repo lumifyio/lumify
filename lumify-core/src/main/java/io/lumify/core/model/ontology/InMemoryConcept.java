@@ -49,7 +49,6 @@ public class InMemoryConcept extends Concept {
 
     @Override
     public void setProperty(String name, Object value, Visibility visibility) {
-        return;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class InMemoryConcept extends Concept {
         return null;
     }
 
-    public void setGlyphIconInputStream (InputStream inputStream) {
+    public void setGlyphIconInputStream(InputStream inputStream) {
         this.glyphIconInputStream = inputStream;
     }
 
@@ -92,9 +91,5 @@ public class InMemoryConcept extends Concept {
 
     public String getConceptIRI() {
         return conceptIRI;
-    }
-
-    public void setConceptIRI(String conceptIRI) {
-        this.conceptIRI = conceptIRI;
     }
 }

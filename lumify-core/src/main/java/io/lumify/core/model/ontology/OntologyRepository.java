@@ -53,8 +53,6 @@ public interface OntologyRepository {
 
     void importFile(File inFile, IRI documentIRI) throws Exception;
 
-    void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception;
-
     void exportOntology(OutputStream out, IRI documentIRI) throws Exception;
 
     void writePackage(File file, IRI documentIRI) throws Exception;

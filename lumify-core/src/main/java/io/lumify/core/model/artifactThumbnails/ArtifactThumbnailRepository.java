@@ -28,9 +28,5 @@ public abstract class ArtifactThumbnailRepository extends Repository<ArtifactThu
 
     public abstract ArtifactThumbnail createThumbnail(Object artifactVertexId, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException;
 
-    public abstract int thumnbailType(BufferedImage image);
-
-    public abstract String thumbnailFormat(BufferedImage image);
-
     public abstract int[] getScaledDimension(int[] imgSize, int[] boundary);
 }

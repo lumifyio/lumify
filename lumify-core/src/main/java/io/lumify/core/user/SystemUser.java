@@ -4,8 +4,6 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.user.UserType;
 
-import java.util.Set;
-
 public class SystemUser implements User {
     private static final long serialVersionUID = 1L;
     private static final String SYSTEM_USERNAME = "system";

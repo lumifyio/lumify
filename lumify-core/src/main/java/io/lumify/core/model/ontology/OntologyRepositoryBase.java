@@ -42,11 +42,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
-            try {
-                baseOwlFile.close();
-            } catch (IOException ex) {
-                throw new LumifyException("Could not close file", ex);
-            }
+            IOUtils.closeQuietly(baseOwlFile);
         }
     }
 
@@ -95,8 +91,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
     }
 
-    @Override
-    public void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception {
+    private void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception {
         byte[] inFileData = IOUtils.toByteArray(in);
 
         Reader inFileReader = new InputStreamReader(new ByteArrayInputStream(inFileData));
@@ -422,7 +417,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     protected File findOwlFile(File dir) {
-        for (File child : dir.listFiles()) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+        for (File child : files) {
             if (child.isDirectory()) {
                 File found = findOwlFile(child);
                 if (found != null) {

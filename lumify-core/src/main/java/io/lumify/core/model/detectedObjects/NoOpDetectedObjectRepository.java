@@ -34,11 +34,6 @@ public class NoOpDetectedObjectRepository extends DetectedObjectRepository {
     }
 
     @Override
-    public Iterable<DetectedObjectModel> findByGraphVertexId(String vertexId, ModelUserContext modelUserContext) {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
     public DetectedObjectModel saveDetectedObject(Object artifactVertexId, Object edgeId, Object graphVertexId, String concept, double x1, double y1, double x2, double y2, boolean resolved, String process, Visibility visibility, ModelUserContext modelUserContext) {
         throw new RuntimeException("not supported");
     }

@@ -108,9 +108,7 @@ public class HdfsLimitOutputStream extends OutputStream {
         if (this.largeOutputStream != null) {
             this.largeOutputStream.close();
         }
-        if (this.smallOutputStream != null) {
-            this.smallOutputStream.close();
-        }
+        this.smallOutputStream.close();
         super.close();
     }
 

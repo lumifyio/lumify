@@ -38,7 +38,7 @@ public class WorkspaceDiff {
         }
 
         for (Edge workspaceEdge : workspaceEdges) {
-            List<DiffItem> entityDiffs = diffEdge(workspace, workspaceEdge, authorizations);
+            List<DiffItem> entityDiffs = diffEdge(workspace, workspaceEdge);
             if (entityDiffs != null) {
                 result.addAll(entityDiffs);
             }
@@ -47,7 +47,7 @@ public class WorkspaceDiff {
         return result;
     }
 
-    private List<DiffItem> diffEdge(Workspace workspace, Edge edge, Authorizations authorizations) {
+    private List<DiffItem> diffEdge(Workspace workspace, Edge edge) {
         List<DiffItem> result = new ArrayList<DiffItem>();
 
         SandboxStatus sandboxStatus = GraphUtil.getSandboxStatus(edge, workspace.getId());

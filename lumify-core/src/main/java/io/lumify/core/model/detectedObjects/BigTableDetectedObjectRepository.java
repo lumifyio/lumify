@@ -42,8 +42,7 @@ public class BigTableDetectedObjectRepository extends DetectedObjectRepository{
         return termMentionBuilder.getTableName();
     }
 
-    @Override
-    public Iterable<DetectedObjectModel> findByGraphVertexId(String vertexId, ModelUserContext modelUserContext) {
+    private Iterable<DetectedObjectModel> findByGraphVertexId(String vertexId, ModelUserContext modelUserContext) {
         return findByRowStartsWith(vertexId + ":", modelUserContext);
     }
 

@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 public class InMemoryUserRepository extends UserRepository {
-    private final List<InMemoryUser> users = new ArrayList<InMemoryUser>();
-
     @Inject
     public InMemoryUserRepository(Configuration configuration) {
         super(configuration);
@@ -39,9 +37,7 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(username, displayName, password, getDefaultPrivileges(), userAuthorizations);
-        users.add(user);
-        return user;
+        return new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations);
     }
 
     @Override
@@ -97,7 +93,6 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public void delete(User user) {
-        this.users.remove(user);
     }
 
     @Override

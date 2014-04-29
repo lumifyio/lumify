@@ -1,6 +1,8 @@
 package io.lumify.core.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CollectionUtil {
     public static <T> List<T> toList(final Iterable<T> it) {
@@ -80,18 +82,6 @@ public class CollectionUtil {
         } catch (IllegalStateException ise) {
             return defaultValue;
         }
-    }
-
-    public static <TKey, TValue> Map<TKey, TValue> toMap(final Iterable<TValue> values, ValueToKey<TValue, TKey> valueToKey) {
-        Map<TKey, TValue> result = new HashMap<TKey, TValue>();
-        for (TValue v : values) {
-            result.put(valueToKey.toKey(v), v);
-        }
-        return result;
-    }
-
-    public static interface ValueToKey<TValue, TKey> {
-        TKey toKey(TValue v);
     }
 
     private CollectionUtil() {

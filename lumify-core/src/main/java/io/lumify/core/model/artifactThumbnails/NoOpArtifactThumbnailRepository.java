@@ -2,11 +2,10 @@ package io.lumify.core.model.artifactThumbnails;
 
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
-import io.lumify.core.user.User;
 import com.beust.jcommander.internal.Nullable;
 import com.google.inject.Inject;
+import io.lumify.core.user.User;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -43,16 +42,6 @@ public class NoOpArtifactThumbnailRepository extends ArtifactThumbnailRepository
 
     @Override
     public ArtifactThumbnail createThumbnail(Object artifactVertexId, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
-    public int thumnbailType(BufferedImage image) {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
-    public String thumbnailFormat(BufferedImage image) {
         throw new RuntimeException("not supported");
     }
 

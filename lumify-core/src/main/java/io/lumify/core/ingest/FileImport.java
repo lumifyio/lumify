@@ -1,5 +1,6 @@
 package io.lumify.core.ingest;
 
+import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
@@ -8,12 +9,10 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.util.*;
-import org.securegraph.*;
-import org.securegraph.mutation.ElementMutation;
-import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
+import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.File;
 import java.io.FileInputStream;

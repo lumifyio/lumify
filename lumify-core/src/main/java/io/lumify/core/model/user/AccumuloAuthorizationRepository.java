@@ -17,12 +17,13 @@ import java.util.*;
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
     public static final String LOCK_NAME = "AccumuloAuthorizationRepository";
+    private final Object lock = new Object();
     private Graph graph;
     private LockRepository lockRepository;
 
     public void addAuthorizationToGraph(final String auth) {
         LOGGER.info("adding authorization [%s] for secure graph user", auth);
-        synchronized (graph) {
+        synchronized (lock) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
                 @Override
@@ -56,7 +57,7 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
 
     public void removeAuthorizationFromGraph(final String auth) {
         LOGGER.info("removing authorization to graph user %s", auth);
-        synchronized (graph) {
+        synchronized (lock) {
             Lock lock = this.lockRepository.createLock(LOCK_NAME);
             lock.run(new Runnable() {
                 @Override

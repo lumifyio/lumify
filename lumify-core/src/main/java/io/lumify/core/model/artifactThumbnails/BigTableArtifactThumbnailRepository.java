@@ -94,26 +94,24 @@ public class BigTableArtifactThumbnailRepository extends ArtifactThumbnailReposi
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(resizedImage, format, out);
 
-        return saveThumbnail(artifactVertexId, thumbnailType, boundaryDims, out.toByteArray(), type, format, user);
+        return saveThumbnail(artifactVertexId, thumbnailType, boundaryDims, out.toByteArray(), type, format);
     }
 
-    @Override
-    public int thumnbailType(BufferedImage image) {
+    private int thumnbailType(BufferedImage image) {
         if (image.getColorModel().getNumComponents() > 3) {
             return BufferedImage.TYPE_4BYTE_ABGR;
         }
         return BufferedImage.TYPE_INT_RGB;
     }
 
-    @Override
-    public String thumbnailFormat(BufferedImage image) {
+    private String thumbnailFormat(BufferedImage image) {
         if (image.getColorModel().getNumComponents() > 3) {
             return "png";
         }
         return "jpg";
     }
 
-    private ArtifactThumbnail saveThumbnail(Object artifactVertexId, String thumbnailType, int[] boundaryDims, byte[] bytes, int type, String format, User user) {
+    private ArtifactThumbnail saveThumbnail(Object artifactVertexId, String thumbnailType, int[] boundaryDims, byte[] bytes, int type, String format) {
         ArtifactThumbnailRowKey artifactThumbnailRowKey = new ArtifactThumbnailRowKey(artifactVertexId, thumbnailType, boundaryDims[0], boundaryDims[1]);
         ArtifactThumbnail artifactThumbnail = new ArtifactThumbnail(artifactThumbnailRowKey);
         artifactThumbnail.getMetadata().setData(bytes);

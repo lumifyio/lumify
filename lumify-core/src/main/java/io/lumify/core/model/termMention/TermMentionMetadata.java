@@ -62,10 +62,6 @@ public class TermMentionMetadata extends ColumnFamily {
         return Value.toString(get(CONCEPT_GRAPH_VERTEX_ID));
     }
 
-    public String getAnalyticProcess() {
-        return Value.toString(get(ANALYTIC_PROCESS));
-    }
-
     public TermMentionMetadata setAnalyticProcess(String analyticProcess, Visibility visibility) {
         set(ANALYTIC_PROCESS, analyticProcess, visibility.getVisibilityString());
         return this;
