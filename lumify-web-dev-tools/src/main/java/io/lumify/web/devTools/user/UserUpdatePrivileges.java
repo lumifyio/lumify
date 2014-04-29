@@ -4,6 +4,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -13,13 +14,14 @@ import org.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
-public class UserDelete extends BaseRequestHandler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UserDelete.class);
+public class UserUpdatePrivileges extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(UserUpdatePrivileges.class);
     private final Graph graph;
 
     @Inject
-    public UserDelete(
+    public UserUpdatePrivileges(
             final UserRepository userRepository,
             final Configuration configuration,
             final Graph graph) {
@@ -30,6 +32,7 @@ public class UserDelete extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         String userName = getRequiredParameter(request, "user-name");
+        Set<Privilege> privileges = Privilege.stringToPrivileges(getRequiredParameter(request, "privileges"));
 
         User user = getUserRepository().findByUsername(userName);
         if (user == null) {
@@ -37,8 +40,8 @@ public class UserDelete extends BaseRequestHandler {
             return;
         }
 
-        LOGGER.info("deleting user %s", user.getUserId());
-        getUserRepository().delete(user);
+        LOGGER.info("Setting user %s privileges to %s", user.getUserId(), Privilege.toString(privileges));
+        getUserRepository().setPrivileges(user, privileges);
         this.graph.flush();
 
         JSONObject json = new JSONObject();

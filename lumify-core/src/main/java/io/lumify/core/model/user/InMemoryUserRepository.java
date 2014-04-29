@@ -99,4 +99,9 @@ public class InMemoryUserRepository extends UserRepository {
     public void delete(User user) {
         this.users.remove(user);
     }
+
+    @Override
+    public void setPrivileges(User user, Set<Privilege> privileges) {
+        ((InMemoryUser) user).setPrivileges(privileges);
+    }
 }

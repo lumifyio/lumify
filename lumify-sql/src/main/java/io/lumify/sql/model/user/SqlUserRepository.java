@@ -280,4 +280,29 @@ public class SqlUserRepository extends UserRepository {
             session.close();
         }
     }
+
+    @Override
+    public void setPrivileges(User user, Set<Privilege> privileges) {
+        Session session = sessionFactory.openSession();
+
+        Transaction transaction = null;
+        SqlUser sqlUser;
+        try {
+            transaction = session.beginTransaction();
+            sqlUser = (SqlUser) findById(user.getUserId());
+            if (sqlUser == null) {
+                throw new LumifyException("User does not exist");
+            }
+            sqlUser.setPrivileges(Privilege.toString(privileges));
+            session.update(sqlUser);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        } finally {
+            session.close();
+        }
+    }
 }

@@ -127,4 +127,6 @@ public abstract class UserRepository {
     }
 
     public abstract void delete(User user);
+
+    public abstract void setPrivileges(User user, Set<Privilege> privileges);
 }

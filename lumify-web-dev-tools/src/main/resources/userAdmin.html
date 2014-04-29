@@ -27,10 +27,10 @@
 <h3>Privileges</h3>
 
 <ul>
-    <li><input type="checkbox" id="privilege-read"> Read</li>
-    <li><input type="checkbox" id="privilege-edit"> Edit</li>
-    <li><input type="checkbox" id="privilege-publish"> Publish</li>
-    <li><input type="checkbox" id="privilege-admin"> Admin</li>
+    <li><input type="checkbox" id="privilege-read" onchange="updatePrivileges()"> Read</li>
+    <li><input type="checkbox" id="privilege-edit" onchange="updatePrivileges()"> Edit</li>
+    <li><input type="checkbox" id="privilege-publish" onchange="updatePrivileges()"> Publish</li>
+    <li><input type="checkbox" id="privilege-admin" onchange="updatePrivileges()"> Admin</li>
 </ul>
 
 <h3>Authorizations</h3>
@@ -109,7 +109,11 @@
     function deleteUser() {
         var userNameParameter = getURLParameter('user-name');
         if(confirm("Are you sure you want to delete: " + userNameParameter)) {
-            $.post()
+            $.post('/user/delete', {
+                'user-name': userNameParameter
+            }, function() {
+                reload();
+            });
         }
     }
 
@@ -127,6 +131,32 @@
                 reload();
             }
         });
+    }
+
+    function updatePrivileges() {
+        var userNameParameter = getURLParameter('user-name');
+        var privileges = getSelectedPrivilegesAsString();
+        $.ajax({
+            type: 'POST',
+            url: '/user/privileges/update',
+            data: {
+                'user-name': userNameParameter,
+                privileges: privileges
+            },
+            success: function (data) {
+                console.log(data);
+                reload();
+            }
+        });
+    }
+
+    function getSelectedPrivilegesAsString() {
+        var result = "";
+        result += $('#privilege-read').is(':checked') ? "READ," : "";
+        result += $('#privilege-edit').is(':checked') ? "EDIT," : "";
+        result += $('#privilege-publish').is(':checked') ? "PUBLISH," : "";
+        result += $('#privilege-admin').is(':checked') ? "ADMIN," : "";
+        return result;
     }
 </script>
 

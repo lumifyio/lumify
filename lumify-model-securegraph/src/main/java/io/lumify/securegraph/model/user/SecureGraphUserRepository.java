@@ -288,6 +288,12 @@ public class SecureGraphUserRepository extends UserRepository {
         graph.removeVertex(userVertex, authorizations);
     }
 
+    @Override
+    public void setPrivileges(User user, Set<Privilege> privileges) {
+        Vertex userVertex = findByIdUserVertex(user.getUserId());
+        PRIVILEGES.setProperty(userVertex, Privilege.toString(privileges), VISIBILITY.getVisibility());
+    }
+
     private Set<Privilege> getPrivileges(Vertex userVertex) {
         return Privilege.stringToPrivileges(PRIVILEGES.getPropertyValue(userVertex));
     }

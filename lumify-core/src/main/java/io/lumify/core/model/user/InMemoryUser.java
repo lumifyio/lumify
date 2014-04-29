@@ -12,7 +12,7 @@ public class InMemoryUser implements User {
     private final String displayName;
     private final String password;
     private final List<String> authorizations;
-    private final Set<Privilege> privileges;
+    private Set<Privilege> privileges;
 
     public InMemoryUser(String username, String displayName, String password, Set<Privilege> privileges, String[] authorizations) {
         this.userId = UUID.randomUUID().toString();
@@ -55,5 +55,9 @@ public class InMemoryUser implements User {
 
     public String[] getAuthorizations() {
         return authorizations.toArray(new String[this.authorizations.size()]);
+    }
+
+    public void setPrivileges(Set<Privilege> privileges) {
+        this.privileges = privileges;
     }
 }

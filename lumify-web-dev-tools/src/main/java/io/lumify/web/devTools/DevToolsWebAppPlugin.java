@@ -8,6 +8,7 @@ import io.lumify.web.WebAppPlugin;
 import io.lumify.web.devTools.user.UserAddAuthorization;
 import io.lumify.web.devTools.user.UserDelete;
 import io.lumify.web.devTools.user.UserRemoveAuthorization;
+import io.lumify.web.devTools.user.UserUpdatePrivileges;
 import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
 
 import javax.servlet.ServletConfig;
@@ -19,5 +20,6 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         app.post("/user/auth/add", authenticator, AdminPrivilegeFilter.class, UserAddAuthorization.class);
         app.post("/user/auth/remove", authenticator, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
         app.post("/user/delete", authenticator, AdminPrivilegeFilter.class, UserDelete.class);
+        app.post("/user/privileges/update", authenticator, AdminPrivilegeFilter.class, UserUpdatePrivileges.class);
     }
 }
