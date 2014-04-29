@@ -102,9 +102,13 @@ public class WorkspaceUpdate extends BaseRequestHandler {
             JSONObject update = entityUpdates.getJSONObject(i);
             LOGGER.debug("workspace update (%s): %s", workspace.getId(), update.toString());
             String entityId = update.getString("vertexId");
-            JSONObject graphPosition = update.getJSONObject("graphPosition");
-            int graphPositionX = graphPosition.getInt("x");
-            int graphPositionY = graphPosition.getInt("y");
+            JSONObject graphPosition = update.optJSONObject("graphPosition");
+            Integer graphPositionX = null;
+            Integer graphPositionY = null;
+            if (graphPosition != null)  {
+                graphPositionX = graphPosition.getInt("x");
+                graphPositionY = graphPosition.getInt("y");
+            }
             workspaceRepository.updateEntityOnWorkspace(workspace, entityId, true, graphPositionX, graphPositionY, authUser);
         }
     }

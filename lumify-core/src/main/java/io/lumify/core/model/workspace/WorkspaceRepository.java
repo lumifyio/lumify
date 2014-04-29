@@ -94,10 +94,16 @@ public abstract class WorkspaceRepository {
                         continue;
                     }
                     JSONObject workspaceEntityJson = new JSONObject();
-                    JSONObject graphPositionJson = new JSONObject();
-                    graphPositionJson.put("x", workspaceEntity.getGraphPositionX());
-                    graphPositionJson.put("y", workspaceEntity.getGraphPositionY());
-                    workspaceEntityJson.put("graphPosition", graphPositionJson);
+
+                    Integer graphPositionX = workspaceEntity.getGraphPositionX();
+                    Integer graphPositionY = workspaceEntity.getGraphPositionY();
+                    if (graphPositionX != null && graphPositionY != null) {
+                        JSONObject graphPositionJson = new JSONObject();
+                        graphPositionJson.put("x", graphPositionX);
+                        graphPositionJson.put("y", graphPositionY);
+                        workspaceEntityJson.put("graphPosition", graphPositionJson);
+                    }
+
                     entitiesJson.put(workspaceEntity.getEntityVertexId().toString(), workspaceEntityJson);
                 }
                 workspaceJson.put("entities", entitiesJson);

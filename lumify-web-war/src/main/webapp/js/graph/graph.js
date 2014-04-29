@@ -322,7 +322,7 @@ define([
                                 nextAvailablePosition.x = startX;
                             }
 
-                            if (dragging.length === 0) {
+                            if (dragging.length === 0 || !isVisible) {
                                 needsUpdating = true;
                             } else {
                                 needsAdding = true;

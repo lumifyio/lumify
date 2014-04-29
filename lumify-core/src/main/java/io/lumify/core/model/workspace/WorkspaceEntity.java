@@ -8,10 +8,10 @@ import org.securegraph.util.ConvertingIterable;
 public class WorkspaceEntity {
     private final Object entityVertexId;
     private final boolean visible;
-    private final int graphPositionX;
-    private final int graphPositionY;
+    private final Integer graphPositionX;
+    private final Integer graphPositionY;
 
-    public WorkspaceEntity(Object entityVertexId, boolean visible, int graphPositionX, int graphPositionY) {
+    public WorkspaceEntity(Object entityVertexId, boolean visible, Integer graphPositionX, Integer graphPositionY) {
         this.entityVertexId = entityVertexId;
         this.visible = visible;
         this.graphPositionX = graphPositionX;
@@ -22,11 +22,11 @@ public class WorkspaceEntity {
         return entityVertexId;
     }
 
-    public int getGraphPositionX() {
+    public Integer getGraphPositionX() {
         return graphPositionX;
     }
 
-    public int getGraphPositionY() {
+    public Integer getGraphPositionY() {
         return graphPositionY;
     }
 

@@ -77,10 +77,9 @@ define([
         };
 
         this.onVerticesDropped = function(event, data) {
-            if (!this.$node.is(':visible')) return;
+           if (!this.$node.is(':visible')) return;
 
-            this.addVertices(data.vertices);
-            this.trigger(document, 'addVertices', data);
+           this.trigger(document, 'addVertices', data);
         };
 
         this.addVertices = function(vertices) {
