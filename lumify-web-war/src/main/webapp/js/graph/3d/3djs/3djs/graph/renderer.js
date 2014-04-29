@@ -5,11 +5,6 @@ define([
     './layout/force-directed'
 ], function(THREE, TrackballControls, ForceDirectedLayout) {
 
-    var requestAnimationFrame = window.requestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.msRequestAnimationFrame;
-
     function GraphRenderer(domElement, options) {
         this.domElement = domElement;
         this.options = options || {};
@@ -112,6 +107,8 @@ define([
         renderer.domElement.addEventListener('mousedown', downHandler);
         renderer.domElement.addEventListener('mouseup', upHandler);
         renderer.domElement.addEventListener('click', clickHandler);
+        renderer.domElement.addEventListener('mousewheel', wheelHandler);
+        renderer.domElement.addEventListener('DOMMouseScroll', wheelHandler);
 
         windowResizeHandler = _.throttle(windowResizeHandler, 250);
         window.addEventListener('resize', windowResizeHandler, false);
@@ -121,13 +118,33 @@ define([
             renderer.domElement.removeEventListener('mousedown', downHandler);
             renderer.domElement.removeEventListener('mouseup', upHandler);
             renderer.domElement.removeEventListener('click', clickHandler);
+            renderer.domElement.removeEventListener('mousewheel', wheelHandler);
+            renderer.domElement.removeEventListener('DOMMouseScroll', wheelHandler);
             window.removeEventListener('resize', windowResizeHandler);
             controls.teardown();
         };
 
+        self.triggerMouseMoving = function() {
+            if (self.mousemoving === false) {
+                self.continueAnimation();
+            }
+            self.mousemoving = true;
+            clearTimeout(self.mousemovingTimeout);
+            self.mousemovingTimeout = _.delay(function() {
+                self.mousemoving = false;
+            }, 250)
+
+        };
+
+        function wheelHandler() {
+            self.triggerMouseMoving();
+        }
+
         function moveHandler(e) {
             mouse.x = e.pageX - self.domElement.offsetLeft;
             mouse.y = e.pageY - self.domElement.offsetTop;
+
+            self.triggerMouseMoving();
 
             var dragging = self.dragging;
 
@@ -152,9 +169,11 @@ define([
         }
 
         function downHandler(e) {
+            self.triggerMouseMoving();
             self.mousedown = true;
         }
         function upHandler(e) {
+            self.triggerMouseMoving();
             if (self.dragging) {
                 self.graph.removeNode(self.dragging);
                 self.dragging = undefined;
@@ -164,6 +183,7 @@ define([
             //self.dispatchEvent( { type: 'node_mouseup', content: self.currentNodeId } );
         }
         function clickHandler(e) {
+            self.triggerMouseMoving();
             controls.noZoom = controls.noRotate = controls.noZoom = false;
             self.mousedown = false;
             self.checkPick = true;
@@ -173,6 +193,7 @@ define([
                 width = el.width(),
                 height = el.height();
 
+            self.triggerMouseMoving();
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
 
@@ -248,9 +269,16 @@ define([
             }
         }
 
+        this.continueAnimation = function() {
+            requestAnimationFrame(render);
+        };
+
         function render() {
             if (!self.running) return;
-            requestAnimationFrame(render);
+
+            if (self.mousemoving || !self._layout.finished) {
+                requestAnimationFrame(render);
+            }
 
             var needsUpdateGeometry = false;
             if (!self._layout.finished) {

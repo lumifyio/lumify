@@ -1130,6 +1130,19 @@ define([
             });
         }
 
+        this.onShowPanel = function() {
+            this.cytoscapeReady().done(function(cy) {
+                cy.startAnimationLoop();
+                cy.renderer().notify({type: 'viewport'});
+            });
+        };
+
+        this.onHidePanel = function() {
+            this.cytoscapeReady().done(function(cy) {
+                cy.stopAnimationLoop();
+            });
+        };
+
         this.after('teardown', function() {
             this.$node.empty();
         });
@@ -1161,6 +1174,8 @@ define([
 
             this.on('registerForPositionChanges', this.onRegisterForPositionChanges);
             this.on('unregisterForPositionChanges', this.onUnregisterForPositionChanges);
+            this.on('showPanel', this.onShowPanel);
+            this.on('hidePanel', this.onHidePanel);
 
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Graph',

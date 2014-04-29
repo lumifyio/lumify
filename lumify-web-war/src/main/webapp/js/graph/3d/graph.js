@@ -58,7 +58,23 @@ define([
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on(document, 'existingVerticesAdded', this.onExistingVerticesAdded);
             this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+
+            this.on('showPanel', this.onShowPanel);
+            this.on('hidePanel', this.onHidePanel);
         });
+
+        this.onShowPanel = function() {
+            if (this.graphRenderer) {
+                this.graphRenderer.running = true;
+                this.graphRenderer.continueAnimation();
+            }
+        };
+
+        this.onHidePanel = function() {
+            if (this.graphRenderer) {
+                this.graphRenderer.running = false;
+            }
+        };
 
         this.onVerticesDropped = function(event, data) {
             if (!this.$node.is(':visible')) return;
