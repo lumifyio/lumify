@@ -7,7 +7,7 @@ define([
     '../withTypeContent',
     '../withHighlighting',
     'detail/dropdowns/termForm/termForm',
-    'detail/properties',
+    'detail/properties/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
     'tpl!util/alert',
@@ -72,8 +72,8 @@ define([
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.after('tearDownDropdowns', this.onTeardownDropdowns);
 
-            this.$node.on('mouseenter.detectedObject mouseleave.detectedObject', 
-                          this.attr.detectedObjectTagSelector, 
+            this.$node.on('mouseenter.detectedObject mouseleave.detectedObject',
+                          this.attr.detectedObjectTagSelector,
                           this.onDetectedObjectHover.bind(this));
             this.before('teardown', function() {
                 self.$node.off('.detectedObject');
@@ -95,9 +95,9 @@ define([
                 var $anchor = $(selection.anchorNode),
                     $focus = $(selection.focusNode),
                     offsets = [];
-                
+
                 [
-                    {el: $anchor, offset: selection.anchorOffset}, 
+                    {el: $anchor, offset: selection.anchorOffset},
                     {el: $focus, offset: selection.focusOffset}
                 ].forEach(function(node) {
                     var parentInfo = node.el.closest('.entity').data('info'),
@@ -106,9 +106,9 @@ define([
                     if (parentInfo) {
                         offset = parentInfo.start;
                     } else {
-                        var previousEntity = node.el.prevAll('.entity').first(), 
+                        var previousEntity = node.el.prevAll('.entity').first(),
                         previousInfo = previousEntity.data('info'),
-                        dom = previousInfo ? 
+                        dom = previousInfo ?
                             previousEntity.get(0) :
                             node.el.closest('.text')[0].childNodes[0],
                         el = node.el.get(0);
@@ -132,7 +132,7 @@ define([
                 });
 
                 offsets = _.sortBy(offsets, function(a, b) {
-                    return a - b 
+                    return a - b
                 });
 
                 var range = selection.getRangeAt(0),
@@ -141,9 +141,9 @@ define([
                     context = contextRange.toString(),
                     contextHighlight =
                         '...' +
-                        output.before + 
+                        output.before +
                         '<span class="selection">' + selection.toString() + '</span>' +
-                        output.after + 
+                        output.after +
                         '...';
 
                 this.trigger('copydocumenttext', {

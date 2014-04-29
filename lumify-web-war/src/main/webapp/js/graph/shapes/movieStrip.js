@@ -33,10 +33,10 @@ define([
 
         for (var j = 0; j < 2; j++) {
             for (var i = 0; i < total; i++) {
-                context.fillRect( 
+                context.fillRect(
                     leftPosition.x + holeLeftPosition + j * (fitW + extend),
                     leftPosition.y + holeTopPosition + i * height,
-                    holeSize.width, 
+                    holeSize.width,
                     holeSize.height
                 );
             }

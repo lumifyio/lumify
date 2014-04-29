@@ -64,11 +64,6 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility) {
-        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT, visibility);
-    }
-
-    @Override
     public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkNotNull(comment, "comment cannot be null");
@@ -95,7 +90,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditEntityProperty(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
+    public Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue,
                                      String process, String comment, Map<String, Object> metadata, User user,
                                      Visibility visibility) {
         checkNotNull(action, "action cannot be null");
@@ -118,6 +113,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
+
+        audit.getAuditProperty().setPropertyKey(propertyKey != null ? propertyKey : "", visibility);
 
         if (oldValue != null) {
             if (oldValue instanceof GeoPoint) {
@@ -195,7 +192,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyName,
+    public List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyKey, String propertyName,
                                                  Object oldValue, Object newValue, Edge edge, String process, String comment, User user,
                                                  Visibility visibility) {
         checkNotNull(action, "action cannot be null");
@@ -245,6 +242,12 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
+        propertyKey = propertyKey != null ? propertyKey : "";
+
+        auditEdge.getAuditProperty().setPropertyKey(propertyKey, visibility);
+        auditSourceDest.getAuditProperty().setPropertyKey(propertyKey, visibility);
+        auditDestSource.getAuditProperty().setPropertyKey(propertyKey, visibility);
+
         if (oldValue != null && !oldValue.equals("")) {
             String convertedValue = checkAndConvertForDateType(propertyName, oldValue);
             if (convertedValue != null) {
@@ -263,7 +266,6 @@ public class SecureGraphAuditRepository extends AuditRepository {
             if (convertedValue != null) {
                 newValue = convertedValue;
             }
-            // TODO handle multi-valued properties
             auditDestSource.getAuditProperty().setNewValue(newValue.toString(), visibility);
             auditSourceDest.getAuditProperty().setNewValue(newValue.toString(), visibility);
             auditEdge.getAuditProperty().setNewValue(newValue.toString(), visibility);
@@ -308,22 +310,20 @@ public class SecureGraphAuditRepository extends AuditRepository {
         if (vertexElementMutation instanceof ExistingElementMutation) {
             Vertex oldVertex = (Vertex) ((ExistingElementMutation) vertexElementMutation).getElement();
             for (Property property : vertexElementMutation.getProperties()) {
-                // TODO handle multi-valued properties
-                Object oldPropertyValue = oldVertex.getPropertyValue(property.getName());
+                Object oldPropertyValue = oldVertex.getPropertyValue(property.getKey());
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue) || !oldVertex.getVisibility().getVisibilityString().equals(property.getVisibility().getVisibilityString())) {
-                    auditEntityProperty(action, oldVertex.getId(), property.getName(), oldPropertyValue,
+                    auditEntityProperty(action, oldVertex.getId(), property.getKey(), property.getName(), oldPropertyValue,
                             newPropertyValue, process, "", property.getMetadata(), user, visibility);
                 }
             }
         } else {
             auditVertexCreate(vertex.getId(), process, "", user, visibility);
             for (Property property : vertexElementMutation.getProperties()) {
-                // TODO handle multi-valued properties
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditEntityProperty(action, vertex.getId(), property.getName(), null, newPropertyValue, process, "",
+                auditEntityProperty(action, vertex.getId(), property.getKey(), property.getName(), null, newPropertyValue, process, "",
                         property.getMetadata(), user, visibility);
             }
         }
@@ -335,22 +335,20 @@ public class SecureGraphAuditRepository extends AuditRepository {
         if (edgeElementMutation instanceof ExistingElementMutation) {
             Edge oldEdge = (Edge) ((ExistingElementMutation) edgeElementMutation).getElement();
             for (Property property : edgeElementMutation.getProperties()) {
-                // TODO handle multi-valued properties
-                Object oldPropertyValue = oldEdge.getPropertyValue(property.getName());
+                Object oldPropertyValue = oldEdge.getPropertyValue(property.getKey());
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue)) {
-                    auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(),
+                    auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
                             property.getName(), oldPropertyValue, newPropertyValue, edge, process, "", user, visibility);
                 }
             }
         } else {
             auditRelationship(AuditAction.CREATE, sourceVertex, destVertex, edge, process, "", user, visibility);
             for (Property property : edgeElementMutation.getProperties()) {
-                // TODO handle multi-valued properties
                 Object newPropertyValue = property.getValue();
                 checkNotNull(newPropertyValue, "new property value cannot be null");
-                auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(),
+                auditRelationshipProperty(action, sourceVertex.getId().toString(), destVertex.getId().toString(), property.getKey(),
                         property.getName(), null, newPropertyValue, edge, process, "", user, visibility);
             }
         }
@@ -396,5 +394,9 @@ public class SecureGraphAuditRepository extends AuditRepository {
             }
         }
         return null;
+    }
+
+    private Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility) {
+        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT, visibility);
     }
 }

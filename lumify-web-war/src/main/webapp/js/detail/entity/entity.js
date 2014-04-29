@@ -3,7 +3,7 @@ define([
     'flight/lib/component',
     'data',
     './image/image',
-    '../properties',
+    '../properties/properties',
     '../withTypeContent',
     '../withHighlighting',
     'tpl!./entity',
@@ -15,7 +15,7 @@ define([
     'service/ontology',
     'service/vertex',
     'sf'
-], function(defineComponent, 
+], function(defineComponent,
     appData,
     Image,
     Properties,
@@ -155,7 +155,7 @@ define([
                 }
             });
 
-            var groupedByType = _.groupBy(relationships, function(r) { 
+            var groupedByType = _.groupBy(relationships, function(r) {
 
                     // Has Entity are collected into references (no matter
                     // relationship direction
@@ -191,7 +191,7 @@ define([
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
                     return defaultSort(
-                        formatters.vertex.prop(a.vertex, 'title'), 
+                        formatters.vertex.prop(a.vertex, 'title'),
                         formatters.vertex.prop(b.vertex, 'title')
                     );
                 }
@@ -235,20 +235,20 @@ define([
 
                     self.trigger(
                         self.select('relationshipsSelector').find('.references'),
-                        'addInfiniteVertices', 
-                        { 
+                        'addInfiniteVertices',
+                        {
                             vertices: _.pluck(relationships, 'vertex'),
                             total: total
                         }
                     );
-                    
+
                 });
         };
 
         this.onPaneClicked = function(evt) {
             var $target = $(evt.target);
 
-            if (!$target.is('.add-new-properties,button') && 
+            if (!$target.is('.add-new-properties,button') &&
                 $target.parents('.underneath').length === 0) {
                 PropertyForm.teardownAll();
             }

@@ -91,7 +91,7 @@ define([
                 var ids;
                 if ($.isArray(this.attr.data)) {
                     ids = _.map(
-                            _.reject(this.attr.data, function(v) { 
+                            _.reject(this.attr.data, function(v) {
                                 return v['http://lumify.io#conceptType'] === 'relationship';
                             }), function(v) {
                                 return v.id || v.graphVertexId;

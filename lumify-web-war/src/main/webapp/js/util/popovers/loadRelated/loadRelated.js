@@ -21,7 +21,7 @@ define([
                 console.warn('title attribute required');
                 config.title = 'Unknown';
             }
-            config.template = config.forceSearch ? 
+            config.template = config.forceSearch ?
                 'loadRelated/loadRelatedForceSearch' :
                 'loadRelated/loadRelatedPrompt';
         });

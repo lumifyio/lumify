@@ -24,13 +24,13 @@ define([
                 node,
                 startOffset = 0,
                 endOffset = 0,
-                startContainer = null, 
+                startContainer = null,
                 endContainer = null,
                 i = 0;
-             
+
             for (; i < len; i++) {
                 node = childNodes[i];
-                
+
                 var toAdd = 0;
                 if (node.nodeType === node.TEXT_NODE) {
                     toAdd = node.length;
@@ -40,27 +40,27 @@ define([
                 }
 
                 if (!startContainer) {
-                    if ((startOffset + toAdd) >= offsets[0]) {        
+                    if ((startOffset + toAdd) >= offsets[0]) {
                         startContainer = node;
                         if (endContainer) break;
-                    } else startOffset += toAdd;    
+                    } else startOffset += toAdd;
                 }
                 if (!endContainer) {
-                    if ((endOffset + toAdd) > offsets[1]) {        
+                    if ((endOffset + toAdd) > offsets[1]) {
                         endContainer = node;
                         if (startContainer) break;
-                    } else endOffset += toAdd;    
-                }                
-            } 
+                    } else endOffset += toAdd;
+                }
+            }
 
-            var range = rangy.createRange(),    
+            var range = rangy.createRange(),
                 highlighter = rangy.createHighlighter();
-                
+
             highlighter.addClassApplier(rangy.createCssClassApplier('highlight', {
                 ignoreWhiteSpace: true,
                 tagNames: ['span']
             }));
-                
+
             range.setStart(startContainer, offsets[0] - startOffset);
             range.setEnd(endContainer, offsets[1] - endOffset)
             range.select()
@@ -73,9 +73,9 @@ define([
                 $newEl = $(newEl),
                 scrollParent = $newEl.scrollParent(),
                 scrollTo = newEl.offsetTop;
-                
-            scrollParent.clearQueue().animate({ 
-                scrollTop: scrollTo - 100 
+
+            scrollParent.clearQueue().animate({
+                scrollTop: scrollTo - 100
             }, {
                 duration: 'fast',
                 easing: 'easeInOutQuad',

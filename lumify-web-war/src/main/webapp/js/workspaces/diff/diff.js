@@ -184,7 +184,7 @@ define([
 
                                 var ontologyProperty = self.ontologyProperties.byTitle[diff.name];
                                 if (ontologyProperty && ontologyProperty.userVisible) {
-                                    diff.id = vertexId + diff.name;
+                                    diff.id = vertexId + diff.name + diff.key;
                                     addDiffDependency(diff.elementId, diff);
 
                                     if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
@@ -477,19 +477,39 @@ define([
             switch (diff.type) {
                 case 'VertexDiffItem':
 
-                    deps.forEach(function(diffId) {
-                        self.trigger('markUndoDiffItem', { diffId: diffId, state: state });
-                    })
+                    if (state) {
+                        deps.forEach(function(diffId) {
+                            self.trigger('markUndoDiffItem', { diffId: diffId, state: true });
+                        })
+                    }
 
                     break;
 
                 case 'PropertyDiffItem':
 
-                    //self.trigger('markUndoDiffItem', { diffId: diffId, state: false });
+                    if (!state) {
+                        var vertexDiff = self.diffsForVertexId[diff.elementId];
+                        if (vertexDiff) {
+                            self.trigger('markUndoDiffItem', { diffId: vertexDiff.id, state: false });
+                        }
+                    }
 
                     break;
 
                 case 'EdgeDiffItem':
+
+                    if (!state) {
+                        var inVertex = self.diffsForVertexId[diff.inVertexId],
+                            outVertex = self.diffsForVertexId[diff.outVertexId];
+
+                        if (inVertex) {
+                            self.trigger('markUndoDiffItem', { diffId: inVertex.id, state: false });
+                        }
+
+                        if (outVertex) {
+                            self.trigger('markUndoDiffItem', { diffId: outVertex.id, state: false });
+                        }
+                    }
 
                     break;
 

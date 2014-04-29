@@ -39,7 +39,7 @@ define([
                 source: this.attr.sourceTerm.text(),
                 dest: this.attr.destTerm.text()
             }));
-            
+
             this.on('visibilitychange', this.onVisibilityChange);
             this.on('justificationchange', this.onJustificationChange);
 

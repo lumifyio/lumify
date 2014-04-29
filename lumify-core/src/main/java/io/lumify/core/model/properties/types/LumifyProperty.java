@@ -1,11 +1,11 @@
 package io.lumify.core.model.properties.types;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 
 import java.util.Collections;
 import java.util.Map;

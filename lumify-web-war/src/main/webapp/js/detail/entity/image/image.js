@@ -10,13 +10,13 @@ define([
     defineComponent,
     template,
     appData,
-    retina, 
+    retina,
     withFileDrop,
     VertexService) {
     'use strict';
 
     // Limit previews to 1MB since it's a dataUri
-    var MAX_PREVIEW_FILE_SIZE = 1024 * 1024; 
+    var MAX_PREVIEW_FILE_SIZE = 1024 * 1024;
 
     return defineComponent(ImageView, withFileDrop);
 
@@ -27,7 +27,7 @@ define([
         this.defaultAttrs({
             canvasSelector: 'canvas',
             fileSelector: 'input',
-            acceptedTypesRegex: /^image\/(jpe?g|png)$/i 
+            acceptedTypesRegex: /^image\/(jpe?g|png)$/i
         });
 
         this.after('initialize', function() {
@@ -43,7 +43,7 @@ define([
 
             this.select('fileSelector').on({
                 click: function() {
-                    self.$node.addClass('file-hover'); this.value = null; 
+                    self.$node.addClass('file-hover'); this.value = null;
                 },
                 change: this.onFileChange.bind(this)
             });
@@ -51,10 +51,10 @@ define([
             this.$node.addClass('upload-available');
             this.$node.on({
                 mouseenter: function() {
-                    $(this).addClass('file-hover'); 
+                    $(this).addClass('file-hover');
                 },
                 mouseleave: function() {
-                    $(this).removeClass('file-hover'); 
+                    $(this).removeClass('file-hover');
                 }
             });
         });
@@ -105,7 +105,7 @@ define([
         };
 
         this.previewFile = function(file) {
-            var self = this, 
+            var self = this,
                 reader = new FileReader();
 
             reader.onload = function(event) {
@@ -148,7 +148,7 @@ define([
                 this.ctx = this.canvas[0].getContext('2d');
             }
 
-            var c = this.ctx, 
+            var c = this.ctx,
                 canvas = this.canvas[0],
                 w = this.canvas.width(),
                 h = this.canvas.height();
@@ -162,7 +162,7 @@ define([
 
             c.beginPath();
             c.moveTo(centerX, centerY);
-            c.arc(centerX, centerY, 
+            c.arc(centerX, centerY,
                   radius + 2 * retina.devicePixelRatio, -Math.PI / 2, 2 * Math.PI - (Math.PI / 2), false
             );
             c.fillStyle = 'rgba(0,0,0,0.5)';
@@ -170,7 +170,7 @@ define([
 
             c.beginPath();
             c.moveTo(centerX, centerY);
-            c.arc(centerX, centerY, 
+            c.arc(centerX, centerY,
                   radius, -Math.PI / 2, 2 * Math.PI * Math.min(1.0, complete) - (Math.PI / 2), false
             );
             c.fillStyle = 'rgba(255,255,255,0.8)';
@@ -196,7 +196,7 @@ define([
             }
 
             this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageSrc));
-            
+
             this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
         };
 

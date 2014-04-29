@@ -36,7 +36,7 @@ define([
         this.onChange = function(event, data) {
             var value = $.trim(this.select('fieldSelector').val());
             this.trigger('visibilitychange', {
-                value: value, 
+                value: value,
                 valid: true
             });
         };

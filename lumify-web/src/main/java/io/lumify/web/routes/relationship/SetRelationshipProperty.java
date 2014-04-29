@@ -1,5 +1,7 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -14,13 +16,12 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Visibility;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +55,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String propertyName = getRequiredParameter(request, "propertyName");
+        String propertyKey = getOptionalParameter(request, "propertyKey");
         final String valueStr = getRequiredParameter(request, "value");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
@@ -69,6 +71,10 @@ public class SetRelationshipProperty extends BaseRequestHandler {
             sourceJson = new JSONObject(sourceInfo);
         } else {
             sourceJson = new JSONObject();
+        }
+
+        if (propertyKey == null) {
+            propertyKey = this.graph.getIdGenerator().nextId().toString();
         }
 
         User user = getUser(request);
@@ -99,6 +105,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(
                 edge,
                 propertyName,
+                propertyKey,
                 value,
                 visibilitySource,
                 workspaceId,
@@ -110,12 +117,12 @@ public class SetRelationshipProperty extends BaseRequestHandler {
 
 
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyName, oldValue, null, edge, "", "",
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
         this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
 
-        JSONObject resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
+        JSONArray resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
         respondWithJson(response, resultsJson);
     }
 }

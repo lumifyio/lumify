@@ -148,7 +148,7 @@ define(['atmosphere'],
                         .fail(deferred.reject)
                         .done(deferred.resolve),
                 promise = deferred.promise();
-                
+
             promise.abort = function() {
                 request.abort();
             };

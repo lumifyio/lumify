@@ -15,7 +15,7 @@ define(['util/withFormFieldErrors'], function(withFormFieldErrors) {
                 node = this.$node;
 
             if (node.outerWidth() <= 0) {
-                // Fix issue where dropdown is zero width/height 
+                // Fix issue where dropdown is zero width/height
                 // when opening dropdown later in detail pane when
                 // dropdown is already open earlier in detail pane
                 node.css({position: 'relative'});

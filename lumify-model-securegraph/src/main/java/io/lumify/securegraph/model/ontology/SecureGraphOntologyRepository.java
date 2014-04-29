@@ -1,5 +1,11 @@
 package io.lumify.securegraph.model.ontology;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.*;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -7,19 +13,14 @@ import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
+import org.apache.commons.lang.SerializationUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.FilterIterable;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
@@ -29,12 +30,12 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
 import static io.lumify.core.util.CollectionUtil.single;
 import static org.securegraph.util.IterableUtils.toList;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
@@ -373,9 +374,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, boolean userVisible) {
+    public OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType,
+                                          ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, userVisible);
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -420,7 +422,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         }
     }
 
-    private OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, boolean userVisible) {
+    private OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName,
+                                                     ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
             VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
@@ -430,6 +433,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
+            }
+            if (possibleValues.size() > 0) {
+                POSSIBLE_VALUES.setProperty(builder, SerializationUtils.serialize(possibleValues), VISIBILITY.getVisibility());
             }
             typeProperty = new SecureGraphOntologyProperty(builder.save());
             graph.flush();

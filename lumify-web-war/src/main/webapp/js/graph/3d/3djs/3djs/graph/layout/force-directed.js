@@ -19,15 +19,15 @@
 
     positionUpdated: <function>, called when the position of the node has been updated
   }
-  
+
   Examples:
-  
+
   create:
   layout = new Layout.ForceDirected(graph, {width: 2000, height: 2000, iterations: 1000, layout: "3d"});
-  
+
   call init when graph is loaded (and for reset or when new nodes has been added to the graph):
   layout.init();
-  
+
   call generate in a render method, returns true if it's still calculating and false if it's finished
   layout.generate();
 
@@ -40,7 +40,7 @@ define( [], function() {
 
     var ForceDirected = function(graph, options) {
       options = options || {};
-      
+
       this.layout = options.layout || "2d";
       this.attraction_multiplier = options.attraction || 5;
       this.repulsion_multiplier = options.repulsion || 0.75;
@@ -51,7 +51,7 @@ define( [], function() {
       this.finished = false;
 
       var callback_positionUpdated = options.positionUpdated;
-      
+
       var EPSILON = 0.000001;
       var attraction_constant;
       var repulsion_constant;
@@ -61,7 +61,7 @@ define( [], function() {
       var nodes_length;
       var edges_length;
       var that = this;
-      
+
       // performance test
       var mean_time = 0;
 
@@ -88,7 +88,7 @@ define( [], function() {
         if(layout_iterations < this.max_iterations && temperature > 0.000001) {
           var start = new Date().getTime();
           var delta_length, delta_length_z, delta_x, delta_y, delta_z, i, force_z, force;
-          
+
           // calculate repulsion
           for(i=0; i < nodes_length; i++) {
             var node_v = graph.nodes[i];
@@ -104,7 +104,7 @@ define( [], function() {
             node_v.layout.force = 0;
             node_v.layout.tmp_pos_x = node_v.layout.tmp_pos_x || node_v.position.x;
             node_v.layout.tmp_pos_y = node_v.layout.tmp_pos_y || node_v.position.y;
-            if(this.layout === "3d") {    
+            if(this.layout === "3d") {
               node_v.layout.tmp_pos_z = node_v.layout.tmp_pos_z || node_v.position.z;
             }
 
@@ -158,7 +158,7 @@ define( [], function() {
               }
             }
           }
-          
+
           // calculate attraction
           for(i=0; i < edges_length; i++) {
             var edge = graph.edges[i];
@@ -166,7 +166,7 @@ define( [], function() {
             delta_y = edge.source.layout.tmp_pos_y - edge.target.layout.tmp_pos_y;
             if(this.layout === "3d") {
               delta_z = edge.source.layout.tmp_pos_z - edge.target.layout.tmp_pos_z;
-            }  
+            }
 
             delta_length = Math.max(EPSILON, Math.sqrt((delta_x * delta_x) + (delta_y * delta_y)));
             if(this.layout === "3d") {
@@ -182,17 +182,17 @@ define( [], function() {
 
             edge.source.layout.offset_x -= (delta_x / delta_length) * force;
             edge.source.layout.offset_y -= (delta_y / delta_length) * force;
-            if(this.layout === "3d") {    
+            if(this.layout === "3d") {
               edge.source.layout.offset_z -= (delta_z / delta_length_z) * force_z;
             }
 
             edge.target.layout.offset_x += (delta_x / delta_length) * force;
             edge.target.layout.offset_y += (delta_y / delta_length) * force;
-            if(this.layout === "3d") {    
+            if(this.layout === "3d") {
               edge.target.layout.offset_z += (delta_z / delta_length_z) * force_z;
-            }        
+            }
           }
-          
+
           // calculate positions
           for(i=0; i < nodes_length; i++) {
             var node = graph.nodes[i];
@@ -203,7 +203,7 @@ define( [], function() {
 
             node.layout.tmp_pos_x += (node.layout.offset_x / delta_length) * Math.min(delta_length, temperature);
             node.layout.tmp_pos_y += (node.layout.offset_y / delta_length) * Math.min(delta_length, temperature);
-            if(this.layout === "3d") {    
+            if(this.layout === "3d") {
               node.layout.tmp_pos_z += (node.layout.offset_z / delta_length_z) * Math.min(delta_length_z, temperature);
             }
 
@@ -211,7 +211,7 @@ define( [], function() {
             node.position.x -=  (node.position.x-node.layout.tmp_pos_x)/10;
               node.position.y -=  (node.position.y-node.layout.tmp_pos_y)/10;
 
-            if(this.layout === "3d") {    
+            if(this.layout === "3d") {
               node.position.z -=  (node.position.z-node.layout.tmp_pos_z)/10;
             }
 
@@ -226,7 +226,7 @@ define( [], function() {
           var end = new Date().getTime();
           mean_time += end - start;
         } else {
-          if(!this.finished) {        
+          if(!this.finished) {
             console.log("Average time: " + (mean_time/layout_iterations) + " ms");
           }
           this.finished = true;

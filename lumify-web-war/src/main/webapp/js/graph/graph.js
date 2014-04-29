@@ -29,7 +29,7 @@ define([
     loadingTemplate,
     Controls,
     throttle,
-    formatters,
+    F,
     VertexService,
     OntologyService,
     ConfigService,
@@ -61,11 +61,11 @@ define([
                 arbor: { friction: 0.6, repulsion: 5000 * retina.devicePixelRatio, targetFps: 60, stiffness: 300 }
             },
             fromCyId = function(cyId) {
-                return formatters.className.from(cyId);
+                return F.className.from(cyId);
             },
             toCyId = function(v) {
                 var vId = _.isString(v) ? v : v.id;
-                return formatters.className.to(vId);
+                return F.className.to(vId);
             };
 
         this.toCyId = toCyId;
@@ -121,8 +121,8 @@ define([
                         if (cyA.length && !cyB.length) return 1;
                         if (cyB.length && !cyA.length) return -1;
 
-                        var titleA = formatters.vertex.prop(a, 'title').toLowerCase(),
-                            titleB = formatters.vertex.prop(b, 'title').toLowerCase();
+                        var titleA = F.vertex.prop(a, 'title').toLowerCase(),
+                            titleB = F.vertex.prop(b, 'title').toLowerCase();
 
                         return titleA < titleB ? -1 : titleB < titleA ? 1 : 0;
                     });
@@ -393,7 +393,7 @@ define([
         };
 
         this.classesForVertex = function(vertex) {
-            if (vertex.properties['http://lumify.io#glyphIcon']) return 'hasCustomGlyph';
+            if (vertex.imageSrcIsFromConcept === false) return 'hasCustomGlyph';
             if (~['video', 'image'].indexOf(vertex.concept.displayType)) {
                 return vertex.concept.displayType;
             }
@@ -402,20 +402,13 @@ define([
         };
 
         this.updateCyNodeData = function(data, vertex) {
-            var truncatedTitle = formatters.vertex.prop(vertex, 'title');
+            var truncatedTitle = F.vertex.prop(vertex, 'title');
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + '...';
             }
 
-            var merged = $.extend(data,
-                _.pick(vertex.properties,
-                   'http://lumify.io#rowKey',
-                   'http://lumify.io#conceptType',
-                   'http://lumify.io#glyphIcon',
-                   'title'
-                )
-            );
+            var merged = data;
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
 
@@ -711,7 +704,7 @@ define([
                                         source: node1.id(),
                                         target: node2.id(),
                                         label: count ?
-                                            formatters.string.plural(count, 'vertex', 'vertices') : ''
+                                            F.string.plural(count, 'vertex', 'vertices') : ''
                                     }
                                 });
                             }
@@ -1192,7 +1185,7 @@ define([
                 // TODO: make context menus work better
                 self.$node.append(template(templateData)).find('.shortcut').each(function() {
                     var $this = $(this), command = $this.text();
-                    $this.text(formatters.string.shortcut($this.text()));
+                    $this.text(F.string.shortcut($this.text()));
                 });
 
                 Controls.attachTo(self.select('graphToolsSelector'));

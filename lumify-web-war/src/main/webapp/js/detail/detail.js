@@ -1,8 +1,9 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'tpl!./detail'
-], function(defineComponent, registry, template) {
+    'tpl!./detail',
+    'util/formatters'
+], function(defineComponent, registry, template, F) {
     'use strict';
 
     return defineComponent(Detail);
@@ -60,14 +61,19 @@ define([
             if (!vertices.length && !edges.length) {
                 var pane = this.$node.closest('.detail-pane');
 
+                this.cancelTransitionTeardown = false;
+
                 return pane.on(TRANSITION_END, function(e) {
                     if (/transform/.test(e.originalEvent && e.originalEvent.propertyName)) {
-                        self.teardownComponents();
+                        if (self.cancelTransitionTeardown !== true) {
+                            self.teardownComponents();
+                        }
                         pane.off(TRANSITION_END);
                     }
                 });
             }
 
+            this.cancelTransitionTeardown = true;
             this.teardownComponents();
             this.$node.addClass('loading');
 
@@ -76,9 +82,9 @@ define([
                 moduleData = vertices;
             } else if (vertices.length === 1) {
                 var vertex = vertices[0],
-                    type = vertices[0].concept && vertices[0].concept.displayType ||
-                        (vertices[0].properties['http://lumify.io#conceptType'].value != 'relationship' ?
-                         'entity' : 'relationship');
+                    type = vertex.concept && vertex.concept.displayType ||
+                        (F.vertex.isEdge(vertex) ? 'relationship' : 'entity');
+
                 if (type === 'relationship') {
                     moduleName = type;
                 } else {

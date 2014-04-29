@@ -385,7 +385,7 @@ define([
         this.onChatMessage = function(e, data) {
             if (!this.select('usersSelector').hasClass('visible')) {
                 this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('usersSelector').data(DATA_MENUBAR_NAME) 
+                    name: this.select('usersSelector').data(DATA_MENUBAR_NAME)
                 });
             }
         };
@@ -424,11 +424,11 @@ define([
                     .filter('.visible:not(.collapsed)')
                     .outerWidth(true) || 0,
 
-                searchResultsWidth = searchWidth > 0 ? 
+                searchResultsWidth = searchWidth > 0 ?
                     $('.search-results:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
-                searchFiltersWidth = searchWidth > 0 ? 
+                searchFiltersWidth = searchWidth > 0 ?
                     $('.search-filters:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
@@ -436,7 +436,7 @@ define([
                     .filter('.visible:not(.collapsed)')
                     .outerWidth(true) || 0,
 
-                workspaceFormWidth = workspacesWidth > 0 ? 
+                workspaceFormWidth = workspacesWidth > 0 ?
                     $('.workspace-form:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
@@ -446,9 +446,9 @@ define([
 
                 padding = {
                     l: searchWidth + searchResultsWidth + searchFiltersWidth +
-                      workspacesWidth + workspaceFormWidth, 
+                      workspacesWidth + workspaceFormWidth,
                     r: detailWidth,
-                    t: 0, 
+                    t: 0,
                     b: 0
                 };
 
@@ -469,7 +469,7 @@ define([
             if (!graph.is('.visible')) {
                 self.trigger(document, 'menubarToggleDisplay', {
                     name: graph.data(DATA_MENUBAR_NAME),
-                    syncToRemote: false 
+                    syncToRemote: false
                 });
             }
         };
@@ -502,7 +502,7 @@ define([
 
                     self.trigger(document, 'menubarToggleDisplay', {
                         name: name,
-                        syncToRemote: false 
+                        syncToRemote: false
                     });
                 }
             });
@@ -529,7 +529,7 @@ define([
             handles: handles,
             minWidth: minWidth || 150,
             maxWidth: maxWidth || 300,
-            resize: callback 
+            resize: callback
         });
     }
 

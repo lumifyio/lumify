@@ -13,6 +13,7 @@ define([
 
     VertexService.prototype.setProperty = function(
         vertexId,
+        propertyKey,
         propertyName,
         value,
         visibilitySource,
@@ -21,14 +22,18 @@ define([
     ) {
         return this._ajaxPost({
             url: 'vertex/property/set',
-            data: {
+            data: _.tap({
                 graphVertexId: vertexId,
                 propertyName: propertyName,
                 value: value,
                 visibilitySource: visibilitySource,
                 justificationText: justificationText,
                 sourceInfo: JSON.stringify(sourceInfo)
-            }
+            }, function(o) {
+                if (propertyKey) {
+                    o.propertyKey = propertyKey
+                }
+            })
         });
     };
 
@@ -42,12 +47,13 @@ define([
         });
     };
 
-    VertexService.prototype.deleteProperty = function(vertexId, propertyName) {
+    VertexService.prototype.deleteProperty = function(vertexId, property) {
         return this._ajaxPost({
             url: 'vertex/property/delete',
             data: {
                 graphVertexId: vertexId,
-                propertyName: propertyName
+                propertyName: property.name,
+                propertyKey: property.key
             }
         });
     };
@@ -69,7 +75,7 @@ define([
         var formData = new FormData(),
             pluralString = formatters.string.plural(files.length, 'file');
 
-        _.forEach(files, function(f) { 
+        _.forEach(files, function(f) {
             formData.append('file', f);
             if (_.isString(visibilitySource)) {
                 formData.append('visibilitySource', visibilitySource);

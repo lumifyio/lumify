@@ -33,7 +33,7 @@ define([], function() {
                 target.blur();
                 return;
             } else {
-                console.error('No function exists for context menu command: ' + functionName);                
+                console.error('No function exists for context menu command: ' + functionName);
             }
 
             setTimeout(function() {

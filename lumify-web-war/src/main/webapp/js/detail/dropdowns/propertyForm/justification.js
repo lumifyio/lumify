@@ -52,18 +52,18 @@ define([
                     var val = self.select('fieldSelector').val();
                     self.animate = true;
                     if (!self.setReferenceWithValue(val)) {
-                        self.trigger('justificationchange', { 
+                        self.trigger('justificationchange', {
                             justificationText: val,
-                            valid: $.trim(val).length > 0 
+                            valid: $.trim(val).length > 0
                         });
                     }
                 });
                 return;
             }
             var val = this.select('fieldSelector').val();
-            this.trigger('justificationchange', { 
+            this.trigger('justificationchange', {
                 justificationText: val,
-                valid: $.trim(val).length > 0 
+                valid: $.trim(val).length > 0
             });
         };
 
@@ -93,9 +93,9 @@ define([
             this.animate = true;
             this.toggleView(false);
             this.select('fieldSelector').focus();
-            this.trigger('justificationchange', { 
+            this.trigger('justificationchange', {
                 justificationText: '',
-                valid: false 
+                valid: false
             });
         };
 
@@ -104,9 +104,9 @@ define([
 
             if (_.isString(value)) {
                 this.toggleView(false, value);
-                this.trigger('justificationchange', { 
+                this.trigger('justificationchange', {
                     justificationText: value,
-                    valid: $.trim(value).length > 0 
+                    valid: $.trim(value).length > 0
                 });
             } else {
                 var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
@@ -117,7 +117,7 @@ define([
 
         this.toggleView = function(referenceDisplay, value) {
             var self = this;
-            
+
             if (referenceDisplay) {
                 this.select('fieldSelector').tooltip('destroy');
                 this.getVertexTitle(value).done(function(title) {
@@ -126,8 +126,8 @@ define([
                 });
             } else {
                 this.transitionHeight(template({value: value || ''}));
-                this.select('fieldSelector').tooltip({ 
-                    container: 'body' 
+                this.select('fieldSelector').tooltip({
+                    container: 'body'
                 }).data('tooltip').tip().addClass('field-tooltip');
             }
         };

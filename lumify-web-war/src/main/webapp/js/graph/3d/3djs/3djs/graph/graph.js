@@ -11,14 +11,14 @@ define(['./node'], function(Node) {
     Graph.Node = Node;
 
     Graph.prototype.node = function(idOrNode) {
-        var node = (typeof idOrNode === 'string') ? 
+        var node = (typeof idOrNode === 'string') ?
             this.nodeSet[ idOrNode ] : idOrNode;
-        
+
         return node;
     };
 
     Graph.prototype.addNode = function(idOrNode) {
-        var node = (typeof idOrNode === 'string' || !idOrNode) ? 
+        var node = (typeof idOrNode === 'string' || !idOrNode) ?
             new Node(idOrNode) : idOrNode;
 
         if (this.nodeSet[ node.id ] === undefined) {

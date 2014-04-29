@@ -54,7 +54,7 @@ define([
             this.on('mousedown', function(event) {
                 var $target = $(event.target),
                     facebox = $target.closest('.facebox')
-                
+
                 if (facebox.length) {
                     var position = facebox.position(),
                         width = facebox.width(),
@@ -127,7 +127,7 @@ define([
                         // Make fixed percentages during drag
                     },
                     stop: convertToPercentageAndTrigger
-                }).draggable({ 
+                }).draggable({
                     containment: this.$node,
                     cursor: 'move',
                     stop: convertToPercentageAndTrigger
@@ -170,7 +170,7 @@ define([
 
             this.imageReady()
                 .done(function() {
-                    var box = (options.editing || options.viewing) ? 
+                    var box = (options.editing || options.viewing) ?
                             self.select('boxEditingSelector') :
                             self.select('boxSelector').not('.editing'),
                         image = self.select('imageSelector'),

@@ -1,5 +1,6 @@
 package io.lumify.core.model.workspace.diff;
 
+import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceEntity;
@@ -7,7 +8,6 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import org.securegraph.*;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,18 +86,18 @@ public class WorkspaceDiff {
         for (int i = 0; i < properties.size(); i++) {
             if (propertyStatuses[i] != SandboxStatus.PUBLIC) {
                 Property property = properties.get(i);
-                Property existingProperty = findExistingProperty(properties, property);
+                Property existingProperty = findExistingProperty(properties, propertyStatuses, property);
                 result.add(new PropertyDiffItem(element, property, existingProperty, propertyStatuses[i]));
             }
         }
     }
 
-    private Property findExistingProperty(List<Property> properties, Property workspaceProperty) {
-        for (Property property : properties) {
-            if (property.getName().equals(workspaceProperty.getName())) {
-                if (property.getKey().equals(workspaceProperty.getKey())) {
-                    continue;
-                }
+    private Property findExistingProperty(List<Property> properties, SandboxStatus[] propertyStatuses, Property workspaceProperty) {
+        for (int i = 0; i < properties.size(); i++) {
+            Property property = properties.get(i);
+            if (property.getName().equals(workspaceProperty.getName())
+                    && property.getKey().equals(workspaceProperty.getKey())
+                    && propertyStatuses[i] == SandboxStatus.PUBLIC) {
                 return property;
             }
         }

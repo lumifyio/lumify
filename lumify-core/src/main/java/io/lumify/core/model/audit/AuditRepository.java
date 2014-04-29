@@ -24,18 +24,16 @@ public abstract class AuditRepository extends Repository<Audit> {
 
     public abstract String getTableName();
 
-    public abstract Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility);
-
     public abstract Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility);
 
-    public abstract Audit auditEntityProperty(AuditAction action, Object id, String propertyName, Object oldValue, Object newValue,
+    public abstract Audit auditEntityProperty(AuditAction action, Object id, String propertyKey, String propertyName, Object oldValue, Object newValue,
                                               String process, String comment, Map<String, Object> metadata, User user,
                                               Visibility visibility);
 
     public abstract List<Audit> auditRelationship(AuditAction action, Vertex sourceVertex, Vertex destVertex, Edge edge, String process,
                                                   String comment, User user, Visibility visibility);
 
-    public abstract List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyName,
+    public abstract List<Audit> auditRelationshipProperty(AuditAction action, String sourceId, String destId, String propertyKey, String propertyName,
                                                           Object oldValue, Object newValue, Edge edge, String process, String comment, User user,
                                                           Visibility visibility);
 

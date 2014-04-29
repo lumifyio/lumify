@@ -33,26 +33,34 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     @Override
     protected void broadcastJson(JSONObject json) {
         try {
-            if (!declaredQueues.contains(BROADCAST_EXCHANGE_NAME)) {
-                channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
-                declaredQueues.add(BROADCAST_EXCHANGE_NAME);
-            }
+            ensureBroadcastExchange();
             channel.basicPublish(BROADCAST_EXCHANGE_NAME, "", null, json.toString().getBytes());
         } catch (IOException ex) {
             throw new LumifyException("Could not broadcast json", ex);
         }
     }
 
+    private void ensureBroadcastExchange() throws IOException {
+        if (!declaredQueues.contains(BROADCAST_EXCHANGE_NAME)) {
+            channel.exchangeDeclare(BROADCAST_EXCHANGE_NAME, "fanout");
+            declaredQueues.add(BROADCAST_EXCHANGE_NAME);
+        }
+    }
+
     @Override
     public void pushOnQueue(String queueName, FlushFlag flushFlag, JSONObject json) {
         try {
-            if (!declaredQueues.contains(queueName)) {
-                channel.queueDeclare(queueName, false, false, false, null);
-                declaredQueues.add(queueName);
-            }
+            ensureQueue(queueName);
             channel.basicPublish("", queueName, null, json.toString().getBytes());
         } catch (Exception ex) {
             throw new LumifyException("Could not push on queue", ex);
+        }
+    }
+
+    private void ensureQueue(String queueName) throws IOException {
+        if (!declaredQueues.contains(queueName)) {
+            channel.queueDeclare(queueName, false, false, false, null);
+            declaredQueues.add(queueName);
         }
     }
 
@@ -91,6 +99,8 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
     @Override
     public void subscribeToBroadcastMessages(final BroadcastConsumer broadcastConsumer) {
         try {
+            ensureBroadcastExchange();
+
             String queueName = this.channel.queueDeclare().getQueue();
             this.channel.queueBind(queueName, BROADCAST_EXCHANGE_NAME, "");
 

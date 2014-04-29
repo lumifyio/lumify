@@ -45,7 +45,7 @@ define([
 
                 DIVIDER,
 
-                { 
+                {
                     label: 'Search',
                     submenu: [
                         { label: '\"{ title }\"', shortcut: 'alt+t', event: 'searchTitle', selection: 1 },
@@ -53,7 +53,7 @@ define([
                     ]
                 },
 
-                { 
+                {
                     label: 'Add Related',
                     submenu: (relatedSubmenuItems = [
                         { label: 'Items', shortcut: 'alt+r', event: 'addRelatedItems', selection: 1 }
@@ -79,14 +79,14 @@ define([
 
                 if (list.length) {
                     relatedSubmenuItems.push(DIVIDER);
-                
+
                     list.forEach(function(concept) {
                         relatedSubmenuItems.push({
                             label: concept.pluralDisplayName,
                             event: relatedSubmenuItems[0].event,
                             selection: 1,
                             args: {
-                                limitParentConceptId: concept.id 
+                                limitParentConceptId: concept.id
                             }
                         })
                     })
@@ -120,7 +120,7 @@ define([
                 args = anchor.data('args'),
                 eventName = anchor.data('event');
 
-            this.trigger(this.attr.element, eventName, 
+            this.trigger(this.attr.element, eventName,
                 _.extend({ vertexId: this.attr.vertexId }, args)
             );
         };
@@ -144,7 +144,7 @@ define([
                         thisVertex = self.attr.vertexId,
                         multi = item.selection !== 1;
 
-                    if (!multi && 
+                    if (!multi &&
                         currentSelection.length &&
                         !_.isEqual(currentSelection, [thisVertex])) {
                         return true;
@@ -164,7 +164,7 @@ define([
 
             this.$menu = this.$node.find('.vertex-menu')
             this.$menu.find('.shortcut').each(function() {
-                    var $this = $(this), 
+                    var $this = $(this),
                         command = $this.text();
 
                     $this.text(formatters.string.shortcut($this.text()));

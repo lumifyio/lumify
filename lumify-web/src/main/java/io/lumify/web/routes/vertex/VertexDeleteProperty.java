@@ -1,5 +1,7 @@
 package io.lumify.web.routes.vertex;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
@@ -10,12 +12,11 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import com.altamiracorp.miniweb.HandlerChain;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
+import org.securegraph.util.FilterIterable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,13 +44,14 @@ public class VertexDeleteProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String graphVertexId = getAttributeString(request, "graphVertexId");
         final String propertyName = getRequiredParameter(request, "propertyName");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         String workspaceId = getActiveWorkspaceId(request);
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
-        List<Property> properties = toList(graphVertex.getProperties(propertyName));
+        List<Property> properties = toList(graphVertex.getProperties(propertyKey, propertyName));
 
         if (properties.size() == 0) {
             LOGGER.warn("Could not find property: %s", propertyName);

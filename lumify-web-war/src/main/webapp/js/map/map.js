@@ -23,7 +23,7 @@ define([
     OntologyService,
     retina,
     Controls,
-    formatters,
+    F,
     withAsyncQueue,
     withContextMenu) {
     'use strict';
@@ -68,7 +68,7 @@ define([
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
                 var $this = $(this), command = $this.text();
-                $this.text(formatters.string.shortcut($this.text()));
+                $this.text(F.string.shortcut($this.text()));
             });
 
             this.on(document, 'mapShow', this.onMapShow);
@@ -118,8 +118,8 @@ define([
                 this.on('pan', function(e, data) {
                     e.stopPropagation();
                     map.pan(
-                        data.pan.x * -1, 
-                        data.pan.y * -1, 
+                        data.pan.x * -1,
+                        data.pan.y * -1,
                         { animate: false }
                     );
                 });
@@ -132,10 +132,10 @@ define([
                     slowZoomOut = _.throttle(map.zoomOut.bind(map), 250, {trailing: false});
 
                 this.on('zoomIn', function() {
-                    slowZoomIn(); 
+                    slowZoomIn();
                 });
                 this.on('zoomOut', function() {
-                    slowZoomOut(); 
+                    slowZoomOut();
                 });
             });
         };
@@ -183,7 +183,7 @@ define([
             this.updateOrAddVertices(data.vertices);
         };
 
-        this.onVerticesDeleted = function(evt, data) { 
+        this.onVerticesDeleted = function(evt, data) {
             this.mapReady(function(map) {
                 var featuresLayer = map.featuresLayer,
                     toRemove = [],
@@ -239,7 +239,7 @@ define([
 
                 var sf = this.clusterStrategy.selectedFeatures = {};
                 selectedIds.forEach(function(sId) {
-                    sf[sId] = true; 
+                    sf[sId] = true;
                 });
 
                 featuresLayer.redraw();
@@ -250,19 +250,17 @@ define([
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
                 geoLocations = this.ontologyProperties.byDataType.geoLocation,
-                geoLocationProperty = geoLocations.length && geoLocations[0],
-                geoLocation = geoLocationProperty && vertex.properties[geoLocationProperty.title],
-                conceptType = vertex.properties['http://lumify.io#conceptType'].value,
-                heading = vertex.properties.heading && vertex.properties.heading.value,
+                geoLocationProperty = _.first(geoLocations),
+                geoLocation = geoLocationProperty && F.vertex.prop(vertex, geoLocationProperty.title),
+                conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
                 iconUrl =  '/map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
                 });
 
-            if (!geoLocation || !geoLocation.value.latitude || !geoLocation.value.longitude) return;
+            if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
 
-            if (heading) iconUrl += '&heading=' + heading;
             if (selected) iconUrl += '&selected';
 
             if (!feature) {
@@ -275,7 +273,7 @@ define([
 
             if (!feature) {
                 feature = new ol.Feature.Vector(
-                    point(geoLocation.value.latitude, geoLocation.value.longitude),
+                    point(geoLocation.latitude, geoLocation.longitude),
                     { vertex: vertex },
                     {
                         graphic: true,
@@ -293,8 +291,7 @@ define([
                 if (feature.style.externalGraphic !== iconUrl) {
                     feature.style.externalGraphic = iconUrl;
                 }
-                feature.move(latLon(geoLocation.value.latitude, geoLocation.value.longitude));
-                // TODO: update heading
+                feature.move(latLon(geoLocation.latitude, geoLocation.longitude));
             }
 
             return feature;
@@ -349,7 +346,7 @@ define([
                     viewportHeight = this.$node.height() - padding.t - padding.b,
 
                     // Figure out ideal resolution based on available realestate
-                    idealResolution = Math.max( 
+                    idealResolution = Math.max(
                         dataExtent.getWidth()  / viewportWidth,
                         dataExtent.getHeight() / viewportHeight
                     ),
@@ -364,7 +361,7 @@ define([
                     offsetY = padding.t - padding.b,
                     lon = offsetX * actualResolution / 2,
                     lat = offsetY * actualResolution / 2;
-                  
+
                 // If there is only one feature don't zoom in so close
                 if (map.featuresLayer.features.length === 1) {
                     zoom = Math.min(5, zoom);
@@ -399,7 +396,6 @@ define([
 
         this.handleContextMenu = function(event) {
             event.originalEvent = event.originalEvent || event;
-            
 
             this.mapReady(function(map) {
                 var feature = map.featuresLayer.getFeatureFromEvent(event);
@@ -518,7 +514,7 @@ define([
                     map.addLayer(layer);
 
                     var modify = new ol.Control.ModifyFeature(layer);
-                    modify.mode = ol.Control.ModifyFeature.RESIZE | 
+                    modify.mode = ol.Control.ModifyFeature.RESIZE |
                                   ol.Control.ModifyFeature.DRAG;
                     map.addControl(modify);
                     modify.activate();
@@ -591,7 +587,7 @@ define([
                         enableKinetic: true
                     }
                 }),
-                map = new ol.Map({ 
+                map = new ol.Map({
                     zoomDuration: 0,
                     numZoomLevels: 18,
                     theme: null,
@@ -602,7 +598,7 @@ define([
                     numZoomLevels: 20,
                     wrapDateLine: false
                 }),
-                cluster = new ClusterStrategy({ 
+                cluster = new ClusterStrategy({
                     distance: 45,
                     threshold: 2,
                     animationMethod: ol.Easing.Expo.easeOut,
@@ -659,7 +655,7 @@ define([
             map.featuresLayer.events.on({
                 featureselected: function(featureEvents) {
                     var vertices = _.map(featureEvents.feature.cluster || [featureEvents.feature], function(feature) {
-                            return feature.data.vertex; 
+                            return feature.data.vertex;
                         });
                     self.trigger('selectObjects', {vertices: vertices});
                 }
@@ -686,7 +682,7 @@ define([
 
             // Prevent map shake on initialize while catching up with vertexAdd
             // events
-           
+
             this.ontologyService.properties()
                 .done(function(p) {
                     self.ontologyProperties = p;

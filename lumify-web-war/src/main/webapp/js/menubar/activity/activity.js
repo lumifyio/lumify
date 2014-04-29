@@ -4,10 +4,10 @@ define([
 ], function(defineComponent) {
     'use strict';
 
-    var MINIMUM_ANIMATION_DURATION_SECONDS = 1, 
+    var MINIMUM_ANIMATION_DURATION_SECONDS = 1,
 
         // Add activity start/end events that are triggered on document
-        // * start/end events are required, 
+        // * start/end events are required,
         // * descriptions optional (event name used)
         ACTIVITIES = [
 
@@ -27,7 +27,7 @@ define([
         ];
 
     return defineComponent(Activity);
-    
+
     function Activity() {
         this.activitiesCount = 0;
         this.activities = { };
@@ -69,10 +69,10 @@ define([
                 }
             });
 
-            this.$node.tooltip({ 
+            this.$node.tooltip({
                 placement: 'right',
                 html: true,
-                title: 'No&nbsp;activity' 
+                title: 'No&nbsp;activity'
             });
             this.on('shown', function() {
                 clearTimeout(this.hideTooltipTimeout);
@@ -88,9 +88,9 @@ define([
             activity.startedAt = Date.now();
 
             this.activities[activity.eventStarting] = activity;
-            this.updateActivity(true, 
+            this.updateActivity(true,
                 (desc[0] || activity.eventStarting) + '...');
-            
+
             if (activity.disableTooltipFlash !== true) {
                 this.$node.tooltip('show');
                 this.hideTooltipTimeout = _.delay(function() {
@@ -105,7 +105,7 @@ define([
             if (this.activities[activity.eventStarting]) {
                 var percent = Math.round(complete * 100) + '%';
                 this.updateActivity(
-                    true, 
+                    true,
                     (desc[0] || activity.eventStarting) + '... ( ' + percent + ' )'
                 );
             }
@@ -140,7 +140,7 @@ define([
             }
 
             var activityIcon = this.$node.tooltip();
-            
+
             message = message.replace(/\s+/g, '&nbsp;');
 
             activityIcon

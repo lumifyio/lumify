@@ -1,8 +1,13 @@
 package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.OntologyProperty;
+import io.lumify.core.model.ontology.PossibleValueType;
 import io.lumify.core.model.ontology.PropertyType;
+import org.apache.commons.lang.SerializationUtils;
 import org.securegraph.Vertex;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
@@ -28,6 +33,11 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
 
     public PropertyType getDataType() {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
+    }
+
+    public List<PossibleValueType> getPossibleValues() {
+        final byte[] possibleValues = POSSIBLE_VALUES.getPropertyValue(vertex);
+        return possibleValues == null ? new ArrayList<PossibleValueType>() : (ArrayList<PossibleValueType>) SerializationUtils.deserialize(possibleValues);
     }
 
     public Vertex getVertex() {

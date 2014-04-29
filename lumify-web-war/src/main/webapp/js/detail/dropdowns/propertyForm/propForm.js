@@ -6,7 +6,8 @@ define([
     'fields/selection/selection',
     'data',
     'tpl!util/alert',
-    'util/withTeardown'
+    'util/withTeardown',
+    'util/formatters'
 ], function(
     defineComponent,
     withDropdown,
@@ -15,7 +16,8 @@ define([
     FieldSelection,
     appData,
     alertTemplate,
-    withTeardown
+    withTeardown,
+    F
 ) {
     'use strict';
 
@@ -26,7 +28,7 @@ define([
 
     function PropertyForm() {
 
-        this.ontologyService = new OntologyService();
+        var ontologyService = new OntologyService();
 
         this.defaultAttrs({
             propertyListSelector: '.property-list',
@@ -79,33 +81,30 @@ define([
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
-                    property: {
-                        displayName: this.attr.property.displayName,
-                        title: this.attr.property.key
-                    }
+                    property: _.chain(this.attr.property)
+                        .pick('displayName key name value visibility'.split(' '))
+                        .extend({
+                            title: this.attr.property.name
+                        })
+                        .value()
                 });
             } else {
-                (vertex.properties['http://lumify.io#conceptType'].value != 'relationship' ?
-                    self.attr.service.propertiesByConceptId(vertex.properties['http://lumify.io#conceptType'].value) :
-                    self.attr.service.propertiesByRelationshipLabel(vertex.properties.relationshipType.value)
+                (F.vertex.isEdge(vertex) ?
+                    ontologyService.propertiesByRelationshipLabel(F.vertex.prop(vertex, 'relationshipType')) :
+                    ontologyService.propertiesByConceptId(F.vertex.prop(vertex, 'conceptType'))
                 ).done(function(properties) {
-                    var propertiesList = [{
-                        title: 'http://lumify.io#visibilityJson',
-                        displayName: 'Visibility'
-                    }];
+                    var propertiesList = [];
 
                     properties.list.forEach(function(property) {
                         if (property.userVisible) {
-                            propertiesList.push($.extend({}, property));
+                            propertiesList.push(_.pick(property, 'displayName', 'title', 'userVisible'));
+                        } else if (property.title === 'http://lumify.io#visibility') {
+                            propertiesList.push({
+                                title: 'http://lumify.io#visibilityJson',
+                                displayName: property.displayName,
+                                userVisible: true
+                            });
                         }
-                    });
-                    
-                    propertiesList.sort(function(pa, pb) {
-                        var a = pa.title, b = pb.title;
-                        if (a === 'http://lumify.io#visibilityJson') return -1;
-                        if (b === 'http://lumify.io#visibilityJson') return 1;
-                        if (a === b) return 0;
-                        return a < b ? -1 : 1;
                     });
 
                     FieldSelection.attachTo(self.select('propertyListSelector'), {
@@ -152,11 +151,12 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = this.attr.data.properties[propertyName],
+            var vertexProperty = property.key ?
+                    F.vertex.propForKey(this.attr.data, property.key) : undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
-                isExistingProperty = (typeof this.attr.data.properties[propertyName]) !== 'undefined';
+                isExistingProperty = typeof vertexProperty !== 'undefined';
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
@@ -174,7 +174,7 @@ define([
                     sandboxStatus === 'PUBLIC_CHANGED' ?  'Undo' : ''
                 )
                 .toggle(
-                    (!!isExistingProperty) && 
+                    (!!isExistingProperty) &&
                     sandboxStatus !== 'PUBLIC' &&
                     propertyName !== 'http://lumify.io#visibilityJson'
                 );
@@ -186,7 +186,7 @@ define([
                 button.attr('disabled', true);
             }
 
-            this.ontologyService.properties().done(function(properties) {
+            ontologyService.properties().done(function(properties) {
                 var propertyDetails = properties.byTitle[propertyName];
                 if (propertyName === 'http://lumify.io#visibilityJson') {
                     require([
@@ -290,7 +290,7 @@ define([
             if (this.settingVisibility) {
                 this.valid = this.visibilitySource && this.visibilitySource.valid;
             } else {
-                this.valid = !this.propertyInvalid && 
+                this.valid = !this.propertyInvalid &&
                     (this.visibilitySource && this.visibilitySource.valid) &&
                     (this.justification && this.justification.valid);
             }
@@ -336,7 +336,7 @@ define([
         this.onDelete = function() {
             _.defer(this.buttonLoading.bind(this, this.attr.deleteButtonSelector));
             this.trigger('deleteProperty', {
-                property: this.currentProperty.title
+                property: _.pick(this.currentProperty, 'key', 'name')
             });
         };
 
@@ -344,6 +344,7 @@ define([
             if (!this.valid) return;
 
             var vertexId = this.attr.data.id,
+                propertyKey = this.currentProperty.key,
                 propertyName = this.currentProperty.title,
                 value = this.currentValue,
                 justification = _.pick(this.justification || {}, 'sourceInfo', 'justificationText');
@@ -353,12 +354,13 @@ define([
             this.$node.find('input').tooltip('hide')
 
             this.$node.find('.errors').hide();
-            if (propertyName.length && 
-                (this.settingVisibility || 
+            if (propertyName.length &&
+                (this.settingVisibility ||
                  (((_.isString(value) && value.length) || value)))) {
 
                 this.trigger('addProperty', {
                     property: $.extend({
+                            key: propertyKey,
                             name: propertyName,
                             value: value,
                             visibilitySource: this.visibilitySource.value

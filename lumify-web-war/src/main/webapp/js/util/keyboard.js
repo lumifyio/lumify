@@ -48,7 +48,7 @@ define([
 
         this.onRegisterKeyboardShortcuts = function(e, data) {
             var self = this,
-                scopes = ['Global'], 
+                scopes = ['Global'],
                 shortcuts = this.shortcuts,
                 shortcutsByScope = this.shortcutsByScope;
 
@@ -162,7 +162,7 @@ define([
                     this.focusElementStack.pop();
                 }
             }
-                
+
             return triggerElement || this.$node;
         };
 

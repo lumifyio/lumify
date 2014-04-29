@@ -477,6 +477,7 @@
         <rdfs:label xml:lang="en">Gender</rdfs:label>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
+        <lumify:possibleValues xml:lang="en">M:Male,F:Female</lumify:possibleValues>
     </owl:DatatypeProperty>
     
 

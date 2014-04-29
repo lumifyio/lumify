@@ -2,8 +2,8 @@
 define([
     'service/vertex',
     'util/formatters'
-], function(VertexService, formatters) {
-                
+], function(VertexService, F) {
+
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
         'http://lumify.io#visibility',
         'http://lumify.io#visibilityJson',
@@ -105,17 +105,17 @@ define([
 
         this.getVertexTitle = function(vertexId) {
             var deferredTitle = $.Deferred(),
-                v, 
+                v,
                 vertexTitle;
 
             v = this.vertex(vertexId);
             if (v) {
-                vertexTitle = formatters.vertex.prop(v, 'title');
+                vertexTitle = F.vertex.prop(v, 'title');
                 return deferredTitle.resolve(vertexTitle);
             }
 
             this.refresh(vertexId).done(function(vertex) {
-                vertexTitle = formatters.vertex.prop(vertex, 'title');
+                vertexTitle = F.vertex.prop(vertex, 'title');
                 deferredTitle.resolve(vertexTitle);
             });
 
@@ -126,33 +126,22 @@ define([
             var id = vertex.id,
                 cache = this.cachedVertices[id] || (this.cachedVertices[id] = { id: id }),
                 hasChanged = !_.isEqual(
-                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)), 
+                    _.pick.apply(_, [cache].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES)),
                     _.pick.apply(_, [vertex].concat(PROPERTIES_TO_INSPECT_FOR_CHANGES))
                 );
 
-            if (options && options.deletedProperty && cache.properties) {
-                delete cache.properties[options.deletedProperty]
-            }
-
-            if (!cache.properties) cache.properties = {};
+            if (!cache.properties) cache.properties = [];
             if (!cache.workspace) cache.workspace = {};
 
             verifyVisibility(vertex);
 
             cache.properties = _.isUndefined(vertex.properties) ? cache.properties : vertex.properties;
-
             cache.workspace = $.extend(true, {}, cache.workspace, vertex.workspace || {});
-            
+
             $.extend(cache, _.pick(vertex, [
                 'http://lumify.io#visibility',
                 'http://lumify.io#visibilityJson',
                 'sandboxStatus']));
-
-            if (!cache.properties.source || !cache.properties.source.value) {
-                if (cache.properties._source && cache.properties._source.value) {
-                    cache.properties.source = cache.properties._source;
-                }
-            }
 
             cache.detectedObjects = vertex.detectedObjects;
 
@@ -160,25 +149,14 @@ define([
                 this.workspaceVertices[id] = cache.workspace;
             }
 
-            var conceptType = (
-                cache.properties['http://lumify.io#conceptType'] &&
-                    cache.properties['http://lumify.io#conceptType'].value
-                ) || cache.properties['http://lumify.io#conceptType'];
-
-            if (!conceptType) {
-                cache.properties['http://lumify.io#conceptType'] = {
-                    value: (conceptType = 'http://www.w3.org/2002/07/owl#Thing')
-                };
-            }
-
+            var conceptType = F.vertex.prop(cache, 'conceptType', 'http://www.w3.org/2002/07/owl#Thing');
             cache.concept = this.cachedConcepts.byId[conceptType];
             if (cache.concept) {
                 setPreviewsForVertex(cache, this.workspaceId);
             } else {
-                console.error('Unable to attach concept to vertex', cache.properties['http://lumify.io#conceptType']);
+                console.error('Unable to attach concept to vertex', conceptType);
             }
 
-            cache.resolvedSource = this.resolvedSourceForProperties(cache.properties);
             cache.detectedObjects = cache.detectedObjects || [];
 
             $.extend(true, vertex, cache);
@@ -200,9 +178,7 @@ define([
             }
 
             if (vertex.properties) {
-                _.keys(vertex.properties).forEach(function(propertyKey) {
-                    var property = vertex.properties[propertyKey];
-
+                _.each(vertex.properties, function(property) {
                     if (!(key in property)) {
                         property[key] = defaultJson;
                     }
@@ -216,22 +192,22 @@ define([
                     graphVertexId: vertex.id
                 },
                 artifactUrl = _.template('artifact/{ type }?' + $.param(params)),
-                glyphIconHref = vertex.properties['http://lumify.io#glyphIcon'];
+                glyphIconHref = F.vertex.prop(vertex, 'glyphIcon');
 
             vertex.imageSrcIsFromConcept = false;
 
             if (glyphIconHref) {
-                var sep = glyphIconHref.value.indexOf('?') > 0 ? '&' : '?';
-                vertex.imageSrc = glyphIconHref.value + sep + $.param({workspaceId: currentWorkspace});
+                var sep = glyphIconHref.indexOf('?') > 0 ? '&' : '?';
+                vertex.imageSrc = glyphIconHref + sep + $.param({workspaceId: currentWorkspace});
             } else {
                 switch (vertex.concept.displayType) {
 
-                    case 'image': 
+                    case 'image':
                         vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
                         vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         break;
 
-                    case 'video': 
+                    case 'video':
                         vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
                         vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
@@ -243,15 +219,6 @@ define([
                         vertex.imageSrcIsFromConcept = true;
                 }
             }
-        }
-
-        this.resolvedSourceForProperties = function(p) {
-            var source = p.source && p.source.value,
-                author = p.author && p.author.value;
-            
-            return source ? 
-                author ? ([source,author].join(' / ')) : source : 
-                author ? author : '';
         }
     }
 });

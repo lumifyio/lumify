@@ -37,11 +37,11 @@ define([
             previouslyPlacedMap = {};
 
         // Sort vertex dependencies
-        vertexIds.sort(function(vId) { 
+        vertexIds.sort(function(vId) {
             return _.uniq(
                 _.pluck(layoutOptions.map, 'sourceId')
                     .concat(_.pluck(layoutOptions.map, 'targetId'))
-            ).indexOf(vId) * -1; 
+            ).indexOf(vId) * -1;
         })
 
         // Position vertices
@@ -148,7 +148,7 @@ define([
                         } while (
                             i < tryNodes.length &&
                             (
-                                (sourcePosition.x === position[0] && sourcePosition.y === position[1]) || 
+                                (sourcePosition.x === position[0] && sourcePosition.y === position[1]) ||
                                 (targetPosition.x === position[0] && targetPosition.y === position[1])
                             )
                         )

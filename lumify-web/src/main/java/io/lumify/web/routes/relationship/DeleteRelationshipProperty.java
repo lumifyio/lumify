@@ -1,5 +1,7 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -11,13 +13,11 @@ import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Property;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +49,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         LumifyVisibility lumifyVisibility = new LumifyVisibility();
         final String propertyName = getRequiredParameter(request, "propertyName");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
         final String sourceId = getRequiredParameter(request, "source");
         final String destId = getRequiredParameter(request, "dest");
         final String edgeId = getRequiredParameter(request, "edgeId");
@@ -64,11 +65,15 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
         // TODO remove all properties from all edges? I don't think so
         Edge edge = graph.getEdge(edgeId, authorizations);
-        Object oldValue = edge.getPropertyValue(propertyName, 0);
+        Object oldValue = null;
+        Property oldProperty = edge.getProperty(propertyKey, propertyName);
+        if (oldProperty != null) {
+            oldValue = oldProperty.getValue();
+        }
         // TODO: replace "" when we implement commenting on ui
-        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, property.getDisplayName(),
+        auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, property.getDisplayName(),
                 oldValue, null, edge, "", "", user, lumifyVisibility.getVisibility());
-        edge.removeProperty(propertyName);
+        edge.removeProperty(propertyKey, propertyName);
         graph.flush();
 
         List<Property> properties = new ArrayList<Property>();
@@ -78,7 +83,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
 
         workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
 
-        JSONObject resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
+        JSONArray resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         respondWithJson(response, resultsJson);
     }
 }

@@ -1,0 +1,24 @@
+{{#if popout}}
+
+  <span>
+    {{#if value.description}}
+       {{value.description}}
+     {{else}}
+       {{stringValue}}
+     {{/if}}
+   </span>
+
+{{else}}
+
+  <a href="#"
+     class="map-coordinates"
+     data-latitude="{{value.latitude}}"
+     data-longitude="{{value.longitude}}">
+     {{#if value.description}}
+       {{value.description}}
+     {{else}}
+       {{stringValue}}
+     {{/if}}
+   </a>
+
+{{/if}}

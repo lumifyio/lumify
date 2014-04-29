@@ -17,7 +17,7 @@ define([], function() {
          .attr('height', h)
          .css({ position: 'absolute', top: 0 });
 
-        var canvas = c[0], 
+        var canvas = c[0],
             ctx = canvas.getContext('2d');
 
         function draw() {

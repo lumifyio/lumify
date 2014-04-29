@@ -43,7 +43,7 @@ define([
                                 ontology.concepts,
                                 _.findWhere(ontology.concepts, {id: PARENT_CONCEPT})
                             ),
-                            byId: ontology.conceptsById, 
+                            byId: ontology.conceptsById,
                             byClassName: _.indexBy(ontology.concepts, 'className'),
                             byTitle: _.chain(ontology.concepts)
                                 .filter(onlyEntityConcepts.bind(null, ontology.conceptsById))
@@ -113,7 +113,7 @@ define([
             var leadingSlashIfNeeded = parents.length ? '/' : '';
 
             return $.extend({}, concept, {
-                flattenedDisplayName: _.pluck(parents, 'displayName').join('/') + 
+                flattenedDisplayName: _.pluck(parents, 'displayName').join('/') +
                                 leadingSlashIfNeeded + concept.displayName
             });
         }
@@ -152,19 +152,19 @@ define([
 
                     var destConcept = concepts.byId[dest]
                     if (destConcept && destConcept.children) {
-                        destConcept.children.forEach(function(c) { 
-                            addToAllDestChildrenGroups(r, source, c.id); 
+                        destConcept.children.forEach(function(c) {
+                            addToAllDestChildrenGroups(r, source, c.id);
                         })
                     }
                 };
-                
+
             relationships.forEach(function(r) {
-                addToAllDestChildrenGroups(r, r.source, r.dest); 
+                addToAllDestChildrenGroups(r, r.source, r.dest);
 
                 var sourceConcept = concepts.byId[r.source]
                 if (sourceConcept && sourceConcept.children) {
-                    sourceConcept.children.forEach(function(c) { 
-                        addToAllDestChildrenGroups(r, c.id, r.dest); 
+                    sourceConcept.children.forEach(function(c) {
+                        addToAllDestChildrenGroups(r, c.id, r.dest);
                     })
                 }
             });
@@ -183,7 +183,7 @@ define([
 
                         return _.chain(relationships.groupedBySourceDestConcepts[key] || [])
                             .uniq(function(r) {
-                                return r.title 
+                                return r.title
                             })
                             .sortBy('displayName')
                             .value()
@@ -207,7 +207,7 @@ define([
     OntologyService.prototype.propertiesByConceptId = function(conceptId) {
         return this.ontology()
                     .then(function(ontology) {
-                        var 
+                        var
                             propertyIds = [],
                             collectPropertyIds = function(conceptId) {
                                 var concept = ontology.conceptsById[conceptId],
@@ -241,8 +241,8 @@ define([
     OntologyService.prototype.propertiesByRelationshipLabel = function(relationshipLabel) {
         return this.ontology()
                     .then(function(ontology) {
-                        var relationship = _.findWhere(ontology.relationships, { 
-                                displayName: relationshipLabel 
+                        var relationship = _.findWhere(ontology.relationships, {
+                                displayName: relationshipLabel
                             }),
                             propertyIds = relationship.properties || [],
                             properties = _.map(propertyIds, function(pId) {

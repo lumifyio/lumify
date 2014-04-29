@@ -22,9 +22,9 @@ define([
                 escape: isMac ? '⎋' : 'esc',
                 'delete': isMac ? '⌫' : null,
                 backspace: isMac ? '⌦' : null,
-                up: '↑', 
+                up: '↑',
                 down: '↓',
-                left: '←', 
+                left: '←',
                 right: '→',
                 drag: isMac ? (isFirefox ? null : '') : null
             }
@@ -79,8 +79,6 @@ define([
 
     var FORMATTERS = {
 
-        vertex: vertexFormatters,
-
         number: {
             pretty: function(number) {
                 return sf('{0:#,###,###,###}', number);
@@ -103,7 +101,7 @@ define([
                     t = g * 1024;
 
                 precision = _.isUndefined(precision) ? 1 : precision;
-	
+
                 if ((bytes >= 0) && (bytes < k)) {
                     return bytes + ' B';
 
@@ -279,7 +277,9 @@ define([
                 return time + ' ago';
             }
         }
-    }
+    };
+
+    FORMATTERS.vertex = vertexFormatters(FORMATTERS);
 
     return FORMATTERS;
 });

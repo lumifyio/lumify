@@ -22,7 +22,7 @@ define([
             })
 
             this.on('select-all', function(e) {
-                e.stopPropagation(); 
+                e.stopPropagation();
             });
             this.on(document, 'graphPaddingUpdated', this.onPaddingUpdated);
         });

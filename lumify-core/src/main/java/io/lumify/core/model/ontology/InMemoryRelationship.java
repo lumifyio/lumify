@@ -1,10 +1,10 @@
 package io.lumify.core.model.ontology;
 
-public class InMememoryRelationship extends Relationship {
+public class InMemoryRelationship extends Relationship {
     private String relationshipIRI;
     private String displayName;
 
-    protected InMememoryRelationship(String relationshipIRI, String displayName, String sourceConceptIRI, String destConceptIRI) {
+    protected InMemoryRelationship(String relationshipIRI, String displayName, String sourceConceptIRI, String destConceptIRI) {
         super(sourceConceptIRI, destConceptIRI);
         this.relationshipIRI = relationshipIRI;
         this.displayName = displayName;
