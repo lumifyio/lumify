@@ -1,7 +1,7 @@
 define([
     'service/serviceBase',
     'util/formatters'
-], function(ServiceBase, formatters) {
+], function(ServiceBase, F) {
     'use strict';
 
     function VertexService() {
@@ -73,7 +73,7 @@ define([
 
     VertexService.prototype.importFiles = function(files, visibilitySource) {
         var formData = new FormData(),
-            pluralString = formatters.string.plural(files.length, 'file');
+            pluralString = F.string.plural(files.length, 'file');
 
         _.forEach(files, function(f) {
             formData.append('file', f);

@@ -1,8 +1,7 @@
 
 define([
-    'sf',
-    './vertex/formatters'
-], function(sf, vertexFormatters) {
+    'sf'
+], function(sf) {
     'use strict';
 
     var classNameIndex = 0,
@@ -278,8 +277,6 @@ define([
             }
         }
     };
-
-    FORMATTERS.vertex = vertexFormatters(FORMATTERS);
 
     return FORMATTERS;
 });

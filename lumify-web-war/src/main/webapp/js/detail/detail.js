@@ -2,7 +2,7 @@ define([
     'flight/lib/component',
     'flight/lib/registry',
     'tpl!./detail',
-    'util/formatters'
+    'util/vertex/formatters'
 ], function(defineComponent, registry, template, F) {
     'use strict';
 

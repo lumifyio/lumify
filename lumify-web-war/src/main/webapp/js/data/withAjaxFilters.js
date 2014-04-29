@@ -172,7 +172,7 @@ define([], function() {
                             });
                         }
                     } catch(e) {
-                        console.error('Request failed in prefilter cache phase', e.stack || e.message);
+                        console.error('Request failed in prefilter cache phase', e.stack || e.message, options.url);
                     }
                     return json;
                 };

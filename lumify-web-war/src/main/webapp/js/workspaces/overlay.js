@@ -6,7 +6,7 @@ define([
     'service/workspace',
     'service/ontology',
     'data'
-], function(defineComponent, template, formatters, WorkspaceService, OntologyService, appData) {
+], function(defineComponent, template, F, WorkspaceService, OntologyService, appData) {
     'use strict';
 
     var LAST_SAVED_UPDATE_FREQUENCY_SECONDS = 30,
@@ -158,7 +158,7 @@ define([
 
         this.onWorkspaceSaved = function(event, data) {
             clearTimeout(this.updateTimer);
-            this.lastSaved = formatters.date.utc(Date.now());
+            this.lastSaved = F.date.utc(Date.now());
 
             if (data.title) {
                 this.select('nameSelector').text(data.title);
@@ -171,7 +171,7 @@ define([
                 setTimer = function() {
                     this.updateTimer = setTimeout(function() {
 
-                        var time = formatters.date.relativeToNow(this.lastSaved);
+                        var time = F.date.relativeToNow(this.lastSaved);
                         subtitle.text(prefix + time);
 
                         setTimer();
@@ -235,7 +235,7 @@ define([
                             return true;
                         }),
                         count = filteredDiffs.length - countOfTitleChanges,
-                        formattedCount = formatters.number.pretty(count);
+                        formattedCount = F.number.pretty(count);
 
                     self.currentDiffIds = _.uniq(filteredDiffs.map(function(diff) {
                         return diff.vertexId || diff.elementId || diff.edgeId;
@@ -292,7 +292,7 @@ define([
                     });
 
                     badge.removePrefixedClasses('badge-').addClass('badge-info')
-                        .attr('title', formatters.string.plural(formattedCount, 'unpublished change'))
+                        .attr('title', F.string.plural(formattedCount, 'unpublished change'))
                         .text(count > 0 ? formattedCount : '');
 
                     if (count > 0) {
@@ -388,8 +388,8 @@ define([
             var name = this.select('nameSelector'),
                 tooltip = name.data('tooltip'),
                 tip = tooltip && tooltip.tip(),
-                text = 'Vertices: ' + formatters.number.pretty(this.verticesCount || 0) +
-                    ', Edges: ' + formatters.number.pretty(this.edgesCount || 0)
+                text = 'Vertices: ' + F.number.pretty(this.verticesCount || 0) +
+                    ', Edges: ' + F.number.pretty(this.edgesCount || 0)
 
             if (tip && tip.is(':visible')) {
                 tip.find('.tooltip-inner span').text(text);

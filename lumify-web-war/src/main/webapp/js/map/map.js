@@ -10,7 +10,7 @@ define([
     'service/ontology',
     'util/retina',
     'util/controls',
-    'util/formatters',
+    'util/vertex/formatters',
     'util/withAsyncQueue',
     'util/withContextMenu'
 ], function(defineComponent,

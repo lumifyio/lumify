@@ -1,7 +1,7 @@
 
 define([
     'service/vertex',
-    'util/formatters'
+    'util/vertex/formatters'
 ], function(VertexService, F) {
 
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [

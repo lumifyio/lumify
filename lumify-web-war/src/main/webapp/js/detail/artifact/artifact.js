@@ -12,7 +12,7 @@ define([
     'tpl!./transcriptEntry',
     'tpl!util/alert',
     'util/range',
-    'util/formatters',
+    'util/vertex/formatters',
     'service/ontology',
     'service/vertex',
     'data'
@@ -28,7 +28,7 @@ define([
     transcriptEntryTemplate,
     alertTemplate,
     rangeUtils,
-    formatters,
+    F,
     OntologyService,
     VertexService,
     appData) {
@@ -152,7 +152,7 @@ define([
                     snippet: contextHighlight,
                     vertexId: this.attr.data.id,
                     text: selection.toString(),
-                    vertexTitle: formatters.vertex.prop(this.attr.data, 'title')
+                    vertexTitle: F.vertex.prop(this.attr.data, 'title')
                 });
             }
         };
@@ -162,7 +162,7 @@ define([
 
             if (matching) {
                 this.select('titleSelector').html(
-                    formatters.vertex.prop(matching, 'title')
+                    F.vertex.prop(matching, 'title')
                 );
             }
         };
@@ -195,7 +195,7 @@ define([
                 vertex: vertex,
                 fullscreenButton: this.fullscreenButton([vertex.id]),
                 auditsButton: this.auditsButton(),
-                formatters: formatters
+                F: F
             }));
 
             this.select('detectedObjectLabelsSelector').toggle(vertex.detectedObjects.length > 0);

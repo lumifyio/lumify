@@ -4,9 +4,9 @@ define([
     'tpl!./diff',
     'service/ontology',
     'service/workspace',
-    'util/formatters',
+    'util/vertex/formatters',
     'data'
-], function(defineComponent, template, OntologyService, WorkspaceService, formatters, appData) {
+], function(defineComponent, template, OntologyService, WorkspaceService, F, appData) {
     'use strict';
 
     var SHOW_CHANGES_TEXT_SECONDS = 3;
@@ -50,7 +50,7 @@ define([
                             value = [change.value.latitude, change.value.longitude].join(', ');
                             break;
                         case 'date':
-                            value = formatters.date.dateString(value);
+                            value = F.date.dateString(value);
                             break;
                     }
 
@@ -62,7 +62,7 @@ define([
                     diffs: processDiffs,
                     formatValue: formatValue,
                     formatLabel: formatLabel,
-                    formatters: formatters
+                    F: F
                 }));
                 self.updateHeader();
                 self.updateDraggables();
@@ -82,10 +82,10 @@ define([
                     var scroll = self.$node.find('.diffs-list'),
                         previousScroll = scroll.scrollTop(),
                         previousPublished = self.$node.find('.mark-publish').map(function() {
-                            return '.' + formatters.className.to($(this).data('diffId'));
+                            return '.' + F.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousUndo = self.$node.find('.mark-undo').map(function() {
-                            return '.' + formatters.className.to($(this).data('diffId'));
+                            return '.' + F.className.to($(this).data('diffId'));
                         }).toArray(),
                         previousSelection  = _.compact(self.$node.find('.active').map(function() {
                             return $(this).data('diffId');
@@ -95,7 +95,7 @@ define([
                         diffs: processDiffs,
                         formatValue: formatValue,
                         formatLabel: formatLabel,
-                        formatters: formatters
+                        F: F
                     }));
 
                     self.selectVertices(previousSelection);
@@ -164,7 +164,7 @@ define([
                             properties: [],
                             edges: [],
                             action: {},
-                            className: formatters.className.to(vertexId),
+                            className: F.className.to(vertexId),
                             vertex: appData.vertex(vertexId)
                         };
 
@@ -173,7 +173,7 @@ define([
                             case 'VertexDiffItem':
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {
-                                    outputItem.title = formatters.vertex.prop(outputItem.vertex, 'title');
+                                    outputItem.title = F.vertex.prop(outputItem.vertex, 'title');
                                 }
                                 outputItem.action = actionTypes.CREATE;
                                 self.diffsForVertexId[vertexId] = diff;
@@ -190,7 +190,7 @@ define([
                                     if (diff.name === 'title' && self.diffsForVertexId[diff.elementId]) {
                                         outputItem.title = diff['new'].value;
                                     } else {
-                                        diff.className = formatters.className.to(diff.id);
+                                        diff.className = F.className.to(diff.id);
                                         outputItem.properties.push(diff)
                                     }
                                     self.diffsById[diff.id] = diff;
@@ -200,7 +200,7 @@ define([
                             case 'EdgeDiffItem':
                                 diff.id = diff.edgeId;
                                 diff.inVertex = appData.vertex(diff.inVertexId);
-                                diff.className = formatters.className.to(diff.edgeId);
+                                diff.className = F.className.to(diff.edgeId);
                                 diff.displayLabel = self.ontologyRelationships.byTitle[diff.label].displayName;
                                 addDiffDependency(diff.inVertexId, diff);
                                 addDiffDependency(diff.outVertexId, diff);
@@ -215,7 +215,7 @@ define([
 
                     if (!outputItem.title && outputItem.vertex) {
                         outputItem.action = actionTypes.UPDATE;
-                        outputItem.title = formatters.vertex.prop(outputItem.vertex, 'title')
+                        outputItem.title = F.vertex.prop(outputItem.vertex, 'title')
                         outputItem.id = outputItem.vertex.id;
                     }
 
@@ -250,7 +250,7 @@ define([
         this.selectVertices = function(vertices) {
             var self = this,
                 cls = vertices.map(function(vertex) {
-                    return '.' + formatters.className.to(_.isString(vertex) ? vertex : vertex.id);
+                    return '.' + F.className.to(_.isString(vertex) ? vertex : vertex.id);
                 });
             this.$node.find(cls.join(',')).addClass('active');
         };
@@ -444,10 +444,10 @@ define([
                 header.toggle(markedAsPublish === 0 && markedAsUndo === 0);
 
                 publish.toggle(markedAsPublish > 0)
-                    .attr('data-count', formatters.number.pretty(markedAsPublish));
+                    .attr('data-count', F.number.pretty(markedAsPublish));
 
                 undo.toggle(markedAsUndo > 0)
-                    .attr('data-count', formatters.number.pretty(markedAsUndo));
+                    .attr('data-count', F.number.pretty(markedAsUndo));
             }
         }
 
@@ -464,7 +464,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
+            this.$node.find('tr.' + F.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-undo')
@@ -529,7 +529,7 @@ define([
                 return;
             }
 
-            this.$node.find('tr.' + formatters.className.to(diff.id)).each(function() {
+            this.$node.find('tr.' + F.className.to(diff.id)).each(function() {
                 $(this)
                     .removePrefixedClasses('mark-')
                     [stateBasedClassFunction]('mark-publish')

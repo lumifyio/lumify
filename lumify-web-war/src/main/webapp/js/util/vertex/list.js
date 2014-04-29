@@ -7,7 +7,7 @@ define([
     'tpl!./item',
     'tpl!util/alert',
     'util/video/scrubber',
-    'util/formatters',
+    'util/vertex/formatters',
     'util/popovers/withVertexScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
@@ -19,7 +19,7 @@ define([
     vertexTemplate,
     alertTemplate,
     VideoScrubber,
-    formatters,
+    F,
     withPositionUpdates) {
     'use strict';
 
@@ -84,7 +84,7 @@ define([
                     vertices: this.attr.vertices,
                     infiniteScrolling: this.attr.infiniteScrolling && this.attr.total !== this.attr.vertices.length,
                     classNamesForVertex: this.classNameMapForVertices(this.attr.vertices),
-                    formatters: formatters
+                    F: F
                 }));
 
             this.attachEvents();
@@ -247,7 +247,7 @@ define([
                         return vertexTemplate({
                             vertex: vertex,
                             classNamesForVertex: clsMap,
-                            formatters: formatters
+                            F: F
                         });
                     }),
                     lastItem = loading.prev();
@@ -365,7 +365,7 @@ define([
                     newAnchor = $(vertexTemplate({
                         vertex: vertex,
                         classNamesForVertex: self.classNameMapForVertices([vertex]),
-                        formatters: formatters
+                        F: F
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
                     src = vertex.imageSrc,

@@ -9,7 +9,7 @@ define([
     defineComponent,
     template,
     UserService,
-    formatters,
+    F,
     appData) {
     'use strict';
 
@@ -29,7 +29,7 @@ define([
         this.after('initialize', function() {
             this.$node.html(template({
                 property: this.attr.property,
-                formatters: formatters
+                F: F
             }));
 
             this.on('click', {

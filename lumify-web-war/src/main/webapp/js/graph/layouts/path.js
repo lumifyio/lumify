@@ -3,7 +3,7 @@ define([
     'pathfinding',
     'util/retina',
     'util/formatters'
-], function(PF, retina, formatters) {
+], function(PF, retina, F) {
 
     var DEBUG_SHOW_GRID = false;
 
@@ -72,7 +72,7 @@ define([
                     ),
                     x = Math.floor((position.x - start.x) / cell.x),
                     y = Math.floor((position.y - start.y) / cell.y),
-                    nodeId = formatters.className.from(this.id());
+                    nodeId = F.className.from(this.id());
 
                 previouslyPlacedMap[nodeId] = {x: x,y: y};
 

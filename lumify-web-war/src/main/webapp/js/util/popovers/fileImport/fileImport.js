@@ -10,7 +10,7 @@ define([
     defineComponent,
     withPopover,
     VertexService,
-    formatters,
+    F,
     VisibilityEditor,
     withFormFieldErrors) {
     'use strict';
@@ -39,8 +39,8 @@ define([
             config.rolledUp = [{
                 name: config.files.length === 1 ?
                     config.files[0].name :
-                    formatters.string.plural(config.files.length, 'file'),
-                size: formatters.bytes.pretty(
+                    F.string.plural(config.files.length, 'file'),
+                size: F.bytes.pretty(
                     _.chain(config.files)
                         .map(_.property('size'))
                         .reduce(function(memo, num) {
@@ -54,11 +54,11 @@ define([
             config.formattedFiles = _.map(config.files, function(f, i) {
                 return {
                     name: f.name,
-                    size: formatters.bytes.pretty(f.size, 0),
+                    size: F.bytes.pretty(f.size, 0),
                     index: i
                 };
             })
-            config.pluralString = formatters.string.plural(config.files.length, 'file');
+            config.pluralString = F.string.plural(config.files.length, 'file');
 
             this.after('setupWithTemplate', function() {
                 var self = this;

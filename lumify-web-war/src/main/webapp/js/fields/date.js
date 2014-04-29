@@ -5,7 +5,7 @@ define([
     './withPropertyField',
     'util/formatters',
     'chrono'
-], function(defineComponent, template, withPropertyField, formatters, chrono) {
+], function(defineComponent, template, withPropertyField, F, chrono) {
     'use strict';
 
     return defineComponent(DateField, withPropertyField);
@@ -22,7 +22,7 @@ define([
             var value = '';
 
             if (this.attr.value) {
-                value = formatters.date.dateString(this.attr.value);
+                value = F.date.dateString(this.attr.value);
             }
 
             this.$node.html(template({
@@ -59,7 +59,7 @@ define([
                     if (pasted) {
                         var date = chrono.parseDate(pasted)
                         if (date) {
-                            self.val(formatters.date.dateString(date));
+                            self.val(F.date.dateString(date));
                             self.datepicker('setDate', date)
                             self.datepicker('update');
                             self.blur();
