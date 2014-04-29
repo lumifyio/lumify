@@ -68,6 +68,7 @@ public enum Privilege {
     }
 
     public static Privilege stringToPrivilege(String privilegesStringPart) {
+        privilegesStringPart = privilegesStringPart.trim();
         for (Privilege privilege : Privilege.values()) {
             if (privilege.name().equalsIgnoreCase(privilegesStringPart)) {
                 return privilege;
