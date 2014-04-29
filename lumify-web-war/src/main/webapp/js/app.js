@@ -304,12 +304,12 @@ define([
                 Graph3D = graph3d;
 
                 if (!self._graphDimensions || self._graphDimensions === 2) {
-                    node2d.removeClass('visible');
-                    Graph3D.attachTo(node3d.addClass('visible'));
+                    node2d.removeClass('visible').trigger('hidePanel');
+                    Graph3D.attachTo(node3d.addClass('visible').trigger('showPanel'));
                     self._graphDimensions = 3;
                 } else {
-                    node3d.removeClass('visible');
-                    node2d.addClass('visible');
+                    node3d.removeClass('visible').trigger('hidePanel');
+                    node2d.addClass('visible').trigger('showPanel');
                     self._graphDimensions = 2;
                     self.triggerPaneResized();
                 }
