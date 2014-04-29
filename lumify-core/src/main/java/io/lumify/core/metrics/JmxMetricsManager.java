@@ -4,6 +4,9 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class JmxMetricsManager implements MetricsManager {

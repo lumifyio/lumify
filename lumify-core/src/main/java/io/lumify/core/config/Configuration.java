@@ -85,6 +85,7 @@ public final class Configuration {
             throw new LumifyException("Could not find required property " + propertyKey);
         }
         try {
+            LOGGER.debug("found class \"%s\" for configuration \"%s\"", className, propertyKey);
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
             throw new LumifyException("Could not load class " + className + " for property " + propertyKey);

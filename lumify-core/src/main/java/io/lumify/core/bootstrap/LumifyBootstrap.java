@@ -96,12 +96,16 @@ public class LumifyBootstrap extends AbstractModule {
     protected void configure() {
         LOGGER.info("Configuring LumifyBootstrap.");
 
-        MetricsManager metricsManager = new JmxMetricsManager();
-
         bind(Configuration.class).toInstance(configuration);
+
+        LOGGER.debug("binding %s", JmxMetricsManager.class.getName());
+        MetricsManager metricsManager = new JmxMetricsManager();
         bind(MetricsManager.class).toInstance(metricsManager);
+
+        LOGGER.debug("binding %s", VersionService.class.getName());
         bind(VersionServiceMXBean.class).to(VersionService.class);
 
+        LOGGER.debug("binding %s", CuratorFrameworkProvider.class.getName());
         bind(CuratorFramework.class)
                 .toProvider(new CuratorFrameworkProvider(configuration))
                 .in(Scopes.SINGLETON);
@@ -181,7 +185,7 @@ public class LumifyBootstrap extends AbstractModule {
     }
 
     private void injectProviders() {
-        LOGGER.info("Running BootstrapBindingProviders");
+        LOGGER.info("Running %s", BootstrapBindingProvider.class.getName());
         ServiceLoader<BootstrapBindingProvider> bindingProviders = ServiceLoaderUtil.load(BootstrapBindingProvider.class);
         Binder binder = binder();
         for (BootstrapBindingProvider provider : bindingProviders) {
@@ -211,7 +215,7 @@ public class LumifyBootstrap extends AbstractModule {
         }
     }
 
-    private <T> Provider<T> getConfigurableProvider(final Class<T> clazz, final Configuration config, final String key) {
+    private <T> Provider<T> getConfigurableProvider(final Class<T> usedToSetTemplateTType, final Configuration config, final String key) {
         Class<? extends T> configuredClass = config.getClass(key);
         return configuredClass != null ? new ConfigurableProvider<T>(configuredClass, config, key, null) : new NullProvider<T>();
     }
@@ -219,7 +223,7 @@ public class LumifyBootstrap extends AbstractModule {
     private static class NullProvider<T> implements Provider<T> {
         @Override
         public T get() {
-            return (T) null;
+            return null;
         }
     }
 
@@ -233,26 +237,23 @@ public class LumifyBootstrap extends AbstractModule {
         public ConfigurableProvider(final Class<? extends T> clazz, final Configuration config, String keyPrefix, final User user) {
             this.config = config;
             this.keyPrefix = keyPrefix;
-            boolean checkInit = true;
-            Method init = null;
+            Method init;
             Object[] initArgs = null;
-            if (checkInit) {
-                init = findInit(clazz, Configuration.class, User.class);
+            init = findInit(clazz, Configuration.class, User.class);
+            if (init != null) {
+                initArgs = new Object[]{config, user};
+            } else {
+                init = findInit(clazz, Map.class, User.class);
                 if (init != null) {
-                    initArgs = new Object[]{config, user};
+                    initArgs = new Object[]{config.toMap(), user};
                 } else {
-                    init = findInit(clazz, Map.class, User.class);
+                    init = findInit(clazz, Configuration.class);
                     if (init != null) {
-                        initArgs = new Object[]{config.toMap(), user};
+                        initArgs = new Object[]{config};
                     } else {
-                        init = findInit(clazz, Configuration.class);
+                        init = findInit(clazz, Map.class);
                         if (init != null) {
-                            initArgs = new Object[]{config};
-                        } else {
-                            init = findInit(clazz, Map.class);
-                            if (init != null) {
-                                initArgs = new Object[]{config.toMap()};
-                            }
+                            initArgs = new Object[]{config.toMap()};
                         }
                     }
                 }
