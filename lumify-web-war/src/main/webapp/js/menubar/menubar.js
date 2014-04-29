@@ -43,7 +43,9 @@ define([
             events[sel] = function(e) {
                 e.preventDefault();
 
-                var isSwitch = false;
+                var self = this,
+                    isSwitch = false;
+
                 if (DISABLE_ACTIVE_SWITCH.indexOf(name) === -1) {
                     MUTALLY_EXCLUSIVE_SWITCHES.forEach(function(exclusive, i) {
                         if (exclusive.names.indexOf(name) !== -1 && exclusive.options.allowCollapse === false) {
@@ -61,10 +63,16 @@ define([
 
                     // Special case to toggle 2d/3d graph
                     if (name === 'graph') {
-                        this.trigger(document, 'toggleGraphDimensions');
+                        requestAnimationFrame(function() {
+                            self.trigger(document, 'toggleGraphDimensions');
+                        });
                     }
                     return;
-                } else this.trigger(document, 'menubarToggleDisplay', {name: name});
+                } else {
+                    requestAnimationFrame(function() {
+                        self.trigger(document, 'menubarToggleDisplay', {name: name});
+                    });
+                }
             };
         });
 
