@@ -1,5 +1,6 @@
 package io.lumify.core.model.user;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
@@ -7,10 +8,19 @@ import io.lumify.core.user.User;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 
-import java.util.*;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class InMemoryUserRepository extends UserRepository {
     private final List<InMemoryUser> users = new ArrayList<InMemoryUser>();
+
+    @Inject
+    public InMemoryUserRepository(Configuration configuration) {
+        super(configuration);
+    }
 
     @Override
     public User findByUsername(String username) {
@@ -28,8 +38,8 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(username, displayName, password, privileges, userAuthorizations);
+    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
+        InMemoryUser user = new InMemoryUser(username, displayName, password, getDefaultPrivileges(), userAuthorizations);
         users.add(user);
         return user;
     }

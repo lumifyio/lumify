@@ -1,5 +1,6 @@
 package io.lumify.securegraph.model.user;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -42,14 +43,17 @@ public class SecureGraphUserRepositoryTest {
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString())).thenReturn(userConcept);
         when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
-        secureGraphUserRepository = new SecureGraphUserRepository(authorizationRepository,
+        Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
+        secureGraphUserRepository = new SecureGraphUserRepository(
+                lumifyConfiguration,
+                authorizationRepository,
                 new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
                 ontologyRepository);
     }
 
     @Test
     public void testAddUser() {
-        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", Privilege.ALL, new String[]{"auth1", "auth2"});
+        secureGraphUserRepository.addUser("12345", "testUser", "testPassword", new String[]{"auth1", "auth2"});
 
         SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUsername("testUser");
         assertEquals("testUser", secureGraphUser.getDisplayName());

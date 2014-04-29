@@ -40,7 +40,7 @@ public class SqlUser implements User {
     private String userStatus;
 
     @Column(name = "privileges")
-    private int privileges;
+    private String privileges;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "workspace_id")
@@ -100,10 +100,10 @@ public class SqlUser implements User {
     }
 
     public Set<Privilege> getPrivileges() {
-        return Privilege.toSet(this.privileges);
+        return Privilege.stringToPrivileges(this.privileges);
     }
 
-    public void setPrivileges(int privileges) {
+    public void setPrivileges(String privileges) {
         this.privileges = privileges;
     }
 

@@ -1,10 +1,10 @@
 package io.lumify.sql.model.user;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserStatus;
-import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.SessionFactory;
@@ -17,7 +17,8 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.securegraph.util.IterableUtils;
 
-import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -37,33 +38,27 @@ public class SqlUserRepositoryTest {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
+        Map<?, ?> configMap = new HashMap<Object, Object>();
+        Configuration lumifyConfiguration = new Configuration(configMap);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory);
     }
 
     @Test
     public void testAddUser() throws Exception {
-        SqlUser sqlUser1 = (SqlUser) sqlUserRepository.addUser("abc", "test user1", "", Privilege.ALL, new String[0]);
+        SqlUser sqlUser1 = (SqlUser) sqlUserRepository.addUser("abc", "test user1", "", new String[0]);
         assertEquals("abc", sqlUser1.getUsername());
         assertEquals("test user1", sqlUser1.getDisplayName());
         assertEquals("OFFLINE", sqlUser1.getUserStatus());
-        assertTrue(sqlUser1.getPrivileges().contains(Privilege.READ));
-        assertTrue(sqlUser1.getPrivileges().contains(Privilege.EDIT));
-        assertTrue(sqlUser1.getPrivileges().contains(Privilege.PUBLISH));
-        assertTrue(sqlUser1.getPrivileges().contains(Privilege.ADMIN));
 
-        SqlUser sqlUser2 = (SqlUser) sqlUserRepository.addUser("def", "test user2", null, Privilege.NONE, new String[0]);
+        SqlUser sqlUser2 = (SqlUser) sqlUserRepository.addUser("def", "test user2", null, new String[0]);
         assertNull(sqlUser2.getPasswordHash());
         assertNull(sqlUser2.getPasswordSalt());
         assertEquals("def", sqlUser2.getUsername());
         assertEquals("test user2", sqlUser2.getDisplayName());
         assertEquals(2, sqlUser2.getId());
         assertEquals("OFFLINE", sqlUser2.getUserStatus());
-        assertFalse(sqlUser2.getPrivileges().contains(Privilege.READ));
-        assertFalse(sqlUser2.getPrivileges().contains(Privilege.EDIT));
-        assertFalse(sqlUser2.getPrivileges().contains(Privilege.PUBLISH));
-        assertFalse(sqlUser2.getPrivileges().contains(Privilege.ADMIN));
 
-        SqlUser sqlUser3 = (SqlUser) sqlUserRepository.addUser("ghi", "test user3", "&gdja81", EnumSet.of(Privilege.READ), new String[0]);
+        SqlUser sqlUser3 = (SqlUser) sqlUserRepository.addUser("ghi", "test user3", "&gdja81", new String[0]);
         byte[] salt = sqlUser3.getPasswordSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
         assertTrue(UserPasswordUtil.validatePassword("&gdja81", salt, passwordHash));
@@ -71,21 +66,17 @@ public class SqlUserRepositoryTest {
         assertEquals("test user3", sqlUser3.getDisplayName());
         assertEquals(3, sqlUser3.getId());
         assertEquals("OFFLINE", sqlUser3.getUserStatus());
-        assertTrue(sqlUser3.getPrivileges().contains(Privilege.READ));
-        assertFalse(sqlUser3.getPrivileges().contains(Privilege.EDIT));
-        assertFalse(sqlUser3.getPrivileges().contains(Privilege.PUBLISH));
-        assertFalse(sqlUser3.getPrivileges().contains(Privilege.ADMIN));
     }
 
     @Test(expected = LumifyException.class)
     public void testAddUserWithExisitingUsername() {
-        sqlUserRepository.addUser("123", "test user1", "&gdja81", Privilege.ALL, new String[0]);
-        sqlUserRepository.addUser("123", "test user1", null, Privilege.ALL, new String[0]);
+        sqlUserRepository.addUser("123", "test user1", "&gdja81", new String[0]);
+        sqlUserRepository.addUser("123", "test user1", null, new String[0]);
     }
 
     @Test
     public void testFindById() throws Exception {
-        sqlUserRepository.addUser("12345", "test user", "&gdja81", Privilege.ALL, new String[0]);
+        sqlUserRepository.addUser("12345", "test user", "&gdja81", new String[0]);
         SqlUser user = (SqlUser) sqlUserRepository.findById("1");
         byte[] salt = user.getPasswordSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword("&gdja81", salt);
@@ -104,16 +95,16 @@ public class SqlUserRepositoryTest {
         Iterable<User> userIterable = sqlUserRepository.findAll();
         assertTrue(IterableUtils.count(userIterable) == 0);
 
-        sqlUserRepository.addUser("123", "test user1", "&gdja81", Privilege.ALL, new String[0]);
-        sqlUserRepository.addUser("456", "test user2", null, Privilege.ALL, new String[0]);
-        sqlUserRepository.addUser("789", "test user3", null, Privilege.ALL, new String[0]);
+        sqlUserRepository.addUser("123", "test user1", "&gdja81", new String[0]);
+        sqlUserRepository.addUser("456", "test user2", null, new String[0]);
+        sqlUserRepository.addUser("789", "test user3", null, new String[0]);
         userIterable = sqlUserRepository.findAll();
         assertTrue(IterableUtils.count(userIterable) == 3);
     }
 
     @Test
     public void testSetPassword() throws Exception {
-        SqlUser testUser = (SqlUser) sqlUserRepository.addUser("abcd", "test user", "1234", Privilege.ALL, new String[0]);
+        SqlUser testUser = (SqlUser) sqlUserRepository.addUser("abcd", "test user", "1234", new String[0]);
 
         assertTrue(sqlUserRepository.findByUsername("abcd") != null);
         assertTrue(UserPasswordUtil.validatePassword("1234", testUser.getPasswordSalt(), testUser.getPasswordHash()));
@@ -146,7 +137,7 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testIsPasswordValid() throws Exception {
-        SqlUser testUser = (SqlUser) sqlUserRepository.addUser("1234", "test user", null, Privilege.ALL, new String[0]);
+        SqlUser testUser = (SqlUser) sqlUserRepository.addUser("1234", "test user", null, new String[0]);
         assertFalse(sqlUserRepository.isPasswordValid(testUser, ""));
 
         sqlUserRepository.setPassword(testUser, "abc");
@@ -172,7 +163,7 @@ public class SqlUserRepositoryTest {
     public void testSetCurrentWorkspace() throws Exception {
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
         sqlWorkspace.setDisplayTitle("workspace1");
-        sqlUserRepository.addUser("123", "abc", null, Privilege.ALL, new String[0]);
+        sqlUserRepository.addUser("123", "abc", null, new String[0]);
         sqlUserRepository.setCurrentWorkspace("1", sqlWorkspace);
         SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
         assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
@@ -185,7 +176,7 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testSetStatus() throws Exception {
-        sqlUserRepository.addUser("123", "abc", null, Privilege.ALL, new String[0]);
+        sqlUserRepository.addUser("123", "abc", null, new String[0]);
         sqlUserRepository.setStatus("1", UserStatus.ONLINE);
 
         SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");

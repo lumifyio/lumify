@@ -1,11 +1,10 @@
 package io.lumify.web;
 
+import com.altamiracorp.miniweb.HandlerChain;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.altamiracorp.miniweb.HandlerChain;
 import org.securegraph.Graph;
 
 import javax.naming.InvalidNameException;
@@ -56,7 +55,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
         if (username == null || username.trim().equals("")) {
             return null;
         }
-        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, Privilege.NONE, new String[0]);
+        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {

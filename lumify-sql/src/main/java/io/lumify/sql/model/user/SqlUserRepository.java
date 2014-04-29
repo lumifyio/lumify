@@ -2,6 +2,7 @@ package io.lumify.sql.model.user;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserPasswordUtil;
@@ -19,7 +20,10 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.securegraph.util.ConvertingIterable;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,8 +34,10 @@ public class SqlUserRepository extends UserRepository {
     private final AuthorizationRepository authorizationRepository;
 
     @Inject
-    public SqlUserRepository(final AuthorizationRepository authorizationRepository,
+    public SqlUserRepository(final Configuration configuration,
+                             final AuthorizationRepository authorizationRepository,
                              final SessionFactory sessionFactory) {
+        super(configuration);
         this.authorizationRepository = authorizationRepository;
         this.sessionFactory = sessionFactory;
     }
@@ -78,7 +84,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -98,7 +104,7 @@ public class SqlUserRepository extends UserRepository {
             }
             newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
-            newUser.setPrivileges(Privilege.toBits(privileges));
+            newUser.setPrivileges(Privilege.toString(getDefaultPrivileges()));
             LOGGER.debug("add %s to user table", displayName);
             session.save(newUser);
             transaction.commit();

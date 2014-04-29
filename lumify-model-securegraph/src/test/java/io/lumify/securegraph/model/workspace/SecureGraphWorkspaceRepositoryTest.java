@@ -1,5 +1,6 @@
 package io.lumify.securegraph.model.workspace;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -11,7 +12,6 @@ import io.lumify.core.model.user.InMemoryUserRepository;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiff;
 import io.lumify.core.security.LumifyVisibility;
-import io.lumify.core.user.Privilege;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,11 +78,12 @@ public class SecureGraphWorkspaceRepositoryTest {
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
-        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", Privilege.ALL, new String[0]);
+        Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
+        InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration);
+        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
 
-        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", Privilege.ALL, new String[0]);
+        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
         when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);

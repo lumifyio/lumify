@@ -6,6 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -26,7 +27,6 @@ import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.util.ConvertingIterable;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,9 +52,11 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Inject
     public SecureGraphUserRepository(
+            final Configuration configuration,
             final AuthorizationRepository authorizationRepository,
             final Graph graph,
             final OntologyRepository ontologyRepository) {
+        super(configuration);
         this.authorizationRepository = authorizationRepository;
         this.graph = graph;
 
@@ -116,7 +118,7 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
         User existingUser = findByUsername(username);
         if (existingUser != null) {
             throw new LumifyException("duplicate username");
@@ -135,7 +137,7 @@ public class SecureGraphUserRepository extends UserRepository {
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
-        PRIVILEGES.setProperty(userBuilder, Privilege.toBits(privileges), VISIBILITY.getVisibility());
+        PRIVILEGES.setProperty(userBuilder, Privilege.toString(getDefaultPrivileges()), VISIBILITY.getVisibility());
         User user = createFromVertex(userBuilder.save());
         graph.flush();
         return user;

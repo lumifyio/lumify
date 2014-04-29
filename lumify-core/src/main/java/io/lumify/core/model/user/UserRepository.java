@@ -2,6 +2,7 @@ package io.lumify.core.model.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -12,14 +13,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 public abstract class UserRepository {
     public static final String VISIBILITY_STRING = "user";
     public static final LumifyVisibility VISIBILITY = new LumifyVisibility(VISIBILITY_STRING);
     public static final String LUMIFY_USER_CONCEPT_ID = "http://lumify.io/user";
+    private final Set<Privilege> defaultPrivileges;
+
+    @Inject
+    protected UserRepository(Configuration configuration) {
+        this.defaultPrivileges = Privilege.stringToPrivileges(configuration.get(Configuration.DEFAULT_PRIVILEGES, ""));
+    }
 
     public abstract User findByUsername(String username);
 
@@ -27,7 +34,7 @@ public abstract class UserRepository {
 
     public abstract User findById(String userId);
 
-    public abstract User addUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] userAuthorizations);
+    public abstract User addUser(String username, String displayName, String password, String[] userAuthorizations);
 
     public abstract void setPassword(User user, String password);
 
@@ -107,12 +114,16 @@ public abstract class UserRepository {
         return new SystemUser(getModelUserContext(LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
     }
 
-    public User findOrAddUser(String username, String displayName, String password, Collection<Privilege> privileges, String[] authorizations) {
+    public User findOrAddUser(String username, String displayName, String password, String[] authorizations) {
         User user = findByUsername(username);
         if (user == null) {
-            user = addUser(username, displayName, password, privileges, authorizations);
+            user = addUser(username, displayName, password, authorizations);
         }
         return user;
+    }
+
+    public Set<Privilege> getDefaultPrivileges() {
+        return defaultPrivileges;
     }
 
     public abstract void delete(User user);

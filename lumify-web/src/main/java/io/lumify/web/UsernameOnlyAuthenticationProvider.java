@@ -40,8 +40,7 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            Set<Privilege> privileges = Privilege.ALL; // TODO set this to something else?
-            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, privileges, new String[0]);
+            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, new String[0]);
         }
         setUser(request, user);
         return true;

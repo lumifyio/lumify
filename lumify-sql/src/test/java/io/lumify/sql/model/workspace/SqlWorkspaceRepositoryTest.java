@@ -1,5 +1,6 @@
 package io.lumify.sql.model.workspace;
 
+import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -20,7 +21,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.securegraph.util.IterableUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -44,9 +47,11 @@ public class SqlWorkspaceRepositoryTest {
         configuration.configure(HIBERNATE_IN_MEM_CFG_XML);
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
-        sqlUserRepository = new SqlUserRepository(authorizationRepository, sessionFactory);
+        Map<?, ?> configMap = new HashMap<Object, Object>();
+        Configuration lumifyConfiguration = new Configuration(configMap);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory);
         sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
-        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, Privilege.ALL, new String[0]);
+        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }
 
     @Test
@@ -148,7 +153,7 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
-        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", Privilege.ALL, new String[0]);
+        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
         workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser2);
         assertTrue(workspaceUsers.size() == 2);

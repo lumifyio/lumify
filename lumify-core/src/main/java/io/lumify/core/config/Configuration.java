@@ -46,6 +46,7 @@ public final class Configuration {
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
+    public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
 
     private Map<String, String> config = new HashMap<String, String>();
 
