@@ -1,15 +1,15 @@
 define([
     'hbs/handlebars',
     'util/formatters'
-], function(Handlebars, formatters) {
+], function(Handlebars, F) {
     'use strict';
 
     Handlebars.registerHelper('date', function(date) {
-        return formatters.date.dateTimeString(date);
+        return F.date.dateTimeString(date);
     });
 
     Handlebars.registerHelper('relativedate', function(date) {
-        return formatters.date.relativeToNow(new Date(date));
+        return F.date.relativeToNow(new Date(date));
     });
 
 });

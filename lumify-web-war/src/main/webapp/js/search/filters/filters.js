@@ -6,7 +6,7 @@ define([
     'tpl!./item',
     'tpl!./entityItem',
     'data',
-    'util/formatters',
+    'util/vertex/formatters',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -16,7 +16,7 @@ define([
     itemTemplate,
     entityItemTemplate,
     appData,
-    formatters,
+    F,
     FieldSelection,
     OntologyService) {
     'use strict';
@@ -60,7 +60,7 @@ define([
 
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
-                title = vertex && formatters.vertex.prop(vertex, 'title') || data.vertexId;
+                title = vertex && F.vertex.prop(vertex, 'title') || data.vertexId;
 
             this.$node.find('.entity-filter-header')
                 .after(entityItemTemplate({title: title}))

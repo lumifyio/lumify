@@ -5,7 +5,7 @@ define([
     'tpl!./menu',
     'service/ontology',
     'util/formatters'
-], function(defineComponent, appData, template, OntologyService, formatters) {
+], function(defineComponent, appData, template, OntologyService, F) {
     'use strict';
 
     return defineComponent(Menu);
@@ -167,7 +167,7 @@ define([
                     var $this = $(this),
                         command = $this.text();
 
-                    $this.text(formatters.string.shortcut($this.text()));
+                    $this.text(F.string.shortcut($this.text()));
                 });
 
             this.positionMenu(this.attr.position);

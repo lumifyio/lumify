@@ -7,7 +7,7 @@ define([
     'tpl!./entity',
     'service/vertex',
     'service/ontology',
-    'util/formatters',
+    'util/vertex/formatters',
     'tpl!util/alert',
     'util/jquery.removePrefixedClasses'
 ], function(

@@ -9,7 +9,7 @@ define([
     'tpl!./multiple',
     'tpl!./histogram',
     'util/vertex/list',
-    'util/formatters'
+    'util/vertex/formatters'
 ], function(
     defineComponent,
     registry,

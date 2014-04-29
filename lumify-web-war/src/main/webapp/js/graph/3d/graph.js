@@ -3,8 +3,8 @@ define([
     'flight/lib/component',
     'service/ontology',
     './3djs/3djs',
-    'util/formatters'
-], function(defineComponent, OntologyService, $3djs, formatters) {
+    'util/vertex/formatters'
+], function(defineComponent, OntologyService, $3djs, F) {
     'use strict';
 
     var MAX_TITLE_LENGTH = 15,
@@ -104,7 +104,7 @@ define([
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
 
-                var title = formatters.vertex.prop(node.data.vertex, 'title');
+                var title = F.vertex.prop(node.data.vertex, 'title');
                 if (title.length > MAX_TITLE_LENGTH) {
                     node.data.label = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + '...';
                 } else node.data.label = title;

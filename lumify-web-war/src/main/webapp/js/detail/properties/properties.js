@@ -5,7 +5,7 @@ define([
     'service/vertex',
     'service/relationship',
     'service/audit',
-    'util/formatters',
+    'util/vertex/formatters',
     '../dropdowns/propertyForm/propForm',
     'hbs!./template',
     'hbs!../audit/audit-list',

@@ -10,7 +10,7 @@ define([
     'tpl!./relationships',
     'tpl!util/alert',
     'util/vertex/list',
-    'util/formatters',
+    'util/vertex/formatters',
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
     'service/vertex',
@@ -25,7 +25,7 @@ define([
     relationshipsTemplate,
     alertTemplate,
     VertexList,
-    formatters,
+    F,
     PropertyForm,
     OntologyService,
     VertexService,
@@ -69,7 +69,7 @@ define([
 
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
-                    self.select('titleSelector').html(formatters.vertex.prop(vertex, 'title'));
+                    self.select('titleSelector').html(F.vertex.prop(vertex, 'title'));
                 }
             });
         };
@@ -84,7 +84,7 @@ define([
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
                         auditsButton: self.auditsButton(),
-                        formatters: formatters
+                        F: F
                     }));
 
                     Image.attachTo(self.select('glyphIconSelector'), {
@@ -176,8 +176,8 @@ define([
                         )
                         if (direction === 0) {
                             return defaultSort(
-                                formatters.vertex.prop(a.vertex, 'title').toLowerCase(),
-                                formatters.vertex.prop(b.vertex, 'title').toLowerCase()
+                                F.vertex.prop(a.vertex, 'title').toLowerCase(),
+                                F.vertex.prop(b.vertex, 'title').toLowerCase()
                             );
                         } else {
                             return direction;
@@ -191,8 +191,8 @@ define([
                 // If in references group sort by the title
                 if (a === b && a === 'references') {
                     return defaultSort(
-                        formatters.vertex.prop(a.vertex, 'title'),
-                        formatters.vertex.prop(b.vertex, 'title')
+                        F.vertex.prop(a.vertex, 'title'),
+                        F.vertex.prop(b.vertex, 'title')
                     );
                 }
 
@@ -213,7 +213,7 @@ define([
             $rels.html(relationshipsTemplate({
                 relationshipsGroupedByType: groupedByType,
                 sortedKeys: sortedKeys,
-                formatters: formatters
+                F: F
             }));
 
             VertexList.attachTo($rels.find('.references'), {

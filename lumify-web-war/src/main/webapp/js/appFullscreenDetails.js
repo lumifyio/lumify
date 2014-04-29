@@ -7,9 +7,9 @@ define([
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
     'detail/detail',
-    'util/formatters',
+    'util/vertex/formatters',
     'util/jquery.removePrefixedClasses'
-], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail, formatters) {
+], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail, F) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -137,7 +137,7 @@ define([
                 // TODO: Image/Video before documents
 
                 // Sort by title
-                descriptors.push(formatters.vertex.prop(v, 'title'));
+                descriptors.push(F.vertex.prop(v, 'title'));
                 return descriptors.join('');
             });
 
@@ -240,7 +240,7 @@ define([
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
                             document.title = '"' +
-                                formatters.vertex.prop(newVerticesById[newVertexIds[0]], 'title') +
+                                F.vertex.prop(newVerticesById[newVertexIds[0]], 'title') +
                                 '" added';
                         } else {
                             document.title = newVertexIds.length + ' items added';
@@ -266,9 +266,9 @@ define([
             });
 
             if (sorted.length === 1) {
-                return formatters.vertex.prop(sorted[0], 'title');
+                return F.vertex.prop(sorted[0], 'title');
             } else {
-                var first = '"' + formatters.vertex.prop(sorted[0], 'title') + '"',
+                var first = '"' + F.vertex.prop(sorted[0], 'title') + '"',
                     l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');

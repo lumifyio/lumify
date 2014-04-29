@@ -2,7 +2,7 @@
 define([
     'flight/lib/component',
     'util/formatters'
-], function(defineComponent, formatters) {
+], function(defineComponent, F) {
     'use strict';
 
     return defineComponent(Keyboard);
@@ -60,7 +60,7 @@ define([
 
             scopes.forEach(function(scope) {
                 Object.keys(data.shortcuts).forEach(function(key) {
-                    var shortcut = $.extend({}, data.shortcuts[key], formatters.object.shortcut(key));
+                    var shortcut = $.extend({}, data.shortcuts[key], F.object.shortcut(key));
 
                     if (!shortcutsByScope[scope]) shortcutsByScope[scope] = {};
                     shortcuts[shortcut.forEventLookup] = shortcutsByScope[scope][shortcut.normalized] = shortcut;

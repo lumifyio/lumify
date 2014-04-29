@@ -7,7 +7,7 @@ define([
     'data',
     'tpl!util/alert',
     'util/withTeardown',
-    'util/formatters'
+    'util/vertex/formatters'
 ], function(
     defineComponent,
     withDropdown,

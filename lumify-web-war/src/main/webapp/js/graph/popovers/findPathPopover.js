@@ -8,7 +8,7 @@ define([
 ], function(
     defineComponent,
     withVertexPopover,
-    formatters,
+    F,
     VertexService,
     appData) {
     'use strict';
@@ -75,11 +75,11 @@ define([
                         notInWorkspace = vertices.filter(function(v) {
                             return !appData.workspaceVertices[v.id];
                         }),
-                        pathsFoundText = formatters.string.plural(paths.length, 'path') + ' found';
+                        pathsFoundText = F.string.plural(paths.length, 'path') + ' found';
 
                     if (paths.length) {
                         if (notInWorkspace.length) {
-                            var vertexText = formatters.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
+                            var vertexText = F.string.plural(notInWorkspace.length, 'vertex', 'vertices'),
                                 suffix = notInWorkspace.length === 1 ? ' isn\'t' : ' aren\'t';
                             text.text(vertexText + suffix + ' already in workspace');
                             button.text('Add ' + vertexText).removeAttr('disabled').show();
@@ -107,7 +107,7 @@ define([
 
                         cy.$('.temp').remove();
                         self.trigger('focusPaths', { paths: paths, sourceId: src, targetId: dest });
-                    } else text.text('Searching up to ' + formatters.string.plural(self.attr.hops, 'hop'));
+                    } else text.text('Searching up to ' + F.string.plural(self.attr.hops, 'hop'));
 
                     title.text(pathsFoundText).closest('.popover-title').show();
                     self.positionDialog();

@@ -6,7 +6,7 @@ define([
     'tpl!./sections'
 ], function(
     defineComponent,
-    formatters,
+    F,
     helpTemplate,
     sectionsTemplate) {
 
@@ -15,7 +15,7 @@ define([
     return defineComponent(Help);
 
     function prettyCommand(shortcut) {
-        return formatters.string.shortcut(shortcut.character, shortcut);
+        return F.string.shortcut(shortcut.character, shortcut);
     }
 
     function Help() {

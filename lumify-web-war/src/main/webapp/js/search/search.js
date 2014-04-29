@@ -6,7 +6,7 @@ define([
     'service/vertex',
     'service/ontology',
     'util/vertex/list',
-    'util/formatters',
+    'util/vertex/formatters',
     './filters/filters',
     'tpl!./search',
     'tpl!./conceptItem',

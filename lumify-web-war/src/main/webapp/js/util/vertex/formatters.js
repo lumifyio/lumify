@@ -1,22 +1,14 @@
 
 define([
-    'service/ontology'
-], function(OntologyService) {
+    'util/formatters',
+    'promise!../service/ontologyPromise'
+], function(
+    F,
+    ontology) {
     'use strict';
 
-    var ontologyService = new OntologyService(),
-        F,
-        properties;
-
-    ontologyService.properties().done(function(p) {
-        properties = p;
-    });
-
-    return vertexFormatters;
-
-    function vertexFormatters(F) {
-        var V = {
-
+    var propertiesByTitle = ontology.propertiesByTitle,
+        V = {
             sandboxStatus: function(vertex) {
                 return (/^private$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
             },
@@ -24,11 +16,7 @@ define([
             propName: function(name) {
                 var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?
                         name : ('http://lumify.io#' + name),
-                    ontologyProperty = properties && (
-
-                        properties.byTitle[name] ||
-                        properties.byTitle[autoExpandedName]
-                    ),
+                    ontologyProperty = propertiesByTitle[name] || propertiesByTitle[autoExpandedName],
 
                     resolvedName = ontologyProperty && (
                         ontologyProperty.title === name ? name : autoExpandedName
@@ -39,7 +27,7 @@ define([
 
             displayProp: function(property) {
                 var value = V.prop(property, property.name),
-                    ontologyProperty = properties && properties.byTitle[property.name];
+                    ontologyProperty = propertiesByTitle[property.name];
 
                 if (!ontologyProperty) {
                     return value;
@@ -68,7 +56,7 @@ define([
             prop: function(vertexOrProperty, name, defaultValue) {
                 var autoExpandedName = V.propName(name),
 
-                    ontologyProperty = properties && properties.byTitle[autoExpandedName],
+                    ontologyProperty = propertiesByTitle[autoExpandedName],
 
                     displayName = (ontologyProperty && ontologyProperty.displayName) ||
                         autoExpandedName,
@@ -94,9 +82,7 @@ define([
             isEdge: function(vertex) {
                 return V.prop(vertex, 'conceptType') === 'relationship';
             }
+        }
 
-        };
-
-        return V;
-    }
+    return $.extend({}, F, { vertex: V });
 });

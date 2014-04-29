@@ -10,7 +10,7 @@ define([
     'tpl!./loading',
     'util/controls',
     'util/throttle',
-    'util/formatters',
+    'util/vertex/formatters',
     'service/vertex',
     'service/ontology',
     'service/config',
