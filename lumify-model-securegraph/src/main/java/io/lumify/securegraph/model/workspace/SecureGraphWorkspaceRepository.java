@@ -190,8 +190,8 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             protected WorkspaceEntity convert(Edge edge) {
                 Object entityVertexId = edge.getOtherVertexId(workspace.getId());
 
-                int graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge, 0);
-                int graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge, 0);
+                Integer graphPositionX = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.getPropertyValue(edge);
+                Integer graphPositionY = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.getPropertyValue(edge);
                 boolean visible = WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.getPropertyValue(edge, false);
 
                 return new WorkspaceEntity(entityVertexId, visible, graphPositionX, graphPositionY);

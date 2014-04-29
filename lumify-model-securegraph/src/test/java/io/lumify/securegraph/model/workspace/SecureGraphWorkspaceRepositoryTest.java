@@ -261,8 +261,8 @@ public class SecureGraphWorkspaceRepositoryTest {
         List<WorkspaceEntity> entities = workspaceRepository.findEntities(workspace, user1);
         assertEquals(1, entities.size());
         assertEquals(entity1Vertex.getId(), entities.get(0).getEntityVertexId());
-        assertEquals(200, entities.get(0).getGraphPositionX());
-        assertEquals(300, entities.get(0).getGraphPositionY());
+        assertEquals(200, entities.get(0).getGraphPositionX().intValue());
+        assertEquals(300, entities.get(0).getGraphPositionY().intValue());
 
         try {
             workspaceRepository.findEntities(workspace, user2);
