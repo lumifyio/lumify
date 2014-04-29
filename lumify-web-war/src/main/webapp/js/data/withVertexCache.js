@@ -1,8 +1,7 @@
 
 define([
-    'service/vertex',
-    'util/vertex/formatters'
-], function(VertexService, F) {
+    'service/vertex'
+], function(VertexService) {
 
     var PROPERTIES_TO_INSPECT_FOR_CHANGES = [
         'http://lumify.io#visibility',
@@ -15,6 +14,14 @@ define([
     return withVertexCache;
 
     function withVertexCache() {
+
+        var F = null;
+
+        this.after('initialize', function() {
+            require(['util/vertex/formatters'], function(f) {
+                F = f;
+            });
+        });
 
         this.cachedVertices = {};
         this.workspaceVertices = {};

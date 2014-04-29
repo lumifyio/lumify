@@ -33,9 +33,13 @@ define([
                 .text(this.attr.errorMessage)
                 .toggleClass('no-error', !this.attr.errorMessage);
 
-            _.defer(function() {
-                this.select('usernameSelector').focus();
-            }.bind(this));
+            if (this.attr.errorMessageOptions) {
+                this.handleErrorOptions(this.attr.errorMessageOptions);
+            } else {
+                _.defer(function() {
+                    this.select('usernameSelector').focus();
+                }.bind(this));
+            }
 
             this.on('click', {
                 loginButtonSelector: this.onLogin
@@ -84,25 +88,32 @@ define([
                     }
                 })
 
-                .fail(function(err) {
+                .fail(function(errorMessage, options) {
                     button.removeClass('loading').attr('disabled', false);
 
-                    switch (err.status) {
-                        case 403:
-                            error.text('Invalid Username or Password');
-                            password.focus().get(0).select();
-                            break;
-                        case 404:
-                            error.text('Server is unavailable');
-                            break;
-                        default:
-                            error.text(err.statusText || 'Unknown Server Error');
-                            console.error(err);
-                            break;
-                    }
+                    error
+                        .text(errorMessage)
+                        .removeClass('no-error');
 
-                    error.removeClass('no-error');
+                    self.handleErrorOptions(options);
                 });
+        }
+
+        this.handleErrorOptions = function(options) {
+            if (options) {
+                var user = this.select('usernameSelector'),
+                    password = this.select('passwordSelector');
+
+                if (options && options.username) {
+                    user.val(options.username);
+                }
+
+                if (options && options.focus === 'username') {
+                    user.focus().get(0).select();
+                } else if (options && options.focus === 'password') {
+                    password.focus().get(0).select();
+                }
+            }
         }
     }
 

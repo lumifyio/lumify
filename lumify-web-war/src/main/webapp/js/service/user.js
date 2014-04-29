@@ -7,8 +7,11 @@ define([
         $(document).ajaxError(function(event, jqxhr, settings, exception) {
             if (jqxhr.status === 403 && !_.contains(['user/me', 'login'], settings.url)) {
                 new UserService().isLoginRequired()
-                    .fail(function() {
-                        $(document).trigger('logout');
+                    .fail(function(xhr, status, message) {
+                        debugger;
+                        $(document).trigger('logout', {
+                            message: 'Session expired'
+                        });
                     })
             }
         });
@@ -29,7 +32,42 @@ define([
     UserService.prototype = Object.create(ServiceBase.prototype);
 
     UserService.prototype.isLoginRequired = function() {
-        return this._ajaxGet({ url: 'user/me' });
+        return this._ajaxGet({ url: 'user/me' })
+            .then(
+
+                // Request was successfull, but check if user has READ
+                function(user, obj, message) {
+                    var deferred = $.Deferred();
+                    $.extend(user, {
+                        privilegesHelper: _.indexBy(user.privileges || [])
+                    });
+                    if (user.privilegesHelper.READ) {
+                        window.currentUser = user;
+                        deferred.resolve(user);
+                    } else {
+                        deferred.reject('Read access is required', {
+                            username: user.userName,
+                            focus: 'username'
+                        });
+                    }
+
+                    return deferred;
+                },
+
+                // Failed to make user/me request
+                function(xhr, status, message) {
+                    var d = $.Deferred();
+                    if (xhr.status === 403) {
+                        d.reject();
+                    } else {
+                        d.reject();
+                    }
+                    return d.promise();
+                }
+
+            ).fail(function() {
+                window.currentUser = null;
+            });
     };
 
     UserService.prototype.login = function(username, password) {
@@ -39,7 +77,27 @@ define([
                 username: username,
                 password: password
             }
-        });
+        }).then(
+            this.isLoginRequired.bind(this),
+
+            function(error) {
+                var errorDeferred = $.Deferred();
+                switch (error.status) {
+                    case 403:
+                        errorDeferred.reject('Invalid Username or Password', {
+                            focus: 'password'
+                        });
+                        break;
+                    case 404:
+                        errorDeferred.reject('Server is unavailable');
+                        break;
+                    default:
+                        errorDeferred.reject(error.statusText || 'Unknown Server Error');
+                        break;
+                }
+                return errorDeferred.promise();
+            }
+        );
     };
 
     UserService.prototype.logout = function() {
@@ -57,11 +115,10 @@ define([
             result = {};
 
         return $.when(
-            this._ajaxGet({ url: 'user/me' }),
+            this.isLoginRequired(),
             this.getCurrentUsers()
-        ).then(function(userResponse, usersResponse) {
-            var user = userResponse[0],
-                users = usersResponse[0].users;
+        ).then(function(user, usersResponse) {
+            var users = usersResponse[0].users;
 
             return {
                 user: user,

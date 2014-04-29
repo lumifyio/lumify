@@ -319,7 +319,7 @@ define([
             });
         };
 
-        this.logout = function() {
+        this.logout = function(event, data) {
             var self = this;
 
             this.trigger('willLogout');
@@ -332,7 +332,7 @@ define([
                             .append('<div id="login"/>');
                         Login.teardownAll();
                         Login.attachTo('#login', {
-                            errorMessage: 'Server is unavailable'
+                            errorMessage: data && data.message || 'Server is unavailable'
                         });
                         _.defer(function() {
                             self.teardown();

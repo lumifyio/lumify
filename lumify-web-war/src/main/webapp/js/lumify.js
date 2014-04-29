@@ -151,11 +151,11 @@ function(jQuery,
             .done(function() {
                 attachApplication(false);
             })
-            .fail(function() {
-                attachApplication(true);
+            .fail(function(message, options) {
+                attachApplication(true, message, options);
             });
 
-        function attachApplication(loginRequired) {
+        function attachApplication(loginRequired, message, options) {
             $('html')
                 .toggleClass('fullscreenApp', mainApp)
                 .toggleClass('fullscreenDetails', popoutDetails)
@@ -164,7 +164,10 @@ function(jQuery,
             if (loginRequired) {
                 require(['login'], function(Login) {
                     Login.teardownAll();
-                    Login.attachTo('#login');
+                    Login.attachTo('#login', {
+                        errorMessage: message,
+                        errorMessageOptions: options
+                    });
                 });
             } else if (popoutDetails) {
                 $('#login').remove();

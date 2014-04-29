@@ -171,11 +171,10 @@ define([
                 .fail(function(err) {
                     console.error('getOnline', err);
                     var $usersList = self.select('usersListSelector');
-                    $usersList.html('Could not get online: ' + err);
+                    $usersList.html('Could not get online');
                 })
                 .done(function(data) {
 
-                    window.currentUser = data.user;
                     self.trigger('currentUserChanged', { user: data.user });
                     self.currentUserId = data.user.id;
 
