@@ -411,6 +411,7 @@ define([
             var merged = data;
             merged.truncatedTitle = truncatedTitle;
             merged.imageSrc = vertex.imageSrc;
+            merged.conceptType = F.vertex.prop(vertex, 'conceptType');
 
             return merged;
         };

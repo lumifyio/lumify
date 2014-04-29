@@ -158,8 +158,8 @@ define([
 
         this.getRelationshipLabels = function(source, dest) {
             var self = this,
-                sourceConceptTypeId = source.data('http://lumify.io#conceptType').value,
-                destConceptTypeId = dest.data('http://lumify.io#conceptType').value;
+                sourceConceptTypeId = source.data('conceptType'),
+                destConceptTypeId = dest.data('conceptType');
 
             return $.when(
                 this.ontologyService.conceptToConceptRelationships(sourceConceptTypeId, destConceptTypeId),
