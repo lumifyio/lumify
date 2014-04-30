@@ -4,8 +4,12 @@
       <div class="select-actions">
         <span>Select All</span>
         <div class="btn-group actions">
-          <button data-action="publish" class="btn btn-mini select-all-publish">Publish</button>
-          <button data-action="undo" class="btn btn-mini select-all-undo">Undo</button>
+          <% if (Privileges.canPUBLISH) { %>
+          <button data-action="publish"
+                  class="btn btn-mini select-all-publish requires-PUBLISH">Publish</button>
+          <% } %>
+          <button data-action="undo"
+                  class="btn btn-mini select-all-undo">Undo</button>
         </div>
       </div>
 

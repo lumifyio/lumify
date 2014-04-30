@@ -5,8 +5,16 @@ define([
     'service/ontology',
     'service/workspace',
     'util/vertex/formatters',
+    'util/privileges',
     'data'
-], function(defineComponent, template, OntologyService, WorkspaceService, F, appData) {
+], function(
+    defineComponent,
+    template,
+    OntologyService,
+    WorkspaceService,
+    F,
+    Privileges,
+    appData) {
     'use strict';
 
     var SHOW_CHANGES_TEXT_SECONDS = 3;
@@ -62,7 +70,8 @@ define([
                     diffs: processDiffs,
                     formatValue: formatValue,
                     formatLabel: formatLabel,
-                    F: F
+                    F: F,
+                    Privileges: Privileges
                 }));
                 self.updateHeader();
                 self.updateDraggables();
@@ -95,7 +104,8 @@ define([
                         diffs: processDiffs,
                         formatValue: formatValue,
                         formatLabel: formatLabel,
-                        F: F
+                        F: F,
+                        Privileges: Privileges
                     }));
 
                     self.selectVertices(previousSelection);
