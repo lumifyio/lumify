@@ -8,7 +8,7 @@
 <% } else {
   var hasSubmenu = item.submenu && item.submenu.length; %>
 
-  <li class="
+  <li class="<%= item.cls || '' %> 
       <%= hasSubmenu ? 'dropdown-submenu' : '' %> 
       <%= shouldDisable(item) ? 'disabled' : '' %>">
   <a 

@@ -156,9 +156,15 @@ function(jQuery,
             });
 
         function attachApplication(loginRequired, message, options) {
+            var user = !loginRequired && window.currentUser;
+
             $('html')
                 .toggleClass('fullscreenApp', mainApp)
                 .toggleClass('fullscreenDetails', popoutDetails)
+                .toggleClass('no-privilege-EDIT', !user || !currentUser.privilegesHelper.EDIT)
+                .toggleClass('no-privilege-PUBLISH', !user || !currentUser.privilegesHelper.PUBLISH)
+                .toggleClass('no-privilege-ADMIN', !user || !currentUser.privilegesHelper.ADMIN)
+
             window.isFullscreenDetails = popoutDetails;
 
             if (loginRequired) {

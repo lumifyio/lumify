@@ -16,7 +16,8 @@
   </tr>
   <% } %>
 
-  <% if (property.metadata.sandboxStatus === 'PRIVATE') { %>
+  <% var status = property.metadata.sandboxStatus === 'PRIVATE';
+     if (status) { %>
   <tr>
     <td class="property-name">Status</td>
     <td class="property-value property-status">unpublished</td>
@@ -44,14 +45,19 @@
     
   <% } %>
 
+  <% if (!status && !(j || s) && !modifiedBy && !modifiedDate) { %>
+    <tr>
+      <td colspan="2">No metadata found</td>
+    </tr>
+  <% } %>
 
 </table>
 <% 
   var publicChanged = property.metadata.sandboxStatus === 'PUBLIC_CHANGED';
   var private = property.metadata.sandboxStatus === 'PRIVATE';
   if (publicChanged) { %>
-<button class="btn btn-danger btn-small">Undo</button>
+<button class="btn btn-danger btn-small requires-EDIT">Undo</button>
 <% } else if (private) { %>
-<button class="btn btn-danger btn-small">Delete</button>
+<button class="btn btn-danger btn-small requires-EDIT">Delete</button>
 <% } %>
-<button class="btn btn-default btn-small <%= (publicChanged || private) ? '' : 'noDelete' %>">Edit</button>
+<button class="btn btn-default btn-small requires-EDIT <%= (publicChanged || private) ? '' : 'noDelete' %>">Edit</button>

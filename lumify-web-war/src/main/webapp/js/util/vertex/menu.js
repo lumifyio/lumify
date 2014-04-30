@@ -17,6 +17,7 @@ define([
             relatedSubmenuItems = null,
             items = [
                 {
+                    cls: 'requires-EDIT',
                     label: 'Connect',
                     shortcut: 'CTRL+drag',
                     event: 'startVertexConnection',
