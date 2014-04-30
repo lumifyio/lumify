@@ -70,7 +70,8 @@ define([
                     event: 'deleteSelected',
                     selection: 2,
                     shouldDisable: function(selection, vertexId, target) {
-                        return !appData.inWorkspace(vertexId);
+                        return !appData.workspaceEditable ||
+                               !appData.inWorkspace(vertexId);
                     }
                 }
 

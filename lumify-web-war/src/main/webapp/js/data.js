@@ -847,6 +847,8 @@ define([
                         self.workspaceService.getVertices(workspaceId)
                     ).done(function(workspace, vertexResponse) {
 
+                        self.workspaceEditable = workspace.isEditable;
+
                         _.each(_.values(self.cachedVertices), resetWorkspace);
                         self.workspaceVertices = {};
                         self.currentVertexState = _.indexBy(_.keys(workspace.entities).map(function(vId) {
