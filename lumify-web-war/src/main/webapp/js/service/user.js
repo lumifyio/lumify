@@ -8,7 +8,6 @@ define([
             if (jqxhr.status === 403 && !_.contains(['user/me', 'login'], settings.url)) {
                 new UserService().isLoginRequired()
                     .fail(function(xhr, status, message) {
-                        debugger;
                         $(document).trigger('logout', {
                             message: 'Session expired'
                         });
