@@ -1,5 +1,4 @@
 
-
 define([], function() {
     'use strict';
 
@@ -9,8 +8,8 @@ define([], function() {
             node.html(str);
 
             var range = window.document.createRange(),
-                start = { node:null, offset:-1 },
-                end = { node:null, offset:-1 };
+                start = { node: null, offset: -1 },
+                end = { node: null, offset: -1 };
 
             $.each(node[0].childNodes, function(i, node) {
                 var textNode = node;

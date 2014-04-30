@@ -5,7 +5,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
         NEW_VALUE = 'a NEW value';
 
     beforeEach(function() {
-        setupComponent({ value:VALUE })
+        setupComponent({ value: VALUE })
     })
 
     it('Should populate the input field with value attribue', function() {
@@ -13,7 +13,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
     })
 
     it('Should populate the input field with value attribue trimmed', function() {
-        setupComponent({ value:"\n      trimmed value    \n\n  " })
+        setupComponent({ value: '\n      trimmed value    \n\n  ' })
         expect(this.$node.find('input').val()).to.equal('trimmed value');
     })
 
@@ -24,7 +24,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
 
             done();
         })
-        this.$node.find('input').val(" \n    " + NEW_VALUE + "   \n \n").change();
+        this.$node.find('input').val(' \n    ' + NEW_VALUE + '   \n \n').change();
     })
 
     it('Should clear value on event', function() {
@@ -33,7 +33,7 @@ describeComponent('configuration/plugins/visibility/visibilityEditor', function(
     })
 
     it('Should accept falsy values', function() {
-        setupComponent({ value:0 })
+        setupComponent({ value: 0 })
         expect(this.$node.find('input').val()).to.equal('0');
     })
 

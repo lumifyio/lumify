@@ -1,5 +1,4 @@
 
-
 define([
     'flight/lib/component',
     'sinon',
@@ -31,19 +30,19 @@ define([
             clearSelection();
         });
 
-
         beforeEach(function() {
-            
 
             clearSelection();
 
             this.Component = defineComponent(WithHighlightingTest, withHighlighting);
-            this.$node = $('<div class="detail-pane"><div class="content"></div></div>').appendTo('body').find('.content');
+            this.$node = $('<div class="detail-pane"><div class="content"></div></div>')
+                .appendTo('body').find('.content');
+
             this.$parentNode = this.$node.closest('.detail-pane');
             this.component = new this.Component();
-            this.component.initialize(this.$node, { 
-                data: { 
-                    properties: {'http://lumify.io#rowKey':'tmp-rowkey'},
+            this.component.initialize(this.$node, {
+                data: {
+                    properties: {'http://lumify.io#rowKey': 'tmp-rowkey'},
                     selectionDebounce: 10
                 }
             });
@@ -56,22 +55,32 @@ define([
                         if (prop.url == 'ontology/concept') {
                             var d = $.Deferred();
                             d.resolve({
-                                children:[
+                                children: [
                                     {
-                                        id:100,
-                                        title:'entity',
-                                        color:'rgb(255,0,0)',
-                                        glyphIconHref:'first-icon',
-                                        children:[
-                                            {id:1, title:'First', color:'rgb(255,0,0)', glyphIconHref:'first-icon'},
-                                            {id:2, title:'Second', color:'rgb(0,0,255)', glyphIconHref:'second-icon'}
+                                        id: 100,
+                                        title: 'entity',
+                                        color: 'rgb(255,0,0)',
+                                        glyphIconHref: 'first-icon',
+                                        children: [
+                                            {
+                                                id: 1,
+                                                title: 'First',
+                                                color: 'rgb(255, 0, 0)',
+                                                glyphIconHref: 'first-icon'
+                                            },
+                                            {
+                                                id: 2,
+                                                title: 'Second',
+                                                color: 'rgb(0, 0, 255)',
+                                                glyphIconHref: 'second-icon'
+                                            }
                                         ]
                                     },
                                     {
-                                        id:101,
-                                        title:'artifact',
-                                        color:'rgb(255,0,0)',
-                                        glyphIconHref:'first-icon'
+                                        id: 101,
+                                        title: 'artifact',
+                                        color: 'rgb(255,0,0)',
+                                        glyphIconHref: 'first-icon'
                                     }
                                 ]
                             });
@@ -90,8 +99,8 @@ define([
                     this.$node.html($('<div class="text"/>').html(str));
 
                     var range = window.document.createRange(),
-                        start = { node:null, offset:-1 },
-                        end = { node:null, offset:-1 };
+                        start = { node: null, offset: -1 },
+                        end = { node: null, offset: -1 };
                     $.each(this.$node.find('.text')[0].childNodes, function(i, node) {
                         var textNode = node;
                         while (textNode && textNode.nodeType !== 3) {
@@ -125,9 +134,7 @@ define([
             }
         });
 
-
-
-        it("should highlight artifacts", function(done) {
+        it('should highlight artifacts', function(done) {
             this.component.$node.html('<span class="artifact"></span>');
 
             setTimeout(function() {
@@ -139,8 +146,7 @@ define([
             }.bind(this), 500);
         });
 
-
-        it("should highlight entities", function(done) {
+        it('should highlight entities', function(done) {
             this.component.$node.html('<span class="entity subType-1"></span>');
             this.component.$node.append('<span class="entity subType-2"></span>');
             this.component.$node.append('<span class="entity resolved subType-1"></span>');
@@ -157,13 +163,10 @@ define([
             }.bind(this), 500);
         });
 
-
-
-
         it('should create dropdown after selection', function(done) {
-            
+
             this.component.update('A persons name is [John] <span class="entity">Appleseed</span>, blah');
-            
+
             setTimeout(function() {
                 var n = this.$node.find('.text')[0],
                     children = n.childNodes;
@@ -173,7 +176,6 @@ define([
                 expect(children[1].nodeName).to.equal('SPAN');
                 expect(children[1].innerHTML).to.equal('John');
                 expect(children[2].className).to.equal('underneath');
-
 
                 done();
             }.bind(this), EXPECTED_DROPDOWN_SPEED);
@@ -187,7 +189,6 @@ define([
                 var n = this.$node.find('.text')[0],
                     children = n.childNodes;
 
-
                 n.normalize();
                 expect(children[0].textContent).to.equal('A persons name is ');
                 expect(children[1].nodeName).to.equal('SPAN');
@@ -200,9 +201,9 @@ define([
         });
 
         it('should create dropdown after selection but not in span', function(done) {
-            
+
             this.component.update('A persons name is [John <span class="entity">Applesee]d</span>, blah');
-            
+
             setTimeout(function() {
                 var n = this.$node.find('.text')[0],
                     children = n.childNodes;
@@ -214,7 +215,7 @@ define([
                 expect(children[2].className).to.equal('underneath', 'Not after span');
 
                 expect(children[1].innerHTML).to.equal('John <span class="entity focused">Appleseed</span>');
-               
+
                 done();
             }.bind(this), EXPECTED_DROPDOWN_SPEED);
         });

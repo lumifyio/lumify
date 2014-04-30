@@ -21,26 +21,26 @@ define(['util/undoManager'], function(undoManager) {
             expect(undoManager.performedAction.bind(undoManager)).to.throw(Error);
 
             expect(function() {
-                undoManager.performedAction( 'test' );
+                undoManager.performedAction('test');
             }).to.throw(Error);
 
             expect(function() {
-                undoManager.performedAction( 'test', { undo: ' ', redo: _ } );
+                undoManager.performedAction('test', { undo: ' ', redo: _ });
             }).to.throw(Error);
 
             expect(function() {
-                undoManager.performedAction( 'test', { undo: _, redo: ' ' } );
+                undoManager.performedAction('test', { undo: _, redo: ' ' });
             }).to.throw(Error);
 
             expect(function() {
-                undoManager.performedAction( 'test', { undo: _, redo: _ } );
+                undoManager.performedAction('test', { undo: _, redo: _ });
             }).to.not.throw(Error);
         });
 
         it('should bind callbacks if specified in options', function(done) {
-            var x = { message:'bound object' };
+            var x = { message: 'bound object' };
 
-            undoManager.performedAction( 'test', {
+            undoManager.performedAction('test', {
                 undo: function() {
                     expect(this).to.equal(x);
                 },
@@ -57,7 +57,7 @@ define(['util/undoManager'], function(undoManager) {
         });
 
         it('should be able to undo an action', function(done) {
-            undoManager.performedAction( 'test undo', {
+            undoManager.performedAction('test undo', {
                 undo: function() {
                     done();
                 },
@@ -68,12 +68,12 @@ define(['util/undoManager'], function(undoManager) {
         });
 
         it('should be able to undo, then redo an action', function() {
-            var initial = 42, 
+            var initial = 42,
                 other = 32,
                 x = initial;
 
             x = other;
-            undoManager.performedAction( 'test undo', {
+            undoManager.performedAction('test undo', {
                 undo: function() {
                     x = initial;
                 },
@@ -100,7 +100,7 @@ define(['util/undoManager'], function(undoManager) {
         it('should know when undo is possible', function() {
             expect(undoManager.canUndo()).to.equal(false);
 
-            undoManager.performedAction( 'test undo', { undo:_, redo:_ });
+            undoManager.performedAction('test undo', { undo: _, redo: _ });
             expect(undoManager.canUndo()).to.equal(true);
 
             undoManager.performUndo();
@@ -110,7 +110,7 @@ define(['util/undoManager'], function(undoManager) {
         it('should know when redo is possible', function() {
             expect(undoManager.canRedo()).to.equal(false);
 
-            undoManager.performedAction( 'test undo', { undo:_, redo:_ });
+            undoManager.performedAction('test undo', { undo: _, redo: _ });
             expect(undoManager.canRedo()).to.equal(false);
 
             undoManager.performUndo();
@@ -133,40 +133,38 @@ define(['util/undoManager'], function(undoManager) {
         it('should handle undo key events on mac', function() {
             var Z = 90;
 
-            shouldPerformUndoWithEvent( 
-                jQuery.Event( "keydown", { which: Z, metaKey: true } )
+            shouldPerformUndoWithEvent(
+                jQuery.Event('keydown', { which: Z, metaKey: true })
             );
         });
 
         it('should handle undo key events on windows', function() {
             var Z = 90;
 
-            shouldPerformUndoWithEvent( 
-                jQuery.Event( "keydown", { which: Z, ctrlKey: true } )
+            shouldPerformUndoWithEvent(
+                jQuery.Event('keydown', { which: Z, ctrlKey: true })
             );
         });
 
         it('should handle redo key events on mac', function() {
             var Z = 90;
 
-            shouldPerformRedoWithEvent( 
-                jQuery.Event( "keydown", { which: Z, metaKey: true, shiftKey: true } )
+            shouldPerformRedoWithEvent(
+                jQuery.Event('keydown', { which: Z, metaKey: true, shiftKey: true })
             );
         });
 
         it('should handle redo key events on windows', function() {
             var Y = 89;
 
-            shouldPerformRedoWithEvent( 
-                jQuery.Event( "keydown", { which: Y, ctrlKey: true } )
+            shouldPerformRedoWithEvent(
+                jQuery.Event('keydown', { which: Y, ctrlKey: true })
             );
         });
 
-
-
         function shouldPerformUndoWithEvent(event) {
             canUndo(false);
-            undoManager.performedAction( 'test undo', { undo:_, redo:_ });
+            undoManager.performedAction('test undo', { undo: _, redo: _ });
             canUndo(true);
             undoManager._handleKey(event);
             canUndo(false);
@@ -174,7 +172,7 @@ define(['util/undoManager'], function(undoManager) {
 
         function shouldPerformRedoWithEvent(event) {
             canRedo(false);
-            undoManager.performedAction( 'test undo', { undo:_, redo:_ });
+            undoManager.performedAction('test undo', { undo: _, redo: _ });
             canUndo(true);
             undoManager.performUndo();
             canUndo(false);

@@ -9,7 +9,7 @@ describe('Search', function () {
           .clickMenubarIcon('search')
           .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout)
             .should.eventually.be.ok
-          .waitForElementByCss('.search-query:focus') 
+          .waitForElementByCss('.search-query:focus')
           .elementByCss('.menubar-pane .search a')
           .click()
           .waitFor(this.asserters.jsCondition(utils.animations.closeSearchAnimationFinished) , utils.animationTimeout)
@@ -22,7 +22,7 @@ describe('Search', function () {
           .elementByTagName('body')
           .sendKeys('/')
           .waitFor(this.asserters.jsCondition(utils.animations.openSearchAnimationFinished) , utils.animationTimeout).should.eventually.be.ok
-          .waitForElementByCss('.search-query:focus') 
+          .waitForElementByCss('.search-query:focus')
           .elementByTagName('body')
           .sendKeys(this.KEYS.Escape)
           .sendKeys(this.KEYS.Escape)
@@ -31,7 +31,7 @@ describe('Search', function () {
 
     it('Should be able to search *', function() {
         var self = this,
-            browser = this.browser, 
+            browser = this.browser,
             Q = this.Q,
             expected = '?';
 

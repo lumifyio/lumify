@@ -2,13 +2,13 @@
 define(['data'], function(data) {
     var conceptDeferred,
         defaultConcepts = {
-            "id":"4",
-            "title":"rootConcept",
-            "children":[
-                {"id":"5","title":"entity","children":[]}
+            id: '4',
+            title: 'rootConcept',
+            children: [
+                {id: '5', title: 'entity', children: []}
             ],
-            "pluralDisplayName":"rootConcepts",
-            "displayName":"rootConcept"
+            pluralDisplayName: 'rootConcepts',
+            displayName: 'rootConcept'
         };
 
     describe('data', function() {
@@ -23,7 +23,7 @@ define(['data'], function(data) {
                 expect(d.shortcuts['delete'].fire).to.equal('deleteSelected');
                 wait();
             });
-            
+
             data.ontologyService._ajaxRequests['ontology/concept'].resolve(defaultConcepts);
             data.cachedConceptsDeferred.resolve(defaultConcepts);
             data.trigger('applicationReady');

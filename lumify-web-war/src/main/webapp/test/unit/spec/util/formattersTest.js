@@ -177,7 +177,7 @@ define(['util/formatters'], function(f) {
                         older = new Date(nowUtc.getTime() - (mult[unit] * time[unit])),
                         old = Date.now;
 
-                    Date.now = function() { 
+                    Date.now = function() {
                         return now;
                     }
                     f.date.relativeToNow(older).should.equal(string)

@@ -11,7 +11,6 @@
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-bower-task": "~0.3.4",
-    "grunt-concurrent": "~0.4.3",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-less": "~0.8.3",

@@ -31,7 +31,7 @@ define(['util/retina'], function(r) {
                 _.keys(inputs).forEach(function(input) {
                     var result = f(inputs[input])
 
-                    switch(input) {
+                    switch (input) {
                         case 'position':
                             expect(result.w).to.be.undefined
                             expect(result.h).to.be.undefined
@@ -64,11 +64,14 @@ define(['util/retina'], function(r) {
                 r.devicePixelRatio = oldRatio;
             };
 
-
         describe('pointsToPixels', function() {
-            var f = r.pointsToPixels, 
-                transformer = function(v) { return v * 2; },
-                identity = function(v) { return v; },
+            var f = r.pointsToPixels,
+                transformer = function(v) {
+                    return v * 2;
+                },
+                identity = function(v) {
+                    return v;
+                },
                 check = checkProperties.bind(null, f)
 
             it('should have function', function() {
@@ -92,8 +95,12 @@ define(['util/retina'], function(r) {
 
         describe('pixelsToPoints', function() {
             var f = r.pixelsToPoints,
-                transformer = function(v) { return v / 2; },
-                identity = function(v) { return v; },
+                transformer = function(v) {
+                    return v / 2;
+                },
+                identity = function(v) {
+                    return v;
+                },
                 check = checkProperties.bind(null, f)
 
             it('should have function', function() {

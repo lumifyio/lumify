@@ -1,8 +1,10 @@
 
-define([], function() {
+define(['text!../../test/unit/mocks/ontology.json'], function(ontologyJson) {
     'use strict';
 
-    var _ajaxRequests = {};
+    debugger;
+    var _ajaxRequests = {},
+        defaultDevOntology = JSON.parse(ontologyJson);
 
     function ServiceBase(options) {
         options = options || {};
@@ -11,17 +13,17 @@ define([], function() {
         var defaults = {
 
             // the base url to find the service
-            serviceBaseUrl: "/",
+            serviceBaseUrl: '/',
 
             //the context of the service
-            serviceContext: "",
+            serviceContext: '',
 
             //to use jsonp, or not to use jsonp
             jsonp: false
         };
 
         this.options = $.extend({},defaults, options);
-        return this; 
+        return this;
     }
 
     ServiceBase.prototype.memoizeFunctions = function()  { }
@@ -30,11 +32,11 @@ define([], function() {
         return _ajaxRequests[url];
     }
 
-    ServiceBase.prototype.getSocket = function () { };
+    ServiceBase.prototype.getSocket = function() { };
 
     ServiceBase.prototype.socketPush = function(data) { };
 
-    ServiceBase.prototype.subscribe = function (config) { };
+    ServiceBase.prototype.subscribe = function(config) { };
 
     ServiceBase.prototype._ajaxPost = function(options) {
         return this._ajaxGet(options);
@@ -45,7 +47,7 @@ define([], function() {
     };
 
     ServiceBase.prototype._ajaxGet = function(options) {
-        options.type = options.type || "GET";
+        options.type = options.type || 'GET';
         options.dataType = options.dataType || this._resolveDataType();
         options.resolvedUrl = options.resolvedUrl || this._resolveUrl(options.url);
 
@@ -55,19 +57,21 @@ define([], function() {
 
         var deferred = $.Deferred();
         _ajaxRequests[options.url] = deferred;
+        if (options.url === 'ontology') {
+            deferred.resolve(defaultDevOntology);
+        }
         return deferred;
         //return $.ajax(options);
     };
 
-    ServiceBase.prototype._unsubscribe = function (url) { };
+    ServiceBase.prototype._unsubscribe = function(url) { };
 
-
-    ServiceBase.prototype._resolveUrl = function (urlSuffix) {
+    ServiceBase.prototype._resolveUrl = function(urlSuffix) {
         return this.options.serviceBaseUrl + this.options.serviceContext + urlSuffix;
     };
 
-    ServiceBase.prototype._resolveDataType = function () {
-        return this.options.jsonp ? "jsonp" : "json";
+    ServiceBase.prototype._resolveDataType = function() {
+        return this.options.jsonp ? 'jsonp' : 'json';
     };
 
     return ServiceBase;

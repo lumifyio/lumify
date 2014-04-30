@@ -12,9 +12,9 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             self.component.ontologyService._ajaxGet = function(prop) {
                 var d = $.Deferred();
                 if (prop.url == 'ontology/concept') {
-                    d.resolve({children:[{id:1, title:'entity'}, {id:2, title:'artifact'}]});
+                    d.resolve({children: [{id: 1, title: 'entity'}, {id: 2, title: 'artifact'}]});
                 } else if (prop.url === 'ontology/property') {
-                    d.resolve({properties:[]});
+                    d.resolve({properties: []});
                 }
                 return d;
             };
@@ -37,13 +37,13 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             self.component.initialize(self.$node, {
                 mentionNode: self.$parentNode.find('.entity')
                                  .data('info', {
-                                     "title":"Web",
-                                     "graphVertexId":"80736",
-                                     "start":110,
-                                     "_conceptType":"44",
-                                     "http://lumify.io#rowKey":"Web\\x1FOpenNlpDictionary\\x1FPerson",
-                                     "type":"TermMention",
-                                     "end":113
+                                     title: 'Web',
+                                     graphVertexId: '80736',
+                                     start: 110,
+                                     _conceptType: '44',
+                                     'http://lumify.io#rowKey': 'Web\\x1FOpenNlpDictionary\\x1FPerson',
+                                     type: 'TermMention',
+                                     end: 113
                                  })
             });
             self.componentConfiguration();
@@ -56,7 +56,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
                 .html(sentenceText)
                 .appendTo('body');
 
-            var mentionNode = self.$parentNode[0].childNodes[self.$parentNode[0].childNodes.length-1];
+            var mentionNode = self.$parentNode[0].childNodes[self.$parentNode[0].childNodes.length - 1];
             if (mentionNode.nodeType != 1 || !$(mentionNode).hasClass('entity')) {
                 mentionNode = undefined;
             } else {
@@ -67,8 +67,8 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             self.parentNode = this.$parentNode.get(0);
 
             var range = window.document.createRange(),
-                start = { node:null, offset:-1 },
-                end = { node:null, offset:-1 };
+                start = { node: null, offset: -1 },
+                end = { node: null, offset: -1 };
             $.each(self.parentNode.childNodes, function(i, node) {
                 var textNode = node;
                 while (textNode && textNode.nodeType !== 3) {
@@ -110,7 +110,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
 
     describe('#existingTerms', function() {
 
-        it("should open form for existing entity", function() {
+        it('should open form for existing entity', function() {
 
             this.setupParentForExisting('offered by Amazon <span class="entity subType-1">Web</span> Services');
 
@@ -119,12 +119,11 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             expect(this.$parentNode.find('span.entity').attr('class')).to.contain('subType-1').not.contain('focused');
         });
 
-
     });
 
     describe('#promoteSelectionToSpan', function() {
 
-        it("should create span around multiple word selection", function() {
+        it('should create span around multiple word selection', function() {
 
             this.setupParentForSelection('offered by [Amazon Web Services]');
 
@@ -134,7 +133,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             expect(this.parentNode.childNodes[2].className).to.equal('dropdown');
         });
 
-        it("should create span around single word selection", function() {
+        it('should create span around single word selection', function() {
 
             this.setupParentForSelection('offered by [Amazon] Web Services');
 
@@ -145,24 +144,30 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
             expect(this.parentNode.childNodes[3].className).to.equal('dropdown');
         });
 
-        it("should create span around word selection with spans", function() {
+        it('should create span around word selection with spans', function() {
 
             this.setupParentForSelection('offered by [Amazon <span class="entity subType-2">Web</span> Services]');
 
             expect(this.parentNode.childNodes[0].textContent).to.equal('offered by ');
             expect(this.parentNode.childNodes[1].nodeName).to.equal('SPAN');
-            expect(this.parentNode.childNodes[1].innerHTML).to.equal('Amazon <span class="entity subType-2 focused">Web</span> Services');
+            expect(this.parentNode.childNodes[1].innerHTML)
+            .to.equal('Amazon <span class="entity subType-2 focused">Web</span> Services');
 
             this.Component.teardownAll();
 
-            expect(this.parentNode.innerHTML).to.equal('offered by Amazon <span class="entity subType-2">Web</span> Services');
+            expect(this.parentNode.innerHTML)
+            .to.equal('offered by Amazon <span class="entity subType-2">Web</span> Services');
         });
 
         it("should accept selections that don't encompass an inner span at both ends of selection", function() {
 
-            this.setupParentForSelection('<span class="entity subType-2">Jo[hnny</span> <span class="entity">App]leseed</span> is a person');
+            this.setupParentForSelection(
+                '<span class="entity subType-2">Jo[hnny</span> <span class="entity">App]leseed</span> is a person'
+            );
             expect(this.parentNode.childNodes[0].innerHTML)
-                .to.equal('<span class="entity subType-2 focused">Johnny</span> <span class="entity focused">Appleseed</span>');
+                .to.equal(
+                    '<span class="entity subType-2 focused">Johnny</span> <span class="entity focused">Appleseed</span>'
+                );
 
             this.Component.teardownAll();
 
@@ -176,16 +181,19 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
                 .not.contain('focused');
         });
 
-        it("should accept selections with existing entity at the start", function() {
+        it('should accept selections with existing entity at the start', function() {
 
-            this.setupParentForSelection('Some text before <span class="entity subType-2">Jo[hnny</span> Appleseed] is a person');
+            this.setupParentForSelection(
+                'Some text before <span class="entity subType-2">Jo[hnny</span> Appleseed] is a person'
+            );
 
             expect(this.parentNode.childNodes[0].textContent).to.equal('Some text before ');
-            expect(this.parentNode.childNodes[1].innerHTML).to.equal('<span class="entity subType-2 focused">Johnny</span> Appleseed');
+            expect(this.parentNode.childNodes[1].innerHTML)
+            .to.equal('<span class="entity subType-2 focused">Johnny</span> Appleseed');
 
         });
 
-        it("should accept selections that encompass an inner span", function() {
+        it('should accept selections that encompass an inner span', function() {
 
             this.setupParentForSelection('offered by [Amazon <span class="entity subType-2">Web]</span> Services');
 
@@ -211,7 +219,7 @@ describeComponent('detail/dropdowns/termForm/termForm', function(TermForm) {
 
     describe('#highlightTerm', function() {
 
-        it("should change highlighted term to loaded concept", function() {
+        it('should change highlighted term to loaded concept', function() {
 
             this.setupParentForSelection('offered by [Amazon <span class="entity subType-2">W]eb</span>');
 

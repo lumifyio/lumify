@@ -8,9 +8,15 @@ utils = {
 
     url: 'https://localhost:8443',
 
-    get username() { return baseUsername + '-' + utils.browserName; },
-    get usernameAlt() { return baseUsername + '-alt-' + utils.browserName; },
-    get browserName() { return browserNameInternal; },
+    get username() {
+        return baseUsername + '-' + utils.browserName;
+    },
+    get usernameAlt() {
+        return baseUsername + '-alt-' + utils.browserName;
+    },
+    get browserName() {
+        return browserNameInternal;
+    },
     password: 'password',
 
     pageLoadTimeout:  10000, // For initial page display
@@ -24,7 +30,7 @@ utils = {
         closeSearchAnimationFinished: "$('.search-pane').offset().left < (-1 * $('.search-pane').width())"
     },
 
-    lumifyReady: "$('.login button').length > 0 || ($('.menubar-pane').length > 0 && $('.loading-graph').length === 0)", 
+    lumifyReady: "$('.login button').length > 0 || ($('.menubar-pane').length > 0 && $('.loading-graph').length === 0)",
 
     addMethods: {
 
@@ -48,7 +54,7 @@ utils = {
 
         openAddFilterMenu: function(nth) {
             if (!nth) nth = 2;
-            var parentSelector = '.prop-filters > li:nth-child(' + nth + ')'; 
+            var parentSelector = '.prop-filters > li:nth-child(' + nth + ')';
 
             return this.browser
                 .elementByCss(parentSelector + ' .add-property input')
@@ -59,7 +65,7 @@ utils = {
         waitForSearchFinished: function() {
             return this.browser
                   .waitFor(this.asserters.jsCondition(
-                      "$('.search-results-summary .entities').text().toLowerCase()=='no entities'" + 
+                      "$('.search-results-summary .entities').text().toLowerCase()=='no entities'" +
                       "||" +
                       "$('.search-results-summary li:visible').length > 1"), utils.requestTimeout)
         },

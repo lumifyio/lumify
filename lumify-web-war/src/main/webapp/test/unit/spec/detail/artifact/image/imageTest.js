@@ -42,7 +42,7 @@ describeComponent('detail/artifact/image/image', function() {
 
         it('should show facebox on detected object tag hover', function() {
             var box = this.$facebox;
-            
+
             box.is(':visible').should.be.false
 
             this.$node.trigger('DetectedObjectEnter', {

@@ -1,5 +1,4 @@
 
-
 define(['service/vertex'], function(Service) {
 
     describe('Service', function() {
@@ -8,10 +7,10 @@ define(['service/vertex'], function(Service) {
             expect(Service).to.be.a('function');
         });
 
-		it('should have some functions', function () {
+		it('should have some functions', function() {
 			var service = new Service({});
-			expect(service.graphVertexSearch).to.be.a("function");
-			expect(service.getVertexProperties).to.be.a("function");
+			expect(service.graphVertexSearch).to.be.a('function');
+			expect(service.getVertexProperties).to.be.a('function');
 		});
 
     });

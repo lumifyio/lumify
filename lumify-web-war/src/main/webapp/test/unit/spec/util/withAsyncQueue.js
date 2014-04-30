@@ -1,5 +1,4 @@
 
-
 describeMixin('util/withAsyncQueue', function() {
 
     var MY_QUEUE_OBJECT = { valid: true };

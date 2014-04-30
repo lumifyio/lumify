@@ -92,12 +92,6 @@ module.exports = function(grunt) {
         }
     },
 
-    concurrent: {
-        development: ['requirejs:development', 'less:development'],
-        selenium: ['mochaSelenium:chrome', 'mochaSelenium:firefox'],
-        tests: ['karma', 'jshint', 'mochaSelenium:chrome', 'mochaSelenium:firefox']
-    },
-
     jshint: {
         options: {
             jshintrc: true
@@ -121,6 +115,7 @@ module.exports = function(grunt) {
         development: {
             src: [
                 'js/**/*.js',
+                'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
                 '!js/require.config.js'
@@ -129,6 +124,7 @@ module.exports = function(grunt) {
         ci: {
             src: [
                 'js/**/*.js',
+                'test/spec/**/*.js',
                 '!js/**/three-plugins/*.js',
                 '!js/graph/3d/3djs/3djs/graph/layout/force-directed.js',
                 '!js/require.config.js'
@@ -234,7 +230,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-exec');
-  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');

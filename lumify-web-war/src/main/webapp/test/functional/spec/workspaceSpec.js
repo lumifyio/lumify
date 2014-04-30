@@ -21,8 +21,8 @@ describe('Workspace', function () {
             .sendKeys(this.KEYS.Return)
             .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 6"), utils.requestTimeout)
             .waitForElementByCss(
-                '.workspaces-list > li:nth-child(3)', 
-                this.asserters.textInclude(title), 
+                '.workspaces-list > li:nth-child(3)',
+                this.asserters.textInclude(title),
                 utils.requestTimeout, 10
             ).should.eventually.exist
     })
@@ -40,7 +40,7 @@ describe('Workspace', function () {
             .waitForElementByCss('input.workspace-title').clear().type(newTitle)
             .waitForElementByCss(
                 '.workspaces-list > li:nth-child(2) .nav-list-title',
-                this.asserters.textInclude(newTitle), 
+                this.asserters.textInclude(newTitle),
                 utils.requestTimeout
             ).should.eventually.be.ok
     })
@@ -69,7 +69,7 @@ describe('Workspace', function () {
             .waitFor(this.asserters.jsCondition("$('.workspaces-list > li').length === 6"), utils.requestTimeout).should.eventually.be.ok
             .waitForElementByCss(
                 '.workspaces-list > li:nth-child(2).active .nav-list-title',
-                this.asserters.textInclude('Copy of Default - ' + utils.username), 
+                this.asserters.textInclude('Copy of Default - ' + utils.username),
                 utils.requestTimeout).should.eventually.exist
             .waitForElementByCss('.workspaces-list > li:nth-child(2).active .disclosure')
             .click()
@@ -137,7 +137,7 @@ describe('Workspace', function () {
             .waitForElementByCss('.workspaces-list > li:nth-child(6).active')
                 .should.eventually.exist
             .waitForElementByCss(
-                '.workspace-overlay h1.name', 
+                '.workspace-overlay h1.name',
                 this.asserters.textInclude('Default - ' + utils.usernameAlt),
                 utils.requestTimeout
             ).should.eventually.exist
@@ -153,7 +153,7 @@ describe('Workspace', function () {
             .waitForElementByCss('.workspace-form .popover', this.asserters.isDisplayed)
             .waitForElementByCss('.permissions-list input[data-permissions=WRITE]').click()
             .waitForElementByCss(
-                '.user-row .permissions', 
+                '.user-row .permissions',
                 this.asserters.textInclude('Edit'), utils.requestTimeout)
 
     })
@@ -162,7 +162,7 @@ describe('Workspace', function () {
         return this.browser
             .detach().then(function() { return browser.attach(mainSession) })
             .waitForElementByCss(
-                '.workspace-overlay .subtitle', 
+                '.workspace-overlay .subtitle',
                 this.asserters.textInclude('no changes'), utils.requestTimeout)
     })
 

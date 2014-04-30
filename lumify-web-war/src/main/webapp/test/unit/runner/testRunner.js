@@ -1,4 +1,4 @@
-var tests = Object.keys(window.__karma__.files).filter(function (file) {
+var tests = Object.keys(window.__karma__.files).filter(function(file) {
     return (/^\/base\/test\/unit\/spec\/.*\.js$/).test(file);
 });
 
@@ -30,9 +30,9 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             sinon: { exports: 'sinon' }
         },
 
-        deps: [ 
-            'chai', 
-            'sinon', 
+        deps: [
+            'chai',
+            'sinon',
             '../libs/es5-shim/es5-shim',
             '../libs/es5-shim/es5-sham',
             '../libs/underscore/underscore',
@@ -45,7 +45,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
             sinon.spy = sinon.spy || {};
 
             require([
-                    'sinon-chai', 
+                    'sinon-chai',
                     'sinon/util/event',
                     'sinon/util/fake_xml_http_request',
                     'sinon/call',
@@ -70,7 +70,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
                 // Use the twitter flight interface to mocha
                 mocha.ui('mocha-flight');
-                mocha.options.globals.push( "ejs", "cytoscape", "DEBUG" );
+                mocha.options.globals.push('ejs', 'cytoscape', 'DEBUG');
 
                 // Run tests after loading
                 if (tests.length) {
@@ -89,5 +89,3 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
     window.require = requirejs;
     requirejs.config(requireConfig);
 });
-
-
