@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'util/privileges'
+], function(Privileges) {
     'use strict';
 
     return withFileDrop;
@@ -13,15 +15,31 @@ define([], function() {
             }
 
             this.node.ondragover = function() {
+                if (Privileges.missingEDIT) {
+                    return;
+                }
+
                 $(this).addClass('file-hover'); return false;
             };
             this.node.ondragenter = function() {
+                if (Privileges.missingEDIT) {
+                    return;
+                }
+
                 $(this).addClass('file-hover'); return false;
             };
             this.node.ondragleave = function() {
+                if (Privileges.missingEDIT) {
+                    return;
+                }
+
                 $(this).removeClass('file-hover'); return false;
             };
             this.node.ondrop = function(e) {
+                if (Privileges.missingEDIT) {
+                    return;
+                }
+
                 if (e.dataTransfer && e.dataTransfer.files) {
                     e.preventDefault();
                     e.stopPropagation();

@@ -5,6 +5,7 @@ define([
     'data',
     'util/retina',
     'util/withFileDrop',
+    'util/privileges',
     'service/vertex'
 ], function(
     defineComponent,
@@ -12,6 +13,7 @@ define([
     appData,
     retina,
     withFileDrop,
+    Privileges,
     VertexService) {
     'use strict';
 
@@ -39,24 +41,29 @@ define([
             this.on('iconUpdated', this.onUpdateIcon);
 
             this.updateImageBackground();
-            this.$node.html(template({}));
 
-            this.select('fileSelector').on({
-                click: function() {
-                    self.$node.addClass('file-hover'); this.value = null;
-                },
-                change: this.onFileChange.bind(this)
-            });
+            if (Privileges.canEDIT) {
+                this.$node.html(template({
+                    Privileges: Privileges
+                }));
 
-            this.$node.addClass('upload-available');
-            this.$node.on({
-                mouseenter: function() {
-                    $(this).addClass('file-hover');
-                },
-                mouseleave: function() {
-                    $(this).removeClass('file-hover');
-                }
-            });
+                this.select('fileSelector').on({
+                    click: function() {
+                        self.$node.addClass('file-hover'); this.value = null;
+                    },
+                    change: this.onFileChange.bind(this)
+                });
+
+                this.$node.addClass('upload-available');
+                this.$node.on({
+                    mouseenter: function() {
+                        $(this).addClass('file-hover');
+                    },
+                    mouseleave: function() {
+                        $(this).removeClass('file-hover');
+                    }
+                });
+            }
         });
 
         this.srcForGlyphIconUrl = function(url) {
