@@ -286,10 +286,11 @@ define([
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
-                        actions: {
-                            Open: 'open.actionbar',
+                        actions: $.extend({
+                            Open: 'open.actionbar'
+                        }, currentUser.privilegesHelper.EDIT ? {
                             Unresolve: 'unresolve.actionbar'
-                        }
+                        } : {})
                     });
 
                     self.on('open.actionbar', function() {
@@ -306,7 +307,7 @@ define([
                         _.defer(self.showForm.bind(self), info, this.attr.data, $target);
                     });
 
-                } else {
+                } else if (currentUser.privilegesHelper.EDIT) {
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',

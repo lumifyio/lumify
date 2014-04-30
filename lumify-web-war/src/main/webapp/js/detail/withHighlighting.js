@@ -313,6 +313,8 @@ define([
                 // Don't show action bar if dropdown opened
                 if (this.$node.find('.text.dropdown').length) return;
 
+                if (!currentUser.privilegesHelper.EDIT) return;
+
                 require(['util/actionbar/actionbar'], function(ActionBar) {
                     ActionBar.teardownAll();
                     ActionBar.attachTo(self.node, {
@@ -391,10 +393,11 @@ define([
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
-                        actions: {
-                            Open: 'open.actionbar',
+                        actions: $.extend({
+                            Open: 'open.actionbar'
+                        }, currentUser.privilegesHelper.EDIT ? {
                             Unresolve: 'unresolve.actionbar'
-                        }
+                        } : {})
                     });
 
                     self.on('open.actionbar', function() {
@@ -411,7 +414,7 @@ define([
                         _.defer(self.dropdownEntity.bind(self), false, $target);
                     });
 
-                } else {
+                } else if (currentUser.privilegesHelper.EDIT) {
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
