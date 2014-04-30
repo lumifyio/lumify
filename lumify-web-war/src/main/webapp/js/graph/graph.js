@@ -11,6 +11,7 @@ define([
     'util/controls',
     'util/throttle',
     'util/vertex/formatters',
+    'util/privileges',
     'service/vertex',
     'service/ontology',
     'service/config',
@@ -30,6 +31,7 @@ define([
     Controls,
     throttle,
     F,
+    Privileges,
     VertexService,
     OntologyService,
     ConfigService,
@@ -808,11 +810,15 @@ define([
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('edgeContextMenuSelector').blur().parent().removeClass('open');
             } else if (event.cyTarget.group ('edges') == 'edges') {
-                menu = this.select ('edgeContextMenuSelector');
-                menu.data('edge', event.cyTarget.data());
-                if (event.cy.nodes().filter(':selected').length > 1) {
-                    return false;
+
+                if (Privileges.canEDIT) {
+                    menu = this.select ('edgeContextMenuSelector');
+                    menu.data('edge', event.cyTarget.data());
+                    if (event.cy.nodes().filter(':selected').length > 1) {
+                        return false;
+                    }
                 }
+
                 this.select('vertexContextMenuSelector').blur().parent().removeClass('open');
                 this.select('contextMenuSelector').blur().parent().removeClass('open');
             } else {
@@ -828,14 +834,16 @@ define([
                 return;
             }
 
-            // Show/Hide the layout selection menu item
-            if (event.cy.nodes().filter(':selected').length) {
-                menu.find('.layout-multi').show();
-            } else {
-                menu.find('.layout-multi').hide();
-            }
+            if (menu) {
+                // Show/Hide the layout selection menu item
+                if (event.cy.nodes().filter(':selected').length) {
+                    menu.find('.layout-multi').show();
+                } else {
+                    menu.find('.layout-multi').hide();
+                }
 
-            this.toggleMenu({positionUsingEvent: event}, menu);
+                this.toggleMenu({positionUsingEvent: event}, menu);
+            }
         };
 
         this.graphSelect = throttle('selection', SELECTION_THROTTLE, function(event) {

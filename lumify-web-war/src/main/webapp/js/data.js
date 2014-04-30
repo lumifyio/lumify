@@ -11,14 +11,17 @@ define([
     'service/ontology',
     'service/config',
     'util/undoManager',
-    'util/clipboardManager'
+    'util/clipboardManager',
+    'util/privileges'
 ], function(
     // Flight
     defineComponent, registry,
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue,
     // Service
-    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, undoManager, ClipboardManager) {
+    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService,
+
+    undoManager, ClipboardManager, Privileges) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1500,
@@ -342,17 +345,20 @@ define([
         };
 
         this.onDelete = function(event, data) {
-
-            if (data && data.vertexId) {
-                return this.trigger('deleteVertices', {
-                    vertices: this.vertices([data.vertexId])
-                })
+            if (!this.workspaceEditable) {
+                return;
             }
 
-            if (this.selectedVertices.length) {
-                this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
-            } else if (this.selectedEdges && this.selectedEdges.length) {
-                this.trigger('deleteEdges', { edges: this.selectedEdges});
+            if (data && data.vertexId) {
+                this.trigger('deleteVertices', {
+                    vertices: this.vertices([data.vertexId])
+                });
+            } else {
+                if (this.selectedVertices.length) {
+                    this.trigger('deleteVertices', { vertices: this.vertices(this.selectedVertices)})
+                } else if (this.selectedEdges && this.selectedEdges.length && Privileges.canEDIT) {
+                    this.trigger('deleteEdges', { edges: this.selectedEdges});
+                }
             }
         };
 
