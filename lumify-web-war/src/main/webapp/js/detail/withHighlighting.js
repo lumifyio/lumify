@@ -479,8 +479,11 @@ define([
                                 $(this)
                                     .parents('.text').removeClass('drag-focus');
                             }
-                        })
-                        .droppable({
+                        });
+
+                    if (Privileges.canEDIT) {
+
+                        words.droppable({
                             activeClass: 'drop-target',
                             hoverClass: 'drop-hover',
                             tolerance: 'pointer',
@@ -508,6 +511,7 @@ define([
                                 });
                             }
                         });
+                    }
                 });
         };
 
