@@ -72,6 +72,7 @@ require([
     'underscore',
 
     'util/visibility',
+    'util/privileges',
     'service/user',
 
     'easing',
@@ -96,6 +97,7 @@ function(jQuery,
          debug,
          _,
          Visibility,
+         Privileges,
          UserService) {
     'use strict';
 
@@ -118,6 +120,7 @@ function(jQuery,
         $.fn.datepicker.defaults.autoclose = true;
 
         Visibility.attachTo(document);
+        Privileges.attachTo(document);
         $(window).on('hashchange', loadApplicationTypeBasedOnUrlHash);
 
         loadApplicationTypeBasedOnUrlHash();
@@ -160,10 +163,7 @@ function(jQuery,
 
             $('html')
                 .toggleClass('fullscreenApp', mainApp)
-                .toggleClass('fullscreenDetails', popoutDetails)
-                .toggleClass('no-privilege-EDIT', !user || !currentUser.privilegesHelper.EDIT)
-                .toggleClass('no-privilege-PUBLISH', !user || !currentUser.privilegesHelper.PUBLISH)
-                .toggleClass('no-privilege-ADMIN', !user || !currentUser.privilegesHelper.ADMIN)
+                .toggleClass('fullscreenDetails', popoutDetails);
 
             window.isFullscreenDetails = popoutDetails;
 

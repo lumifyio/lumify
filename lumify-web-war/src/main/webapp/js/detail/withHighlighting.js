@@ -3,13 +3,23 @@ define([
     './dropdowns/termForm/termForm',
     './dropdowns/statementForm/statementForm',
     'util/css-stylesheet',
+    'util/privileges',
     'colorjs',
     'service/vertex',
     'service/ontology',
     'util/popovers/withVertexScrollingPositionUpdates',
     'util/range',
     'util/jquery.withinScrollable'
-], function(TermForm, StatementForm, stylesheet, colorjs, VertexService, OntologyService, withPositionUpdates, range) {
+], function(
+    TermForm,
+    StatementForm,
+    stylesheet,
+    Privileges,
+    colorjs,
+    VertexService,
+    OntologyService,
+    withPositionUpdates,
+    range) {
     'use strict';
 
     var HIGHLIGHT_STYLES = [
@@ -313,7 +323,7 @@ define([
                 // Don't show action bar if dropdown opened
                 if (this.$node.find('.text.dropdown').length) return;
 
-                if (!currentUser.privilegesHelper.EDIT) return;
+                if (Privileges.missingEDIT) return;
 
                 require(['util/actionbar/actionbar'], function(ActionBar) {
                     ActionBar.teardownAll();
@@ -395,7 +405,7 @@ define([
                         alignTo: 'node',
                         actions: $.extend({
                             Open: 'open.actionbar'
-                        }, currentUser.privilegesHelper.EDIT ? {
+                        }, Privileges.canEDIT ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
                     });
@@ -414,7 +424,7 @@ define([
                         _.defer(self.dropdownEntity.bind(self), false, $target);
                     });
 
-                } else if (currentUser.privilegesHelper.EDIT) {
+                } else if (Privileges.canEDIT) {
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',

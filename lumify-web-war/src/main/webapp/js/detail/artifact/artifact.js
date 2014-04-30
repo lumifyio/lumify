@@ -3,6 +3,7 @@ define([
     'flight/lib/component',
     'util/video/scrubber',
     'util/audio/scrubber',
+    'util/privileges',
     './image/image',
     '../withTypeContent',
     '../withHighlighting',
@@ -20,6 +21,7 @@ define([
     defineComponent,
     VideoScrubber,
     AudioScrubber,
+    Privileges,
     Image,
     withTypeContent, withHighlighting,
     TermForm,
@@ -288,7 +290,7 @@ define([
                         alignTo: 'node',
                         actions: $.extend({
                             Open: 'open.actionbar'
-                        }, currentUser.privilegesHelper.EDIT ? {
+                        }, Privileges.canEDIT ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
                     });
@@ -307,7 +309,7 @@ define([
                         _.defer(self.showForm.bind(self), info, this.attr.data, $target);
                     });
 
-                } else if (currentUser.privilegesHelper.EDIT) {
+                } else if (Privileges.canEDIT) {
 
                     ActionBar.attachTo($target, {
                         alignTo: 'node',
