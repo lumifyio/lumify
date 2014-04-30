@@ -272,6 +272,9 @@ define([
         };
 
         this.onDetectedObjectClicked = function(event) {
+            if (Privileges.missingEDIT) {
+                return;
+            }
             event.preventDefault();
             var self = this,
                 $target = $(event.target),
