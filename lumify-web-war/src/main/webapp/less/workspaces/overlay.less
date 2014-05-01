@@ -54,6 +54,26 @@ h1 {
     .keyframe-animation(pop-diff-badge, 2s, 1);
   }
 }
+
+.tooltip {
+  .tooltip-inner {
+    text-align: left;
+    padding: 0 1em 0.5em;
+    font-size: 90%;
+    text-transform: lowercase;
+  }
+  span, div {
+    white-space: nowrap;
+  }
+  strong {
+    font-size: 130%;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    display: block;
+    color: #ccc;
+  }
+}
+
 @import "diff";
 
 .user {

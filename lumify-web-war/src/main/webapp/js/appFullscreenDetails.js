@@ -17,6 +17,7 @@ define([
     function filterEntity(v) {
         return v.concept && !filterArtifacts(v);
     }
+
     function filterArtifacts(v) {
         return v.concept && (/^(document|image|video)$/).test(v.concept.displayType);
     }
@@ -86,7 +87,7 @@ define([
         };
 
         this.updateLocationHash = function() {
-            location.hash = '#v=' + _.pluck(this.vertices, 'id').sort().join(',');
+            location.hash = F.vertexUrl.fragmentUrl(this.vertices, this.attr.workspaceId);
         };
 
         this.updateLayout = function() {
@@ -172,7 +173,7 @@ define([
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
 
                 Detail.attachTo(this.$node.find('.detail-pane').last()
-                                .addClass('type-' + type + ' subType-' + subType)
+                                .addClass('type-' + type + (subType ? (' subType-' + subType) : ''))
                                 .find('.content'), {
                     loadGraphVertexData: v,
                     highlightStyle: 2

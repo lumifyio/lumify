@@ -369,9 +369,12 @@ define([
                     .tooltip({
                         placement: 'right',
                         html: true,
-                        title: '<span style="white-space:nowrap">Authorizations: ' +
-                            (data.user.authorizations.join(', ') || 'none') +
-                            '</span>',
+                        title: '<span><strong>Authorizations</strong> ' +
+                                    (data.user.authorizations.join(', ') || 'none') +
+                                '</span>' +
+                                '<div><strong>Privileges</strong> ' +
+                                    _.without(data.user.privileges, 'READ').join(', ') +
+                                '</div>',
                         trigger: 'hover',
                         delay: { show: 500, hide: 0 }
                     })

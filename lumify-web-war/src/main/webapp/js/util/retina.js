@@ -39,7 +39,7 @@ define([], function() {
         };
 
         this.pixelsToPoints = function(position) {
-            if(!position) {
+            if (!position) {
                 return {
                     x: 0,
                     y: 0
@@ -57,7 +57,7 @@ define([], function() {
         };
 
         this.pointsToPixels = function(position) {
-            if(!position) {
+            if (!position) {
                 return {
                     x: 0,
                     y: 0

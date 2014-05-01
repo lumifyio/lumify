@@ -171,10 +171,15 @@ define([
                                 if (a.relationshipAudit) {
                                     a.relationshipAudit.sourceIsCurrent =
                                         a.relationshipAudit.sourceId === self.attr.data.id;
+                                    a.relationshipAudit.sourceHref = F.vertexUrl.fragmentUrl(
+                                        [a.relationshipAudit.sourceId], appData.workspaceId);
                                     a.relationshipAudit.sourceInfo =
                                         self.createInfoJsonFromAudit(a.relationshipAudit, 'source');
+
                                     a.relationshipAudit.destInfo =
                                         self.createInfoJsonFromAudit(a.relationshipAudit, 'dest');
+                                    a.relationshipAudit.destHref = F.vertexUrl.fragmentUrl(
+                                        [a.relationshipAudit.destId], appData.workspaceId);
                                 }
 
                                 return 'other';

@@ -26,7 +26,7 @@ define(['tpl!./alert'], function(alertTemplate) {
 
             if (_.isObject(error)) {
                 _.keys(error).forEach(function(fieldName) {
-                    switch(fieldName) {
+                    switch (fieldName) {
                         case 'visibilitySource':
                             rootEl.find('.visibility')
                                 .each(function() {

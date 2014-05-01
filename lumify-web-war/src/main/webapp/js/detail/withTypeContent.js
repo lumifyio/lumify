@@ -3,8 +3,9 @@ define([
     'tpl!./toolbar/fullscreen',
     'tpl!./toolbar/fullscreen-item',
     'tpl!./toolbar/audits',
-    'data'
-], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate, appData) {
+    'data',
+    'util/vertex/formatters'
+], function(fullscreenButtonTemplate, fullscreenItemTemplate, auditsButtonTemplate, appData, F) {
     'use strict';
 
     var intercomInstance;
@@ -51,7 +52,9 @@ define([
 
         this.fullscreenButton = function(vertexIds) {
             return fullscreenButtonTemplate({
-                vertexIds: vertexIds
+                vertexIds: vertexIds,
+                F: F,
+                workspaceId: appData.workspaceId
             });
         };
 

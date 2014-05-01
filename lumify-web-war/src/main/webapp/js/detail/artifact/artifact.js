@@ -255,12 +255,12 @@ define([
         };
 
         this.findTranscriptEntryForTime = function(time) {
-            if(!this.videoTranscript || !this.videoTranscript.entries) {
+            if (!this.videoTranscript || !this.videoTranscript.entries) {
                 return null;
             }
             var bestMatch = this.videoTranscript.entries[0];
             for (var i = 0; i < this.videoTranscript.entries.length; i++) {
-                if(this.videoTranscript.entries[i].start <= time) {
+                if (this.videoTranscript.entries[i].start <= time) {
                     bestMatch = this.videoTranscript.entries[i];
                 }
             }

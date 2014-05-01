@@ -37,12 +37,12 @@
           {{#if sourceIsCurrent}}
             &#8594; 
             <a data-info="{{destInfo}}" 
-              href="#v={{destId}}" 
+              href="{{destHref}}" 
               class="audit-to entity resolved">{{destTitle}}</a>
           {{else}}
             &#8592; 
             <a data-info="{{sourceInfo}}" 
-              href="#v={{sourceId}}" 
+              href="{{sourceHref}}"
               class="audit-to entity resolved">{{sourceTitle}}</a>
           {{/if}}
         {{/with}}

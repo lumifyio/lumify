@@ -577,7 +577,7 @@ define([
             }
 
             function _fit(cy) {
-                if(cy.elements().size() === 0){
+                if (cy.elements().size() === 0){
                     cy.reset();
                 } else if (self.graphPadding) {
                     // Temporarily adjust max zoom
