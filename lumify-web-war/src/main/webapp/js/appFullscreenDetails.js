@@ -174,7 +174,7 @@ define([
                 node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
 
                 Detail.attachTo(this.$node.find('.detail-pane').last()
-                                .addClass('type-' + type + ' subType-' + subType)
+                                .addClass('type-' + type + (subType ? (' subType-' + subType) : ''))
                                 .find('.content'), {
                     loadGraphVertexData: v,
                     highlightStyle: 2
