@@ -1,5 +1,9 @@
 package io.lumify.securegraph.model.workspace;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.ontology.Concept;
@@ -20,17 +24,13 @@ import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.VerticesToEdgeIdsIterable;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
 import static org.securegraph.util.IterableUtils.toSet;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
@@ -90,6 +90,11 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         authorizationRepository.removeAuthorizationFromGraph(workspace.getId());
     }
 
+    public Vertex getVertex(String workspaceId, User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, LumifyVisibility.SUPER_USER_VISIBILITY_STRING, workspaceId);
+        return graph.getVertex(workspaceId, authorizations);
+    }
+
     private Vertex getVertexFromWorkspace(Workspace workspace, Authorizations authorizations) {
         if (workspace instanceof SecureGraphWorkspace) {
             return ((SecureGraphWorkspace) workspace).getVertex(graph, authorizations);
@@ -126,13 +131,17 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, VISIBILITY.getVisibility());
         Vertex workspaceVertex = workspaceVertexBuilder.save();
 
+        addWorkspaceToUser(workspaceVertex, userVertex, authorizations);
+
+        graph.flush();
+        return new SecureGraphWorkspace(workspaceVertex);
+    }
+
+    public void addWorkspaceToUser(Vertex workspaceVertex, Vertex userVertex, Authorizations authorizations) {
         EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility(), authorizations);
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, WorkspaceAccess.WRITE.toString(), VISIBILITY.getVisibility());
         edgeBuilder.save();
-
-        graph.flush();
-        return new SecureGraphWorkspace(workspaceVertex);
     }
 
     @Override

@@ -26,9 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +106,7 @@ public class ArtifactImport extends BaseRequestHandler {
             if (part.getName().equals("file")) {
                 String fileName = getFilename(part);
                 File outFile = new File(tempDir, fileName);
-                copyToFile(part, outFile);
+                copyPartToFile(part, outFile);
                 addFileToFilesList(files, fileIndex++, outFile);
             } else if (part.getName().equals("visibilitySource")) {
                 String visibilitySource = IOUtils.toString(part.getInputStream(), "UTF8");
@@ -143,17 +140,6 @@ public class ArtifactImport extends BaseRequestHandler {
     private void ensureFilesSize(List<FileAndVisibility> files, int index) {
         while (files.size() <= index) {
             files.add(new FileAndVisibility());
-        }
-    }
-
-    private void copyToFile(Part part, File outFile) throws IOException {
-        FileOutputStream out = new FileOutputStream(outFile);
-        InputStream in = part.getInputStream();
-        try {
-            IOUtils.copy(in, out);
-        } finally {
-            out.close();
-            in.close();
         }
     }
 

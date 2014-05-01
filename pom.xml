@@ -48,6 +48,7 @@
         <module>lumify-web-dev-tools</module>
         <module>lumify-model-securegraph</module>
         <module>lumify-model-rabbitmq</module>
+        <module>lumify-web-import-export-workspaces</module>
     </modules>
 
     <repositories>

@@ -8,13 +8,15 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.Part;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -316,6 +318,21 @@ public abstract class BaseRequestHandler implements Handler {
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while writing response", e);
         }
+    }
+
+    protected void copyPartToOutputStream(Part part, OutputStream out) throws IOException {
+        InputStream in = part.getInputStream();
+        try {
+            IOUtils.copy(in, out);
+        } finally {
+            out.close();
+            in.close();
+        }
+    }
+
+    protected void copyPartToFile(Part part, File outFile) throws IOException {
+        FileOutputStream out = new FileOutputStream(outFile);
+        copyPartToOutputStream(part, out);
     }
 
     public UserRepository getUserRepository() {

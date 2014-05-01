@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Lumify: Workspace Export</title>
+    <script src='/libs/jquery/jquery.js'></script>
+    <script src='/libs/ejs/ejs.js'></script>
+</head>
+<body>
+<h1>Lumify: Workspace Export</h1>
+
+<select id="workspace">
+</select>
+<button onclick="exportWorkspace()">Export</button>
+
+<script type="text/javascript">
+    $(function() {
+        $.ajax({
+            url: '/workspaces',
+            success: function (data) {
+                var html = "";
+                data.workspaces.forEach(function(workspace) {
+                    html += "<option value='" + encodeURIComponent(workspace.workspaceId) + "'>" + workspace.title + "</option>";
+                });
+                $('#workspace').html(html);
+            }
+        });
+    });
+
+    function exportWorkspace() {
+        var workspaceId = $('#workspace').val();
+        document.location.href = '/admin/workspace/export?workspaceId=' + workspaceId;
+    }
+</script>
+
+</body>
+</html>
