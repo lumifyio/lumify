@@ -1,6 +1,6 @@
 
 define([
-    'util/formatters',
+    './urlFormatters',
     'promise!../service/ontologyPromise'
 ], function(
     F,

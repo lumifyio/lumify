@@ -73,6 +73,7 @@ require([
 
     'util/visibility',
     'util/privileges',
+    'util/vertex/urlFormatters',
     'service/user',
 
     'easing',
@@ -98,6 +99,7 @@ function(jQuery,
          _,
          Visibility,
          Privileges,
+         F,
          UserService) {
     'use strict';
 
@@ -130,9 +132,9 @@ function(jQuery,
      * Switch between lumify and lumify-fullscreen-details based on url hash
      */
     function loadApplicationTypeBasedOnUrlHash(e) {
-        var toOpen = graphVertexIdsToOpen(),
+        var toOpen = F.vertexUrl.parametersInUrl(location.href),
 
-            ids = toOpen && toOpen.ids,
+            ids = toOpen && toOpen.vertexIds,
 
             workspaceId = toOpen && toOpen.workspaceId,
 
@@ -205,43 +207,9 @@ function(jQuery,
     }
 
     function isPopoutUrl(url) {
-        var toOpen = graphVertexIdsToOpen(url)
+        var toOpen = F.vertexUrl.parametersInUrl(url);
 
-        return toOpen && toOpen.ids && toOpen.ids.length;
+        return toOpen && toOpen.vertexIds && toOpen.vertexIds.length;
     }
 
-    function graphVertexIdsToOpen(url) {
-        // http://...#v=1,2,3&w=[workspaceid]
-
-        var h = location.hash;
-
-        if (url) {
-            var urlMatch = url.match(/.*?(#.*)$/);
-            if (urlMatch) {
-                h = urlMatch[1];
-            } else h = '';
-        }
-
-        if (!h || h.length === 0) return;
-
-        var m = h.match(/^#?v=(.+?)(?:&w=(.+))?$/);
-
-        if (m && m.length === 3) {
-            var vertexIds = [],
-                workspaceId = null;
-
-            if (m[1]) {
-                vertexIds = decodeURIComponent(m[1]).split(',');
-            }
-
-            if (m[2]) {
-                workspaceId = decodeURIComponent(m[2]);
-            }
-
-            return {
-                ids: vertexIds,
-                workspaceId: workspaceId
-            };
-        }
-    }
 });

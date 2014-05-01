@@ -70,18 +70,23 @@ define([
 
         this.onCopy = function() {
             console.debug('Clipboard: Copy', this.textarea.val());
-            var val = this.textarea.val();
+
+            var self = this,
+                val = this.textarea.val();
 
             if (val.length) {
-                var vertices = this._verticesInData(val);
+                require(['util/vertex/urlFormatters'], function(F) {
+                    var parameters = F.vertexUrl.parametersInUrl(val),
+                        vertices = parameters && parameters.vertexIds;
 
-                if (vertices && vertices.length === 1) {
-                    this.trigger('displayInformation', { message: 'Copied vertex' });
-                } else if (vertices && vertices.length > 1) {
-                    this.trigger('displayInformation', { message: 'Copied ' + vertices.length + ' vertices' });
-                } else if (!vertices) {
-                    this.trigger('displayInformation', { message: 'Copied data' });
-                }
+                    if (vertices && vertices.length === 1) {
+                        self.trigger('displayInformation', { message: 'Copied vertex' });
+                    } else if (vertices && vertices.length > 1) {
+                        self.trigger('displayInformation', { message: 'Copied ' + vertices.length + ' vertices' });
+                    } else if (!vertices) {
+                        self.trigger('displayInformation', { message: 'Copied data' });
+                    }
+                })
             }
         };
 
@@ -108,13 +113,6 @@ define([
             this.focus();
         };
 
-        this._verticesInData = function(val) {
-            var match = val.match(/#v=(.+)$/);
-            if (match && match.length === 2) {
-                return match[1].split(',');
-            }
-            return null;
-        };
     }
 
     return defineComponent(ClipboardManager);

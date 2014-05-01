@@ -87,8 +87,7 @@ define([
         };
 
         this.updateLocationHash = function() {
-            location.hash = '#v=' + _.pluck(this.vertices, 'id').sort().join(',') +
-                '&w=' + this.attr.workspaceId;
+            location.hash = F.vertexUrl.fragmentUrl(this.vertices, this.attr.workspaceId);
         };
 
         this.updateLayout = function() {

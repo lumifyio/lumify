@@ -12,7 +12,8 @@ define([
     'service/config',
     'util/undoManager',
     'util/clipboardManager',
-    'util/privileges'
+    'util/privileges',
+    'util/vertex/formatters'
 ], function(
     // Flight
     defineComponent, registry,
@@ -21,7 +22,7 @@ define([
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService,
 
-    undoManager, ClipboardManager, Privileges) {
+    undoManager, ClipboardManager, Privileges, F) {
     'use strict';
 
     var WORKSPACE_SAVE_DELAY = 1500,
@@ -479,7 +480,8 @@ define([
                     existing = [],
                     addingVerticesRelatedTo = !!(data.options && data.options.addingVerticesRelatedTo),
                     addingVerticesFileDrop = !!(data.options && data.options.fileDropPosition),
-                    shouldBeSelected = (addingVerticesFileDrop || addingVerticesRelatedTo),
+                    shouldBeSelected = (addingVerticesFileDrop || addingVerticesRelatedTo ||
+                                        (data.options && data.options.shouldBeSelected)),
                     // Check if vertices are missing properties (from search results)
                     needsRefreshing = data.vertices.filter(function(v) {
                         var cached = self.vertex(v.id);
@@ -614,9 +616,9 @@ define([
 
         this.getVerticesFromClipboardData = function(data) {
             if (data) {
-                var vertexUrlMatch = data.match(/#v=(.+)$/);
-                if (vertexUrlMatch) {
-                    return vertexUrlMatch[1].split(',');
+                var p = F.vertexUrl.parametersInUrl(data);
+                if (p && p.vertexIds) {
+                    return p.vertexIds;
                 }
             }
 
@@ -655,7 +657,12 @@ define([
             if (len) {
                 this.trigger('displayInformation', { message: this.formatVertexAction('Paste', vertexIds)});
                 this.vertexService.getMultiple(vertexIds).done(function(data) {
-                    self.trigger('addVertices', data);
+                    self.trigger('addVertices', {
+                        vertices: data.vertices,
+                        options: {
+                            shouldBeSelected: true
+                        }
+                    });
                 });
             }
         };
@@ -702,9 +709,7 @@ define([
 
                 if (selected.vertices.length) {
                     self.trigger('clipboardSet', {
-                        text: window.location.href.replace(/#.*$/,'') +
-                            '#v=' +
-                            _.pluck(selected.vertices, 'id').join(',')
+                        text: F.vertexUrl.url(selected.vertices, self.workspaceId)
                     });
                 } else {
                     self.trigger('clipboardClear');

@@ -1,13 +1,6 @@
 <% if (!window.isFullscreenDetails) { 
 
-var url = '/#v=',
-    ids = encodeURIComponent(vertexIds.join(',')),
-    workspace = window.workspaceId;
-url += ids;
-if (workspace) {
-  url += '&w=';
-  url += encodeURIComponent(workspace);
-}
+  var url = F.vertexUrl.url(vertexIds, workspaceId)
 %>
 
 <a class="btn btn-small fullscreen-single" href="<%= url %>" target="_blank"><i class="icon-fullscreen"></i></a>
