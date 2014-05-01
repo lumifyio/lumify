@@ -5,10 +5,7 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
-import io.lumify.core.model.user.AuthorizationRepository;
-import io.lumify.core.model.user.InMemoryAuthorizationRepository;
-import io.lumify.core.model.user.InMemoryUser;
-import io.lumify.core.model.user.InMemoryUserRepository;
+import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.WorkspaceDiff;
 import io.lumify.core.security.LumifyVisibility;
@@ -69,6 +66,9 @@ public class SecureGraphWorkspaceRepositoryTest {
     private AuthorizationRepository authorizationRepository;
     private Vertex entity1Vertex;
 
+    @Mock
+    private UserListenerUtil userListenerUtil;
+
     @Before
     public void setup() {
         Visibility visibility = new Visibility("");
@@ -79,7 +79,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         authorizationRepository = new InMemoryAuthorizationRepository();
 
         Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
-        InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration);
+        InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration, userListenerUtil);
         user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
 

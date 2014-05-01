@@ -3,6 +3,7 @@ package io.lumify.sql.model.user;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.user.User;
@@ -32,6 +33,9 @@ public class SqlUserRepositoryTest {
     @Mock
     private AuthorizationRepository authorizationRepository;
 
+    @Mock
+    private UserListenerUtil userListenerUtil;
+
     @Before
     public void setup() {
         configuration = new org.hibernate.cfg.Configuration();
@@ -40,7 +44,7 @@ public class SqlUserRepositoryTest {
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new Configuration(configMap);
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
     }
 
     @Test

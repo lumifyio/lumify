@@ -5,6 +5,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.InMemoryAuthorizationRepository;
+import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -35,6 +36,9 @@ public class SecureGraphUserRepositoryTest {
     private AuthorizationRepository authorizationRepository;
     private SecureGraphUserRepository secureGraphUserRepository;
 
+    @Mock
+    private UserListenerUtil userListenerUtil;
+
     @Before
     public void setup() {
         InMemoryGraphConfiguration config = new InMemoryGraphConfiguration(new HashMap());
@@ -48,7 +52,8 @@ public class SecureGraphUserRepositoryTest {
                 lumifyConfiguration,
                 authorizationRepository,
                 new InMemoryGraph(config, new UUIDIdGenerator(config.getConfig()), new DefaultSearchIndex(config.getConfig())),
-                ontologyRepository);
+                ontologyRepository,
+                userListenerUtil);
     }
 
     @Test

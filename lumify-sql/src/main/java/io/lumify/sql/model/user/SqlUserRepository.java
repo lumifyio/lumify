@@ -4,10 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
-import io.lumify.core.model.user.AuthorizationRepository;
-import io.lumify.core.model.user.UserPasswordUtil;
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.user.UserStatus;
+import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
@@ -32,14 +29,17 @@ public class SqlUserRepository extends UserRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlUserRepository.class);
     private final SessionFactory sessionFactory;
     private final AuthorizationRepository authorizationRepository;
+    private final UserListenerUtil userListenerUtil;
 
     @Inject
     public SqlUserRepository(final Configuration configuration,
                              final AuthorizationRepository authorizationRepository,
-                             final SessionFactory sessionFactory) {
+                             final SessionFactory sessionFactory,
+                             final UserListenerUtil userListenerUtil) {
         super(configuration);
         this.authorizationRepository = authorizationRepository;
         this.sessionFactory = sessionFactory;
+        this.userListenerUtil = userListenerUtil;
     }
 
     @Override
@@ -116,6 +116,9 @@ public class SqlUserRepository extends UserRepository {
         } finally {
             session.close();
         }
+
+        userListenerUtil.fireNewUserAddedEvent(newUser);
+
         return newUser;
     }
 

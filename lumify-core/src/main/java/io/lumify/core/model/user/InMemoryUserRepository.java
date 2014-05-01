@@ -15,9 +15,12 @@ import java.util.List;
 import java.util.Set;
 
 public class InMemoryUserRepository extends UserRepository {
+    private UserListenerUtil userListenerUtil;
+
     @Inject
-    public InMemoryUserRepository(Configuration configuration) {
+    public InMemoryUserRepository(Configuration configuration, UserListenerUtil userListenerUtil) {
         super(configuration);
+        this.userListenerUtil = userListenerUtil;
     }
 
     @Override
@@ -37,7 +40,9 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
-        return new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations);
+        InMemoryUser user = new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations);
+        userListenerUtil.fireNewUserAddedEvent(user);
+        return user;
     }
 
     @Override

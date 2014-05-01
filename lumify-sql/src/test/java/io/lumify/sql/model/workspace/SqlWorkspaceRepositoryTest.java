@@ -4,6 +4,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
+import io.lumify.core.model.user.UserListenerUtil;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
@@ -40,6 +41,9 @@ public class SqlWorkspaceRepositoryTest {
     @Mock
     private AuthorizationRepository authorizationRepository;
 
+    @Mock
+    private UserListenerUtil userListenerUtil;
+
     @Before
     public void setUp() throws Exception {
         configuration = new org.hibernate.cfg.Configuration();
@@ -48,7 +52,7 @@ public class SqlWorkspaceRepositoryTest {
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new Configuration(configMap);
-        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory);
+        sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
         sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, new String[0]);
     }

@@ -10,10 +10,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.user.AuthorizationRepository;
-import io.lumify.core.model.user.UserPasswordUtil;
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.model.user.UserStatus;
+import io.lumify.core.model.user.*;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -49,16 +46,19 @@ public class SecureGraphUserRepository extends UserRepository {
     private final Cache<String, Set<Privilege>> userPrivilegesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build();
+    private UserListenerUtil userListenerUtil;
 
     @Inject
     public SecureGraphUserRepository(
             final Configuration configuration,
             final AuthorizationRepository authorizationRepository,
             final Graph graph,
-            final OntologyRepository ontologyRepository) {
+            final OntologyRepository ontologyRepository,
+            final UserListenerUtil userListenerUtil) {
         super(configuration);
         this.authorizationRepository = authorizationRepository;
         this.graph = graph;
+        this.userListenerUtil = userListenerUtil;
 
         authorizationRepository.addAuthorizationToGraph(VISIBILITY_STRING);
         authorizationRepository.addAuthorizationToGraph(LumifyVisibility.SUPER_USER_VISIBILITY_STRING);
@@ -140,6 +140,9 @@ public class SecureGraphUserRepository extends UserRepository {
         PRIVILEGES.setProperty(userBuilder, Privilege.toString(getDefaultPrivileges()), VISIBILITY.getVisibility());
         User user = createFromVertex(userBuilder.save());
         graph.flush();
+
+        userListenerUtil.fireNewUserAddedEvent(user);
+
         return user;
     }
 

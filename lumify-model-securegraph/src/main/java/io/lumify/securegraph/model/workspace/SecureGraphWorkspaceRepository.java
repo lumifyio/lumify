@@ -16,6 +16,7 @@ import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.model.workspace.diff.WorkspaceDiff;
 import io.lumify.core.security.LumifyVisibility;
+import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -313,6 +314,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+        if (user instanceof SystemUser) {
+            return true;
+        }
+
         String cacheKey = workspace.getId() + user.getUserId();
         Boolean hasWriteAccess = usersWithWriteAccessCache.getIfPresent(cacheKey);
         if (hasWriteAccess != null && hasWriteAccess) {
@@ -330,6 +335,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     private boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+        if (user instanceof SystemUser) {
+            return true;
+        }
+
         String cacheKey = workspace.getId() + user.getUserId();
         Boolean hasReadAccess = usersWithReadAccessCache.getIfPresent(cacheKey);
         if (hasReadAccess != null && hasReadAccess) {
