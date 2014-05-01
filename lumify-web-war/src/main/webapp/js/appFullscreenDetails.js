@@ -17,6 +17,7 @@ define([
     function filterEntity(v) {
         return v.concept && !filterArtifacts(v);
     }
+
     function filterArtifacts(v) {
         return v.concept && (/^(document|image|video)$/).test(v.concept.displayType);
     }
@@ -86,7 +87,8 @@ define([
         };
 
         this.updateLocationHash = function() {
-            location.hash = '#v=' + _.pluck(this.vertices, 'id').sort().join(',');
+            location.hash = '#v=' + _.pluck(this.vertices, 'id').sort().join(',') +
+                '&w=' + this.attr.workspaceId;
         };
 
         this.updateLayout = function() {
