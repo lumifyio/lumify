@@ -16,7 +16,7 @@ command -v bower >/dev/null 2>&1 || { echo >&2 "[ERROR] bower not found! install
 
 # run `npm install` in src/main/webapp
 cd $DIR/../webapp >/dev/null 
-npm install
+npm install --quiet
 
 # Run `bower list` for previous `bower list` output
 mkdir -p ${DIR}/../../../target

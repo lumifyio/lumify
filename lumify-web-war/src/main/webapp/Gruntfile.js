@@ -11,13 +11,15 @@ module.exports = function(grunt) {
               targetDir: './libs',
               install: true,
               copy: false,
+              quiet: true
           }
       },
       prune: {
           options: {
               targetDir: './libs',
               copy: false,
-              offline: true
+              offline: true,
+              quiet: true
           }
       }
     },
