@@ -12,9 +12,9 @@ public class SqlWorkspaceVertex implements Serializable {
     @Column(name = "workspace_vertex_id", unique = true)
     private int workspaceVertexId;
     @Column(name = "graph_position_x")
-    private int graphPositionX;
+    private Integer graphPositionX;
     @Column(name = "graph_position_y")
-    private int graphPositionY;
+    private Integer graphPositionY;
     @Column(name = "visible", columnDefinition = "TINYINT(1)")
     private boolean visible;
     @Column(name = "vertex_id")
@@ -23,19 +23,19 @@ public class SqlWorkspaceVertex implements Serializable {
     @PrimaryKeyJoinColumn (name="workspace_id")
     private SqlWorkspace workspace;
 
-    public int getGraphPositionY() {
+    public Integer getGraphPositionY() {
         return graphPositionY;
     }
 
-    public void setGraphPositionY(int graphPositionY) {
+    public void setGraphPositionY(Integer graphPositionY) {
         this.graphPositionY = graphPositionY;
     }
 
-    public int getGraphPositionX() {
+    public Integer getGraphPositionX() {
         return graphPositionX;
     }
 
-    public void setGraphPositionX(int graphPositionX) {
+    public void setGraphPositionX(Integer graphPositionX) {
         this.graphPositionX = graphPositionX;
     }
 

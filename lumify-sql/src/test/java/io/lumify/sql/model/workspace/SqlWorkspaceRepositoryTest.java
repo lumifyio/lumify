@@ -8,7 +8,6 @@ import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceEntity;
 import io.lumify.core.model.workspace.WorkspaceUser;
-import io.lumify.core.user.Privilege;
 import io.lumify.sql.model.user.SqlUser;
 import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.SessionFactory;
@@ -205,8 +204,8 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         SqlWorkspaceVertex sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertEquals("1234", sqlWorkspaceVertex.getVertexId());
-        assertEquals(0, sqlWorkspaceVertex.getGraphPositionX());
-        assertEquals(0, sqlWorkspaceVertex.getGraphPositionY());
+        assertEquals(0, sqlWorkspaceVertex.getGraphPositionX().intValue());
+        assertEquals(0, sqlWorkspaceVertex.getGraphPositionY().intValue());
         assertTrue(sqlWorkspaceVertex.isVisible());
 
         sqlWorkspaceRepository.updateEntityOnWorkspace(sqlWorkspace, vertexId, false, 1, 10, testUser);
@@ -216,8 +215,8 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(sqlWorkspaceVertexSet.size() == 1);
         sqlWorkspaceVertex = sqlWorkspaceVertexSet.iterator().next();
         assertEquals("1234", sqlWorkspaceVertex.getVertexId());
-        assertEquals(1, sqlWorkspaceVertex.getGraphPositionX());
-        assertEquals(10, sqlWorkspaceVertex.getGraphPositionY());
+        assertEquals(1, sqlWorkspaceVertex.getGraphPositionX().intValue());
+        assertEquals(10, sqlWorkspaceVertex.getGraphPositionY().intValue());
         assertFalse(sqlWorkspaceVertex.isVisible());
     }
 
