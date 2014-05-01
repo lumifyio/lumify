@@ -4,24 +4,18 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
-import org.securegraph.Graph;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
 
 public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
     private static final String PASSWORD = "8XXuk2tQ523b";
     private final UserRepository userRepository;
-    private final Graph graph;
 
     @Inject
-    public UsernameOnlyAuthenticationProvider(final UserRepository userRepository,
-                                              final Graph graph) {
+    public UsernameOnlyAuthenticationProvider(final UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.graph = graph;
     }
 
     @Override
@@ -40,7 +34,8 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            user = userRepository.addUser(graph.getIdGenerator().nextId().toString(), username, PASSWORD, new String[0]);
+            // For form based authentication, username and displayName will be the same
+            user = userRepository.addUser(username, username, PASSWORD, new String[0]);
         }
         setUser(request, user);
         return true;

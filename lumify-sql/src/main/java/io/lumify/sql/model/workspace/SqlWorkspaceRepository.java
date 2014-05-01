@@ -90,7 +90,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
             LOGGER.debug("add %s to workspace table", title);
             newWorkspace.getSqlWorkspaceUser().add(sqlWorkspaceUser);
-            ((SqlUser) user).getSqlWorkspaceUsers().add(sqlWorkspaceUser);
             session.save(newWorkspace);
             session.save(sqlWorkspaceUser);
             session.update(user);
@@ -109,12 +108,16 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
     @Override
     public Iterable<Workspace> findAll(User user) {
         Session session = sessionFactory.openSession();
-        List workspaces = session.createCriteria(SqlWorkspace.class).list();
+        List workspaces = session.createCriteria(SqlWorkspaceUser.class)
+                .add(Restrictions.eq("sqlWorkspaceUserId.user.id", Integer.parseInt(user.getUserId())))
+                .add(Restrictions.in("workspaceAccess", new String [] {WorkspaceAccess.READ.toString(), WorkspaceAccess.WRITE.toString()}))
+                .list();
         session.close();
         return new ConvertingIterable<Object, Workspace>(workspaces) {
             @Override
             protected Workspace convert(Object obj) {
-                return (SqlWorkspace) obj;
+                SqlWorkspaceUser sqlWorkspaceUser = (SqlWorkspaceUser)obj;
+                return sqlWorkspaceUser.getWorkspace();
             }
         };
     }

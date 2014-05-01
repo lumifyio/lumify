@@ -129,8 +129,8 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
-        username = "USER_" + username;
-        VertexBuilder userBuilder = graph.prepareVertex(username, VISIBILITY.getVisibility(), this.authorizations);
+        String id = "USER_" + graph.getIdGenerator().nextId().toString();
+        VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility(), this.authorizations);
         USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
