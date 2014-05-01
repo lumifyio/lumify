@@ -23,7 +23,7 @@ define(['hbs/handlebars'], function(Handlebars) {
 
         if (context && typeof context === 'object') {
             if (Handlebars.Utils.isArray(context)) {
-                for(var j = context.length; i < j; i++) {
+                for (var j = context.length; i < j; i++) {
                     if (data) {
                         data.index = i;
                         data.first = (i === 0);

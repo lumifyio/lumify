@@ -179,7 +179,7 @@ define([
                         };
 
                     diffs.forEach(function(diff) {
-                        switch(diff.type) {
+                        switch (diff.type) {
                             case 'VertexDiffItem':
                                 diff.id = outputItem.id = vertexId;
                                 if (outputItem.vertex) {

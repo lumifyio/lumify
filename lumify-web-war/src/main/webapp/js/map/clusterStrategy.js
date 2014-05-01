@@ -88,7 +88,7 @@ define(['openlayers'], function(OpenLayers) {
                     this.layer.removeAllFeatures();
                     this.clustering = false;
                     if (clusters.length > 0) {
-                        if(this.threshold > 1) {
+                        if (this.threshold > 1) {
                             var clone = clusters.slice();
                             clusters = [];
                             var candidate;
@@ -195,7 +195,7 @@ define(['openlayers'], function(OpenLayers) {
         },
 
         removeFeatures: function(event) {
-            if(!this.clustering) {
+            if (!this.clustering) {
                 var existingIds = _.pluck(event.features, 'id');
                 this.features = _.filter(this.features, function(feature) {
                     return !~existingIds.indexOf(feature.id);
