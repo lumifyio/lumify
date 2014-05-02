@@ -54,6 +54,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
     
+    
+    <!-- http://lumify.io#possibleValues -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;possibleValues"/>
 
 
     <!-- 
