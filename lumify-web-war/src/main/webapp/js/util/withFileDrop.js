@@ -46,7 +46,7 @@ define([
 
                     if (self.$node.hasClass('uploading')) return;
 
-                    self.handleFilesDropped(e.dataTransfer.files, event);
+                    self.handleFilesDropped(e.dataTransfer.files, e);
                 }
             };
         });
