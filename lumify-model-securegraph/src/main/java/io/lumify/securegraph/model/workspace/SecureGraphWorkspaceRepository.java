@@ -218,18 +218,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public Workspace copy(Workspace workspace, User user) {
-        Workspace newWorkspace = add("Copy of " + workspace.getDisplayTitle(), user);
-
-        List<WorkspaceEntity> entities = findEntities(workspace, user);
-        for (WorkspaceEntity entity : entities) {
-            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
-        }
-
-        // TODO should we copy users?
-
+    public Workspace copyTo(Workspace workspace, User destinationUser, User user) {
+        Workspace newWorkspace = super.copyTo(workspace, destinationUser, user);
         graph.flush();
-
         return newWorkspace;
     }
 

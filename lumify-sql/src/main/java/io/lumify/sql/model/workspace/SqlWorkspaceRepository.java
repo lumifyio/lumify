@@ -1,5 +1,7 @@
 package io.lumify.sql.model.workspace;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
@@ -9,21 +11,19 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.user.SqlUser;
-import org.securegraph.util.ConvertingIterable;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.securegraph.util.ConvertingIterable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
 public class SqlWorkspaceRepository extends WorkspaceRepository {
@@ -110,13 +110,13 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         Session session = sessionFactory.openSession();
         List workspaces = session.createCriteria(SqlWorkspaceUser.class)
                 .add(Restrictions.eq("sqlWorkspaceUserId.user.id", Integer.parseInt(user.getUserId())))
-                .add(Restrictions.in("workspaceAccess", new String [] {WorkspaceAccess.READ.toString(), WorkspaceAccess.WRITE.toString()}))
+                .add(Restrictions.in("workspaceAccess", new String[]{WorkspaceAccess.READ.toString(), WorkspaceAccess.WRITE.toString()}))
                 .list();
         session.close();
         return new ConvertingIterable<Object, Workspace>(workspaces) {
             @Override
             protected Workspace convert(Object obj) {
-                SqlWorkspaceUser sqlWorkspaceUser = (SqlWorkspaceUser)obj;
+                SqlWorkspaceUser sqlWorkspaceUser = (SqlWorkspaceUser) obj;
                 return sqlWorkspaceUser.getWorkspace();
             }
         };
@@ -196,17 +196,6 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             session.close();
         }
         return workspaceEntities;
-    }
-
-    @Override
-    public Workspace copy(Workspace workspace, User user) {
-        SqlWorkspace sqlWorkspace = (SqlWorkspace) add("Copy of " + workspace.getDisplayTitle(), user);
-        List<WorkspaceEntity> entities = findEntities(workspace, user);
-        for (WorkspaceEntity entity : entities) {
-            updateEntityOnWorkspace(sqlWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), user);
-        }
-
-        return sqlWorkspace;
     }
 
     @Override

@@ -38,7 +38,19 @@ public abstract class WorkspaceRepository {
     public abstract List<WorkspaceEntity> findEntities(Workspace workspace, User user);
 
     // TODO change Workspace to workspace id?
-    public abstract Workspace copy(Workspace workspace, User user);
+    public Workspace copy(Workspace workspace, User user) {
+        return copyTo(workspace, user, user);
+    }
+
+    // TODO change Workspace to workspace id?
+    public Workspace copyTo(Workspace workspace, User destinationUser, User user) {
+        Workspace newWorkspace = add("Copy of " + workspace.getDisplayTitle(), destinationUser);
+        List<WorkspaceEntity> entities = findEntities(workspace, user);
+        for (WorkspaceEntity entity : entities) {
+            updateEntityOnWorkspace(newWorkspace, entity.getEntityVertexId(), entity.isVisible(), entity.getGraphPositionX(), entity.getGraphPositionY(), destinationUser);
+        }
+        return newWorkspace;
+    }
 
     // TODO change Workspace to workspace id?
     public abstract void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
