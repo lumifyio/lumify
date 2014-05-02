@@ -211,10 +211,10 @@ define([
                             propertyIds = [],
                             collectPropertyIds = function(conceptId) {
                                 var concept = ontology.conceptsById[conceptId],
-                                    properties = concept.properties,
-                                    parentConceptId = concept.parentConcept;
+                                    properties = concept && concept.properties,
+                                    parentConceptId = concept && concept.parentConcept;
 
-                                if (properties.length) {
+                                if (properties && properties.length) {
                                     propertyIds.push.apply(propertyIds, properties);
                                 }
                                 if (parentConceptId) {
