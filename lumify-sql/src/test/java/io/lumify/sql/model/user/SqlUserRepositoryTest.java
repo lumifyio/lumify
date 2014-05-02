@@ -33,9 +33,6 @@ public class SqlUserRepositoryTest {
     @Mock
     private AuthorizationRepository authorizationRepository;
 
-    @Mock
-    private UserListenerUtil userListenerUtil;
-
     @Before
     public void setup() {
         configuration = new org.hibernate.cfg.Configuration();
@@ -44,6 +41,7 @@ public class SqlUserRepositoryTest {
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new Configuration(configMap);
+        UserListenerUtil userListenerUtil = new UserListenerUtil();
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
     }
 
