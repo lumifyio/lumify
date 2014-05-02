@@ -49,7 +49,10 @@ public abstract class OntologyProperty {
             if (getPossibleValues() != null && getPossibleValues().size() > 0) {
                 JSONArray possibleValues = new JSONArray();
                 for (PossibleValueType possibleValueProperty : getPossibleValues()) {
-                    possibleValues.put(new JSONObject().put(possibleValueProperty.getKey(), possibleValueProperty.getValue()));
+                    JSONObject possibleValue = new JSONObject();
+                    possibleValue.put("key", possibleValueProperty.getKey());
+                    possibleValue.put("value", possibleValueProperty.getValue());
+                    possibleValues.put(possibleValue);
                 }
                 json.put("possibleValues", possibleValues);
             }
