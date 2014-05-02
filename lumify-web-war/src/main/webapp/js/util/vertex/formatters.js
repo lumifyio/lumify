@@ -33,6 +33,15 @@ define([
                     return value;
                 }
 
+                if (ontologyProperty.possibleValues) {
+                    var foundPossibleValue = _.findWhere(ontologyProperty.possibleValues, { key: value });
+                    if (foundPossibleValue) {
+                        return foundPossibleValue.value;
+                    } else {
+                        console.warn('Unknown ontology value for key', value, ontologyProperty);
+                    }
+                }
+
                 switch (ontologyProperty.dataType) {
                     case 'date': return F.date.dateString(value);
                     case 'number': return F.number.pretty(value);

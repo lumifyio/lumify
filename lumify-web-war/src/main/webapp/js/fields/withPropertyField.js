@@ -7,8 +7,8 @@ define(['util/withTeardown'], function(withTeardown) {
         withTeardown.call(this);
 
         this.defaultAttrs({
-            predicateSelector: 'select',
-            visibleInputsSelector: 'input:visible',
+            predicateSelector: 'select.predicate',
+            visibleInputsSelector: 'input:visible,select:not(.predicate):visible',
             inputSelector: 'input,select',
             value: ''
         });
@@ -20,14 +20,18 @@ define(['util/withTeardown'], function(withTeardown) {
         });
 
         this.after('initialize', function() {
-            var inputs = this.select('visibleInputsSelector');
+            var inputs = this.select('visibleInputsSelector'),
+                inputsNoSelects = inputs.not('select');
 
             this.$node.find('input').each(function() {
                 $(this).attr('required', true)
             });
 
-            if (this.attr.tooltip && this.$node.find('.input-prepend').length === 0) {
-                inputs.eq(0)
+            if (inputsNoSelects.length && this.attr.tooltip &&
+                this.attr.disableTooltip !== true &&
+                this.$node.find('.input-prepend').length === 0) {
+
+                inputsNoSelects.eq(0)
                     .tooltip($.extend({ container: 'body' }, this.attr.tooltip))
                     .data('tooltip').tip().addClass('field-tooltip');
             }

@@ -207,7 +207,11 @@ define([
                     });
                 } else if (propertyDetails) {
                     require([
-                        'fields/' + propertyDetails.dataType,
+                        (
+                            propertyDetails.possibleValues ?
+                                'fields/restrictValues' :
+                                'fields/' + propertyDetails.dataType
+                        ),
                         'detail/dropdowns/propertyForm/justification',
                         'configuration/plugins/visibility/visibilityEditor'
                     ], function(PropertyField, Justification, Visibility) {

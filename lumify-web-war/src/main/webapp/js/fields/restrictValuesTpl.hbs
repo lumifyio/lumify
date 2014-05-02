@@ -1,0 +1,17 @@
+
+
+<table cellpadding="0">
+    <tr>
+      <td class="input-row input-row-select">
+       <select>
+        <option value="">Choose {{displayName}}...</option>
+        {{#each values}}
+        <option value="{{key}}"
+                {{#if selected}}
+                selected="selected"
+                {{/if}}>{{value}}</option>
+        {{/each}}
+      </select>
+      </td>
+    </tr>
+</table>

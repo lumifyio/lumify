@@ -23,5 +23,11 @@ define([
                 }
             });
         });
+
+        this.isValid = function() {
+            return _.every(this.getValues(), function(v) {
+                return $.trim(v).length > 0;
+            });
+        };
     }
 });

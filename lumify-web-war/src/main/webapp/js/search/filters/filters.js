@@ -122,9 +122,12 @@ define([
             var self = this,
                 target = $(event.target),
                 li = target.closest('li'),
-                property = data.property;
+                property = data.property,
+                fieldComponent = property.possibleValues ?
+                    'fields/restrictValues' :
+                    'fields/' + property.dataType;
 
-            require(['fields/' + property.dataType], function(PropertyFieldItem) {
+            require([fieldComponent], function(PropertyFieldItem) {
                 var node = li.find('.configuration');
 
                 self.teardownField(node);

@@ -139,7 +139,17 @@ width: 175px;
   .predicate-row { 
     //width: auto; 
   }
-  .input-row { width: 100%; }
+  .input-row {
+    width: 100%;
+
+    &.input-row-select {
+      display: table;
+      select {
+        width: 100%;
+        display: table-cell;
+      }
+    }
+  }
 
   .range-only {
     display: block;
