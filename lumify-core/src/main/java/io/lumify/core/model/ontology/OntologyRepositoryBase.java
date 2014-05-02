@@ -9,6 +9,9 @@ import net.lingala.zip4j.core.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.securegraph.property.StreamingPropertyValue;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -432,5 +435,21 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
         }
         return null;
+    }
+
+    @Override
+    public void resolvePropertyIds(JSONArray filterJson) throws JSONException {
+        for (int i = 0; i < filterJson.length(); i++) {
+            JSONObject filter = filterJson.getJSONObject(i);
+            if (filter.has("propertyId") && !filter.has("propertyName")) {
+                String propertyVertexId = filter.getString("propertyId");
+                OntologyProperty property = getProperty(propertyVertexId);
+                if (property == null) {
+                    throw new RuntimeException("Could not find property with id: " + propertyVertexId);
+                }
+                filter.put("propertyName", property.getTitle());
+                filter.put("propertyDataType", property.getDataType());
+            }
+        }
     }
 }

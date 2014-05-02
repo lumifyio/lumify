@@ -10,6 +10,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -320,10 +321,5 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, ((InMemoryConcept) from).getConceptIRI(), ((InMemoryConcept) to).getConceptIRI());
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
-    }
-
-    @Override
-    public void resolvePropertyIds(JSONArray filterJson) throws JSONException {
-
     }
 }

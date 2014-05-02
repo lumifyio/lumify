@@ -406,22 +406,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         return new SecureGraphRelationship(relationshipVertex, from.getTitle(), to.getTitle());
     }
 
-    @Override
-    public void resolvePropertyIds(JSONArray filterJson) throws JSONException {
-        for (int i = 0; i < filterJson.length(); i++) {
-            JSONObject filter = filterJson.getJSONObject(i);
-            if (filter.has("propertyId") && !filter.has("propertyName")) {
-                String propertyVertexId = filter.getString("propertyId");
-                OntologyProperty property = getProperty(propertyVertexId);
-                if (property == null) {
-                    throw new RuntimeException("Could not find property with id: " + propertyVertexId);
-                }
-                filter.put("propertyName", property.getTitle());
-                filter.put("propertyDataType", property.getDataType());
-            }
-        }
-    }
-
     private OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName,
                                                      ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
         OntologyProperty typeProperty = getProperty(propertyName);
