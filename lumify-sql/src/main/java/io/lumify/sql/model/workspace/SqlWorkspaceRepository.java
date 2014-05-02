@@ -360,7 +360,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public boolean hasWritePermissions(Workspace workspace, User user) {
-        return false;
+        return doesUserHaveWriteAccess(workspace, user);
     }
 
     protected List<SqlWorkspaceUser> getSqlWorkspaceUsers(SqlWorkspace workspace) {
