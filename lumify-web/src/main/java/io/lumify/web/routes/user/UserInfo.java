@@ -31,7 +31,7 @@ public class UserInfo extends BaseRequestHandler {
             return;
         }
 
-        JSONObject json = getUserRepository().toJson(user);
+        JSONObject json = UserRepository.toJson(user);
         respondWithJson(response, json);
     }
 }
