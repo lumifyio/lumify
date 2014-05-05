@@ -53,7 +53,7 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
+    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations, String workspaceId) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
@@ -76,16 +76,13 @@ public class WorkspaceHelper {
                 if (edgeId != null) {
                     Edge edge = graph.getEdge(edgeId, authorizations);
                     graph.removeEdge(edgeId, authorizations);
-                    this.workQueueRepository.pushEdgeDeletion(edge);
+                    workQueueRepository.pushEdgeDeletion(edge);
                     auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
                 }
             }
 
             termMentionRepository.delete(termMention.getRowKey());
-
-            if (analyzedTermMention != null) {
-                workQueueRepository.pushTextUpdated(JsonSerializer.toJsonVertex(artifactVertex, workspaceId));
-            }
+            workQueueRepository.pushTextUpdated(JsonSerializer.toJsonVertex(artifactVertex, workspaceId));
 
             graph.flush();
 
