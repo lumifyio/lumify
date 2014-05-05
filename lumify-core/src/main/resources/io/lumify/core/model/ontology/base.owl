@@ -172,26 +172,14 @@
     
 
 
-    <!-- http://lumify.io#glyphIcon -->
+    <!-- http://lumify.io#entityImageVertexId -->
 
-    <owl:DatatypeProperty rdf:about="&lumify;glyphIcon">
-        <rdfs:label xml:lang="en">Glyph Icon</rdfs:label>
+    <owl:DatatypeProperty rdf:about="&lumify;entityImageVertexId">
+        <rdfs:label xml:lang="en">Entity Image Vertex ID</rdfs:label>
         <userVisible>false</userVisible>
-        <rdfs:range rdf:resource="&lumify;image"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
-
-
-    <!-- http://lumify.io#mapGlyphIcon -->
-
-    <owl:DatatypeProperty rdf:about="&lumify;mapGlyphIcon">
-        <rdfs:label xml:lang="en">Map Glyph Icon</rdfs:label>
-        <userVisible>false</userVisible>
-        <rdfs:range rdf:resource="&lumify;image"/>
-        <rdfs:domain rdf:resource="&owl;Thing"/>
-    </owl:DatatypeProperty>
-    
 
 
     <!-- http://lumify.io#mappingJson -->

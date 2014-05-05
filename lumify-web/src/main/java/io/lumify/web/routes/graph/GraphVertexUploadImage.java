@@ -125,8 +125,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
-        // TODO: Create new ENTITY_IMAGE property to replace GLYPH_ICON.
-        entityVertexMutation.setProperty(LumifyProperties.GLYPH_ICON.getKey(), ArtifactThumbnail.getUrl(artifactVertex.getId()), metadata, lumifyVisibility.getVisibility());
+        entityVertexMutation.setProperty(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save();
         graph.flush();

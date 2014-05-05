@@ -2,6 +2,8 @@ package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.Audit;
@@ -12,6 +14,7 @@ import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.EntityLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -25,12 +28,10 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import org.securegraph.mutation.ExistingElementMutation;
-import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.*;
+import org.securegraph.mutation.ExistingElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -238,7 +239,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Property property : vertex.getProperties()) {
             OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
             checkNotNull(ontologyProperty, "Could not find property " + property.getName());
-            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.GLYPH_ICON.getKey())) {
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey())) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
@@ -367,7 +368,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Vertex entityVertex = hasImageEdge.getVertex(Direction.OUT, authorizations);
         checkNotNull(entityVertex, "Could not find has image source vertex " + hasImageEdge.getVertexId(Direction.OUT));
         ExistingElementMutation elementMutation = entityVertex.prepareMutation();
-        Iterable<Property> glyphIconProperties = entityVertex.getProperties(LumifyProperties.GLYPH_ICON.getKey());
+        Iterable<Property> glyphIconProperties = entityVertex.getProperties(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey());
         for (Property glyphIconProperty : glyphIconProperties) {
             if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
                 elementMutation.save();

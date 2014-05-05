@@ -41,10 +41,6 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         this.graph = graph;
     }
 
-    public static String getUrl(Object graphVertexId) {
-        return "artifact/thumbnail?graphVertexId=" + graphVertexId;
-    }
-
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         User user = getUser(request);
