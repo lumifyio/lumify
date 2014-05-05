@@ -430,6 +430,10 @@ define([
                             //delay: { show: 100, hide: 1000 }
                         });
 
+                        var popover = $this.data('popover'),
+                            tip = popover.tip(),
+                            content = tip.find('.popover-content');
+
                         $this.on('shown', function() {
                             infos.not($this).popover('hide');
                             $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
@@ -443,12 +447,19 @@ define([
                                 }
                             });
 
+                            self.off('positionPropertyInfo').on('positionPropertyInfo', function() {
+                                var pos = popover.getPosition(),
+                                    actualWidth  = tip[0].offsetWidth,
+                                    actualHeight = tip[0].offsetHeight,
+                                    calculatedOffset = {
+                                        top: pos.top - actualHeight,
+                                        left: pos.left + pos.width / 2 - actualWidth / 2
+                                    };
+
+                                popover.applyPlacement(calculatedOffset, 'top');
+                            });
                             self.trigger(content, 'willDisplayPropertyInfo');
                         });
-
-                        var popover = $this.data('popover'),
-                        tip = popover.tip(),
-                        content = tip.find('.popover-content');
 
                         popover.setContent = function() {
                             var $tip = this.tip()
@@ -493,10 +504,24 @@ define([
                     }));
                     self.$node.html(props);
                     self.updateVisibility();
+                    self.updateJustification();
                     self.updatePopovers();
                 });
             self.trigger('toggleAuditDisplay', { displayed: false })
         };
+
+        this.updateJustification = function() {
+            this.$node.find('.justification').each(function() {
+                var justification = $(this),
+                    property = justification.data('property');
+
+                require(['util/vertex/justification/viewer'], function(JustificationViewer) {
+                    var attrs = {};
+                    attrs[property.name] = property.value;
+                    JustificationViewer.attachTo(justification, attrs);
+                });
+            });
+        }
 
         this.updateVisibility = function() {
             var self = this;
@@ -575,7 +600,25 @@ define([
                         'sandboxStatus'
                     )
                 }
-                propertyView[displayType] = true;
+
+            } else if (name === '_sourceMetadata') {
+                propertyView = {
+                    name: 'sourceMetadata',
+                    value: value,
+                    displayName: 'Justification',
+                    displayType: 'justification'
+                };
+            } else if (name === '_justificationMetadata') {
+                propertyView = {
+                    name: 'justificationMetadata',
+                    value: value,
+                    displayName: 'Justification',
+                    displayType: 'justification'
+                };
+            }
+
+            if (propertyView) {
+                propertyView[propertyView.displayType] = true;
                 propertyView.json = JSON.stringify(propertyView);
                 displayProperties.push(propertyView);
             }

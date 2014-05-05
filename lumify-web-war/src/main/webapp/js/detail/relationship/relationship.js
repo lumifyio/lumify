@@ -64,28 +64,10 @@ define([
                     F: F
                 }));
 
-                var properties = $.extend({}, data.properties);
-                properties.relationshipType = (
-                    ontologyRelationships.byTitle[data.properties.relationshipType] ||
-                    ontologyRelationships.byId[data.properties.relationshipType] ||
-                    {}
-                ).displayName;
-
-                _.keys(properties).forEach(function(key) {
-                    properties[key] = {
-                        value: properties[key]
-                    };
-                });
-                Object.keys(relationshipData[0].properties).forEach(function(propKey) {
-                    properties[propKey] =  {
-                        value: relationshipData[0].properties[propKey]
-                    };
-                });
-
                 Properties.attachTo(self.select('propertiesSelector'), {
                     data: {
-                        id: encodeURIComponent(data.id),
-                        properties: properties
+                        id: relationshipData[0].id,
+                        properties: relationshipData[0].properties
                     }
                 });
 

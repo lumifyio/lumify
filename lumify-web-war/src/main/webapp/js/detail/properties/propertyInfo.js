@@ -23,7 +23,7 @@ define([
             deleteButtonSelector: '.btn-danger',
             editButtonSelector: '.btn-default',
             modifiedBySelector: '.property-modifiedBy',
-            sourceInfoTitleSelector: '.sourceInfoTitle'
+            justificationValueSelector: '.justificationValue'
         });
 
         this.after('initialize', function() {
@@ -35,26 +35,37 @@ define([
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
                 editButtonSelector: this.onEdit,
-                sourceInfoTitleSelector: this.onSourceInfo
             })
 
             this.on('propertyerror', this.onPropertyError);
             this.on('willDisplayPropertyInfo', this.onDisplay);
-        })
+        });
+
+        this.updateJustification = function() {
+            var self = this,
+                metadata = this.attr.property.metadata,
+                justificationMetadata = metadata && metadata._justificationMetadata,
+                sourceMetadata = metadata && metadata._sourceMetadata;
+
+            if (justificationMetadata || sourceMetadata) {
+                require(['util/vertex/justification/viewer'], function(JustificationViewer) {
+                    JustificationViewer.attachTo(self.select('justificationValueSelector'), {
+                        justificationMetadata: justificationMetadata,
+                        sourceMetadata: sourceMetadata
+                    });
+
+                    self.trigger('positionPropertyInfo');
+                });
+            }
+        };
 
         this.onDisplay = function() {
             var self = this,
                 field = this.select('modifiedBySelector'),
                 metadata = this.attr.property.metadata,
-                user = metadata && metadata['http://lumify.io#modifiedBy'],
-                sourceMetadata = metadata._sourceMetadata;
+                user = metadata && metadata['http://lumify.io#modifiedBy'];
 
-            if (sourceMetadata) {
-                appData.getVertexTitle(sourceMetadata.vertexId)
-                    .done(function(title) {
-                        self.$node.find('.sourceInfoTitle').text(title);
-                    });
-            }
+            this.updateJustification();
 
             if (this.userLoaded) {
                 return;
@@ -72,23 +83,6 @@ define([
             } else {
                 field.text('Unknown');
             }
-        };
-
-        this.onSourceInfo = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var metadata = this.attr.property.metadata._sourceMetadata,
-                vertexId = metadata.vertexId,
-                offsets = [metadata.startOffset, metadata.endOffset];
-
-            this.trigger('selectObjects', {
-                vertices: [ { id: vertexId } ],
-                focus: {
-                    vertexId: vertexId,
-                    offsets: offsets
-                }
-            })
         };
 
         this.onPropertyError = function(event, data) {

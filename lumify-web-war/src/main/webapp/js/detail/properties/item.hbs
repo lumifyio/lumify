@@ -8,12 +8,16 @@
         {{> detail/properties/types/visibility }}
         <button data-property="{{json}}" class="info"></button>
     {{else}}
-      {{#if geoLocation}}
-        {{> detail/properties/types/geoLocation }}
+      {{#if justification}}
+          {{> detail/properties/types/justification }}
       {{else}}
-        {{stringValue}}
+        {{#if geoLocation}}
+          {{> detail/properties/types/geoLocation }}
+        {{else}}
+          {{stringValue}}
+        {{/if}}
+        <button data-property="{{json}}" class="info"></button>
       {{/if}}
-      <button data-property="{{json}}" class="info"></button>
       <span class="visibility" data-visibility="{{visibilityJson}}"></span>
     {{/if}}
 
