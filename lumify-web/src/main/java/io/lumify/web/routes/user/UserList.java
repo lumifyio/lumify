@@ -1,12 +1,12 @@
 package io.lumify.web.routes.user;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,9 @@ public class UserList extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        Iterable<User> users = getUserRepository().findAll();
+        String query = getOptionalParameter(request, "q");
+
+        Iterable<User> users = getUserRepository().find(query);
 
         JSONObject resultJson = new JSONObject();
         JSONArray usersJson = getJson(users);

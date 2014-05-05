@@ -12,6 +12,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.util.FilterIterable;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -129,4 +130,17 @@ public abstract class UserRepository {
     public abstract void delete(User user);
 
     public abstract void setPrivileges(User user, Set<Privilege> privileges);
+
+    public Iterable<User> find(String query) {
+        final String lowerCaseQuery = query == null ? null : query.toLowerCase();
+        return new FilterIterable<User>(findAll()) {
+            @Override
+            protected boolean isIncluded(User user) {
+                if (lowerCaseQuery == null) {
+                    return true;
+                }
+                return user.getDisplayName().toLowerCase().contains(lowerCaseQuery);
+            }
+        };
+    }
 }
