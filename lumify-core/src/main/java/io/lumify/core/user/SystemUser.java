@@ -35,6 +35,11 @@ public class SystemUser implements User {
     }
 
     @Override
+    public String getCurrentWorkspaceId() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "SystemUser";
     }

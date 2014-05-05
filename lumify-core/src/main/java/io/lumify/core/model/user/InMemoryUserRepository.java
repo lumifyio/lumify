@@ -1,7 +1,6 @@
 package io.lumify.core.model.user;
 
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
@@ -40,7 +39,7 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations);
+        InMemoryUser user = new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations, null);
         userListenerUtil.fireNewUserAddedEvent(user);
         return user;
     }

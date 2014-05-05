@@ -83,8 +83,9 @@ public class SecureGraphUserRepository extends UserRepository {
         String userId = (String) user.getId();
         String userStatus = STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(PRIVILEGES.getPropertyValue(user));
+        String currentWorkspaceId = CURRENT_WORKSPACE.getPropertyValue(user);
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, privileges);
+        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, privileges, currentWorkspaceId);
     }
 
     @Override

@@ -17,4 +17,6 @@ public interface User extends Serializable {
     public UserType getUserType();
 
     public String getUserStatus();
+
+    public String getCurrentWorkspaceId();
 }

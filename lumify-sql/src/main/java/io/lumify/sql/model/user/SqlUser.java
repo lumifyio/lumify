@@ -100,6 +100,15 @@ public class SqlUser implements User {
         return userStatus;
     }
 
+    @Override
+    public String getCurrentWorkspaceId() {
+        SqlWorkspace workspace = getCurrentWorkspace();
+        if (workspace == null) {
+            return null;
+        }
+        return workspace.getId();
+    }
+
     public Set<Privilege> getPrivileges() {
         return Privilege.stringToPrivileges(this.privileges);
     }

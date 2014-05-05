@@ -10,9 +10,11 @@ public class InMemoryUser implements User {
     private final String userId;
     private final String displayName;
     private final List<String> authorizations;
+    private final String currentWorkspaceId;
     private Set<Privilege> privileges;
 
-    public InMemoryUser(String displayName, Set<Privilege> privileges, String[] authorizations) {
+    public InMemoryUser(String displayName, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
+        this.currentWorkspaceId = currentWorkspaceId;
         this.userId = UUID.randomUUID().toString();
         this.displayName = displayName;
         this.authorizations = new ArrayList<String>();
@@ -43,6 +45,11 @@ public class InMemoryUser implements User {
     @Override
     public String getUserStatus() {
         throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public String getCurrentWorkspaceId() {
+        return this.currentWorkspaceId;
     }
 
     public Set<Privilege> getPrivileges() {
