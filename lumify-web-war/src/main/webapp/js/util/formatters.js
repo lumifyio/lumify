@@ -1,6 +1,8 @@
 
 define([
-    'sf'
+    'sf',
+    'jquery',
+    'underscore'
 ], function(sf) {
     'use strict';
 
