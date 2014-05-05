@@ -700,7 +700,7 @@ define([
                                 item: item,
                                 F: F,
                                 properties: item.properties &&
-                                    Properties.filterPropertiesForDisplay(item.properties, ontologyProperties),
+                                    Properties.filterPropertiesForDisplay(item, ontologyProperties),
                                 iconSrc: item.imageSrc,
                                 concept: concept
                             });
