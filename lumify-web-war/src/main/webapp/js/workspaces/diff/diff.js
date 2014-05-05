@@ -52,17 +52,10 @@ define([
                     return self.ontologyProperties.byTitle[name].displayName;
                 },
                 formatValue = function(name, change) {
-                    var value = change.value;
-                    switch (self.ontologyProperties.byTitle[name].dataType) {
-                        case 'geoLocation':
-                            value = [change.value.latitude, change.value.longitude].join(', ');
-                            break;
-                        case 'date':
-                            value = F.date.dateString(value);
-                            break;
-                    }
-
-                    return value;
+                    return F.vertex.displayProp({
+                        name: name,
+                        value: change.value
+                    });
                 };
 
             self.processDiffs(self.attr.diffs).done(function(processDiffs) {
