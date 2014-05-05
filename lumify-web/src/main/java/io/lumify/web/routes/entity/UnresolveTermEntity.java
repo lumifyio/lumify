@@ -63,6 +63,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String graphVertexId = getRequiredParameter(request, "graphVertexId");
         final String edgeId = getRequiredParameter(request, "edgeId");
+        final String rowKey = getOptionalParameter(request, "rowKey");
 
         LOGGER.debug(
                 "UnresolveTermEntity (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
@@ -100,7 +101,12 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         }
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
-        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
+        String propertyKey = "";
+        if (rowKey != null) {
+            TermMentionRowKey analyzedTermMentionRowKey = new TermMentionRowKey(rowKey);
+            propertyKey = analyzedTermMentionRowKey.getPropertyKey();
+        }
+
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edgeId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         TermMentionModel analyzedTermMention = termMentionRepository.findByRowKey(new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd).toString(), modelUserContext);

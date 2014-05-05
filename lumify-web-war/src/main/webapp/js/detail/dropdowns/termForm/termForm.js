@@ -178,12 +178,14 @@ define([
                 $mentionNode = $(this.attr.mentionNode),
                 newObjectSign = $.trim(this.select('objectSignSelector').val()),
                 mentionStart,
-                mentionEnd;
+                mentionEnd,
+                rowKey;
 
             if (this.attr.existing) {
                 var dataInfo = $mentionNode.data('info');
                 mentionStart = dataInfo.start;
                 mentionEnd = dataInfo.end;
+                rowKey = dataInfo['http://lumify.io#rowKey'];
             } else {
                 mentionStart = this.selectedStart;
                 mentionEnd = this.selectedEnd;
@@ -194,7 +196,8 @@ define([
                 mentionStart: mentionStart,
                 mentionEnd: mentionEnd,
                 artifactId: this.attr.artifactId,
-                visibilitySource: this.visibilitySource || ''
+                visibilitySource: this.visibilitySource || '',
+                rowKey: rowKey
             };
 
             if (this.currentGraphVertexId) {
@@ -230,10 +233,6 @@ define([
                     .fail(this.requestFailure.bind(this))
                     .done(function(data) {
                         self.highlightTerm(data);
-
-                        if (data.deleteEdge) {
-                            self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
-                        }
 
                         self.trigger(document, 'refreshRelationships');
 
@@ -342,10 +341,6 @@ define([
                             .data('info', data.detectedObject)
                             .removeClass();
                         $tag.addClass('label-info label detected-object opens-dropdown');
-                    }
-
-                    if (data.deleteEdge) {
-                        self.trigger(document, 'edgesDeleted', { edgeId: data.edgeId });
                     }
 
                     self.trigger(document, 'updateVertices', { vertices: [data.artifactVertex] });

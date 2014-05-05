@@ -66,4 +66,12 @@ public class TermMentionRowKey extends RowKey {
         }
         return Long.parseLong(keyElements[keyElements.length - 3]);
     }
+
+    public String getUniqueId () {
+        String[] keyElements = this.toString().split("" + ROW_KEY_SEP);
+        if (keyElements.length == 5) {
+            return keyElements[keyElements.length - 1];
+        }
+        return null;
+    }
 }

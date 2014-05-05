@@ -79,6 +79,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String rowKey = getOptionalParameter (request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -126,14 +127,18 @@ public class ResolveTermEntity extends BaseRequestHandler {
             workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), false, null, null, user);
         }
 
-
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = graph.addEdge(artifactVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
-        // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
-        String propertyKey = ""; // TODO fill this in with the correct property key of the value you are tagging
+
+        String propertyKey = "";
+        if (rowKey != null) {
+            TermMentionRowKey analyzedRowKey = new TermMentionRowKey(rowKey);
+            propertyKey = analyzedRowKey.getPropertyKey();
+        }
+
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()

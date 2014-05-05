@@ -64,12 +64,11 @@ public class WorkspaceHelper {
 
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
-            boolean deleteEdge = false;
             int termCount = 0;
             while (termMentionModels.hasNext()) {
                 TermMentionModel termMentionModel = termMentionModels.next();
-                Object termMentionId = termMentionModel.getMetadata().getGraphVertexId();
-                if (termMentionId != null && termMentionId.equals(vertex.getId())) {
+                Object termMentionId = termMentionModel.getRowKey().getRowKey();
+                if (termMentionId != null && termMention.getRowKey().getRowKey().equals(termMentionId)) {
                     termCount++;
                     break;
                 }
@@ -78,7 +77,7 @@ public class WorkspaceHelper {
                 if (edgeId != null) {
                     Edge edge = graph.getEdge(edgeId, authorizations);
                     graph.removeEdge(edgeId, authorizations);
-                    deleteEdge = true;
+                    this.workQueueRepository.pushEdgeDeletion(edge);
                     auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
                 }
             }
@@ -93,11 +92,6 @@ public class WorkspaceHelper {
             graph.flush();
 
             auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
-
-            if (deleteEdge) {
-                result.put("deleteEdge", deleteEdge);
-                result.put("edgeId", edgeId);
-            }
         }
         return result;
     }
@@ -124,9 +118,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, authorizations);
 
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
-
-            result.put("deleteEdge", true);
-            result.put("edgeId", edge.getId());
+            this.workQueueRepository.pushEdgeDeletion(edge);
             graph.flush();
         }
 

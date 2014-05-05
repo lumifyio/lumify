@@ -147,7 +147,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 if (detectedObjectModel == null) {
                     continue;
                 } else {
-                    DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey((String) rowKeyProperty.getValue());
+                    DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey(rowKeyProperty.getValue().toString());
                     DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
                             (detectedObjectRowKey.getArtifactId(), detectedObjectModel.getMetadata().getX1(), detectedObjectModel.getMetadata().getY1(),
                                     detectedObjectModel.getMetadata().getX2(), detectedObjectModel.getMetadata().getY2());
@@ -157,10 +157,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     unresolved.put(artifactVertexWithDetectedObjects);
                 }
             } else {
-                TermMentionRowKey termMentionRowKey = new TermMentionRowKey((String) rowKeyProperty.getValue());
+                TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
                 TermMentionRowKey analyzedRowKey = new TermMentionRowKey(termMentionRowKey.getGraphVertexId(), termMentionRowKey.getPropertyKey(), termMentionRowKey.getStartOffset(), termMentionRowKey.getEndOffset());
                 TermMentionModel analyzedTermMention = termMentionRepository.findByRowKey(analyzedRowKey.toString(), modelUserContext);
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getGraphVertexId(), termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, analyzedTermMention, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
 
