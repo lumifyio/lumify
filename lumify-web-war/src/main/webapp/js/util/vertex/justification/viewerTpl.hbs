@@ -1,0 +1,10 @@
+{{#if justificationMetadata}}
+  {{justificationMetadata.justificationText}}
+{{else}}
+
+  {{#if sourceMetadata}}
+    {{{sourceMetadata.snippet}}}
+    <a class="sourceInfoTitle" href="#"></a>
+  {{/if}}
+
+{{/if}}
