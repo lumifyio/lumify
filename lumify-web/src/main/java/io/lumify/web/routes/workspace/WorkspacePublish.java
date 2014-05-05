@@ -238,7 +238,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         for (Property property : vertex.getProperties()) {
             OntologyProperty ontologyProperty = ontologyRepository.getProperty(property.getName());
             checkNotNull(ontologyProperty, "Could not find property " + property.getName());
-            if (!ontologyProperty.getUserVisible()) {
+            if (!ontologyProperty.getUserVisible() && !property.getName().equals(LumifyProperties.GLYPH_ICON.getKey())) {
                 publishProperty(vertexElementMutation, property, workspaceId, user);
             }
         }
