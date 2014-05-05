@@ -77,6 +77,7 @@ public abstract class UserRepository {
             json.put("userName", user.getDisplayName());
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
+            json.put("currentWorkspaceId", user.getCurrentWorkspaceId());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

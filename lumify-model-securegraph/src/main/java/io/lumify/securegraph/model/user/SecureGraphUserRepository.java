@@ -181,9 +181,7 @@ public class SecureGraphUserRepository extends UserRepository {
         User user = findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        String workspaceId = CURRENT_WORKSPACE.getPropertyValue(userVertex);
-        checkNotNull(workspaceId, "Could not find current workspace");
-        return workspaceId;
+        return CURRENT_WORKSPACE.getPropertyValue(userVertex);
     }
 
     @Override
