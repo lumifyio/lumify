@@ -14,6 +14,7 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
@@ -48,6 +49,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
     private final VisibilityTranslator visibilityTranslator;
     private final TermMentionRepository termMentionRepository;
     private final WorkspaceRepository workspaceRepository;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public ResolveTermEntity(
@@ -58,7 +60,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
             final TermMentionRepository termMentionRepository,
-            final WorkspaceRepository workspaceRepository) {
+            final WorkspaceRepository workspaceRepository,
+            final WorkQueueRepository workQueueRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
@@ -66,6 +69,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.termMentionRepository = termMentionRepository;
         this.workspaceRepository = workspaceRepository;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -153,8 +157,10 @@ public class ResolveTermEntity extends BaseRequestHandler {
         vertexMutation.save();
 
         this.graph.flush();
+        workQueueRepository.pushTextUpdated(artifactId);
 
-        TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(termMention);
-        respondWithJson(response, offsetItem.toJson());
+        JSONObject result = new JSONObject();
+        result.put("success", true);
+        respondWithJson(response, result);
     }
 }
