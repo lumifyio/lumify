@@ -158,7 +158,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
             } else {
                 TermMentionRowKey termMentionRowKey = new TermMentionRowKey(rowKeyProperty.getValue().toString());
-                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations, workspaceId));
+                unresolved.put(workspaceHelper.unresolveTerm(vertex, termMentionRowKey.getUniqueId(), termMentionModel, lumifyVisibility, modelUserContext, user, authorizations));
             }
         }
 

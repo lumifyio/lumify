@@ -2,6 +2,8 @@ package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
@@ -18,10 +20,8 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
-import org.securegraph.*;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ public class WorkspaceHelper {
     }
 
     public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, LumifyVisibility visibility,
-                                    ModelUserContext modelUserContext, User user, Authorizations authorizations, String workspaceId) {
+                                    ModelUserContext modelUserContext, User user, Authorizations authorizations) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
             LOGGER.warn("invalid term mention row");
@@ -82,7 +82,7 @@ public class WorkspaceHelper {
             }
 
             termMentionRepository.delete(termMention.getRowKey());
-            workQueueRepository.pushTextUpdated(JsonSerializer.toJsonVertex(artifactVertex, workspaceId));
+            workQueueRepository.pushTextUpdated(artifactVertex.getId().toString());
 
             graph.flush();
 

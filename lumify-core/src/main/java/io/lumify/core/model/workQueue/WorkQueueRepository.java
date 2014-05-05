@@ -79,14 +79,14 @@ public abstract class WorkQueueRepository {
         broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
     }
 
-    public void pushTextUpdated(JSONObject offsetJson) {
-        broadcastTextUpdated(offsetJson);
+    public void pushTextUpdated(String vertexId) {
+        broadcastTextUpdated(vertexId);
     }
 
-    protected void broadcastTextUpdated(JSONObject offsetJson) {
+    protected void broadcastTextUpdated(String vertexId) {
         JSONObject dataJson = new JSONObject();
-        if (offsetJson != null) {
-            dataJson = offsetJson;
+        if (vertexId != null) {
+            dataJson.put("graphVertexId", vertexId);
         }
 
         JSONObject json = new JSONObject();

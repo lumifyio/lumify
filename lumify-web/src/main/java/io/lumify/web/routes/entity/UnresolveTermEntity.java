@@ -109,7 +109,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
 
         TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edgeId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
-        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations, workspaceId);
+        JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);
     }
