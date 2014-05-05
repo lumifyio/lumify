@@ -73,12 +73,6 @@ public class WorkspaceUndo extends BaseRequestHandler {
         JSONArray failures = new JSONArray();
         JSONArray successArray = new JSONArray();
 
-        /*
-            [ { type: "vertex", vertexId:"vertexid", status: "PUBLIC..."},
-            { type:"property", vertexId: "vertexid", key: "key", name: "name", status: "PUBLIC..."},
-            { type:"relationship", edgeId:"edgeId", sourceId: "sourceId", destId: "destId", status: "PUBLIC..."}]
-         */
-
         for (int i = 0; i < undoData.length(); i++) {
             JSONObject data = undoData.getJSONObject(i);
             String type = data.getString("type");
@@ -147,11 +141,11 @@ public class WorkspaceUndo extends BaseRequestHandler {
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getKey())) {
-            TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
+            TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
             if (termMentionModel == null) {
-                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
+                DetectedObjectModel detectedObjectModel = detectedObjectRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
                 if (detectedObjectModel == null) {
-                    LOGGER.warn("No term mention or detected objects found for vertex, %s", vertex.getId());
+                    continue;
                 } else {
                     DetectedObjectRowKey detectedObjectRowKey = new DetectedObjectRowKey((String) rowKeyProperty.getValue());
                     DetectedObjectRowKey analyzedDetectedObjectRK = new DetectedObjectRowKey
