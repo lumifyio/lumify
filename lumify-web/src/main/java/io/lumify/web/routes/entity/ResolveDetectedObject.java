@@ -53,7 +53,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final DetectedObjectRepository detectedObjectRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;

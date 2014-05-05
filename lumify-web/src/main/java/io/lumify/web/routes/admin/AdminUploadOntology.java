@@ -3,6 +3,7 @@ package io.lumify.web.routes.admin;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -33,8 +34,9 @@ public class AdminUploadOntology extends BaseRequestHandler {
     public AdminUploadOntology(
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
     }
 

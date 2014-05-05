@@ -17,15 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class WorkspaceById extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceById.class);
-    private final WorkspaceRepository workspaceRepository;
 
     @Inject
     public WorkspaceById(
             final WorkspaceRepository workspaceRepo,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
-        workspaceRepository = workspaceRepo;
+        super(userRepository, workspaceRepository, configuration);
     }
 
     @Override
@@ -33,14 +32,14 @@ public class WorkspaceById extends BaseRequestHandler {
         final String workspaceId = super.getAttributeString(request, "workspaceId");
         final User authUser = getUser(request);
         LOGGER.info("Attempting to retrieve workspace: %s", workspaceId);
-        final Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
+        final Workspace workspace = getWorkspaceRepository().findById(workspaceId, authUser);
         if (workspace == null) {
             LOGGER.warn("Could not find workspace: %s", workspaceId);
             respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
             request.getSession().setAttribute("activeWorkspace", workspaceId);
-            final JSONObject resultJSON = workspaceRepository.toJson(workspace, authUser, true);
+            final JSONObject resultJSON = getWorkspaceRepository().toJson(workspace, authUser, true);
             respondWithJson(response, resultJSON);
         }
 

@@ -9,6 +9,7 @@ import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
@@ -37,8 +38,9 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final UserRepository userRepository,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;

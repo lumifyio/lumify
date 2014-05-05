@@ -4,6 +4,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -23,9 +24,10 @@ public class UserUpdatePrivileges extends BaseRequestHandler {
     @Inject
     public UserUpdatePrivileges(
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration,
             final Graph graph) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
     }
 

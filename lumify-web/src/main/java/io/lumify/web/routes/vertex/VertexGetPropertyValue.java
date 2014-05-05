@@ -4,6 +4,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -35,10 +36,11 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
 
     @Inject
     public VertexGetPropertyValue(
-            Graph graph,
-            UserRepository userRepository,
-            Configuration configuration) {
-        super(userRepository, configuration);
+            final Graph graph,
+            final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
+            final Configuration configuration) {
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
     }
 

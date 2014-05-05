@@ -59,7 +59,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             final Configuration configuration,
             final TermMentionRepository termMentionRepository,
             final WorkspaceRepository workspaceRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graphRepository;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;

@@ -38,7 +38,7 @@ public class WorkspaceRelationships extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceRepository = workspaceRepository;
     }

@@ -51,8 +51,9 @@ public class WorkspaceUndo extends BaseRequestHandler {
             final VisibilityTranslator visibilityTranslator,
             final UserRepository userRepository,
             final WorkspaceHelper workspaceHelper,
+            final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.detectedObjectRepository = detectedObjectRepository;
         this.graph = graph;

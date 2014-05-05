@@ -1,6 +1,7 @@
 package io.lumify.web.routes.config;
 
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -15,8 +16,9 @@ public class Configuration extends BaseRequestHandler {
     @Inject
     public Configuration(
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final io.lumify.core.config.Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
     }
 
     @Override

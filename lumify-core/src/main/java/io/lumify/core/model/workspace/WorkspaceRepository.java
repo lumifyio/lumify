@@ -31,8 +31,7 @@ public abstract class WorkspaceRepository {
     // TODO change Workspace to workspace id?
     public abstract void setTitle(Workspace workspace, String title, User user);
 
-    // TODO change Workspace to workspace id?
-    public abstract List<WorkspaceUser> findUsersWithAccess(Workspace workspace, User user);
+    public abstract List<WorkspaceUser> findUsersWithAccess(String workspaceId, User user);
 
     // TODO change Workspace to workspace id?
     public abstract List<WorkspaceEntity> findEntities(Workspace workspace, User user);
@@ -67,11 +66,18 @@ public abstract class WorkspaceRepository {
     // TODO change Workspace to workspace id?
     public abstract List<DiffItem> getDiff(Workspace workspace, User user);
 
-    // TODO change Workspace to workspace id?
-    public abstract String getCreatorUserId(Workspace workspace, User user);
+    public String getCreatorUserId(Workspace workspace, User user) {
+        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getId(), user)) {
+            if (workspaceUser.isCreator()) {
+                return workspaceUser.getUserId();
+            }
+        }
+        return null;
+    }
 
-    // TODO change Workspace to workspace id?
-    public abstract boolean hasWritePermissions(Workspace workspace, User user);
+    public abstract boolean hasWritePermissions(String workspaceId, User user);
+
+    public abstract boolean hasReadPermissions(String workspaceId, User user);
 
     public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
         checkNotNull(workspace, "workspace cannot be null");
@@ -87,10 +93,10 @@ public abstract class WorkspaceRepository {
                 workspaceJson.put("createdBy", creatorUserId);
                 workspaceJson.put("isSharedToUser", !creatorUserId.equals(user.getUserId()));
             }
-            workspaceJson.put("isEditable", hasWritePermissions(workspace, user));
+            workspaceJson.put("isEditable", hasWritePermissions(workspace.getId(), user));
 
             JSONArray usersJson = new JSONArray();
-            for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace, user)) {
+            for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace.getId(), user)) {
                 String userId = workspaceUser.getUserId();
                 JSONObject userJson = new JSONObject();
                 userJson.put("userId", userId);

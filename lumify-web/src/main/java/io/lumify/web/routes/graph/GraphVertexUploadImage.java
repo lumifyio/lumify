@@ -71,7 +71,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
             final Configuration configuration,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;

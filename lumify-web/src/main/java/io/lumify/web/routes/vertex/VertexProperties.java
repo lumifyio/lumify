@@ -4,6 +4,7 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
@@ -27,8 +28,9 @@ public class VertexProperties extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final DetectedObjectRepository detectedObjectRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
         this.userRepository = userRepository;

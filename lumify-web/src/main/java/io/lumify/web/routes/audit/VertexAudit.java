@@ -5,6 +5,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -24,8 +25,9 @@ public class VertexAudit extends BaseRequestHandler {
     public VertexAudit(
             final AuditRepository auditRepository,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.auditRepository = auditRepository;
         this.userRepository = userRepository;
     }

@@ -17,6 +17,7 @@ import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
@@ -60,8 +61,9 @@ public class WorkspacePublish extends BaseRequestHandler {
             final Graph graph,
             final VisibilityTranslator visibilityTranslator,
             final OntologyRepository ontologyRepository,
+            final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.detectedObjectRepository = detectedObjectRepository;
         this.termMentionRepository = termMentionRepository;
         this.auditRepository = auditRepository;

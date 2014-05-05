@@ -5,7 +5,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.common.base.Preconditions;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import org.apache.commons.io.IOUtils;
@@ -29,11 +31,13 @@ public abstract class BaseRequestHandler implements Handler {
 
     protected static final ResourceBundle STRINGS = ResourceBundle.getBundle("MessageBundle", Locale.getDefault());
 
-    private UserRepository userRepository;
-    private Configuration configuration;
+    private final UserRepository userRepository;
+    private final WorkspaceRepository workspaceRepository;
+    private final Configuration configuration;
 
-    protected BaseRequestHandler(UserRepository userRepository, Configuration configuration) {
+    protected BaseRequestHandler(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         this.userRepository = userRepository;
+        this.workspaceRepository = workspaceRepository;
         this.configuration = configuration;
     }
 
@@ -179,7 +183,9 @@ public abstract class BaseRequestHandler implements Handler {
     protected Authorizations getAuthorizations(final HttpServletRequest request, final User user) {
         String workspaceId = getWorkspaceIdOrDefault(request);
         if (workspaceId != null) {
-            // TODO verify user has access to see this workspace
+            if (!this.workspaceRepository.hasReadPermissions(workspaceId, user)) {
+                throw new LumifyAccessDeniedException("You do not have access to workspace: " + workspaceId, user, workspaceId);
+            }
             return getUserRepository().getAuthorizations(user, workspaceId);
         }
 
@@ -341,5 +347,9 @@ public abstract class BaseRequestHandler implements Handler {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public WorkspaceRepository getWorkspaceRepository() {
+        return workspaceRepository;
     }
 }

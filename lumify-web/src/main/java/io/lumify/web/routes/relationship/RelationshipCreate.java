@@ -5,6 +5,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -32,9 +33,10 @@ public class RelationshipCreate extends BaseRequestHandler {
             final AuditRepository auditRepository,
             final OntologyRepository ontologyRepository,
             final VisibilityTranslator visibilityTranslator,
+            final WorkspaceRepository workspaceRepository,
             final UserRepository userRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;

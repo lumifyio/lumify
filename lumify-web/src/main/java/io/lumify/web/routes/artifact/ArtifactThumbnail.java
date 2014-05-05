@@ -3,6 +3,7 @@ package io.lumify.web.routes.artifact;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -33,8 +34,9 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             final ArtifactThumbnailRepository artifactThumbnailRepository,
             final Graph graph,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.artifactThumbnailRepository = artifactThumbnailRepository;
         this.graph = graph;
     }

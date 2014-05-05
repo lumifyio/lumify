@@ -127,15 +127,10 @@ public class SqlWorkspaceRepositoryTest {
     public void testFindUsersWithAccess() throws Exception {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
-        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
         assertFalse(workspaceUsers.isEmpty());
         assertEquals("1", workspaceUsers.get(0).getUserId());
         assertTrue(workspaceUsers.get(0).isCreator());
-    }
-
-    @Test(expected = LumifyException.class)
-    public void testFindUsersWithAccessWithInvalidWorkspace() {
-        sqlWorkspaceRepository.findUsersWithAccess(new SqlWorkspace(), new SqlUser());
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
@@ -144,7 +139,7 @@ public class SqlWorkspaceRepositoryTest {
 
         SqlUser sqlUser = new SqlUser();
         sqlUser.setId(2);
-        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, sqlUser);
+        sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), sqlUser);
     }
 
     @Test(expected = LumifyAccessDeniedException.class)
@@ -152,18 +147,18 @@ public class SqlWorkspaceRepositoryTest {
         SqlWorkspace sqlWorkspace = (SqlWorkspace) sqlWorkspaceRepository.add("test", testUser);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.WRITE, testUser);
-        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        List<WorkspaceUser> workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
         SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
-        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser2);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser2);
         assertTrue(workspaceUsers.size() == 2);
         assertEquals(workspaceUsers.get(1).getWorkspaceAccess(), WorkspaceAccess.READ);
 
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "1", WorkspaceAccess.NONE, testUser);
-        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace, testUser);
+        workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.NONE);
     }
 

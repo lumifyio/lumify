@@ -182,7 +182,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         workspaceRepository.updateUserOnWorkspace(user2Workspaces.get(0), user1.getUserId(), WorkspaceAccess.READ, user2);
         assertEquals(startingVertexCount + 3, graph.getAllVertices().size()); // +3 = the workspace vertices
         assertEquals(startingEdgeCount + 4, graph.getAllEdges().size()); // +4 = the edges between workspaces and users
-        List<WorkspaceUser> usersWithAccess = workspaceRepository.findUsersWithAccess(user2Workspaces.get(0), user2);
+        List<WorkspaceUser> usersWithAccess = workspaceRepository.findUsersWithAccess(user2Workspaces.get(0).getId(), user2);
         boolean foundUser1 = false;
         boolean foundUser2 = false;
         for (WorkspaceUser userWithAccess : usersWithAccess) {

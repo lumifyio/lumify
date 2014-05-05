@@ -47,7 +47,7 @@ public class VertexSetProperty extends BaseRequestHandler {
             final Configuration configuration,
             final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.auditRepository = auditRepository;

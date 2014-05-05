@@ -2,6 +2,7 @@ package io.lumify.web.routes.map;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
@@ -17,8 +18,9 @@ public class MapTileHandler extends BaseRequestHandler {
     @Inject
     public MapTileHandler(
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration config) {
-        super(userRepository, config);
+        super(userRepository, workspaceRepository, config);
     }
 
     @Override

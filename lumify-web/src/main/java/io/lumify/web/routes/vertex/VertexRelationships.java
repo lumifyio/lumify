@@ -2,6 +2,7 @@ package io.lumify.web.routes.vertex;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
@@ -21,8 +22,9 @@ public class VertexRelationships extends BaseRequestHandler {
     public VertexRelationships(
             final Graph graph,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
     }
 

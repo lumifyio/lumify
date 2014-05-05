@@ -2,6 +2,7 @@ package io.lumify.web.routes.user;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.AuthenticationProvider;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -18,8 +19,9 @@ public class Logout extends BaseRequestHandler {
     public Logout(
             final AuthenticationProvider authenticationProvider,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.authenticationProvider = authenticationProvider;
     }
 

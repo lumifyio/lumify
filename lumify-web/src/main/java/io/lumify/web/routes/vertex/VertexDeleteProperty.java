@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -16,7 +17,6 @@ import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import org.securegraph.util.FilterIterable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,8 +34,9 @@ public class VertexDeleteProperty extends BaseRequestHandler {
             final Graph graph,
             final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
     }

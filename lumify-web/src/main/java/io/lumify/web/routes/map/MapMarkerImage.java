@@ -5,6 +5,7 @@ import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -39,8 +40,9 @@ public class MapMarkerImage extends BaseRequestHandler {
             final OntologyRepository ontologyRepository,
             final UserRepository userRepository,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final ArtifactThumbnailRepository artifactThumbnailRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
     }

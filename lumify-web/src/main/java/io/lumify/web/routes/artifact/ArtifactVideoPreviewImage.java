@@ -4,6 +4,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -47,8 +48,9 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             final Graph graph,
             final ArtifactThumbnailRepository artifactThumbnailRepository,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.artifactThumbnailRepository = artifactThumbnailRepository;
     }

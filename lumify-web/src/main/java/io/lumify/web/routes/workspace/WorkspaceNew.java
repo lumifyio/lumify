@@ -25,7 +25,7 @@ public class WorkspaceNew extends BaseRequestHandler {
             final WorkspaceRepository workspaceRepository,
             final UserRepository userRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.workspaceRepository = workspaceRepository;
     }
 

@@ -6,6 +6,7 @@ import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectRowKey;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
@@ -42,8 +43,9 @@ public class UnresolveDetectedObject extends BaseRequestHandler {
             final DetectedObjectRepository detectedObjectRepository,
             final VisibilityTranslator visibilityTranslator,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final WorkspaceHelper workspaceHelper) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;
         this.visibilityTranslator = visibilityTranslator;

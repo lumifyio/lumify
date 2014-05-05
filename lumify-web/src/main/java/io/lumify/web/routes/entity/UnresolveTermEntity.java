@@ -6,6 +6,7 @@ import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
@@ -41,9 +42,10 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final VisibilityTranslator visibilityTranslator,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration,
             final WorkspaceHelper workspaceHelper) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.termMentionRepository = termMentionRepository;
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;

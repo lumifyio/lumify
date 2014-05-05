@@ -4,6 +4,7 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -22,8 +23,9 @@ public class UserDelete extends BaseRequestHandler {
     public UserDelete(
             final UserRepository userRepository,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final Graph graph) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
     }
 

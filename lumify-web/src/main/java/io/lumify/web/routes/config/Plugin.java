@@ -1,6 +1,7 @@
 package io.lumify.web.routes.config;
 
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
@@ -22,8 +23,9 @@ public class Plugin extends BaseRequestHandler {
     @Inject
     public Plugin(
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final io.lumify.core.config.Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
     }
 
     @Override

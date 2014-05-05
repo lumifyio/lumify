@@ -9,6 +9,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -35,8 +36,9 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             final UserRepository userRepository,
             final TermMentionRepository termMentionRepository,
             final EntityHighlighter entityHighlighter,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.termMentionRepository = termMentionRepository;
         this.entityHighlighter = entityHighlighter;

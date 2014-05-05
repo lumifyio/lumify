@@ -35,7 +35,7 @@ public class Export extends BaseRequestHandler {
             Configuration configuration,
             WorkspaceRepository workspaceRepository,
             Graph graph) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.workspaceRepository = (SecureGraphWorkspaceRepository) workspaceRepository;
         this.graph = graph;
     }

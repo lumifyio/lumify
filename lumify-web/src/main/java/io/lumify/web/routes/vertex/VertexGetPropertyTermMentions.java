@@ -5,6 +5,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -30,8 +31,9 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
             Graph graph,
             UserRepository userRepository,
             Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             TermMentionRepository termMentionRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.userRepository = userRepository;
         this.termMentionRepository = termMentionRepository;

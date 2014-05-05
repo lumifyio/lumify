@@ -3,6 +3,7 @@ package io.lumify.web.privilegeFilters;
 import com.altamiracorp.miniweb.HandlerChain;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
@@ -14,8 +15,12 @@ import java.util.Set;
 public class PrivilegeFilter extends BaseRequestHandler {
     private final Set<Privilege> requiredPrivileges;
 
-    protected PrivilegeFilter(Set<Privilege> requiredPrivileges, UserRepository userRepository, Configuration configuration) {
-        super(userRepository, configuration);
+    protected PrivilegeFilter(
+            final Set<Privilege> requiredPrivileges,
+            final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
+            final Configuration configuration) {
+        super(userRepository, workspaceRepository, configuration);
         this.requiredPrivileges = requiredPrivileges;
     }
 

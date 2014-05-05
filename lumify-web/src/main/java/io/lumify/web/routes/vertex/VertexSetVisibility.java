@@ -3,6 +3,7 @@ package io.lumify.web.routes.vertex;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -34,8 +35,9 @@ public class VertexSetVisibility extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final VisibilityTranslator visibilityTranslator,
+            final WorkspaceRepository workspaceRepository,
             final WorkQueueRepository workQueueRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;

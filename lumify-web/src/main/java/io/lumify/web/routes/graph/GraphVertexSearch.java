@@ -8,6 +8,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
@@ -53,8 +54,9 @@ public class GraphVertexSearch extends BaseRequestHandler {
             final Graph graph,
             final UserRepository userRepository,
             final Configuration configuration,
+            final WorkspaceRepository workspaceRepository,
             final DetectedObjectRepository detectedObjectRepository) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.ontologyRepository = ontologyRepository;
         this.graph = graph;
         this.detectedObjectRepository = detectedObjectRepository;

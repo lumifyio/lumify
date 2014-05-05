@@ -2,6 +2,7 @@ package io.lumify.web.routes.admin;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.App;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -16,8 +17,11 @@ import java.util.Map;
 
 public class AdminList extends BaseRequestHandler {
     @Inject
-    public AdminList(UserRepository userRepository, Configuration configuration) {
-        super(userRepository, configuration);
+    public AdminList(
+            final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
+            final Configuration configuration) {
+        super(userRepository, workspaceRepository, configuration);
     }
 
     @Override

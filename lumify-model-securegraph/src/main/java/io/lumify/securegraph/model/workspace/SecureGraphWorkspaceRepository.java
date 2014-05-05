@@ -79,7 +79,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void delete(Workspace workspace, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
@@ -111,11 +111,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         if (workspaceVertex == null) {
             return null;
         }
-        Workspace workspace = new SecureGraphWorkspace(workspaceVertex);
-        if (!doesUserHaveReadAccess(workspace, user)) {
-            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
+        if (!hasReadPermissions(workspaceId, user)) {
+            throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspaceId, user, workspaceId);
         }
-        return workspace;
+        return new SecureGraphWorkspace(workspaceVertex);
     }
 
     @Override
@@ -154,7 +153,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void setTitle(Workspace workspace, String title, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user);
@@ -164,14 +163,14 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     @Override
-    public List<WorkspaceUser> findUsersWithAccess(final Workspace workspace, final User user) {
-        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
-        Vertex workspaceVertex = getVertexFromWorkspace(workspace, authorizations);
+    public List<WorkspaceUser> findUsersWithAccess(final String workspaceId, final User user) {
+        Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspaceId);
+        Vertex workspaceVertex = getVertex(workspaceId, user);
         Iterable<Edge> userEdges = workspaceVertex.getEdges(Direction.BOTH, workspaceToUserRelationshipId, authorizations);
         return toList(new ConvertingIterable<Edge, WorkspaceUser>(userEdges) {
             @Override
             protected WorkspaceUser convert(Edge edge) {
-                String userId = edge.getOtherVertexId(workspace.getId()).toString();
+                String userId = edge.getOtherVertexId(workspaceId).toString();
 
                 String accessString = WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.getPropertyValue(edge);
                 WorkspaceAccess workspaceAccess = WorkspaceAccess.NONE;
@@ -189,7 +188,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     @Override
     public List<WorkspaceEntity> findEntities(final Workspace workspace, User user) {
         LOGGER.debug("findEntities(workspaceId: %s, userId: %s)", workspace.getId(), user.getUserId());
-        if (!doesUserHaveReadAccess(workspace, user)) {
+        if (!hasReadPermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
@@ -213,8 +212,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
         Iterable<Vertex> vertices = WorkspaceEntity.toVertices(graph, workspaceEntities, authorizations);
         Iterable<Object> edgeIds = toSet(new VerticesToEdgeIdsIterable(vertices, authorizations));
-        final Iterable<Edge> edges = graph.getEdges(edgeIds, authorizations);
-        return edges;
+        return graph.getEdges(edgeIds, authorizations);
     }
 
     @Override
@@ -226,7 +224,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
@@ -244,7 +242,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
@@ -288,7 +286,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void deleteUserFromWorkspace(Workspace workspace, String userId, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, UserRepository.VISIBILITY_STRING, VISIBILITY_STRING, workspace.getId());
@@ -304,18 +302,19 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         graph.flush();
     }
 
-    private boolean doesUserHaveWriteAccess(Workspace workspace, User user) {
+    @Override
+    public boolean hasWritePermissions(String workspaceId, User user) {
         if (user instanceof SystemUser) {
             return true;
         }
 
-        String cacheKey = workspace.getId() + user.getUserId();
+        String cacheKey = workspaceId + user.getUserId();
         Boolean hasWriteAccess = usersWithWriteAccessCache.getIfPresent(cacheKey);
         if (hasWriteAccess != null && hasWriteAccess) {
             return true;
         }
 
-        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
+        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspaceId, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId()) && userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE) {
                 usersWithWriteAccessCache.put(cacheKey, true);
@@ -325,18 +324,19 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         return false;
     }
 
-    private boolean doesUserHaveReadAccess(Workspace workspace, User user) {
+    @Override
+    public boolean hasReadPermissions(String workspaceId, User user) {
         if (user instanceof SystemUser) {
             return true;
         }
 
-        String cacheKey = workspace.getId() + user.getUserId();
+        String cacheKey = workspaceId + user.getUserId();
         Boolean hasReadAccess = usersWithReadAccessCache.getIfPresent(cacheKey);
         if (hasReadAccess != null && hasReadAccess) {
             return true;
         }
 
-        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspace, user);
+        List<WorkspaceUser> usersWithAccess = findUsersWithAccess(workspaceId, user);
         for (WorkspaceUser userWithAccess : usersWithAccess) {
             if (userWithAccess.getUserId().equals(user.getUserId())
                     && (userWithAccess.getWorkspaceAccess() == WorkspaceAccess.WRITE || userWithAccess.getWorkspaceAccess() == WorkspaceAccess.READ)) {
@@ -348,7 +348,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user) {
-        if (!doesUserHaveWriteAccess(workspace, user)) {
+        if (!hasWritePermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
         Authorizations authorizations = userRepository.getAuthorizations(user, VISIBILITY_STRING, workspace.getId());
@@ -384,7 +384,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
 
     @Override
     public List<DiffItem> getDiff(Workspace workspace, User user) {
-        if (!doesUserHaveReadAccess(workspace, user)) {
+        if (!hasReadPermissions(workspace.getId(), user)) {
             throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have write access to workspace " + workspace.getId(), user, workspace.getId());
         }
 
@@ -392,26 +392,6 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         List<Edge> workspaceEdges = toList(findEdges(workspace, workspaceEntities, user));
 
         return workspaceDiff.diff(workspace, workspaceEntities, workspaceEdges, user);
-    }
-
-    @Override
-    public String getCreatorUserId(Workspace workspace, User user) {
-        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace, user)) {
-            if (workspaceUser.isCreator()) {
-                return workspaceUser.getUserId();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean hasWritePermissions(Workspace workspace, User user) {
-        for (WorkspaceUser workspaceUser : findUsersWithAccess(workspace, user)) {
-            if (workspaceUser.getUserId().equals(user.getUserId())) {
-                return workspaceUser.getWorkspaceAccess() == WorkspaceAccess.WRITE;
-            }
-        }
-        return false;
     }
 
     private Iterable<Workspace> toWorkspaceIterable(Iterable<Vertex> vertices, final User user) {

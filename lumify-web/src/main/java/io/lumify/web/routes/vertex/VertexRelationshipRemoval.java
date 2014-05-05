@@ -2,6 +2,7 @@ package io.lumify.web.routes.vertex;
 
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
@@ -29,8 +30,9 @@ public class VertexRelationshipRemoval extends BaseRequestHandler {
             final Graph graph,
             final WorkspaceHelper workspaceHelper,
             final UserRepository userRepository,
+            final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
-        super(userRepository, configuration);
+        super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.workspaceHelper = workspaceHelper;
     }
