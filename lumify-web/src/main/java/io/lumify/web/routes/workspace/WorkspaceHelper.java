@@ -9,7 +9,6 @@ import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -55,7 +54,7 @@ public class WorkspaceHelper {
     }
 
     public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
-                                    ModelUserContext modelUserContext, User user, Authorizations authorizations) {
+                                    ModelUserContext modelUserContext, User user, Authorizations authorizations, String workspaceId) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
             LOGGER.warn("invalid term mention row");
@@ -85,13 +84,13 @@ public class WorkspaceHelper {
             termMentionRepository.delete(termMention.getRowKey());
 
             if (analyzedTermMention != null) {
-                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(analyzedTermMention);
-                result = offsetItem.toJson();
+                workQueueRepository.pushTextUpdated(JsonSerializer.toJsonVertex(artifactVertex, workspaceId));
             }
 
             graph.flush();
 
             auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+            result.put("success", true);
         }
         return result;
     }

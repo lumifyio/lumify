@@ -79,6 +79,22 @@ public abstract class WorkQueueRepository {
         broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
     }
 
+    public void pushTextUpdated(JSONObject offsetJson) {
+        broadcastTextUpdated(offsetJson);
+    }
+
+    protected void broadcastTextUpdated(JSONObject offsetJson) {
+        JSONObject dataJson = new JSONObject();
+        if (offsetJson != null) {
+            dataJson = offsetJson;
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "textUpdated");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
     protected void broadcastDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
         JSONObject dataJson = new JSONObject();
         if (artifactVertexWithDetectedObjects != null) {
