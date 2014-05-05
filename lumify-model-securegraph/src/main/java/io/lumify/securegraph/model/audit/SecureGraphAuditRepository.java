@@ -21,6 +21,7 @@ import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
+import org.securegraph.util.IterableUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -166,6 +167,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         String displayLabel = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
         audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
         audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
+
         auditEdge.getAuditCommon()
                 .setUser(user, visibility)
                 .setAction(action, visibility)
@@ -176,12 +178,24 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
+        Iterable<String> sourceTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        String sourceTitle = "";
+        if (IterableUtils.count(sourceTitleIterable) != 0) {
+            sourceTitle = IterableUtils.toList(sourceTitleIterable).get(IterableUtils.count(sourceTitleIterable) - 1);
+        }
+
+        Iterable<String> destTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        String destTitle = "";
+        if (IterableUtils.count(destTitleIterable) != 0) {
+            destTitle = IterableUtils.toList(destTitleIterable).get(IterableUtils.count(destTitleIterable) - 1);
+        }
+
         auditEdge.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)
                 .setSourceType(CONCEPT_TYPE.getPropertyValue(sourceVertex), visibility)
-                .setSourceTitle(TITLE.getPropertyValue(sourceVertex), visibility)
+                .setSourceTitle(sourceTitle, visibility)
                 .setDestId(destVertex.getId(), visibility)
-                .setDestTitle(TITLE.getPropertyValue(destVertex), visibility)
+                .setDestTitle(destTitle, visibility)
                 .setDestType(CONCEPT_TYPE.getPropertyValue(destVertex), visibility)
                 .setLabel(displayLabel, visibility);
 
@@ -293,12 +307,24 @@ public class SecureGraphAuditRepository extends AuditRepository {
                 .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
                 .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
 
+        Iterable<String> sourceTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        String sourceTitle = "";
+        if (IterableUtils.count(sourceTitleIterable) != 0) {
+            sourceTitle = IterableUtils.toList(sourceTitleIterable).get(IterableUtils.count(sourceTitleIterable) - 1);
+        }
+
+        Iterable<String> destTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        String destTitle = "";
+        if (IterableUtils.count(destTitleIterable) != 0) {
+            destTitle = IterableUtils.toList(destTitleIterable).get(IterableUtils.count(destTitleIterable) - 1);
+        }
+
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)
                 .setSourceType(CONCEPT_TYPE.getPropertyValue(sourceVertex), visibility)
-                .setSourceTitle(TITLE.getPropertyValue(sourceVertex), visibility)
+                .setSourceTitle(sourceTitle, visibility)
                 .setDestId(destVertex.getId(), visibility)
-                .setDestTitle(TITLE.getPropertyValue(destVertex), visibility)
+                .setDestTitle(destTitle, visibility)
                 .setDestType(CONCEPT_TYPE.getPropertyValue(destVertex), visibility)
                 .setLabel(label, visibility);
         return audit;
