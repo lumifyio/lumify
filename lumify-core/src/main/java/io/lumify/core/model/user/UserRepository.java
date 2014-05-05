@@ -41,8 +41,7 @@ public abstract class UserRepository {
 
     public abstract boolean isPasswordValid(User user, String password);
 
-    // TODO change to Workspace to workspace id
-    public abstract User setCurrentWorkspace(String userId, Workspace workspace);
+    public abstract User setCurrentWorkspace(String userId, String workspaceId);
 
     public abstract String getCurrentWorkspaceId(String userId);
 

@@ -1,5 +1,7 @@
 package io.lumify.web.routes.workspace;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -8,8 +10,6 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.google.inject.Inject;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class WorkspaceById extends BaseRequestHandler {
             respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
-            request.getSession().setAttribute("activeWorkspace", workspaceId);
+            getUserRepository().setCurrentWorkspace(authUser.getUserId(), workspaceId);
             final JSONObject resultJSON = getWorkspaceRepository().toJson(workspace, authUser, true);
             respondWithJson(response, resultJSON);
         }

@@ -56,7 +56,7 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public User setCurrentWorkspace(String userId, Workspace workspace) {
+    public User setCurrentWorkspace(String userId, String workspaceId) {
         throw new RuntimeException("Not implemented");
     }
 

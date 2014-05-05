@@ -11,7 +11,6 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.*;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
@@ -167,11 +166,11 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public User setCurrentWorkspace(String userId, Workspace workspace) {
+    public User setCurrentWorkspace(String userId, String workspaceId) {
         User user = findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        CURRENT_WORKSPACE.setProperty(userVertex, workspace.getId(), VISIBILITY.getVisibility());
+        CURRENT_WORKSPACE.setProperty(userVertex, workspaceId, VISIBILITY.getVisibility());
         graph.flush();
         return user;
     }

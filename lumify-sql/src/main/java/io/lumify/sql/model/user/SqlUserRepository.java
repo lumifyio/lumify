@@ -10,6 +10,7 @@ import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.sql.model.workspace.SqlWorkspace;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -164,7 +165,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User setCurrentWorkspace(String userId, Workspace workspace) {
+    public User setCurrentWorkspace(String userId, String workspaceId) {
         if (userId == null) {
             throw new LumifyException("UserId cannot be null");
         }
@@ -178,9 +179,12 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            sqlUser.setCurrentWorkspace(workspace);
-            session.update(sqlUser);
-            session.update(workspace);
+            List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", Integer.parseInt(workspaceId))).list();
+            if (workspaces.size() == 0) {
+                throw new LumifyException("Could not find workspace with id: " + workspaceId);
+            }
+            sqlUser.setCurrentWorkspace((Workspace) workspaces.get(0));
+            session.merge(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {

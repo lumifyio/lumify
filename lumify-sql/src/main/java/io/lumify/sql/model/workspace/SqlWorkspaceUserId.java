@@ -8,8 +8,10 @@ import java.io.Serializable;
 @Embeddable
 public class SqlWorkspaceUserId implements Serializable{
     private static final long serialVersionUID = 1L;
+
     @ManyToOne (cascade = CascadeType.ALL)
     private SqlUser user;
+
     @ManyToOne (cascade = CascadeType.ALL)
     private SqlWorkspace workspace;
 

@@ -14,13 +14,17 @@ public class SqlWorkspace implements Workspace {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "workspace_id", unique = true)
     private int workspaceId;
+
     @Column(name = "display_title")
     private String displayTitle;
+
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "user_id")
     private SqlUser creator;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sqlWorkspaceUserId.workspace")
     public Set<SqlWorkspaceUser> sqlWorkspaceUser = new HashSet<SqlWorkspaceUser>(0);
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<SqlWorkspaceVertex> sqlWorkspaceVertices = new HashSet<SqlWorkspaceVertex>(0);
 

@@ -1,13 +1,13 @@
 package io.lumify.web.routes.workspace;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,7 +31,7 @@ public class WorkspaceList extends BaseRequestHandler {
         User user = getUser(request);
 
         Iterable<Workspace> workspaces = workspaceRepository.findAll(user);
-        String activeWorkspaceId = (String) request.getSession().getAttribute("activeWorkspace");
+        String activeWorkspaceId = getUserRepository().getCurrentWorkspaceId(user.getUserId());
         activeWorkspaceId = activeWorkspaceId != null ? activeWorkspaceId : "";
         JSONArray workspacesJson = new JSONArray();
         for (Workspace workspace : workspaces) {

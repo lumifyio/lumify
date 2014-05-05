@@ -8,6 +8,7 @@ import io.lumify.core.model.user.UserPasswordUtil;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.user.User;
 import io.lumify.sql.model.workspace.SqlWorkspace;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
@@ -163,17 +164,21 @@ public class SqlUserRepositoryTest {
 
     @Test
     public void testSetCurrentWorkspace() throws Exception {
+        Session session = sessionFactory.openSession();
         SqlWorkspace sqlWorkspace = new SqlWorkspace();
         sqlWorkspace.setDisplayTitle("workspace1");
-        sqlUserRepository.addUser("123", "abc", null, new String[0]);
-        sqlUserRepository.setCurrentWorkspace("1", sqlWorkspace);
-        SqlUser testUser = (SqlUser) sqlUserRepository.findById("1");
+        session.save(sqlWorkspace);
+        session.close();
+
+        User user = sqlUserRepository.addUser("123", "abc", null, new String[0]);
+        sqlUserRepository.setCurrentWorkspace(user.getUserId(), sqlWorkspace.getId());
+        SqlUser testUser = (SqlUser) sqlUserRepository.findById(user.getUserId());
         assertEquals("workspace1", testUser.getCurrentWorkspace().getDisplayTitle());
     }
 
     @Test(expected = LumifyException.class)
     public void testSetCurrentWorkspaceWithNonExisitingUser() {
-        sqlUserRepository.setCurrentWorkspace("1", new SqlWorkspace());
+        sqlUserRepository.setCurrentWorkspace("1", new SqlWorkspace().getId());
     }
 
     @Test

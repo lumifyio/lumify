@@ -42,9 +42,10 @@ public class SqlUser implements User {
     @Column(name = "privileges")
     private String privileges;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "workspace_id")
     private SqlWorkspace currentWorkspace;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sqlWorkspaceUserId.user", cascade = CascadeType.ALL)
     private Set<SqlWorkspaceUser> sqlWorkspaceUsers = new HashSet<SqlWorkspaceUser>(0);
 
