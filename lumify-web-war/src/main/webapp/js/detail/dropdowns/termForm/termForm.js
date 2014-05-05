@@ -776,7 +776,7 @@ define([
 
             } else if (this.promoted) {
                 this.promoted.data('info', data.info)
-                    .addClass(data.cssClasses.join(' '))
+                    .addClass((data.cssClasses && data.cssClasses.join(' ')) || '')
                     .removeClass('focused');
                 this.promoted = null;
             }
