@@ -76,7 +76,7 @@ define([
             this.$node.html(propertiesTemplate({
                 properties: null
             }));
-            this.displayProperties(this.attr.data.properties);
+            this.displayProperties(this.attr.data);
         });
 
         this.before('teardown', function() {
@@ -292,7 +292,7 @@ define([
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
                     self.attr.data.properties = vertex.properties;
-                    self.displayProperties(vertex.properties);
+                    self.displayProperties(vertex);
                 }
             });
         };
@@ -309,7 +309,7 @@ define([
                 .fail(this.requestFailure.bind(this))
                 .done(function(newProperties) {
                     var properties = $.extend({}, self.attr.data.properties, newProperties);
-                    self.displayProperties(properties);
+                    self.displayProperties(self.attr.data);
                 });
 
             } else {
@@ -322,8 +322,8 @@ define([
             var self = this,
                 isEdge = F.vertex.isEdge(this.attr.data),
                 done = isEdge ? function(edge) {
-                    self.attr.data.properties = edge.properties;
-                    self.displayProperties(edge.properties);
+                    self.attr.data = edge;
+                    self.displayProperties(self.attr.data);
                 } : function() { };
 
             if (data.property.name === 'http://lumify.io#visibilityJson') {
@@ -477,12 +477,14 @@ define([
             })
         }
 
-        this.displayProperties = function(properties) {
+        this.displayProperties = function(vertex) {
             var self = this;
 
-            this.ontologyService.properties()
-                .done(function(ontologyProperties) {
-                    var filtered = filterPropertiesForDisplay(properties, ontologyProperties),
+            $.when(
+                this.ontologyService.relationships(),
+                this.ontologyService.properties()
+            ).done(function(ontologyRelationships, ontologyProperties) {
+                    var filtered = filterPropertiesForDisplay(vertex, ontologyProperties, ontologyRelationships),
                         popoutEnabled = false,
                         iconProperty = _.findWhere(filtered, { key: 'http://lumify.io#glyphIcon' });
 
@@ -539,8 +541,9 @@ define([
         };
     }
 
-    function filterPropertiesForDisplay(properties, ontologyProperties) {
-        var visibilityJsonName = 'http://lumify.io#visibilityJson',
+    function filterPropertiesForDisplay(vertex, ontologyProperties, ontologyRelationships) {
+        var properties = vertex.properties,
+            visibilityJsonName = 'http://lumify.io#visibilityJson',
             visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonName, {source: ''}),
             visibilityOntology = ontologyProperties.byTitle['http://lumify.io#visibility'],
             displayProperties = [],
@@ -561,6 +564,20 @@ define([
 
         displayProperties.push(visibilityProperty);
         visibilityProperty.json = JSON.stringify(visibilityProperty);
+
+        var relationshipType, relationshipProperty;
+        if (vertex.label && ontologyRelationships && (relationshipType = ontologyRelationships.byTitle[vertex.label])) {
+            relationshipProperty = {
+                displayType: 'string',
+                string: true,
+                name: 'type',
+                stringValue: relationshipType.displayName,
+                displayName: 'Relation',
+                hideVisibility: true
+            }
+            displayProperties.push(relationshipProperty);
+            relationshipProperty.json = JSON.stringify(relationshipProperty);
+        }
 
         _.sortBy(properties, function(p) {
             var ontologyProperty = ontologyProperties.byTitle[p.name];

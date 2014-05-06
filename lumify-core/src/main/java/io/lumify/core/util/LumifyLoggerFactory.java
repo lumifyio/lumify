@@ -22,7 +22,7 @@ public class LumifyLoggerFactory {
         synchronized (logMap) {
             if (!initialized) {
                 if (System.getProperty("logFileSuffix") == null) {
-                    System.setProperty("logFileSuffix", "-" + System.getProperty("user.name") + "-" + getPid());
+                    System.setProperty("logFileSuffix", "-" + System.getProperty("user.name") + "-" + ProcessUtil.getPid());
                 }
                 String log4jFile = Configuration.CONFIGURATION_LOCATION + "log4j.xml";
                 if (!new File(log4jFile).exists()) {
@@ -35,15 +35,6 @@ public class LumifyLoggerFactory {
                 logger.info("Using log4j.xml: %s", log4jFile);
             }
         }
-    }
-
-    private static String getPid() {
-        String name = ManagementFactory.getRuntimeMXBean().getName();
-        int i = name.indexOf('@');
-        if (i > 0) {
-            name = name.substring(0, i);
-        }
-        return name;
     }
 
     private static LumifyLogger getLogger(String name) {

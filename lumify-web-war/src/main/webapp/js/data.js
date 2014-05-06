@@ -182,6 +182,7 @@ define([
 
             switch (message.type) {
                 case 'propertiesChange':
+
                     // TODO: create edgesUpdated events
                     if (!message.data.vertex.sourceVertexId) {
                         updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
@@ -190,12 +191,20 @@ define([
                         }
                     }
                     break;
+
+                case 'textUpdated':
+                    if (message.data && message.data.graphVertexId) {
+                        self.trigger('textUpdated', { vertexId: message.data.graphVertexId })
+                    } else console.warn('textUpdated event received with no graphVertexId', message);
+                    break;
+
                 case 'edgeDeletion':
                     if (_.findWhere(self.selectedEdges, { id: message.data.edgeId })) {
                         self.trigger('selectObjects');
                     }
                     self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
                     break;
+
                 case 'detectedObjectChange':
                     updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
                     if (updated) {

@@ -72,6 +72,7 @@ define([
             this.on('termCreated', this.onTeardownDropdowns);
             this.on('dropdownClosed', this.onTeardownDropdowns);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+            this.on(document, 'textUpdated', this.onTextUpdated);
             this.after('tearDownDropdowns', this.onTeardownDropdowns);
 
             this.$node.on('mouseenter.detectedObject mouseleave.detectedObject',
@@ -181,6 +182,8 @@ define([
             var self = this,
                 properties = vertex && vertex.properties;
 
+            this.attr.data = vertex;
+
             if (properties) {
                 this.videoTranscript = ('http://lumify.io#videoTranscript' in properties) ?
                     properties['http://lumify.io#videoTranscript'].value : {};
@@ -204,9 +207,21 @@ define([
 
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
-            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(vertex.id))
+            this.updateText();
+        };
+
+        this.onTextUpdated = function(event, data) {
+            if (data.vertexId === this.attr.data.id) {
+                this.updateText();
+            }
+        };
+
+        this.updateText = function() {
+            var self = this;
+
+            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
                 .done(function(artifactText, status, xhr) {
-                    var displayType = vertex.concept.displayType,
+                    var displayType = self.attr.data.concept.displayType,
                         textElement = self.select('textSelector');
 
                     if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
@@ -223,7 +238,7 @@ define([
                     }
                     self.updateEntityAndArtifactDraggables();
                     if (self[displayType + 'Setup']) {
-                        self[displayType + 'Setup'](vertex);
+                        self[displayType + 'Setup'](self.attr.data);
                     }
             });
         };

@@ -54,6 +54,7 @@ define([
             appData.cachedConceptsDeferred.done(function() {
                 self.vertexService
                     .getMultiple(self.attr.graphVertexIds)
+                    .fail(self.handleVerticesFailed.bind(self))
                     .done(self.handleVerticesLoaded.bind(self));
             });
         });
@@ -120,6 +121,10 @@ define([
             this.select('noResultsSelector')
                 .html(errorTemplate({ vertices: this.attr.graphVertexIds }))
                 .addClass('visible');
+        };
+
+        this.handleVerticesFailed = function(data) {
+            this.handleNoVertices();
         };
 
         this.handleVerticesLoaded = function(data) {

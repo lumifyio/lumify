@@ -65,10 +65,7 @@ define([
                 }));
 
                 Properties.attachTo(self.select('propertiesSelector'), {
-                    data: {
-                        id: relationshipData[0].id,
-                        properties: relationshipData[0].properties
-                    }
+                    data: relationshipData[0]
                 });
 
                 self.updateEntityAndArtifactDraggables();
