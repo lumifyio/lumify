@@ -3,7 +3,6 @@ package io.lumify.core.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.bigtable.model.user.accumulo.AccumuloUserContext;
 import io.lumify.core.config.Configuration;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
@@ -16,6 +15,7 @@ import org.securegraph.util.FilterIterable;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class UserRepository {
@@ -71,14 +71,22 @@ public abstract class UserRepository {
     }
 
     public static JSONArray toJson(Iterable<User> users) throws JSONException {
+        return toJson(users, null);
+    }
+
+    public static JSONArray toJson(Iterable<User> users, Map<String, String> workspaceNames) {
         JSONArray usersJson = new JSONArray();
         for (User user : users) {
-            usersJson.put(UserRepository.toJson(user));
+            usersJson.put(UserRepository.toJson(user, workspaceNames));
         }
         return usersJson;
     }
 
     public static JSONObject toJson(User user) {
+        return toJson(user, null);
+    }
+
+    public static JSONObject toJson(User user, Map<String, String> workspaceNames) {
         try {
             JSONObject json = new JSONObject();
             json.put("id", user.getUserId());
@@ -86,6 +94,10 @@ public abstract class UserRepository {
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
             json.put("currentWorkspaceId", user.getCurrentWorkspaceId());
+            if (workspaceNames != null) {
+                String workspaceName = workspaceNames.get(user.getCurrentWorkspaceId());
+                json.put("currentWorkspaceName", workspaceName);
+            }
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

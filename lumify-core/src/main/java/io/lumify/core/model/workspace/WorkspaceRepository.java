@@ -1,11 +1,13 @@
 package io.lumify.core.model.workspace;
 
+import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.workspace.diff.DiffItem;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.util.ConvertingIterable;
 
 import java.util.List;
 
@@ -23,6 +25,22 @@ public abstract class WorkspaceRepository {
     public abstract void delete(Workspace workspace, User user);
 
     public abstract Workspace findById(String workspaceId, User user);
+
+    public Iterable<Workspace> findByIds(final Iterable<String> workspaceIds, final User user) {
+        return new ConvertingIterable<String, Workspace>(workspaceIds) {
+            @Override
+            protected Workspace convert(String workspaceId) {
+                if (workspaceId == null) {
+                    return null;
+                }
+                try {
+                    return findById(workspaceId, user);
+                } catch (LumifyAccessDeniedException ex) {
+                    return null;
+                }
+            }
+        };
+    }
 
     public abstract Workspace add(String title, User user);
 
