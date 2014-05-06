@@ -26,7 +26,27 @@ define([
             this.$node.html(template({}));
 
             AuthenticationPlugin.attachTo(this.select('authenticationSelector'));
+
+            this.on('loginSuccess', this.onLoginSuccess);
         });
+
+        this.onLoginSuccess = function() {
+            var self = this;
+
+            if ((/^#?v=/).test(location.hash)) {
+                window.location.reload();
+            } else {
+                require(['app'], function(App) {
+                    App.attachTo('#app', {
+                        animateFromLogin: true
+                    });
+
+                    self.$node.find('.logo').one(TRANSITION_END, function() {
+                        self.teardown();
+                    });
+                });
+            }
+        };
 
     }
 

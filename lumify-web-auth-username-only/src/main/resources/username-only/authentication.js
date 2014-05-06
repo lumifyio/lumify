@@ -20,14 +20,17 @@ define([
             this.$node.html(template({}));
 
             this.on('click', {
-                loginButtonSelector: this.onLogin
+                loginButtonSelector: this.onLoginButton
             });
         });
 
-        this.onLogin = function() {
+        this.onLoginButton = function(event) {
             var self = this,
                 $error = this.select('errorSelector'),
                 $username = this.select('usernameSelector');
+
+            event.preventDefault();
+            event.stopPropagation();
 
             this.enableButton(false);
             $error.empty();
