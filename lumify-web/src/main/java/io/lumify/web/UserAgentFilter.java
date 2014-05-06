@@ -28,7 +28,7 @@ public class UserAgentFilter implements Handler {
         MINIMUM_VERSION_BROWSERS.put("Firefox", new VersionNumber("17"));
     }
 
-    private final UserAgentStringParser parser = UADetectorServiceFactory.getCachingAndUpdatingParser();
+    private final UserAgentStringParser parser = UADetectorServiceFactory.getResourceModuleParser();
 
     private final Cache<String, String> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
