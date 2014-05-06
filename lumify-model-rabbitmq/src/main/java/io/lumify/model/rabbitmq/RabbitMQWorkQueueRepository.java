@@ -59,7 +59,7 @@ public class RabbitMQWorkQueueRepository extends WorkQueueRepository {
 
     private void ensureQueue(String queueName) throws IOException {
         if (!declaredQueues.contains(queueName)) {
-            channel.queueDeclare(queueName, false, false, false, null);
+            channel.queueDeclare(queueName, true, false, false, null);
             declaredQueues.add(queueName);
         }
     }
