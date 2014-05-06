@@ -63,6 +63,12 @@ public class Router extends HttpServlet {
 
             AuthenticationHandler authenticatorInstance = new AuthenticationHandler();
             Class<? extends Handler> authenticator = AuthenticationHandler.class;
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
+            for (WebAppPlugin webAppPlugin : webAppPlugins) {
+                LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
+                injector.injectMembers(webAppPlugin);
+                webAppPlugin.init(app, config, authenticator, authenticatorInstance);
+            }
 
             app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
 
@@ -136,13 +142,6 @@ public class Router extends HttpServlet {
 
             app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
             app.post("/admin/uploadOntology", authenticator, AdminPrivilegeFilter.class, AdminUploadOntology.class);
-
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
-            for (WebAppPlugin webAppPlugin : webAppPlugins) {
-                LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
-                injector.injectMembers(webAppPlugin);
-                webAppPlugin.init(app, config, authenticator, authenticatorInstance);
-            }
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));
         } catch (Exception ex) {

@@ -2,8 +2,11 @@ package io.lumify.web.auth.usernameonly;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticFileHandler;
+import com.altamiracorp.miniweb.StaticResourceHandler;
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
@@ -15,10 +18,14 @@ import javax.servlet.ServletConfig;
 public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
 
     private UserRepository userRepository;
+    private Configuration configuration;
+    private WorkspaceRepository workspaceRepository;
 
     @Inject
-    public void setUserRepository(UserRepository userRepository) {
+    public void configure(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         this.userRepository = userRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.configuration = configuration;
     }
 
     @Override
@@ -32,7 +39,13 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
 
         // 3) Add post route for logout
 
-        app.post(AuthenticationHandler.LOGIN_PATH, new Login(this.userRepository));
+        StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-only/authentication.js", "application/javascript");
+        StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-only/templates/login.hbs", "text/plain");
+
+        app.get("/js/configuration/plugins/authentication/authentication.js", jsHandler);
+        app.get("/jsc/configuration/plugins/authentication/authentication.js", jsHandler);
+        app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", jsHandler);
+        app.post(AuthenticationHandler.LOGIN_PATH, new Login(this.userRepository, this.workspaceRepository, this.configuration));
         //app.get(AuthenticationHandler.LOGOUT_PATH, new Logout());
     }
 }
