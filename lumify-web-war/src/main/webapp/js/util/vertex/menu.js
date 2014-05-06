@@ -36,8 +36,7 @@ define([
                     event: 'startVertexConnection',
                     selection: 1,
                     args: {
-                        connectionType: 'FindPath',
-                        hops: 1
+                        connectionType: 'FindPath'
                     },
                     shouldDisable: function(selection, vertexId, target) {
                         return $(target).closest('.graph-pane').length === 0;
