@@ -16,6 +16,7 @@ import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.type.GeoPoint;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +84,7 @@ public class JsonSerializer {
     public static JSONArray toJsonProperties(Iterable<Property> properties, String workspaceId) {
         JSONArray resultsJson = new JSONArray();
         List<Property> propertiesList = toList(properties);
+        Collections.sort(propertiesList, new ConfidencePropertyComparator());
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
         VideoTranscript allVideoTranscripts = new VideoTranscript();
         for (int i = 0; i < propertiesList.size(); i++) {

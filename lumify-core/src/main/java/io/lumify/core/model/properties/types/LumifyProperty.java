@@ -172,6 +172,13 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         return unwrap(metadata.get(key));
     }
 
+    public TRaw getMetadataValue(Map<String, Object> metadata, TRaw defaultValue) {
+        if (!metadata.containsKey(key)) {
+            return defaultValue;
+        }
+        return unwrap(metadata.get(key));
+    }
+
     public void setMetadata(Map<String, Object> metadata, TRaw value) {
         metadata.put(key, wrap(value));
     }

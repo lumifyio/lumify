@@ -1,6 +1,7 @@
 package io.lumify.core.model.properties;
 
 import io.lumify.core.model.properties.types.DateLumifyProperty;
+import io.lumify.core.model.properties.types.DoubleLumifyProperty;
 import io.lumify.core.model.properties.types.StreamingLumifyProperty;
 import io.lumify.core.model.properties.types.TextLumifyProperty;
 import org.securegraph.TextIndexHint;
@@ -14,6 +15,7 @@ public class LumifyProperties {
     public static final TextLumifyProperty TITLE = TextLumifyProperty.all("http://lumify.io#title");
     public static final DateLumifyProperty MODIFIED_DATE = new DateLumifyProperty("http://lumify.io#modifiedDate");
     public static final TextLumifyProperty MODIFIED_BY = new TextLumifyProperty("http://lumify.io#modifiedBy", TextIndexHint.EXACT_MATCH);
+    public static final DoubleLumifyProperty CONFIDENCE = new DoubleLumifyProperty("http://lumify.io#confidence");
 
     private LumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

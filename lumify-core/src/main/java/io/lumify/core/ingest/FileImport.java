@@ -109,6 +109,7 @@ public class FileImport {
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();
+            LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
 
             VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility, authorizations);
