@@ -26,7 +26,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
 
             JSONArray users = permissionsJson.optJSONArray("users");
             if (users != null) {
-                User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
+                User currentUser = CurrentUser.get(r.getRequest().getSession());
                 if (!isUserInList(users, currentUser)) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }
@@ -34,7 +34,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
 
             JSONArray workspaces = permissionsJson.optJSONArray("workspaces");
             if (workspaces != null) {
-                User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
+                User currentUser = CurrentUser.get(r.getRequest().getSession());
                 if (!isWorkspaceInList(workspaces, userRepository.getCurrentWorkspaceId(currentUser.getUserId()))) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }

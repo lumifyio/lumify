@@ -1,10 +1,10 @@
 package io.lumify.web.routes;
 
+import com.altamiracorp.miniweb.HandlerChain;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.user.User;
-import io.lumify.web.AuthenticationProvider;
+import io.lumify.web.CurrentUser;
 import io.lumify.web.WebApp;
-import com.altamiracorp.miniweb.HandlerChain;
 import org.mockito.Mockito;
 
 import javax.servlet.ServletOutputStream;
@@ -51,6 +51,6 @@ public abstract class RouteTestBase {
         when(mockResponse.getOutputStream()).thenReturn(mockResponseOutputStream);
 
         when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(AuthenticationProvider.getUser(mockHttpSession)).thenReturn(mockUser);
+        when(CurrentUser.get(mockHttpSession)).thenReturn(mockUser);
     }
 }

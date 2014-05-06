@@ -2,7 +2,7 @@ package io.lumify.web.auth.oauth;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticResourceHandler;
-import io.lumify.web.AuthenticationProvider;
+import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 import io.lumify.web.auth.oauth.routes.Login;
@@ -12,8 +12,8 @@ import javax.servlet.ServletConfig;
 
 public class OAuthWebAppPlugin implements WebAppPlugin {
     @Override
-    public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationProvider authenticatorInstance) {
-        app.get("/oauth/login", new Login());
+    public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationHandler authenticationHandler) {
+        app.get(AuthenticationHandler.LOGIN_PATH, new Login());
 
         app.get("/oauth/twitter", new Twitter());
 

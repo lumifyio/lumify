@@ -2,7 +2,7 @@ package io.lumify.web.auth.oauth.routes;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
-import io.lumify.web.auth.oauth.MustacheTemplate;
+import io.lumify.web.MustacheTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

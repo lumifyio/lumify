@@ -59,16 +59,12 @@ public class Router extends HttpServlet {
 
             final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
 
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
-
             app = new WebApp(config, injector);
 
-            AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
-            Class<? extends Handler> authenticator = authenticatorInstance.getClass();
+            AuthenticationHandler authenticatorInstance = new AuthenticationHandler();
+            Class<? extends Handler> authenticator = AuthenticationHandler.class;
 
-            app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
-            app.post("/login", Login.class);
-            app.post("/logout", Logout.class);
+            app.get("/", userAgentFilter, authenticatorInstance, new StaticFileHandler(config, "/index.html"));
 
             app.get("/configuration", authenticator, Configuration.class);
             app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
@@ -140,8 +136,10 @@ public class Router extends HttpServlet {
             app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
             app.post("/admin/uploadOntology", authenticator, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
+                injector.injectMembers(webAppPlugin);
                 webAppPlugin.init(app, config, authenticator, authenticatorInstance);
             }
 

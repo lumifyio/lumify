@@ -340,7 +340,7 @@ define([
                     });
                 })
                 .done(function() {
-                    window.location.reload();
+                    window.location = 'logout';
                 });
         };
 

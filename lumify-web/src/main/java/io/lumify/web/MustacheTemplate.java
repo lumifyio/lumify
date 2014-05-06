@@ -1,4 +1,4 @@
-package io.lumify.web.auth.oauth;
+package io.lumify.web;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;

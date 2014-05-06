@@ -289,7 +289,7 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected User getUser(HttpServletRequest request) {
-        return AuthenticationProvider.getUser(request);
+        return CurrentUser.get(request);
     }
 
     private void configureResponse(final ResponseTypes type, final HttpServletResponse response, final Object responseData) {

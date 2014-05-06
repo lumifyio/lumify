@@ -157,7 +157,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
 
         if ("changedWorkspace".equals(type)) {
-            io.lumify.core.user.User authUser = AuthenticationProvider.getUser(resource.session());
+            io.lumify.core.user.User authUser = CurrentUser.get(resource.session());
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
@@ -181,7 +181,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     private void setStatus(AtmosphereResource resource, UserStatus status) {
         broadcaster = resource.getBroadcaster();
         try {
-            io.lumify.core.user.User authUser = AuthenticationProvider.getUser(resource.getRequest().getSession());
+            io.lumify.core.user.User authUser = CurrentUser.get(resource.getRequest());
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
