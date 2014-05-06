@@ -55,11 +55,7 @@ public class HdfsLibCacheLoader extends LibLoader {
         }
         LOGGER.debug("using local lib cache directory: %s", libCacheDirectory.getAbsolutePath());
         libCacheDirectory.deleteOnExit();
-        if (!libCacheDirectory.exists()) {
-            if (!libCacheDirectory.mkdirs()) {
-                throw new LumifyException("Could not mkdir " + libCacheDirectory.getAbsolutePath());
-            }
-        }
+        libCacheDirectory.mkdirs();
         return libCacheDirectory;
     }
 
