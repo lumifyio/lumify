@@ -40,7 +40,7 @@ public class VertexMultiple extends BaseRequestHandler {
         String[] vertexStringIds = getRequiredParameterArray(request, "vertexIds[]");
         boolean fallbackToPublic = getOptionalParameterBoolean(request, "fallbackToPublic", false);
         User user = getUser(request);
-        Authorizations authorizations = getAuthorizations(request, fallbackToPublic, user);
+        GetAuthorizationsResult getAuthorizationsResult = getAuthorizations(request, fallbackToPublic, user);
         String workspaceId = getWorkspaceId(request);
 
         Iterable<Object> vertexIds = new ConvertingIterable<String, Object>(toIterable(vertexStringIds)) {
@@ -50,10 +50,11 @@ public class VertexMultiple extends BaseRequestHandler {
             }
         };
 
-        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, authorizations);
+        Iterable<Vertex> graphVertices = graph.getVertices(vertexIds, getAuthorizationsResult.authorizations);
         JSONObject results = new JSONObject();
         JSONArray vertices = new JSONArray();
         results.put("vertices", vertices);
+        results.put("requiredFallback", getAuthorizationsResult.requiredFallback);
         for (Vertex v : graphVertices) {
             vertices.put(JsonSerializer.toJson(v, workspaceId));
         }
@@ -61,18 +62,20 @@ public class VertexMultiple extends BaseRequestHandler {
         respondWithJson(response, results);
     }
 
-    private Authorizations getAuthorizations(HttpServletRequest request, boolean fallbackToPublic, User user) {
-        Authorizations authorizations;
+    private GetAuthorizationsResult getAuthorizations(HttpServletRequest request, boolean fallbackToPublic, User user) {
+        GetAuthorizationsResult result = new GetAuthorizationsResult();
+        result.requiredFallback = false;
         try {
-            authorizations = getAuthorizations(request, user);
+            result.authorizations = getAuthorizations(request, user);
         } catch (LumifyAccessDeniedException ex) {
             if (fallbackToPublic) {
-                authorizations = getUserRepository().getAuthorizations(user);
+                result.authorizations = getUserRepository().getAuthorizations(user);
+                result.requiredFallback = true;
             } else {
                 throw ex;
             }
         }
-        return authorizations;
+        return result;
     }
 
     private String getWorkspaceId(HttpServletRequest request) {
@@ -83,5 +86,10 @@ public class VertexMultiple extends BaseRequestHandler {
             workspaceId = null;
         }
         return workspaceId;
+    }
+
+    private static class GetAuthorizationsResult {
+        public Authorizations authorizations;
+        public boolean requiredFallback;
     }
 }
