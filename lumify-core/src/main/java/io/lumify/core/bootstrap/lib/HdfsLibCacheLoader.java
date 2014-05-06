@@ -5,6 +5,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ProcessUtil;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
@@ -16,15 +17,21 @@ import java.net.URI;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
+    private File hdfsLibCacheTempDirectory;
 
     @Override
     public void loadLibs(Configuration configuration) {
         LOGGER.info("Loading libs using %s", HdfsLibCacheLoader.class.getName());
 
-        String hdfsLibCacheDirectory = configuration.get(Configuration.HDFS_LIB_CACHE_DIRECTORY, null);
+        String hdfsLibCacheDirectory = configuration.get(Configuration.HDFS_LIB_CACHE_SOURCE_DIRECTORY, null);
         if (hdfsLibCacheDirectory == null) {
-            LOGGER.warn("skipping HDFS libcache. Configuration parameter %s not found", Configuration.HDFS_LIB_CACHE_DIRECTORY);
+            LOGGER.warn("skipping HDFS libcache. Configuration parameter %s not found", Configuration.HDFS_LIB_CACHE_SOURCE_DIRECTORY);
             return;
+        }
+
+        String hdfsLibCacheTempDirectoryString = configuration.get(Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, null);
+        if (hdfsLibCacheTempDirectoryString != null) {
+            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString);
         }
 
         FileSystem hdfsFileSystem = getFileSystem(configuration);
@@ -40,7 +47,12 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private File ensureLocalLibCacheDirectory() {
-        File libCacheDirectory = Files.createTempDir();
+        File libCacheDirectory;
+        if (hdfsLibCacheTempDirectory == null) {
+            libCacheDirectory = Files.createTempDir();
+        } else {
+            libCacheDirectory = new File(hdfsLibCacheTempDirectory, System.getProperty("user.name") + "-" + ProcessUtil.getPid());
+        }
         libCacheDirectory.deleteOnExit();
         if (!libCacheDirectory.exists()) {
             if (!libCacheDirectory.mkdirs()) {
