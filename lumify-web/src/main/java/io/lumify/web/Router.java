@@ -64,11 +64,12 @@ public class Router extends HttpServlet {
             AuthenticationHandler authenticatorInstance = new AuthenticationHandler();
             Class<? extends Handler> authenticator = AuthenticationHandler.class;
 
-            app.get("/", userAgentFilter, authenticatorInstance, new StaticFileHandler(config, "/index.html"));
+            app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
 
             app.get("/configuration", authenticator, Configuration.class);
-            app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
-            app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
+            // TODO: remove after fixing visibility
+            //app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
+            //app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
 
             app.get("/ontology", authenticator, ReadPrivilegeFilter.class, Ontology.class);
 

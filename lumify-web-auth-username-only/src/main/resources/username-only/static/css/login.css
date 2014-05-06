@@ -1,11 +1,18 @@
-.logo {
-  background: url(../img/lumify-logo.png);
-  background-position: 46%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: block;
-  height: 40%;
-  margin: 1em auto 0;
-  max-width: 500px;
-  width: auto;
+/** TODO need way to require css */
+input {
+  width: 100%;
+  height: 100%;
+  padding: 0.5em;
+  .box-sizing(border-box);
+}
+
+.text-error {
+  text-align: center;
+}
+
+button {
+  &.loading {
+    margin-left: 0;
+  }
+  width: 100%;
 }

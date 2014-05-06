@@ -1,6 +1,7 @@
 package io.lumify.web.auth.usernameonly;
 
 import com.altamiracorp.miniweb.Handler;
+import com.altamiracorp.miniweb.StaticFileHandler;
 import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.web.AuthenticationHandler;
@@ -22,9 +23,16 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
 
     @Override
     public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationHandler authenticationHandler) {
-        Handler loginHandler = new Login(this.userRepository);
-        app.get(AuthenticationHandler.LOGIN_PATH, loginHandler);
-        app.post(AuthenticationHandler.LOGIN_PATH, loginHandler);
-        app.get(AuthenticationHandler.LOGOUT_PATH, new Logout());
+
+        // TODO
+        // 1) Add route to replacement authentication.js component
+        // app.get("/jsc/configuration/authentication/authentication.js", new StaticFileHandler(config, ??? component));
+
+        // 2) Add routes for static files in plugin at /jsc/configuration/authentication/static/templates ?
+
+        // 3) Add post route for logout
+
+        app.post(AuthenticationHandler.LOGIN_PATH, new Login(this.userRepository));
+        //app.get(AuthenticationHandler.LOGOUT_PATH, new Logout());
     }
 }

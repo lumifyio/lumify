@@ -1,7 +1,9 @@
 define([
-    'flight/lib/component'
+    'flight/lib/component',
+    'hbs!./template'
 ], function(
-    defineComponent) {
+    defineComponent,
+    template) {
     'use strict';
 
     return defineComponent(AuthenticationMissing);
@@ -9,7 +11,7 @@ define([
     function AuthenticationMissing() {
 
         this.after('initialize', function() {
-            this.$node.text('Missing authenication plugin');
+            this.$node.html(template({}));
         });
 
     }

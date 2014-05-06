@@ -1,0 +1,56 @@
+define([
+    'flight/lib/component',
+    'hbs!./templates/login'
+], function(
+    defineComponent,
+    template) {
+    'use strict';
+
+    return defineComponent(UserNameOnlyAuthentication);
+
+    function UserNameOnlyAuthentication() {
+
+        this.defaultAttrs({
+            errorSelector: '.text-error',
+            usernameSelector: 'input.username',
+            loginButtonSelector: 'button'
+        });
+
+        this.after('initialize', function() {
+            this.$node.html(template({}));
+
+            this.on('click', {
+                loginButtonSelector: this.onLogin
+            });
+        });
+
+        this.onLogin = function() {
+            var self = this,
+                $error = this.select('errorSelector'),
+                $username = this.select('usernameSelector');
+
+            this.enableButton(false);
+            $error.empty();
+
+            $.post('login', { username: $username.val() })
+                .fail(function(xhr, status, error) {
+                    $error.text(error);
+                    self.enableButton(true);
+                })
+                .done(function() {
+                    self.trigger('loginSuccess');
+                })
+        };
+
+        this.enableButton = function(enable) {
+            var button = this.select('buttonSelector');
+
+            if (enable) {
+                button.addClass('loading').attr('disabled', true);
+            } else {
+                button.removeClass('loading').removeAttr('disabled');
+            }
+        }
+
+    }
+});
