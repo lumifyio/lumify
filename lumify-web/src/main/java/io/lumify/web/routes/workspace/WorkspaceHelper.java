@@ -2,6 +2,8 @@ package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
@@ -9,7 +11,6 @@ import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
-import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -19,10 +20,8 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
-import org.securegraph.*;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +53,7 @@ public class WorkspaceHelper {
         this.graph = graph;
     }
 
-    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, TermMentionModel analyzedTermMention, LumifyVisibility visibility,
+    public JSONObject unresolveTerm(Vertex vertex, String edgeId, TermMentionModel termMention, LumifyVisibility visibility,
                                     ModelUserContext modelUserContext, User user, Authorizations authorizations) {
         JSONObject result = new JSONObject();
         if (termMention == null) {
@@ -64,12 +63,11 @@ public class WorkspaceHelper {
 
             // If there is only instance of the term entity in this artifact delete the relationship
             Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
-            boolean deleteEdge = false;
             int termCount = 0;
             while (termMentionModels.hasNext()) {
                 TermMentionModel termMentionModel = termMentionModels.next();
-                Object termMentionId = termMentionModel.getMetadata().getGraphVertexId();
-                if (termMentionId != null && termMentionId.equals(vertex.getId())) {
+                Object termMentionId = termMentionModel.getRowKey().getRowKey();
+                if (termMentionId != null && termMention.getRowKey().getRowKey().equals(termMentionId)) {
                     termCount++;
                     break;
                 }
@@ -78,26 +76,18 @@ public class WorkspaceHelper {
                 if (edgeId != null) {
                     Edge edge = graph.getEdge(edgeId, authorizations);
                     graph.removeEdge(edgeId, authorizations);
-                    deleteEdge = true;
+                    workQueueRepository.pushEdgeDeletion(edge);
                     auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
                 }
             }
 
             termMentionRepository.delete(termMention.getRowKey());
-
-            if (analyzedTermMention != null) {
-                TermMentionOffsetItem offsetItem = new TermMentionOffsetItem(analyzedTermMention);
-                result = offsetItem.toJson();
-            }
+            workQueueRepository.pushTextUpdated(artifactVertex.getId().toString());
 
             graph.flush();
 
             auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
-
-            if (deleteEdge) {
-                result.put("deleteEdge", deleteEdge);
-                result.put("edgeId", edgeId);
-            }
+            result.put("success", true);
         }
         return result;
     }
@@ -124,9 +114,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, authorizations);
 
             auditRepository.auditRelationship(AuditAction.DELETE, artifactVertex, vertex, edge, "", "", user, visibility.getVisibility());
-
-            result.put("deleteEdge", true);
-            result.put("edgeId", edge.getId());
+            this.workQueueRepository.pushEdgeDeletion(edge);
             graph.flush();
         }
 

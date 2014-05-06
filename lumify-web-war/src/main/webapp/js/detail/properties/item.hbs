@@ -17,8 +17,10 @@
           {{stringValue}}
         {{/if}}
         <button data-property="{{json}}" class="info"></button>
+        {{#unless hideVisibility}}
+        <span class="visibility" data-visibility="{{visibilityJson}}"></span>
+        {{/unless}}
       {{/if}}
-      <span class="visibility" data-visibility="{{visibilityJson}}"></span>
     {{/if}}
 
   </td>

@@ -79,6 +79,22 @@ public abstract class WorkQueueRepository {
         broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
     }
 
+    public void pushTextUpdated(String vertexId) {
+        broadcastTextUpdated(vertexId);
+    }
+
+    protected void broadcastTextUpdated(String vertexId) {
+        JSONObject dataJson = new JSONObject();
+        if (vertexId != null) {
+            dataJson.put("graphVertexId", vertexId);
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "textUpdated");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
     protected void broadcastDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
         JSONObject dataJson = new JSONObject();
         if (artifactVertexWithDetectedObjects != null) {
