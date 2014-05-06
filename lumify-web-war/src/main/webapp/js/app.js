@@ -9,7 +9,7 @@ define([
     'workspaces/workspaces',
     'workspaces/overlay',
     'sync/sync',
-    'users/users',
+    'chat/chat',
     'graph/graph',
     'detail/detail',
     'map/map',
@@ -28,7 +28,7 @@ define([
     Workspaces,
     WorkspaceOverlay,
     Sync,
-    Users,
+    Chat,
     Graph,
     Detail,
     Map,
@@ -59,7 +59,7 @@ define([
             workspacesSelector: '.workspaces-pane',
             workspaceOverlaySelector: '.workspace-overlay',
             helpDialogSelector: '.help-dialog',
-            usersSelector: '.users-pane',
+            chatSelector: '.chat-pane',
             graphSelector: '.graph-pane',
             mapSelector: '.map-pane',
             detailPaneSelector: '.detail-pane'
@@ -75,7 +75,7 @@ define([
                 Dashboard,
                 Search,
                 Workspaces,
-                Users,
+                Chat,
                 Graph,
                 Map,
                 Detail,
@@ -149,7 +149,7 @@ define([
                 dashboardPane = content.filter('.dashboard-pane').data(DATA_MENUBAR_NAME, 'dashboard'),
                 searchPane = content.filter('.search-pane').data(DATA_MENUBAR_NAME, 'search'),
                 workspacesPane = content.filter('.workspaces-pane').data(DATA_MENUBAR_NAME, 'workspaces'),
-                usersPane = content.filter('.users-pane').data(DATA_MENUBAR_NAME, 'users'),
+                chatPane = content.filter('.chat-pane').data(DATA_MENUBAR_NAME, 'chat'),
                 graphPane = content.filter('.graph-pane').data(DATA_MENUBAR_NAME, 'graph'),
                 detailPane = content.filter('.detail-pane'),
                 mapPane = content.filter('.map-pane').data(DATA_MENUBAR_NAME, 'map'),
@@ -167,7 +167,7 @@ define([
             Dashboard.attachTo(dashboardPane);
             Search.attachTo(searchPane.find('.content'));
             Workspaces.attachTo(workspacesPane.find('.content'));
-            Users.attachTo(usersPane.find('.content'));
+            Chat.attachTo(chatPane.find('.content'));
             Graph.attachTo(graphPane.filter('.graph-pane-2d'));
             Map.attachTo(mapPane);
             Detail.attachTo(detailPane.find('.content'));
@@ -383,9 +383,9 @@ define([
         };
 
         this.onChatMessage = function(e, data) {
-            if (!this.select('usersSelector').hasClass('visible')) {
+            if (!this.select('chatSelector').hasClass('visible')) {
                 this.trigger(document, 'menubarToggleDisplay', {
-                    name: this.select('usersSelector').data(DATA_MENUBAR_NAME)
+                    name: this.select('chatSelector').data(DATA_MENUBAR_NAME)
                 });
             }
         };

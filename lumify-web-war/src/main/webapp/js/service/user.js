@@ -110,25 +110,15 @@ define([
     };
 
     UserService.prototype.getOnline = function() {
-        var self = this,
-            result = {};
-
-        return $.when(
-            this.isLoginRequired(),
-            this.getCurrentUsers()
-        ).then(function(user, usersResponse) {
-            var users = usersResponse[0].users;
-
-            return {
-                user: user,
-                users: users
-            };
-        });
+        return this.isLoginRequired();
     };
 
-    UserService.prototype.getCurrentUsers = function() {
+    UserService.prototype.getCurrentUsers = function(workspaceId) {
         return this._ajaxGet({
-            url: 'users'
+            url: 'users',
+            data: {
+                workspaceId: workspaceId
+            }
         });
     };
 
