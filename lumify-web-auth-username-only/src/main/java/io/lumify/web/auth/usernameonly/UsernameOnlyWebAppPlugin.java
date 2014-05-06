@@ -1,7 +1,6 @@
 package io.lumify.web.auth.usernameonly;
 
 import com.altamiracorp.miniweb.Handler;
-import com.altamiracorp.miniweb.StaticFileHandler;
 import com.altamiracorp.miniweb.StaticResourceHandler;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -11,7 +10,6 @@ import io.lumify.web.AuthenticationHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 import io.lumify.web.auth.usernameonly.routes.Login;
-import io.lumify.web.auth.usernameonly.routes.Logout;
 
 import javax.servlet.ServletConfig;
 
@@ -46,6 +44,5 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
         app.get("/jsc/configuration/plugins/authentication/authentication.js", jsHandler);
         app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", loginTemplateHandler);
         app.post(AuthenticationHandler.LOGIN_PATH, new Login(this.userRepository, this.workspaceRepository, this.configuration));
-        //app.get(AuthenticationHandler.LOGOUT_PATH, new Logout());
     }
 }

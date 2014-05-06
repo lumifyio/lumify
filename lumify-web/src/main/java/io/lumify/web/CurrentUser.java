@@ -24,4 +24,8 @@ public class CurrentUser {
     public static User get(HttpServletRequest request) {
         return CurrentUser.get(request.getSession());
     }
+
+    public static void clear(HttpServletRequest request) {
+        request.getSession().removeAttribute(CurrentUser.CURRENT_USER_REQ_ATTR_NAME);
+    }
 }
