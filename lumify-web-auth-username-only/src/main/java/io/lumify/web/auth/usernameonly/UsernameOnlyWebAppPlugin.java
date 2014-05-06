@@ -28,15 +28,6 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
 
     @Override
     public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationHandler authenticationHandler) {
-
-        // TODO
-        // 1) Add route to replacement authentication.js component
-        // app.get("/jsc/configuration/authentication/authentication.js", new StaticFileHandler(config, ??? component));
-
-        // 2) Add routes for static files in plugin at /jsc/configuration/authentication/static/templates ?
-
-        // 3) Add post route for logout
-
         StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-only/authentication.js", "application/javascript");
         StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-only/templates/login.hbs", "text/plain");
 
