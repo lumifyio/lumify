@@ -70,6 +70,14 @@ public abstract class UserRepository {
         return json;
     }
 
+    public static JSONArray toJson(Iterable<User> users) throws JSONException {
+        JSONArray usersJson = new JSONArray();
+        for (User user : users) {
+            usersJson.put(UserRepository.toJson(user));
+        }
+        return usersJson;
+    }
+
     public static JSONObject toJson(User user) {
         try {
             JSONObject json = new JSONObject();

@@ -39,7 +39,7 @@ public class UserList extends BaseRequestHandler {
         }
 
         JSONObject resultJson = new JSONObject();
-        JSONArray usersJson = getJson(users);
+        JSONArray usersJson = UserRepository.toJson(users);
         resultJson.put("users", usersJson);
 
         respondWithJson(response, resultJson);
@@ -62,13 +62,5 @@ public class UserList extends BaseRequestHandler {
                 return false;
             }
         };
-    }
-
-    private JSONArray getJson(Iterable<User> users) throws JSONException {
-        JSONArray usersJson = new JSONArray();
-        for (User user : users) {
-            usersJson.put(UserRepository.toJson(user));
-        }
-        return usersJson;
     }
 }
