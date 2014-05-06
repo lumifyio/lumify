@@ -53,6 +53,7 @@ public class HdfsLibCacheLoader extends LibLoader {
         } else {
             libCacheDirectory = new File(hdfsLibCacheTempDirectory, System.getProperty("user.name") + "-" + ProcessUtil.getPid());
         }
+        LOGGER.debug("using local lib cache directory: %s", libCacheDirectory.getAbsolutePath());
         libCacheDirectory.deleteOnExit();
         if (!libCacheDirectory.exists()) {
             if (!libCacheDirectory.mkdirs()) {
@@ -83,6 +84,7 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private static void addFilesFromHdfs(FileSystem fs, Path source, File dest) throws IOException {
+        LOGGER.debug("adding files from hdfs %s -> %s", source.toString(), dest.getAbsolutePath());
         RemoteIterator<LocatedFileStatus> sourceFiles = fs.listFiles(source, true);
         while (sourceFiles.hasNext()) {
             LocatedFileStatus sourceFile = sourceFiles.next();
@@ -93,6 +95,7 @@ public class HdfsLibCacheLoader extends LibLoader {
                     LOGGER.debug("Could not make directory %s", destFile.getAbsolutePath());
                 }
             } else {
+                LOGGER.debug("copy to local %s -> %s", sourceFile.getPath().toString(), destFile.getAbsolutePath());
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
                 new File(destFile.getParent(), "." + destFile.getName() + ".crc").deleteOnExit();
             }
