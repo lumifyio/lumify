@@ -44,7 +44,7 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
 
         app.get("/js/configuration/plugins/authentication/authentication.js", jsHandler);
         app.get("/jsc/configuration/plugins/authentication/authentication.js", jsHandler);
-        app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", jsHandler);
+        app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", loginTemplateHandler);
         app.post(AuthenticationHandler.LOGIN_PATH, new Login(this.userRepository, this.workspaceRepository, this.configuration));
         //app.get(AuthenticationHandler.LOGOUT_PATH, new Logout());
     }
