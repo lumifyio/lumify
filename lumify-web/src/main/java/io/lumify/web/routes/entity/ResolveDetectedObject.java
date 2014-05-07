@@ -1,5 +1,7 @@
 package io.lumify.web.routes.entity;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -10,6 +12,7 @@ import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
@@ -20,11 +23,9 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
     private final AuditRepository auditRepository;
     private final OntologyRepository ontologyRepository;
     private final DetectedObjectRepository detectedObjectRepository;
+    private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
 
@@ -51,6 +53,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
             final UserRepository userRepository,
             final Configuration configuration,
             final DetectedObjectRepository detectedObjectRepository,
+            final WorkQueueRepository workQueueRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository) {
         super(userRepository, workspaceRepository, configuration);
@@ -58,6 +61,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         this.auditRepository = auditRepository;
         this.ontologyRepository = ontologyRepository;
         this.detectedObjectRepository = detectedObjectRepository;
+        this.workQueueRepository = workQueueRepository;
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
     }
@@ -138,6 +142,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         resolvedVertexMutation.save();
 
         graph.flush();
+
+        workQueueRepository.pushEdgeCreation(edge);
 
         respondWithJson(response, result);
     }

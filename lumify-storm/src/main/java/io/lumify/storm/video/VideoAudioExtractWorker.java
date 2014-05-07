@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -40,7 +41,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+            ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
             InputStream mp3FileIn = new FileInputStream(mp3File);
             try {
@@ -52,7 +53,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
                 m.save();
                 getGraph().flush();
 
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());
             } finally {
                 mp3FileIn.close();
             }
@@ -62,7 +63,11 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
@@ -71,7 +76,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.AUDIO_MP3.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.AUDIO_MP3.hasProperty(element, PROPERTY_KEY)) {
             return false;
         }
 

@@ -7,9 +7,8 @@ import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.securegraph.Element;
 import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.mutation.ElementMutation;
 
 import java.io.InputStream;
 
@@ -20,7 +19,7 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(data.getVertex());
+        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(data.getElement());
         Concept concept;
 
         if (mimeType.startsWith("image")) {
@@ -37,19 +36,23 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
             checkNotNull(concept, "Could not find concept " + ConceptType.DOCUMENT.toString());
         }
 
-        LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getVertex().getId());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getVertex(), concept.getTitle(), data.getPropertyMetadata(), data.getVisibility());
+        LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getElement().getId());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.getPropertyMetadata(), data.getVisibility());
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex(), null, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
 
-        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(vertex);
+        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(element);
         return mimeType != null;
     }
 }

@@ -1,25 +1,28 @@
 package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.security.LumifyVisibilityProperties;
-import org.securegraph.*;
 import org.json.JSONObject;
+import org.securegraph.Element;
+import org.securegraph.ElementBuilder;
+import org.securegraph.Property;
+import org.securegraph.Visibility;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GraphPropertyWorkData {
-    private final Vertex vertex;
+    private final Element element;
     private final Property property;
     private File localFile;
 
-    public GraphPropertyWorkData(Vertex vertex, Property property) {
-        this.vertex = vertex;
+    public GraphPropertyWorkData(Element element, Property property) {
+        this.element = element;
         this.property = property;
     }
 
-    public Vertex getVertex() {
-        return vertex;
+    public Element getElement() {
+        return element;
     }
 
     public Property getProperty() {
@@ -35,12 +38,12 @@ public class GraphPropertyWorkData {
     }
 
     public Visibility getVisibility() {
-        return getVertex().getVisibility();
+        return getElement().getVisibility();
     }
 
     public Map<String, Object> getPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         }
@@ -48,14 +51,14 @@ public class GraphPropertyWorkData {
     }
 
     public void setVisibilityJsonOnElement(ElementBuilder builder) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(builder, visibilityJson, getVisibility());
         }
     }
 
     public void setVisibilityJsonOnElement(Element element) {
-        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getVertex());
+        JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
         if (visibilityJson != null) {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(element, visibilityJson, getVisibility());
         }

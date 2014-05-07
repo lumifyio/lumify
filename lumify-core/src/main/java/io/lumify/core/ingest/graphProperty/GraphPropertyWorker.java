@@ -53,7 +53,7 @@ public abstract class GraphPropertyWorker {
 
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
-    public abstract boolean isHandled(Vertex vertex, Property property);
+    public abstract boolean isHandled(Element element, Property property);
 
     public boolean isLocalFileRequired() {
         return false;

@@ -1,10 +1,13 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
@@ -13,9 +16,7 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
 import org.securegraph.*;
-import com.google.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ public class RelationshipCreate extends BaseRequestHandler {
     private final Graph graph;
     private final AuditRepository auditRepository;
     private final VisibilityTranslator visibilityTranslator;
+    private final WorkQueueRepository workQueueRepository;
 
     @Inject
     public RelationshipCreate(
@@ -34,12 +36,14 @@ public class RelationshipCreate extends BaseRequestHandler {
             final OntologyRepository ontologyRepository,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository,
+            final WorkQueueRepository workQueueRepository,
             final UserRepository userRepository,
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.auditRepository = auditRepository;
         this.visibilityTranslator = visibilityTranslator;
+        this.workQueueRepository = workQueueRepository;
     }
 
     @Override
@@ -76,6 +80,8 @@ public class RelationshipCreate extends BaseRequestHandler {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId).toString(2));
         }
+
+        workQueueRepository.pushEdgeCreation(edge);
 
         respondWithJson(response, JsonSerializer.toJson(edge, workspaceId));
     }
