@@ -21,7 +21,7 @@ For example, to override visibility:
     form.ejs
     style.css
 
-Root JavaScript file must use requirejs, and flightjs. Any other `html, js, css, ejs` files in plugin directory will be served at path:
+Root JavaScript file must use requirejs, and flightjs. Any other `html, js, css, ejs, hbs` files in plugin directory will be served at path:
 
     /jsc/configuration/plugins/[plugin name]/*
 
@@ -43,3 +43,13 @@ Minimal plugin scaffold.
         function Plugin() {
         }
     });
+
+
+Templating
+----------
+
+define([
+    'tpl!./template' // loads ejs "template.ejs" in plugin directory
+    'hbs!./template' // loads handlebars "template.hbs" in plugin directory
+])
+
