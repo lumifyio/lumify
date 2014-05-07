@@ -1,12 +1,16 @@
 define([
-    'flight/lib/component',
-    'hbs!./templates/login'
+    'configuration/plugin',
+    'hbs!./templates/login',
+    'less!./less/login'
 ], function(
-    defineComponent,
-    template) {
+    defineLumifyPlugin,
+    template,
+    less) {
     'use strict';
 
-    return defineComponent(UserNameOnlyAuthentication);
+    return defineLumifyPlugin(UserNameOnlyAuthentication, {
+        less: less
+    });
 
     function UserNameOnlyAuthentication() {
 
