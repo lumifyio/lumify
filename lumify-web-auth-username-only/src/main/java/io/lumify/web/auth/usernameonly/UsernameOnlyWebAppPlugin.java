@@ -27,7 +27,7 @@ public class UsernameOnlyWebAppPlugin implements WebAppPlugin {
     }
 
     @Override
-    public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationHandler authenticationHandler) {
+    public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
         StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-only/authentication.js", "application/javascript");
         StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-only/templates/login.hbs", "text/plain");
 

@@ -5,5 +5,5 @@ import com.altamiracorp.miniweb.Handler;
 import javax.servlet.ServletConfig;
 
 public interface WebAppPlugin {
-    void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationHandler authenticationHandler);
+    void init(WebApp app, ServletConfig config, Handler authenticationHandler);
 }

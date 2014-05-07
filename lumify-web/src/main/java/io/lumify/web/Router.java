@@ -8,15 +8,15 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
-import io.lumify.web.privilegeFilters.*;
+import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
 import io.lumify.web.privilegeFilters.EditPrivilegeFilter;
+import io.lumify.web.privilegeFilters.PublishPrivilegeFilter;
 import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
 import io.lumify.web.routes.artifact.*;
 import io.lumify.web.routes.audit.VertexAudit;
 import io.lumify.web.routes.config.Configuration;
-import io.lumify.web.routes.config.Plugin;
 import io.lumify.web.routes.entity.ResolveDetectedObject;
 import io.lumify.web.routes.entity.ResolveTermEntity;
 import io.lumify.web.routes.entity.UnresolveDetectedObject;
@@ -142,7 +142,7 @@ public class Router extends HttpServlet {
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
                 LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
                 injector.injectMembers(webAppPlugin);
-                webAppPlugin.init(app, config, authenticator, authenticatorInstance);
+                webAppPlugin.init(app, config, authenticatorInstance);
             }
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));

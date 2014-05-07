@@ -2,8 +2,13 @@ package io.lumify.web.auth.oauth.routes;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.web.CurrentUser;
+import io.lumify.web.auth.oauth.TwitterOAuthConfiguration;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.*;
@@ -13,23 +18,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Twitter implements Handler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Twitter.class);
+    private static final String PASSWORD = "8XXuk2tQ523b";
     private static final String OAUTH_REQUEST_TOKEN = "oauth_token";
     public static final String OAUTH_TOKEN_PARAM_NAME = "oauth_token";
     public static final String OAUTH_VERIFIER_PARAM_NAME = "oauth_verifier";
+    private final TwitterOAuthConfiguration config;
+    private final UserRepository userRepository;
 
-    public Twitter() {
-
+    public Twitter(TwitterOAuthConfiguration config, UserRepository userRepository) {
+        this.config = config;
+        this.userRepository = userRepository;
+        checkNotNull(config.getApiKey(), "Twitter OAuth apiKey not set");
+        checkNotNull(config.getApiSecret(), "Twitter OAuth apiSecret not set");
     }
 
     @Override
     public void handle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws Exception {
         if (httpRequest.getParameter(OAUTH_VERIFIER_PARAM_NAME) != null) {
             verify(httpRequest, httpResponse, chain);
+        } else {
+            login(httpRequest, httpResponse, chain);
         }
-
-        login(httpRequest, httpResponse, chain);
     }
 
     private void login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
@@ -67,22 +80,44 @@ public class Twitter implements Handler {
         service.signRequest(accessToken, authRequest);
         Response authResponse = authRequest.send();
 
-        if (authResponse.getCode() != 200) {
+        if (!authResponse.isSuccessful()) {
             LOGGER.warn("OAuth handshake completed, but Twitter credential verification failed: " + authResponse.getMessage());
             httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        System.out.println(authResponse.getBody());
+        JSONObject jsonResponse = new JSONObject(authResponse.getBody());
+        String screenName = jsonResponse.getString("screen_name");
+        if (screenName == null) {
+            LOGGER.warn("Twitter OAuth JSON authorization response did not contain a 'screen_name' value, which is required.");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
 
-        httpResponse.sendRedirect("/oauth/success.html");
+        String displayName = jsonResponse.getString("name");
+        if (displayName == null) {
+            LOGGER.warn("Twitter OAuth JSON authorization response did not contain a 'name' value, which is required.");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        String username = "twitter/" + screenName;
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            // For form based authentication, username and displayName will be the same
+            user = userRepository.addUser(username, displayName, PASSWORD, new String[0]);
+        }
+
+        CurrentUser.set(httpRequest, user);
+
+        httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }
 
     private OAuthService getOAuthService(HttpServletRequest request, boolean withCallback) {
         ServiceBuilder builder = new ServiceBuilder()
                 .provider(TwitterApi.SSL.class)
-                .apiKey("nzr1TkoPHupu7aSW9SjQ")
-                .apiSecret("nC3os0GA14tNj0HtrcNIpf8p1CHcJlLHQCpJU5YI");
+                .apiKey(config.getApiKey())
+                .apiSecret(config.getApiSecret());
 
         if (withCallback) {
             builder.callback(request.getRequestURL().toString());
