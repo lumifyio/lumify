@@ -10,7 +10,7 @@ import io.lumify.web.CurrentUser;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.TwitterApi;
+import org.scribe.builder.api.GoogleApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
@@ -20,8 +20,8 @@ import java.io.IOException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class Twitter implements Handler {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Twitter.class);
+public class Google implements Handler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Google.class);
     private static final String PASSWORD = "8XXuk2tQ523b";
     private static final String OAUTH_REQUEST_TOKEN = "oauth_token";
     public static final String OAUTH_TOKEN_PARAM_NAME = "oauth_token";
@@ -29,11 +29,11 @@ public class Twitter implements Handler {
     private final OAuthConfiguration config;
     private final UserRepository userRepository;
 
-    public Twitter(OAuthConfiguration config, UserRepository userRepository) {
+    public Google(OAuthConfiguration config, UserRepository userRepository) {
         this.config = config;
         this.userRepository = userRepository;
-        checkNotNull(config.getKey(), "Twitter OAuth apiKey not set");
-        checkNotNull(config.getSecret(), "Twitter OAuth apiSecret not set");
+        checkNotNull(config.getKey(), "OAuth id not set");
+        checkNotNull(config.getSecret(), "OAuth secret not set");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Twitter implements Handler {
     }
 
     private void login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
-        OAuthService service = getOAuthService(httpRequest, true);
+        OAuthService service = getOAuthService(httpRequest, true, null);
         Token requestToken = service.getRequestToken();
         httpRequest.getSession().setAttribute(OAUTH_REQUEST_TOKEN, requestToken);
         String authUrl = service.getAuthorizationUrl(requestToken);
@@ -72,20 +72,23 @@ public class Twitter implements Handler {
         }
 
         Verifier verifier = new Verifier(inboundVerifier);
-        OAuthService service = getOAuthService(httpRequest, false);
+        OAuthService service = getOAuthService(httpRequest, false, "https://www.googleapis.com/auth/plus.login");
 
         // TODO: Store this token if authorization succeeds
         Token accessToken = service.getAccessToken(storedToken, verifier);
 
-        OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
+        OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://www.googleapis.com/plus/v1/people/me");
         service.signRequest(accessToken, authRequest);
         Response authResponse = authRequest.send();
 
         if (!authResponse.isSuccessful()) {
-            LOGGER.warn("OAuth handshake completed, but Twitter credential verification failed: " + authResponse.getMessage());
+            LOGGER.warn("OAuth handshake completed, but credential verification failed: " + authResponse.getMessage());
             httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
+
+        System.out.println(authResponse.getBody());
+        httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
 
         JSONObject jsonResponse = new JSONObject(authResponse.getBody());
         String screenName = jsonResponse.getString("screen_name");
@@ -102,7 +105,7 @@ public class Twitter implements Handler {
             return;
         }
 
-        String username = "twitter/" + screenName;
+        String username = "google/" + screenName;
         User user = userRepository.findByUsername(username);
         if (user == null) {
             // For form based authentication, username and displayName will be the same
@@ -114,11 +117,15 @@ public class Twitter implements Handler {
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }
 
-    private OAuthService getOAuthService(HttpServletRequest request, boolean withCallback) {
+    private OAuthService getOAuthService(HttpServletRequest request, boolean withCallback, String scope) {
         ServiceBuilder builder = new ServiceBuilder()
-                .provider(TwitterApi.SSL.class)
+                .provider(GoogleApi.class)
                 .apiKey(config.getKey())
                 .apiSecret(config.getSecret());
+
+        if (scope != null) {
+            builder.scope(scope);
+        }
 
         if (withCallback) {
             builder.callback(request.getRequestURL().toString());
