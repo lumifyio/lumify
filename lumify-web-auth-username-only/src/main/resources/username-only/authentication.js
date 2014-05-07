@@ -22,11 +22,27 @@ define([
 
         this.after('initialize', function() {
             this.$node.html(template({}));
+            this.enableButton(false);
 
             this.on('click', {
                 loginButtonSelector: this.onLoginButton
             });
+
+            this.on('keyup change paste', {
+                usernameSelector: this.onUsernameChange
+            });
+
+            this.select('usernameSelector').focus();
         });
+
+        this.onUsernameChange = function(event) {
+            var self = this,
+                input = this.select('usernameSelector');
+
+            _.defer(function() {
+                self.enableButton($.trim(input.val()).length > 0);
+            })
+        };
 
         this.onLoginButton = function(event) {
             var self = this,
@@ -35,8 +51,9 @@ define([
 
             event.preventDefault();
             event.stopPropagation();
+            event.target.blur();
 
-            this.enableButton(false);
+            this.enableButton(false, true);
             $error.empty();
 
             $.post('login', { username: $username.val() })
@@ -49,15 +66,16 @@ define([
                 })
         };
 
-        this.enableButton = function(enable) {
-            var button = this.select('buttonSelector');
+        this.enableButton = function(enable, loading) {
+            var button = this.select('loginButtonSelector');
 
             if (enable) {
-                button.addClass('loading').attr('disabled', true);
-            } else {
                 button.removeClass('loading').removeAttr('disabled');
+            } else {
+                button.toggleClass('loading', !!loading)
+                    .attr('disabled', true);
             }
         }
-
     }
-});
+
+})
