@@ -124,6 +124,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         mutation.addPropertyValue(multiKey, key, wrap(value), visibility);
     }
 
+    public final void addPropertyValue(final Element element, final String multiKey, final TRaw value, final Visibility visibility) {
+        element.addPropertyValue(multiKey, key, wrap(value), visibility);
+    }
+
     /**
      * Add a mutation to add a new value to this property
      *
