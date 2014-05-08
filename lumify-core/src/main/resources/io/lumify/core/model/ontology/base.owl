@@ -140,6 +140,15 @@
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
 
+    <!-- http://lumify.io#confidence -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;confidence">
+        <rdfs:label xml:lang="en">Confidence</rdfs:label>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;double"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
+
     <!-- http://lumify.io#modifiedBy -->
 
     <owl:DatatypeProperty rdf:about="&lumify;modifiedBy">

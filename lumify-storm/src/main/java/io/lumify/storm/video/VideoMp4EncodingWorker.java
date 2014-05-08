@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -58,7 +59,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+            ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
             InputStream mp4RelocatedFileIn = new FileInputStream(mp4ReloactedFile);
             try {
@@ -78,7 +79,11 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
@@ -87,7 +92,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.VIDEO_MP4.hasProperty(element, PROPERTY_KEY)) {
             return false;
         }
 

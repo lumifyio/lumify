@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -48,7 +49,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
                 InputStream frameFileIn = new FileInputStream(frameFile);
                 try {
-                    ExistingElementMutation<Vertex> mutation = data.getVertex().prepareMutation();
+                    ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
                     StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", frameStartTime);
@@ -66,7 +67,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             getGraph().flush();
 
             for (String propertyKey : propertyKeys) {
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getVertex(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
             }
         } finally {
             FileUtils.deleteDirectory(tempDir);
@@ -87,7 +88,11 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }

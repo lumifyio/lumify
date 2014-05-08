@@ -5,6 +5,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.ProcessUtil;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
@@ -16,15 +17,21 @@ import java.net.URI;
 
 public class HdfsLibCacheLoader extends LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(HdfsLibCacheLoader.class);
+    private File hdfsLibCacheTempDirectory;
 
     @Override
     public void loadLibs(Configuration configuration) {
         LOGGER.info("Loading libs using %s", HdfsLibCacheLoader.class.getName());
 
-        String hdfsLibCacheDirectory = configuration.get(Configuration.HDFS_LIB_CACHE_DIRECTORY, null);
+        String hdfsLibCacheDirectory = configuration.get(Configuration.HDFS_LIB_CACHE_SOURCE_DIRECTORY, null);
         if (hdfsLibCacheDirectory == null) {
-            LOGGER.warn("skipping HDFS libcache. Configuration parameter %s not found", Configuration.HDFS_LIB_CACHE_DIRECTORY);
+            LOGGER.warn("skipping HDFS libcache. Configuration parameter %s not found", Configuration.HDFS_LIB_CACHE_SOURCE_DIRECTORY);
             return;
+        }
+
+        String hdfsLibCacheTempDirectoryString = configuration.get(Configuration.HDFS_LIB_CACHE_TEMP_DIRECTORY, null);
+        if (hdfsLibCacheTempDirectoryString != null) {
+            hdfsLibCacheTempDirectory = new File(hdfsLibCacheTempDirectoryString);
         }
 
         FileSystem hdfsFileSystem = getFileSystem(configuration);
@@ -40,13 +47,15 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private File ensureLocalLibCacheDirectory() {
-        File libCacheDirectory = Files.createTempDir();
-        libCacheDirectory.deleteOnExit();
-        if (!libCacheDirectory.exists()) {
-            if (!libCacheDirectory.mkdirs()) {
-                throw new LumifyException("Could not mkdir " + libCacheDirectory.getAbsolutePath());
-            }
+        File libCacheDirectory;
+        if (hdfsLibCacheTempDirectory == null) {
+            libCacheDirectory = Files.createTempDir();
+        } else {
+            libCacheDirectory = new File(hdfsLibCacheTempDirectory, System.getProperty("user.name") + "-" + ProcessUtil.getPid());
         }
+        LOGGER.debug("using local lib cache directory: %s", libCacheDirectory.getAbsolutePath());
+        libCacheDirectory.deleteOnExit();
+        libCacheDirectory.mkdirs();
         return libCacheDirectory;
     }
 
@@ -71,6 +80,7 @@ public class HdfsLibCacheLoader extends LibLoader {
     }
 
     private static void addFilesFromHdfs(FileSystem fs, Path source, File dest) throws IOException {
+        LOGGER.debug("adding files from hdfs %s -> %s", source.toString(), dest.getAbsolutePath());
         RemoteIterator<LocatedFileStatus> sourceFiles = fs.listFiles(source, true);
         while (sourceFiles.hasNext()) {
             LocatedFileStatus sourceFile = sourceFiles.next();
@@ -81,6 +91,7 @@ public class HdfsLibCacheLoader extends LibLoader {
                     LOGGER.debug("Could not make directory %s", destFile.getAbsolutePath());
                 }
             } else {
+                LOGGER.debug("copy to local %s -> %s", sourceFile.getPath().toString(), destFile.getAbsolutePath());
                 fs.copyToLocalFile(sourceFile.getPath(), new Path(destFile.getAbsolutePath()));
                 new File(destFile.getParent(), "." + destFile.getName() + ".crc").deleteOnExit();
             }

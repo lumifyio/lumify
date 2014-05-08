@@ -1,15 +1,16 @@
 package io.lumify.storm.audio;
 
+import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +38,7 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+            ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
             InputStream mp4FileIn = new FileInputStream(mp4File);
             try {
@@ -56,7 +57,11 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
@@ -65,7 +70,7 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.AUDIO_MP4.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.AUDIO_MP4.hasProperty(element, PROPERTY_KEY)) {
             return false;
         }
 

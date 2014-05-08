@@ -12,7 +12,6 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
-import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -83,7 +82,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        final String rowKey = getOptionalParameter (request, "rowKey");
+        final String rowKey = getOptionalParameter(request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -158,6 +157,8 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         this.graph.flush();
         workQueueRepository.pushTextUpdated(artifactId);
+
+        workQueueRepository.pushEdgeCreation(edge);
 
         JSONObject result = new JSONObject();
         result.put("success", true);

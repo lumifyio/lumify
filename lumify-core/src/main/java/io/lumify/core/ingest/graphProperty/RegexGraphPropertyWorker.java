@@ -1,14 +1,15 @@
 package io.lumify.core.ingest.graphProperty;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,7 +47,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVisibility());
             termMentions.add(termMention);
         }
-        saveTermMentions(data.getVertex(), termMentions);
+        saveTermMentions((Vertex) data.getElement(), termMentions);
     }
 
     private TermMention createTerm(final Matcher matched, String propertyKey, Visibility visibility) {
@@ -62,7 +63,11 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }

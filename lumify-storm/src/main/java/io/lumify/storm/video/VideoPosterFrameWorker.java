@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -48,7 +49,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
 
             InputStream videoPosterFrameFileIn = new FileInputStream(videoPosterFrameFile);
             try {
-                ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+                ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
                 StreamingPropertyValue spv = new StreamingPropertyValue(videoPosterFrameFileIn, byte[].class);
                 spv.searchIndex(false);
@@ -66,7 +67,11 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
