@@ -319,13 +319,18 @@ public class SecureGraphAuditRepository extends AuditRepository {
             destTitle = IterableUtils.toList(destTitleIterable).get(IterableUtils.count(destTitleIterable) - 1);
         }
 
+        String sourceVertexConceptType = CONCEPT_TYPE.getPropertyValue(sourceVertex);
+        checkNotNull(sourceVertexConceptType, "vertex " + sourceVertex.getId() + " has a null " + CONCEPT_TYPE.getKey());
+        String destVertexConceptType = CONCEPT_TYPE.getPropertyValue(destVertex);
+        checkNotNull(destVertexConceptType, "vertex " + destVertex.getId() + " has a null " + CONCEPT_TYPE.getKey());
+
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)
-                .setSourceType(CONCEPT_TYPE.getPropertyValue(sourceVertex), visibility)
+                .setSourceType(sourceVertexConceptType, visibility)
                 .setSourceTitle(sourceTitle, visibility)
                 .setDestId(destVertex.getId(), visibility)
                 .setDestTitle(destTitle, visibility)
-                .setDestType(CONCEPT_TYPE.getPropertyValue(destVertex), visibility)
+                .setDestType(destVertexConceptType, visibility)
                 .setLabel(label, visibility);
         return audit;
     }
