@@ -38,7 +38,6 @@ public class WorkspaceById extends BaseRequestHandler {
             respondWithNotFound(response);
         } else {
             LOGGER.debug("Successfully found workspace");
-            getUserRepository().setCurrentWorkspace(authUser.getUserId(), workspaceId);
             final JSONObject resultJSON = getWorkspaceRepository().toJson(workspace, authUser, true);
             respondWithJson(response, resultJSON);
         }

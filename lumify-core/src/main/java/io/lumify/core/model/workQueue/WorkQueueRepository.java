@@ -115,6 +115,19 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
+    public void pushUserWorkspaceChange(User user, String workspaceId) {
+        broadcastUserWorkspaceChange(user, workspaceId);
+    }
+
+    protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "userWorkspaceChange");
+        JSONObject data = UserRepository.toJson(user);
+        data.put("workspaceId", workspaceId);
+        json.put("data", data);
+        broadcastJson(json);
+    }
+
     protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName) {
         try {
             JSONObject json;
