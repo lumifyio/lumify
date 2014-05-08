@@ -10,6 +10,9 @@ import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.user.UserListener;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.version.BuildInfo;
+import io.lumify.core.version.ProjectInfo;
+import io.lumify.core.version.ProjectInfoScanner;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.WebAppPlugin;
 import org.json.JSONArray;
@@ -81,8 +84,44 @@ public class PluginList extends BaseRequestHandler {
     }
 
     private JSONObject getLoadedLibFileJson(File loadedLibFile) {
+        ProjectInfoScanner scanner = new ProjectInfoScanner(loadedLibFile);
+
         JSONObject json = new JSONObject();
         json.put("fileName", loadedLibFile);
+
+        JSONArray projectInfosJson = new JSONArray();
+        for (ProjectInfo projectInfo : scanner) {
+            projectInfosJson.put(getProjectInfoJson(projectInfo));
+        }
+        json.put("projectInfos", projectInfosJson);
+
+        return json;
+    }
+
+    private JSONObject getProjectInfoJson(ProjectInfo projectInfo) {
+        JSONObject json = new JSONObject();
+        json.put("name", projectInfo.getName());
+        json.put("artifactId", projectInfo.getArtifactId());
+        json.put("buildInfo", getBuildInfoJson(projectInfo.getBuildInfo()));
+        json.put("coordinates", projectInfo.getCoordinates());
+        json.put("groupId", projectInfo.getGroupId());
+        json.put("scmRevision", projectInfo.getScmRevision());
+        json.put("source", projectInfo.getSource());
+        json.put("version", projectInfo.getVersion());
+        return json;
+    }
+
+    private JSONObject getBuildInfoJson(BuildInfo buildInfo) {
+        JSONObject json = new JSONObject();
+        json.put("date", buildInfo.getDate());
+        json.put("jvmVendor", buildInfo.getJvmVendor());
+        json.put("jvmVersion", buildInfo.getJvmVersion());
+        json.put("mavenVersion", buildInfo.getMavenVersion());
+        json.put("osArch", buildInfo.getOsArch());
+        json.put("osName", buildInfo.getOsName());
+        json.put("osVersion", buildInfo.getOsVersion());
+        json.put("timestamp", buildInfo.getTimestamp());
+        json.put("user", buildInfo.getUser());
         return json;
     }
 

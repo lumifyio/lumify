@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import io.lumify.core.version.BuildInfo;
+import io.lumify.core.version.ProjectInfo;
+import io.lumify.core.version.ProjectInfoScanner;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
