@@ -250,8 +250,14 @@ define([
             var self = this,
                 feature = map.featuresLayer.getFeatureById(vertex.id),
                 geoLocations = this.ontologyProperties.byDataType.geoLocation,
-                geoLocationProperty = _.first(geoLocations),
-                geoLocation = geoLocationProperty && F.vertex.prop(vertex, geoLocationProperty.title),
+                geoLocation = geoLocations &&
+                    _.chain(geoLocations)
+                        .map(function(geoLocationProperty) {
+                            return F.vertex.prop(vertex, geoLocationProperty.title);
+                        })
+                        .compact()
+                        .first()
+                        .value(),
                 conceptType = F.vertex.prop(vertex, 'conceptType'),
                 selected = ~appData.selectedVertexIds.indexOf(vertex.id),
                 iconUrl =  '/map/marker/image?' + $.param({
