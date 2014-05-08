@@ -1,5 +1,7 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserStatus;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
@@ -8,8 +10,6 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import org.apache.commons.lang.StringUtils;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.client.TrackMessageSizeInterceptor;
@@ -173,6 +173,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         if (!workspaceId.equals(userRepository.getCurrentWorkspaceId(authUser.getUserId()))) {
             Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
             userRepository.setCurrentWorkspace(authUser.getUserId(), workspace.getId());
+            workQueueRepository.pushUserWorkspaceChange(authUser, workspace.getId());
 
             LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);
         }
