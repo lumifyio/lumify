@@ -374,7 +374,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValuesByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getKey());
     }
 
-    private ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+    protected ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
         ArrayList<PossibleValueType> possibleValueTypes = new ArrayList<PossibleValueType>();
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().getIRI().toString().equals(uri)) {
