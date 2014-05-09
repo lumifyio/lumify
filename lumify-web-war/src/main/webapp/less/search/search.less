@@ -13,6 +13,34 @@ width: 175px;
 
   .search-query {
     margin-bottom: 0.5em;
+    padding-right: 28px;
+  }
+
+  .search-query-container {
+    position: relative;
+
+    a {
+      position: absolute;
+      font-size: 0;
+      top: 0;
+      right: 5px;
+      width: 25px;
+      height: 100%;
+      color: #999;
+      line-height: 1.4em;
+      margin: 0;
+      padding: 0;
+      background: url(../img/glyphicons/glyphicons_192_circle_remove.png);
+      background-repeat: no-repeat;
+      background-size: 13px;
+      background-position: center;
+      
+      .opacity(40);
+
+      &:hover {
+        .opacity(60);
+      }
+    }
   }
 }
 
