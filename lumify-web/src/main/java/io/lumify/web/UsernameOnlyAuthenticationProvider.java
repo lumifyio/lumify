@@ -30,12 +30,12 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
     @Override
     public boolean login(HttpServletRequest request) {
-        final String username = UrlUtils.urlDecode(request.getParameter("username"));
+        final String username = UrlUtils.urlDecode(request.getParameter("username")).trim();
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username.toLowerCase());
         if (user == null) {
             // For form based authentication, username and displayName will be the same
-            user = userRepository.addUser(username, username, PASSWORD, new String[0]);
+            user = userRepository.addUser(username.toLowerCase(), username, PASSWORD, new String[0]);
         }
         setUserId(request, user.getUserId());
         return true;

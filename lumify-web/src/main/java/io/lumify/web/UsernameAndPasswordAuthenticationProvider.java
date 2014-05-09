@@ -29,10 +29,10 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
 
     @Override
     public boolean login(HttpServletRequest request) {
-        final String username = UrlUtils.urlDecode(request.getParameter("username"));
-        final String password = UrlUtils.urlDecode(request.getParameter("password"));
+        final String username = UrlUtils.urlDecode(request.getParameter("username")).trim();
+        final String password = UrlUtils.urlDecode(request.getParameter("password")).trim();
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username.toLowerCase());
         if (user != null && userRepository.isPasswordValid(user, password)) {
             setUserId(request, user.getUserId());
             return true;
