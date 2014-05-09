@@ -50,8 +50,8 @@ public abstract class WorkQueueRepository {
         broadcastPropertyChange(element, propertyKey, propertyName);
     }
 
-    public void pushEdgeCreation(Edge edge) {
-        pushGraphPropertyQueue(edge, null, null);
+    public void pushElement(Element element) {
+        pushGraphPropertyQueue(element, null, null);
     }
 
     public void pushEdgeDeletion(Edge edge) {

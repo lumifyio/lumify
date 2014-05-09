@@ -21,5 +21,9 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         app.post("/user/auth/remove", authenticator, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
         app.post("/user/delete", authenticator, AdminPrivilegeFilter.class, UserDelete.class);
         app.post("/user/privileges/update", authenticator, AdminPrivilegeFilter.class, UserUpdatePrivileges.class);
+
+        app.get("/admin/requeue.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
+        app.post("/admin/queueVertices", authenticator, AdminPrivilegeFilter.class, QueueVertices.class);
+        app.post("/admin/queueEdges", authenticator, AdminPrivilegeFilter.class, QueueEdges.class);
     }
 }

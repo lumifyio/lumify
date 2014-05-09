@@ -191,6 +191,10 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         return element.getProperty(getKey());
     }
 
+    public Iterable<Property> getProperties(Element element) {
+        return element.getProperties(getKey());
+    }
+
     /**
      * Function that converts the values returned by the Vertex.getProperty()
      * methods to the configured TRaw type.

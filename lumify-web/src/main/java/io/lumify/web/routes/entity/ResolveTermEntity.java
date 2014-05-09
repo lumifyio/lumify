@@ -158,7 +158,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.graph.flush();
         workQueueRepository.pushTextUpdated(artifactId);
 
-        workQueueRepository.pushEdgeCreation(edge);
+        workQueueRepository.pushElement(edge);
 
         JSONObject result = new JSONObject();
         result.put("success", true);
