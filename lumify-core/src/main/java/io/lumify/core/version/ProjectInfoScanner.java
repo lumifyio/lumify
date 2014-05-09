@@ -1,27 +1,17 @@
-package io.lumify.tools.version;
+package io.lumify.core.version;
 
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -32,15 +22,19 @@ public class ProjectInfoScanner implements Iterable<ProjectInfo>, Iterator<Proje
     private static final Pattern LUMIFY_BUILD_INFO_PATTERN =
             Pattern.compile(".*\\bMETA-INF[\\\\/]lumify[\\\\/].*-build.properties$");
     private static final Pattern ARCHIVE_PATTERN = Pattern.compile(".*\\.(jar|war|ear)$");
-    private static final String[] TARGET_EXTENSIONS = new String[] {
-        "properties",
-        "jar",
-        "war",
-        "ear"
+    private static final String[] TARGET_EXTENSIONS = new String[]{
+            "properties",
+            "jar",
+            "war",
+            "ear"
     };
 
     private final Deque<Iterator<Entry>> entryIterStack;
     private ProjectInfo nextInfo;
+
+    public ProjectInfoScanner(final File file) {
+        this(Arrays.asList(new File[]{file}));
+    }
 
     public ProjectInfoScanner(final Collection<File> roots) {
         Set<File> fullTree = new TreeSet<File>();
@@ -122,6 +116,7 @@ public class ProjectInfoScanner implements Iterable<ProjectInfo>, Iterator<Proje
 
     private abstract static class Entry {
         public abstract String getFullPath();
+
         public abstract InputStream getInputStream() throws IOException;
 
         @Override

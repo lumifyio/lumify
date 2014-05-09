@@ -186,6 +186,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
             if (authUser == null) {
                 throw new RuntimeException("Could not find user in session");
             }
+            LOGGER.debug("Setting user %s status to %s", authUser.getUserId(), status.toString());
             User user = userRepository.setStatus(authUser.getUserId(), status);
 
             this.workQueueRepository.pushUserStatusChange(user, status);

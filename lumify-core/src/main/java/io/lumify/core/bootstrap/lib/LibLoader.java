@@ -9,9 +9,12 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class LibLoader {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(LibLoader.class);
+    private static List<File> loadedLibFiles = new ArrayList<File>();
 
     public abstract void loadLibs(Configuration configuration);
 
@@ -49,6 +52,7 @@ public abstract class LibLoader {
             throw new LumifyException(String.format("Could not add lib %s. Not a file.", f.getAbsolutePath()));
         }
         LOGGER.info("adding lib: %s", f.getAbsolutePath());
+        loadedLibFiles.add(f);
 
         ClassLoader classLoader = LibLoader.class.getClassLoader();
         while (classLoader != null) {
@@ -80,5 +84,9 @@ public abstract class LibLoader {
             LOGGER.error("Error, could not add URL " + f.getAbsolutePath() + " to classloader: " + classLoaderClass.getName(), t);
             return false;
         }
+    }
+
+    public static List<File> getLoadedLibFiles() {
+        return loadedLibFiles;
     }
 }
