@@ -59,6 +59,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;possibleValues"/>
 
+    <!-- http://lumify.io#mappingKey -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;mappingKey"/>
+
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
