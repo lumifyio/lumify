@@ -1,7 +1,20 @@
 <ul class="nav nav-list">
-  <li class="nav-header conversations">Chats</li>
 
-  <li class="nav-header status-online">Online</li>
+  {{#if chats}}
+    <li class="nav-header conversations">Conversations</li>
+    {{#each chats}}
+    {{> chat/userListItemTpl }}
+    {{/each}}
+  {{/if}}
 
-  <li class="nav-header status-offline">Offline</li>
+  {{#each usersByWorkspace}}
+    <li class="nav-header">{{name}}</li>
+    {{#each users}}
+    {{> chat/userListItemTpl }}
+    {{/each}}
+    </li>
+  {{else}}
+    <li><em>No users online</em></li>
+  {{/each}}
+
 </ul>

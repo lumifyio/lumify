@@ -103,7 +103,7 @@ define([
             this.on(document, 'error', this.onError);
             this.on(document, 'menubarToggleDisplay', this.toggleDisplay);
             this.on(document, 'chatMessage', this.onChatMessage);
-            this.on(document, 'startChat', this.onChatMessage);
+            this.on(document, 'selectUser', this.onChatMessage);
             this.on(document, 'objectsSelected', this.onObjectsSelected);
             this.on(document, 'syncStarted', this.onSyncStarted);
             this.on(document, 'paneResized', this.onInternalPaneResize);

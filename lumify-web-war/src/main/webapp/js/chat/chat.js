@@ -1,7 +1,9 @@
 define([
+    'require',
     'flight/lib/component',
-    'hbs!./chatTpl'
+    'hbs!./chatTpl',
 ], function(
+    require,
     defineComponent,
     template) {
     'use strict';
@@ -21,24 +23,25 @@ define([
             this.initialWorkspaceLoad = $.Deferred();
 
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
-            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
-            this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
+            //this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+            //this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
 
+            _.delay(function() {
+                //this.trigger(document, 'menubarToggleDisplay', { name: 'chat' })
+            }.bind(this), 1000);
         });
 
-        this.attachComponents = function(workspaceId) {
+        this.attachComponents = function() {
             var self = this,
                 userListPane = this.select('usersListSelector'),
                 activeChatPane = this.select('activeChatSelector');
 
             require([
-                './chat',
+                './window',
                 './userList'
-            ], function(Chat, UserList) {
-                Chat.attachTo(chatPane);
-                UserList.attachTo(userListPane, {
-                    workspaceId: workspaceId
-                });
+            ], function(Window, UserList) {
+                Window.attachTo(activeChatPane);
+                UserList.attachTo(userListPane)
             });
 
             // Set function to noop for future calls
@@ -47,7 +50,7 @@ define([
 
         this.onMenubarToggleDisplay = function(event, data) {
             if (data.name === 'chat') {
-                this.initialWorkspaceLoad.done(this.attachComponents.bind(this));
+                this.attachComponents();
             }
         };
 

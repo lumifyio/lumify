@@ -18,11 +18,29 @@ width: 390px;
   overflow: auto;
   overflow-x: hidden;
   width: 130px;
+  
+  .nav-header div {
+    font-size: 80%;
+  }
 
   .user a {
     max-width: 95px;
     text-overflow: ellipsis;
     overflow: hidden;
+    
+    span.label {
+      //display: block;
+      //float: right;
+      white-space: nowrap;
+      font-size: 70%;      
+      .opacity(50);
+    }
+    .subtitle {
+      display: block;
+      color: #555;
+      text-transform: lowercase;
+      font-variant: small-caps;      
+    }
   }
 
   .badge {
@@ -32,5 +50,5 @@ width: 390px;
 }
 
 .active-chat {
-  @import "message";
+  @import "window";
 }

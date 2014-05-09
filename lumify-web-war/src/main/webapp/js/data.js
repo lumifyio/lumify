@@ -10,6 +10,7 @@ define([
     'service/vertex',
     'service/ontology',
     'service/config',
+    'service/user',
     'util/undoManager',
     'util/clipboardManager',
     'util/privileges',
@@ -20,7 +21,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue,
     // Service
-    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService,
+    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
     undoManager, ClipboardManager, Privileges, F) {
     'use strict';
@@ -56,6 +57,7 @@ define([
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
         this.configService = new ConfigService();
+        this.userService = new UserService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
         this.workspaceId = null;
@@ -122,6 +124,9 @@ define([
             this.on('searchRelated', this.onSearchRelated);
             this.on('addRelatedItems', this.onAddRelatedItems);
 
+            // Service requests
+            this.on('requestUsersForChat', this.onRequestUsersForChat);
+
             this.on('socketMessage', this.onSocketMessage);
 
             this.on('copydocumenttext', this.onDocumentTextCopy);
@@ -174,6 +179,20 @@ define([
                     self.socketSubscribeMarkReady(response);
                 }
             });
+        };
+
+        this.onRequestUsersForChat = function(event, data) {
+            var self = this;
+
+            this.workspaceReady()
+                .done(function(workspace) {
+                    self.userService
+                        .getCurrentUsers(workspace.workspaceId)
+                        .done(function(data) {
+                            data.workspace = workspace;
+                            self.trigger(event.target, 'usersForChat', data);
+                        });
+                });
         };
 
         this.onSocketMessage = function(evt, message) {
@@ -851,7 +870,8 @@ define([
 
         this.loadWorkspace = function(workspaceData) {
             var self = this,
-                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
+                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId,
+                isChanged = self.workspaceId !== workspaceId;
 
             window.workspaceId = self.workspaceId = workspaceId;
 
@@ -863,7 +883,23 @@ define([
             self.socketSubscribeReady()
                 .done(function() {
                     $.when(
-                        self.getWorkspace(workspaceId),
+                        self.getWorkspace(workspaceId)
+                            .done(function() {
+                                if (isChanged) {
+                                    var currentUserId = window.currentUser.id;
+
+                                    self.workspaceService.socketPush({
+                                        type: 'changedWorkspace',
+                                        permissions: {
+                                            users: [currentUserId]
+                                        },
+                                        data: {
+                                            workspaceId: workspaceId,
+                                            userId: currentUserId
+                                        }
+                                    });
+                                }
+                            }),
                         self.workspaceService.getVertices(workspaceId)
                     ).done(function(workspace, vertexResponse) {
 

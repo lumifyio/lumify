@@ -1,10 +1,17 @@
 define([
     'flight/lib/component',
     'service/chat',
-    'tpl!./chatWindow',
-    'tpl!./chatMessage',
-    'sf'
-], function(defineComponent, ChatService, chatWindowTemplate, chatMessageTemplate, sf) {
+    'hbs!./windowTpl',
+    'hbs!./message',
+    'sf',
+    'util/formatters'
+], function(
+    defineComponent,
+    ChatService,
+    chatWindowTemplate,
+    chatMessageTemplate,
+    sf,
+    F) {
     'use strict';
 
     return defineComponent(Chat);
@@ -23,7 +30,6 @@ define([
             this.on(document, 'userSelected', this.onUserSelected);
             this.on(document, 'chatMessage', this.onChatMessage);
             this.on(document, 'socketMessage', this.onSocketMessage);
-            this.on(document, 'chatCreated', this.onChatCreated);
             this.on('submit', {
                 newMessageFormSelector: this.onNewMessageFormSubmit
             });
@@ -45,7 +51,9 @@ define([
         };
 
         this.focusMessage = function(rowKey) {
-            $('#chat-window-' + rowKey).show().find('.message').focus();
+            this.$node
+                .find('.' + F.className.to(rowKey)).show()
+                .find('.message').focus();
         };
 
         this.onUserSelected = function(evt, userData) {
@@ -58,11 +66,8 @@ define([
                 rowKey: userData.id,
                 users: [userData]
             };
-            this.openChats[chat.rowKey] = chat;
-            this.trigger(document, 'chatCreated', chat);
-        };
 
-        this.onChatCreated = function(evt, chat) {
+            this.openChats[chat.rowKey] = chat;
             this.createChatWindowAndFocus(chat);
         };
 
@@ -72,8 +77,9 @@ define([
 
             if (!chat.windowCreated) {
                 var html = $(chatWindowTemplate({
-                    id: id,
-                    chat: chat
+                    cls: F.className.to(id),
+                    rowKey: id,
+                    to: chat.users[0].userName
                 }));
                 html.hide().appendTo(this.$node);
                 chat.windowCreated = true;
@@ -92,23 +98,25 @@ define([
             }
             this.checkChatWindow(messageData);
 
-            var $chatWindow = $('#chat-window-' + messageData.chatRowKey),
+            var $chatWindow = this.$node.find('.' + F.className.to(messageData.chatRowKey)),
                 data = {
-                    messageData: messageData
+                    userName: messageData.from.userName,
+                    tempId: messageData.tempId,
+                    timestamp: sf('{0:hh:mm:ss tt}',
+                        messageData.postDate ?
+                            new Date(messageData.postDate) :
+                            new Date()
+                    ),
+                    message: messageData.message
                 };
 
-            if (messageData.postDate) {
-                data.prettyDate = sf('{0:hh:mm:ss tt}', new Date(messageData.postDate));
-            } else {
-                data.prettyDate = sf('{0:hh:mm:ss tt}', new Date());
-            }
             $chatWindow.find('.chat-messages').append(chatMessageTemplate(data));
 
             this.scrollWindowToBottom($chatWindow);
         };
 
         this.checkChatWindow = function(messageData) {
-            var $chatWindow = $('#chat-window-' + messageData.chatRowKey);
+            var $chatWindow = this.$node.find('.' + F.className.to(messageData.chatRowKey));
             if ($chatWindow.length === 0) {
                 var chat = this.openChats[messageData.chatRowKey];
                 if (!chat) {
@@ -117,7 +125,7 @@ define([
                         users: [messageData.from]
                     };
                     this.openChats[messageData.chatRowKey] = chat;
-                    this.trigger(document, 'chatCreated', chat);
+                    this.createChatWindowAndFocus(chat);
                 } else {
                     this.createChatWindowAndFocus(chat);
                 }
@@ -156,7 +164,7 @@ define([
                 $target = $(evt.target),
                 $chatWindow = $target.parents('.chat-window'),
                 $messageInput = $('.message', $target),
-                chatRowKey = $chatWindow.data('chatrowkey'),
+                chatRowKey = $chatWindow.data('rowKey'),
                 chat = this.openChats[chatRowKey],
                 tempId = 'chat-message-temp-' + Date.now(),
 
@@ -176,6 +184,7 @@ define([
             });
             userIds.push(currentUser.id);
 
+            console.log(messageData)
             this.chatService.sendChatMessage(userIds, messageData);
 
             $messageInput.val('');
