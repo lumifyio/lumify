@@ -123,7 +123,7 @@ define([
         this.onAuditUserClicked = function(event) {
             var userId = $(event.target).data('userId');
             if (userId) {
-                this.trigger('startChat', { userId: userId });
+                this.trigger('selectUser', { userId: userId });
             }
         };
 

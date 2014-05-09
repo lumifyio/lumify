@@ -34,7 +34,6 @@ define([
                 selectSelector: function(event) {
                     var val = this.select('selectSelector').val()
 
-                    console.log(val)
                     this.filterUpdated(val);
                 }
             })

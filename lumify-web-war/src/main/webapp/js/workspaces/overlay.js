@@ -35,11 +35,17 @@ define([
             })
 
             this.userDeferred = $.Deferred();
+            if (window.currentUser) {
+                this.userDeferred.resolve();
+            }
+
             this.workspaceDeferred = $.Deferred();
             this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
 
             $.when(this.userDeferred, this.workspaceDeferred).done(function() {
                 self.$node.show();
+
+                self.updateUserTooltip({user: window.currentUser});
 
                 requestAnimationFrame(function() {
                     self.$node.addClass('visible');
