@@ -11,14 +11,14 @@ define([
     function Menubar() {
 
         // Add class name of <li> buttons here
-        var BUTTONS = 'dashboard graph map search workspaces activity users logout',
+        var BUTTONS = 'dashboard graph map search workspaces activity chat logout',
             TOOLTIPS = {
                 dashboard: 'Dashboard',
                 graph: { html: 'Graph<span class="subtitle">2D / 3D</span>' },
                 map: 'Map',
                 search: 'Search',
                 workspaces: 'Workspaces',
-                users: 'Chat',
+                chat: 'Chat',
                 logout: 'Log&nbsp;out'
             },
 
@@ -105,10 +105,10 @@ define([
                 cls = 'synchronizing';
 
             this.on(document, 'syncStarted', function() {
-                self.select('usersIconSelector').addClass(cls);
+                self.select('chatIconSelector').addClass(cls);
             });
             this.on(document, 'syncEnded', function() {
-                self.select('usersIconSelector').removeClass(cls);
+                self.select('chatIconSelector').removeClass(cls);
             });
         };
 

@@ -209,7 +209,7 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            return sqlUser.getCurrentWorkspace().getId();
+            return sqlUser.getCurrentWorkspace() == null ? null : sqlUser.getCurrentWorkspace().getId();
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         } finally {
