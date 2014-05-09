@@ -1,10 +1,10 @@
 package io.lumify.web;
 
-import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
+import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +19,8 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        User user = getUser(request);
-        if (user != null) {
+        String userId = getUserId(request);
+        if (userId != null) {
             chain.next(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -34,7 +34,7 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
 
         User user = userRepository.findByUsername(username);
         if (user != null && userRepository.isPasswordValid(user, password)) {
-            setUser(request, user);
+            setUserId(request, user.getUserId());
             return true;
         } else {
             return false;

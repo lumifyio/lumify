@@ -1,10 +1,9 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
 import io.lumify.core.model.user.UserRepository;
-import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.google.inject.Inject;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
 import org.json.JSONArray;
@@ -26,16 +25,16 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
 
             JSONArray users = permissionsJson.optJSONArray("users");
             if (users != null) {
-                User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
-                if (!isUserInList(users, currentUser)) {
+                String currentUserId = AuthenticationProvider.getUserId(r.getRequest().getSession());
+                if (!isUserInList(users, currentUserId)) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }
             }
 
             JSONArray workspaces = permissionsJson.optJSONArray("workspaces");
             if (workspaces != null) {
-                User currentUser = AuthenticationProvider.getUser(r.getRequest().getSession());
-                if (!isWorkspaceInList(workspaces, userRepository.getCurrentWorkspaceId(currentUser.getUserId()))) {
+                String currentUserId = AuthenticationProvider.getUserId(r.getRequest().getSession());
+                if (!isWorkspaceInList(workspaces, userRepository.getCurrentWorkspaceId(currentUserId))) {
                     return new BroadcastAction(BroadcastAction.ACTION.ABORT, message);
                 }
             }
@@ -57,8 +56,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
         return false;
     }
 
-    private boolean isUserInList(JSONArray users, User user) throws JSONException {
-        String userId = user.getUserId();
+    private boolean isUserInList(JSONArray users, String userId) throws JSONException {
         for (int i = 0; i < users.length(); i++) {
             String userItemId = users.getString(i);
             if (userItemId.equals(userId)) {
@@ -74,5 +72,7 @@ public class MessagingFilter implements PerRequestBroadcastFilter {
     }
 
     @Inject
-    public void setUserRepository (UserRepository userRepository) { this.userRepository = userRepository;}
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }

@@ -27,7 +27,7 @@ public class Logout extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        this.authenticationProvider.setUser(request, null);
+        this.authenticationProvider.setUserId(request, null);
         JSONObject json = new JSONObject();
         json.put("status", "ok");
         respondWithJson(response, json);
