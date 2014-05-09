@@ -20,8 +20,8 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        User user = getUser(request);
-        if (user != null) {
+        String userId = getUserId(request);
+        if (userId != null) {
             chain.next(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -37,7 +37,7 @@ public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
             // For form based authentication, username and displayName will be the same
             user = userRepository.addUser(username, username, PASSWORD, new String[0]);
         }
-        setUser(request, user);
+        setUserId(request, user.getUserId());
         return true;
     }
 }

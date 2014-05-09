@@ -157,39 +157,42 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
 
         if ("changedWorkspace".equals(type)) {
-            io.lumify.core.user.User authUser = AuthenticationProvider.getUser(resource.session());
-            if (authUser == null) {
+            String authUserId = AuthenticationProvider.getUserId(resource.session());
+            if (authUserId == null) {
                 throw new RuntimeException("Could not find user in session");
             }
             String workspaceId = dataJson.getString("workspaceId");
             String userId = dataJson.getString("userId");
-            if (userId.equals(authUser.getUserId())) {
-                switchWorkspace(authUser, workspaceId);
+            if (userId.equals(authUserId)) {
+                switchWorkspace(authUserId, workspaceId);
             }
         }
     }
 
-    private void switchWorkspace(io.lumify.core.user.User authUser, String workspaceId) {
-        if (!workspaceId.equals(userRepository.getCurrentWorkspaceId(authUser.getUserId()))) {
+    private void switchWorkspace(String authUserId, String workspaceId) {
+        if (!workspaceId.equals(userRepository.getCurrentWorkspaceId(authUserId))) {
+            User authUser = userRepository.findById(authUserId);
             Workspace workspace = workspaceRepository.findById(workspaceId, authUser);
-            userRepository.setCurrentWorkspace(authUser.getUserId(), workspace.getId());
+            userRepository.setCurrentWorkspace(authUserId, workspace.getId());
             workQueueRepository.pushUserWorkspaceChange(authUser, workspace.getId());
 
-            LOGGER.debug("User %s switched current workspace to %s", authUser.getUserId(), workspaceId);
+            LOGGER.debug("User %s switched current workspace to %s", authUserId, workspaceId);
         }
     }
 
     private void setStatus(AtmosphereResource resource, UserStatus status) {
         broadcaster = resource.getBroadcaster();
         try {
-            io.lumify.core.user.User authUser = AuthenticationProvider.getUser(resource.getRequest().getSession());
-            if (authUser == null) {
+            String authUserId = AuthenticationProvider.getUserId(resource.getRequest().getSession());
+            if (authUserId == null) {
                 throw new RuntimeException("Could not find user in session");
             }
-            LOGGER.debug("Setting user %s status to %s", authUser.getUserId(), status.toString());
-            User user = userRepository.setStatus(authUser.getUserId(), status);
+            User authUser = userRepository.findById(authUserId);
 
-            this.workQueueRepository.pushUserStatusChange(user, status);
+            LOGGER.debug("Setting user %s status to %s", authUserId, status.toString());
+            userRepository.setStatus(authUserId, status);
+
+            this.workQueueRepository.pushUserStatusChange(authUser, status);
         } catch (Exception ex) {
             LOGGER.error("Could not update status", ex);
         } finally {

@@ -308,7 +308,7 @@ public abstract class BaseRequestHandler implements Handler {
     }
 
     protected User getUser(HttpServletRequest request) {
-        return AuthenticationProvider.getUser(request);
+        return new ProxyUser(AuthenticationProvider.getUserId(request), this.userRepository);
     }
 
     private void configureResponse(final ResponseTypes type, final HttpServletResponse response, final Object responseData) {

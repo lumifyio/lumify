@@ -1,6 +1,5 @@
 package io.lumify.web;
 
-import io.lumify.core.user.User;
 import com.altamiracorp.miniweb.Handler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,21 +8,20 @@ import javax.servlet.http.HttpSession;
 public abstract class AuthenticationProvider implements Handler {
     public static final String CURRENT_USER_REQ_ATTR_NAME = "user.current";
 
-    public void setUser(HttpServletRequest request, User user) {
-        request.getSession().setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, user);
+    public void setUserId(HttpServletRequest request, String userId) {
+        request.getSession().setAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME, userId);
     }
 
-    public static User getUser(HttpSession session) {
+    public static String getUserId(HttpSession session) {
         if (session == null) {
             return null;
         }
 
-        Object user = session.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME);
-        return user != null ? (User) user : null;
+        return (String) session.getAttribute(AuthenticationProvider.CURRENT_USER_REQ_ATTR_NAME);
     }
 
-    public static User getUser(HttpServletRequest request) {
-        return AuthenticationProvider.getUser(request.getSession());
+    public static String getUserId(HttpServletRequest request) {
+        return getUserId(request.getSession());
     }
 
     public abstract boolean login(HttpServletRequest request);
