@@ -20,16 +20,24 @@ define([
         this.after('initialize', function() {
             this.$node.html(template({}));
 
-            this.initialWorkspaceLoad = $.Deferred();
-
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
+            this.on(document, 'socketMessage', this.onSocketMessage);
 
-            //_.delay(function() {
-            //    this.trigger(document, 'menubarToggleDisplay', { name: 'chat' })
-            //}.bind(this), 1000);
         });
 
-        this.attachComponents = function() {
+        this.onSocketMessage = function(evt, data) {
+            var self = this;
+
+            switch (data.type) {
+                case 'chatMessage':
+                    self.attachComponents(function() {
+                        self.trigger(document, 'chatMessage', data.data);
+                    });
+                    break;
+            }
+        };
+
+        this.attachComponents = function(callback) {
             var self = this,
                 userListPane = this.select('usersListSelector'),
                 activeChatPane = this.select('activeChatSelector');
@@ -39,27 +47,24 @@ define([
                 './userList'
             ], function(Window, UserList) {
                 Window.attachTo(activeChatPane);
-                UserList.attachTo(userListPane)
+                UserList.attachTo(userListPane);
+                if (callback) {
+                    callback();
+                }
             });
 
             // Set function to noop for future calls
-            this.attachComponents = function() {};
+            this.attachComponents = function(callback) {
+                if (callback) {
+                    callback();
+                }
+            };
         };
 
         this.onMenubarToggleDisplay = function(event, data) {
             if (data.name === 'chat') {
                 this.attachComponents();
             }
-        };
-
-        this.onWorkspaceLoaded = function(event, data) {
-            if (this.initialWorkspaceLoad.state() !== 'resolved') {
-                this.initialWorkspaceLoad.resolve(data.workspaceId);
-            }
-        };
-
-        this.onSwitchWorkspace = function(event, data) {
-            console.log(data)
         };
 
     }

@@ -21,6 +21,7 @@ define([
         this.after('initialize', function() {
             this.$node.html(template({}));
 
+            this.usersDeferred = $.Deferred();
             this.on('usersForChat', this.onUsersForChat);
             this.on(document, 'socketMessage', this.onSocketMessage);
             this.on(document, 'chatMessage', this.onChatMessage);
@@ -32,11 +33,14 @@ define([
         });
 
         this.onChatMessage = function(event, data) {
-            var userRow = this.$node.find('.' + F.className.to(data.from.id) + '');
+            var self = this;
+            this.usersDeferred.done(function() {
+                var userRow = self.$node.find('.' + F.className.to(data.from.id) + '');
 
-            if (!userRow.hasClass('active')) {
-                this.trigger('selectUser', { userId: data.from.id });
-            }
+                if (!userRow.hasClass('active')) {
+                    self.trigger('selectUser', { userId: data.from.id });
+                }
+            });
         };
 
         this.onUserListItemClicked = function(event) {
@@ -55,9 +59,12 @@ define([
 
         this.onSelectUser = function(event, data) {
             this.$node.find('.active').removeClass('active');
-            this.$node.find('.' + F.className.to(data.userId)).addClass('active');
-
-            this.trigger('userSelected', _.findWhere(this.users, { id: data.userId }));
+            if (data && data.userId) {
+                this.$node.find('.' + F.className.to(data.userId)).addClass('active');
+                this.trigger('userSelected', _.findWhere(this.users, { id: data.userId }));
+            } else {
+                this.trigger('userSelected');
+            }
         };
 
         this.onSocketMessage = function(event, message) {
@@ -65,7 +72,9 @@ define([
                 ~'userStatusChange userWorkspaceChange'.indexOf(message.type)) {
                 var user = message.data;
 
-                user.currentWorkspaceId = user.workspaceId;
+                if (user.workspaceId) {
+                    user.currentWorkspaceId = user.workspaceId;
+                }
 
                 if (this.users) {
                     var newUsers = _.reject(this.users, function(u) {
@@ -83,6 +92,7 @@ define([
             this.users = data.users;
             this.workspaces = _.indexBy(data.workspaces, 'workspaceId');
             this.updateUsers();
+            this.usersDeferred.resolve();
         };
 
         this.updateUsers = function() {
@@ -90,8 +100,7 @@ define([
                 UNKNOWN = 'Unknown',
                 groupedUsers = _.chain(self.users)
                     .reject(function(user) {
-                        if (user.id === window.currentUser.id) return true;
-                        return false;// (/OFFLINE/i.test(user.status)) || user.id === window.currentUser.id;
+                        return (/OFFLINE/i.test(user.status)) || user.id === window.currentUser.id;
                     })
                     .groupBy(function(user) {
                         user.cls = F.className.to(user.id);
@@ -116,12 +125,22 @@ define([
                             users: groupedUsers[id]
                         };
                     })
-                    .value();
+                    .value(),
+                activeUser = this.$node.find('.user.active').data('userId');
 
             this.$node.html(template({
                 workspace: self.currentWorkspace,
                 usersByWorkspace: usersByWorkspace
             }));
+            if (activeUser) {
+                var row = this.$node.find('.' + F.className.to(activeUser));
+
+                if (row.length) {
+                    row.addClass('active');
+                } else {
+                    this.trigger('selectUser');
+                }
+            }
         }
     }
 });

@@ -29,7 +29,6 @@ define([
             this.focusMessage = _.debounce(this.focusMessage.bind(this), 100);
             this.on(document, 'userSelected', this.onUserSelected);
             this.on(document, 'chatMessage', this.onChatMessage);
-            this.on(document, 'socketMessage', this.onSocketMessage);
             this.on('submit', {
                 newMessageFormSelector: this.onNewMessageFormSubmit
             });
@@ -57,18 +56,23 @@ define([
         };
 
         this.onUserSelected = function(evt, userData) {
-            var chat = this.findChatByUserId(userData.id);
-            if (chat) {
-                return this.createChatWindowAndFocus(chat);
+
+            if (userData) {
+                var chat = this.findChatByUserId(userData.id);
+                if (chat) {
+                    return this.createChatWindowAndFocus(chat);
+                }
+
+                chat = {
+                    rowKey: userData.id,
+                    users: [userData]
+                };
+
+                this.openChats[chat.rowKey] = chat;
+                this.createChatWindowAndFocus(chat);
+            } else {
+                this.select('chatWindowSelector').hide();
             }
-
-            chat = {
-                rowKey: userData.id,
-                users: [userData]
-            };
-
-            this.openChats[chat.rowKey] = chat;
-            this.createChatWindowAndFocus(chat);
         };
 
         this.createChatWindowAndFocus = function(chat) {
@@ -143,16 +147,6 @@ define([
             }, 100);
         };
 
-        this.onSocketMessage = function(evt, data) {
-            var self = this;
-
-            switch (data.type) {
-                case 'chatMessage':
-                    self.trigger(document, 'chatMessage', data.data);
-                    break;
-            }
-        };
-
         this.onChatMessage = function(evt, message) {
             this.addMessage(message);
         };
@@ -184,7 +178,6 @@ define([
             });
             userIds.push(currentUser.id);
 
-            console.log(messageData)
             this.chatService.sendChatMessage(userIds, messageData);
 
             $messageInput.val('');
