@@ -65,6 +65,8 @@ define([
                 ~'userStatusChange userWorkspaceChange'.indexOf(message.type)) {
                 var user = message.data;
 
+                user.currentWorkspaceId = user.workspaceId;
+
                 if (this.users) {
                     var newUsers = _.reject(this.users, function(u) {
                         return user.id === u.id;
@@ -79,27 +81,24 @@ define([
         this.onUsersForChat = function(event, data) {
             this.currentWorkspace = data.workspace;
             this.users = data.users;
+            this.workspaces = _.indexBy(data.workspaces, 'workspaceId');
             this.updateUsers();
         };
 
         this.updateUsers = function() {
             var self = this,
-                idToName = _.tap({}, function(map) {
-                    map[self.currentWorkspace.workspaceId] = self.currentWorkspace.title;
-                }),
                 UNKNOWN = 'Unknown',
                 groupedUsers = _.chain(self.users)
                     .reject(function(user) {
+                        if (user.id === window.currentUser.id) return true;
                         return false;// (/OFFLINE/i.test(user.status)) || user.id === window.currentUser.id;
                     })
                     .groupBy(function(user) {
                         user.cls = F.className.to(user.id);
 
-                        if (_.isUndefined(user.currentWorkspaceName)) {
+                        if (!self.workspaces[user.currentWorkspaceId]) {
                             return UNKNOWN;
                         }
-
-                        idToName[user.currentWorkspaceId] = user.currentWorkspaceName;
 
                         return user.currentWorkspaceId;
                     })
@@ -109,11 +108,11 @@ define([
                     .sortBy(function(id) {
                         return id === UNKNOWN ? '2' :
                             id === self.currentWorkspace.id ? '0' :
-                            ('1' + idToName[id]);
+                            ('1' + self.workspaces[id].title.toLowerCase());
                     })
                     .map(function(id) {
                         return {
-                            name: id === UNKNOWN ? UNKNOWN : idToName[id],
+                            name: id === UNKNOWN ? UNKNOWN : self.workspaces[id].title,
                             users: groupedUsers[id]
                         };
                     })

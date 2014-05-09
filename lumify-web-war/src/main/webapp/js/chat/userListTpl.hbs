@@ -8,13 +8,13 @@
   {{/if}}
 
   {{#each usersByWorkspace}}
-    <li class="nav-header">{{name}}</li>
+  <li title="{{name}}" class="nav-header">{{name}}</li>
     {{#each users}}
     {{> chat/userListItemTpl }}
     {{/each}}
     </li>
   {{else}}
-    <li><em>No users online</em></li>
+    <li class="none"><em>No users online</em></li>
   {{/each}}
 
 </ul>

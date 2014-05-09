@@ -19,12 +19,21 @@ width: 390px;
   overflow-x: hidden;
   width: 130px;
   
-  .nav-header div {
-    font-size: 80%;
+  .nav-header {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .none {
+    margin-top: 1em;
+    color: #999;
   }
 
   .user a {
     max-width: 95px;
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     

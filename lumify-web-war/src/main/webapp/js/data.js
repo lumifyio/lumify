@@ -186,12 +186,19 @@ define([
 
             this.workspaceReady()
                 .done(function(workspace) {
-                    self.userService
-                        .getCurrentUsers(workspace.workspaceId)
-                        .done(function(data) {
-                            data.workspace = workspace;
-                            self.trigger(event.target, 'usersForChat', data);
+                    $.when(
+                        self.userService.getCurrentUsers(workspace.workspaceId),
+                        self.workspaceService.list()
+                    ).done(function(usersResponse, workspacesResponse) {
+                        var users = usersResponse[0].users,
+                            workspaces = workspacesResponse[0].workspaces;
+
+                        self.trigger(event.target, 'usersForChat', {
+                            workspace: workspace,
+                            users: users,
+                            workspaces: workspaces
                         });
+                    });
                 });
         };
 

@@ -23,12 +23,10 @@ define([
             this.initialWorkspaceLoad = $.Deferred();
 
             this.on(document, 'menubarToggleDisplay', this.onMenubarToggleDisplay);
-            //this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
-            //this.on(document, 'switchWorkspace', this.onSwitchWorkspace);
 
-            _.delay(function() {
-                //this.trigger(document, 'menubarToggleDisplay', { name: 'chat' })
-            }.bind(this), 1000);
+            //_.delay(function() {
+            //    this.trigger(document, 'menubarToggleDisplay', { name: 'chat' })
+            //}.bind(this), 1000);
         });
 
         this.attachComponents = function() {
