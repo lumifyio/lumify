@@ -1,20 +1,17 @@
 package io.lumify.web.routes.artifact;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.io.Files;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.FileImport;
 import io.lumify.core.model.user.UserRepository;
+import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
-import com.google.common.io.Files;
-import com.google.inject.Inject;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ParameterParser;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -22,6 +19,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,7 +71,9 @@ public class ArtifactImport extends BaseRequestHandler {
                 return;
             }
 
-            List<Vertex> vertices = importVertices(authorizations, workspaceId, files);
+            Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
+
+            List<Vertex> vertices = importVertices(workspace, files, user, authorizations);
 
             JSONArray vertexIdsJson = getVertexIdsJsonArray(vertices);
 
@@ -90,11 +93,11 @@ public class ArtifactImport extends BaseRequestHandler {
         return vertexIdsJson;
     }
 
-    private List<Vertex> importVertices(Authorizations authorizations, String workspaceId, List<FileAndVisibility> files) throws Exception {
+    private List<Vertex> importVertices(Workspace workspace, List<FileAndVisibility> files, User user, Authorizations authorizations) throws Exception {
         List<Vertex> vertices = new ArrayList<Vertex>();
         for (FileAndVisibility file : files) {
             LOGGER.debug("Processing file: %s", file.getFile().getAbsolutePath());
-            vertices.add(fileImport.importFile(file.getFile(), true, file.getVisibilitySource(), workspaceId, authorizations));
+            vertices.add(fileImport.importFile(file.getFile(), true, file.getVisibilitySource(), workspace, user, authorizations));
         }
         return vertices;
     }

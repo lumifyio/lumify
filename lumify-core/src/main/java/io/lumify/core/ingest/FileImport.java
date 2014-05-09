@@ -5,9 +5,12 @@ import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.security.LumifyVisibilityProperties;
 import io.lumify.core.security.VisibilityTranslator;
+import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
@@ -28,13 +31,14 @@ public class FileImport {
     private List<FileImportSupportingFileHandler> fileImportSupportingFileHandlers;
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
+    private WorkspaceRepository workspaceRepository;
 
     @Inject
     public FileImport(VisibilityTranslator visibilityTranslator) {
         this.visibilityTranslator = visibilityTranslator;
     }
 
-    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, String workspaceId, Authorizations authorizations) throws IOException {
+    public List<Vertex> importDirectory(File dataDir, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws IOException {
         ensureInitialized();
 
         ArrayList<Vertex> results = new ArrayList<Vertex>();
@@ -59,7 +63,7 @@ public class FileImport {
 
                 LOGGER.debug("Importing file (%d/%d): %s", fileCount + 1, totalFileCount, f.getAbsolutePath());
                 try {
-                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspaceId, authorizations);
+                    Vertex vertex = importFile(f, queueDuplicates, visibilitySource, workspace, user, authorizations);
                     results.add(vertex);
                     importedFileCount++;
                 } catch (Exception ex) {
@@ -84,7 +88,7 @@ public class FileImport {
         return false;
     }
 
-    public Vertex importFile(File f, boolean queueDuplicates, String visibilitySource, String workspaceId, Authorizations authorizations) throws Exception {
+    public Vertex importFile(File f, boolean queueDuplicates, String visibilitySource, Workspace workspace, User user, Authorizations authorizations) throws Exception {
         ensureInitialized();
 
         String hash = calculateFileHash(f);
@@ -105,7 +109,7 @@ public class FileImport {
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
-            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspaceId);
+            JSONObject visibilityJson = GraphUtil.updateVisibilitySourceAndAddWorkspaceId(null, visibilitySource, workspace == null ? null : workspace.getId());
             LumifyVisibility lumifyVisibility = this.visibilityTranslator.toVisibility(visibilityJson);
             Visibility visibility = lumifyVisibility.getVisibility();
             Map<String, Object> propertyMetadata = new HashMap<String, Object>();
@@ -130,6 +134,11 @@ public class FileImport {
 
             vertex = vertexBuilder.save();
             graph.flush();
+
+            if (workspace != null) {
+                workspaceRepository.updateEntityOnWorkspace(workspace, vertex.getId(), null, null, null, user);
+            }
+
             LOGGER.debug("File %s imported. vertex id: %s", f.getAbsolutePath(), vertex.getId().toString());
             pushOnQueue(vertex);
             return vertex;
@@ -183,5 +192,10 @@ public class FileImport {
     @Inject
     public void setWorkQueueRepository(WorkQueueRepository workQueueRepository) {
         this.workQueueRepository = workQueueRepository;
+    }
+
+    @Inject
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 }

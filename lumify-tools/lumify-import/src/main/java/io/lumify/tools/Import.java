@@ -1,8 +1,10 @@
 package io.lumify.tools;
 
+import com.google.inject.Inject;
 import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.ingest.FileImport;
-import com.google.inject.Inject;
+import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceRepository;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -13,7 +15,9 @@ public class Import extends CommandLineBase {
     private static final String CMD_OPT_DATADIR = "datadir";
     private static final String CMD_OPT_QUEUE_DUPLICATES = "queuedups";
     private static final String CMD_OPT_VISIBILITY_SOURCE = "visibilitysource";
+    private static final String CMD_OPT_WORKSPACE_ID = "workspaceid";
     private FileImport fileImport;
+    private WorkspaceRepository workspaceRepository;
 
     public static void main(String[] args) throws Exception {
         int res = new Import().run(args);
@@ -50,6 +54,14 @@ public class Import extends CommandLineBase {
                         .create()
         );
 
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_WORKSPACE_ID)
+                        .withDescription("The workspace id to import the files into.")
+                        .hasArg()
+                        .create()
+        );
+
         return opts;
     }
 
@@ -58,12 +70,24 @@ public class Import extends CommandLineBase {
         File dataDir = new File(cmd.getOptionValue(CMD_OPT_DATADIR));
         boolean queueDuplicates = cmd.hasOption(CMD_OPT_QUEUE_DUPLICATES);
         String visibilitySource = cmd.getOptionValue(CMD_OPT_VISIBILITY_SOURCE, "");
-        fileImport.importDirectory(dataDir, queueDuplicates, visibilitySource, null, getAuthorizations());
+        String workspaceId = cmd.getOptionValue(CMD_OPT_WORKSPACE_ID, null);
+        Workspace workspace;
+        if (workspaceId == null) {
+            workspace = null;
+        } else {
+            workspace = workspaceRepository.findById(workspaceId, getUser());
+        }
+        fileImport.importDirectory(dataDir, queueDuplicates, visibilitySource, workspace, getUser(), getAuthorizations());
         return 0;
     }
 
     @Inject
     public void setFileImport(FileImport fileImport) {
         this.fileImport = fileImport;
+    }
+
+    @Inject
+    public void setWorkspaceRepository(WorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
     }
 }
