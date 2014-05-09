@@ -492,18 +492,24 @@ define([
                 return console.error('Invalid event data to delete edge', data);
             }
 
-            var self = this,
-                edge = data.edges[0];
-            this.vertexService.deleteEdge(
-                edge.properties.source,
-                edge.properties.target,
-                edge.properties.relationshipType,
-                edge.id).done(function() {
-                    if (_.findWhere(self.selectedEdges, { id: edge.id })) {
-                        self.trigger('selectObjects');
-                    }
-                    self.trigger('edgesDeleted', { edgeId: edge.id });
-                });
+            if (Privileges.canEDIT && _.every(data.edges, function(e) {
+                return e.diffType !== 'PUBLIC';
+            })) {
+
+                var self = this,
+                    edge = data.edges[0];
+                this.vertexService.deleteEdge(
+                    edge.properties.source,
+                    edge.properties.target,
+                    edge.properties.relationshipType,
+                    edge.id).done(function() {
+                        if (_.findWhere(self.selectedEdges, { id: edge.id })) {
+                            self.trigger('selectObjects');
+                        }
+                        self.trigger('edgesDeleted', { edgeId: edge.id });
+                    });
+            }
+
         };
 
         this.onAddVertices = function(evt, data) {
