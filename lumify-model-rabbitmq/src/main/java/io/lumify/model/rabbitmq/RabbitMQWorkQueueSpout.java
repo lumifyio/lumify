@@ -49,7 +49,7 @@ public class RabbitMQWorkQueueSpout extends BaseRichSpout {
             this.connection = RabbitMQUtils.openConnection(configuration);
             this.channel = RabbitMQUtils.openChannel(this.connection);
             this.collector = collector;
-            this.channel.queueDeclare(queueName, false, false, false, null);
+            this.channel.queueDeclare(queueName, true, false, false, null);
             this.consumer = new QueueingConsumer(channel);
             this.channel.basicConsume(this.queueName, false, consumer);
         } catch (IOException ex) {

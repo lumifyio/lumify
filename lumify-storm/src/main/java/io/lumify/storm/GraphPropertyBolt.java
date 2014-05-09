@@ -6,6 +6,9 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Timer;
+import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationHelper;
@@ -19,18 +22,12 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
 import io.lumify.core.util.TeeInputStream;
-import org.securegraph.Authorizations;
-import org.securegraph.Graph;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.property.StreamingPropertyValue;
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Timer;
-import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.json.JSONObject;
+import org.securegraph.*;
+import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.*;
 import java.net.URI;
@@ -180,39 +177,62 @@ public class GraphPropertyBolt extends BaseRichBolt {
 
     private void safeExecute(Tuple input) throws Exception {
         JSONObject json = getJsonFromTuple(input);
-        Object graphVertexId = json.get("graphVertexId");
         String propertyKey = json.optString("propertyKey");
-        String propertyName = json.getString("propertyName");
-        safeExecute(graphVertexId, propertyKey, propertyName);
-    }
+        String propertyName = json.optString("propertyName");
 
-    private void safeExecute(Object graphVertexId, String propertyKey, String propertyName) throws Exception {
-        Vertex vertex = graph.getVertex(graphVertexId, this.authorizations);
-        if (vertex == null) {
-            throw new LumifyException("Could not find vertex with id " + graphVertexId);
-        }
-        Property property;
-        if (propertyKey == null) {
-            property = vertex.getProperty(propertyName);
-        } else {
-            property = vertex.getProperty(propertyKey, propertyName);
-        }
-        if (property == null) {
-            LOGGER.error("Could not find property [%s]:[%s] on vertex with id %s", propertyKey, propertyName, graphVertexId);
+        Object graphVertexId = json.opt("graphVertexId");
+        if (graphVertexId != null) {
+            Vertex vertex = graph.getVertex(graphVertexId, this.authorizations);
+            if (vertex == null) {
+                throw new LumifyException("Could not find vertex with id " + graphVertexId);
+            }
+            safeExecute(vertex, propertyKey, propertyName);
             return;
         }
-        safeExecute(vertex, property);
+
+        Object graphEdgeId = json.opt("graphEdgeId");
+        if (graphEdgeId != null) {
+            Edge edge = graph.getEdge(graphEdgeId, this.authorizations);
+            if (edge == null) {
+                throw new LumifyException("Could not find edge with id " + graphEdgeId);
+            }
+            safeExecute(edge, propertyKey, propertyName);
+            return;
+        }
+
+        throw new LumifyException("Could not find graphVertexId or graphEdgeId");
     }
 
-    private void safeExecute(Vertex vertex, Property property) throws Exception {
-        List<GraphPropertyThreadedWrapper> interestedWorkerWrappers = findInterestedWorkers(vertex, property);
-        if (interestedWorkerWrappers.size() == 0) {
-            LOGGER.info("Could not find interested workers for property %s:%s", property.getKey(), property.getName());
+    private void safeExecute(Element element, String propertyKey, String propertyName) throws Exception {
+        Property property;
+        if ((propertyKey == null || propertyKey.length() == 0) && (propertyName == null || propertyName.length() == 0)) {
+            property = null;
+        } else {
+            if (propertyKey == null) {
+                property = element.getProperty(propertyName);
+            } else {
+                property = element.getProperty(propertyKey, propertyName);
+            }
+            if (property == null) {
+                LOGGER.error("Could not find property [%s]:[%s] on vertex with id %s", propertyKey, propertyName, element.getId());
+                return;
+            }
         }
-        GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
+        safeExecute(element, property);
+    }
 
-        LOGGER.debug("Begin work on %s:%s", property.getKey(), property.getName());
-        if (property.getValue() instanceof StreamingPropertyValue) {
+    private void safeExecute(Element element, Property property) throws Exception {
+        String propertyText = property == null ? "[none]" : (property.getKey() + ":" + property.getName());
+
+        List<GraphPropertyThreadedWrapper> interestedWorkerWrappers = findInterestedWorkers(element, property);
+        if (interestedWorkerWrappers.size() == 0) {
+            LOGGER.info("Could not find interested workers for element %s property %s", element.getId(), propertyText);
+            return;
+        }
+        GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property);
+
+        LOGGER.debug("Begin work on element %s property %s", element.getId(), propertyText);
+        if (property != null && property.getValue() instanceof StreamingPropertyValue) {
             StreamingPropertyValue spb = (StreamingPropertyValue) property.getValue();
             safeExecuteStreamingPropertyValue(interestedWorkerWrappers, workData, spb);
         } else {
@@ -221,7 +241,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
 
         this.graph.flush();
 
-        LOGGER.debug("Completed work on %s:%s", property.getKey(), property.getName());
+        LOGGER.debug("Completed work on %s", propertyText);
     }
 
     private void safeExecuteNonStreamingProperty(List<GraphPropertyThreadedWrapper> interestedWorkerWrappers, GraphPropertyWorkData workData) throws Exception {
@@ -259,7 +279,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
     }
 
     private File copyToTempFile(InputStream in, GraphPropertyWorkData workData) throws IOException {
-        String fileExt = RawLumifyProperties.FILE_NAME_EXTENSION.getPropertyValue(workData.getVertex());
+        String fileExt = RawLumifyProperties.FILE_NAME_EXTENSION.getPropertyValue(workData.getElement());
         if (fileExt == null) {
             fileExt = "data";
         }
@@ -292,10 +312,10 @@ public class GraphPropertyBolt extends BaseRichBolt {
         return names;
     }
 
-    private List<GraphPropertyThreadedWrapper> findInterestedWorkers(Vertex vertex, Property property) {
+    private List<GraphPropertyThreadedWrapper> findInterestedWorkers(Element element, Property property) {
         List<GraphPropertyThreadedWrapper> interestedWorkers = new ArrayList<GraphPropertyThreadedWrapper>();
         for (GraphPropertyThreadedWrapper wrapper : workerWrappers) {
-            if (wrapper.getWorker().isHandled(vertex, property)) {
+            if (wrapper.getWorker().isHandled(element, property)) {
                 interestedWorkers.add(wrapper);
             }
         }

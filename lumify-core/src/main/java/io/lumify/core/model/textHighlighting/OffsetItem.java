@@ -96,16 +96,16 @@ public abstract class OffsetItem implements Comparable {
             return getEnd() < other.getEnd() ? -1 : 1;
         }
 
-        if (getGraphVertexId() != null && other.getGraphVertexId() == null) {
-            return -1;
+        if (getGraphVertexId() == null && other.getGraphVertexId() == null) {
+            return 0;
         }
 
-        if (getGraphVertexId() == null && other.getGraphVertexId() != null) {
+        if (getGraphVertexId() == null) {
             return 1;
         }
 
-        if (getGraphVertexId() == null /* implied: && other.getGraphVertexId() == null */) {
-            return 0;
+        if (other.getGraphVertexId() == null) {
+            return -1;
         }
 
         return getGraphVertexId().compareTo(other.getGraphVertexId());

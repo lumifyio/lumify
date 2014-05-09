@@ -12,11 +12,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.mutation.ElementMutation;
+import org.securegraph.*;
 
 import java.util.Map;
 
@@ -32,31 +28,30 @@ public abstract class WorkQueueRepository {
         this.graph = graph;
     }
 
-    public void pushGraphPropertyQueue(final Vertex graphVertex, final Property property) {
-        pushGraphPropertyQueue(graphVertex, property.getKey(), property.getName());
+    public void pushGraphPropertyQueue(final Element element, final Property property) {
+        pushGraphPropertyQueue(element, property.getKey(), property.getName());
     }
 
-    public void pushGraphPropertyQueue(final Vertex graphVertex, String propertyKey, final String propertyName) {
+    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
         getGraph().flush();
-
-        if (propertyKey == null) {
-            propertyKey = ElementMutation.DEFAULT_KEY;
-        }
-
-        checkNotNull(graphVertex);
-        checkNotNull(propertyKey);
-        checkNotNull(propertyName);
+        checkNotNull(element);
         JSONObject data = new JSONObject();
-        data.put("graphVertexId", graphVertex.getId());
+        if (element instanceof Vertex) {
+            data.put("graphVertexId", element.getId());
+        } else if (element instanceof Edge) {
+            data.put("graphEdgeId", element.getId());
+        } else {
+            throw new LumifyException("Unexpected element type: " + element.getClass().getName());
+        }
         data.put("propertyKey", propertyKey);
         data.put("propertyName", propertyName);
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
-        broadcastPropertyChange(graphVertex, propertyKey, propertyName);
+        broadcastPropertyChange(element, propertyKey, propertyName);
     }
 
-    public void pushGraphPropertyQueue(Edge edge, String propertyKey, String propertyName) {
-        broadcastPropertyChange(edge, propertyKey, propertyName);
+    public void pushEdgeCreation(Edge edge) {
+        pushGraphPropertyQueue(edge, null, null);
     }
 
     public void pushEdgeDeletion(Edge edge) {
@@ -120,18 +115,29 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastPropertyChange(Edge edge, String propertyKey, String propertyName) {
-        try {
-            JSONObject json = getBroadcastPropertyChangeJson(edge, propertyKey, propertyName);
-            broadcastJson(json);
-        } catch (Exception ex) {
-            throw new LumifyException("Could not broadcast property change", ex);
-        }
+    public void pushUserWorkspaceChange(User user, String workspaceId) {
+        broadcastUserWorkspaceChange(user, workspaceId);
     }
 
-    protected void broadcastPropertyChange(Vertex graphVertex, String propertyKey, String propertyName) {
+    protected void broadcastUserWorkspaceChange(User user, String workspaceId) {
+        JSONObject json = new JSONObject();
+        json.put("type", "userWorkspaceChange");
+        JSONObject data = UserRepository.toJson(user);
+        data.put("workspaceId", workspaceId);
+        json.put("data", data);
+        broadcastJson(json);
+    }
+
+    protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName) {
         try {
-            JSONObject json = getBroadcastPropertyChangeJson(graphVertex, propertyKey, propertyName);
+            JSONObject json;
+            if (element instanceof Vertex) {
+                json = getBroadcastPropertyChangeJson((Vertex) element, propertyKey, propertyName);
+            } else if (element instanceof Edge) {
+                json = getBroadcastPropertyChangeJson((Edge) element, propertyKey, propertyName);
+            } else {
+                throw new LumifyException("Unexpected element type: " + element.getClass().getName());
+            }
             broadcastJson(json);
         } catch (Exception ex) {
             throw new LumifyException("Could not broadcast property change", ex);

@@ -14,6 +14,7 @@ import io.lumify.web.privilegeFilters.PublishPrivilegeFilter;
 import io.lumify.web.privilegeFilters.ReadPrivilegeFilter;
 import io.lumify.web.routes.admin.AdminList;
 import io.lumify.web.routes.admin.AdminUploadOntology;
+import io.lumify.web.routes.admin.PluginList;
 import io.lumify.web.routes.artifact.*;
 import io.lumify.web.routes.audit.VertexAudit;
 import io.lumify.web.routes.config.Configuration;
@@ -135,6 +136,7 @@ public class Router extends HttpServlet {
 
             app.get("/admin", authenticator, AdminPrivilegeFilter.class, AdminList.class);
 
+            app.get("/admin/plugins", authenticator, PluginList.class);
             app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
             app.post("/admin/uploadOntology", authenticator, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 

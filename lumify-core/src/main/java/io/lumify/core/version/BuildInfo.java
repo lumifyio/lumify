@@ -1,4 +1,4 @@
-package io.lumify.tools.version;
+package io.lumify.core.version;
 
 import java.util.Map;
 

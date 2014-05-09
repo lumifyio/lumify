@@ -53,7 +53,7 @@ public abstract class GraphPropertyWorker {
 
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
 
-    public abstract boolean isHandled(Vertex vertex, Property property);
+    public abstract boolean isHandled(Element element, Property property);
 
     public boolean isLocalFileRequired() {
         return false;
@@ -199,6 +199,7 @@ public abstract class GraphPropertyWorker {
             String title = termMention.getSign();
             ElementMutation<Vertex> vertexElementMutation;
             if (termMention.getUseExisting()) {
+                graph.flush(); // make sure the previous term mentions have made it into the graph
                 if (termMention.getId() != null) {
                     vertex = graph.getVertex(termMention.getId(), getAuthorizations());
                 } else {

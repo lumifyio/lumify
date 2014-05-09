@@ -5,6 +5,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
@@ -48,7 +49,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-            ExistingElementMutation<Vertex> m = data.getVertex().prepareMutation();
+            ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
             InputStream webmFileIn = new FileInputStream(webmFile);
             try {
@@ -67,7 +68,11 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     }
 
     @Override
-    public boolean isHandled(Vertex vertex, Property property) {
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
@@ -76,7 +81,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (MediaLumifyProperties.VIDEO_WEBM.hasProperty(vertex, PROPERTY_KEY)) {
+        if (MediaLumifyProperties.VIDEO_WEBM.hasProperty(element, PROPERTY_KEY)) {
             return false;
         }
 

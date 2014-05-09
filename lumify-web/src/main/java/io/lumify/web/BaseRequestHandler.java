@@ -6,6 +6,7 @@ import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.common.base.Preconditions;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyAccessDeniedException;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
@@ -58,12 +59,30 @@ public abstract class BaseRequestHandler implements Handler {
         return getParameter(request, parameterName, false);
     }
 
+    protected String[] getRequiredParameterArray(HttpServletRequest request, String parameterName) {
+        Preconditions.checkNotNull(request, "The provided request was invalid");
+
+        String[] value = request.getParameterValues(parameterName);
+        if (value == null) {
+            throw new LumifyException(String.format("Parameter: '%s' is required in the request", parameterName));
+        }
+        return value;
+    }
+
     protected long getOptionalParameterLong(final HttpServletRequest request, final String parameterName, long defaultValue) {
         String val = getOptionalParameter(request, parameterName);
         if (val == null) {
             return defaultValue;
         }
         return Long.parseLong(val);
+    }
+
+    protected boolean getOptionalParameterBoolean(final HttpServletRequest request, final String parameterName, boolean defaultValue) {
+        String val = getOptionalParameter(request, parameterName);
+        if (val == null) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(val);
     }
 
     protected double getOptionalParameterDouble(final HttpServletRequest request, final String parameterName, double defaultValue) {
@@ -141,7 +160,7 @@ public abstract class BaseRequestHandler implements Handler {
 
         if (paramValue == null) {
             if (!optional) {
-                throw new RuntimeException(String.format("Parameter: '%s' is required in the request", parameterName));
+                throw new LumifyException(String.format("Parameter: '%s' is required in the request", parameterName));
             }
 
             return null;
@@ -161,7 +180,7 @@ public abstract class BaseRequestHandler implements Handler {
     protected String getActiveWorkspaceId(final HttpServletRequest request) {
         String workspaceId = getWorkspaceIdOrDefault(request);
         if (workspaceId == null || workspaceId.trim().length() == 0) {
-            throw new RuntimeException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
+            throw new LumifyException(LUMIFY_WORKSPACE_ID_HEADER_NAME + " is a required header.");
         }
         return workspaceId;
     }
