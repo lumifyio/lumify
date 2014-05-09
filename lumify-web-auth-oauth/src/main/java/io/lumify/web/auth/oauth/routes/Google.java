@@ -2,12 +2,17 @@ package io.lumify.web.auth.oauth.routes;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.CurrentUser;
+import io.lumify.web.URLBuilder;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpClientConnection;
+import org.apache.http.HttpRequest;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.GoogleApi;
@@ -17,6 +22,11 @@ import org.scribe.oauth.OAuthService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.SecureRandom;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,14 +36,52 @@ public class Google implements Handler {
     private static final String OAUTH_REQUEST_TOKEN = "oauth_token";
     public static final String OAUTH_TOKEN_PARAM_NAME = "oauth_token";
     public static final String OAUTH_VERIFIER_PARAM_NAME = "oauth_verifier";
+    private static final String OAUTH_STATE_PARAM_NAME = "oauth.state";
+
+    private static final String DISCOVERY_DOC_URL = "https://accounts.google.com/.well-known/openid-configuration";
+
     private final OAuthConfiguration config;
     private final UserRepository userRepository;
+    private String authorizationEndpoint;
+    private String tokenEndpoint;
 
     public Google(OAuthConfiguration config, UserRepository userRepository) {
         this.config = config;
         this.userRepository = userRepository;
-        checkNotNull(config.getKey(), "OAuth id not set");
+        checkNotNull(config.getKey(), "OAuth key not set");
         checkNotNull(config.getSecret(), "OAuth secret not set");
+
+        discoverEndpoints();
+    }
+
+    private void discoverEndpoints() {
+        try {
+            URL url = new URL(DISCOVERY_DOC_URL);
+            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            httpConn.setDoOutput(true);
+            httpConn.setInstanceFollowRedirects(true);
+            httpConn.setUseCaches(false);
+
+            if (httpConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new LumifyException("Failed to retrieve OpenID Connect discovery document");
+            }
+
+            String content = IOUtils.toString(httpConn.getInputStream());
+            if (!(content instanceof String)) {
+                throw new LumifyException("Unexpected response content type " + content.getClass().getName());
+            }
+
+            JSONObject json = new JSONObject(content);
+            System.out.println(json.toString());
+            this.authorizationEndpoint = json.getString("authorization_endpoint");
+            this.tokenEndpoint = json.getString("token_endpoint");
+        } catch (Exception e) {
+            throw new LumifyException("Error retrieving OpenID Connect discover document", e);
+        }
+    }
+
+    private String generateState() {
+        return new BigInteger(120, new SecureRandom()).toString(32);
     }
 
     @Override
@@ -46,11 +94,16 @@ public class Google implements Handler {
     }
 
     private void login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
-        OAuthService service = getOAuthService(httpRequest, true, null);
-        Token requestToken = service.getRequestToken();
-        httpRequest.getSession().setAttribute(OAUTH_REQUEST_TOKEN, requestToken);
-        String authUrl = service.getAuthorizationUrl(requestToken);
-        httpResponse.sendRedirect(authUrl);
+        String state = generateState();
+        httpRequest.getSession().setAttribute(OAUTH_STATE_PARAM_NAME, state);
+
+        URLBuilder authUrl = new URLBuilder(this.authorizationEndpoint);
+        authUrl.addParameter("client_id", this.config.getKey());
+        authUrl.addParameter("response_type", "code");
+        authUrl.addParameter("scope", "openid email");
+        authUrl.addParameter("redirect_uri", httpRequest.getRequestURL().toString());
+
+        httpResponse.sendRedirect(authUrl.build().toString());
     }
 
     private void verify(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
