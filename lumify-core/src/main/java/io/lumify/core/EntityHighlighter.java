@@ -21,8 +21,6 @@ public class EntityHighlighter {
 
     // TODO: change to use an InputStream?
     public static String getHighlightedText(String text, int textStartOffset, List<OffsetItem> offsetItems) throws JSONException {
-        text = text.replaceAll("<", "&lt;").replaceAll("<", "&gt;");
-
         Collections.sort(offsetItems);
         StringBuilder result = new StringBuilder();
         PriorityQueue<Integer> endOffsets = new PriorityQueue<Integer>();
@@ -54,11 +52,11 @@ public class EntityHighlighter {
 
             while (endOffsets.size() > 0 && endOffsets.peek() <= offsetItem.getStart()) {
                 int end = endOffsets.poll();
-                result.append(text.substring(lastStart - textStartOffset, end - textStartOffset));
+                result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, end - textStartOffset)));
                 result.append("</span>");
                 lastStart = end;
             }
-            result.append(text.substring(lastStart - textStartOffset, (int) (offsetItem.getStart() - textStartOffset)));
+            result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, (int) (offsetItem.getStart() - textStartOffset))));
 
             JSONObject infoJson = offsetItem.getInfoJson();
 
@@ -81,13 +79,28 @@ public class EntityHighlighter {
 
         while (endOffsets.size() > 0) {
             int end = endOffsets.poll();
-            result.append(text.substring(lastStart - textStartOffset, end - textStartOffset));
+            result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, end - textStartOffset)));
             result.append("</span>");
             lastStart = end;
         }
-        result.append(text.substring(lastStart - textStartOffset));
+        result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset)));
 
         return result.toString();
+    }
+
+    private static String safeSubstring(String text, int beginIndex) {
+        beginIndex = Math.min(beginIndex, text.length());
+        return text.substring(beginIndex);
+    }
+
+    private static String safeSubstring(String text, int beginIndex, int endIndex) {
+        beginIndex = Math.min(beginIndex, text.length());
+        endIndex = Math.min(endIndex, text.length());
+        return text.substring(beginIndex, endIndex);
+    }
+
+    private static String escapeHtml(String text) {
+        return text.replaceAll("<", "&lt;").replaceAll("<", "&gt;").replaceAll("&", "&amp;");
     }
 
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions) {
