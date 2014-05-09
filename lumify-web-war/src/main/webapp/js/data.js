@@ -210,7 +210,7 @@ define([
                 case 'propertiesChange':
 
                     // TODO: create edgesUpdated events
-                    if (!message.data.vertex.sourceVertexId) {
+                    if (message.data && message.data.vertex && !message.data.vertex.sourceVertexId) {
                         updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
                         if (updated) {
                             self.trigger('verticesUpdated', { vertices: [updated] });
