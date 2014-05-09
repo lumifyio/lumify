@@ -405,8 +405,23 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
 
+
+    <!-- http://lumify.io/dev#titleFormulaEntityPropA -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#titleFormulaEntityPropA">
+        <rdfs:label xml:lang="en">PropA</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+
+    <!-- http://lumify.io/dev#titleFormulaEntityPropB -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#titleFormulaEntityPropB">
+        <rdfs:label xml:lang="en">PropB</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io/dev#abbreviation -->
 
@@ -671,7 +686,16 @@
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
-    
+
+
+    <!-- http://lumify.io/dev#person -->
+
+    <owl:Class rdf:about="http://lumify.io/dev#titleFormulaEntity">
+        <rdfs:label xml:lang="en">Title Formula Entity</rdfs:label>
+        <lumify:titleFormula xml:lang="en">titleFormulaEntityPropA + ',' + titleFormulaEntityPropB</lumify:titleFormula>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+    </owl:Class>
 
 
     <!-- http://lumify.io/dev#phoneCall -->

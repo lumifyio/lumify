@@ -8,9 +8,6 @@ import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -80,6 +77,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         String displayType = getDisplayType(o, ontologyClass);
         if (displayType != null) {
             result.setDisplayType(displayType);
+        }
+
+        String titleFormula = getTitleFormula(o, ontologyClass);
+        if (titleFormula != null) {
+            result.setTitleFormula(titleFormula);
         }
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
@@ -156,7 +158,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 property.setDisplayName(displayName);
             }
             if (possibleValues.size() > 0) {
-                property.setPossibleValues (possibleValues);
+                property.setPossibleValues(possibleValues);
             }
             propertiesCache.put(propertyName, property);
         }
