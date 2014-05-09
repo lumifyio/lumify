@@ -692,7 +692,7 @@
 
     <owl:Class rdf:about="http://lumify.io/dev#titleFormulaEntity">
         <rdfs:label xml:lang="en">Title Formula Entity</rdfs:label>
-        <lumify:titleFormula xml:lang="en">titleFormulaEntityPropA + ',' + titleFormulaEntityPropB</lumify:titleFormula>
+        <lumify:titleFormula xml:lang="en">prop('http://lumify.io/dev#titleFormulaEntityPropA') + ', ' + prop('http://lumify.io/dev#titleFormulaEntityPropA')</lumify:titleFormula>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
