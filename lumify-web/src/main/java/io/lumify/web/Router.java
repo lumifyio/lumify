@@ -5,6 +5,7 @@ import com.altamiracorp.miniweb.StaticFileHandler;
 import com.altamiracorp.miniweb.StaticResourceHandler;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
@@ -142,9 +143,13 @@ public class Router extends HttpServlet {
 
             List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
-                LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
-                injector.injectMembers(webAppPlugin);
-                webAppPlugin.init(app, config, authenticatorInstance);
+                LOGGER.info("Loading webapp plugin: %s", webAppPlugin.getClass().getName());
+                try {
+                    injector.injectMembers(webAppPlugin);
+                    webAppPlugin.init(app, config, authenticatorInstance);
+                } catch (Exception e) {
+                    throw new LumifyException("Could not initialize webapp plugin: " + webAppPlugin.getClass().getName(), e);
+                }
             }
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));

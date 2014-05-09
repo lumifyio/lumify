@@ -7,24 +7,20 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.http.HttpConnection;
+import io.lumify.http.HttpGetMethod;
+import io.lumify.http.HttpPostMethod;
+import io.lumify.http.URLBuilder;
 import io.lumify.web.CurrentUser;
-import io.lumify.web.URLBuilder;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpClientConnection;
-import org.apache.http.HttpRequest;
+import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.GoogleApi;
-import org.scribe.model.*;
-import org.scribe.oauth.OAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
 
@@ -33,48 +29,48 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class Google implements Handler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Google.class);
     private static final String PASSWORD = "8XXuk2tQ523b";
-    private static final String OAUTH_REQUEST_TOKEN = "oauth_token";
-    public static final String OAUTH_TOKEN_PARAM_NAME = "oauth_token";
-    public static final String OAUTH_VERIFIER_PARAM_NAME = "oauth_verifier";
-    private static final String OAUTH_STATE_PARAM_NAME = "oauth.state";
-
+    private static final String OAUTH_STATE_ATTR_NAME = "oauth.state";
     private static final String DISCOVERY_DOC_URL = "https://accounts.google.com/.well-known/openid-configuration";
 
     private final OAuthConfiguration config;
     private final UserRepository userRepository;
     private String authorizationEndpoint;
     private String tokenEndpoint;
+    private String userInfoEndpoint;
 
     public Google(OAuthConfiguration config, UserRepository userRepository) {
         this.config = config;
         this.userRepository = userRepository;
         checkNotNull(config.getKey(), "OAuth key not set");
         checkNotNull(config.getSecret(), "OAuth secret not set");
-
         discoverEndpoints();
+    }
+
+    @Override
+    public void handle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws Exception {
+        if (httpRequest.getParameter("code") != null) {
+            verify(httpRequest, httpResponse, chain);
+        } else {
+            login(httpRequest, httpResponse, chain);
+        }
     }
 
     private void discoverEndpoints() {
         try {
-            URL url = new URL(DISCOVERY_DOC_URL);
-            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-            httpConn.setDoOutput(true);
-            httpConn.setInstanceFollowRedirects(true);
-            httpConn.setUseCaches(false);
+            HttpGetMethod getMethod = new HttpGetMethod(new URL(DISCOVERY_DOC_URL));
+            HttpConnection conn = getMethod.openConnection();
 
-            if (httpConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new LumifyException("Failed to retrieve OpenID Connect discovery document");
             }
 
-            String content = IOUtils.toString(httpConn.getInputStream());
-            if (!(content instanceof String)) {
-                throw new LumifyException("Unexpected response content type " + content.getClass().getName());
-            }
-
-            JSONObject json = new JSONObject(content);
-            System.out.println(json.toString());
+            JSONObject json = new JSONObject(conn.getResponseAsString());
             this.authorizationEndpoint = json.getString("authorization_endpoint");
+            checkNotNull(this.authorizationEndpoint);
             this.tokenEndpoint = json.getString("token_endpoint");
+            checkNotNull(this.tokenEndpoint);
+            this.userInfoEndpoint = json.getString("userinfo_endpoint");
+            checkNotNull(this.userInfoEndpoint);
         } catch (Exception e) {
             throw new LumifyException("Error retrieving OpenID Connect discover document", e);
         }
@@ -84,106 +80,131 @@ public class Google implements Handler {
         return new BigInteger(120, new SecureRandom()).toString(32);
     }
 
-    @Override
-    public void handle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws Exception {
-        if (httpRequest.getParameter(OAUTH_VERIFIER_PARAM_NAME) != null) {
-            verify(httpRequest, httpResponse, chain);
-        } else {
-            login(httpRequest, httpResponse, chain);
-        }
-    }
-
     private void login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
         String state = generateState();
-        httpRequest.getSession().setAttribute(OAUTH_STATE_PARAM_NAME, state);
+        httpRequest.getSession().setAttribute(OAUTH_STATE_ATTR_NAME, state);
 
         URLBuilder authUrl = new URLBuilder(this.authorizationEndpoint);
+        authUrl.addParameter("state", state);
         authUrl.addParameter("client_id", this.config.getKey());
         authUrl.addParameter("response_type", "code");
-        authUrl.addParameter("scope", "openid email");
+        authUrl.addParameter("scope", "openid email profile");
         authUrl.addParameter("redirect_uri", httpRequest.getRequestURL().toString());
 
-        httpResponse.sendRedirect(authUrl.build().toString());
+        httpResponse.sendRedirect(authUrl.build());
     }
 
     private void verify(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HandlerChain chain) throws IOException {
-        String inboundVerifier = httpRequest.getParameter(OAUTH_VERIFIER_PARAM_NAME);
-        String inboundToken = httpRequest.getParameter(OAUTH_TOKEN_PARAM_NAME);
-        Token storedToken = (Token) httpRequest.getSession().getAttribute(OAUTH_REQUEST_TOKEN);
-        httpRequest.getSession().removeAttribute(OAUTH_REQUEST_TOKEN);
+        validateState(httpRequest, httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        if (storedToken == null) {
-            LOGGER.warn("OAuth verification attempted but no stored token found in the user's session");
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        String code = getRequiredRequestParameter("code", httpRequest, httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        if (!inboundToken.equals(storedToken.getToken())) {
-            LOGGER.warn("OAuth verfication attempted, but oauth_token request param did not match token stored in user's session");
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        JSONObject accessTokenResponseJson = requestAccessToken(httpRequest, httpResponse, code);
+        if (httpResponse.isCommitted()) return;
 
-        Verifier verifier = new Verifier(inboundVerifier);
-        OAuthService service = getOAuthService(httpRequest, false, "https://www.googleapis.com/auth/plus.login");
+        String accessToken = getRequiredProperty(accessTokenResponseJson, "access_token", httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        // TODO: Store this token if authorization succeeds
-        Token accessToken = service.getAccessToken(storedToken, verifier);
+        String tokenType = getRequiredProperty(accessTokenResponseJson, "token_type", httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        OAuthRequest authRequest = new OAuthRequest(Verb.GET, "https://www.googleapis.com/plus/v1/people/me");
-        service.signRequest(accessToken, authRequest);
-        Response authResponse = authRequest.send();
+        JSONObject userInfo = getUserInfo(accessToken, tokenType, httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        if (!authResponse.isSuccessful()) {
-            LOGGER.warn("OAuth handshake completed, but credential verification failed: " + authResponse.getMessage());
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        String userid = getRequiredProperty(userInfo, "sub", httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        System.out.println(authResponse.getBody());
-        httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+        String displayName = getRequiredProperty(userInfo, "name", httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        JSONObject jsonResponse = new JSONObject(authResponse.getBody());
-        String screenName = jsonResponse.getString("screen_name");
-        if (screenName == null) {
-            LOGGER.warn("Twitter OAuth JSON authorization response did not contain a 'screen_name' value, which is required.");
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        String email = getRequiredProperty(userInfo, "email", httpResponse);
+        if (httpResponse.isCommitted()) return;
 
-        String displayName = jsonResponse.getString("name");
-        if (displayName == null) {
-            LOGGER.warn("Twitter OAuth JSON authorization response did not contain a 'name' value, which is required.");
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
-        String username = "google/" + screenName;
+        String username = "google/" + userid;
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            // For form based authentication, username and displayName will be the same
             user = userRepository.addUser(username, displayName, PASSWORD, new String[0]);
         }
 
         CurrentUser.set(httpRequest, user);
-
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }
 
-    private OAuthService getOAuthService(HttpServletRequest request, boolean withCallback, String scope) {
-        ServiceBuilder builder = new ServiceBuilder()
-                .provider(GoogleApi.class)
-                .apiKey(config.getKey())
-                .apiSecret(config.getSecret());
-
-        if (scope != null) {
-            builder.scope(scope);
+    private void validateState(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+        Object storedState = httpRequest.getSession().getAttribute(OAUTH_STATE_ATTR_NAME);
+        httpRequest.getSession().removeAttribute(OAUTH_STATE_ATTR_NAME);
+        if (storedState == null) {
+            LOGGER.warn("OAuth verification attempted but no stored state found in the user's session");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
 
-        if (withCallback) {
-            builder.callback(request.getRequestURL().toString());
+        String inboundState = httpRequest.getParameter("state");
+        if (inboundState == null) {
+            LOGGER.warn("OAuth verfication attempted, but no 'state' parameter found in the request");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
 
-        return builder.build();
+        if (!storedState.equals(inboundState)) {
+            LOGGER.warn("OAuth verfication attempted, but stored state does not match state param in the request");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
     }
+
+    private JSONObject requestAccessToken(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String code) throws IOException {
+        HttpPostMethod postMethod = new HttpPostMethod(new URL(this.tokenEndpoint));
+        postMethod.addRequestParameter("code", code);
+        postMethod.addRequestParameter("client_id", this.config.getKey());
+        postMethod.addRequestParameter("client_secret", this.config.getSecret());
+        postMethod.addRequestParameter("redirect_uri", httpRequest.getRequestURL().toString());
+        postMethod.addRequestParameter("grant_type", "authorization_code");
+        HttpConnection accessTokenConnection = postMethod.openConnection();
+
+        if (accessTokenConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            LOGGER.error("Access token request failed: %s", accessTokenConnection.getResponseMessage());
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
+        String accessTokenResponse = accessTokenConnection.getResponseAsString();
+        return new JSONObject(accessTokenResponse);
+    }
+
+    private JSONObject getUserInfo(String accessToken, String tokenType, HttpServletResponse httpResponse) throws IOException {
+        HttpGetMethod getMethod = new HttpGetMethod(new URL(this.userInfoEndpoint));
+        getMethod.setHeader("Authorization", tokenType + " " + accessToken);
+        HttpConnection userInfoConnection = getMethod.openConnection();
+
+        if (userInfoConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            LOGGER.error("Request for user information failed: %s", userInfoConnection.getResponseMessage());
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
+        return new JSONObject(userInfoConnection.getResponseAsString());
+    }
+
+    private String getRequiredRequestParameter(String paramName, HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+        String value = httpRequest.getParameter(paramName);
+        if (value == null) {
+            LOGGER.warn("Request parameter '%s' not found", paramName);
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
+        return value;
+    }
+
+    private String getRequiredProperty(JSONObject json, String propName, HttpServletResponse httpResponse) throws IOException {
+        String value = json.getString(propName);
+        if (value == null) {
+            LOGGER.error("No '%s' parameter found in response", propName);
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+        return value;
+    }
+
 }
