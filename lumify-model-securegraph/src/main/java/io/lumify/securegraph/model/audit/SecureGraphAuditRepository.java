@@ -289,7 +289,14 @@ public class SecureGraphAuditRepository extends AuditRepository {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
         auditEdge.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource);
+        Map <String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
+        if (metadata != null && !metadata.isEmpty()) {
+            auditDestSource.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+            auditSourceDest.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+            auditEdge.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+        }
+
+        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource, auditEdge);
         saveMany(audits);
         return audits;
     }

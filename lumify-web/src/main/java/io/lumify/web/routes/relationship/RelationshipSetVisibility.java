@@ -1,6 +1,8 @@
 package io.lumify.web.routes.relationship;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.model.audit.AuditAction;
+import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -13,10 +15,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.Authorizations;
-import org.securegraph.Edge;
-import org.securegraph.Graph;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
 
@@ -28,6 +27,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkQueueRepository workQueueRepository;
+    private final AuditRepository auditRepository;
 
     @Inject
     public RelationshipSetVisibility(
@@ -36,11 +36,13 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
             final Configuration configuration,
             final VisibilityTranslator visibilityTranslator,
             final WorkspaceRepository workspaceRepository,
-            final WorkQueueRepository workQueueRepository) {
+            final WorkQueueRepository workQueueRepository,
+            final AuditRepository auditRepository) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
         this.visibilityTranslator = visibilityTranslator;
         this.workQueueRepository = workQueueRepository;
+        this.auditRepository = auditRepository;
     }
 
     @Override
@@ -67,7 +69,9 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         LOGGER.info("changing edge (%s) visibility source to %s", graphEdge.getId().toString(), visibilitySource);
 
-        GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId);
+        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId);
+        auditRepository.auditEdgeElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphEdge,
+                graphEdge.getVertex(Direction.OUT, authorizations), graphEdge.getVertex(Direction.IN, authorizations), "", user, setPropertyResult.visibility.getVisibility());
 
         this.graph.flush();
 

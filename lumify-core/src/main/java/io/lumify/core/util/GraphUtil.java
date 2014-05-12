@@ -2,6 +2,8 @@ package io.lumify.core.util;
 
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
+import io.lumify.core.model.ontology.OntologyLumifyProperties;
+import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.security.LumifyVisibility;
@@ -167,6 +169,7 @@ public class GraphUtil {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ElementBuilder<Edge> edgeBuilder = graph.prepareEdge(sourceVertex, destVertex, predicateLabel, lumifyVisibility.getVisibility(), authorizations);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(edgeBuilder, OntologyRepository.TYPE_RELATIONSHIP, lumifyVisibility.getVisibility());
 
         addJustificationToMutation(edgeBuilder, justificationText, sourceInfo, lumifyVisibility);
 
