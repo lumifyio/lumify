@@ -76,7 +76,7 @@ public class GraphUtil {
         }
     }
 
-    public static void updateElementVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
+    public static <T extends Element> VisibilityAndElementMutation<T> updateElementVisibilitySource(VisibilityTranslator visibilityTranslator, Element element, SandboxStatus sandboxStatus, String visibilitySource, String workspaceId) {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
         visibilityJson = sandboxStatus != SandboxStatus.PUBLIC ? updateVisibilitySourceAndAddWorkspaceId(visibilityJson, visibilitySource, workspaceId) : updateVisibilitySource(visibilityJson, visibilitySource);
 
@@ -84,10 +84,15 @@ public class GraphUtil {
 
         ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
         if (LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element) != null) {
-            m.alterPropertyVisibility(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), lumifyVisibility.getVisibility());
+            Property visibilityJsonProperty = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getProperty(element);
+            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), lumifyVisibility.getVisibility());
         }
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(m, visibilityJson, lumifyVisibility.getVisibility());
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilityJson.toString());
+
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(m, visibilityJson, metadata, lumifyVisibility.getVisibility());
         m.save();
+        return new VisibilityAndElementMutation<T>(lumifyVisibility, m);
     }
 
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(

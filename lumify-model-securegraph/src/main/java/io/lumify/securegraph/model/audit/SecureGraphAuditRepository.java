@@ -9,6 +9,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
+import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.user.User;
@@ -416,7 +417,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     private String checkAndConvertForDateType(String propertyName, Object value) {
-        if (ontologyRepository.getProperty(propertyName).getDataType() == PropertyType.DATE) {
+        OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+        if (ontologyProperty != null && ontologyProperty.getDataType() == PropertyType.DATE) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyy");
             try {
                 return String.valueOf(dateFormat.parse(value.toString()).getTime());
