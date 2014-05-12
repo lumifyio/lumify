@@ -27,9 +27,10 @@ define([
                 return resolvedName;
             },
 
-            displayProp: function(property) {
-                var value = V.prop(property, property.name),
-                    ontologyProperty = propertiesByTitle[property.name];
+            displayProp: function(vertexOrProperty, optionalName) {
+                var name = _.isUndefined(optionalName) ? vertexOrProperty.name : optionalName,
+                    value = V.prop(vertexOrProperty, name),
+                    ontologyProperty = propertiesByTitle[name];
 
                 if (!ontologyProperty) {
                     return value;
