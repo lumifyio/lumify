@@ -314,7 +314,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             sourceTitle = IterableUtils.toList(sourceTitleIterable).get(IterableUtils.count(sourceTitleIterable) - 1);
         }
 
-        Iterable<String> destTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        Iterable<String> destTitleIterable = TITLE.getPropertyValues(destVertex);
         String destTitle = "";
         if (IterableUtils.count(destTitleIterable) != 0) {
             destTitle = IterableUtils.toList(destTitleIterable).get(IterableUtils.count(destTitleIterable) - 1);
