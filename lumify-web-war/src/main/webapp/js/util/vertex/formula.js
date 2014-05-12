@@ -12,7 +12,7 @@ define([], function() {
                 formula = 'return (' + formula + ')';
             }
 
-            return new Function(
+            return new Function( // jshint ignore:line
                 // Get property value and converted to string displayValue
                 'prop',
                 // Get actual raw property value
