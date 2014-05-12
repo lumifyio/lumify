@@ -70,6 +70,22 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
+    public void pushVerticesDeletion (JSONArray verticesDeleted) {
+        broadcastVerticesDeletion (verticesDeleted);
+    }
+
+    protected void broadcastVerticesDeletion(JSONArray verticesDeleted) {
+        JSONObject dataJson = new JSONObject();
+        if (verticesDeleted != null) {
+            dataJson.put("vertexIds", verticesDeleted);
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "verticesDeleted");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
     public void pushDetectedObjectChange(JSONObject artifactVertexWithDetectedObjects) {
         broadcastDetectedObjectChange(artifactVertexWithDetectedObjects);
     }
