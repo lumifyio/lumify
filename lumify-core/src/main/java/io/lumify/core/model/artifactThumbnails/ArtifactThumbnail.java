@@ -4,7 +4,7 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
 
 public class ArtifactThumbnail extends Row<ArtifactThumbnailRowKey> {
-    public static final String TABLE_NAME = "atc_artifactThumbnail";
+    public static final String TABLE_NAME = "lumify_artifactThumbnail";
 
     public ArtifactThumbnail(ArtifactThumbnailRowKey rowKey) {
         super(TABLE_NAME, rowKey);
