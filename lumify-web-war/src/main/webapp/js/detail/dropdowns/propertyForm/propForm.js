@@ -152,7 +152,7 @@ define([
             justification.teardownAllComponents();
 
             var vertexProperty = property.key ?
-                    F.vertex.propForKey(this.attr.data, property.key) : undefined,
+                    F.vertex.propForNameAndKey(this.attr.data, property.name, property.key) : undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
