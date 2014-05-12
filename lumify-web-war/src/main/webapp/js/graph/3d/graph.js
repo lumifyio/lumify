@@ -119,7 +119,7 @@ define([
                 node.data.iconWidth = width;
                 node.data.iconHeight = height;
 
-                var title = F.vertex.prop(node.data.vertex, 'title');
+                var title = F.vertex.title(node.data.vertex);
                 if (title.length > MAX_TITLE_LENGTH) {
                     node.data.label = $.trim(title.substring(0, MAX_TITLE_LENGTH)) + '...';
                 } else node.data.label = title;

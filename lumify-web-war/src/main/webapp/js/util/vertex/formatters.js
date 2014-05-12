@@ -1,9 +1,11 @@
 
 define([
     './urlFormatters',
+    './formula',
     'promise!../service/ontologyPromise'
 ], function(
     F,
+    formula,
     ontology) {
     'use strict';
 
@@ -61,8 +63,29 @@ define([
                 return _.findWhere(vertex.properties, { key: key });
             },
 
+            title: function(vertex) {
+                var conceptId = V.prop(vertex, 'conceptType'),
+                    ontologyConcept = conceptId && ontology.conceptsById[conceptId],
+                    titleFormula = ontologyConcept && ontologyConcept.titleFormula,
+                    title;
+
+                if (titleFormula) {
+                    title = formula(titleFormula, vertex, ontologyConcept, V);
+                }
+
+                if (!title) {
+                    title = V.prop(vertex, 'title', undefined, true);
+                }
+
+                return title;
+            },
+
             // TODO: support looking for underscore properties like _source?
-            prop: function(vertexOrProperty, name, defaultValue) {
+            prop: function(vertexOrProperty, name, defaultValue, ignoreErrorIfTitle) {
+                if (ignoreErrorIfTitle !== true && name === 'title') {
+                    throw new Error('Use title function, not generic prop');
+                }
+
                 var autoExpandedName = V.propName(name),
 
                     ontologyProperty = propertiesByTitle[autoExpandedName],
