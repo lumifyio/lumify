@@ -71,7 +71,7 @@ define([
                     title;
 
                 if (titleFormula) {
-                    title = formula(titleFormula, vertex, ontologyConcept, V);
+                    title = formula(titleFormula, vertex, V);
                 }
 
                 if (!title) {
