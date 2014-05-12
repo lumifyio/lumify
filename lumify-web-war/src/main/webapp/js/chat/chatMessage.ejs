@@ -1,5 +1,5 @@
 <div class="chat-message <%= messageData.tempId ? 'submitting' : '' %>" <%- messageData.tempId ? ('id="' + messageData.tempId + '"') : '' %> style="border: 1px solid black;">
-    <div class="from"><%= messageData.from.userName %></div>
+    <div class="from"><%= messageData.from.displayName %></div>
     <div class="message"><%= messageData.message %></div>
     <div class="date"><%= prettyDate %></div>
 </div>

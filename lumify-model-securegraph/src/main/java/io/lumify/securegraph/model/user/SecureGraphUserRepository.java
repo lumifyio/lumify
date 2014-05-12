@@ -79,13 +79,14 @@ public class SecureGraphUserRepository extends UserRepository {
         String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
 
-        String userName = USERNAME.getPropertyValue(user);
+        String username = USERNAME.getPropertyValue(user);
+        String displayName = DISPLAY_NAME.getPropertyValue(user);
         String userId = (String) user.getId();
         String userStatus = STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = CURRENT_WORKSPACE.getPropertyValue(user);
-        LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, privileges, currentWorkspaceId);
+        LOGGER.debug("Creating user from UserRow. userId: %s, authorizations: %s", userId, AUTHORIZATIONS.getPropertyValue(user));
+        return new SecureGraphUser(userId, username, displayName, modelUserContext, userStatus, privileges, currentWorkspaceId);
     }
 
     @Override
@@ -131,7 +132,8 @@ public class SecureGraphUserRepository extends UserRepository {
 
         String id = "USER_" + graph.getIdGenerator().nextId().toString();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility(), this.authorizations);
-        USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
+        USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
+        DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());

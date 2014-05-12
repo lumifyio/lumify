@@ -78,7 +78,7 @@ define([
                     })
                     .done(function(user) {
                         self.userLoaded = true;
-                        field.text(user.userName);
+                        field.text(user.displayName);
                     })
             } else {
                 field.text('Unknown');

@@ -13,6 +13,7 @@ public class AuditCommon extends ColumnFamily {
     public static final String ACTOR_TYPE = "actorType";
     public static final String USER_ID = "userId";
     public static final String USER_NAME = "userName";
+    public static final String DISPLAY_NAME = "displayName";
     public static final String ACTION = "action";
     public static final String TYPE = "type";
     public static final String COMMENT = "comment";
@@ -53,6 +54,15 @@ public class AuditCommon extends ColumnFamily {
         return this;
     }
 
+    public String getDisplayName() {
+        return Value.toString(get(DISPLAY_NAME));
+    }
+
+    public AuditCommon setDisplayName(String displayName, Visibility visibility) {
+        set(DISPLAY_NAME, displayName, visibility.getVisibilityString());
+        return this;
+    }
+
     public String getAction() {
         return Value.toString(get(ACTION));
     }
@@ -82,7 +92,8 @@ public class AuditCommon extends ColumnFamily {
 
     public AuditCommon setUser(User user, Visibility visibility) {
         setUserId(user.getUserId(), visibility);
-        setUserName(user.getDisplayName(), visibility);
+        setUserName(user.getUsername(), visibility);
+        setDisplayName(user.getDisplayName(), visibility);
         setActorType(user.getUserType(), visibility);
         return this;
     }
@@ -139,6 +150,7 @@ public class AuditCommon extends ColumnFamily {
             json.put("actorType", getActorType());
             json.put("userId", getUserId());
             json.put("userName", getUserName());
+            json.put("displayName", getDisplayName());
             json.put("action", getAction());
             json.put("type", getType());
             json.put("comment", getComment());

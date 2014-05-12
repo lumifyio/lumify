@@ -39,7 +39,7 @@ public class InMemoryUserRepository extends UserRepository {
 
     @Override
     public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
-        InMemoryUser user = new InMemoryUser(displayName, getDefaultPrivileges(), userAuthorizations, null);
+        InMemoryUser user = new InMemoryUser(username, displayName, getDefaultPrivileges(), userAuthorizations, null);
         userListenerUtil.fireNewUserAddedEvent(user);
         return user;
     }

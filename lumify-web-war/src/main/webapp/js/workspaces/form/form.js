@@ -136,7 +136,7 @@ define([
                         access: userPermission.access,
                         permissionLabel: {read: 'View', write: 'Edit'}[userPermission.access.toLowerCase()],
                         userId: user.id,
-                        userName: user.userName
+                        displayName: user.displayName
                     },
                     editable: this.editable
                 };
@@ -329,21 +329,21 @@ define([
                             var users = response.users,
                                 regex = new RegExp(query, 'i'),
                                 search = users.filter(function(user) {
-                                    userMap[user.userName] = user;
+                                    userMap[user.displayName] = user;
 
                                     // Can't share with oneself
                                     if (user.id === self.attr.data.createdBy) return false;
 
-                                    return regex.test(user.userName);
+                                    return regex.test(user.displayName);
                                 }),
-                                names = _.pluck(search, 'userName');
+                                names = _.pluck(search, 'displayName');
 
                             self.currentUsers = users;
                             callback(names);
                         });
                 },
-                updater: function(userName) {
-                    var user = userMap[userName];
+                updater: function(displayName) {
+                    var user = userMap[displayName];
                     if (user) {
                         self.trigger('shareWorkspaceWithUser', {
                             workspace: self.attr.data,

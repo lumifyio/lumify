@@ -294,7 +294,7 @@ define([
 
         this.workspaceDataForItemRow = function(w) {
             var row = $.extend({}, w),
-                createdBy = this.usersById[row.createdBy].userName,
+                createdBy = this.usersById[row.createdBy].displayName,
                 text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != window.currentUser.id;
