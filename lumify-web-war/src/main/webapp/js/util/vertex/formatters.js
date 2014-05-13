@@ -60,8 +60,8 @@ define([
                 return foundProperties;
             },
 
-            propForKey: function(vertex, key) {
-                return _.findWhere(vertex.properties, { key: key });
+            propForNameAndKey: function(vertex, name, key) {
+                return _.findWhere(vertex.properties, { name: name, key: key });
             },
 
             title: function(vertex) {

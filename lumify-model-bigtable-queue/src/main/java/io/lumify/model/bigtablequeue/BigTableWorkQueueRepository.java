@@ -23,7 +23,7 @@ import java.util.Map;
 public class BigTableWorkQueueRepository extends WorkQueueRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(BigTableWorkQueueRepository.class);
     private final UserRepository userRepository;
-    public static final String DEFAULT_TABLE_PREFIX = "atc_accumuloqueue_";
+    public static final String DEFAULT_TABLE_PREFIX = "lumify_bigtable_queue_";
     private final ModelSession modelSession;
     private Map<String, QueueItemRepository> queues = new HashMap<String, QueueItemRepository>();
     private String tablePrefix;

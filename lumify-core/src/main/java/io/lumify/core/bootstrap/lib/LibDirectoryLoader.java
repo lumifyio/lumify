@@ -11,7 +11,7 @@ public class LibDirectoryLoader extends LibLoader {
 
     @Override
     public void loadLibs(Configuration configuration) {
-        LOGGER.info("Loading libs using %s", HdfsLibCacheLoader.class.getName());
+        LOGGER.info("Loading libs using %s", LibDirectoryLoader.class.getName());
 
         File libDirectory = new File(configuration.get(Configuration.LIB_DIRECTORY, "/opt/lumify/lib"));
         if (!libDirectory.exists()) {

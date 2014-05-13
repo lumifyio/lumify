@@ -9,6 +9,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
 import io.lumify.core.model.audit.*;
+import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.user.User;
@@ -288,7 +289,14 @@ public class SecureGraphAuditRepository extends AuditRepository {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
         auditEdge.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource);
+        Map <String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
+        if (metadata != null && !metadata.isEmpty()) {
+            auditDestSource.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+            auditSourceDest.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+            auditEdge.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
+        }
+
+        List<Audit> audits = Lists.newArrayList(auditSourceDest, auditDestSource, auditEdge);
         saveMany(audits);
         return audits;
     }
@@ -313,7 +321,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             sourceTitle = IterableUtils.toList(sourceTitleIterable).get(IterableUtils.count(sourceTitleIterable) - 1);
         }
 
-        Iterable<String> destTitleIterable = TITLE.getPropertyValues(sourceVertex);
+        Iterable<String> destTitleIterable = TITLE.getPropertyValues(destVertex);
         String destTitle = "";
         if (IterableUtils.count(destTitleIterable) != 0) {
             destTitle = IterableUtils.toList(destTitleIterable).get(IterableUtils.count(destTitleIterable) - 1);
@@ -416,7 +424,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     private String checkAndConvertForDateType(String propertyName, Object value) {
-        if (ontologyRepository.getProperty(propertyName).getDataType() == PropertyType.DATE) {
+        OntologyProperty ontologyProperty = ontologyRepository.getProperty(propertyName);
+        if (ontologyProperty != null && ontologyProperty.getDataType() == PropertyType.DATE) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyy");
             try {
                 return String.valueOf(dateFormat.parse(value.toString()).getTime());

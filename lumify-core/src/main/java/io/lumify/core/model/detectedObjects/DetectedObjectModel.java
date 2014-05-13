@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DetectedObjectModel extends Row<DetectedObjectRowKey> {
-    public static final String TABLE_NAME = "atc_detectedObject";
+    public static final String TABLE_NAME = "lumify_detectedObject";
 
     public DetectedObjectModel(DetectedObjectRowKey rowKey) {
         super(TABLE_NAME, rowKey);

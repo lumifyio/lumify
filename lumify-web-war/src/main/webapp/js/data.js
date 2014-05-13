@@ -231,6 +231,19 @@ define([
                     self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
                     break;
 
+                case 'verticesDeleted':
+                    if (_.some(self.selectedVertices, function(vertex) {
+                            return ~message.data.vertexIds.indexOf(vertex.id);
+                        })) {
+                        self.trigger('selectObjects');
+                    }
+                    self.trigger('verticesDeleted', {
+                        vertices: message.data.vertexIds.map(function(vId) {
+                            return { id: vId };
+                        })
+                    });
+                    break;
+
                 case 'detectedObjectChange':
                     updated = self.updateCacheWithVertex(message.data.artifactVertex, { returnNullIfNotChanged: true });
                     if (updated) {

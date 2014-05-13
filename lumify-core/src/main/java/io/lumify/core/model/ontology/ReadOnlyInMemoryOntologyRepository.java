@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReadOnlyInMemoryOntologyRepository.class);
+    private OWLOntologyLoaderConfiguration owlConfig = new OWLOntologyLoaderConfiguration();
     private Cache<String, InMemoryConcept> conceptsCache = CacheBuilder.newBuilder()
             .build();
     private Cache<String, InMemoryOntologyProperty> propertiesCache = CacheBuilder.newBuilder()
@@ -30,11 +31,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             .build();
     private Cache<String, byte[]> fileCache = CacheBuilder.newBuilder()
             .build();
-    private OWLOntologyLoaderConfiguration owlConfig;
 
     public void init(Configuration config) throws Exception {
         Map<String, String> ontologies = config.getSubset(Configuration.ONTOLOGY_REPOSITORY_OWL);
-        owlConfig = new OWLOntologyLoaderConfiguration();
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");

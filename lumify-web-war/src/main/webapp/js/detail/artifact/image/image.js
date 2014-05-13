@@ -156,10 +156,10 @@ define([
 
                 self.trigger('DetectedObjectCoordsChange', {
                     id: self.currentlyEditing,
-                    x1: (l * naturalWidth).toFixed(2) + '',
-                    x2: ((l + w) * naturalWidth).toFixed(2) + '',
-                    y1: (t * naturalHeight).toFixed(2) + '',
-                    y2: ((t + h) * naturalHeight).toFixed(2) + ''
+                    x1: l.toFixed(2) + '',
+                    x2: (l + w).toFixed(2) + '',
+                    y1: t.toFixed(2) + '',
+                    y2: (t + h).toFixed(2) + ''
                 });
             }
         };
@@ -173,15 +173,10 @@ define([
                     var box = (options.editing || options.viewing) ?
                             self.select('boxEditingSelector') :
                             self.select('boxSelector').not('.editing'),
-                        image = self.select('imageSelector'),
-                        width = image.width(),
-                        height = image.height(),
-                        aspectWidth = width / image[0].naturalWidth,
-                        aspectHeight = height / image[0].naturalHeight,
-                        w = (data.x2 - data.x1) * aspectWidth / width * 100,
-                        h = (data.y2 - data.y1) * aspectHeight / height * 100,
-                        x = data.x1 * aspectWidth / width * 100,
-                        y = data.y1 * aspectHeight / height * 100;
+                        w = (data.x2 - data.x1) * 100,
+                        h = (data.y2 - data.y1) * 100,
+                        x = data.x1 * 100,
+                        y = data.y1 * 100;
 
                     if (options.viewing) {
                         box.resizable('disable').draggable('disable')

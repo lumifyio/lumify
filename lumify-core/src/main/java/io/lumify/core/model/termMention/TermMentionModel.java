@@ -4,7 +4,7 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.RowKey;
 
 public class TermMentionModel extends Row<TermMentionRowKey> {
-    public static final String TABLE_NAME = "atc_termMention";
+    public static final String TABLE_NAME = "lumify_termMention";
 
     public TermMentionModel(TermMentionRowKey rowKey) {
         super(TABLE_NAME, rowKey);

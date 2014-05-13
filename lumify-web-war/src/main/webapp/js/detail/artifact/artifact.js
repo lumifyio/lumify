@@ -421,7 +421,7 @@ define([
         this.imageSetup = function(vertex) {
             var self = this,
                 data = {
-                    src: vertex.imageRawSrc,
+                    src: vertex.imageDetailSrc,
                     id: vertex.id
                 };
             Image.attachTo(this.select('imagePreviewSelector'), { data: data });
