@@ -223,6 +223,8 @@ define([
             if (!data || !data.remoteEvent) return;
 
             this.currentUserReady(function(currentUser) {
+                var userAccess = _.findWhere(data.users, { userId: currentUser.id });
+                data.isEditable = (/write/i).test(userAccess && userAccess.access);
                 data.isSharedToUser = data.createdBy !== currentUser.id;
 
                 if (this.workspaceId === data.workspaceId) {
