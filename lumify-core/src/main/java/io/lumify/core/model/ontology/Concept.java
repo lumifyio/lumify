@@ -1,11 +1,11 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
-import org.securegraph.Visibility;
 import org.atteo.evo.inflector.English;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -30,6 +30,10 @@ public abstract class Concept {
     public abstract String getDisplayName();
 
     public abstract String getDisplayType();
+
+    public Collection<OntologyProperty> getProperties() {
+        return properties;
+    }
 
     protected String getParentConceptIRI() {
         return this.parentConceptIRI;

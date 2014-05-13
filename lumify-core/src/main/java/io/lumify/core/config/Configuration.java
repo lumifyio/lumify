@@ -45,6 +45,9 @@ public final class Configuration {
     public static final String WORK_QUEUE_REPOSITORY = "repository.workQueue";
     public static final String ONTOLOGY_REPOSITORY_OWL = "repository.ontology.owl";
     public static final String ONTOLOGY_IRI_ENTITY_IMAGE = "ontology.iri.entityImage";
+    public static final String ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY = "ontology.iri.artifactHasEntity";
+    public static final String ONTOLOGY_IRI_ENTITY_HAS_IMAGE = "ontology.iri.entityHasImage";
+    public static final String ONTOLOGY_IRI_ARTIFACT_CONTAINS_IMAGE_OF_ENTITY = "ontology.iri.artifactContainsImageOfEntity";
     public static final String GRAPH_PROVIDER = "graph";
     public static final String VISIBILITY_TRANSLATOR = "security.visibilityTranslator";
     public static final String AUDIT_VISIBILITY_LABEL = "audit.visibilityLabel";
