@@ -122,7 +122,7 @@ define([
 
             configService.getProperties().done(function(config) {
                 // Create source/dest/other properties
-                allRelationships.forEach(function (r) {
+                allRelationships.forEach(function(r) {
                     if (ontologyRelationships.byTitle[r.relationship.label]) {
                         r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
                         var src, dest, other;
@@ -171,9 +171,9 @@ define([
                     }),
                     sortedKeys = Object.keys(groupedByType);
 
-                sortedKeys.forEach(function (section) {
+                sortedKeys.forEach(function(section) {
                     if (section !== 'references') {
-                        groupedByType[section].sort(function (a, b) {
+                        groupedByType[section].sort(function(a, b) {
                             var direction = defaultSort(
                                     a.vertex.id === a.vertices.src.id ? 0 : 1,
                                     b.vertex.id === b.vertices.src.id ? 0 : 1
@@ -190,7 +190,7 @@ define([
                     }
                 });
 
-                sortedKeys.sort(function(a,b) {
+                sortedKeys.sort(function(a, b) {
                     // If in references group sort by the title
                     if (a === b && a === 'references') {
                         return defaultSort(
