@@ -1,14 +1,18 @@
 
 define([
     'flight/lib/component',
+    'service/user',
     'tpl!login',
     'configuration/plugins/authentication/authentication'
 ], function(
     defineComponent,
+    UserService,
     template,
     AuthenticationPlugin
 ) {
     'use strict';
+
+    var userService = new UserService();
 
     return defineComponent(Login);
 
@@ -36,15 +40,19 @@ define([
             if ((/^#?v=/).test(location.hash)) {
                 window.location.reload();
             } else {
-                require(['app'], function(App) {
-                    App.attachTo('#app', {
-                        animateFromLogin: true
-                    });
+                userService.isLoginRequired()
+                    .done(function(user) {
+                        window.currentUser = user;
+                        require(['app'], function(App) {
+                            App.attachTo('#app', {
+                                animateFromLogin: true
+                            });
 
-                    self.$node.find('.logo').one(TRANSITION_END, function() {
-                        self.teardown();
-                    });
-                });
+                            self.$node.find('.logo').one(TRANSITION_END, function() {
+                                self.teardown();
+                            });
+                        });
+                    })
             }
         };
 
