@@ -16,6 +16,13 @@ define([
 
     return defineComponent(WorkspaceOverlay);
 
+    function isWorkspaceDiffPost(settings) {
+        var route = ~['workspace/undo', 'workspace/publish'].indexOf(settings.url),
+            isPost = (/post/i).test(settings.type);
+
+        return !!(route && isPost);
+    }
+
     function WorkspaceOverlay() {
 
         var workspaceService = new WorkspaceService(),
@@ -35,11 +42,17 @@ define([
             })
 
             this.userDeferred = $.Deferred();
+            if (window.currentUser) {
+                this.userDeferred.resolve();
+            }
+
             this.workspaceDeferred = $.Deferred();
             this.updateDiffBadge = _.throttle(this.updateDiffBadge.bind(this), UPDATE_WORKSPACE_DIFF_SECONDS * 1000)
 
             $.when(this.userDeferred, this.workspaceDeferred).done(function() {
                 self.$node.show();
+
+                self.updateUserTooltip({user: window.currentUser});
 
                 requestAnimationFrame(function() {
                     self.$node.addClass('visible');
@@ -60,6 +73,7 @@ define([
             this.on(document, 'verticesAdded', this.updateDiffBadge)
             this.on(document, 'edgesDeleted', this.updateDiffBadge)
             this.on(document, 'ajaxComplete', this.onAjaxComplete);
+            this.on(document, 'ajaxSend', this.onAjaxSend);
 
             this.on(document, 'showDiffPanel', this.showDiffPanel);
             this.on(document, 'escape', this.closeDiffPanel);
@@ -86,9 +100,22 @@ define([
             }
         };
 
+        this.onAjaxSend = function(event, xhr, settings) {
+            if (isWorkspaceDiffPost(settings)) {
+                this.disableAutoUpdateBadge = true;
+            }
+        };
+
         this.onAjaxComplete = function(event, xhr, settings) {
+
             // Automatically call diff after every POST
-            if (/post/i.test(settings.type) && settings.url !== 'vertex/multiple') {
+            if ((!this.disableAutoUpdateBadge) &&
+                /post/i.test(settings.type) &&
+                settings.url !== 'vertex/multiple') {
+
+                xhr.done(this.updateDiffBadge.bind(this));
+            } else if (isWorkspaceDiffPost(settings)) {
+                this.disableAutoUpdateBadge = false;
                 xhr.done(this.updateDiffBadge.bind(this));
             }
         };

@@ -30,7 +30,7 @@ public class Login extends BaseRequestHandler {
             user = getUserRepository().addUser(username, username, PASSWORD, new String[0]);
         }
 
-        CurrentUser.set(request, user);
+        CurrentUser.set(request, user.getUserId());
         JSONObject json = new JSONObject();
         json.put("status", "OK");
         respondWithJson(response, json);

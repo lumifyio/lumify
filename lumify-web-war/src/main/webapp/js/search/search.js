@@ -42,6 +42,7 @@ define([
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
+            clearSearchSelector: '.search-query-container a',
             filtersInfoSelector: '.filter-info',
             resultsSummarySelector: '.search-results-summary',
             entitiesHeaderBadgeSelector: '.search-results-summary li.entities .badge',
@@ -156,10 +157,18 @@ define([
             this.select('querySelector').val('');
         };
 
+        this.onClearSearchButton = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(event.target).blur();
+            this.trigger('clearSearch')
+        };
+
         this.onClearSearch = function() {
             this.select('resultsSummarySelector').empty();
             this.clearFilters();
             this.select('querySelector').val('').focus();
+            this.select('clearSearchSelector').hide();
         }
 
         this.onSearch = function(evt, data) {
@@ -409,10 +418,17 @@ define([
             this.on('click', {
                 summaryResultItemSelector: this.onSummaryResultItemClick,
                 filtersInfoSelector: this.onFiltersInfoRemoveClick,
+                clearSearchSelector: this.onClearSearchButton
             });
             this.on('keyup', {
                 querySelector: this.onKeyUp
             });
+            this.on('change keyup', function() {
+                this.select('clearSearchSelector').toggle(
+                    $.trim(this.select('querySelector').val()).length > 0
+                )
+            });
+            this.select('clearSearchSelector').hide();
 
             this.select('querySelector').on('focus', this.onQueryFocus.bind(this));
 

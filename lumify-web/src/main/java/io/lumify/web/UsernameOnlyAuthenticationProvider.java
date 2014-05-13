@@ -9,11 +9,12 @@ import io.lumify.core.user.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UsernameAndPasswordAuthenticationProvider extends AuthenticationProvider {
+public class UsernameOnlyAuthenticationProvider extends AuthenticationProvider {
+    private static final String PASSWORD = "8XXuk2tQ523b";
     private final UserRepository userRepository;
 
     @Inject
-    public UsernameAndPasswordAuthenticationProvider(final UserRepository userRepository) {
+    public UsernameOnlyAuthenticationProvider(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -30,14 +31,13 @@ public class UsernameAndPasswordAuthenticationProvider extends AuthenticationPro
     @Override
     public boolean login(HttpServletRequest request) {
         final String username = UrlUtils.urlDecode(request.getParameter("username")).trim();
-        final String password = UrlUtils.urlDecode(request.getParameter("password")).trim();
 
         User user = userRepository.findByUsername(username.toLowerCase());
-        if (user != null && userRepository.isPasswordValid(user, password)) {
-            setUserId(request, user.getUserId());
-            return true;
-        } else {
-            return false;
+        if (user == null) {
+            // For form based authentication, username and displayName will be the same
+            user = userRepository.addUser(username.toLowerCase(), username, PASSWORD, new String[0]);
         }
+        setUserId(request, user.getUserId());
+        return true;
     }
 }

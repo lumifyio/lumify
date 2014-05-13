@@ -7,7 +7,7 @@ import io.lumify.core.util.RowKeyHelper;
 import org.json.JSONObject;
 
 public class Audit extends Row<AuditRowKey> {
-    public static final String TABLE_NAME = "atc_audit";
+    public static final String TABLE_NAME = "lumify_audit";
 
     public Audit(RowKey rowKey) {
         super(TABLE_NAME, new AuditRowKey(rowKey.toString()));

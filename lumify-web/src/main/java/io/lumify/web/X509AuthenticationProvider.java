@@ -32,20 +32,20 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        User user = CurrentUser.get(request);
-        if (user == null) {
+        String userId = CurrentUser.get(request);
+        if (userId == null) {
             X509Certificate cert = extractCertificate(request);
             if (isInvalid(cert)) {
                 respondWithAuthenticationFailure(response);
                 return;
             }
 
-            user = getUser(request, cert);
+            User user = getUser(request, cert);
             if (user == null) {
                 respondWithAuthenticationFailure(response);
                 return;
             }
-            setUser(request, user);
+            setUserId(request, user.getUserId());
         }
         chain.next(request, response);
     }

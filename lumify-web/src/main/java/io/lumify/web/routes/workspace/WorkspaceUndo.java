@@ -72,6 +72,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
 
         JSONArray failures = new JSONArray();
         JSONArray successArray = new JSONArray();
+        JSONArray verticesDeleted = new JSONArray();
 
         for (int i = 0; i < undoData.length(); i++) {
             JSONObject data = undoData.getJSONObject(i);
@@ -90,6 +91,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 JSONObject responseResult = new JSONObject();
                 responseResult.put("vertex", undoVertex(vertex, workspaceId, authorizations, user));
                 successArray.put(responseResult);
+                verticesDeleted.put(vertex.getId());
             } else if (type.equals("relationship")) {
                 Vertex sourceVertex = graph.getVertex(data.getString("sourceId"), authorizations);
                 Vertex destVertex = graph.getVertex(data.getString("destId"), authorizations);
@@ -126,6 +128,10 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user));
                 successArray.put(responseResult);
             }
+        }
+
+        if (verticesDeleted.length() > 0) {
+            workQueueRepository.pushVerticesDeletion(verticesDeleted);
         }
 
         JSONObject resultJson = new JSONObject();

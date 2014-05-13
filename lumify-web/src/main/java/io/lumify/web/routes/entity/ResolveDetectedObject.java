@@ -143,7 +143,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         graph.flush();
 
-        workQueueRepository.pushEdgeCreation(edge);
+        workQueueRepository.pushElement(edge);
 
         respondWithJson(response, result);
     }

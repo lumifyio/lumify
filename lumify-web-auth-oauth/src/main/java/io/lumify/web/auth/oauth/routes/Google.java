@@ -128,7 +128,7 @@ public class Google implements Handler {
             user = userRepository.addUser(username, displayName, PASSWORD, new String[0]);
         }
 
-        CurrentUser.set(httpRequest, user);
+        CurrentUser.set(httpRequest, user.getUserId());
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");
     }
 

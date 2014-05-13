@@ -40,12 +40,12 @@ public class NoOpDetectedObjectRepository extends DetectedObjectRepository {
 
     @Override
     public JSONArray toJSON(Vertex artifactVertex, ModelUserContext modelUserContext, Authorizations authorizations, String workspaceId) {
-        throw new RuntimeException("not supported");
+        return new JSONArray();
     }
 
     @Override
     public JSONObject toJSON(DetectedObjectModel detectedObjectModel, Authorizations authorizations) {
-        throw new RuntimeException("not supported");
+        return new JSONObject();
     }
 
     @Override

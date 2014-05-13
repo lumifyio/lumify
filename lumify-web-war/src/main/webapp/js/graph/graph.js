@@ -813,9 +813,14 @@ define([
 
                 if (Privileges.canEDIT) {
                     menu = this.select ('edgeContextMenuSelector');
-                    menu.data('edge', event.cyTarget.data());
-                    if (event.cy.nodes().filter(':selected').length > 1) {
-                        return false;
+                    var edgeData = event.cyTarget.data();
+                    if (!(/^public$/i).test(edgeData.vertex.diffType)) {
+                        menu.data('edge', edgeData);
+                        if (event.cy.nodes().filter(':selected').length > 1) {
+                            return false;
+                        }
+                    } else {
+                        menu = null;
                     }
                 }
 
@@ -1035,6 +1040,7 @@ define([
                                     target: destNode.id(),
                                     vertex: {
                                         id: relationship.id,
+                                        diffType: relationship.diffType,
                                         properties: {
                                             'http://lumify.io#conceptType': 'relationship',
                                             source: relationship.from,

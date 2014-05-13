@@ -19,9 +19,9 @@ public class ModelUtil {
             Audit.TABLE_NAME,
             DetectedObjectModel.TABLE_NAME,
             // TODO refactor to config file info. But since this is only for development this is low priority
-            "atc_securegraph_d",
-            "atc_securegraph_v",
-            "atc_securegraph_e");
+            "lumify_securegraph_d",
+            "lumify_securegraph_v",
+            "lumify_securegraph_e");
 
     public static void initializeTables(ModelSession modelSession, User user) {
         for (String table : tables) {
@@ -35,7 +35,7 @@ public class ModelUtil {
             modelSession.deleteTable(table, user.getModelUserContext());
         }
         for (String table : modelSession.getTableList(user.getModelUserContext())) {
-            if (table.startsWith("atc_")) {
+            if (table.startsWith("lumify_")) {
                 modelSession.deleteTable(table, user.getModelUserContext());
             }
         }

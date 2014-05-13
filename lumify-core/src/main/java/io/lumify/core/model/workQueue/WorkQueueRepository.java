@@ -50,8 +50,8 @@ public abstract class WorkQueueRepository {
         broadcastPropertyChange(element, propertyKey, propertyName);
     }
 
-    public void pushEdgeCreation(Edge edge) {
-        pushGraphPropertyQueue(edge, null, null);
+    public void pushElement(Element element) {
+        pushGraphPropertyQueue(element, null, null);
     }
 
     public void pushEdgeDeletion(Edge edge) {
@@ -66,6 +66,22 @@ public abstract class WorkQueueRepository {
 
         JSONObject json = new JSONObject();
         json.put("type", "edgeDeletion");
+        json.put("data", dataJson);
+        broadcastJson(json);
+    }
+
+    public void pushVerticesDeletion (JSONArray verticesDeleted) {
+        broadcastVerticesDeletion (verticesDeleted);
+    }
+
+    protected void broadcastVerticesDeletion(JSONArray verticesDeleted) {
+        JSONObject dataJson = new JSONObject();
+        if (verticesDeleted != null) {
+            dataJson.put("vertexIds", verticesDeleted);
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("type", "verticesDeleted");
         json.put("data", dataJson);
         broadcastJson(json);
     }

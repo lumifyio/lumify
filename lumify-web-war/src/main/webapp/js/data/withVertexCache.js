@@ -204,6 +204,7 @@ define([
 
                     case 'image':
                         vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
+                        vertex.imageDetailSrc = artifactUrl({ type: 'thumbnail' }) + '&width=800';
                         vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         break;
 

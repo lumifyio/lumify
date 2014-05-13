@@ -85,7 +85,7 @@ html.fullscreenDetails {
 }
 
 .fullscreenApp {
-  .users-pane, 
+  .chat-pane, 
   .search-pane, 
   .workspaces-pane, 
   .detail-pane {
@@ -146,7 +146,7 @@ html.fullscreenDetails {
   @import "workspaces/overlay";
 }
 
-.fullscreenApp .users-pane {
+.fullscreenApp .chat-pane {
   @padding: 10px;
   .above-graph(2);
   .left-pane(@padding);
@@ -154,7 +154,7 @@ html.fullscreenDetails {
   bottom: @padding;
   height: 200px;
 
-  @import "users/users";
+  @import "chat/chat";
 }
 
 .graph-pane { 

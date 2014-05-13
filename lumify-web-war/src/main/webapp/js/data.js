@@ -10,6 +10,7 @@ define([
     'service/vertex',
     'service/ontology',
     'service/config',
+    'service/user',
     'util/undoManager',
     'util/clipboardManager',
     'util/privileges',
@@ -20,7 +21,7 @@ define([
     // Mixins
     withVertexCache, withAjaxFilters, withAsyncQueue,
     // Service
-    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService,
+    Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
     undoManager, ClipboardManager, Privileges, F) {
     'use strict';
@@ -56,6 +57,7 @@ define([
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
         this.configService = new ConfigService();
+        this.userService = new UserService();
         this.selectedVertices = [];
         this.selectedVertexIds = [];
         this.workspaceId = null;
@@ -122,6 +124,9 @@ define([
             this.on('searchRelated', this.onSearchRelated);
             this.on('addRelatedItems', this.onAddRelatedItems);
 
+            // Service requests
+            this.on('requestUsersForChat', this.onRequestUsersForChat);
+
             this.on('socketMessage', this.onSocketMessage);
 
             this.on('copydocumenttext', this.onDocumentTextCopy);
@@ -176,6 +181,27 @@ define([
             });
         };
 
+        this.onRequestUsersForChat = function(event, data) {
+            var self = this;
+
+            this.workspaceReady()
+                .done(function(workspace) {
+                    $.when(
+                        self.userService.getCurrentUsers(workspace.workspaceId),
+                        self.workspaceService.list()
+                    ).done(function(usersResponse, workspacesResponse) {
+                        var users = usersResponse[0].users,
+                            workspaces = workspacesResponse[0].workspaces;
+
+                        self.trigger(event.target, 'usersForChat', {
+                            workspace: workspace,
+                            users: users,
+                            workspaces: workspaces
+                        });
+                    });
+                });
+        };
+
         this.onSocketMessage = function(evt, message) {
             var self = this,
                 updated = null;
@@ -184,7 +210,7 @@ define([
                 case 'propertiesChange':
 
                     // TODO: create edgesUpdated events
-                    if (!message.data.vertex.sourceVertexId) {
+                    if (message.data && message.data.vertex && !message.data.vertex.sourceVertexId) {
                         updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
                         if (updated) {
                             self.trigger('verticesUpdated', { vertices: [updated] });
@@ -203,6 +229,19 @@ define([
                         self.trigger('selectObjects');
                     }
                     self.trigger('edgesDeleted', { edgeId: message.data.edgeId});
+                    break;
+
+                case 'verticesDeleted':
+                    if (_.some(self.selectedVertices, function(vertex) {
+                            return ~message.data.vertexIds.indexOf(vertex.id);
+                        })) {
+                        self.trigger('selectObjects');
+                    }
+                    self.trigger('verticesDeleted', {
+                        vertices: message.data.vertexIds.map(function(vId) {
+                            return { id: vId };
+                        })
+                    });
                     break;
 
                 case 'detectedObjectChange':
@@ -466,18 +505,24 @@ define([
                 return console.error('Invalid event data to delete edge', data);
             }
 
-            var self = this,
-                edge = data.edges[0];
-            this.vertexService.deleteEdge(
-                edge.properties.source,
-                edge.properties.target,
-                edge.properties.relationshipType,
-                edge.id).done(function() {
-                    if (_.findWhere(self.selectedEdges, { id: edge.id })) {
-                        self.trigger('selectObjects');
-                    }
-                    self.trigger('edgesDeleted', { edgeId: edge.id });
-                });
+            if (Privileges.canEDIT && _.every(data.edges, function(e) {
+                return e.diffType !== 'PUBLIC';
+            })) {
+
+                var self = this,
+                    edge = data.edges[0];
+                this.vertexService.deleteEdge(
+                    edge.properties.source,
+                    edge.properties.target,
+                    edge.properties.relationshipType,
+                    edge.id).done(function() {
+                        if (_.findWhere(self.selectedEdges, { id: edge.id })) {
+                            self.trigger('selectObjects');
+                        }
+                        self.trigger('edgesDeleted', { edgeId: edge.id });
+                    });
+            }
+
         };
 
         this.onAddVertices = function(evt, data) {
@@ -851,7 +896,8 @@ define([
 
         this.loadWorkspace = function(workspaceData) {
             var self = this,
-                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId;
+                workspaceId = _.isString(workspaceData) ? workspaceData : workspaceData.workspaceId,
+                isChanged = self.workspaceId !== workspaceId;
 
             window.workspaceId = self.workspaceId = workspaceId;
 
@@ -863,7 +909,23 @@ define([
             self.socketSubscribeReady()
                 .done(function() {
                     $.when(
-                        self.getWorkspace(workspaceId),
+                        self.getWorkspace(workspaceId)
+                            .done(function() {
+                                if (isChanged) {
+                                    var currentUserId = window.currentUser.id;
+
+                                    self.workspaceService.socketPush({
+                                        type: 'changedWorkspace',
+                                        permissions: {
+                                            users: [currentUserId]
+                                        },
+                                        data: {
+                                            workspaceId: workspaceId,
+                                            userId: currentUserId
+                                        }
+                                    });
+                                }
+                            }),
                         self.workspaceService.getVertices(workspaceId)
                     ).done(function(workspace, vertexResponse) {
 

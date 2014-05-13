@@ -51,6 +51,6 @@ public abstract class RouteTestBase {
         when(mockResponse.getOutputStream()).thenReturn(mockResponseOutputStream);
 
         when(mockRequest.getSession()).thenReturn(mockHttpSession);
-        when(CurrentUser.get(mockHttpSession)).thenReturn(mockUser);
+        when(CurrentUser.get(mockHttpSession)).thenReturn(mockUser.getUserId());
     }
 }

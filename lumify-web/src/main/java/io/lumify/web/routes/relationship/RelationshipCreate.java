@@ -81,7 +81,7 @@ public class RelationshipCreate extends BaseRequestHandler {
             LOGGER.info("Statement created:\n" + JsonSerializer.toJson(edge, workspaceId).toString(2));
         }
 
-        workQueueRepository.pushEdgeCreation(edge);
+        workQueueRepository.pushElement(edge);
 
         respondWithJson(response, JsonSerializer.toJson(edge, workspaceId));
     }

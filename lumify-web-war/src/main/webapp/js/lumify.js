@@ -153,7 +153,9 @@ function(jQuery,
         }
 
         new UserService().isLoginRequired()
-            .done(function() {
+            .done(function(user) {
+                window.currentUser = user;
+                $(document).trigger('currentUserChanged', { user: user });
                 attachApplication(false);
             })
             .fail(function(message, options) {

@@ -1,0 +1,20 @@
+<ul class="nav nav-list">
+
+  {{#if chats}}
+    <li class="nav-header conversations">Conversations</li>
+    {{#each chats}}
+    {{> chat/userListItemTpl }}
+    {{/each}}
+  {{/if}}
+
+  {{#each usersByWorkspace}}
+  <li title="{{name}}" class="nav-header">{{name}}</li>
+    {{#each users}}
+    {{> chat/userListItemTpl }}
+    {{/each}}
+    </li>
+  {{else}}
+    <li class="none"><em>No users online</em></li>
+  {{/each}}
+
+</ul>
