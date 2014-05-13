@@ -117,111 +117,113 @@ define([
                 allRelationships = vertexRelationships[0].relationships,
                 relationships = [];
 
-            // Create source/dest/other properties
-            allRelationships.forEach(function(r) {
-                if (ontologyRelationships.byTitle[r.relationship.label]) {
-                    r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
-                    var src, dest, other;
-                    if (vertex.id == r.relationship.sourceVertexId) {
-                        src = vertex;
-                        dest = other = r.vertex;
-                    } else {
-                        src = other = r.vertex;
-                        dest = vertex;
-                    }
-
-                    r.vertices = {
-                        src: src,
-                        dest: dest,
-                        other: other,
-                        classes: {
-                            src: self.classesForVertex(src),
-                            dest: self.classesForVertex(dest),
-                            other: self.classesForVertex(other)
-                        }
-                    };
-
-                    r.relationshipInfo = {
-                        id: r.relationship.id,
-                        properties: $.extend({}, r.relationship.properties, {
-                            'http://lumify.io#conceptType': 'relationship',
-                            id: r.relationship.id,
-                            relationshipType: r.relationship.label,
-                            source: r.relationship.sourceVertexId,
-                            target: r.relationship.destVertexId
-                        })
-                    };
-                    relationships.push(r);
-                }
-            });
-
-            var groupedByType = _.groupBy(relationships, function(r) {
-
-                    // Has Entity are collected into references (no matter
-                    // relationship direction
-                    if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
-                        return 'references';
-                    }
-
-                    return r.displayLabel;
-                }),
-                sortedKeys = Object.keys(groupedByType);
-
-            sortedKeys.forEach(function(section) {
-                if (section !== 'references') {
-                    groupedByType[section].sort(function(a,b) {
-                        var direction = defaultSort(
-                            a.vertex.id === a.vertices.src.id ? 0 : 1,
-                            b.vertex.id === b.vertices.src.id ? 0 : 1
-                        )
-                        if (direction === 0) {
-                            return defaultSort(
-                                F.vertex.title(a.vertex).toLowerCase(),
-                                F.vertex.title(b.vertex).toLowerCase()
-                            );
+            configService.getProperties().done(function(config) {
+                // Create source/dest/other properties
+                allRelationships.forEach(function (r) {
+                    if (ontologyRelationships.byTitle[r.relationship.label]) {
+                        r.displayLabel = ontologyRelationships.byTitle[r.relationship.label].displayName;
+                        var src, dest, other;
+                        if (vertex.id == r.relationship.sourceVertexId) {
+                            src = vertex;
+                            dest = other = r.vertex;
                         } else {
-                            return direction;
+                            src = other = r.vertex;
+                            dest = vertex;
                         }
-                    });
-                }
-            });
 
-            sortedKeys.sort(function(a,b) {
+                        r.vertices = {
+                            src: src,
+                            dest: dest,
+                            other: other,
+                            classes: {
+                                src: self.classesForVertex(src),
+                                dest: self.classesForVertex(dest),
+                                other: self.classesForVertex(other)
+                            }
+                        };
 
-                // If in references group sort by the title
-                if (a === b && a === 'references') {
-                    return defaultSort(
-                        F.vertex.title(a.vertex),
-                        F.vertex.title(b.vertex)
-                    );
-                }
+                        r.relationshipInfo = {
+                            id: r.relationship.id,
+                            properties: $.extend({}, r.relationship.properties, {
+                                'http://lumify.io#conceptType': 'relationship',
+                                id: r.relationship.id,
+                                relationshipType: r.relationship.label,
+                                source: r.relationship.sourceVertexId,
+                                target: r.relationship.destVertexId
+                            })
+                        };
+                        relationships.push(r);
+                    }
+                });
 
-                // Specifies the special group sort order
-                var groups = { references: 1 };
-                if (groups[a] && groups[b]) {
-                    return defaultSort(groups[a], groups[b]);
-                } else if (groups[a]) {
-                    return 1;
-                } else if (groups[b]) {
-                    return -1;
-                }
+                var groupedByType = _.groupBy(relationships, function (r) {
 
-                return defaultSort(a, b);
-            });
+                        // Has Entity are collected into references (no matter
+                        // relationship direction
+                        if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
+                            return 'references';
+                        }
 
-            var $rels = self.select('relationshipsSelector');
-            $rels.html(relationshipsTemplate({
-                relationshipsGroupedByType: groupedByType,
-                sortedKeys: sortedKeys,
-                F: F
-            }));
+                        return r.displayLabel;
+                    }),
+                    sortedKeys = Object.keys(groupedByType);
 
-            VertexList.attachTo($rels.find('.references'), {
-                vertices: _.map(groupedByType.references, function(r) {
-                    return r.vertices.other;
-                }),
-                infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
-                total: totalReferences
+                sortedKeys.forEach(function (section) {
+                    if (section !== 'references') {
+                        groupedByType[section].sort(function (a, b) {
+                            var direction = defaultSort(
+                                    a.vertex.id === a.vertices.src.id ? 0 : 1,
+                                    b.vertex.id === b.vertices.src.id ? 0 : 1
+                            )
+                            if (direction === 0) {
+                                return defaultSort(
+                                    F.vertex.title(a.vertex).toLowerCase(),
+                                    F.vertex.title(b.vertex).toLowerCase()
+                                );
+                            } else {
+                                return direction;
+                            }
+                        });
+                    }
+                });
+
+                sortedKeys.sort(function (a, b) {
+
+                    // If in references group sort by the title
+                    if (a === b && a === 'references') {
+                        return defaultSort(
+                            F.vertex.title(a.vertex),
+                            F.vertex.title(b.vertex)
+                        );
+                    }
+
+                    // Specifies the special group sort order
+                    var groups = { references: 1 };
+                    if (groups[a] && groups[b]) {
+                        return defaultSort(groups[a], groups[b]);
+                    } else if (groups[a]) {
+                        return 1;
+                    } else if (groups[b]) {
+                        return -1;
+                    }
+
+                    return defaultSort(a, b);
+                });
+
+                var $rels = self.select('relationshipsSelector');
+                $rels.html(relationshipsTemplate({
+                    relationshipsGroupedByType: groupedByType,
+                    sortedKeys: sortedKeys,
+                    F: F
+                }));
+
+                VertexList.attachTo($rels.find('.references'), {
+                    vertices: _.map(groupedByType.references, function (r) {
+                        return r.vertices.other;
+                    }),
+                    infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
+                    total: totalReferences
+                });
             });
         };
 
