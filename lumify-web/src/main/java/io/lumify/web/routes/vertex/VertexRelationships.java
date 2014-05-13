@@ -1,22 +1,24 @@
 package io.lumify.web.routes.vertex;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class VertexRelationships extends BaseRequestHandler {
     private final Graph graph;
+    private final String artifactHasEntityIri;
 
     @Inject
     public VertexRelationships(
@@ -26,6 +28,11 @@ public class VertexRelationships extends BaseRequestHandler {
             final Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
         this.graph = graph;
+
+        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        if (this.artifactHasEntityIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
     }
 
     @Override
@@ -55,7 +62,7 @@ public class VertexRelationships extends BaseRequestHandler {
                 continue;
             }
 
-            if (edge.getLabel().equals("http://lumify.io/dev#rawHasEntity")) {
+            if (edge.getLabel().equals(this.artifactHasEntityIri)) {
                 totalReferences++;
                 if (referencesAdded >= size) continue;
                 if (skipped < offset) {

@@ -166,6 +166,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
 
         List<Audit> audits = new ArrayList<Audit>();
         String displayLabel = ontologyRepository.getDisplayNameForLabel(edge.getLabel());
+        checkNotNull(displayLabel, "Could not find display name for label '" + edge.getLabel() + "' on edge " + edge.getId());
         audits.add(auditRelationshipHelper(auditSourceDest, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
         audits.add(auditRelationshipHelper(auditDestSource, action, sourceVertex, destVertex, displayLabel, process, comment, user, visibility));
 
@@ -289,7 +290,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         auditSourceDest.getAuditProperty().setPropertyName(propertyName, visibility);
         auditEdge.getAuditProperty().setPropertyName(propertyName, visibility);
 
-        Map <String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
+        Map<String, Object> metadata = edge.getProperty(propertyKey, propertyName).getMetadata();
         if (metadata != null && !metadata.isEmpty()) {
             auditDestSource.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);
             auditSourceDest.getAuditProperty().setPropertyMetadata(jsonMetadata(metadata).toString(), visibility);

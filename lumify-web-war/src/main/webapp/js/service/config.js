@@ -7,6 +7,7 @@ define([
     var DEFAULTS = {
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
+        'ontology.iri.artifactHasEntity': 'http://lumify.io/dev#rawHasEntity'
     };
 
     // Coerce all values to strings since that's what they will be from

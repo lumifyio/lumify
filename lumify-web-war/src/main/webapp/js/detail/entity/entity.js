@@ -14,6 +14,7 @@ define([
     'detail/dropdowns/propertyForm/propForm',
     'service/ontology',
     'service/vertex',
+    'service/config',
     'sf'
 ], function(defineComponent,
     appData,
@@ -29,11 +30,13 @@ define([
     PropertyForm,
     OntologyService,
     VertexService,
+    ConfigService,
     sf) {
     'use strict';
 
     var ontologyService = new OntologyService(),
-        vertexService = new VertexService();
+        vertexService = new VertexService(),
+        configService = new ConfigService();
 
     return defineComponent(Entity, withTypeContent, withHighlighting);
 
@@ -156,11 +159,11 @@ define([
                     }
                 });
 
-                var groupedByType = _.groupBy(relationships, function (r) {
+                var groupedByType = _.groupBy(relationships, function(r) {
 
                         // Has Entity are collected into references (no matter
                         // relationship direction
-                        if (r.relationship.label === 'http://lumify.io/dev#rawHasEntity') {
+                        if (r.relationship.label === config['ontology.iri.artifactHasEntity']) {
                             return 'references';
                         }
 
@@ -187,8 +190,7 @@ define([
                     }
                 });
 
-                sortedKeys.sort(function (a, b) {
-
+                sortedKeys.sort(function(a,b) {
                     // If in references group sort by the title
                     if (a === b && a === 'references') {
                         return defaultSort(
@@ -218,7 +220,7 @@ define([
                 }));
 
                 VertexList.attachTo($rels.find('.references'), {
-                    vertices: _.map(groupedByType.references, function (r) {
+                    vertices: _.map(groupedByType.references, function(r) {
                         return r.vertices.other;
                     }),
                     infiniteScrolling: (groupedByType.references && groupedByType.references.length) > 0,
