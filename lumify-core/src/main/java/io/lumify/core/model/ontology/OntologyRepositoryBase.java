@@ -184,6 +184,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getKey(), displayType, OntologyRepository.VISIBILITY.getVisibility());
         }
 
+        String titleFormula = getTitleFormula(o, ontologyClass);
+        if (titleFormula != null) {
+            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility());
+        }
+
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
@@ -359,6 +364,10 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#displayType");
+    }
+
+    protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#titleFormula");
     }
 
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {

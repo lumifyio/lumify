@@ -2,42 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>lumify-tools</artifactId>
         <groupId>io.lumify</groupId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-import</artifactId>
+    <artifactId>lumify-cli</artifactId>
     <packaging>jar</packaging>
 
-    <name>Lumify: Tools: Import</name>
+    <name>Lumify: Tools: CLI</name>
 
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-core</artifactId>
+            <artifactId>lumify-import</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-fs-hdfs</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-bigtable-queue</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-rabbitmq</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-model-securegraph</artifactId>
+            <artifactId>lumify-user-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -63,6 +48,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    <archive>
+                        <manifest>
+                            <mainClass>io.lumify.tools.Cli</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

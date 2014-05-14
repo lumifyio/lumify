@@ -45,6 +45,10 @@ public class SecureGraphConcept extends Concept {
         return DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
+    public String getTitleFormula() {
+        return TITLE_FORMULA.getPropertyValue(vertex);
+    }
+
     @Override
     public void setProperty(String name, Object value, Visibility visibility) {
         getVertex().setProperty(name, value, visibility);

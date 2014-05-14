@@ -60,7 +60,7 @@ define([
 
             this.entityFilters.relatedToVertexId = data.vertexId;
             var vertex = appData.vertex(data.vertexId),
-                title = vertex && F.vertex.prop(vertex, 'title') || data.vertexId;
+                title = vertex && F.vertex.title(vertex) || data.vertexId;
 
             this.$node.find('.entity-filter-header')
                 .after(entityItemTemplate({title: title}))

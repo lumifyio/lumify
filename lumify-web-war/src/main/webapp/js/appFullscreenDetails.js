@@ -143,7 +143,7 @@ define([
                 // TODO: Image/Video before documents
 
                 // Sort by title
-                descriptors.push(F.vertex.prop(v, 'title'));
+                descriptors.push(F.vertex.title(v));
                 return descriptors.join('');
             });
 
@@ -246,7 +246,7 @@ define([
                     if (self._windowIsHidden && i++ % 2 === 0) {
                         if (newVertexIds.length === 1) {
                             document.title = '"' +
-                                F.vertex.prop(newVerticesById[newVertexIds[0]], 'title') +
+                                F.vertex.title(newVerticesById[newVertexIds[0]]) +
                                 '" added';
                         } else {
                             document.title = newVertexIds.length + ' items added';
@@ -272,9 +272,9 @@ define([
             });
 
             if (sorted.length === 1) {
-                return F.vertex.prop(sorted[0], 'title');
+                return F.vertex.title(sorted[0]);
             } else {
-                var first = '"' + F.vertex.prop(sorted[0], 'title') + '"',
+                var first = '"' + F.vertex.title(sorted[0]) + '"',
                     l = sorted.length - 1;
 
                 return first + ' and ' + l + ' other' + (l > 1 ? 's' : '');

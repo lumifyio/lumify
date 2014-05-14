@@ -11,7 +11,6 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
-import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.EntityLumifyProperties;
@@ -51,6 +50,7 @@ public class WorkspacePublish extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final Graph graph;
     private final VisibilityTranslator visibilityTranslator;
+    private final String entityHasImageIri;
 
     @Inject
     public WorkspacePublish(
@@ -73,6 +73,11 @@ public class WorkspacePublish extends BaseRequestHandler {
         this.userRepository = userRepository;
         this.ontologyRepository = ontologyRepository;
         this.workQueueRepository = workQueueRepository;
+
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        if (this.entityHasImageIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        }
     }
 
     @Override
@@ -314,7 +319,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             throw new LumifyException(String.format("edge with id '%s' is not local to workspace '%s'", edge.getId(), workspaceId));
         }
 
-        if (edge.getLabel().equals(LabelName.ENTITY_HAS_IMAGE_RAW.toString())) {
+        if (edge.getLabel().equals(entityHasImageIri)) {
             publishGlyphIconProperty(edge, workspaceId, user, authorizations);
         }
 

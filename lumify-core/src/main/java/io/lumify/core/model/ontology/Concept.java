@@ -1,16 +1,18 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
-import org.securegraph.Visibility;
 import org.atteo.evo.inflector.English;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Visibility;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
+
+import static io.lumify.core.model.ontology.OntologyLumifyProperties.TITLE_FORMULA;
 
 public abstract class Concept {
     private final String parentConceptIRI;
@@ -31,6 +33,12 @@ public abstract class Concept {
 
     public abstract String getDisplayType();
 
+    public abstract String getTitleFormula();
+
+    public Collection<OntologyProperty> getProperties() {
+        return properties;
+    }
+
     protected String getParentConceptIRI() {
         return this.parentConceptIRI;
     }
@@ -43,6 +51,9 @@ public abstract class Concept {
             result.put("displayName", getDisplayName());
             if (getDisplayType() != null) {
                 result.put("displayType", getDisplayType());
+            }
+            if (getTitleFormula() != null) {
+                result.put("titleFormula", getTitleFormula());
             }
             if (getParentConceptIRI() != null) {
                 result.put("parentConcept", getParentConceptIRI());

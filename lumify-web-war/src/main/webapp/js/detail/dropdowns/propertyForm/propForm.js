@@ -36,6 +36,7 @@ define([
             deleteButtonSelector: '.btn-danger',
             configurationSelector: '.configuration',
             configurationFieldSelector: '.configuration input',
+            previousValuesSelector: '.previous-values',
             visibilitySelector: '.visibility',
             justificationSelector: '.justification',
             propertyInputSelector: '.input-row input',
@@ -54,7 +55,8 @@ define([
 
             this.on('click', {
                 saveButtonSelector: this.onSave,
-                deleteButtonSelector: this.onDelete
+                deleteButtonSelector: this.onDelete,
+                previousValuesSelector: this.onPreviousValuesButtons
             });
             this.on('keyup', {
                 propertyInputSelector: this.onKeyup,
@@ -81,6 +83,7 @@ define([
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
+                    disablePreviousValuePrompt: true,
                     property: _.chain(this.attr.property)
                         .pick('displayName key name value visibility'.split(' '))
                         .extend({
@@ -136,9 +139,28 @@ define([
             });
         };
 
+        this.onPreviousValuesButtons = function(event) {
+            this.select('previousValuesSelector').find('.active').removeClass('active');
+
+            var action = $(event.target).addClass('active').data('action');
+
+            if (action === 'add') {
+                this.trigger('propertyselected', {
+                    fromPreviousValuePrompt: true,
+                    property: _.omit(this.currentProperty, 'value', 'key')
+                });
+            } else {
+                this.trigger('propertyselected', {
+                    fromPreviousValuePrompt: true,
+                    property: $.extend({}, this.currentProperty, this.previousValues[0])
+                });
+            }
+        };
+
         this.onPropertySelected = function(event, data) {
             var self = this,
                 property = data.property,
+                disablePreviousValuePrompt = data.disablePreviousValuePrompt,
                 propertyName = property.title,
                 config = self.select('configurationSelector'),
                 visibility = self.select('visibilitySelector'),
@@ -156,7 +178,8 @@ define([
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
                 sandboxStatus = vertexProperty && vertexProperty.sandboxStatus,
-                isExistingProperty = typeof vertexProperty !== 'undefined';
+                isExistingProperty = typeof vertexProperty !== 'undefined',
+                previousValues = disablePreviousValuePrompt !== true && F.vertex.props(this.attr.data, propertyName);
 
             this.currentValue = previousValue;
             if (this.currentValue && this.currentValue.latitude) {
@@ -167,6 +190,29 @@ define([
                 visibilityValue = visibilityValue.source;
                 this.visibilitySource = { value: visibilityValue, valid: true };
             }
+
+            if (data.fromPreviousValuePrompt !== true) {
+                if (previousValues && previousValues.length) {
+                    this.previousValues = previousValues;
+                    this.select('previousValuesSelector')
+                        .show()
+                        .find('.active').removeClass('active')
+                        .addBack()
+                        .find('.edit-previous span').text(previousValues.length)
+                        .addBack()
+                        .find('.edit-previous small').toggle(previousValues.length > 1);
+
+                    this.select('justificationSelector').hide();
+                    this.select('visibilitySelector').hide();
+
+                    return;
+                } else {
+                    this.select('previousValuesSelector').hide();
+                }
+            }
+
+            this.select('justificationSelector').show();
+            this.select('visibilitySelector').show();
 
             this.select('deleteButtonSelector')
                 .text(

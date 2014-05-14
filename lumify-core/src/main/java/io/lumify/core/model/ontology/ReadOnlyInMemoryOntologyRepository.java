@@ -78,6 +78,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             result.setDisplayType(displayType);
         }
 
+        String titleFormula = getTitleFormula(o, ontologyClass);
+        if (titleFormula != null) {
+            result.setTitleFormula(titleFormula);
+        }
+
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
@@ -152,7 +157,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 property.setDisplayName(displayName);
             }
             if (possibleValues.size() > 0) {
-                property.setPossibleValues (possibleValues);
+                property.setPossibleValues(possibleValues);
             }
             propertiesCache.put(propertyName, property);
         }

@@ -21,17 +21,17 @@ import java.util.regex.Pattern;
 public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(RegexGraphPropertyWorker.class);
     private final Pattern pattern;
-    private final String ontologyClassUri;
 
-    public RegexGraphPropertyWorker(String regEx, String ontologyClassUri) {
+    public RegexGraphPropertyWorker(String regEx) {
         this.pattern = Pattern.compile(regEx, Pattern.MULTILINE);
-        this.ontologyClassUri = ontologyClassUri;
     }
+
+    protected abstract String getOntologyClassUri();
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
-        LOGGER.debug("Extractor prepared for entity type [%s] with regular expression: %s", this.ontologyClassUri, this.pattern.toString());
+        LOGGER.debug("Extractor prepared for entity type [%s] with regular expression: %s", getOntologyClassUri(), this.pattern.toString());
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
         int start = matched.start();
         int end = matched.end();
 
-        return new TermMention.Builder(start, end, patternGroup, this.ontologyClassUri, propertyKey, visibility)
+        return new TermMention.Builder(start, end, patternGroup, getOntologyClassUri(), propertyKey, visibility)
                 .resolved(false)
                 .useExisting(true)
                 .process(getClass().getName())

@@ -53,9 +53,14 @@ public enum Privilege {
     }
 
     public static Set<Privilege> stringToPrivileges(String privilegesString) {
-        if (privilegesString == null) {
+        if (privilegesString == null || privilegesString.equalsIgnoreCase("NONE")) {
             return NONE;
         }
+
+        if (privilegesString.equalsIgnoreCase("ALL")) {
+            return ALL;
+        }
+
         String[] privilegesStringParts = privilegesString.split(",");
         Set<Privilege> privileges = new HashSet<Privilege>();
         for (String privilegesStringPart : privilegesStringParts) {

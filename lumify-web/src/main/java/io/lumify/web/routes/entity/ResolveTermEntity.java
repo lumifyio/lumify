@@ -3,6 +3,7 @@ package io.lumify.web.routes.entity;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -49,6 +50,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
     private final TermMentionRepository termMentionRepository;
     private final WorkspaceRepository workspaceRepository;
     private final WorkQueueRepository workQueueRepository;
+    private final String artifactHasEntityIri;
 
     @Inject
     public ResolveTermEntity(
@@ -69,6 +71,11 @@ public class ResolveTermEntity extends BaseRequestHandler {
         this.termMentionRepository = termMentionRepository;
         this.workspaceRepository = workspaceRepository;
         this.workQueueRepository = workQueueRepository;
+
+        this.artifactHasEntityIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        if (this.artifactHasEntityIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
     }
 
     @Override
@@ -131,7 +138,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         }
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
-        Edge edge = graph.addEdge(artifactVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), lumifyVisibility.getVisibility(), authorizations);
+        Edge edge = graph.addEdge(artifactVertex, vertex, this.artifactHasEntityIri, lumifyVisibility.getVisibility(), authorizations);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());

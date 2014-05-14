@@ -1,6 +1,7 @@
 package io.lumify.core.ingest.graphProperty;
 
 import com.altamiracorp.bigtable.model.FlushFlag;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.term.extraction.TermExtractionResult;
@@ -9,7 +10,6 @@ import io.lumify.core.ingest.term.extraction.TermRelationship;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
@@ -22,11 +22,10 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,8 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.lumify.core.util.CollectionUtil.trySingle;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.lumify.core.util.CollectionUtil.trySingle;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
@@ -46,9 +45,14 @@ public abstract class GraphPropertyWorker {
     private TermMentionRepository termMentionRepository;
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
+    private String artifactHasEntityIri;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
+        this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        if (this.artifactHasEntityIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
     }
 
     public abstract void execute(InputStream in, GraphPropertyWorkData data) throws Exception;
@@ -246,9 +250,9 @@ public abstract class GraphPropertyWorker {
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?
-            Edge edge = trySingle(artifactGraphVertex.getEdges(vertex, Direction.OUT, LabelName.RAW_HAS_ENTITY.toString(), getAuthorizations()));
+            Edge edge = trySingle(artifactGraphVertex.getEdges(vertex, Direction.OUT, artifactHasEntityIri, getAuthorizations()));
             if (edge == null) {
-                edge = graph.addEdge(artifactGraphVertex, vertex, LabelName.RAW_HAS_ENTITY.toString(), termMention.getVisibility(), getAuthorizations());
+                edge = graph.addEdge(artifactGraphVertex, vertex, artifactHasEntityIri, termMention.getVisibility(), getAuthorizations());
                 auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), termMention.getVisibility());
             }
 

@@ -11,6 +11,7 @@ public class InMemoryConcept extends Concept {
     private String color;
     private String displayName;
     private String displayType;
+    private String titleFormula;
     private ArrayList<OntologyProperty> properties;
     private boolean glyphIconResource;
     private String conceptIRI;
@@ -48,6 +49,11 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public String getTitleFormula() {
+        return titleFormula;
+    }
+
+    @Override
     public void setProperty(String name, Object value, Visibility visibility) {
     }
 
@@ -79,6 +85,10 @@ public class InMemoryConcept extends Concept {
 
     public void setDisplayType(String displayType) {
         this.displayType = displayType;
+    }
+
+    public void setTitleFormula(String titleFormula) {
+        this.titleFormula = titleFormula;
     }
 
     public ArrayList<OntologyProperty> getProperties() {

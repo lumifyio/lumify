@@ -296,6 +296,7 @@ public class SecureGraphUserRepository extends UserRepository {
     public void setPrivileges(User user, Set<Privilege> privileges) {
         Vertex userVertex = findByIdUserVertex(user.getUserId());
         UserLumifyProperties.PRIVILEGES.setProperty(userVertex, Privilege.toString(privileges), VISIBILITY.getVisibility());
+        graph.flush();
     }
 
     private Set<Privilege> getPrivileges(Vertex userVertex) {

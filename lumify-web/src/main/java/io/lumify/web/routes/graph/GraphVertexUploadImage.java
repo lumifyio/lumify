@@ -1,6 +1,7 @@
 package io.lumify.web.routes.graph;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -20,7 +21,6 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import io.lumify.web.BaseRequestHandler;
-import io.lumify.web.routes.artifact.ArtifactThumbnail;
 import com.altamiracorp.miniweb.HandlerChain;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
@@ -59,7 +59,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
     private final WorkQueueRepository workQueueRepository;
     private final VisibilityTranslator visibilityTranslator;
     private final WorkspaceRepository workspaceRepository;
-    private final String conceptIRI;
+    private final String conceptIri;
+    private final String entityHasImageIri;
 
     @Inject
     public GraphVertexUploadImage(
@@ -79,10 +80,15 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.visibilityTranslator = visibilityTranslator;
         this.workspaceRepository = workspaceRepository;
 
-        conceptIRI = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
-        Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
+        this.conceptIri = configuration.get(Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
         if (concept == null) {
-            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIRI, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+            LOGGER.error("Could not find concept '%s' for entity upload. Configuration key %s", conceptIri, Configuration.ONTOLOGY_IRI_ENTITY_IMAGE);
+        }
+
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        if (this.entityHasImageIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
         }
     }
 
@@ -91,8 +97,8 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         final String graphVertexId = getAttributeString(request, ATTR_GRAPH_VERTEX_ID);
         final List<Part> files = Lists.newArrayList(request.getParts());
 
-        Concept concept = ontologyRepository.getConceptByIRI(conceptIRI);
-        checkNotNull(concept, "Could not find image concept: " + conceptIRI);
+        Concept concept = ontologyRepository.getConceptByIRI(conceptIri);
+        checkNotNull(concept, "Could not find image concept: " + conceptIri);
 
         if (files.size() != 1) {
             throw new RuntimeException("Wrong number of uploaded files. Expected 1 got " + files.size());
@@ -130,9 +136,9 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         entityVertex = entityVertexMutation.save();
         graph.flush();
 
-        List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), authorizations));
+        List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, entityHasImageIri, authorizations));
         if (existingEdges.size() == 0) {
-            EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, LabelName.ENTITY_HAS_IMAGE_RAW.toString(), lumifyVisibility.getVisibility(), authorizations);
+            EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, entityHasImageIri, lumifyVisibility.getVisibility(), authorizations);
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
             Edge edge = edgeBuilder.save();
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
@@ -186,7 +192,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         RawLumifyProperties.FILE_NAME_EXTENSION.setProperty(vertexBuilder, FilenameUtils.getExtension(fileName), metadata, lumifyVisibility.getVisibility());
         RawLumifyProperties.MIME_TYPE.setProperty(vertexBuilder, mimeType, metadata, lumifyVisibility.getVisibility());
         RawLumifyProperties.RAW.setProperty(vertexBuilder, rawValue, metadata, lumifyVisibility.getVisibility());
-        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptIRI, metadata, lumifyVisibility.getVisibility());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexBuilder, conceptIri, metadata, lumifyVisibility.getVisibility());
         EntityLumifyProperties.SOURCE.setProperty(vertexBuilder, SOURCE_UPLOAD, metadata, lumifyVisibility.getVisibility());
         LumifyProperties.PROCESS.setProperty(vertexBuilder, PROCESS, metadata, lumifyVisibility.getVisibility());
         return vertexBuilder;

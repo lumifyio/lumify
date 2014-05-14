@@ -19,6 +19,8 @@ public final class OntologyLumifyProperties {
 
     public static final TextLumifyProperty DISPLAY_TYPE = new TextLumifyProperty("http://lumify.io#displayType", TextIndexHint.EXACT_MATCH);
 
+    public static final TextLumifyProperty TITLE_FORMULA = new TextLumifyProperty("http://lumify.io#titleFormula", TextIndexHint.NONE);
+
     public static final TextLumifyProperty COLOR = new TextLumifyProperty("http://lumify.io#color", TextIndexHint.NONE);
 
     public static final ByteArrayLumifyProperty POSSIBLE_VALUES = new ByteArrayLumifyProperty("http://lumify.io#possibleValues");

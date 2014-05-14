@@ -110,12 +110,12 @@ define([
 
             v = this.vertex(vertexId);
             if (v) {
-                vertexTitle = F.vertex.prop(v, 'title');
+                vertexTitle = F.vertex.title(v);
                 return deferredTitle.resolve(vertexTitle);
             }
 
             this.refresh(vertexId).done(function(vertex) {
-                vertexTitle = F.vertex.prop(vertex, 'title');
+                vertexTitle = F.vertex.title(vertex);
                 deferredTitle.resolve(vertexTitle);
             });
 

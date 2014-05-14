@@ -123,8 +123,8 @@ define([
                         if (cyA.length && !cyB.length) return 1;
                         if (cyB.length && !cyA.length) return -1;
 
-                        var titleA = F.vertex.prop(a, 'title').toLowerCase(),
-                            titleB = F.vertex.prop(b, 'title').toLowerCase();
+                        var titleA = F.vertex.title(a).toLowerCase(),
+                            titleB = F.vertex.title(b).toLowerCase();
 
                         return titleA < titleB ? -1 : titleB < titleA ? 1 : 0;
                     });
@@ -404,7 +404,7 @@ define([
         };
 
         this.updateCyNodeData = function(data, vertex) {
-            var truncatedTitle = F.vertex.prop(vertex, 'title');
+            var truncatedTitle = F.vertex.title(vertex);
 
             if (truncatedTitle.length > MAX_TITLE_LENGTH) {
                 truncatedTitle = $.trim(truncatedTitle.substring(0, MAX_TITLE_LENGTH)) + '...';

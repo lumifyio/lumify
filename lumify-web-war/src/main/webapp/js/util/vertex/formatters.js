@@ -1,9 +1,11 @@
 
 define([
     './urlFormatters',
+    './formula',
     'promise!../service/ontologyPromise'
 ], function(
     F,
+    formula,
     ontology) {
     'use strict';
 
@@ -25,9 +27,10 @@ define([
                 return resolvedName;
             },
 
-            displayProp: function(property) {
-                var value = V.prop(property, property.name),
-                    ontologyProperty = propertiesByTitle[property.name];
+            displayProp: function(vertexOrProperty, optionalName) {
+                var name = _.isUndefined(optionalName) ? vertexOrProperty.name : optionalName,
+                    value = V.prop(vertexOrProperty, name),
+                    ontologyProperty = propertiesByTitle[name];
 
                 if (!ontologyProperty) {
                     return value;
@@ -61,8 +64,29 @@ define([
                 return _.findWhere(vertex.properties, { name: name, key: key });
             },
 
+            title: function(vertex) {
+                var conceptId = V.prop(vertex, 'conceptType'),
+                    ontologyConcept = conceptId && ontology.conceptsById[conceptId],
+                    titleFormula = ontologyConcept && ontologyConcept.titleFormula,
+                    title;
+
+                if (titleFormula) {
+                    title = formula(titleFormula, vertex, V);
+                }
+
+                if (!title) {
+                    title = V.prop(vertex, 'title', undefined, true);
+                }
+
+                return title;
+            },
+
             // TODO: support looking for underscore properties like _source?
-            prop: function(vertexOrProperty, name, defaultValue) {
+            prop: function(vertexOrProperty, name, defaultValue, ignoreErrorIfTitle) {
+                if (ignoreErrorIfTitle !== true && name === 'title') {
+                    throw new Error('Use title function, not generic prop');
+                }
+
                 var autoExpandedName = V.propName(name),
 
                     ontologyProperty = propertiesByTitle[autoExpandedName],

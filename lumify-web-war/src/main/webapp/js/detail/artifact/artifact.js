@@ -155,7 +155,7 @@ define([
                     snippet: contextHighlight,
                     vertexId: this.attr.data.id,
                     text: selection.toString(),
-                    vertexTitle: F.vertex.prop(this.attr.data, 'title')
+                    vertexTitle: F.vertex.title(this.attr.data)
                 });
             }
         };
@@ -165,7 +165,7 @@ define([
 
             if (matching) {
                 this.select('titleSelector').html(
-                    F.vertex.prop(matching, 'title')
+                    F.vertex.title(matching)
                 );
             }
         };

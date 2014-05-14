@@ -35,7 +35,10 @@
     <!-- http://lumify.io#color -->
 
     <owl:AnnotationProperty rdf:about="&lumify;color"/>
-    
+
+    <!-- http://lumify.io#titleFormula -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;titleFormula"/>
 
 
     <!-- http://lumify.io#displayType -->
