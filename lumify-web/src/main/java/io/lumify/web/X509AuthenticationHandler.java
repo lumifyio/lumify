@@ -17,15 +17,15 @@ import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 
-public abstract class X509AuthenticationProvider extends AuthenticationProvider {
+public abstract class X509AuthenticationHandler extends AuthenticationHandler {
     public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
 
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationProvider.class);
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationHandler.class);
     protected static final String X509_USER_PASSWORD = "N/A";
     private final UserRepository userRepository;
     private final Graph graph;
 
-    protected X509AuthenticationProvider(UserRepository userRepository, final Graph graph) {
+    protected X509AuthenticationHandler(UserRepository userRepository, final Graph graph) {
         this.userRepository = userRepository;
         this.graph = graph;
     }
@@ -45,7 +45,7 @@ public abstract class X509AuthenticationProvider extends AuthenticationProvider 
                 respondWithAuthenticationFailure(response);
                 return;
             }
-            setUserId(request, user.getUserId());
+            CurrentUser.set(request, user.getUserId());
         }
         chain.next(request, response);
     }

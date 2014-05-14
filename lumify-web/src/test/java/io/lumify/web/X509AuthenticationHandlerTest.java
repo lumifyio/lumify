@@ -21,7 +21,7 @@ import java.security.cert.X509Certificate;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class X509AuthenticationProviderTest {
+public class X509AuthenticationHandlerTest {
     public static final String X509_REQ_ATTR_NAME = "javax.servlet.request.X509Certificate";
     public static final String TEST_USERNAME = "testuser";
 
@@ -47,11 +47,11 @@ public class X509AuthenticationProviderTest {
     @Mock
     private Delegate delegate;
 
-    private X509AuthenticationProvider instance;
+    private X509AuthenticationHandler instance;
 
     @Before
     public void setupTests() {
-        instance = new TestX509AuthenticationProvider(userRepository, graph);
+        instance = new TestX509AuthenticationHandler(userRepository, graph);
 
         when(request.getSession()).thenReturn(httpSession);
     }
@@ -87,7 +87,7 @@ public class X509AuthenticationProviderTest {
         X509Certificate[] certs = new X509Certificate[]{cert};
         when(request.getAttribute(X509_REQ_ATTR_NAME)).thenReturn(certs);
         when(delegate.getUsername(cert)).thenReturn(TEST_USERNAME);
-        when(userRepository.findOrAddUser(TEST_USERNAME, TEST_USERNAME, X509AuthenticationProvider.X509_USER_PASSWORD, new String[0])).thenReturn(user);
+        when(userRepository.findOrAddUser(TEST_USERNAME, TEST_USERNAME, X509AuthenticationHandler.X509_USER_PASSWORD, new String[0])).thenReturn(user);
         instance.handle(request, response, chain);
         verify(delegate).getUsername(cert);
         verify(httpSession).setAttribute(CurrentUser.CURRENT_USER_REQ_ATTR_NAME, user.getUserId());
@@ -97,7 +97,7 @@ public class X509AuthenticationProviderTest {
     private X509Certificate getCertificate(String name) {
         try {
             KeyStore ks = KeyStore.getInstance("JKS");
-            InputStream ksis = X509AuthenticationProviderTest.class.getResourceAsStream("/" + name + ".jks");
+            InputStream ksis = X509AuthenticationHandlerTest.class.getResourceAsStream("/" + name + ".jks");
             ks.load(ksis, "password".toCharArray());
             return (X509Certificate) ks.getCertificate(name);
         } catch (Exception e) {
@@ -111,20 +111,15 @@ public class X509AuthenticationProviderTest {
         boolean login(HttpServletRequest request);
     }
 
-    private class TestX509AuthenticationProvider extends X509AuthenticationProvider {
+    private class TestX509AuthenticationHandler extends X509AuthenticationHandler {
 
-        public TestX509AuthenticationProvider(UserRepository userRepository, Graph graph) {
+        public TestX509AuthenticationHandler(UserRepository userRepository, Graph graph) {
             super(userRepository, graph);
         }
 
         @Override
         protected String getUsername(X509Certificate cert) {
             return delegate.getUsername(cert);
-        }
-
-        @Override
-        public boolean login(HttpServletRequest request) {
-            return delegate.login(request);
         }
     }
 }
