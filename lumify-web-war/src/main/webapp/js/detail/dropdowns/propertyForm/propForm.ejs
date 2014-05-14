@@ -3,10 +3,15 @@
   <% if (!property) { %>
   <div class="property-list"></div>
   <% } %>
-  <div class="previous-values" style="display:none">
-    <button data-action="add">Add</button>
-    <button data-action="edit" class="edit-previous">Edit (<span></span>) <small>&#x25BC;</small></button>
+
+  <div class="previous-values-container">
+    <div class="previous-values" style="display:none;">
+      <button data-action="add">Add</button>
+      <button data-action="edit" class="edit-previous">Edit (<span></span>) <small>&#x25BC;</small></button>
+    </div>
+    <ul class="dropdown-menu" style="display:none"></ul>
   </div>
+
   <div class="configuration"></div>
   <div class="justification"></div>
   <div class="visibility"></div>
