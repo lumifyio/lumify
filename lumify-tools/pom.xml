@@ -37,5 +37,7 @@
 	<modules>
 		<module>lumify-version-inspector</module>
         <module>lumify-import</module>
+        <module>lumify-cli</module>
+        <module>lumify-user-admin</module>
     </modules>
 </project>
