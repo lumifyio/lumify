@@ -22,7 +22,7 @@ public class Login extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String username = UrlUtils.urlDecode(request.getParameter("username"));
+        final String username = UrlUtils.urlDecode(request.getParameter("username")).trim().toLowerCase();
 
         User user = getUserRepository().findByUsername(username);
         if (user == null) {
