@@ -97,14 +97,12 @@ define(['atmosphere'],
         };
 
         ServiceBase.prototype.disconnect = function() {
-            var req = document.$subSocket.request,
-                url = req.url + '?X-Atmosphere-Transport=close&X-Atmosphere-tracking-id=' + req.uuid;
+            var socket = document.$subSocket,
+                config = socket.request;
 
-            return $.ajax(url, {
-                async: false,
-                type: 'POST'
-            });
-        }
+            config.maxReconnectOnClose = 0;
+            socket.disconnect();
+        };
 
         ServiceBase.prototype._ajaxPost = function(options) {
             options.type = options.type || 'POST';
