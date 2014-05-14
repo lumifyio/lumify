@@ -35,6 +35,13 @@ public class TermRelationship {
     }
 
     @Override
+    public String toString() {
+        String srcSign = sourceTermMention != null ? sourceTermMention.getSign() : null;
+        String destSign = destTermMention != null ? destTermMention.getSign() : null;
+        return String.format("%s --- %s ---> %s", srcSign, label, destSign);
+    }
+
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 13 * hash + (this.sourceTermMention != null ? this.sourceTermMention.hashCode() : 0);
