@@ -194,10 +194,13 @@ footer .social {
   padding: 0;
 }
 
-#downloads-panel {
+#sidebar {
   width: 20%;
   margin-left: 1em;
   padding-left: 1em;
-  border-left: 1px solid #ddd;
   float: right;
+}
+
+#sidebar h2, #sidebar h3 {
+  font-weight: normal;
 }
