@@ -4,9 +4,10 @@ import io.lumify.core.security.LumifyVisibility;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public interface OntologyRepository {
     Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName);
 
     Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
+
+    OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception;
 
     void resolvePropertyIds(JSONArray filterJson) throws JSONException;
 
