@@ -50,7 +50,10 @@
     <!-- http://lumify.io#glyphIconFileName -->
 
     <owl:AnnotationProperty rdf:about="&lumify;glyphIconFileName"/>
-    
+
+    <!-- http://lumify.io#mapGlyphIconFileName -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;mapGlyphIconFileName"/>
 
 
     <!-- http://lumify.io#userVisible -->
