@@ -83,7 +83,7 @@ define([
                 var html = $(chatWindowTemplate({
                     cls: F.className.to(id),
                     rowKey: id,
-                    to: chat.users[0].userName
+                    to: chat.users[0].displayName
                 }));
                 html.hide().appendTo(this.$node);
                 chat.windowCreated = true;
@@ -104,7 +104,7 @@ define([
 
             var $chatWindow = this.$node.find('.' + F.className.to(messageData.chatRowKey)),
                 data = {
-                    userName: messageData.from.userName,
+                    displayName: messageData.from.displayName,
                     tempId: messageData.tempId,
                     timestamp: sf('{0:hh:mm:ss tt}',
                         messageData.postDate ?

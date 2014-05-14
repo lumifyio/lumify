@@ -300,6 +300,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             graph.removeEdge(edge, authorizations);
         }
         graph.flush();
+
+        usersWithWriteAccessCache.invalidateAll();
+        usersWithReadAccessCache.invalidateAll();
     }
 
     @Override
@@ -380,6 +383,9 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         }
 
         graph.flush();
+
+        usersWithReadAccessCache.invalidateAll();
+        usersWithWriteAccessCache.invalidateAll();
     }
 
     @Override

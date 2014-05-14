@@ -1,0 +1,9 @@
+<div class="chat-window" id="chat-window-<%= id %>" data-chatrowkey="<%= chat.rowKey %>">
+    <div class="to"><%= chat.users.map(function(user) { return user.displayName; }).join(', ') %></div>
+
+    <div class="chat-messages"></div>
+
+    <form class="new-message">
+        <input type="text" class="message" placeholder="Message...">
+    </form>
+</div>

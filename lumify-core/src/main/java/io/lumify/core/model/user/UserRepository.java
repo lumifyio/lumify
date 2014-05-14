@@ -90,7 +90,8 @@ public abstract class UserRepository {
         try {
             JSONObject json = new JSONObject();
             json.put("id", user.getUserId());
-            json.put("userName", user.getDisplayName());
+            json.put("userName", user.getUsername());
+            json.put("displayName", user.getDisplayName());
             json.put("status", user.getUserStatus());
             json.put("userType", user.getUserType());
             json.put("currentWorkspaceId", user.getCurrentWorkspaceId());

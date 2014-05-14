@@ -1,0 +1,41 @@
+width: 100%;
+text-align: center;
+
+form {
+  padding-top: 3em;
+}
+
+a {
+  padding: 0.5em 1em 0.5em 3em;
+  margin: 0 0.5em;
+  color: #666;
+  text-shadow: 0 1px 0 white;
+  font-weight: bold;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3em;
+    background-position: center;
+    background-size: 24px auto;
+    background-repeat: no-repeat;
+  }
+
+  &.twitter:after {
+    background-image: url(../img/twitter.png);
+  }
+
+  &.google:after {
+    background-image: url(../img/google.png);
+    background-size: 20px auto;
+  }
+}
+
+img {
+  margin-right: 0.5em;
+}
+

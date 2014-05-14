@@ -79,12 +79,13 @@ public class SecureGraphUserRepository extends UserRepository {
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
 
         String userName = UserLumifyProperties.USERNAME.getPropertyValue(user);
+        String displayName = UserLumifyProperties.DISPLAY_NAME.getPropertyValue(user);
         String userId = (String) user.getId();
         String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
         LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, UserLumifyProperties.AUTHORIZATIONS.getPropertyValue(user));
-        return new SecureGraphUser(userId, userName, modelUserContext, userStatus, privileges, currentWorkspaceId);
+        return new SecureGraphUser(userId, userName, displayName, modelUserContext, userStatus, privileges, currentWorkspaceId);
     }
 
     @Override
@@ -130,13 +131,16 @@ public class SecureGraphUserRepository extends UserRepository {
 
         String id = "USER_" + graph.getIdGenerator().nextId().toString();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility(), this.authorizations);
+
         UserLumifyProperties.USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
+        UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         UserLumifyProperties.STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         UserLumifyProperties.AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
         UserLumifyProperties.PRIVILEGES.setProperty(userBuilder, Privilege.toString(getDefaultPrivileges()), VISIBILITY.getVisibility());
+
         User user = createFromVertex(userBuilder.save());
         graph.flush();
 
@@ -292,6 +296,7 @@ public class SecureGraphUserRepository extends UserRepository {
     public void setPrivileges(User user, Set<Privilege> privileges) {
         Vertex userVertex = findByIdUserVertex(user.getUserId());
         UserLumifyProperties.PRIVILEGES.setProperty(userVertex, Privilege.toString(privileges), VISIBILITY.getVisibility());
+        graph.flush();
     }
 
     private Set<Privilege> getPrivileges(Vertex userVertex) {

@@ -157,7 +157,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
         }
 
         if ("changedWorkspace".equals(type)) {
-            String authUserId = AuthenticationProvider.getUserId(resource.session());
+            String authUserId = CurrentUser.get(resource.session());
             if (authUserId == null) {
                 throw new RuntimeException("Could not find user in session");
             }
@@ -183,7 +183,7 @@ public class Messaging implements AtmosphereHandler { //extends AbstractReflecto
     private void setStatus(AtmosphereResource resource, UserStatus status) {
         broadcaster = resource.getBroadcaster();
         try {
-            String authUserId = AuthenticationProvider.getUserId(resource.getRequest().getSession());
+            String authUserId = CurrentUser.get(resource.getRequest());
             if (authUserId == null) {
                 throw new RuntimeException("Could not find user in session");
             }

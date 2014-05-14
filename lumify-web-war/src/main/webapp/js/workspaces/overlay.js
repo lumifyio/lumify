@@ -391,7 +391,7 @@ define([
 
         this.updateUserTooltip = function(data) {
             if (data && data.user) {
-                this.select('userSelector').text(data.user.userName)
+                this.select('userSelector').text(data.user.displayName)
                     .tooltip('destroy')
                     .tooltip({
                         placement: 'right',

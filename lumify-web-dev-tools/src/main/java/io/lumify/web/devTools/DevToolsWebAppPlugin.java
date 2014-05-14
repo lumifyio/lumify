@@ -2,7 +2,6 @@ package io.lumify.web.devTools;
 
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.StaticResourceHandler;
-import io.lumify.web.AuthenticationProvider;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
 import io.lumify.web.devTools.user.UserAddAuthorization;
@@ -15,15 +14,17 @@ import javax.servlet.ServletConfig;
 
 public class DevToolsWebAppPlugin implements WebAppPlugin {
     @Override
-    public void init(WebApp app, ServletConfig config, Class<? extends Handler> authenticator, AuthenticationProvider authenticatorInstance) {
-        app.get("/admin/userAdmin.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/userAdmin.html", "text/html"));
-        app.post("/user/auth/add", authenticator, AdminPrivilegeFilter.class, UserAddAuthorization.class);
-        app.post("/user/auth/remove", authenticator, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
-        app.post("/user/delete", authenticator, AdminPrivilegeFilter.class, UserDelete.class);
-        app.post("/user/privileges/update", authenticator, AdminPrivilegeFilter.class, UserUpdatePrivileges.class);
+    public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
+        Class<? extends Handler> authenticationHandlerClass = authenticationHandler.getClass();
 
-        app.get("/admin/requeue.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
-        app.post("/admin/queueVertices", authenticator, AdminPrivilegeFilter.class, QueueVertices.class);
-        app.post("/admin/queueEdges", authenticator, AdminPrivilegeFilter.class, QueueEdges.class);
+        app.get("/admin/userAdmin.html", authenticationHandler, new StaticResourceHandler(getClass(), "/userAdmin.html", "text/html"));
+        app.post("/user/auth/add", authenticationHandlerClass, AdminPrivilegeFilter.class, UserAddAuthorization.class);
+        app.post("/user/auth/remove", authenticationHandlerClass, AdminPrivilegeFilter.class, UserRemoveAuthorization.class);
+        app.post("/user/delete", authenticationHandlerClass, AdminPrivilegeFilter.class, UserDelete.class);
+        app.post("/user/privileges/update", authenticationHandlerClass, AdminPrivilegeFilter.class, UserUpdatePrivileges.class);
+
+        app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
+        app.post("/admin/queueVertices", authenticationHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
+        app.post("/admin/queueEdges", authenticationHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);
     }
 }

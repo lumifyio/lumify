@@ -8,13 +8,15 @@ import java.util.*;
 
 public class InMemoryUser implements User {
     private final String userId;
+    private final String userName;
     private final String displayName;
     private final List<String> authorizations;
     private final String currentWorkspaceId;
     private Set<Privilege> privileges;
 
-    public InMemoryUser(String displayName, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
+    public InMemoryUser(String userName, String displayName, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
         this.currentWorkspaceId = currentWorkspaceId;
+        this.userName = userName;
         this.userId = UUID.randomUUID().toString();
         this.displayName = displayName;
         this.authorizations = new ArrayList<String>();
@@ -30,6 +32,11 @@ public class InMemoryUser implements User {
     @Override
     public ModelUserContext getModelUserContext() {
         throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userName;
     }
 
     @Override

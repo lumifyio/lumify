@@ -13,6 +13,7 @@ public class SecureGraphUser implements User, Serializable {
     private ModelUserContext modelUserContext;
     private String displayName;
     private String userId;
+    private String userName;
     private String userStatus;
     private Set<Privilege> privileges;
     private String currentWorkspaceId;
@@ -22,8 +23,9 @@ public class SecureGraphUser implements User, Serializable {
 
     }
 
-    public SecureGraphUser(String userId, String displayName, ModelUserContext modelUserContext, String userStatus, Set<Privilege> privileges, String currentWorkspaceId) {
+    public SecureGraphUser(String userId, String userName, String displayName, ModelUserContext modelUserContext, String userStatus, Set<Privilege> privileges, String currentWorkspaceId) {
         this.displayName = displayName;
+        this.userName = userName;
         this.modelUserContext = modelUserContext;
         this.userId = userId;
         this.userStatus = userStatus;
@@ -37,6 +39,10 @@ public class SecureGraphUser implements User, Serializable {
 
     public ModelUserContext getModelUserContext() {
         return modelUserContext;
+    }
+
+    public String getUsername() {
+        return userName;
     }
 
     public String getDisplayName() {

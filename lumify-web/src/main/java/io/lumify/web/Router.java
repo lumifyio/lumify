@@ -5,6 +5,7 @@ import com.altamiracorp.miniweb.StaticFileHandler;
 import com.altamiracorp.miniweb.StaticResourceHandler;
 import com.google.inject.Injector;
 import io.lumify.core.exception.LumifyAccessDeniedException;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
@@ -18,7 +19,6 @@ import io.lumify.web.routes.admin.PluginList;
 import io.lumify.web.routes.artifact.*;
 import io.lumify.web.routes.audit.VertexAudit;
 import io.lumify.web.routes.config.Configuration;
-import io.lumify.web.routes.config.Plugin;
 import io.lumify.web.routes.entity.ResolveDetectedObject;
 import io.lumify.web.routes.entity.ResolveTermEntity;
 import io.lumify.web.routes.entity.UnresolveDetectedObject;
@@ -61,20 +61,18 @@ public class Router extends HttpServlet {
 
             final Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
 
-            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
-
             app = new WebApp(config, injector);
 
-            AuthenticationProvider authenticatorInstance = injector.getInstance(AuthenticationProvider.class);
-            Class<? extends Handler> authenticator = authenticatorInstance.getClass();
+            AuthenticationHandler authenticatorInstance = new AuthenticationHandler();
+            Class<? extends Handler> authenticator = AuthenticationHandler.class;
 
             app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
-            app.post("/login", Login.class);
             app.post("/logout", Logout.class);
 
             app.get("/configuration", authenticator, Configuration.class);
-            app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
-            app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
+            // TODO: remove after fixing visibility
+            //app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
+            //app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
 
             app.get("/ontology", authenticator, ReadPrivilegeFilter.class, Ontology.class);
 
@@ -143,9 +141,15 @@ public class Router extends HttpServlet {
             app.get("/admin/uploadOntology.html", authenticatorInstance, new StaticResourceHandler(getClass(), "/uploadOntology.html", "text/html"));
             app.post("/admin/uploadOntology", authenticator, AdminPrivilegeFilter.class, AdminUploadOntology.class);
 
+            List<WebAppPlugin> webAppPlugins = toList(ServiceLoaderUtil.load(WebAppPlugin.class));
             for (WebAppPlugin webAppPlugin : webAppPlugins) {
-                LOGGER.info("Loading webAppPlugin: %s", webAppPlugin.getClass().getName());
-                webAppPlugin.init(app, config, authenticator, authenticatorInstance);
+                LOGGER.info("Loading webapp plugin: %s", webAppPlugin.getClass().getName());
+                try {
+                    injector.injectMembers(webAppPlugin);
+                    webAppPlugin.init(app, config, authenticatorInstance);
+                } catch (Exception e) {
+                    throw new LumifyException("Could not initialize webapp plugin: " + webAppPlugin.getClass().getName(), e);
+                }
             }
 
             app.onException(LumifyAccessDeniedException.class, new ErrorCodeHandler(HttpServletResponse.SC_FORBIDDEN));

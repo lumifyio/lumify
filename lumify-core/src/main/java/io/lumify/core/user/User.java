@@ -6,7 +6,7 @@ import io.lumify.core.model.user.UserType;
 import java.io.Serializable;
 
 public interface User extends Serializable {
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 2L;
 
     public String getUserId();
 
@@ -19,4 +19,6 @@ public interface User extends Serializable {
     public String getUserStatus();
 
     public String getCurrentWorkspaceId();
+
+    public String getUsername();
 }

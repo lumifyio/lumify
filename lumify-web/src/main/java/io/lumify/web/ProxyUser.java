@@ -27,6 +27,12 @@ public class ProxyUser implements User {
     }
 
     @Override
+    public String getUsername() {
+        ensureUser();
+        return proxiedUser.getUsername();
+    }
+
+    @Override
     public String getDisplayName() {
         ensureUser();
         return proxiedUser.getDisplayName();

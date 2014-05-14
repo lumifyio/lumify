@@ -223,6 +223,8 @@ define([
             if (!data || !data.remoteEvent) return;
 
             this.currentUserReady(function(currentUser) {
+                var userAccess = _.findWhere(data.users, { userId: currentUser.id });
+                data.isEditable = (/write/i).test(userAccess && userAccess.access);
                 data.isSharedToUser = data.createdBy !== currentUser.id;
 
                 if (this.workspaceId === data.workspaceId) {
@@ -294,7 +296,7 @@ define([
 
         this.workspaceDataForItemRow = function(w) {
             var row = $.extend({}, w),
-                createdBy = this.usersById[row.createdBy].userName,
+                createdBy = this.usersById[row.createdBy].displayName,
                 text = row.isSharedToUser ? 'Shared by ' + createdBy + ' to': 'Shared with',
                 usersNotCurrent = row.users.filter(function(u) {
                     return u.userId != window.currentUser.id;
