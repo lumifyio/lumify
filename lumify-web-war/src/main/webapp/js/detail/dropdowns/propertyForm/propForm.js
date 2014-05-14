@@ -1,4 +1,5 @@
 define([
+    'require',
     'flight/lib/component',
     '../withDropdown',
     'tpl!./propForm',
@@ -9,6 +10,7 @@ define([
     'util/withTeardown',
     'util/vertex/formatters'
 ], function(
+    require,
     defineComponent,
     withDropdown,
     template,
@@ -37,6 +39,7 @@ define([
             configurationSelector: '.configuration',
             configurationFieldSelector: '.configuration input',
             previousValuesSelector: '.previous-values',
+            previousValuesDropdownSelector: '.previous-values-container .dropdown-menu',
             visibilitySelector: '.visibility',
             justificationSelector: '.justification',
             propertyInputSelector: '.input-row input',
@@ -74,12 +77,16 @@ define([
             this.on('paste', {
                 configurationFieldSelector: _.debounce(this.onPaste.bind(this), 10)
             });
+            this.on('click', {
+                previousValuesDropdownSelector: this.onPreviousValuesDropdown
+            });
             this.$node.html(template({
                 property: this.attr.property
             }));
 
             self.select('saveButtonSelector').attr('disabled', true);
             self.select('deleteButtonSelector').hide();
+            self.select('saveButtonSelector').hide();
 
             if (this.attr.property) {
                 this.trigger('propertyselected', {
@@ -140,21 +147,64 @@ define([
         };
 
         this.onPreviousValuesButtons = function(event) {
-            this.select('previousValuesSelector').find('.active').removeClass('active');
-
-            var action = $(event.target).addClass('active').data('action');
+            var dropdown = this.select('previousValuesDropdownSelector'),
+                buttons = this.select('previousValuesSelector').find('.active').removeClass('active'),
+                action = $(event.target).closest('button').addClass('active').data('action');
 
             if (action === 'add') {
+                dropdown.hide();
                 this.trigger('propertyselected', {
                     fromPreviousValuePrompt: true,
                     property: _.omit(this.currentProperty, 'value', 'key')
                 });
+            } else if (this.previousValues.length > 1) {
+                this.trigger('propertyselected', {
+                    property: _.omit(this.currentProperty, 'value', 'key')
+                });
+
+                dropdown.html(
+                        this.previousValues.map(function(p, i) {
+                            var visibility = p['http://lumify.io#visibilityJson'];
+                            return _.template(
+                                '<li data-index="{i}">' +
+                                    '<a href="#">{value}' +
+                                        '<div data-visibility="{visibilityJson}" class="visibility"/>' +
+                                    '</a>' +
+                                '</li>')({
+                                value: F.vertex.displayProp(p),
+                                visibilityJson: JSON.stringify(visibility || {}),
+                                i: i
+                            });
+                        }).join('')
+                    ).show();
+
+                require(['configuration/plugins/visibility/visibilityDisplay'], function(Visibility) {
+                    dropdown.find('.visibility').each(function() {
+                        var value = $(this).data('visibility');
+                        Visibility.attachTo(this, {
+                            value: value && value.source
+                        });
+                    });
+                });
+
             } else {
+                dropdown.hide();
                 this.trigger('propertyselected', {
                     fromPreviousValuePrompt: true,
                     property: $.extend({}, this.currentProperty, this.previousValues[0])
                 });
             }
+        };
+
+        this.onPreviousValuesDropdown = function(event) {
+            var li = $(event.target).closest('li');
+                index = li.data('index');
+
+            this.$node.find('.previous-values .edit-previous').addClass('active');
+            this.trigger('propertyselected', {
+                fromPreviousValuePrompt: true,
+                property: $.extend({}, this.currentProperty, this.previousValues[index])
+            });
         };
 
         this.onPropertySelected = function(event, data) {
@@ -204,6 +254,8 @@ define([
 
                     this.select('justificationSelector').hide();
                     this.select('visibilitySelector').hide();
+                    this.select('saveButtonSelector').hide();
+                    this.select('previousValuesDropdownSelector').hide();
 
                     return;
                 } else {
@@ -211,8 +263,10 @@ define([
                 }
             }
 
+            this.select('previousValuesDropdownSelector').hide();
             this.select('justificationSelector').show();
             this.select('visibilitySelector').show();
+            this.select('saveButtonSelector').show();
 
             this.select('deleteButtonSelector')
                 .text(

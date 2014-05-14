@@ -115,7 +115,8 @@ function(jQuery,
         }
 
         // Default templating
-        _.templateSettings.interpolate = /\{([\s\S]+?)\}/g;
+        _.templateSettings.escape = /\{([\s\S]+?)\}/g;
+        _.templateSettings.interpolate = /\{-([\s\S]+?)\}/g;
 
         // Default datepicker options
         $.fn.datepicker.defaults.format = 'yyyy-mm-dd';
