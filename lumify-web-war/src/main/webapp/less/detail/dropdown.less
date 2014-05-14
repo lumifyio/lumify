@@ -16,6 +16,40 @@ width: 100%;
 
   div.text { margin-bottom: 1em; }
 
+  .previous-values {
+    margin-bottom: 0.5em;
+    border: 1px solid @blue-color;
+    border-radius: 4px;
+    overflow: hidden;
+
+    button {
+      border: 0;
+      position: relative;
+      background: inherit;
+      width: 50%;
+      padding: 0.25em 0;
+      margin: 0;
+      float: left;
+      color: @blue-color;
+      .box-sizing(border-box);
+
+      &:first-child {
+        border-right: 1px solid @blue-color;
+      }
+
+      &.active {
+        background: @blue-color;
+        color: white;
+      }
+
+      small {
+        position: absolute;
+        margin-left: 5px;
+        margin-top: 0px;
+      }
+    }
+  }
+
   .src-term, .dest-term {
     float: left;
     width: 25%;
