@@ -49,7 +49,7 @@
         <module>lumify-model-securegraph</module>
         <module>lumify-model-rabbitmq</module>
         <module>lumify-web-import-export-workspaces</module>
-        <module>lumify-web-auth-oauth</module>
+        <module>lumify-web-auth-social</module>
         <module>lumify-web-auth-username-only</module>
         <module>lumify-web-auth-username-password</module>
     </modules>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-web-auth-oauth</artifactId>
+    <artifactId>lumify-web-auth-social</artifactId>
     <name>Lumify: OAuth Authentication</name>
 
     <dependencies>
