@@ -28,9 +28,9 @@ public class UsernamePasswordWebAppPlugin implements WebAppPlugin {
 
     @Override
     public void init(WebApp app, ServletConfig config, Handler authenticationHandler) {
-        StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-only/authentication.js", "application/javascript");
-        StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-only/templates/login.hbs", "text/plain");
-        StaticResourceHandler lessHandler = new StaticResourceHandler(this.getClass(), "/username-only/less/login.less", "text/plain");
+        StaticResourceHandler jsHandler = new StaticResourceHandler(this.getClass(), "/username-password/authentication.js", "application/javascript");
+        StaticResourceHandler loginTemplateHandler = new StaticResourceHandler(this.getClass(), "/username-password/templates/login.hbs", "text/plain");
+        StaticResourceHandler lessHandler = new StaticResourceHandler(this.getClass(), "/username-password/less/login.less", "text/plain");
 
         app.get("/jsc/configuration/plugins/authentication/authentication.js", jsHandler);
         app.get("/jsc/configuration/plugins/authentication/templates/login.hbs", loginTemplateHandler);
