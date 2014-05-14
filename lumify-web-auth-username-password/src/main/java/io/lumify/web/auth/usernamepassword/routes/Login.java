@@ -2,6 +2,7 @@ package io.lumify.web.auth.usernamepassword.routes;
 
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Login extends BaseRequestHandler {
 
+    @Inject
     public Login(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
     }
