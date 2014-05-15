@@ -132,7 +132,7 @@ public class SecureGraphUserRepository extends UserRepository {
         String id = "USER_" + graph.getIdGenerator().nextId().toString();
         VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility(), this.authorizations);
 
-        UserLumifyProperties.USERNAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
+        UserLumifyProperties.USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
