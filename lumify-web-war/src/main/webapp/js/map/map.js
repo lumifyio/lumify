@@ -164,8 +164,21 @@ define([
             var self = this;
             this.isWorkspaceEditable = workspaceData.isEditable;
             this.mapReady(function(map) {
+
                 map.featuresLayer.removeAllFeatures();
-                this.updateOrAddVertices(workspaceData.data.vertices, { adding: true, preventShake: true });
+
+                if (this.clusterStrategy.features) {
+                    this.clusterStrategy.features.length = 0;
+                }
+
+                if (this.clusterStrategy.clusters) {
+                    this.clusterStrategy.clusters.length = 0;
+                }
+
+                this.updateOrAddVertices(workspaceData.data.vertices, {
+                    adding: true,
+                    preventShake: true
+                });
             });
         };
 
