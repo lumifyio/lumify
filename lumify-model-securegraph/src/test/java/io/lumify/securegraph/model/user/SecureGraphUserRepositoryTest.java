@@ -60,7 +60,7 @@ public class SecureGraphUserRepositoryTest {
     public void testAddUser() {
         secureGraphUserRepository.addUser("12345", "testUser", "testPassword", new String[]{"auth1", "auth2"});
 
-        SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUsername("testUser");
+        SecureGraphUser secureGraphUser = (SecureGraphUser) secureGraphUserRepository.findByUsername("12345");
         assertEquals("testUser", secureGraphUser.getDisplayName());
     }
 }
