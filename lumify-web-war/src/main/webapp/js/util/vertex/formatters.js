@@ -81,6 +81,14 @@ define([
                 return title;
             },
 
+            heading: function(vertex) {
+                var headingProp = _.find(vertex.properties, function(p) { return p.name.indexOf('heading') > 0; });
+                if (headingProp) {
+                    return headingProp.value;
+                }
+                return 0;
+            },
+
             // TODO: support looking for underscore properties like _source?
             prop: function(vertexOrProperty, name, defaultValue, ignoreErrorIfTitle) {
                 if (ignoreErrorIfTitle !== true && name === 'title') {

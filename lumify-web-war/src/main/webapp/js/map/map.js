@@ -263,7 +263,8 @@ define([
                 iconUrl =  '/map/marker/image?' + $.param({
                     type: conceptType,
                     scale: retina.devicePixelRatio > 1 ? '2' : '1'
-                });
+                }),
+                heading = F.vertex.heading(vertex);
 
             if (!geoLocation || !geoLocation.latitude || !geoLocation.longitude) return;
 
@@ -288,6 +289,7 @@ define([
                         graphicHeight: 40,
                         graphicXOffset: -11,
                         graphicYOffset: -40,
+                        rotation: heading,
                         cursor: 'pointer'
                     }
                 );
