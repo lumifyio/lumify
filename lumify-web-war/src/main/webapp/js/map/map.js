@@ -175,6 +175,8 @@ define([
                     this.clusterStrategy.clusters.length = 0;
                 }
 
+                map.featuresLayer.redraw();
+
                 this.updateOrAddVertices(workspaceData.data.vertices, {
                     adding: true,
                     preventShake: true
@@ -327,17 +329,15 @@ define([
             this.mapReady(function(map) {
                 vertices.forEach(function(vertex) {
                     var inWorkspace = appData.inWorkspace(vertex),
-                        feature = map.featuresLayer.getFeatureById(vertex.id);
+                        marker = self.findOrCreateMarker(map, vertex);
 
-                    if (inWorkspace || feature) {
-                        var marker = self.findOrCreateMarker(map, vertex);
-                        if (marker) {
-                            validAddition = true;
-                            marker.data.inWorkspace = inWorkspace;
-                        }
+                    if (marker) {
+                        validAddition = true;
+                        marker.data.inWorkspace = inWorkspace;
                     }
                 });
 
+                this.clusterStrategy.cluster();
                 map.featuresLayer.redraw();
 
                 if (adding && vertices.length && validAddition) {
