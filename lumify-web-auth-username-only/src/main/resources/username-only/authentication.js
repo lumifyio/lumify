@@ -28,7 +28,7 @@ define([
                 loginButtonSelector: this.onLoginButton
             });
 
-            this.on('keyup change paste', {
+            this.on('keydown keyup change paste', {
                 usernameSelector: this.onUsernameChange
             });
 
@@ -37,22 +37,42 @@ define([
 
         this.onUsernameChange = function(event) {
             var self = this,
-                input = this.select('usernameSelector');
+                input = this.select('usernameSelector'),
+                isValid = function() {
+                    return $.trim(input.val()).length > 0;
+                }
+
+            if (event.which === $.ui.keyCode.ENTER) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (isValid()) {
+                    _.defer(this.login.bind(this));
+                }
+            }
 
             _.defer(function() {
-                self.enableButton($.trim(input.val()).length > 0);
-            })
+                self.enableButton(isValid());
+            });
         };
 
         this.onLoginButton = function(event) {
-            var self = this,
-                $error = this.select('errorSelector'),
-                $username = this.select('usernameSelector');
-
             event.preventDefault();
             event.stopPropagation();
             event.target.blur();
 
+            this.login();
+        };
+
+        this.login = function() {
+            var self = this,
+                $error = this.select('errorSelector'),
+                $username = this.select('usernameSelector');
+
+            if (this.disabled) {
+                return;
+            }
+
+            this.disabled = true;
             this.enableButton(false, true);
             $error.empty();
 
@@ -60,6 +80,7 @@ define([
                 .fail(function(xhr, status, error) {
                     $error.text(error);
                     self.enableButton(true);
+                    self.disabled = false;
                 })
                 .done(function() {
                     self.trigger('loginSuccess');
