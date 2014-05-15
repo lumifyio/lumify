@@ -91,7 +91,7 @@ public abstract class OntologyProperty {
             double latitude = json.getDouble("latitude");
             double longitude = json.getDouble("longitude");
             String altitudeString = json.optString("altitude");
-            Double altitude = altitudeString == null || altitudeString.length() == 0 ? null : Double.parseDouble(altitudeString);
+            Double altitude = (altitudeString == null || altitudeString.length() == 0) ? null : Double.parseDouble(altitudeString);
             String description = json.optString("description");
             return new GeoPoint(latitude, longitude, altitude, description);
         } catch (Exception ex) {
