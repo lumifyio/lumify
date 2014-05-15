@@ -6,6 +6,7 @@ import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.OntologyRepositoryBase;
 import io.lumify.core.model.properties.types.DoubleLumifyProperty;
 import io.lumify.core.model.properties.types.GeoPointLumifyProperty;
+import io.lumify.core.model.properties.types.TextLumifyProperty;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -116,6 +117,8 @@ public class OwlToJava extends CommandLineBase {
             type = DoubleLumifyProperty.class.getSimpleName();
         } else if ("http://lumify.io#geolocation".equals(rangeIri)) {
             type = GeoPointLumifyProperty.class.getSimpleName();
+        } else if ("http://www.w3.org/2001/XMLSchema#string".equals(rangeIri)) {
+            type = TextLumifyProperty.class.getSimpleName();
         } else {
             throw new LumifyException("Could not map range type " + rangeIri);
         }

@@ -194,6 +194,15 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         }
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
+        setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getKey());
+
+        String mapGlyphIconFileName = getMapGlyphIconFileName(o, ontologyClass);
+        setIconProperty(result, inDir, mapGlyphIconFileName, LumifyProperties.MAP_GLYPH_ICON.getKey());
+
+        return result;
+    }
+
+    private void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey) throws IOException {
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
             if (!iconFile.exists()) {
@@ -204,13 +213,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
                 value.searchIndex(false);
                 value.store(true);
-                result.setProperty(LumifyProperties.GLYPH_ICON.getKey(), value, OntologyRepository.VISIBILITY.getVisibility());
+                concept.setProperty(propertyKey, value, OntologyRepository.VISIBILITY.getVisibility());
             } finally {
                 iconFileIn.close();
             }
         }
-
-        return result;
     }
 
     protected Concept getParentConcept(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
@@ -384,6 +391,10 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#glyphIconFileName");
+    }
+
+    protected String getMapGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#mapGlyphIconFileName");
     }
 
     protected ArrayList<PossibleValueType> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
