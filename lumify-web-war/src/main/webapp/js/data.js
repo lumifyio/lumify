@@ -709,8 +709,21 @@ define([
                 plural = len === 1 ? 'vertex' : 'vertices';
 
             if (len) {
-                this.trigger('displayInformation', { message: this.formatVertexAction('Paste', vertexIds)});
+                this.trigger('displayInformation', { message: this.formatVertexAction('Pasting', vertexIds) + '...' });
                 this.vertexService.getMultiple(vertexIds).done(function(data) {
+                    if (data.vertices.length !== vertexIds.length) {
+                        self.trigger('displayInformation', {
+                            message: 'Unable to add ' +
+                                F.string.plural(
+                                    vertexIds.length - data.vertices.length,
+                                    'unpublished vertex', 'unpublished vertices'
+                                )
+                        });
+                    } else {
+                        self.trigger('displayInformation', {
+                            message: self.formatVertexAction('Pasted', vertexIds)
+                        });
+                    }
                     self.trigger('addVertices', {
                         vertices: data.vertices,
                         options: {
