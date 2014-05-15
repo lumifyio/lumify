@@ -113,8 +113,8 @@ public class JsonSerializer {
                 } else if (property.getName().equals(RawLumifyProperties.TEXT.getKey())) {
                     mergeTextPropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
                 }
-            } catch (IOException ex) {
-                LOGGER.error("Could not read video transcript from property %s", property.toString());
+            } catch (Exception ex) {
+                LOGGER.error("Could not read video transcript from property %s", property.toString(), ex);
             }
         }
         return allVideoTranscripts;
@@ -145,9 +145,13 @@ public class JsonSerializer {
 
     private static VideoTranscript mergeVideoTranscriptPropertyIntoTranscript(Property property, VideoTranscript allVideoTranscripts) throws IOException {
         String videoTranscriptJsonString = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
-        JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
-        VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
-        allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
+        try {
+            JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
+            VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
+            allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
+        } catch (Exception ex) {
+            LOGGER.error("Could not parse video transcript on property " + property + "\n" + videoTranscriptJsonString, ex);
+        }
         return allVideoTranscripts;
     }
 
