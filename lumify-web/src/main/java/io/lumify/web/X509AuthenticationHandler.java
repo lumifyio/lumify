@@ -13,6 +13,8 @@ import javax.naming.ldap.Rdn;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
@@ -21,7 +23,6 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
     public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(X509AuthenticationHandler.class);
-    protected static final String X509_USER_PASSWORD = "N/A";
     private final UserRepository userRepository;
     private final Graph graph;
 
@@ -55,7 +56,8 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
         if (username == null || username.trim().equals("")) {
             return null;
         }
-        return userRepository.findOrAddUser(username, username, X509_USER_PASSWORD, new String[0]);
+        String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+        return userRepository.findOrAddUser(username, username, randomPassword, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {
