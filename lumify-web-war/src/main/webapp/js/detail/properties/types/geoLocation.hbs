@@ -3,6 +3,7 @@
   <span>
     {{#if value.description}}
        {{value.description}}
+       <small style="white-space:nowrap">{{stringValue}}</small>
      {{else}}
        {{stringValue}}
      {{/if}}
@@ -14,11 +15,12 @@
      class="map-coordinates"
      data-latitude="{{value.latitude}}"
      data-longitude="{{value.longitude}}">
-     {{#if value.description}}
+     {{~#if value.description~}}
        {{value.description}}
-     {{else}}
+       <small style="white-space:nowrap">{{stringValue}}</small>
+     {{~else~}}
        {{stringValue}}
-     {{/if}}
+     {{~/if~}}
    </a>
 
 {{/if}}
