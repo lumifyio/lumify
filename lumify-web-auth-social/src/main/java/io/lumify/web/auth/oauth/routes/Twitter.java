@@ -116,7 +116,7 @@ public class Twitter implements Handler {
 
     private OAuthService getOAuthService(HttpServletRequest request, boolean withCallback) {
         ServiceBuilder builder = new ServiceBuilder()
-                .provider(TwitterApi.SSL.class)
+                .provider(TwitterApi.SSL.Authenticate.class)
                 .apiKey(config.getKey())
                 .apiSecret(config.getSecret());
 
