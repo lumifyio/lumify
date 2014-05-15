@@ -82,7 +82,9 @@ define([
             },
 
             heading: function(vertex) {
-                var headingProp = _.find(vertex.properties, function(p) { return p.name.indexOf('heading') > 0; });
+                var headingProp = _.find(vertex.properties, function(p) {
+                  return p.name.indexOf('heading') > 0;
+                });
                 if (headingProp) {
                     return headingProp.value;
                 }
