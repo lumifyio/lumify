@@ -1,5 +1,18 @@
 
 <table cellpadding="0">
+
+  <% if (!predicates) { %>
+  <tr class="input-prepend">
+    <td class="predicate-row">
+      <span style="min-width:5em;" class="add-on">Description</span>
+    </td>
+
+    <td class="input-row">
+      <input class="lat" type="text" value="<%= value && value.description || '' %>" />
+    </td>
+  </tr>
+  <% } %>
+
   <tr class="input-prepend">
     <td class="predicate-row">
       <span style="min-width:5em;" class="add-on">Latitude</span>

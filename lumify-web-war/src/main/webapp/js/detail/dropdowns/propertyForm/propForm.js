@@ -223,7 +223,7 @@ define([
             visibility.teardownAllComponents();
             justification.teardownAllComponents();
 
-            var vertexProperty = property.key ?
+            var vertexProperty = property.key || property.key === '' ?
                     F.vertex.propForNameAndKey(this.attr.data, property.name, property.key) : undefined,
                 previousValue = vertexProperty && (vertexProperty.latitude ? vertexProperty : vertexProperty.value),
                 visibilityValue = vertexProperty && vertexProperty['http://lumify.io#visibilityJson'],
@@ -414,9 +414,15 @@ define([
 
             if (data.values.length === 1) {
                 this.currentValue = data.values[0];
-            } else if (data.values.length > 1) {
+            } else if (data.values.length === 2) {
                 // Must be geoLocation
                 this.currentValue = 'point(' + data.values.join(',') + ')';
+            } else if (data.values.length === 3) {
+                this.currentValue = JSON.stringify({
+                    description: data.values[0],
+                    latitude: data.values[1],
+                    longitude: data.values[2]
+                });
             }
         };
 

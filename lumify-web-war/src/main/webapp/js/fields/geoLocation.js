@@ -14,7 +14,7 @@ define([
 
     function splitLatLon(latLonStr) {
         var parts = latLonStr.split(',');
-        if (parts.length == 2) {
+        if (parts.length === 2) {
             return [ $.trim(parts[0]), $.trim(parts[1]) ];
         }
         return null;
@@ -36,7 +36,12 @@ define([
                         lonInput.val(latLon[1]);
                         lonInput.focus();
                     }
-                    this.filterUpdated(this.getValues().map(function(v) {
+
+                    var values = this.getValues();
+                    this.filterUpdated(values.map(function(v, i) {
+                        if (values.length === 3 && i === 0) {
+                            return v;
+                        }
                         return makeNumber(v);
                     }));
                 }
@@ -44,7 +49,12 @@ define([
         });
 
         this.isValid = function() {
-            return _.every(this.getValues(), function(v) {
+            var values = this.getValues();
+
+            return _.every(values, function(v, i) {
+                if (values.length === 3 && i === 0) {
+                    return true;
+                }
                 return v.length && _.isNumber(makeNumber(v)) && !isNaN(v);
             });
         };
