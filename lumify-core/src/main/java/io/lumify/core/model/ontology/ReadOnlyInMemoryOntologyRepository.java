@@ -153,6 +153,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property = new InMemoryOntologyProperty();
             property.setDataType(dataType);
             property.setUserVisible(userVisible);
+            property.setTitle(propertyName);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
