@@ -23,15 +23,15 @@ define([
     function GeoLocationField() {
 
         this.after('initialize', function() {
-            var _this = this;
+            var self = this;
             this.$node.html(template(this.attr));
 
             this.on('change keyup', {
                 inputSelector: function(event) {
                     var latLon = splitLatLon(this.getValues()[0]);
                     if (latLon) {
-                        var latInput = _this.$node.find('input.lat');
-                        var lonInput = _this.$node.find('input.lon');
+                        var latInput = self.$node.find('input.lat'),
+                            lonInput = self.$node.find('input.lon');
                         latInput.val(latLon[0]);
                         lonInput.val(latLon[1]);
                         lonInput.focus();
