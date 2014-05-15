@@ -34,6 +34,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     public void init(Configuration config) throws Exception {
         Map<String, String> ontologies = config.getSubset(Configuration.ONTOLOGY_REPOSITORY_OWL);
+        clearCache();
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
@@ -167,6 +168,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public void clearCache() {
+        LOGGER.info("clearing ReadOnlyInMemoryOntologyRepository cache");
+        fileCache.invalidateAll();
+        propertiesCache.invalidateAll();
+        relationshipsCache.invalidateAll();
+        conceptsCache.invalidateAll();
     }
 
     @Override
