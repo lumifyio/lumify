@@ -17,12 +17,13 @@ import org.scribe.oauth.OAuthService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Twitter implements Handler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Twitter.class);
-    private static final String PASSWORD = "8XXuk2tQ523b";
     private static final String OAUTH_REQUEST_TOKEN = "oauth_token";
     public static final String OAUTH_TOKEN_PARAM_NAME = "oauth_token";
     public static final String OAUTH_VERIFIER_PARAM_NAME = "oauth_verifier";
@@ -106,7 +107,8 @@ public class Twitter implements Handler {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             // For form based authentication, username and displayName will be the same
-            user = userRepository.addUser(username, displayName, PASSWORD, new String[0]);
+            String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+            user = userRepository.addUser(username, displayName, randomPassword, new String[0]);
         }
 
         CurrentUser.set(httpRequest, user.getUserId());

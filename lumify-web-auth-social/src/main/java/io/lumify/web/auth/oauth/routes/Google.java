@@ -13,7 +13,6 @@ import io.lumify.http.HttpPostMethod;
 import io.lumify.http.URLBuilder;
 import io.lumify.web.CurrentUser;
 import io.lumify.web.auth.oauth.OAuthConfiguration;
-import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Google implements Handler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Google.class);
-    private static final String PASSWORD = "8XXuk2tQ523b";
     private static final String OAUTH_STATE_ATTR_NAME = "oauth.state";
     private static final String DISCOVERY_DOC_URL = "https://accounts.google.com/.well-known/openid-configuration";
 
@@ -125,7 +123,8 @@ public class Google implements Handler {
         String username = "google/" + userid;
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            user = userRepository.addUser(username, displayName, PASSWORD, new String[0]);
+            String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+            user = userRepository.addUser(username, displayName, randomPassword, new String[0]);
         }
 
         CurrentUser.set(httpRequest, user.getUserId());
