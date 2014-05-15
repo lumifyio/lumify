@@ -1,5 +1,9 @@
 package io.lumify.web.routes.map;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.ontology.Concept;
@@ -10,10 +14,6 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.inject.Inject;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -81,6 +81,7 @@ public class MapMarkerImage extends BaseRequestHandler {
             imageCache.put(cacheKey, imageData);
         }
 
+        response.setHeader("Cache-Control", "max-age=" + (5 * 60));
         ServletOutputStream out = response.getOutputStream();
         out.write(imageData);
         out.close();
