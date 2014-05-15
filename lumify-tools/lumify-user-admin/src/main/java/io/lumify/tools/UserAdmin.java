@@ -76,18 +76,9 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private int delete(CommandLine cmd) {
-        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
-        String userid = cmd.getOptionValue(CMD_OPT_USERID);
-
-        User user = null;
-        if (username != null) {
-            user = getUserRepository().findByUsername(username);
-        } else if (userid != null) {
-            user = getUserRepository().findById(userid);
-        }
-
+        User user = findUser(cmd);
         if (user == null) {
-            System.err.println("User " + username + " not found");
+            printUserNotFoundError(cmd);
             return 2;
         }
 
@@ -105,14 +96,31 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private int setPrivileges(CommandLine cmd) {
-        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
-        String userid = cmd.getOptionValue(CMD_OPT_USERID);
-
         String privilegesString = cmd.getOptionValue(CMD_OPT_PRIVILEGES);
         Set<Privilege> privileges = null;
         if (privilegesString != null) {
             privileges = Privilege.stringToPrivileges(privilegesString);
         }
+
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        if (privileges != null) {
+            System.out.println("Assigning privileges " + privileges + " to user " + user.getUserId());
+            getUserRepository().setPrivileges(user, privileges);
+            user = getUserRepository().findById(user.getUserId());
+        }
+
+        printUser(user);
+        return 0;
+    }
+
+    private User findUser(CommandLine cmd) {
+        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
+        String userid = cmd.getOptionValue(CMD_OPT_USERID);
 
         User user = null;
         if (username != null) {
@@ -120,31 +128,32 @@ public class UserAdmin extends CommandLineBase {
         } else if (userid != null) {
             user = getUserRepository().findById(userid);
         }
-
-        if (user == null) {
-            System.err.println("User " + username + " not found");
-            return 2;
-        }
-
-        if (privileges != null) {
-            System.out.println("Assigning privileges " + privileges + " to user " + username);
-            getUserRepository().setPrivileges(user, privileges);
-            user = getUserRepository().findByUsername(username);
-        }
-
-        printUser(user);
-
-        return 0;
+        return user;
     }
 
     private void printUser(User user) {
-        System.out.println("ID: " + user.getUserId());
-        System.out.println("Username: " + user.getUsername());
+        System.out.println("                  ID: " + user.getUserId());
+        System.out.println("            Username: " + user.getUsername());
         System.out.println("Current Workspace Id: " + user.getCurrentWorkspaceId());
-        System.out.println("Display Name: " + user.getDisplayName());
-        System.out.println("Status: " + user.getUserStatus());
-        System.out.println("Type: " + user.getUserType());
-        System.out.println("Privileges: " + getUserRepository().getPrivileges(user).toString().replaceAll(" ", ""));
+        System.out.println("        Display Name: " + user.getDisplayName());
+        System.out.println("              Status: " + user.getUserStatus());
+        System.out.println("                Type: " + user.getUserType());
+        System.out.println("          Privileges: " + getUserRepository().getPrivileges(user).toString().replaceAll(" ", ""));
         System.out.println("");
     }
+
+    private void printUserNotFoundError(CommandLine cmd) {
+        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
+        if (username != null) {
+            System.out.println("No user found with username: " + username);
+            return;
+        }
+
+        String userid = cmd.getOptionValue(CMD_OPT_USERID);
+        if (userid != null) {
+            System.out.println("No user found with userid: " + userid);
+            return;
+        }
+    }
+
 }
