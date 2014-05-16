@@ -2,9 +2,13 @@
 .properties {
   margin: 0;
   padding: 0;
+
+  tr.hidden {
+    display: none;
+  }
+
   .property-name {    
       color: #999;
-      padding: 0.25em 0 0.25em 1em;
       text-align: right;
       text-shadow: 0 1px 0 white;
       text-transform: uppercase;
@@ -23,9 +27,28 @@
     &:empty { display: none; }
   }
 
+  .property-value, .property-name {
+    padding: 0.9em 0.25em 0.25em 1em;    
+  }
+  .property-value {
+    padding-right: 0.5em;
+  }
+
+  .show-more .property-value {
+      padding-top: 0.25em;
+      font-size: 85%;
+      button {
+        .opacity(75);
+        padding: 0;
+        &:hover {
+          .opacity(100);
+          text-decoration: none;
+        }
+      }
+  }
+
   .property-value {
     width: 100%;
-    padding: 0.25em 1em 0.25em 0.5em;
     word-break: break-word;
 
     .entity-visibility {
@@ -134,4 +157,14 @@
   }
 
   @import "audit";
+
+  & > table {
+    border-collapse: collapse;
+  }
+}
+
+.showAuditing .properties {
+  .property-value, .property-name {
+    padding: 1.5em 0.25em 1em 1em;    
+  }
 }

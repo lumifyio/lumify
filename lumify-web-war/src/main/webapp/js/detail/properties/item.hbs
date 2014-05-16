@@ -1,4 +1,4 @@
-<tr class="property property-{{cls}}">
+<tr class="property property-{{cls}} {{#if hidden}}hidden{{/if}}">
 
   <td class="property-name">{{#unless isRepeated}}<strong>{{displayName}}</strong>{{/unless}}</td>
 
@@ -25,3 +25,12 @@
 
   </td>
 </tr>
+
+{{#if hiddenNumber}}
+  <tr class="show-more">
+    <td class="property-name">&nbsp;</td>
+    <td class="property-value" colspan="2">
+      <button class="btn btn-link btn-small">Show {{hiddenNumber}} more&hellip;</button>
+    </td>
+  </tr>
+{{/if}}

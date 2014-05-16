@@ -5,6 +5,7 @@ define([
     'service/vertex',
     'service/relationship',
     'service/audit',
+    'service/config',
     'util/vertex/formatters',
     '../dropdowns/propertyForm/propForm',
     'hbs!./template',
@@ -17,6 +18,7 @@ define([
     VertexService,
     RelationshipService,
     AuditService,
+    ConfigService,
     F,
     PropertyForm,
     propertiesTemplate,
@@ -43,6 +45,7 @@ define([
         this.vertexService = new VertexService();
         this.relationshipService = new RelationshipService();
         this.auditService = new AuditService();
+        this.configService = new ConfigService();
 
         this.defaultAttrs({
             addNewPropertiesSelector: '.add-new-properties',
@@ -51,7 +54,8 @@ define([
             auditDateSelector: '.audit-date',
             auditUserSelector: '.audit-user',
             auditEntitySelector: '.resolved',
-            propertiesInfoSelector: 'button.info'
+            propertiesInfoSelector: 'button.info',
+            showMorePropertiesSelector: '.show-more button'
         });
 
         this.after('initialize', function() {
@@ -62,6 +66,7 @@ define([
                 auditUserSelector: this.onAuditUserClicked,
                 auditShowAllSelector: this.onAuditShowAll,
                 auditEntitySelector: this.onEntitySelected,
+                showMorePropertiesSelector: this.onShowMoreProperties
             });
             this.on('addProperty', this.onAddProperty);
             this.on('deleteProperty', this.onDeleteProperty);
@@ -133,7 +138,10 @@ define([
 
             if (data.displayed) {
                 auditsEl.html('<div class="nav-header">Audits<span class="badge loading"/></div>').show();
-                this.$node.find('.audit-list').remove();
+                this.$node
+                    .find('.audit-list').remove().end()
+                    .find('.hidden').removeClass('hidden').end()
+                    .find('.show-more').remove();
 
                 var itemTemplate = $.Deferred();
                 require(['hbs!detail/properties/item'], itemTemplate.resolve);
@@ -284,6 +292,15 @@ define([
             }
 
             return JSON.stringify(info);
+        };
+
+        this.onShowMoreProperties = function(event) {
+            $(event.target)
+                .closest('tr')
+                    .nextUntil(':not(.hidden)')
+                        .removeClass('hidden')
+                    .end()
+                .remove();
         };
 
         this.onVerticesUpdated = function(event, data) {
@@ -482,8 +499,9 @@ define([
 
             $.when(
                 this.ontologyService.relationships(),
-                this.ontologyService.properties()
-            ).done(function(ontologyRelationships, ontologyProperties) {
+                this.ontologyService.properties(),
+                this.configService.getProperties()
+            ).done(function(ontologyRelationships, ontologyProperties, config) {
                     var filtered = filterPropertiesForDisplay(vertex, ontologyProperties, ontologyRelationships),
                         popoutEnabled = false,
                         iconProperty = _.findWhere(filtered, { key: 'http://lumify.io#glyphIcon' });
@@ -499,11 +517,36 @@ define([
                     }
 
                     var previousName,
+                        repeatCount = 0,
+                        lastNonHidden = _.first(filtered),
+                        max = config['properties.multivalue.defaultVisibleCount'],
+                        formatNumber = function(c) {
+                            var numberHidden = Math.max(0, c - max);
+                            if (numberHidden) {
+                                return F.number.pretty(numberHidden);
+                            }
+                        },
                         props = $(propertiesTemplate({
-                            properties: _.map(filtered, function(p) {
+                            properties: _.map(filtered, function(p, i) {
+                                var count = repeatCount;
                                 p.isRepeated = !!(previousName && previousName === p.name);
-                                previousName = p.name;
+                                if (!p.isRepeated) {
+                                    if (previousName) {
+                                        lastNonHidden.hiddenNumber = formatNumber(count);
+                                    }
+                                    repeatCount = 0;
+                                }
+
+                                p.hidden = repeatCount++ >= max;
+                                if (!p.hidden) {
+                                    lastNonHidden = p;
+                                }
                                 p.popout = popoutEnabled;
+                                if (i === (filtered.length - 1) && previousName) {
+                                    lastNonHidden.hiddenNumber = formatNumber(count + 1);
+                                }
+
+                                previousName = p.name;
                                 return p;
                             })
                         }));

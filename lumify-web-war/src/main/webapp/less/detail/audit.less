@@ -1,8 +1,11 @@
 
-& > table, 
 .entity_audit_events > table {
   border-collapse: separate;
-  border-spacing: 0 0.75em;
+  border-spacing: 0 1em;
+}
+
+& > table, 
+.entity_audit_events > table {
   .entity {
     border-bottom: 0 !important;
   }
@@ -28,12 +31,19 @@
       .deleted {
         text-decoration: line-through;
       }
+      
+      &.audit-to span {
+        
+      }
 
-      &.audit-to, &.audit-message {      
+      &.audit-to, &.audit-message {                    
         border-left: 1px solid mix(@blue-color, @pane-background, 30%);      
         width: 100%;
-        padding-left: 0.5em;
-        padding-right: 0.5em;
+        padding: 0.5em 0.25em;
+        padding-left: 0.9em;        
+        margin-top: 1px;
+        margin-bottom: 1px;
+        
         span {
           font-size: 90%;
         }
