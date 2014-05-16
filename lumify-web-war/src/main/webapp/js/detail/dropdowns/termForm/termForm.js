@@ -112,13 +112,8 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                var conceptType = (info && (
-                    (info['http://lumify.io#conceptType'] && info['http://lumify.io#conceptType'].value) ||
-                        info['http://lumify.io#conceptType'] ||
-                        (info.properties &&
-                         info.properties['http://lumify.io#conceptType'] &&
-                         info.properties['http://lumify.io#conceptType'].value)
-                    )) || '';
+                var conceptType = _.findWhere(info, { name: 'http://lumify.io#conceptType' });
+                conceptType = conceptType ? conceptType.value : '';
 
                 this.updateConceptSelect(conceptType).show();
 
