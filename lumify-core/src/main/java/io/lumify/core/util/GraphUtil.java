@@ -98,6 +98,7 @@ public class GraphUtil {
     }
 
     public static <T extends Element> VisibilityAndElementMutation<T> setProperty(
+            Graph graph,
             T element,
             String propertyName,
             String propertyKey,
@@ -114,6 +115,7 @@ public class GraphUtil {
             propertyMetadata = oldProperty.getMetadata();
             if (oldProperty.getName().equals(propertyName) && oldProperty.getValue().equals(value)) {
                 element.removeProperty(propertyKey, propertyName);
+                graph.flush();
             }
         } else {
             propertyMetadata = new HashMap<String, Object>();

@@ -105,6 +105,7 @@ public class VertexSetProperty extends BaseRequestHandler {
 
         Vertex graphVertex = graph.getVertex(graphVertexId, authorizations);
         GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.setProperty(
+                graph,
                 graphVertex,
                 propertyName,
                 propertyKey,

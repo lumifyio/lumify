@@ -105,6 +105,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         Edge edge = graph.getEdge(edgeId, authorizations);
         Object oldValue = edge.getPropertyValue(propertyName, 0);
         GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.setProperty(
+                graph,
                 edge,
                 propertyName,
                 propertyKey,
