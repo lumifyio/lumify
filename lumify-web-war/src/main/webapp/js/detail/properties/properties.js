@@ -498,12 +498,15 @@ define([
                         popoutEnabled = true;
                     }
 
-                    var props = $(propertiesTemplate({
-                        properties: _.map(filtered, function(p) {
-                            p.popout = popoutEnabled;
-                            return p;
-                        })
-                    }));
+                    var previousName,
+                        props = $(propertiesTemplate({
+                            properties: _.map(filtered, function(p) {
+                                p.isRepeated = !!(previousName && previousName === p.name);
+                                previousName = p.name;
+                                p.popout = popoutEnabled;
+                                return p;
+                            })
+                        }));
                     self.$node.html(props);
                     self.updateVisibility();
                     self.updateJustification();
