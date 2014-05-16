@@ -54,7 +54,7 @@ define([
             var input = this.select('inputSelector'),
                 val = input.prop('checked');
 
-            this.$node.find('.input-row div').text(
+            this.$node.find('.input-row .display').text(
                 F.boolean.pretty(val)
             );
 
@@ -67,13 +67,6 @@ define([
 
         this.isValid = function() {
             return true;
-            /*
-            var values = this.getValues();
-
-            return _.every(values, function(v) {
-                return v.length && _.isNumber(makeNumber(v));
-            });
-            */
         };
     }
 });
