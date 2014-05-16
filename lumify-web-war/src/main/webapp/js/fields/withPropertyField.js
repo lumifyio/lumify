@@ -24,7 +24,10 @@ define(['util/withTeardown'], function(withTeardown) {
                 inputsNoSelects = inputs.not('select');
 
             this.$node.find('input:not([type=checkbox])').each(function() {
-                $(this).attr('required', true)
+                var $this = $(this);
+                if ($this.data('optional') !== true) {
+                    $this.attr('required', true)
+                }
             });
 
             if (inputsNoSelects.length && this.attr.tooltip &&
