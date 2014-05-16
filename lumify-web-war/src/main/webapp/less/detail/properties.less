@@ -163,8 +163,11 @@
   }
 }
 
-.showAuditing .properties {
-  .property-value, .property-name {
-    padding: 1.5em 0.25em 1em 1em;    
+.showAuditing .properties > table {
+  .property {
+    & > .property-value,
+    & > .property-name {
+      padding: 1.5em 0.25em 1em 1em;    
+    }
   }
 }
