@@ -46,6 +46,7 @@ define([
                 }
 
                 switch (ontologyProperty.dataType) {
+                    case 'boolean': return F.boolean.pretty(value);
                     case 'date': return F.date.dateString(value);
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);

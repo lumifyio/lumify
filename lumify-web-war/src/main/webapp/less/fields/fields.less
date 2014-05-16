@@ -22,6 +22,46 @@
     margin-right: 0;
     margin-left: 1px;
   }
+
+  .field-type-boolean {
+    .input-prepend {
+      font-size: 100%;
+      cursor: pointer;
+    }
+
+    input {
+      vertical-align: top;
+      position: relative;
+      top: 0;
+      margin-top: -0.5em;
+    }
+
+    .input-row {
+      position: relative;
+      .disable-text-selection;
+
+      div {
+        background: white;
+        border: 1px solid #ccc;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        bottom: 0;
+        top: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        line-height: 2em;
+        padding: 0 0.5em;
+        .box-sizing(border-box);
+        .box-shadow(~"inset 0 1px 1px rgba(0, 0, 0, 0.075)");
+      }
+    }
+  }
+}
+
+.underneath .configuration .field-type-boolean input {
+  margin-top: 0.3em;
+  margin-left: 0.2em;
 }
 
 .justification {

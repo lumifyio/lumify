@@ -23,7 +23,7 @@ define(['util/withTeardown'], function(withTeardown) {
             var inputs = this.select('visibleInputsSelector'),
                 inputsNoSelects = inputs.not('select');
 
-            this.$node.find('input').each(function() {
+            this.$node.find('input:not([type=checkbox])').each(function() {
                 $(this).attr('required', true)
             });
 
@@ -76,6 +76,10 @@ define(['util/withTeardown'], function(withTeardown) {
 
         this.getValues = function() {
             return this.select('visibleInputsSelector').map(function() {
+                var $this = $(this);
+                if ($this.is('input[type=checkbox]')) {
+                    return $this.prop('checked');
+                }
                 return $(this).val();
             }).toArray();
         };

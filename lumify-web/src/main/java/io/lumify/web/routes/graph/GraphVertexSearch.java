@@ -172,6 +172,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         if (PropertyType.STRING.equals(propertyDataType) && (predicateString == null || "".equals(predicateString))) {
             graphQuery.has(propertyName, TextPredicate.CONTAINS, value0);
+        } else if (PropertyType.BOOLEAN.equals(propertyDataType) && (predicateString == null || "".equals(predicateString))) {
+            graphQuery.has(propertyName, Compare.EQUAL, value0);
         } else if ("<".equals(predicateString)) {
             graphQuery.has(propertyName, Compare.LESS_THAN, value0);
         } else if (">".equals(predicateString)) {
@@ -194,6 +196,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
             return new DateOnly(DATE_FORMAT.parse(values.getString(index)));
         } else if (PropertyType.STRING.equals(propertyDataType)) {
             return values.getString(index);
+        } else if (PropertyType.BOOLEAN.equals(propertyDataType)) {
+            return values.getBoolean(index);
         } else {
             return values.getDouble(index);
         }

@@ -94,6 +94,13 @@ define([
                 } else return FORMATTERS.number.pretty(number);
             }
         },
+
+        boolean: {
+            pretty: function(bool) {
+                return bool ? 'Yes' : 'No';
+            }
+        },
+
         bytes: {
             pretty: function(bytes, precision) {
                 var k = 1024,
