@@ -14,6 +14,7 @@ public class UserAdmin extends CommandLineBase {
     private static final String CMD_OPT_USERNAME = "username";
     private static final String CMD_OPT_USERID = "userid";
     private static final String CMD_OPT_PRIVILEGES = "privileges";
+    private static final String CMD_OPT_AS_TABLE = "as-table";
     private static final String CMD_ACTION_LIST = "list";
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
@@ -48,9 +49,16 @@ public class UserAdmin extends CommandLineBase {
         opts.addOption(
                 OptionBuilder
                         .withLongOpt(CMD_OPT_PRIVILEGES)
-                        .withDescription("Comma separated list of privileges " + Privilege.ALL.toString().replaceAll(" ", ""))
+                        .withDescription("Comma separated list of privileges " + privilegesAsString(Privilege.ALL))
                         .hasArg()
                         .create("p")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_AS_TABLE)
+                        .withDescription("List users in a table")
+                        .create("t")
         );
 
         return opts;
@@ -89,8 +97,12 @@ public class UserAdmin extends CommandLineBase {
 
     private int list(CommandLine cmd) {
         Iterable<User> users = getUserRepository().findAll();
-        for (User user : users) {
-            printUser(user);
+        if (cmd.hasOption(CMD_OPT_AS_TABLE)) {
+            printUsers(users);
+        } else {
+            for (User user : users) {
+                printUser(user);
+            }
         }
         return 0;
     }
@@ -132,14 +144,46 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private void printUser(User user) {
-        System.out.println("                  ID: " + user.getUserId());
-        System.out.println("            Username: " + user.getUsername());
-        System.out.println("Current Workspace Id: " + user.getCurrentWorkspaceId());
-        System.out.println("        Display Name: " + user.getDisplayName());
-        System.out.println("              Status: " + user.getUserStatus());
-        System.out.println("                Type: " + user.getUserType());
-        System.out.println("          Privileges: " + getUserRepository().getPrivileges(user).toString().replaceAll(" ", ""));
+        System.out.println("          ID: " + user.getUserId());
+        System.out.println("    Username: " + user.getUsername());
+        System.out.println("Display Name: " + user.getDisplayName());
+        System.out.println("  Privileges: " + privilegesAsString(getUserRepository().getPrivileges(user)));
         System.out.println("");
+    }
+
+    private void printUsers(Iterable<User> users) {
+        if (users != null) {
+            int maxIdWidth = 1;
+            int maxUsernameWidth = 1;
+            int maxDisplayNameWidth = 1;
+            int maxPrivilegesWith = privilegesAsString(Privilege.ALL).length();
+            for (User user : users) {
+                String id = user.getUserId();
+                int idWidth = id != null ? id.length() : 0;
+                maxIdWidth = idWidth > maxIdWidth ? idWidth : maxIdWidth;
+                String username = user.getUsername();
+                int usernameWidth = username != null ? username.length() : 0;
+                maxUsernameWidth = usernameWidth > maxUsernameWidth ? usernameWidth : maxUsernameWidth;
+                String displayName = user.getDisplayName();
+                int displayNameWidth = displayName != null ? displayName.length() : 0;
+                maxDisplayNameWidth = displayNameWidth > maxDisplayNameWidth ? displayNameWidth : maxDisplayNameWidth;
+            }
+            String format = String.format("%%%ds %%%ds %%%ds %%%ds%%n", -1 * maxIdWidth, -1 * maxUsernameWidth, -1 * maxDisplayNameWidth, -1 * maxPrivilegesWith);
+            for (User user : users) {
+                System.out.printf(format,
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getDisplayName(),
+                        privilegesAsString(getUserRepository().getPrivileges(user))
+                );
+            }
+        } else {
+            System.out.println("No users");
+        }
+    }
+
+    private String privilegesAsString(Set<Privilege> privileges) {
+        return privileges.toString().replaceAll(" ", "");
     }
 
     private void printUserNotFoundError(CommandLine cmd) {
