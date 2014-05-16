@@ -342,8 +342,8 @@
     <!-- http://lumify.io#ontologyTitle -->
 
     <owl:DatatypeProperty rdf:about="&lumify;ontologyTitle">
-        <textIndexHints>NONE</textIndexHints>
         <userVisible>false</userVisible>
+        <textIndexHints>EXACT_MATCH</textIndexHints>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
