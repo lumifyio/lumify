@@ -375,6 +375,9 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         if ("http://www.w3.org/2001/XMLSchema#boolean".equals(iri)) {
             return PropertyType.BOOLEAN;
         }
+        if ("http://www.w3.org/2001/XMLSchema#integer".equals(iri)) {
+            return PropertyType.INTEGER;
+        }
         throw new LumifyException("Unhandled property type " + iri);
     }
 

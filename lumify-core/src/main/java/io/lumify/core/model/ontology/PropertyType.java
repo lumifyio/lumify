@@ -13,7 +13,8 @@ public enum PropertyType {
     BINARY("binary"),
     CURRENCY("currency"),
     DOUBLE("double"),
-    BOOLEAN("boolean");
+    BOOLEAN("boolean"),
+    INTEGER("integer");
 
     private final String text;
 
@@ -51,6 +52,10 @@ public enum PropertyType {
                 return Double.class;
             case BOOLEAN:
                 return Boolean.class;
+            case DOUBLE:
+                return Double.class;
+            case INTEGER:
+                return Integer.class;
             default:
                 throw new LumifyException("Unhandled property type: " + propertyType);
         }
