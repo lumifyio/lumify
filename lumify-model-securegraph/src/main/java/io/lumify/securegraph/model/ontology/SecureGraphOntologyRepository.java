@@ -14,9 +14,6 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
 import org.apache.commons.lang.SerializationUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
@@ -375,9 +372,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType,
-                                          ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+                                          ArrayList<PossibleValueType> possibleValues, Collection<TextIndexHint> textIndexHints, boolean userVisible) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -407,9 +404,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName,
-                                                     ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+                                                     ArrayList<PossibleValueType> possibleValues, Collection<TextIndexHint> textIndexHints, boolean userVisible) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
+            DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyName);
+            definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
+            if (dataType == PropertyType.STRING) {
+                definePropertyBuilder.textIndexHint(textIndexHints);
+            }
+            definePropertyBuilder.define();
+
             VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());

@@ -1,5 +1,6 @@
 package io.lumify.storm.video;
 
+import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
@@ -10,7 +11,6 @@ import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +56,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(webmFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
+                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
                 MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save();
             } finally {
@@ -76,7 +76,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

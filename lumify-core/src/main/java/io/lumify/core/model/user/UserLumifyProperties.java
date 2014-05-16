@@ -1,16 +1,16 @@
 package io.lumify.core.model.user;
 
 import io.lumify.core.model.properties.types.ByteArrayLumifyProperty;
-import io.lumify.core.model.properties.types.TextLumifyProperty;
+import io.lumify.core.model.properties.types.StringLumifyProperty;
 import org.securegraph.TextIndexHint;
 
 public final class UserLumifyProperties {
-    public static final TextLumifyProperty USERNAME = new TextLumifyProperty("http://lumify.io/user/username", TextIndexHint.EXACT_MATCH);
-    public static final TextLumifyProperty DISPLAY_NAME = new TextLumifyProperty("http://lumify.io/user/displayName", TextIndexHint.EXACT_MATCH);
-    public static final TextLumifyProperty AUTHORIZATIONS = new TextLumifyProperty("http://lumify.io/user/authorizations", TextIndexHint.NONE);
-    public static final TextLumifyProperty PRIVILEGES = new TextLumifyProperty("http://lumify.io/user/privileges", TextIndexHint.NONE);
-    public static final TextLumifyProperty STATUS = new TextLumifyProperty("http://lumify.io/user/status", TextIndexHint.NONE);
-    public static final TextLumifyProperty CURRENT_WORKSPACE = new TextLumifyProperty("http://lumify.io/user/currentWorkspace", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty USERNAME = new StringLumifyProperty("http://lumify.io/user/username");
+    public static final StringLumifyProperty DISPLAY_NAME = new StringLumifyProperty("http://lumify.io/user/displayName");
+    public static final StringLumifyProperty AUTHORIZATIONS = new StringLumifyProperty("http://lumify.io/user/authorizations");
+    public static final StringLumifyProperty PRIVILEGES = new StringLumifyProperty("http://lumify.io/user/privileges");
+    public static final StringLumifyProperty STATUS = new StringLumifyProperty("http://lumify.io/user/status");
+    public static final StringLumifyProperty CURRENT_WORKSPACE = new StringLumifyProperty("http://lumify.io/user/currentWorkspace");
     public static final ByteArrayLumifyProperty PASSWORD_SALT = new ByteArrayLumifyProperty("http://lumify.io/user/passwordSalt");
     public static final ByteArrayLumifyProperty PASSWORD_HASH = new ByteArrayLumifyProperty("http://lumify.io/user/passwordHash");
 }

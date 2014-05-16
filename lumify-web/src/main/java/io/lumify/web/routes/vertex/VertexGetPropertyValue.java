@@ -1,5 +1,8 @@
 package io.lumify.web.routes.vertex;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
@@ -9,15 +12,12 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -172,7 +172,7 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     }
 
     private String getMimeType(Property property) {
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
         if (mimeType != null) {
             return mimeType;
         }

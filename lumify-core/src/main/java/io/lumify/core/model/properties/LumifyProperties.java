@@ -3,18 +3,18 @@ package io.lumify.core.model.properties;
 import io.lumify.core.model.properties.types.DateLumifyProperty;
 import io.lumify.core.model.properties.types.DoubleLumifyProperty;
 import io.lumify.core.model.properties.types.StreamingLumifyProperty;
-import io.lumify.core.model.properties.types.TextLumifyProperty;
+import io.lumify.core.model.properties.types.StringLumifyProperty;
 import org.securegraph.TextIndexHint;
 
 public class LumifyProperties {
-    public static final TextLumifyProperty DISPLAY_NAME = TextLumifyProperty.all("http://lumify.io#displayName");
-    public static final TextLumifyProperty PROCESS = TextLumifyProperty.all("http://lumify.io#process");
-    public static final TextLumifyProperty ROW_KEY = new TextLumifyProperty("http://lumify.io#rowKey", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty DISPLAY_NAME = new StringLumifyProperty("http://lumify.io#displayName");
+    public static final StringLumifyProperty PROCESS = new StringLumifyProperty("http://lumify.io#process");
+    public static final StringLumifyProperty ROW_KEY = new StringLumifyProperty("http://lumify.io#rowKey");
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
-    public static final TextLumifyProperty TITLE = TextLumifyProperty.all("http://lumify.io#title");
+    public static final StringLumifyProperty TITLE = new StringLumifyProperty("http://lumify.io#title");
     public static final DateLumifyProperty MODIFIED_DATE = new DateLumifyProperty("http://lumify.io#modifiedDate");
-    public static final TextLumifyProperty MODIFIED_BY = new TextLumifyProperty("http://lumify.io#modifiedBy", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty MODIFIED_BY = new StringLumifyProperty("http://lumify.io#modifiedBy");
     public static final DoubleLumifyProperty CONFIDENCE = new DoubleLumifyProperty("http://lumify.io#confidence");
 
     private LumifyProperties() {

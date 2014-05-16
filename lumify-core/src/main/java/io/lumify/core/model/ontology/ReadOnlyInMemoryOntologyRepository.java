@@ -8,6 +8,7 @@ import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
+import org.securegraph.TextIndexHint;
 import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -140,14 +141,14 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, Collection<TextIndexHint> textIndexHints, boolean userVisible) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
 
-    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, ArrayList<PossibleValueType> possibleValues, Collection<TextIndexHint> textIndexHints, boolean userVisible) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();

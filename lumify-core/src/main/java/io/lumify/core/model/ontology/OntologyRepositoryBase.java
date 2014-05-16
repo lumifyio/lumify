@@ -12,6 +12,7 @@ import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -20,6 +21,7 @@ import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -37,11 +39,17 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     private void importBaseOwlFile() {
-        InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream("base.owl");
-        checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource("base.owl"));
+        importResourceOwl("base.owl", "http://lumify.io");
+        importResourceOwl("user.owl", "http://lumify.io/user");
+        importResourceOwl("workspace.owl", "http://lumify.io/workspace");
+    }
+
+    private void importResourceOwl(String fileName, String iri) {
+        InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream(fileName);
+        checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource(fileName));
 
         try {
-            importFile(baseOwlFile, IRI.create("http://lumify.io"), null);
+            importFile(baseOwlFile, IRI.create(iri), null);
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
@@ -261,11 +269,19 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
 
             ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, userVisible);
+            Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible);
         }
     }
 
-    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible);
+    protected abstract OntologyProperty addPropertyTo(
+            Concept concept,
+            String propertyIRI,
+            String displayName,
+            PropertyType dataType,
+            ArrayList<PossibleValueType> possibleValues,
+            Collection<TextIndexHint> textIndexHints,
+            boolean userVisible);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -369,36 +385,40 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 return value.getLiteral();
             }
         }
-        return null;
+        return owlEntity.getIRI().toString();
     }
 
     protected String getColor(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#color");
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.COLOR.getKey());
     }
 
     protected String getDisplayType(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#displayType");
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.DISPLAY_TYPE.getKey());
     }
 
     protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#titleFormula");
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TITLE_FORMULA.getKey());
     }
 
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
-        String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#userVisible");
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.USER_VISIBLE.getKey());
         return val == null || Boolean.parseBoolean(val);
     }
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#glyphIconFileName");
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.GLYPH_ICON_FILE_NAME.getKey());
     }
 
     protected String getMapGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValueByUri(o, owlEntity, "http://lumify.io#mapGlyphIconFileName");
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getKey());
     }
 
     protected ArrayList<PossibleValueType> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValuesByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getKey());
+    }
+
+    protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {
+        return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getKey()));
     }
 
     protected ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {

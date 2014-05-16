@@ -2,28 +2,33 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.model.properties.types.BooleanLumifyProperty;
 import io.lumify.core.model.properties.types.ByteArrayLumifyProperty;
-import io.lumify.core.model.properties.types.TextLumifyProperty;
-import org.securegraph.TextIndexHint;
+import io.lumify.core.model.properties.types.StringLumifyProperty;
 
 /**
  * LumifyProperty values used for storage of Ontology concepts.
  */
 public final class OntologyLumifyProperties {
-    public static final TextLumifyProperty CONCEPT_TYPE = new TextLumifyProperty("http://lumify.io#conceptType", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty CONCEPT_TYPE = new StringLumifyProperty("http://lumify.io#conceptType");
 
-    public static final TextLumifyProperty DATA_TYPE = new TextLumifyProperty("http://lumify.io#dataType", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty DATA_TYPE = new StringLumifyProperty("http://lumify.io#dataType");
 
     public static final BooleanLumifyProperty USER_VISIBLE = new BooleanLumifyProperty("http://lumify.io#userVisible");
 
-    public static final TextLumifyProperty ONTOLOGY_TITLE = new TextLumifyProperty("http://lumify.io#ontologyTitle", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty ONTOLOGY_TITLE = new StringLumifyProperty("http://lumify.io#ontologyTitle");
 
-    public static final TextLumifyProperty DISPLAY_TYPE = new TextLumifyProperty("http://lumify.io#displayType", TextIndexHint.EXACT_MATCH);
+    public static final StringLumifyProperty DISPLAY_TYPE = new StringLumifyProperty("http://lumify.io#displayType");
 
-    public static final TextLumifyProperty TITLE_FORMULA = new TextLumifyProperty("http://lumify.io#titleFormula", TextIndexHint.NONE);
+    public static final StringLumifyProperty TITLE_FORMULA = new StringLumifyProperty("http://lumify.io#titleFormula");
 
-    public static final TextLumifyProperty COLOR = new TextLumifyProperty("http://lumify.io#color", TextIndexHint.NONE);
+    public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
 
     public static final ByteArrayLumifyProperty POSSIBLE_VALUES = new ByteArrayLumifyProperty("http://lumify.io#possibleValues");
+
+    public static final StringLumifyProperty TEXT_INDEX_HINTS = new StringLumifyProperty("http://lumify.io#textIndexHints");
+
+    public static final StringLumifyProperty GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#glyphIconFileName");
+
+    public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
 
     private OntologyLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

@@ -188,10 +188,6 @@ public class JsonSerializer {
     }
 
     private static Object toJsonValue(Object value) {
-        if (value instanceof Text) {
-            value = ((Text) value).getText();
-        }
-
         if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
             JSONObject result = new JSONObject();

@@ -1,18 +1,18 @@
 package io.lumify.storm.video;
 
+import com.google.common.io.Files;
+import com.google.inject.Inject;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import org.apache.commons.io.FileUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.common.io.Files;
-import com.google.inject.Inject;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +54,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", frameStartTime);
                     Map<String, Object> metadata = data.getPropertyMetadata();
-                    metadata.put(RawLumifyProperties.METADATA_MIME_TYPE, "image/png");
+                    metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
                     propertyKeys.add(key);
@@ -96,7 +96,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.METADATA_MIME_TYPE);
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }
