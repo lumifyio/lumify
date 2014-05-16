@@ -48,6 +48,7 @@ public class ResourceGet extends BaseRequestHandler {
 
         // TODO change content type if we use this route for more than getting glyph icons
         response.setContentType("image/png");
+        response.setHeader("Cache-Control", "max-age=" + (5 * 60));
         ServletOutputStream out = response.getOutputStream();
         out.write(rawImg);
         out.close();
