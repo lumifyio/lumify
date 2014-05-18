@@ -91,11 +91,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
             InputStream iconFileIn = new FileInputStream(iconFile);
-            try {
-                result.setGlyphIconInputStream(iconFileIn);
-            } finally {
-                iconFileIn.close();
-            }
+            result.setGlyphIconInputStream(iconFileIn);
+            result.setHasGlyphIcon(true);
         }
         conceptsCache.put(uri, result);
         return result;
