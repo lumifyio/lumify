@@ -197,7 +197,7 @@ define([
 
             if (this.currentGraphVertexId) {
                 parameters.graphVertexId = this.currentGraphVertexId;
-                parameters.edgeId = $mentionNode.data('info').edgeId;
+                parameters.edgeId = $mentionNode.data('info') ? $mentionNode.data('info').edgeId : null;
             }
 
             _.defer(this.buttonLoading.bind(this));
