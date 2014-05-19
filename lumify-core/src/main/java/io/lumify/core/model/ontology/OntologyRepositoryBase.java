@@ -248,6 +248,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
         boolean userVisible = getUserVisible(o, dataTypeProperty);
+        boolean searchable = getSearchable (o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
@@ -261,11 +262,13 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
 
             ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, userVisible);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, userVisible, searchable);
         }
     }
 
-    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible);
+    protected abstract OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName,
+                                                      PropertyType dataType, ArrayList<PossibleValueType> possibleValues,
+                                                      boolean userVisible, boolean searchable);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -387,6 +390,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#userVisible");
         return val == null || Boolean.parseBoolean(val);
+    }
+
+    protected boolean getSearchable(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#searchable");
+        return  val == null || Boolean.parseBoolean(val);
     }
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {

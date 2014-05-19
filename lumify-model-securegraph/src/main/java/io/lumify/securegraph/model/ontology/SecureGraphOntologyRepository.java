@@ -375,9 +375,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType,
-                                          ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+                                          ArrayList<PossibleValueType> possibleValues, boolean userVisible, boolean searchable) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -407,7 +407,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName,
-                                                     ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+                                                     ArrayList<PossibleValueType> possibleValues, boolean userVisible, boolean searchable) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
             VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
@@ -415,6 +415,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
             USER_VISIBLE.setProperty(builder, userVisible, VISIBILITY.getVisibility());
+            SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }

@@ -69,6 +69,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;mappingKey"/>
 
+    <!-- http://lumify.io#searchable -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;searchable"/>
+
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////

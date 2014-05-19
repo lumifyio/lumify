@@ -138,19 +138,25 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+    protected OntologyProperty addPropertyTo(Concept concept, String propertyIRI, String displayName, PropertyType dataType,
+                                             ArrayList<PossibleValueType> possibleValues, boolean userVisible,
+                                             boolean searchable) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues,
+                userVisible, searchable);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
 
-    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType, final String displayName, ArrayList<PossibleValueType> possibleValues, boolean userVisible) {
+    private InMemoryOntologyProperty getOrCreatePropertyType(final String propertyName, final PropertyType dataType,
+                                                             final String displayName, ArrayList<PossibleValueType> possibleValues,
+                                                             boolean userVisible, boolean searchable) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
             property.setDataType(dataType);
             property.setUserVisible(userVisible);
+            property.setSearchable(searchable);
             property.setTitle(propertyName);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);

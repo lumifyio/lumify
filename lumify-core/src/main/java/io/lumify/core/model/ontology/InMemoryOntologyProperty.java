@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;
     private boolean userVisible;
+    private boolean searchable;
     private String displayName;
     private PropertyType dataType;
     private ArrayList<PossibleValueType> possibleValues;
@@ -32,6 +33,15 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     @Override
     public ArrayList<PossibleValueType> getPossibleValues() {
         return possibleValues;
+    }
+
+    @Override
+    public boolean getSearchable() {
+        return searchable;
+    }
+
+    public void setSearchable(boolean searchable) {
+        this.searchable = searchable;
     }
 
     public void setTitle(String title) {
