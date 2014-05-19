@@ -518,7 +518,6 @@ define([
                 }
 
                 self.allConcepts = _.filter(concepts.byTitle, function(c) {
-                    console.log(c);
                     return c.userVisible !== false;
                 });
 
