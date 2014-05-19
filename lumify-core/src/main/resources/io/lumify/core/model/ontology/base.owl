@@ -103,6 +103,10 @@
     <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
     
 
+    <!-- http://lumify.io#searchable -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;searchable"/>
+
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////

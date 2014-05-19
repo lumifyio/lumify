@@ -64,7 +64,7 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
         if (workspaces.size() == 0) {
             return null;
         } else if (workspaces.size() > 1) {
-            throw new LumifyException("more than one user was returned");
+            throw new LumifyException("more than one workspace was returned");
         } else {
             if (!hasReadPermissions(workspaceId, user)) {
                 throw new LumifyAccessDeniedException("user " + user.getUserId() + " does not have read access to workspace " + workspaceId, user, workspaceId);

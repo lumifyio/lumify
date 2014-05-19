@@ -31,6 +31,8 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return USER_VISIBLE.getPropertyValue(vertex);
     }
 
+    public boolean getSearchable () { return SEARCHABLE.getPropertyValue(vertex); }
+
     public PropertyType getDataType() {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }

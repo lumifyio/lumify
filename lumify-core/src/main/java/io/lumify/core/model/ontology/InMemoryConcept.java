@@ -59,7 +59,11 @@ public class InMemoryConcept extends Concept {
 
     @Override
     public InputStream getGlyphIcon() {
-        return null;
+        return glyphIconInputStream;
+    }
+
+    public void setHasGlyphIcon (boolean hasGlyphIcon) {
+        glyphIconResource = hasGlyphIcon;
     }
 
     public void setGlyphIconInputStream(InputStream inputStream) {
