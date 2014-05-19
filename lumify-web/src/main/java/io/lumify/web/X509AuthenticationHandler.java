@@ -56,8 +56,12 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
         if (username == null || username.trim().equals("")) {
             return null;
         }
+        String displayName = getDisplayName(cert);
+        if (displayName == null || displayName.trim().equals("")) {
+            return null;
+        }
         String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
-        return userRepository.findOrAddUser(username, username, randomPassword, new String[0]);
+        return userRepository.findOrAddUser(username, displayName, randomPassword, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {
@@ -86,6 +90,10 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
     }
 
     protected String getUsername(X509Certificate cert) {
+        return cert.getSubjectX500Principal().getName();
+    }
+
+    protected String getDisplayName(X509Certificate cert) {
         String dn = cert.getSubjectX500Principal().getName();
         try {
             return getCn(dn);
