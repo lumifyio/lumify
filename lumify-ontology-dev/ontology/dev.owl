@@ -784,6 +784,17 @@
         <lumify:color xml:lang="en">rgb(149, 138, 218)</lumify:color>
         <lumify:displayType xml:lang="en">video</lumify:displayType>
     </owl:Class>
+    
+
+
+    <!-- http://lumify.io/dev#zipCode -->
+
+    <owl:Class rdf:about="http://lumify.io/dev#zipCode">
+        <rdfs:label xml:lang="en">Zip Code</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/dev#location"/>
+        <lumify:glyphIconFileName xml:lang="en">glyphicons_020_home@2x.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
+    </owl:Class>
 </rdf:RDF>
 
 
