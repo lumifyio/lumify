@@ -100,7 +100,10 @@ public class EntityHighlighter {
     }
 
     private static String escapeHtml(String text) {
-        return text.replaceAll("<", "&lt;").replaceAll("<", "&gt;").replaceAll("&", "&amp;");
+        return text
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;");
     }
 
     public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions) {
