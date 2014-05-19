@@ -517,7 +517,10 @@ define([
                     vertexInfo = mentionVertex.data('info');
                 }
 
-                self.allConcepts = concepts.byTitle;
+                self.allConcepts = _.filter(concepts.byTitle, function(c) {
+                    console.log(c);
+                    return c.userVisible !== false;
+                });
 
                 self.select('conceptSelector').html(conceptsTemplate({
                     concepts: self.allConcepts,

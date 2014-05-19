@@ -33,6 +33,8 @@ public abstract class Concept {
 
     public abstract String getTitleFormula();
 
+    public abstract boolean getUserVisible();
+
     public Collection<OntologyProperty> getProperties() {
         return properties;
     }
@@ -58,6 +60,9 @@ public abstract class Concept {
             }
             if (getDisplayName() != null) {
                 result.put("pluralDisplayName", English.plural(getDisplayName()));
+            }
+            if (!getUserVisible()) {
+                result.put("userVisible", getUserVisible());
             }
             if (hasGlyphIconResource()) {
                 result.put("glyphIconHref", "resource?id=" + URLEncoder.encode(getTitle(), "utf8"));

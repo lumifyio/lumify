@@ -16,6 +16,7 @@ public class InMemoryConcept extends Concept {
     private boolean glyphIconResource;
     private String conceptIRI;
     private InputStream glyphIconInputStream;
+    private boolean userVisible;
 
     protected InMemoryConcept(String conceptIRI, String parentIRI, Collection<OntologyProperty> properties) {
         super(parentIRI, properties);
@@ -51,6 +52,11 @@ public class InMemoryConcept extends Concept {
     @Override
     public String getTitleFormula() {
         return titleFormula;
+    }
+
+    @Override
+    public boolean getUserVisible() {
+        return userVisible;
     }
 
     @Override
@@ -93,6 +99,10 @@ public class InMemoryConcept extends Concept {
 
     public void setTitleFormula(String titleFormula) {
         this.titleFormula = titleFormula;
+    }
+
+    public void setUserVisible(boolean userVisible) {
+        this.userVisible = userVisible;
     }
 
     public ArrayList<OntologyProperty> getProperties() {

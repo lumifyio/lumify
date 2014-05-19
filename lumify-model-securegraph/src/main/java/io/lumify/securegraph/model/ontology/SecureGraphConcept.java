@@ -50,6 +50,11 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
+    public boolean getUserVisible() {
+        return USER_VISIBLE.getPropertyValue(vertex, true);
+    }
+
+    @Override
     public void setProperty(String name, Object value, Visibility visibility) {
         getVertex().setProperty(name, value, visibility);
     }

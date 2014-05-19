@@ -201,10 +201,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility());
         }
 
-        Boolean displayTime = getDisplayTime(o, ontologyClass);
-        if (displayTime != null) {
-            result.setProperty(OntologyLumifyProperties.DISPLAY_TIME.getKey(), displayTime, OntologyRepository.VISIBILITY.getVisibility());
-        }
+        boolean userVisible = getUserVisible(o, ontologyClass);
+        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getKey(), userVisible, OntologyRepository.VISIBILITY.getVisibility());
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getKey());
