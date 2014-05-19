@@ -28,7 +28,7 @@ define([
 
             this.on('change keyup', {
                 inputSelector: function(event) {
-                    var latLon = splitLatLon(this.getValues()[0]);
+                    var latLon = splitLatLon(this.getValues()[1]);
                     if (latLon) {
                         var latInput = self.$node.find('input.lat'),
                             lonInput = self.$node.find('input.lon');
