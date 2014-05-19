@@ -452,6 +452,27 @@
     
 
 
+    <!-- http://lumify.io/dev#dateAndTime -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#dateAndTime">
+        <rdfs:label xml:lang="en">Date and Time</rdfs:label>
+        <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/dev#dateOnly -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#dateOnly">
+        <rdfs:label xml:lang="en">Date Only</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#titleFormulaEntity"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/dev#duration -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#duration">
@@ -527,7 +548,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-
+    
 
 
     <!-- http://lumify.io/dev#titleFormulaEntityPropA -->

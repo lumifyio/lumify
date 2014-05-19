@@ -201,6 +201,11 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility());
         }
 
+        Boolean displayTime = getDisplayTime(o, ontologyClass);
+        if (displayTime != null) {
+            result.setProperty(OntologyLumifyProperties.DISPLAY_TIME.getKey(), displayTime, OntologyRepository.VISIBILITY.getVisibility());
+        }
+
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getKey());
 
@@ -256,7 +261,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         String propertyDisplayName = getLabel(o, dataTypeProperty);
         PropertyType propertyType = getPropertyType(o, dataTypeProperty);
         boolean userVisible = getUserVisible(o, dataTypeProperty);
-        boolean searchable = getSearchable (o, dataTypeProperty);
+        boolean searchable = getSearchable(o, dataTypeProperty);
+        Boolean displayTime = getDisplayTime(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
@@ -271,7 +277,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime);
         }
     }
 
@@ -283,7 +289,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             ArrayList<PossibleValueType> possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
-            boolean searchable);
+            boolean searchable,
+            Boolean displayTime);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -405,6 +412,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TITLE_FORMULA.getKey());
     }
 
+    protected Boolean getDisplayTime(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.DISPLAY_TIME.getKey());
+        if (val == null) {
+            return null;
+        }
+        return Boolean.parseBoolean(val);
+    }
+
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.USER_VISIBLE.getKey());
         return val == null || Boolean.parseBoolean(val);
@@ -412,7 +427,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected boolean getSearchable(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, "http://lumify.io#searchable");
-        return  val == null || Boolean.parseBoolean(val);
+        return val == null || Boolean.parseBoolean(val);
     }
 
     protected String getGlyphIconFileName(OWLOntology o, OWLEntity owlEntity) {

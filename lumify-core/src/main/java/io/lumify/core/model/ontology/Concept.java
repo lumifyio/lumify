@@ -12,8 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.TITLE_FORMULA;
-
 public abstract class Concept {
     private final String parentConceptIRI;
     private final Collection<OntologyProperty> properties;

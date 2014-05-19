@@ -27,7 +27,9 @@ public abstract class OntologyProperty {
 
     public abstract boolean getUserVisible();
 
-    public abstract boolean getSearchable ();
+    public abstract boolean getSearchable();
+
+    public abstract Boolean getDisplayTime();
 
     public abstract PropertyType getDataType();
 
@@ -46,6 +48,9 @@ public abstract class OntologyProperty {
             JSONObject json = new JSONObject();
             json.put("title", getTitle());
             json.put("displayName", getDisplayName());
+            if (getDisplayTime() != null) {
+                json.put("displayTime", getDisplayTime());
+            }
             json.put("userVisible", getUserVisible());
             json.put("searchable", getSearchable());
             json.put("dataType", getDataType().toString());

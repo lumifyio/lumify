@@ -9,6 +9,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private String displayName;
     private PropertyType dataType;
     private ArrayList<PossibleValueType> possibleValues;
+    private Boolean displayTime;
 
     @Override
     public String getTitle() {
@@ -40,12 +41,21 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         return searchable;
     }
 
+    @Override
+    public Boolean getDisplayTime() {
+        return displayTime;
+    }
+
     public void setSearchable(boolean searchable) {
         this.searchable = searchable;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setDisplayTime(Boolean displayTime) {
+        this.displayTime = displayTime;
     }
 
     public void setUserVisible(boolean userVisible) {

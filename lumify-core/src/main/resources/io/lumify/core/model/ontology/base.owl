@@ -108,6 +108,10 @@
     <owl:AnnotationProperty rdf:about="&lumify;searchable"/>
 
 
+    <!-- http://lumify.io#displayTime -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;displayTime"/>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
