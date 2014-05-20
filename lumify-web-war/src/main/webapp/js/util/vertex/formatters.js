@@ -124,7 +124,8 @@ define([
             },
 
             isEdge: function(vertex) {
-                return V.prop(vertex, 'conceptType') === 'relationship';
+                return V.prop(vertex, 'conceptType') === 'relationship' ||
+                    (_.has(vertex, 'sourceVertexId') && _.has(vertex, 'destVertexId'));
             }
         }
 
