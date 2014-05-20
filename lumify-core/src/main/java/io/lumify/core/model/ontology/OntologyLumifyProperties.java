@@ -22,6 +22,10 @@ public final class OntologyLumifyProperties {
 
     public static final StringLumifyProperty TITLE_FORMULA = new StringLumifyProperty("http://lumify.io#titleFormula");
 
+    public static final StringLumifyProperty SUBTITLE_FORMULA = new StringLumifyProperty("http://lumify.io#subtitleFormula");
+
+    public static final StringLumifyProperty TIME_FORMULA = new StringLumifyProperty("http://lumify.io#timeFormula");
+
     public static final BooleanLumifyProperty DISPLAY_TIME = new BooleanLumifyProperty("http://lumify.io#displayTime");
 
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");

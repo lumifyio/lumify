@@ -33,6 +33,10 @@ public abstract class Concept {
 
     public abstract String getTitleFormula();
 
+    public abstract String getSubtitleFormula();
+
+    public abstract String getTimeFormula();
+
     public abstract boolean getUserVisible();
 
     public Collection<OntologyProperty> getProperties() {
@@ -54,6 +58,12 @@ public abstract class Concept {
             }
             if (getTitleFormula() != null) {
                 result.put("titleFormula", getTitleFormula());
+            }
+            if (getSubtitleFormula() != null) {
+                result.put("subtitleFormula", getSubtitleFormula());
+            }
+            if (getTimeFormula() != null) {
+                result.put("timeFormula", getTimeFormula());
             }
             if (getParentConceptIRI() != null) {
                 result.put("parentConcept", getParentConceptIRI());

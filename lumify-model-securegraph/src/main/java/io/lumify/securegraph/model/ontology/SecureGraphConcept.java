@@ -1,16 +1,15 @@
 package io.lumify.securegraph.model.ontology;
 
 import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyProperty;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.property.StreamingPropertyValue;
 
 import java.io.InputStream;
 import java.util.Collection;
-
-import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
-import static io.lumify.core.model.properties.LumifyProperties.*;
 
 public class SecureGraphConcept extends Concept {
     private final Vertex vertex;
@@ -24,34 +23,50 @@ public class SecureGraphConcept extends Concept {
         this.vertex = vertex;
     }
 
+    @Override
     public String getTitle() {
-        return ONTOLOGY_TITLE.getPropertyValue(vertex);
+        return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
 
+    @Override
     public boolean hasGlyphIconResource() {
         // TODO: This can be changed to GLYPH_ICON.getPropertyValue(vertex) once ENTITY_IMAGE_URL is added
-        return vertex.getPropertyValue(GLYPH_ICON.getKey()) != null;
+        return vertex.getPropertyValue(LumifyProperties.GLYPH_ICON.getKey()) != null;
     }
 
+    @Override
     public String getColor() {
-        return COLOR.getPropertyValue(vertex);
+        return OntologyLumifyProperties.COLOR.getPropertyValue(vertex);
     }
 
+    @Override
     public String getDisplayName() {
-        return DISPLAY_NAME.getPropertyValue(vertex);
+        return LumifyProperties.DISPLAY_NAME.getPropertyValue(vertex);
     }
 
+    @Override
     public String getDisplayType() {
-        return DISPLAY_TYPE.getPropertyValue(vertex);
+        return OntologyLumifyProperties.DISPLAY_TYPE.getPropertyValue(vertex);
     }
 
+    @Override
     public String getTitleFormula() {
-        return TITLE_FORMULA.getPropertyValue(vertex);
+        return OntologyLumifyProperties.TITLE_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public String getSubtitleFormula() {
+        return OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyValue(vertex);
+    }
+
+    @Override
+    public String getTimeFormula() {
+        return OntologyLumifyProperties.TIME_FORMULA.getPropertyValue(vertex);
     }
 
     @Override
     public boolean getUserVisible() {
-        return USER_VISIBLE.getPropertyValue(vertex, true);
+        return OntologyLumifyProperties.USER_VISIBLE.getPropertyValue(vertex, true);
     }
 
     @Override
@@ -61,7 +76,7 @@ public class SecureGraphConcept extends Concept {
 
     @Override
     public InputStream getGlyphIcon() {
-        StreamingPropertyValue spv = GLYPH_ICON.getPropertyValue(getVertex());
+        StreamingPropertyValue spv = LumifyProperties.GLYPH_ICON.getPropertyValue(getVertex());
         if (spv == null) {
             return null;
         }
@@ -70,7 +85,7 @@ public class SecureGraphConcept extends Concept {
 
     @Override
     public InputStream getMapGlyphIcon() {
-        StreamingPropertyValue spv = MAP_GLYPH_ICON.getPropertyValue(getVertex());
+        StreamingPropertyValue spv = LumifyProperties.MAP_GLYPH_ICON.getPropertyValue(getVertex());
         if (spv == null) {
             return null;
         }

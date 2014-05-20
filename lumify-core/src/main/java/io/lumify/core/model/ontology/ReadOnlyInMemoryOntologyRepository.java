@@ -85,6 +85,16 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             result.setTitleFormula(titleFormula);
         }
 
+        String subtitleFormula = getSubtitleFormula(o, ontologyClass);
+        if (subtitleFormula != null) {
+            result.setSubtitleFormula(subtitleFormula);
+        }
+
+        String timeFormula = getTimeFormula(o, ontologyClass);
+        if (timeFormula != null) {
+            result.setTimeFormula(timeFormula);
+        }
+
         result.setUserVisible(getUserVisible(o, ontologyClass));
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);

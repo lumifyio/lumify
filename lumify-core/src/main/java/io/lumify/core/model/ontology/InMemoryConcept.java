@@ -12,6 +12,8 @@ public class InMemoryConcept extends Concept {
     private String displayName;
     private String displayType;
     private String titleFormula;
+    private String subtitleFormula;
+    private String timeFormula;
     private ArrayList<OntologyProperty> properties;
     private boolean glyphIconResource;
     private String conceptIRI;
@@ -55,6 +57,16 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
+    public String getSubtitleFormula() {
+        return this.subtitleFormula;
+    }
+
+    @Override
+    public String getTimeFormula() {
+        return this.timeFormula;
+    }
+
+    @Override
     public boolean getUserVisible() {
         return userVisible;
     }
@@ -68,7 +80,7 @@ public class InMemoryConcept extends Concept {
         return glyphIconInputStream;
     }
 
-    public void setHasGlyphIcon (boolean hasGlyphIcon) {
+    public void setHasGlyphIcon(boolean hasGlyphIcon) {
         glyphIconResource = hasGlyphIcon;
     }
 
@@ -115,5 +127,13 @@ public class InMemoryConcept extends Concept {
 
     public String getConceptIRI() {
         return conceptIRI;
+    }
+
+    public void setSubtitleFormula(String subtitleFormula) {
+        this.subtitleFormula = subtitleFormula;
+    }
+
+    public void setTimeFormula(String timeFormula) {
+        this.timeFormula = timeFormula;
     }
 }

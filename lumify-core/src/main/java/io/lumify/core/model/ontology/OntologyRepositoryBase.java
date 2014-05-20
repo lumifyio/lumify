@@ -201,6 +201,16 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility());
         }
 
+        String subtitleFormula = getSubtitleFormula(o, ontologyClass);
+        if (subtitleFormula != null) {
+            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getKey(), subtitleFormula, OntologyRepository.VISIBILITY.getVisibility());
+        }
+
+        String timeFormula = getTimeFormula(o, ontologyClass);
+        if (timeFormula != null) {
+            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getKey(), timeFormula, OntologyRepository.VISIBILITY.getVisibility());
+        }
+
         boolean userVisible = getUserVisible(o, ontologyClass);
         result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getKey(), userVisible, OntologyRepository.VISIBILITY.getVisibility());
 
@@ -408,6 +418,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     protected String getTitleFormula(OWLOntology o, OWLEntity owlEntity) {
         return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TITLE_FORMULA.getKey());
+    }
+
+    protected String getSubtitleFormula(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.SUBTITLE_FORMULA.getKey());
+    }
+
+    protected String getTimeFormula(OWLOntology o, OWLEntity owlEntity) {
+        return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TIME_FORMULA.getKey());
     }
 
     protected Boolean getDisplayTime(OWLOntology o, OWLEntity owlEntity) {
