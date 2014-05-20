@@ -112,8 +112,11 @@ define([
                 } else {
                     this.select('conceptSelector').attr('disabled', false);
                 }
-                var conceptType = _.findWhere(info, { name: 'http://lumify.io#conceptType' });
-                conceptType = conceptType ? conceptType.value : '';
+
+                var conceptType = _.isArray(info) ?
+                    _.findWhere(info, { name: 'http://lumify.io#conceptType' }) :
+                    info['http://lumify.io#conceptType'];
+                conceptType = conceptType && conceptType.value || conceptType || '';
 
                 this.updateConceptSelect(conceptType).show();
 
