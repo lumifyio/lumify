@@ -46,7 +46,7 @@ define([
                 event.preventDefault();
                 event.stopPropagation();
                 if (isValid()) {
-                    _.defer(this.login.bind(this));
+                    return _.defer(this.login.bind(this));
                 }
             }
 
