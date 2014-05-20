@@ -68,7 +68,12 @@ define([
                         if (!child.color) {
                             if (node.color) {
                                 child.color = node.color;
-                            } else {
+                            } else if (
+                                [
+                                    'http://lumify.io/user#user',
+                                    'http://lumify.io/workspace#workspace'
+                                ].indexOf(child.id) === -1
+                            ) {
                                 console.warn('No color specified in concept hierarchy for conceptType:', child.id);
                                 child.color = 'rgb(0, 0, 0)';
                             }
