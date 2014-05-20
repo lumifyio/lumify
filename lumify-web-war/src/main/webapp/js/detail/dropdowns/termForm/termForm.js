@@ -115,7 +115,7 @@ define([
 
                 var conceptType = _.isArray(info) ?
                     _.findWhere(info, { name: 'http://lumify.io#conceptType' }) :
-                    info['http://lumify.io#conceptType'];
+                    (info && info['http://lumify.io#conceptType']);
                 conceptType = conceptType && conceptType.value || conceptType || '';
 
                 this.updateConceptSelect(conceptType).show();
