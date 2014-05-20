@@ -63,9 +63,10 @@ define([
         };
 
         this.configureButton = function(options) {
-            var button = this.select('loginButtonSelector');
+            var button = this.select('loginButtonSelector')
+                             .text(options.text);
 
-            if (options.enable) {
+            if (options.enabled) {
                 button.removeClass('loading').removeAttr('disabled');
             } else {
                 button

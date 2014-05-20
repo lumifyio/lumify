@@ -52,6 +52,7 @@
         <module>lumify-web-auth-social</module>
         <module>lumify-web-auth-username-only</module>
         <module>lumify-web-auth-username-password</module>
+        <module>lumify-web-auth-x509</module>
     </modules>
 
     <repositories>
