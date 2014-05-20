@@ -241,6 +241,12 @@ define([
                 this.visibilitySource = { value: visibilityValue, valid: true };
             }
 
+            if (property.name === 'http://lumify.io#visibilityJson') {
+                vertexProperty = property;
+                isExistingProperty = true;
+                previousValues = null;
+            }
+
             if (data.fromPreviousValuePrompt !== true) {
                 if (previousValues && previousValues.length) {
                     this.previousValues = previousValues;
