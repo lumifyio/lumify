@@ -79,6 +79,7 @@ require([
     'easing',
     'scrollStop',
     'bootstrap-datepicker',
+    'bootstrap-timepicker',
     'util/jquery.flight',
     'util/jquery.removePrefixedClasses',
 

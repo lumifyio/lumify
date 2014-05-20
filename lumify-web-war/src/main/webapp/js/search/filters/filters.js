@@ -45,6 +45,7 @@ define([
 
             this.on('propertychange', this.onPropertyFieldItemChanged);
             this.on('propertyselected', this.onPropertySelected);
+            this.on('propertyinvalid', this.onPropertyInvalid);
             this.on('clearfilters', this.onClearFilters);
             this.on('click', {
                 removeEntityRowSelector: this.onRemoveEntityRow,
@@ -121,7 +122,7 @@ define([
         this.onPropertySelected = function(event, data) {
             var self = this,
                 target = $(event.target),
-                li = target.closest('li'),
+                li = target.closest('li').addClass('fId' + self.filterId),
                 property = data.property,
                 fieldComponent = property.possibleValues ?
                     'fields/restrictValues' :
@@ -144,6 +145,12 @@ define([
             });
         };
 
+        this.onPropertyInvalid = function(event, data) {
+            console.log(data);
+            var li = this.$node.find('li.fId' + data.id);
+            li.addClass('invalid');
+        };
+
         this.createNewRowIfNeeded = function() {
             if (this.$node.find('.newrow').length === 0) {
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
@@ -155,6 +162,7 @@ define([
         };
 
         this.onPropertyFieldItemChanged = function(event, data) {
+            this.$node.find('li.fId' + data.id).removeClass('invalid');
             this.propertyFilters[data.id] = data;
             this.notifyOfFilters();
             event.stopPropagation();

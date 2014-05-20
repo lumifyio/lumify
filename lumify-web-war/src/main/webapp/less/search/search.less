@@ -52,7 +52,7 @@ width: 175px;
 .search-results, .search-filters {
   .pin-left-split;
 
-  width: 265px;
+  width: 270px;
   background: @pane-background;
   z-index: 89;  // so it floats above graph, but below splitbar handles
 }
@@ -109,11 +109,12 @@ width: 175px;
 }
 
 .search-filters {
-  width: 220px;
 
   .typeahead {
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
+    max-height: 250px;
+    overflow: auto;
     li { margin-bottom: 0; }
   }
 
@@ -157,10 +158,14 @@ width: 175px;
     padding: 0;
     background: #F9F9F9;
     padding-left: 0.5em;
+    line-height: 2em;
   }
  
   li { margin-bottom: 0.5em; position:relative; }
   li.nav-header { margin-bottom: 1em; }
+  li.invalid .add-property input {
+    color: red;
+  }
 
   table td { vertical-align:top; }
   table, tr { width: 100%; }
@@ -179,6 +184,10 @@ width: 175px;
     }
   }
 
+  .controls-row.range-only {
+    position: relative;
+    top: 1.2ex;
+  }
   .range-only {
     display: block;
     margin-top: 0.5em;

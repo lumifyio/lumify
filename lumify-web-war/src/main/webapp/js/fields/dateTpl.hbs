@@ -1,0 +1,36 @@
+<table cellpadding="0">
+  <tr class="input-prepend">
+
+    <td class="predicate-row">
+      <span class="add-on">
+        {{#if predicates}}
+        <select class="predicate">
+          <option value="<">Before</option>
+          <option value=">">After</option>
+          <option value="range">Between</option>
+          <option value="equal">Is</option>
+        </select>
+        {{else}}
+        <i class="icon-calendar"></i> 
+        {{/if}}
+      </span>
+    </td>
+
+    <td class="input-row">
+
+     {{#if displayTime}}
+        <div class="controls-row">{{> fields/dateTimeTpl }}</div>
+        <div class="controls-row range-only">{{> fields/dateTimeTpl }}</div>
+      {{else}}
+        <input data-provide="datepicker" placeholder="{{today}}" 
+          value="{{dateString}}" type="text" pattern="\d{4}-\d+-\d+"></input>
+        <input data-provide="datepicker" placeholder="{{today}}" 
+          class="range-only" type="text" pattern="\d{4}-\d+-\d+"></input>
+      {{/if}}
+
+    </td>
+  </tr>
+
+   
+</table>
+
