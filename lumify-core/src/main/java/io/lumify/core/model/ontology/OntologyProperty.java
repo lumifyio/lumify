@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.securegraph.type.GeoPoint;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -81,7 +82,7 @@ public abstract class OntologyProperty {
                 value = parseGeoLocation(valueStr);
                 break;
             case CURRENCY:
-                value = Double.parseDouble(valueStr);
+                value = new BigDecimal(valueStr);
                 break;
             case DOUBLE:
                 value = Double.parseDouble(valueStr);

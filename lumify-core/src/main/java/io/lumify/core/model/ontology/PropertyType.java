@@ -3,6 +3,7 @@ package io.lumify.core.model.ontology;
 import io.lumify.core.exception.LumifyException;
 import org.securegraph.type.GeoPoint;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public enum PropertyType {
@@ -49,7 +50,7 @@ public enum PropertyType {
             case BINARY:
                 return byte[].class;
             case CURRENCY:
-                return Double.class;
+                return BigDecimal.class;
             case BOOLEAN:
                 return Boolean.class;
             case DOUBLE:
