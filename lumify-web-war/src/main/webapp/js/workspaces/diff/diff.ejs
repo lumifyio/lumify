@@ -70,7 +70,7 @@
             <td class="edge-label"><div><%= edge.displayLabel %><span>&#8594;</span></div></td>
             <td class="edge-value"><%= edge.inVertex ? F.vertex.title(edge.inVertex) : edge.inVertexId %>
                 <% if (edge.visibilityJson) { %>
-                  <div class="visibility" data-visibility="<%= JSON.stringify(edge.visibilityJson) %>"></div>
+                  <div class="visibility" data-visibility="<%= JSON.stringify(edge.visibilityJson['http://lumify.io#visibilityJson']) %>"></div>
                 <% } %>
             </td>
             <% include workspaces/diff/actions %>
