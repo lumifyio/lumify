@@ -180,6 +180,7 @@ define([
             }
 
             this.select('queryValidationSelector').empty();
+            this.select('clearSearchSelector').show();
             this.hideSearchResults();
             this.popoutIfNeeded();
 
