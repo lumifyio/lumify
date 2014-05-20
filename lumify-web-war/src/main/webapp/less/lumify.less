@@ -69,25 +69,24 @@ html.fullscreenDetails {
 }
 .right-pane {
   .fullscreen;
-  left: 100% !important;
+  left: auto !important;
+  right: 0;
   width: 25%;
   min-width: 200px !important;
+  .translate3d(100%, 0, 0);
   .transition-transform(ease-in-out, 0.2s);
 
   &.visible {
-    .translate3d(-100%, 0, 0);
     max-width: 500px;
-  }
-
-  &.collapsed {
-    .translate3d(1px, 0, 0);
+    .translate3d(0, 0, 0);
+    .transition-transform(ease-in-out, 0.2s);
   }
 }
 
 .fullscreenApp {
-  .chat-pane, 
-  .search-pane, 
-  .workspaces-pane, 
+  .chat-pane,
+  .search-pane,
+  .workspaces-pane,
   .detail-pane {
     .above-graph;
     position: absolute;
@@ -100,7 +99,7 @@ html.fullscreenDetails {
     }
   }
 
-  .search-pane, 
+  .search-pane,
   .workspaces-pane,
   .detail-pane {
     height: 100%;
@@ -113,7 +112,7 @@ html.fullscreenDetails {
 
 .graph-pane, .map-pane, .dashboard-pane {
   display: none;
-  
+
   &.visible {
     display: block;
   }
@@ -157,7 +156,7 @@ html.fullscreenDetails {
   @import "chat/chat";
 }
 
-.graph-pane { 
+.graph-pane {
   .fullscreen;
   left: @menubar-width;
 
@@ -188,7 +187,7 @@ html.fullscreenDetails {
   right: 0;
 }
 
-.detail-pane { 
+.detail-pane {
   @import "detail/detail";
 }
 .field-tooltip {
