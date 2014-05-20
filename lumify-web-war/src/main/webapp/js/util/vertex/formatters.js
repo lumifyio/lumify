@@ -71,14 +71,7 @@ define([
             },
 
             title: function(vertex) {
-                var conceptId = V.prop(vertex, 'conceptType'),
-                    ontologyConcept = conceptId && ontology.conceptsById[conceptId],
-                    titleFormula = ontologyConcept && ontologyConcept.titleFormula,
-                    title;
-
-                if (titleFormula) {
-                    title = formula(titleFormula, vertex, V);
-                }
+                var title = formulaResultForVertex(vertex, 'titleFormula')
 
                 if (!title) {
                     title = V.prop(vertex, 'title', undefined, true);
@@ -86,6 +79,10 @@ define([
 
                 return title;
             },
+
+            subtitle: _.partial(formulaResultForVertex, _, 'subtitleFormula', ''),
+
+            time: _.partial(formulaResultForVertex, _, 'timeFormula', ''),
 
             heading: function(vertex) {
                 var headingProp = _.find(vertex.properties, function(p) {
@@ -135,4 +132,17 @@ define([
         }
 
     return $.extend({}, F, { vertex: V });
+
+    function formulaResultForVertex(vertex, formulaKey, defaultValue) {
+        var conceptId = V.prop(vertex, 'conceptType'),
+            ontologyConcept = conceptId && ontology.conceptsById[conceptId],
+            formulaString = ontologyConcept && ontologyConcept[formulaKey],
+            result = defaultValue;
+
+        if (formulaString) {
+            result = formula(formulaString, vertex, V);
+        }
+
+        return result;
+    }
 });
