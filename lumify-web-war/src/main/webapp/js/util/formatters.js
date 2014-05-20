@@ -249,12 +249,15 @@ define([
                 return dateInUTC;
             },
             dateString: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return sf('{0:yyyy-MM-dd}', FORMATTERS.date.utc(millisStr));
             },
             dateTimeString: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.utc(millisStr));
             },
             timeString: function(millisStr) {
+                if (_.isUndefined(millisStr)) return '';
                 return sf('{0:HH:mm}', FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
