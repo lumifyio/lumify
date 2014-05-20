@@ -15,11 +15,13 @@ import java.util.regex.Pattern;
 
 public abstract class OntologyProperty {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     public static final Pattern GEO_LOCATION_FORMAT = Pattern.compile("POINT\\((.*?),(.*?)\\)", Pattern.CASE_INSENSITIVE);
     public static final Pattern GEO_LOCATION_ALTERNATE_FORMAT = Pattern.compile("(.*?),(.*)", Pattern.CASE_INSENSITIVE);
 
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DATE_TIME_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public abstract String getTitle();
@@ -76,7 +78,11 @@ public abstract class OntologyProperty {
         Object value = valueStr;
         switch (dataType) {
             case DATE:
-                value = DATE_FORMAT.parse(valueStr);
+                try {
+                    value = DATE_TIME_FORMAT.parse(valueStr);
+                } catch (ParseException ex) {
+                    value = DATE_FORMAT.parse(valueStr);
+                }
                 break;
             case GEO_LOCATION:
                 value = parseGeoLocation(valueStr);
