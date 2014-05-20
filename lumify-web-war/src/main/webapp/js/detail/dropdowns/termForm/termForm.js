@@ -545,6 +545,8 @@ define([
         };
 
         this.runQuery = function(query) {
+            var self = this;
+
             query = $.trim(query || '');
             if (!this.queryCache) this.queryCache = {};
             if (this.queryCache[query]) return this.queryCache[query];
@@ -554,20 +556,29 @@ define([
             badge.addClass('loading');
 
             this.queryCache[query] = this.vertexService.graphVertexSearch(query)
-                .then(function(response) {
+                .always(function() {
                     badge.removeClass('loading');
+                })
+                .then(function(response) {
                     return _.filter(response.vertices, function(v) {
                         return ~F.vertex.title(v).toLowerCase().indexOf(query.toLowerCase());
                     });
-                }).done(this.updateQueryCountBadge.bind(this));
+                })
+                .fail(function() {
+                    self.updateQueryCountBadge();
+                })
+                .done(this.updateQueryCountBadge.bind(this));
 
             return this.queryCache[query];
         };
 
         this.updateQueryCountBadge = function(vertices) {
+            var hasVertices = !_.isUndefined(vertices);
             this.$node.find('.badge')
-                .attr('title', vertices.length + ' match' + (vertices.length === 1 ? '' : 'es') + ' found')
-                .text(vertices.length);
+                .attr('title', hasVertices ?
+                      (vertices.length + ' match' + (vertices.length === 1 ? '' : 'es') + ' found') :
+                      'Server error')
+                .text(hasVertices ? vertices.length : '!');
         };
 
         this.setupObjectTypeAhead = function() {
