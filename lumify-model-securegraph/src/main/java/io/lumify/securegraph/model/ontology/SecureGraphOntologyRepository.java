@@ -380,9 +380,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime);
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -419,13 +420,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
             DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyName);
             definePropertyBuilder.dataType(PropertyType.getTypeClass(dataType));
             if (dataType == PropertyType.STRING) {
                 definePropertyBuilder.textIndexHint(textIndexHints);
+            }
+            if (boost != null) {
+                if (graph.isFieldBoostSupported()) {
+                    definePropertyBuilder.boost(boost.doubleValue());
+                } else {
+                    LOGGER.warn("Field boosting is not support by the graph");
+                }
             }
             definePropertyBuilder.define();
 
@@ -437,6 +446,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             SEARCHABLE.setProperty(builder, searchable, VISIBILITY.getVisibility());
             if (displayTime != null) {
                 DISPLAY_TIME.setProperty(builder, displayTime, VISIBILITY.getVisibility());
+            }
+            if (boost != null) {
+                BOOST.setProperty(builder, boost, VISIBILITY.getVisibility());
             }
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());

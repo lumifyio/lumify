@@ -2,6 +2,7 @@ package io.lumify.core.model.ontology;
 
 import io.lumify.core.model.properties.types.BooleanLumifyProperty;
 import io.lumify.core.model.properties.types.ByteArrayLumifyProperty;
+import io.lumify.core.model.properties.types.DoubleLumifyProperty;
 import io.lumify.core.model.properties.types.StringLumifyProperty;
 
 /**
@@ -27,6 +28,8 @@ public final class OntologyLumifyProperties {
     public static final StringLumifyProperty TIME_FORMULA = new StringLumifyProperty("http://lumify.io#timeFormula");
 
     public static final BooleanLumifyProperty DISPLAY_TIME = new BooleanLumifyProperty("http://lumify.io#displayTime");
+
+    public static final DoubleLumifyProperty BOOST = new DoubleLumifyProperty("http://lumify.io#boost");
 
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
 

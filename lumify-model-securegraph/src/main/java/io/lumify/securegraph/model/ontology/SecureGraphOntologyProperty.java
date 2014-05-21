@@ -44,6 +44,11 @@ public class SecureGraphOntologyProperty extends OntologyProperty {
         return PropertyType.convert(DATA_TYPE.getPropertyValue(vertex));
     }
 
+    @Override
+    public Double getBoost() {
+        return BOOST.getPropertyValue(vertex);
+    }
+
     public List<PossibleValueType> getPossibleValues() {
         final byte[] possibleValues = POSSIBLE_VALUES.getPropertyValue(vertex);
         return possibleValues == null ? new ArrayList<PossibleValueType>() : (ArrayList<PossibleValueType>) SerializationUtils.deserialize(possibleValues);
