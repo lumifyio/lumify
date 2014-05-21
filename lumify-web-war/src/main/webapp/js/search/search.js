@@ -1,513 +1,130 @@
-
 define([
+    'require',
     'flight/lib/component',
-    'flight/lib/registry',
-    'data',
-    'service/vertex',
-    'service/ontology',
-    'util/vertex/list',
-    'util/vertex/formatters',
-    './filters/filters',
-    'tpl!./search',
-    'tpl!./conceptItem',
-    'tpl!./conceptSections',
-    'tpl!util/alert',
-    'util/jquery.ui.draggable.multiselect',
-    'sf'
+    'hbs!./searchTpl'
 ], function(
+    require,
     defineComponent,
-    registry,
-    appData,
-    VertexService,
-    OntologyService,
-    VertexList,
-    F,
-    Filters,
-    template,
-    conceptItemTemplate,
-    conceptSectionsTemplate,
-    alertTemplate,
-    multiselect,
-    sf) {
+    template) {
     'use strict';
+
+    var SEARCH_TYPES = ['Lumify', 'Workspace'];
 
     return defineComponent(Search);
 
     function Search() {
-        this.vertexService = new VertexService();
-        this.ontologyService = new OntologyService();
-        this.currentQuery = null;
+
+        this.savedQueries = _.indexBy(SEARCH_TYPES.map(function(type) {
+            return {
+                type: type,
+                query: '',
+                filters: []
+            }
+        }), 'type');
 
         this.defaultAttrs({
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
             clearSearchSelector: '.search-query-container a',
+            segmentedControlSelector: '.segmented-control',
             filtersInfoSelector: '.filter-info',
-            resultsSummarySelector: '.search-results-summary',
-            entitiesHeaderBadgeSelector: '.search-results-summary li.entities .badge',
-            summaryResultItemSelector: '.search-results-summary li',
-            resultsSelector: '.search-results',
-            filtersSelector: '.search-filters'
+            searchTypeSelector: '.search-type'
         });
-
-        this.searchResults = null;
-
-        this.onEntitySearchResultsForConcept = function(
-            $searchResultsSummary,
-            concept,
-            entities,
-            count,
-            parentPropertyListElements
-        ) {
-            var self = this,
-                resultsCount = count,
-                badge = this.updateCountBadgeForConcept(concept.id, resultsCount),
-                li = badge.closest('li').toggle(resultsCount > 0);
-
-            parentPropertyListElements = parentPropertyListElements || $();
-
-            this.select('entitiesHeaderBadgeSelector').removeClass('loading');
-
-            if (resultsCount) {
-                parentPropertyListElements.show();
-            }
-
-            if (concept.children && concept.children.length > 0) {
-                var parentLis = parentPropertyListElements.add(li);
-                concept.children.forEach(function(childConcept) {
-                    self.onEntitySearchResultsForConcept(
-                        $searchResultsSummary,
-                        childConcept,
-                        entities,
-                        count,
-                        parentLis
-                    );
-                });
-            }
-        };
-
-        this.onFormSearch = function(evt) {
-            evt.preventDefault();
-            var $searchQueryValidation = this.select('queryValidationSelector');
-            $searchQueryValidation.html('');
-
-            var query = this.select('querySelector').val();
-            if (query) {
-                query = $.trim(query);
-            }
-            if (!query && !this.relatedToVertexId) {
-                this.select('resultsSummarySelector').empty();
-                return $searchQueryValidation.html(alertTemplate({ error: 'Query cannot be empty' }));
-            }
-            this.trigger('search', { query: query });
-            return false;
-        };
-
-        var conceptToClassMap = {}, classNameToConceptMap = {}, clsIndex = 0;
-        this.classSafeConceptId = function(conceptId) {
-            if (conceptToClassMap[conceptId]) {
-                return conceptToClassMap[conceptId];
-            }
-
-            conceptToClassMap[conceptId] = 'cId' + (clsIndex++);
-            classNameToConceptMap[conceptToClassMap[conceptId]] = conceptId;
-
-            return conceptToClassMap[conceptId];
-        };
-
-        this.getConceptChildrenHtml = function(concept, indent) {
-            var self = this,
-                html = '';
-
-            (concept.children || []).forEach(function(concept) {
-                html += conceptItemTemplate({
-                    concept: concept,
-                    classSafeConceptId: self.classSafeConceptId(concept.id),
-                    indent: indent
-                });
-                if (concept.children && concept.children.length > 0) {
-                    html += self.getConceptChildrenHtml(concept, indent + 15);
-                }
-            });
-            return html;
-        };
-
-        this.updateCountBadgeForConcept = function(conceptId, count) {
-            return this.$node.find('.' + this.classSafeConceptId(conceptId) + ' .badge')
-                .removeClass('loading')
-                .data('count', count)
-                .attr('title', F.number.pretty(count))
-                .text(F.number.prettyApproximate(count));
-        };
-
-        this.popoutIfNeeded = function() {
-            if (!this.$node.closest(':data(menubarName)').hasClass('visible')) {
-                this.trigger ('menubarToggleDisplay', { name: 'search' });
-            }
-        }
-
-        this.onSearchByEntity = function(evt, data) {
-            this.select('querySelector').val(data.query);
-            this.clearFilters({triggerUpdates: false});
-            this.trigger ('search', { query: data.query});
-        };
-
-        this.onSearchByRelatedEntity = function(evt, data) {
-            this.select('querySelector').val('');
-        };
-
-        this.onClearSearchButton = function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(event.target).blur();
-            this.trigger('clearSearch')
-        };
-
-        this.onClearSearch = function() {
-            this.select('resultsSummarySelector').empty();
-            this.clearFilters();
-            this.select('querySelector').val('').focus();
-            this.select('clearSearchSelector').hide();
-        }
-
-        this.onSearch = function(evt, data) {
-            data = data || {};
-            var query = data.query || this.select('querySelector').val();
-
-            if (!this.searchResults) {
-                this.searchResults = {};
-            }
-
-            this.select('queryValidationSelector').empty();
-            this.select('clearSearchSelector').show();
-            this.hideSearchResults();
-            this.popoutIfNeeded();
-
-            if (this.previousSearch) {
-                this.previousSearch.abort();
-            }
-
-            if (this.infiniteSearchRequest) {
-                this.infiniteSearchRequest.abort();
-            }
-
-            if (query != data.query) {
-                this.select('querySelector').val(data.query);
-            }
-
-            var relatedToVertexId = this.entityFilters && this.entityFilters.relatedToVertexId;
-            if (relatedToVertexId) {
-                query = {
-                    query: _.isUndefined(query.query) ? query : query.query,
-                    relatedToVertexId: relatedToVertexId
-                };
-            }
-
-            var self = this;
-
-            this.ontologyService.concepts().done(function(concepts) {
-                this.updateConceptSections(concepts);
-
-                var paging = { offset: 0, size: 100 },
-                    subTypeFilter = null;
-
-                this.previousSearch = this.vertexService.graphVertexSearch(query, this.filters, subTypeFilter, paging)
-                    .done(function(vertexResults) {
-                        self.previousSearch = null;
-
-                        var results = {},
-                            sortVerticesIntoResults = function(v) {
-                                var conceptType = F.vertex.prop(v, 'conceptType'),
-                                    addToSearchResults = function(conceptType) {
-                                        if (!results[conceptType]) results[conceptType] = [];
-
-                                        // Check for an existing result with the same id
-                                        var resultFound = results[conceptType].some(function(result) {
-                                            return result.id === v.id;
-                                        });
-
-                                        // Only store unique results
-                                        if (resultFound === false) {
-                                            results[conceptType].push(v);
-                                        }
-                                    },
-                                    vertexConcept = concepts.byId[conceptType];
-
-                                if (!conceptType) {
-                                    console.error('Found vertex without a conceptType: ', v);
-                                }
-
-                                while (vertexConcept) {
-                                    addToSearchResults(vertexConcept.id, v);
-                                    vertexConcept = vertexConcept.parentId ?
-                                        concepts.byId[vertexConcept.parentId] :
-                                        null;
-                                }
-                            };
-                        vertexResults.vertices.forEach(sortVerticesIntoResults);
-
-                        self.searchResults = results;
-
-                        var counts = _.values(vertexResults.verticesCount);
-                        if (counts.length === 0 || Math.max.apply([], counts) === 0) {
-                            var headerTextNode = self.$node.find('.search-results-summary li.entities');
-                            if (headerTextNode.length) {
-                                headerTextNode[0].normalize();
-                                headerTextNode[0].textContent = 'No Entities';
-                            }
-                        } else {
-                            var countMap = vertexResults.verticesCount,
-                                summaryNode = self.select('resultsSummarySelector');
-
-                            concepts.byTitle.forEach(function(concept) {
-                                var count = countMap[concept.id] || 0,
-                                    childrenCounts = _.pick(countMap, _.pluck(concept.children, 'id')),
-                                    total = _.reduce(childrenCounts, function(memo, i) {
-                                        return memo + i
-                                    }, 0);
-
-                                self.onEntitySearchResultsForConcept(
-                                    summaryNode,
-                                    concept,
-                                    results.entity,
-                                    count + total
-                                );
-                            });
-                        }
-
-                    }).fail(function(request, reason) {
-                        if (reason === 'abort') return;
-                        var $searchQueryValidation = self.select('queryValidationSelector');
-                        self.select('resultsSummarySelector').empty();
-                        return $searchQueryValidation.html(alertTemplate({ error: 'Invalid query' }));
-                    });
-            }.bind(this));
-        };
-
-        this.updateConceptSections = function(concepts) {
-            var $searchResultsSummary = this.select('resultsSummarySelector'),
-                resultsHtml = this.getConceptChildrenHtml(concepts.entityConcept, 15);
-
-            $searchResultsSummary.html(conceptSectionsTemplate({ resultsHtml: resultsHtml }));
-            $('.badge', $searchResultsSummary).addClass('loading');
-        };
-
-        this.onSummaryResultItemClick = function(evt) {
-            evt.preventDefault();
-
-            var $target = $(evt.target).parents('li');
-            if ($target.hasClass('active')) {
-                return this.close(evt);
-            }
-
-            var count = $target.find('.badge').data('count');
-            if (count === 0) {
-                return this.close(evt);
-            }
-
-            this.$node.find('.search-results-summary .active').removeClass('active');
-            $target.addClass('active');
-
-            this.trigger('showSearchResults', {
-                conceptId: $target.data('conceptId'),
-                count: count
-            });
-        };
-
-        this.onShowSearchResults = function(evt, data) {
-            var self = this,
-                $searchResults = this.select('resultsSelector'),
-                vertexIds = _.pluck(this.searchResults[data.conceptId] || [], 'id'),
-                vertices = appData.vertices(vertexIds);
-
-            this.hideSearchResults();
-            this.select('filtersSelector').hide();
-
-            if (data.count) {
-                VertexList.attachTo($searchResults.find('.content'), {
-                    vertices: vertices,
-                    infiniteScrolling: true,
-                    verticesConceptId: data.conceptId,
-                    total: data.count
-                });
-                this.makeResizable($searchResults);
-                $searchResults.show();
-                $searchResults.find('.multi-select').focus();
-            }
-            this.trigger(document, 'paneResized');
-        };
-
-        this.makeResizable = function(node) {
-            var self = this;
-
-            // Add splitbar to search results
-            return node.resizable({
-                handles: 'e',
-                minWidth: 200,
-                maxWidth: 350,
-                resize: function() {
-                    self.trigger(document, 'paneResized');
-                }
-            });
-        };
-
-        this.onKeyUp = function(evt) {
-            var search = this.select('querySelector'),
-                query = search.val();
-
-            if (query != this.currentQuery) {
-                this.trigger('searchQueryChanged', { query: query});
-                this.currentQuery = query;
-            }
-
-            if (evt.which === 27) {
-                search.blur();
-            }
-        };
-
-        this.onQueryFocus = function(evt, data) {
-            var filters = this.select('filtersSelector').show();
-            this.hideSearchResults();
-            this.$node.find('.search-results-summary .active').removeClass('active');
-        };
-
-        this.hideSearchResults = function() {
-            registry.findInstanceInfoByNode(
-                this.select('resultsSelector')
-                    .hide()
-                    .find('.content')[0]
-            ).forEach(function(info) {
-                info.instance.teardown();
-            });
-            this.trigger(document, 'paneResized');
-        };
-
-        this.close = function(e) {
-            this.hideSearchResults();
-            this.$node.find('.search-results-summary .active').removeClass('active');
-        };
-
-        this.onPaneVisible = function() {
-            this.select('querySelector').focus().select();
-        };
 
         this.after('initialize', function() {
-            var self = this;
-            this.searchResults = {};
-            this.$node.html(template({}));
+            this.render();
+            this.triggerQueryUpdated = _.debounce(this.triggerQueryUpdated.bind(this), 500);
 
-            this.hideSearchResults();
-
-            var filters = this.select('filtersSelector').hide();
-            Filters.attachTo(filters.find('.content'));
-            this.makeResizable(filters);
-
-            this.on('filterschange', this.onFiltersChange);
-            this.on('infiniteScrollRequest', this.onInfiniteScrollRequest);
-
-            this.on(document, 'searchByEntity', this.onSearchByEntity);
-            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
-            this.on(document, 'search', this.onSearch);
-            this.on(document, 'clearSearch', this.onClearSearch);
-            this.on(document, 'showSearchResults', this.onShowSearchResults);
-            this.on(document, 'menubarToggleDisplay', this.onMenubarToggle);
-            this.on(document, 'searchPaneVisible', this.onPaneVisible);
-            this.on('submit', {
-                formSelector: this.onFormSearch
-            });
             this.on('click', {
-                summaryResultItemSelector: this.onSummaryResultItemClick,
-                filtersInfoSelector: this.onFiltersInfoRemoveClick,
-                clearSearchSelector: this.onClearSearchButton
+                segmentedControlSelector: this.onSegmentedControlsClick
             });
-            this.on('keyup', {
-                querySelector: this.onKeyUp
-            });
-            this.on('change keyup', function() {
-                this.select('clearSearchSelector').toggle(
-                    $.trim(this.select('querySelector').val()).length > 0
-                )
-            });
-            this.select('clearSearchSelector').hide();
-
-            this.select('querySelector').on('focus', this.onQueryFocus.bind(this));
-
-            this.trigger(document, 'registerKeyboardShortcuts', {
-                scope: 'Search',
-                shortcuts: {
-                    'meta-a': { fire: 'selectAll', desc: 'Select all search results' },
-                    up: { fire: 'up', desc: 'Select previous result'},
-                    down: { fire: 'down', desc: 'Select next result'}
-                }
-            });
+            this.on('change keydown keyup paste', this.onQueryChange);
+            this.on(this.select('querySelector'), 'focus', this.onQueryFocus);
         });
 
-        this.onMenubarToggle = function(evt, data) {
-            var pane = this.$node.closest(':data(menubarName)');
-            if (data.name === pane.data('menubarName')) {
-                if (!pane.hasClass('visible')) {
-                    this.$node.find('.search-results-summary .active').removeClass('active');
-                    this.select('filtersSelector').hide();
-                    this.hideSearchResults();
+        this.onQueryChange = function(event) {
+            if (event.which === $.ui.keyCode.ENTER) {
+                if (event.type === 'keyup') {
+                    var searchType = this.getSearchTypeNode();
+
+                    this.trigger(searchType, 'querysubmit', {
+                        value: $.trim($(event.target).val())
+                    });
                 }
+            } else {
+                this.triggerQueryUpdated();
             }
         };
 
-        this.onInfiniteScrollRequest = function(evt, data) {
-            var query = this.select('querySelector').val(),
-                trigger = this.trigger.bind(this,
-                   this.select('resultsSelector').find('.content'),
-                   'addInfiniteVertices'
-                );
+        this.onSegmentedControlsClick = function(event, data) {
+            event.stopPropagation();
 
-            if (this.infiniteSearchRequest) {
-                this.infiniteSearchRequest.abort();
-            }
-
-            if (this.entityFilters && this.entityFilters.relatedToVertexId) {
-                query = { query: query, relatedToVertexId: this.entityFilters.relatedToVertexId };
-            }
-
-            this.infiniteSearchRequest = this.vertexService.graphVertexSearch(
-                    query,
-                    this.filters,
-                    data.conceptType,
-                    data.paging
-            )
-            .fail(function() {
-                trigger({ success: false });
-            })
-            .done(function(results) {
-                trigger({ success: true, vertices: results.vertices });
-            });
+            this.switchSearchType(
+                $(event.target)
+                    .blur()
+                    .addClass('active')
+                    .siblings('button').removeClass('active').end()
+                    .data('type')
+            );
+            this.select('querySelector').focus();
         };
 
-        this.onFiltersChange = function(evt, data) {
-            this.filters = data.propertyFilters;
-            this.entityFilters = data.entityFilters;
+        this.onQueryFocus = function(event) {
+            this.switchSearchType(this.searchType || SEARCH_TYPES[0]);
+        };
 
-            var filterInfo = this.select('filtersInfoSelector'),
-                numberOfFilters = this.filters.length + _.keys(this.entityFilters).length,
-                query = this.select('querySelector').val();
-
-            filterInfo.find('.message').text(F.string.plural(numberOfFilters, 'filter') + ' applied');
-            filterInfo.toggle(numberOfFilters > 0);
-
-            if (!query && !this.entityFilters.relatedToVertexId) {
-                this.select('resultsSummarySelector').empty();
+        this.switchSearchType = function(newSearchType) {
+            if (this.searchType === newSearchType) {
                 return;
             }
 
-            this.trigger('search', { query: query || '' });
+            var self = this,
+                $query = this.select('querySelector');
+
+            console.log('switching', this.searchType, $query.val())
+            if (this.searchType) {
+                this.savedQueries[this.searchType].query = $query.val();
+            }
+            $query.val(this.savedQueries[newSearchType].query);
+
+            this.searchType = newSearchType;
+            var node = this.getSearchTypeNode()
+                    .addClass('active')
+                    .siblings('.search-type').removeClass('active').end();
+
+            require(['./types/type' + newSearchType], function(SearchType) {
+                SearchType.attachTo(node);
+
+                self.trigger('searchtypeloaded', { type: newSearchType });
+            });
         };
 
-        this.onFiltersInfoRemoveClick = function() {
-            this.clearFilters();
+        this.triggerQueryUpdated = function() {
+            var $query = this.select('querySelector'),
+                searchType = this.getSearchTypeNode();
+
+            this.trigger(searchType, 'queryupdated', {
+                value: $.trim($query.val())
+            });
         };
 
-        this.clearFilters = function(options) {
-            this.trigger(this.select('filtersSelector').find('.content'), 'clearfilters', options);
+        this.getSearchTypeNode = function() {
+            return this.$node.find('.search-type-' + this.searchType.toLowerCase());
+        };
+
+        this.render = function() {
+            var self = this;
+
+            this.$node.html(template({
+                types: SEARCH_TYPES.map(function(type, i) {
+                    return {
+                        cls: type.toLowerCase(),
+                        name: type,
+                        selected: i === 0
+                    }
+                }),
+            }));
         };
     }
 });

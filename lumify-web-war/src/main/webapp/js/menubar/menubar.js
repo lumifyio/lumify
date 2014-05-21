@@ -16,7 +16,7 @@ define([
                 dashboard: 'Dashboard',
                 graph: { html: 'Graph<span class="subtitle">2D / 3D</span>' },
                 map: 'Map',
-                search: 'Search',
+                search: 'Find',
                 workspaces: 'Workspaces',
                 chat: 'Chat',
                 logout: 'Log&nbsp;out'

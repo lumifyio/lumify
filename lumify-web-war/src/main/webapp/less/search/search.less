@@ -19,6 +19,15 @@ width: 175px;
   .search-query-container {
     position: relative;
 
+    .segmented-control {
+      button:first-child {
+        width: 46%;
+      }
+      button:last-child {
+        width: 54%;
+      }
+    }
+
     a {
       position: absolute;
       font-size: 0;
@@ -41,6 +50,13 @@ width: 175px;
         .opacity(60);
       }
     }
+  }
+}
+
+.search-type {
+  display: none;
+  &.active {
+    display: block;
   }
 }
 
