@@ -964,6 +964,31 @@ define([
             this.setWorkspaceDirty();
         };
 
+        this.graphMouseOver = function(event) {
+            var cyNode = event.cyTarget;
+
+            clearTimeout(this.mouseoverTimeout);
+
+            if (cyNode !== event.cy && cyNode.group() === 'nodes') {
+                this.mouseoverTimeout = _.delay(function() {
+                    var vertex = appData.vertex(fromCyId(cyNode.id())),
+                    truncatedTitle = cyNode.data('truncatedTitle');
+
+                    if (vertex) {
+                        cyNode.data('previousTruncated', truncatedTitle);
+                        cyNode.data('truncatedTitle', F.vertex.title(vertex));
+                    }
+                }, 500);
+            }
+        };
+
+        this.graphMouseOut = function(event) {
+            clearTimeout(this.mouseoverTimeout);
+            if (event.cyTarget !== event.cy) {
+                event.cyTarget.data('truncatedTitle', event.cyTarget.data('previousTruncated'));
+            }
+        };
+
         this.setWorkspaceDirty = function() {
             this.checkEmptyGraph();
         };
@@ -1251,7 +1276,9 @@ define([
                         select: self.graphSelect.bind(self),
                         unselect: self.graphUnselect.bind(self),
                         grab: self.graphGrab.bind(self),
-                        free: self.graphFree.bind(self)
+                        free: self.graphFree.bind(self),
+                        mouseover: self.graphMouseOver.bind(self),
+                        mouseout: self.graphMouseOut.bind(self)
                     });
 
                     self.bindContextMenuClickEvent();
