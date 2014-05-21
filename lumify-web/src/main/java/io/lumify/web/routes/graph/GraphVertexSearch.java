@@ -18,6 +18,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.search.SearchPhaseExecutionException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -27,7 +28,6 @@ import org.securegraph.query.Compare;
 import org.securegraph.query.GeoCompare;
 import org.securegraph.query.Query;
 import org.securegraph.query.TextPredicate;
-import org.securegraph.type.GeoCircle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,7 +126,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         graphQuery.limit(MAX_RESULT_COUNT);
-        Iterable<Vertex> searchResults = graphQuery.vertices();
+        Iterable<Vertex> searchResults;
+        try {
+            searchResults = graphQuery.vertices();
+        } catch (SearchPhaseExecutionException ex) {
+            respondWithBadRequest(response, "q", "Invalid Query");
+            return;
+        }
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
