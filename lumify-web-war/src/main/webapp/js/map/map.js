@@ -707,7 +707,9 @@ define([
               if (tileServerURL) {
                 tileServerURL = $.map(tileServerURL.split(','), $.trim)
               }
-              base = new OpenLayers.Layer.OSM('Open Street Map', tileServerURL);
+              base = new OpenLayers.Layer.OSM('Open Street Map', tileServerURL, {
+                tileOptions: { crossOriginKeyword: null }
+              });
             } else {
               console.error('Unknown map provider type: ', configProperties['map.provider']);
             }
