@@ -8,7 +8,9 @@ define([
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
         'ontology.iri.artifactHasEntity': 'http://lumify.io/dev#rawHasEntity',
-        'properties.multivalue.defaultVisibleCount': 2
+        'properties.multivalue.defaultVisibleCount': 2,
+        'map.provider': 'google',
+        'map.provider.osm.url': 'http://10.0.1.201:9999/${z}/${x}/${y}.png'
     };
 
     // Coerce all values to strings since that's what they will be from

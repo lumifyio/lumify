@@ -58,7 +58,7 @@ var require = {
         'intercom': { exports:'Intercom' },
         'jquery': { exports:'jQuery' },
         'jqueryui': { init: function() { return $.ui; }, deps:['jquery'] },
-        'openlayers': { exports: 'OpenLayers', deps:['goog!maps,3,other_params:sensor=false'] },
+        'openlayers': { exports: 'OpenLayers' },
         'pathfinding': { exports: 'PF' },
         'rangy-text': { deps:['rangy']},
         'rangy-highlighter': { deps:['rangy', 'rangy-cssclassapplier', 'rangy-serializer']},
