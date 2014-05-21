@@ -23,36 +23,54 @@ public class ProxyUser implements User {
     @Override
     public ModelUserContext getModelUserContext() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getModelUserContext();
     }
 
     @Override
     public String getUsername() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getUsername();
     }
 
     @Override
     public String getDisplayName() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getDisplayName();
     }
 
     @Override
     public UserType getUserType() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getUserType();
     }
 
     @Override
     public String getUserStatus() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getUserStatus();
     }
 
     @Override
     public String getCurrentWorkspaceId() {
         ensureUser();
+        if (proxiedUser == null) {
+            return null;
+        }
         return proxiedUser.getCurrentWorkspaceId();
     }
 

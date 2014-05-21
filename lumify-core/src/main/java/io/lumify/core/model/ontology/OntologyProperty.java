@@ -36,6 +36,8 @@ public abstract class OntologyProperty {
 
     public abstract PropertyType getDataType();
 
+    public abstract Double getBoost();
+
     public abstract List<PossibleValueType> getPossibleValues();
 
     public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {

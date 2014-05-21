@@ -271,6 +271,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
         Boolean displayTime = getDisplayTime(o, dataTypeProperty);
+        Double boost = getBoost(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
@@ -285,7 +286,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         }
     }
 
@@ -298,7 +299,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime);
+            Boolean displayTime,
+            Double boost);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -434,6 +436,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             return null;
         }
         return Boolean.parseBoolean(val);
+    }
+
+    protected Double getBoost(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.BOOST.getKey());
+        if (val == null) {
+            return null;
+        }
+        return Double.parseDouble(val);
     }
 
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {

@@ -124,6 +124,10 @@
 
     <owl:AnnotationProperty rdf:about="&lumify;displayTime"/>
 
+    <!-- http://lumify.io#boost -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;boost"/>
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -443,6 +447,7 @@
         <rdfs:label xml:lang="en">Title</rdfs:label>
         <textIndexHints>FULL_TEXT,EXACT_MATCH</textIndexHints>
         <userVisible>true</userVisible>
+        <boost>1.5</boost>
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
