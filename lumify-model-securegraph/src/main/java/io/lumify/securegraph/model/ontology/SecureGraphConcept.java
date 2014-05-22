@@ -4,6 +4,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.properties.LumifyProperties;
+import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.property.StreamingPropertyValue;
@@ -70,8 +71,8 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
-    public void setProperty(String name, Object value, Visibility visibility) {
-        getVertex().setProperty(name, value, visibility);
+    public void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations) {
+        getVertex().setProperty(name, value, visibility, authorizations);
     }
 
     @Override

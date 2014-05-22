@@ -35,6 +35,11 @@ public class NoOpAuthorizationRepository implements AuthorizationRepository {
             public String[] getAuthorizations() {
                 return new String[0];
             }
+
+            @Override
+            public boolean equals(Authorizations authorizations) {
+                return authorizations.getAuthorizations().length == 0;
+            }
         };
     }
 }

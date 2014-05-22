@@ -1,5 +1,8 @@
 package io.lumify.web.routes.artifact;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.properties.MediaLumifyProperties;
@@ -9,15 +12,12 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -34,9 +34,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.properties.MediaLumifyProperties.VIDEO_PREVIEW_IMAGE;
 import static org.securegraph.util.IterableUtils.toList;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ArtifactVideoPreviewImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
@@ -91,7 +91,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
 
         StreamingPropertyValue videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
         if (videoPreviewImageValue == null) {
-            generateAndSaveVideoPreviewImage(artifactVertex);
+            generateAndSaveVideoPreviewImage(artifactVertex, authorizations);
             videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
         }
         InputStream in = videoPreviewImageValue.getInputStream();
@@ -112,14 +112,14 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
         }
     }
 
-    private void generateAndSaveVideoPreviewImage(Vertex artifactVertex) {
+    private void generateAndSaveVideoPreviewImage(Vertex artifactVertex, Authorizations authorizations) {
         LOGGER.info("Generating video preview for %s", artifactVertex.getId().toString());
 
         try {
             Iterable<Property> videoFrames = getVideoFrameProperties(artifactVertex);
             List<Property> videoFramesForPreview = getFramesForPreview(videoFrames);
             BufferedImage previewImage = createPreviewImage(videoFramesForPreview);
-            saveImage(artifactVertex, previewImage);
+            saveImage(artifactVertex, previewImage, authorizations);
         } catch (IOException e) {
             throw new RuntimeException("Could not create preview image for artifact: " + artifactVertex.getId(), e);
         }
@@ -127,12 +127,12 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
         LOGGER.debug("Finished creating preview for: %s", artifactVertex.getId().toString());
     }
 
-    private void saveImage(Vertex artifactVertex, BufferedImage previewImage) throws IOException {
+    private void saveImage(Vertex artifactVertex, BufferedImage previewImage, Authorizations authorizations) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(previewImage, "png", out);
         StreamingPropertyValue spv = new StreamingPropertyValue(new ByteArrayInputStream(out.toByteArray()), byte[].class);
         spv.searchIndex(false);
-        MediaLumifyProperties.VIDEO_PREVIEW_IMAGE.setProperty(artifactVertex, spv, artifactVertex.getVisibility());
+        MediaLumifyProperties.VIDEO_PREVIEW_IMAGE.setProperty(artifactVertex, spv, artifactVertex.getVisibility(), authorizations);
         graph.flush();
     }
 

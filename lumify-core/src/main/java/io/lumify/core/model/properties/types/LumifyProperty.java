@@ -2,6 +2,7 @@ package io.lumify.core.model.properties.types;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
+import org.securegraph.Authorizations;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Visibility;
@@ -96,8 +97,8 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param value      the new property value
      * @param visibility the property visibility
      */
-    public final void setProperty(final Element element, final TRaw value, final Visibility visibility) {
-        element.setProperty(key, wrap(value), visibility);
+    public final void setProperty(final Element element, final TRaw value, final Visibility visibility, Authorizations authorizations) {
+        element.setProperty(key, wrap(value), visibility, authorizations);
     }
 
     /**
@@ -108,8 +109,8 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param metadata   the property metadata
      * @param visibility the property visibility
      */
-    public final void setProperty(final Element element, final TRaw value, final Map<String, Object> metadata, final Visibility visibility) {
-        element.setProperty(key, wrap(value), metadata, visibility);
+    public final void setProperty(final Element element, final TRaw value, final Map<String, Object> metadata, final Visibility visibility, Authorizations authorizations) {
+        element.setProperty(key, wrap(value), metadata, visibility, authorizations);
     }
 
     /**
@@ -124,8 +125,8 @@ public abstract class LumifyProperty<TRaw, TGraph> {
         mutation.addPropertyValue(multiKey, key, wrap(value), visibility);
     }
 
-    public final void addPropertyValue(final Element element, final String multiKey, final TRaw value, final Visibility visibility) {
-        element.addPropertyValue(multiKey, key, wrap(value), visibility);
+    public final void addPropertyValue(final Element element, final String multiKey, final TRaw value, final Visibility visibility, Authorizations authorizations) {
+        element.addPropertyValue(multiKey, key, wrap(value), visibility, authorizations);
     }
 
     /**

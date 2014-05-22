@@ -58,7 +58,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
                     propertyKeys.add(key);
-                    mutation.save();
+                    mutation.save(getAuthorizations());
                 } finally {
                     frameFileIn.close();
                 }

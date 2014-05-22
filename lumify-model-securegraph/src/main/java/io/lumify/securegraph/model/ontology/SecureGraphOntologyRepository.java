@@ -65,7 +65,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology();
+            defineOntology(authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
         }
@@ -84,7 +84,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
         raw.searchIndex(false);
-        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -95,7 +95,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Map<String, Object> metadata = new HashMap<String, Object>();
         Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
         metadata.put("index", toList(rootConceptVertex.getProperties("ontologyFile")).size());
-        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility());
+        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -342,11 +342,11 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
-        Vertex vertex = builder.save();
+        Vertex vertex = builder.save(getAuthorizations());
 
         concept = new SecureGraphConcept(vertex);
         if (parent != null) {
@@ -399,11 +399,11 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
-        Vertex relationshipVertex = builder.save();
+        Vertex relationshipVertex = builder.save(getAuthorizations());
 
         findOrAddEdge(((SecureGraphConcept) from).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
         findOrAddEdge(relationshipVertex, ((SecureGraphConcept) to).getVertex(), LabelName.HAS_EDGE.toString());
@@ -438,7 +438,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
+            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
@@ -456,7 +456,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             if (possibleValues.size() > 0) {
                 POSSIBLE_VALUES.setProperty(builder, SerializationUtils.serialize(possibleValues), VISIBILITY.getVisibility());
             }
-            typeProperty = new SecureGraphOntologyProperty(builder.save());
+            typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();
         }
         return typeProperty;

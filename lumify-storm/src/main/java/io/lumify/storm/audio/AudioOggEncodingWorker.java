@@ -47,7 +47,7 @@ public class AudioOggEncodingWorker extends GraphPropertyWorker {
                 Map<String, Object> metadata = new HashMap<String, Object>();
                 metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_AUDIO_OGG);
                 MediaLumifyProperties.AUDIO_OGG.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
+                m.save(getAuthorizations());
             } finally {
                 mp4FileIn.close();
             }

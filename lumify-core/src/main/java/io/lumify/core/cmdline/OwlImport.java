@@ -59,7 +59,7 @@ public class OwlImport extends CommandLineBase {
     protected int run(CommandLine cmd) throws Exception {
         File inFile = new File(this.inFileName);
         IRI documentIRI = IRI.create(this.documentIRIString);
-        ontologyRepository.importFile(inFile, documentIRI);
+        ontologyRepository.importFile(inFile, documentIRI, getAuthorizations());
         getGraph().flush();
         ontologyRepository.clearCache();
         return 0;
