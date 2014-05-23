@@ -90,10 +90,7 @@ define(['atmosphere'],
             document.$subSocket = this.getSocket().subscribe(req);
             document.subSocketId = $.atmosphere.guid();
 
-            $(window).off('beforeunload.serviceBaseSubscribe');
-            $(window).on('beforeunload.serviceBaseSubscribe', function() {
-                self.disconnect();
-            });
+            $(document).trigger('registerBeforeUnloadHandler', self.disconnect);
         };
 
         ServiceBase.prototype.disconnect = function() {

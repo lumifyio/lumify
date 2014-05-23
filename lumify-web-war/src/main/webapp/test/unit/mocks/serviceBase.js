@@ -2,7 +2,6 @@
 define(['text!../../test/unit/mocks/ontology.json'], function(ontologyJson) {
     'use strict';
 
-    debugger;
     var _ajaxRequests = {},
         defaultDevOntology = JSON.parse(ontologyJson);
 
