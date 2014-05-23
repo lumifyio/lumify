@@ -428,10 +428,6 @@ define([
                     $('.active .search-results:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
-                searchFiltersWidth = searchWidth > 0 ?
-                    $('.active .search-filters:visible:not(.collapsed)')
-                        .outerWidth(true) || 0 : 0,
-
                 workspacesWidth = this.select('workspacesSelector')
                     .filter('.visible:not(.collapsed)')
                     .outerWidth(true) || 0,
@@ -445,8 +441,7 @@ define([
                     .outerWidth(true) || 0,
 
                 padding = {
-                    l: searchWidth + searchResultsWidth + searchFiltersWidth +
-                      workspacesWidth + workspaceFormWidth,
+                    l: searchWidth + searchResultsWidth + workspacesWidth + workspaceFormWidth,
                     r: detailWidth,
                     t: 0,
                     b: 0

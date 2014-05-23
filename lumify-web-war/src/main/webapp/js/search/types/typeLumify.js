@@ -10,10 +10,6 @@ define([
 
     function SearchTypeLumify() {
 
-        this.before('initialize', function() {
-            this.after('render', this.afterRender);
-        });
-
         this.after('initialize', function() {
             this.on('querysubmit', this.onQuerySubmit);
         });
@@ -31,13 +27,10 @@ define([
                 .fail(function(error) {
                     self.trigger('searchRequestCompleted', { success: false, error: error });
                 })
-                .done(function(results) {
-                    self.trigger('searchRequestCompleted', { success: true, results: results });
+                .done(function(result) {
+                    self.trigger('searchRequestCompleted', { success: true, result: result });
                 });
         };
 
-        this.afterRender = function() {
-            //this.$node.find('.search-results-summary').text('Lumify Search');
-        };
     }
 });

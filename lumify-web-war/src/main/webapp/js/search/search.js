@@ -52,6 +52,8 @@ define([
                     this.trigger(searchType, 'querysubmit', {
                         value: this.getQueryVal()
                     });
+
+                    $(event.target).select()
                 }
             } else {
                 this.updateClearSearch();
