@@ -10,10 +10,6 @@ define([
 
     function SearchTypeLumify() {
 
-        this.before('initialize', function() {
-            this.after('render', this.afterRender);
-        });
-
         this.after('initialize', function() {
             this.on('querysubmit', this.onQuerySubmit);
         });
@@ -36,8 +32,5 @@ define([
                 });
         };
 
-        this.afterRender = function() {
-            //this.$node.find('.search-results-summary').text('Lumify Search');
-        };
     }
 });

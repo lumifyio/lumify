@@ -2,13 +2,11 @@ define([
     'flight/lib/registry',
     '../filters/filters',
     'hbs!./templates/type',
-    'hbs!./templates/conceptSections',
     'util/withServiceRequest'
 ], function(
     registry,
     Filters,
     template,
-    conceptsTemplate,
     withServiceRequest
 ) {
     'use strict';
@@ -21,8 +19,7 @@ define([
 
         this.defaultAttrs({
             resultsSelector: '.search-results',
-            filtersSelector: '.search-filters',
-            conceptsSelector: '.search-concepts'
+            filtersSelector: '.search-filters'
         });
 
         this.after('initialize', function() {
@@ -34,32 +31,24 @@ define([
         });
 
         this.onClearSearch = function() {
-            this.select('conceptsSelector').empty();
+            // TODO: Rerender filters?
         };
 
         this.onSearchResultsBegan = function() {
-            this.select('conceptsSelector').html(
-                conceptsTemplate({ loading: true })
-            );
+            // TODO: start spinning badge
         };
 
         this.onSearchResultsCompleted = function(event, data) {
             var self = this;
 
+            // TODO: show results
+            /*
             if (data.success) {
-                this.serviceRequest('ontology', 'concepts')
-                    .done(function(concepts) {
-                        self.select('conceptsSelector').html(
-                            conceptsTemplate({
-                                results: transform(concepts, data.results)
-                            })
-                        );
-                    })
+
             } else {
-                this.select('conceptsSelector').html(
-                    conceptsTemplate({ error: data.error })
-                );
+
             }
+            */
         };
 
         this.render = function() {
@@ -69,7 +58,6 @@ define([
 
             var filters = this.select('filtersSelector');
             Filters.attachTo(filters.find('.content'));
-            this.makeResizable(filters);
         };
 
         this.hideSearchResults = function() {
@@ -97,42 +85,5 @@ define([
             });
         };
 
-    }
-
-    function transform(concepts, results) {
-        if (concepts && results && results.verticesCount) {
-            var counts = results.verticesCount,
-                leafConcepts = _.chain(counts)
-                    .keys()
-                    .sortBy(function(k) {
-                        return k.toLowerCase();
-                    })
-                    .value(),
-                rolledUpCounts = leafConcepts.map(function(conceptId) {
-                    return {
-                        concept: concepts.byId[conceptId],
-                        count: counts[conceptId]
-                    };
-                })
-
-            leafConcepts.forEach(function(conceptId) {
-                var concept = concepts.byId[conceptId],
-                    parentConceptId = concept;
-
-                while ((parentConceptId = parentConceptId.parentConcept)) {
-                    if (!rolledUpCounts[parentConceptId]) {
-                        rolledUpCounts[parentConceptId] = {
-                            concept: concepts.byId[parentConceptId],
-                            count: 0
-                        }
-                    }
-
-                    rolledUpCounts[parentConceptId].count++;
-                }
-            });
-
-            return rolledUpCounts;
-        }
-        return [];
     }
 });

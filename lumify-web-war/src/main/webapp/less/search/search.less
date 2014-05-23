@@ -65,41 +65,12 @@ width: 175px;
   float:right;
 }
 
-.search-results, .search-filters {
+.search-results {
   .pin-left-split;
 
   width: 270px;
   background: @pane-background;
   z-index: 89;  // so it floats above graph, but below splitbar handles
-}
-
-.search-concepts {
-  cursor: default;
-  .disable-text-selection;
-  a {
-    cursor: pointer;
-  }
-}
-
-.search-concepts.nav-list > li {
-  position: relative;
-}
-.search-concepts.nav-list > li > a {
-  white-space: nowrap;
-  padding-right: 0.5em;
-
-  .title {
-    overflow: hidden;
-    display: block;
-    text-overflow: ellipsis;
-    padding-right: 0.25em;
-  }
-}
-
-.search-concepts a .badge {
-  position: relative;
-  float: right;
-  display: block;
 }
 
 .filter-info {
@@ -125,6 +96,15 @@ width: 175px;
 }
 
 .search-filters {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  //background: red;
+  top: 7em;  
+  .content {
+    overflow: auto;
+  }
 
   .typeahead {
     width: 100%;
@@ -177,7 +157,7 @@ width: 175px;
     line-height: 2em;
   }
  
-  li { margin-bottom: 0.5em; position:relative; }
+  li { margin-bottom: 0.5em; }
   li.nav-header { margin-bottom: 1em; }
   li.invalid .add-property input {
     color: red;
