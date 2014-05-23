@@ -68,9 +68,24 @@ width: 175px;
 .search-results {
   .pin-left-split;
 
+  .content {
+    overflow: auto;
+  }
   width: 270px;
   background: @pane-background;
   z-index: 89;  // so it floats above graph, but below splitbar handles
+  
+  .total-hits {
+    font-size: 100%;
+    text-align: center;    
+    color: darken(@pane-background, 30%);
+    font-weight: normal;
+    margin: 0 0 0.5em 0;
+    padding: 0 1em;
+    span {
+      font-size: 90%;  
+    }    
+  }
 }
 
 .filter-info {

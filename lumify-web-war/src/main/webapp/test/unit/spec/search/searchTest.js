@@ -126,6 +126,8 @@ describeComponent('search/search', function(Search) {
             querySubmit(c);
         })
 
+        it('should select search text after enter')
+
     })
 
     function querySubmit(component) {

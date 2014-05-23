@@ -27,8 +27,8 @@ define([
                 .fail(function(error) {
                     self.trigger('searchRequestCompleted', { success: false, error: error });
                 })
-                .done(function(results) {
-                    self.trigger('searchRequestCompleted', { success: true, results: results });
+                .done(function(result) {
+                    self.trigger('searchRequestCompleted', { success: true, result: result });
                 });
         };
 

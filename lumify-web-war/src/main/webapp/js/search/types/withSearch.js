@@ -2,12 +2,16 @@ define([
     'flight/lib/registry',
     '../filters/filters',
     'hbs!./templates/type',
-    'util/withServiceRequest'
+    'util/withServiceRequest',
+    'util/formatters',
+    'util/vertex/list'
 ], function(
     registry,
     Filters,
     template,
-    withServiceRequest
+    withServiceRequest,
+    F,
+    VertexList
 ) {
     'use strict';
 
@@ -32,6 +36,7 @@ define([
 
         this.onClearSearch = function() {
             // TODO: Rerender filters?
+            this.hideSearchResults();
         };
 
         this.onSearchResultsBegan = function() {
@@ -39,16 +44,36 @@ define([
         };
 
         this.onSearchResultsCompleted = function(event, data) {
-            var self = this;
-
-            // TODO: show results
-            /*
+            debugger;
             if (data.success) {
+                var self = this,
+                    result = data.result,
+                    vertices = result.vertices,
+                    $searchResults = this.select('resultsSelector'),
+                    $resultsContainer = $searchResults.find('.content > div')
+                        .teardownComponent(VertexList)
+                        .empty(),
+                    $hits = $searchResults.find('.total-hits span').text(
+                        'Found ' + F.string.plural(
+                            F.number.pretty(result.totalHits),
+                            'vertex', 'vertices'
+                        )
+                    );
 
+                console.log('Hits: ', result.totalHits);
+
+                VertexList.attachTo($resultsContainer, {
+                    vertices: vertices,
+                    infiniteScrolling: true,
+                    //verticesConceptId: result.conceptId,
+                    total: result.totalHits
+                });
+                this.makeResizable($searchResults);
+                $searchResults.show().find('.multi-select');
+                this.trigger(document, 'paneResized');
             } else {
-
+                // TODO: show error
             }
-            */
         };
 
         this.render = function() {
@@ -61,13 +86,8 @@ define([
         };
 
         this.hideSearchResults = function() {
-            registry.findInstanceInfoByNode(
-                this.select('resultsSelector')
-                    .hide()
-                    .find('.content')[0]
-            ).forEach(function(info) {
-                info.instance.teardown();
-            });
+            this.select('resultsSelector').hide()
+                .find('.content > div').teardownComponent(VertexList).empty();
             this.trigger(document, 'paneResized');
         };
 
