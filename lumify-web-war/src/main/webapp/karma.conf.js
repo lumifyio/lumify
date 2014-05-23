@@ -95,7 +95,7 @@ module.exports = function(config) {
 
     if (coverage) {
         karmaConfig.preprocessors = {
-            'js/*.js': 'coverage',
+            'js/*.js,!js/require.config.js': 'coverage',
             'js/**/*.js': 'coverage'
         };
         karmaConfig.reporters.push('coverage');
