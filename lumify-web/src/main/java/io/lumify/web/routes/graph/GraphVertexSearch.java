@@ -34,7 +34,7 @@ import java.util.List;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
-    private final int MAX_RESULT_COUNT = 100;
+    private final int DEFAULT_RESULT_COUNT = 100;
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
@@ -61,8 +61,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String query;
         final String filter = getRequiredParameter(request, "filter");
-        final long offset = getOptionalParameterLong(request, "offset", 0);
-        final long size = getOptionalParameterLong(request, "size", 100);
+        final int offset = (int) getOptionalParameterLong(request, "offset", 0);
+        final int size = (int) getOptionalParameterLong(request, "size", DEFAULT_RESULT_COUNT);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
         final String relatedToVertexId = getOptionalParameter(request, "relatedToVertexId");
@@ -121,7 +121,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
             }
         }
 
-        graphQuery.limit(MAX_RESULT_COUNT);
+        graphQuery.limit(size);
+        graphQuery.skip(offset);
         Iterable<Vertex> searchResults;
         try {
             searchResults = graphQuery.vertices();
@@ -132,18 +133,15 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
         JSONArray verticesJson = new JSONArray();
         int verticesCount = 0;
-        int count = 0;
         for (Vertex vertex : searchResults) {
-            if (verticesCount >= offset && verticesCount <= offset + size) {
-                verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
-                verticesJson.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
-                count++;
-            }
+            verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
+            verticesJson.getJSONObject(verticesCount).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
             verticesCount++;
         }
 
         JSONObject results = new JSONObject();
         results.put("vertices", verticesJson);
+        results.put("nextOffset", offset + size);
 
         if (searchResults instanceof IterableWithFacetedResults) {
             IterableWithFacetedResults searchResultsFaceted = (IterableWithFacetedResults) searchResults;
