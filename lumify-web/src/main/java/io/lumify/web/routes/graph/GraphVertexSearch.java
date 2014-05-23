@@ -37,8 +37,7 @@ import java.util.List;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
-    //TODO should we limit to 10000??
-    private final int MAX_RESULT_COUNT = 10000;
+    private final int MAX_RESULT_COUNT = 100;
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
@@ -135,7 +134,6 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         JSONArray vertices = new JSONArray();
-        JSONObject counts = new JSONObject();
         int verticesCount = 0;
         int count = 0;
         for (Vertex vertex : searchResults) {
@@ -144,22 +142,11 @@ public class GraphVertexSearch extends BaseRequestHandler {
                 vertices.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
                 count++;
             }
-            String type = CONCEPT_TYPE.getPropertyValue(vertex);
-            if (type == null) {
-                type = "Unknown";
-            }
-            if (counts.keySet().contains(type)) {
-                counts.put(type, (counts.getInt(type) + 1));
-            } else {
-                counts.put(type, 1);
-            }
             verticesCount++;
-            // TODO this used create hierarchical results
         }
 
         JSONObject results = new JSONObject();
         results.put("vertices", vertices);
-        results.put("verticesCount", counts);
 
         long endTime = System.nanoTime();
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);

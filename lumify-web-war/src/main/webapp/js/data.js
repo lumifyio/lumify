@@ -22,7 +22,8 @@ define([
     // Flight
     defineComponent, registry,
     // Mixins
-    withVertexCache, withAjaxFilters, withServiceHandlers, withPendingChanges, withAsyncQueue,
+    withVertexCache, withAjaxFilters, withServiceHandlers,
+    withPendingChanges, withAsyncQueue, withDocumentUnloadHandlers,
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
