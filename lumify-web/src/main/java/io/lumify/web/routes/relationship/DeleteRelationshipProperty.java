@@ -75,7 +75,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
         // TODO: replace "" when we implement commenting on ui
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, property.getDisplayName(),
                 oldValue, null, edge, "", "", user, lumifyVisibility.getVisibility());
-        edge.removeProperty(propertyKey, propertyName);
+        edge.removeProperty(propertyKey, propertyName, authorizations);
         graph.flush();
 
         List<Property> properties = new ArrayList<Property>();

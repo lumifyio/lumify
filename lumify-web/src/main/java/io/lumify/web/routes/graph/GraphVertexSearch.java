@@ -1,10 +1,13 @@
 package io.lumify.web.routes.graph;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
 import io.lumify.core.model.user.UserRepository;
@@ -14,32 +17,27 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.search.SearchPhaseExecutionException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
-import org.securegraph.DateOnly;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.query.Compare;
 import org.securegraph.query.GeoCompare;
 import org.securegraph.query.Query;
 import org.securegraph.query.TextPredicate;
-import org.securegraph.type.GeoCircle;
-import com.google.inject.Inject;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
     //TODO should we limit to 10000??
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private final int MAX_RESULT_COUNT = 10000;
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
@@ -128,7 +126,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         graphQuery.limit(MAX_RESULT_COUNT);
-        Iterable<Vertex> searchResults = graphQuery.vertices();
+        Iterable<Vertex> searchResults;
+        try {
+            searchResults = graphQuery.vertices();
+        } catch (SearchPhaseExecutionException ex) {
+            respondWithBadRequest(response, "q", "Invalid Query");
+            return;
+        }
 
         JSONArray vertices = new JSONArray();
         JSONObject counts = new JSONObject();
@@ -184,22 +188,13 @@ public class GraphVertexSearch extends BaseRequestHandler {
         } else if ("=".equals(predicateString) || "equal".equals(predicateString)) {
             graphQuery.has(propertyName, Compare.EQUAL, value0);
         } else if (PropertyType.GEO_LOCATION.equals(propertyDataType)) {
-            GeoCircle circle = new GeoCircle(values.getDouble(0), values.getDouble(1), values.getDouble(2));
-            graphQuery.has(propertyName, GeoCompare.WITHIN, circle);
+            graphQuery.has(propertyName, GeoCompare.WITHIN, value0);
         } else {
             throw new LumifyException("unhandled query\n" + obj.toString(2));
         }
     }
 
     private Object jsonValueToObject(JSONArray values, PropertyType propertyDataType, int index) throws ParseException {
-        if (PropertyType.DATE.equals(propertyDataType)) {
-            return new DateOnly(DATE_FORMAT.parse(values.getString(index)));
-        } else if (PropertyType.STRING.equals(propertyDataType)) {
-            return values.getString(index);
-        } else if (PropertyType.BOOLEAN.equals(propertyDataType)) {
-            return values.getBoolean(index);
-        } else {
-            return values.getDouble(index);
-        }
+        return OntologyProperty.convert(values, propertyDataType, index);
     }
 }

@@ -126,10 +126,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         checkNotNull(userVertex, "Could not find user: " + user.getUserId());
 
-        VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, VISIBILITY.getVisibility(), authorizations);
+        VertexBuilder workspaceVertexBuilder = graph.prepareVertex(workspaceId, VISIBILITY.getVisibility());
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(workspaceVertexBuilder, workspaceConceptId, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertexBuilder, title, VISIBILITY.getVisibility());
-        Vertex workspaceVertex = workspaceVertexBuilder.save();
+        Vertex workspaceVertex = workspaceVertexBuilder.save(authorizations);
 
         addWorkspaceToUser(workspaceVertex, userVertex, authorizations);
 
@@ -138,10 +138,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
     }
 
     public void addWorkspaceToUser(Vertex workspaceVertex, Vertex userVertex, Authorizations authorizations) {
-        EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility(), authorizations);
+        EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, userVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_IS_CREATOR.setProperty(edgeBuilder, true, VISIBILITY.getVisibility());
         WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, WorkspaceAccess.WRITE.toString(), VISIBILITY.getVisibility());
-        edgeBuilder.save();
+        edgeBuilder.save(authorizations);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         }
         Authorizations authorizations = userRepository.getAuthorizations(user);
         Vertex workspaceVertex = getVertexFromWorkspace(workspace, authorizations);
-        WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertex, title, VISIBILITY.getVisibility());
+        WorkspaceLumifyProperties.TITLE.setProperty(workspaceVertex, title, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -235,7 +235,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         Vertex workspaceVertex = getVertexFromWorkspace(workspace, authorizations);
         List<Edge> edges = toList(workspaceVertex.getEdges(otherVertex, Direction.BOTH, authorizations));
         for (Edge edge : edges) {
-            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edge, false, VISIBILITY.getVisibility());
+            WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edge, false, VISIBILITY.getVisibility(), authorizations);
         }
         graph.flush();
     }
@@ -268,10 +268,10 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
                 if (visible != null) {
                     WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(m, visible, VISIBILITY.getVisibility());
                 }
-                m.save();
+                m.save(authorizations);
             }
         } else {
-            EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, otherVertex, workspaceToEntityRelationshipId, VISIBILITY.getVisibility(), authorizations);
+            EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, otherVertex, workspaceToEntityRelationshipId, VISIBILITY.getVisibility());
             if (graphPositionX != null && graphPositionY != null) {
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_X.setProperty(edgeBuilder, graphPositionX, VISIBILITY.getVisibility());
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_GRAPH_POSITION_Y.setProperty(edgeBuilder, graphPositionY, VISIBILITY.getVisibility());
@@ -279,7 +279,7 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
             if (visible != null) {
                 WorkspaceLumifyProperties.WORKSPACE_TO_ENTITY_VISIBLE.setProperty(edgeBuilder, visible, VISIBILITY.getVisibility());
             }
-            edgeBuilder.save();
+            edgeBuilder.save(authorizations);
         }
         graph.flush();
     }
@@ -373,13 +373,13 @@ public class SecureGraphWorkspaceRepository extends WorkspaceRepository {
         List<Edge> existingEdges = toList(workspaceVertex.getEdges(otherUserVertex, Direction.OUT, workspaceToUserRelationshipId, authorizations));
         if (existingEdges.size() > 0) {
             for (Edge existingEdge : existingEdges) {
-                WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(existingEdge, workspaceAccess.toString(), VISIBILITY.getVisibility());
+                WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(existingEdge, workspaceAccess.toString(), VISIBILITY.getVisibility(), authorizations);
             }
         } else {
 
-            EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, otherUserVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility(), authorizations);
+            EdgeBuilder edgeBuilder = graph.prepareEdge(workspaceVertex, otherUserVertex, workspaceToUserRelationshipId, VISIBILITY.getVisibility());
             WorkspaceLumifyProperties.WORKSPACE_TO_USER_ACCESS.setProperty(edgeBuilder, workspaceAccess.toString(), VISIBILITY.getVisibility());
-            edgeBuilder.save();
+            edgeBuilder.save(authorizations);
         }
 
         graph.flush();

@@ -115,8 +115,9 @@ public class SetRelationshipProperty extends BaseRequestHandler {
                 this.visibilityTranslator,
                 justificationText,
                 sourceJson,
-                user);
-        setPropertyResult.elementMutation.save();
+                user,
+                authorizations);
+        setPropertyResult.elementMutation.save(authorizations);
 
 
         // TODO: replace "" when we implement commenting on ui

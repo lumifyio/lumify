@@ -12,6 +12,7 @@ import org.coode.owlapi.rdf.rdfxml.RDFXMLRenderer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -31,25 +32,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
 
-    public void defineOntology() {
+    public void defineOntology(Authorizations authorizations) {
         Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
         Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
         addEntityGlyphIcon(entityConcept);
-        importBaseOwlFile();
+        importBaseOwlFile(authorizations);
     }
 
-    private void importBaseOwlFile() {
-        importResourceOwl("base.owl", "http://lumify.io");
-        importResourceOwl("user.owl", "http://lumify.io/user");
-        importResourceOwl("workspace.owl", "http://lumify.io/workspace");
+    private void importBaseOwlFile(Authorizations authorizations) {
+        importResourceOwl("base.owl", "http://lumify.io", authorizations);
+        importResourceOwl("user.owl", "http://lumify.io/user", authorizations);
+        importResourceOwl("workspace.owl", "http://lumify.io/workspace", authorizations);
     }
 
-    private void importResourceOwl(String fileName, String iri) {
+    private void importResourceOwl(String fileName, String iri, Authorizations authorizations) {
         InputStream baseOwlFile = OntologyRepositoryBase.class.getResourceAsStream(fileName);
         checkNotNull(baseOwlFile, "Could not load resource " + OntologyRepositoryBase.class.getResource(fileName));
 
         try {
-            importFile(baseOwlFile, IRI.create(iri), null);
+            importFile(baseOwlFile, IRI.create(iri), null, authorizations);
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
@@ -88,7 +89,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     @Override
-    public void importFile(File inFile, IRI documentIRI) throws Exception {
+    public void importFile(File inFile, IRI documentIRI, Authorizations authorizations) throws Exception {
         if (!inFile.exists()) {
             throw new LumifyException("File " + inFile + " does not exist");
         }
@@ -96,13 +97,13 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         FileInputStream inFileIn = new FileInputStream(inFile);
         try {
-            importFile(inFileIn, documentIRI, inDir);
+            importFile(inFileIn, documentIRI, inDir, authorizations);
         } finally {
             inFileIn.close();
         }
     }
 
-    private void importFile(InputStream in, IRI documentIRI, File inDir) throws Exception {
+    private void importFile(InputStream in, IRI documentIRI, File inDir, Authorizations authorizations) throws Exception {
         byte[] inFileData = IOUtils.toByteArray(in);
 
         Reader inFileReader = new InputStreamReader(new ByteArrayInputStream(inFileData));
@@ -117,7 +118,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (!o.isDeclared(ontologyClass, false)) {
                 continue;
             }
-            importOntologyClass(o, ontologyClass, inDir);
+            importOntologyClass(o, ontologyClass, inDir, authorizations);
         }
 
         for (OWLDataProperty dataTypeProperty : o.getDataPropertiesInSignature()) {
@@ -173,7 +174,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return null;
     }
 
-    protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
+    protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir, Authorizations authorizations) throws IOException {
         String uri = ontologyClass.getIRI().toString();
         if ("http://www.w3.org/2002/07/owl#Thing".equals(uri)) {
             return getEntityConcept();
@@ -183,47 +184,47 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         checkNotNull(label, "label cannot be null or empty: " + uri);
         LOGGER.info("Importing ontology class " + uri + " (label: " + label + ")");
 
-        Concept parent = getParentConcept(o, ontologyClass, inDir);
+        Concept parent = getParentConcept(o, ontologyClass, inDir, authorizations);
         Concept result = getOrCreateConcept(parent, uri, label);
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
-            result.setProperty(OntologyLumifyProperties.COLOR.getKey(), color, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.COLOR.getKey(), color, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         }
 
         String displayType = getDisplayType(o, ontologyClass);
         if (displayType != null) {
-            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getKey(), displayType, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getKey(), displayType, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         }
 
         String titleFormula = getTitleFormula(o, ontologyClass);
         if (titleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getKey(), titleFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         }
 
         String subtitleFormula = getSubtitleFormula(o, ontologyClass);
         if (subtitleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getKey(), subtitleFormula, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getKey(), subtitleFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         }
 
         String timeFormula = getTimeFormula(o, ontologyClass);
         if (timeFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getKey(), timeFormula, OntologyRepository.VISIBILITY.getVisibility());
+            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getKey(), timeFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         }
 
         boolean userVisible = getUserVisible(o, ontologyClass);
-        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getKey(), userVisible, OntologyRepository.VISIBILITY.getVisibility());
+        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getKey(), userVisible, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
-        setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getKey());
+        setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getKey(), authorizations);
 
         String mapGlyphIconFileName = getMapGlyphIconFileName(o, ontologyClass);
-        setIconProperty(result, inDir, mapGlyphIconFileName, LumifyProperties.MAP_GLYPH_ICON.getKey());
+        setIconProperty(result, inDir, mapGlyphIconFileName, LumifyProperties.MAP_GLYPH_ICON.getKey(), authorizations);
 
         return result;
     }
 
-    private void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey) throws IOException {
+    private void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
             if (!iconFile.exists()) {
@@ -234,14 +235,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
                 value.searchIndex(false);
                 value.store(true);
-                concept.setProperty(propertyKey, value, OntologyRepository.VISIBILITY.getVisibility());
+                concept.setProperty(propertyKey, value, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
             } finally {
                 iconFileIn.close();
             }
         }
     }
 
-    protected Concept getParentConcept(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
+    protected Concept getParentConcept(OWLOntology o, OWLClass ontologyClass, File inDir, Authorizations authorizations) throws IOException {
         Set<OWLClassExpression> superClasses = ontologyClass.getSuperClasses(o);
         if (superClasses.size() == 0) {
             return getEntityConcept();
@@ -254,7 +255,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 return parent;
             }
 
-            parent = importOntologyClass(o, superClass, inDir);
+            parent = importOntologyClass(o, superClass, inDir, authorizations);
             if (parent == null) {
                 throw new LumifyException("Could not find or create parent: " + superClass);
             }
@@ -271,6 +272,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         boolean userVisible = getUserVisible(o, dataTypeProperty);
         boolean searchable = getSearchable(o, dataTypeProperty);
         Boolean displayTime = getDisplayTime(o, dataTypeProperty);
+        Double boost = getBoost(o, dataTypeProperty);
         if (propertyType == null) {
             throw new LumifyException("Could not get property type on data property " + propertyIRI);
         }
@@ -285,7 +287,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
-            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime);
+            addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         }
     }
 
@@ -298,7 +300,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime);
+            Boolean displayTime,
+            Double boost);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
@@ -436,6 +439,14 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return Boolean.parseBoolean(val);
     }
 
+    protected Double getBoost(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.BOOST.getKey());
+        if (val == null) {
+            return null;
+        }
+        return Double.parseDouble(val);
+    }
+
     protected boolean getUserVisible(OWLOntology o, OWLEntity owlEntity) {
         String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.USER_VISIBLE.getKey());
         return val == null || Boolean.parseBoolean(val);
@@ -489,7 +500,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     }
 
     @Override
-    public void writePackage(File file, IRI documentIRI) throws Exception {
+    public void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception {
         ZipFile zipped = new ZipFile(file);
         if (zipped.isValidZipFile()) {
             File tempDir = Files.createTempDir();
@@ -498,12 +509,12 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 zipped.extractAll(tempDir.getAbsolutePath());
 
                 File owlFile = findOwlFile(tempDir);
-                importFile(owlFile, documentIRI);
+                importFile(owlFile, documentIRI, authorizations);
             } finally {
                 FileUtils.deleteDirectory(tempDir);
             }
         } else {
-            importFile(file, documentIRI);
+            importFile(file, documentIRI, authorizations);
         }
     }
 

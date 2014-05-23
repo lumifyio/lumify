@@ -58,7 +58,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                 Map<String, Object> metadata = new HashMap<String, Object>();
                 metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_VIDEO_WEBM);
                 MediaLumifyProperties.VIDEO_WEBM.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
+                m.save(getAuthorizations());
             } finally {
                 webmFileIn.close();
             }

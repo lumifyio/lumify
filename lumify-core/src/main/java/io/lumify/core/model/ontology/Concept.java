@@ -5,6 +5,7 @@ import org.atteo.evo.inflector.English;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
 import org.securegraph.Visibility;
 
 import java.io.InputStream;
@@ -108,7 +109,7 @@ public abstract class Concept {
         return conceptsJson;
     }
 
-    public abstract void setProperty(String name, Object value, Visibility visibility);
+    public abstract void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations);
 
     public abstract InputStream getGlyphIcon();
 

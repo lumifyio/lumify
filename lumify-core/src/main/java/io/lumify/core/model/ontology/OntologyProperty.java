@@ -3,6 +3,7 @@ package io.lumify.core.model.ontology;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.securegraph.type.GeoCircle;
 import org.securegraph.type.GeoPoint;
 
 import java.math.BigDecimal;
@@ -35,6 +36,8 @@ public abstract class OntologyProperty {
     public abstract Boolean getDisplayTime();
 
     public abstract PropertyType getDataType();
+
+    public abstract Double getBoost();
 
     public abstract List<PossibleValueType> getPossibleValues();
 
@@ -100,7 +103,32 @@ public abstract class OntologyProperty {
         return value;
     }
 
-    protected Object parseGeoLocation(String valueStr) {
+    public static Object convert(JSONArray values, PropertyType propertyDataType, int index) throws ParseException {
+        switch (propertyDataType) {
+            case DATE:
+                String valueStr = values.getString(index);
+                try {
+                    return DATE_TIME_FORMAT.parse(valueStr);
+                } catch (ParseException ex) {
+                    return DATE_FORMAT.parse(valueStr);
+                }
+            case GEO_LOCATION:
+                return new GeoCircle(
+                        values.getDouble(index),
+                        values.getDouble(index + 1),
+                        values.getDouble(index + 2)
+                );
+            case CURRENCY:
+                return new BigDecimal(values.getString(index));
+            case DOUBLE:
+                return values.getDouble(index);
+            case BOOLEAN:
+                return values.getBoolean(index);
+        }
+        return values.getString(index);
+    }
+
+    protected static Object parseGeoLocation(String valueStr) {
         try {
             JSONObject json = new JSONObject(valueStr);
             double latitude = json.getDouble("latitude");

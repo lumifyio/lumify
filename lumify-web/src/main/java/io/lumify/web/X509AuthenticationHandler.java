@@ -1,6 +1,7 @@
 package io.lumify.web;
 
 import com.altamiracorp.miniweb.HandlerChain;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -18,6 +19,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 public abstract class X509AuthenticationHandler extends AuthenticationHandler {
     public static final String CERTIFICATE_REQUEST_ATTRIBUTE = "javax.servlet.request.X509Certificate";
@@ -90,25 +92,43 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
     }
 
     protected String getUsername(X509Certificate cert) {
-        return cert.getSubjectX500Principal().getName();
-    }
-
-    protected String getDisplayName(X509Certificate cert) {
-        String dn = cert.getSubjectX500Principal().getName();
-        try {
-            return getCn(dn);
-        } catch (InvalidNameException e) {
-            LOGGER.error("Unable to parse CN from X509 certificate DN: %s", dn);
-            return null;
+        String dn = getDn(cert);
+        if (dn != null) {
+            return dn;
+        } else {
+            throw new LumifyException("failed to get DN from cert for username");
         }
     }
 
-    private String getCn(String dn) throws InvalidNameException {
-        LdapName ldapDN = new LdapName(dn);
-        for (Rdn rdn : ldapDN.getRdns()) {
-            if (rdn.getType().equalsIgnoreCase("CN")) {
-                return rdn.getValue().toString();
+    protected String getDisplayName(X509Certificate cert) {
+        String cn = getCn(cert);
+        if (cn != null) {
+            return cn;
+        } else {
+            throw new LumifyException("failed to get CN from cert for displayName");
+        }
+    }
+
+    private String getDn(X509Certificate cert) {
+        String dn = cert.getSubjectX500Principal().getName();
+        LOGGER.debug("certificate DN is [%s]", dn);
+        return dn;
+    }
+
+    private String getCn(X509Certificate cert) {
+        String dn = getDn(cert);
+        try {
+            List<Rdn> rdns = new LdapName(dn).getRdns();
+            for (int i = rdns.size() - 1; i >= 0; i--) {
+                Rdn rdn = rdns.get(i);
+                if (rdn.getType().equalsIgnoreCase("CN")) {
+                    String cn = rdn.getValue().toString();
+                    LOGGER.debug("certificate CN is [%s]", cn);
+                    return cn;
+                }
             }
+        } catch (InvalidNameException ine) {
+            return null;
         }
         return null;
     }

@@ -13,6 +13,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
@@ -125,6 +126,22 @@ public abstract class GraphPropertyWorker {
         this.configuration = configuration;
     }
 
+    /**
+     * Determines if this is a property that should be analyzed by text processing tools.
+     */
+    protected boolean isTextProperty(Property property) {
+        if (property == null) {
+            return false;
+        }
+
+        if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+            return false;
+        }
+
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        return !(mimeType == null || !mimeType.startsWith("text"));
+    }
+
     protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
         List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions());
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
@@ -221,9 +238,9 @@ public abstract class GraphPropertyWorker {
 
             if (vertex == null) {
                 if (termMention.getId() != null) {
-                    vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility(), getAuthorizations());
+                    vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility());
                 } else {
-                    vertexElementMutation = graph.prepareVertex(termMention.getVisibility(), getAuthorizations());
+                    vertexElementMutation = graph.prepareVertex(termMention.getVisibility());
                 }
                 LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, termMention.getVisibility());
                 OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
@@ -242,11 +259,11 @@ public abstract class GraphPropertyWorker {
             }
 
             if (!(vertexElementMutation instanceof ExistingElementMutation)) {
-                vertex = vertexElementMutation.save();
+                vertex = vertexElementMutation.save(getAuthorizations());
                 auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
             } else {
                 auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
-                vertex = vertexElementMutation.save();
+                vertex = vertexElementMutation.save(getAuthorizations());
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?

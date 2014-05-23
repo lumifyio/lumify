@@ -10,6 +10,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private PropertyType dataType;
     private ArrayList<PossibleValueType> possibleValues;
     private Boolean displayTime;
+    private Double boost;
 
     @Override
     public String getTitle() {
@@ -29,6 +30,11 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     @Override
     public PropertyType getDataType() {
         return dataType;
+    }
+
+    @Override
+    public Double getBoost() {
+        return boost;
     }
 
     @Override
@@ -72,5 +78,9 @@ public class InMemoryOntologyProperty extends OntologyProperty {
 
     public void setPossibleValues(ArrayList<PossibleValueType> possibleValues) {
         this.possibleValues = possibleValues;
+    }
+
+    public void setBoost(Double boost) {
+        this.boost = boost;
     }
 }

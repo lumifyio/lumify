@@ -8,6 +8,7 @@ define([
     'tpl!./instructions/regionLoading',
     'service/vertex',
     'service/ontology',
+    'service/config',
     'util/retina',
     'util/controls',
     'util/vertex/formatters',
@@ -21,6 +22,7 @@ define([
     loadingTemplate,
     VertexService,
     OntologyService,
+    ConfigService,
     retina,
     Controls,
     F,
@@ -41,6 +43,7 @@ define([
 
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
+        this.configService = new ConfigService();
         this.mode = MODE_NORMAL;
 
         this.defaultAttrs({
@@ -64,7 +67,6 @@ define([
 
         this.after('initialize', function() {
             this.initialized = false;
-            this.setupAsyncQueue('openlayers');
             this.setupAsyncQueue('map');
             this.$node.html(template({})).find('.shortcut').each(function() {
                 var $this = $(this), command = $this.text();
@@ -574,31 +576,36 @@ define([
         };
 
         this.initializeMap = function() {
-            var self = this;
+            var self = this,
+                openlayersDeferred = $.Deferred(),
+                clusterStrategyDeferred = $.Deferred()
+                mapProviderDeferred = $.Deferred();
 
-            this.openlayersReady(function(ol) {
-                require(['map/clusterStrategy'], function(cluster) {
-                    self.createMap(ol, cluster);
+            require(['openlayers'], openlayersDeferred.resolve);
+            require(['map/clusterStrategy'], clusterStrategyDeferred.resolve);
+
+            this.configService.getProperties().done(function(configProperties) {
+              if (configProperties['map.provider'] == 'google') {
+                require(['goog!maps,3,other_params:sensor=false'], function() {
+                  google.maps.visualRefresh = true;
+                  mapProviderDeferred.resolve(configProperties);
                 });
+              } else {
+                mapProviderDeferred.resolve(configProperties);
+              }
             });
 
-            window.googleV3Initialized = function() {
-                google.maps.visualRefresh = true;
-                if (ol) {
-                    self.openlayersMarkReady(ol);
-                }
-                delete window.googleV3Initialized;
-            };
-
-            require(['openlayers'], function(OpenLayers) {
-                ol = OpenLayers;
-                if (google.maps.version) {
-                    self.openlayersMarkReady(ol);
-                }
+            $.when(
+              openlayersDeferred,
+              clusterStrategyDeferred,
+              mapProviderDeferred
+            ).done(function(openlayers, cluster, configProperties) {
+              ol = openlayers;
+              self.createMap(ol, cluster, configProperties);
             });
         };
 
-        this.createMap = function(ol, ClusterStrategy) {
+        this.createMap = function(ol, ClusterStrategy, configProperties) {
             ol.ImgPath = '/libs/openlayers/img';
 
             var self = this,
@@ -615,10 +622,6 @@ define([
                     displayProjection: new ol.Projection('EPSG:4326'),
                     controls: [ controls ]
                 }),
-                base = new ol.Layer.Google('Google Streets', {
-                    numZoomLevels: 20,
-                    wrapDateLine: false
-                }),
                 cluster = new ClusterStrategy({
                     distance: 45,
                     threshold: 2,
@@ -631,7 +634,8 @@ define([
                 },
                 partialSelectionStyle = {
                     strokeColor: '#08538B'
-                };
+                },
+                base;
 
             map.featuresLayer = new ol.Layer.Vector('Markers', {
                 strategies: [ cluster ],
@@ -692,6 +696,23 @@ define([
                     self.onMapClicked(event, map);
                 }
             });
+
+            if (configProperties['map.provider'] == 'google') {
+              base = new ol.Layer.Google('Google Streets', {
+                  numZoomLevels: 20,
+                  wrapDateLine: false
+              });
+            } else if (configProperties['map.provider'] == 'osm') {
+              var tileServerURL = configProperties['map.provider.osm.url'];
+              if (tileServerURL) {
+                tileServerURL = $.map(tileServerURL.split(','), $.trim)
+              }
+              base = new OpenLayers.Layer.OSM('Open Street Map', tileServerURL, {
+                tileOptions: { crossOriginKeyword: null }
+              });
+            } else {
+              console.error('Unknown map provider type: ', configProperties['map.provider']);
+            }
 
             map.addLayers([base, map.featuresLayer]);
 

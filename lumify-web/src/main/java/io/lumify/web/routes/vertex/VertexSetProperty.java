@@ -115,9 +115,10 @@ public class VertexSetProperty extends BaseRequestHandler {
                 this.visibilityTranslator,
                 justificationText,
                 sourceJson,
-                user);
+                user,
+                authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
-        graphVertex = setPropertyResult.elementMutation.save();
+        graphVertex = setPropertyResult.elementMutation.save(authorizations);
         graph.flush();
 
         Workspace workspace = workspaceRepository.findById(workspaceId, user);

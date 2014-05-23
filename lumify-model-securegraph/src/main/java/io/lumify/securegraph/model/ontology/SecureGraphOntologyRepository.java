@@ -65,7 +65,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology();
+            defineOntology(authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
         }
@@ -84,7 +84,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
         raw.searchIndex(false);
-        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility());
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -95,7 +95,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         Map<String, Object> metadata = new HashMap<String, Object>();
         Vertex rootConceptVertex = ((SecureGraphConcept) getRootConcept()).getVertex();
         metadata.put("index", toList(rootConceptVertex.getProperties("ontologyFile")).size());
-        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility());
+        rootConceptVertex.addPropertyValue(documentIRI.toString(), "ontologyFile", value, metadata, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -342,11 +342,11 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
-        Vertex vertex = builder.save();
+        Vertex vertex = builder.save(getAuthorizations());
 
         concept = new SecureGraphConcept(vertex);
         if (parent != null) {
@@ -380,9 +380,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime);
+        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -398,13 +399,13 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility(), getAuthorizations());
+        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
-        Vertex relationshipVertex = builder.save();
+        Vertex relationshipVertex = builder.save(getAuthorizations());
 
-        findOrAddEdge(((SecureGraphConcept) from).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
+        findOrAddEdge(((SecureGraphConcept) from).getVertex(d), relationshipVertex, LabelName.HAS_EDGE.toString());
         findOrAddEdge(relationshipVertex, ((SecureGraphConcept) to).getVertex(), LabelName.HAS_EDGE.toString());
 
         graph.flush();
@@ -419,7 +420,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         OntologyProperty typeProperty = getProperty(propertyName);
         if (typeProperty == null) {
             DefinePropertyBuilder definePropertyBuilder = graph.defineProperty(propertyName);
@@ -427,9 +429,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             if (dataType == PropertyType.STRING) {
                 definePropertyBuilder.textIndexHint(textIndexHints);
             }
+            if (boost != null) {
+                if (graph.isFieldBoostSupported()) {
+                    definePropertyBuilder.boost(boost.doubleValue());
+                } else {
+                    LOGGER.warn("Field boosting is not support by the graph");
+                }
+            }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility(), getAuthorizations());
+            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
@@ -438,13 +447,16 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             if (displayTime != null) {
                 DISPLAY_TIME.setProperty(builder, displayTime, VISIBILITY.getVisibility());
             }
+            if (boost != null) {
+                BOOST.setProperty(builder, boost, VISIBILITY.getVisibility());
+            }
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }
             if (possibleValues.size() > 0) {
                 POSSIBLE_VALUES.setProperty(builder, SerializationUtils.serialize(possibleValues), VISIBILITY.getVisibility());
             }
-            typeProperty = new SecureGraphOntologyProperty(builder.save());
+            typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();
         }
         return typeProperty;

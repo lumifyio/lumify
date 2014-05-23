@@ -1,5 +1,7 @@
 package io.lumify.web.routes.relationship;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -14,10 +16,8 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import com.google.inject.Inject;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,7 +69,7 @@ public class RelationshipSetVisibility extends BaseRequestHandler {
 
         LOGGER.info("changing edge (%s) visibility source to %s", graphEdge.getId().toString(), visibilitySource);
 
-        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId);
+        GraphUtil.VisibilityAndElementMutation<Edge> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphEdge, GraphUtil.getSandboxStatus(graphEdge, workspaceId), visibilitySource, workspaceId, authorizations);
         auditRepository.auditEdgeElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphEdge,
                 graphEdge.getVertex(Direction.OUT, authorizations), graphEdge.getVertex(Direction.IN, authorizations), "", user, setPropertyResult.visibility.getVisibility());
 

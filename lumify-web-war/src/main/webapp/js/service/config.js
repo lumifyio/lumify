@@ -8,7 +8,11 @@ define([
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
         'ontology.iri.artifactHasEntity': 'http://lumify.io/dev#rawHasEntity',
-        'properties.multivalue.defaultVisibleCount': 2
+        'properties.multivalue.defaultVisibleCount': 2,
+        'map.provider': 'google',
+        'map.provider.osm.url': 'https://a.tile.openstreetmap.org/${z}/${x}/${y}.png,' +
+                                'https://b.tile.openstreetmap.org/${z}/${x}/${y}.png,' +
+                                'https://c.tile.openstreetmap.org/${z}/${x}/${y}.png'
     };
 
     // Coerce all values to strings since that's what they will be from

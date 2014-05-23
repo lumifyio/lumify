@@ -3,6 +3,7 @@ package io.lumify.core.model.ontology;
 import io.lumify.core.security.LumifyVisibility;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.securegraph.Authorizations;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -54,9 +55,9 @@ public interface OntologyRepository {
 
     void resolvePropertyIds(JSONArray filterJson) throws JSONException;
 
-    void importFile(File inFile, IRI documentIRI) throws Exception;
+    void importFile(File inFile, IRI documentIRI, Authorizations authorizations) throws Exception;
 
     void exportOntology(OutputStream out, IRI documentIRI) throws Exception;
 
-    void writePackage(File file, IRI documentIRI) throws Exception;
+    void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception;
 }

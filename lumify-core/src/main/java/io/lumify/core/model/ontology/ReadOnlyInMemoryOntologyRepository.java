@@ -8,7 +8,9 @@ import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
+import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
+import org.securegraph.inmemory.InMemoryAuthorizations;
 import org.securegraph.util.ConvertingIterable;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
@@ -36,10 +38,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     public void init(Configuration config) throws Exception {
         Map<String, String> ontologies = config.getSubset(Configuration.ONTOLOGY_REPOSITORY_OWL);
         clearCache();
+        Authorizations authorizations = new InMemoryAuthorizations(VISIBILITY_STRING);
         owlConfig.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
         if (!isOntologyDefined()) {
             LOGGER.info("Base ontology not defined. Creating a new ontology.");
-            defineOntology();
+            defineOntology(authorizations);
         } else {
             LOGGER.info("Base ontology already defined.");
         }
@@ -51,9 +54,9 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
             if (iri != null) {
                 if (dir != null) {
-                    importFile(findOwlFile(new File(dir)), IRI.create(iri));
+                    importFile(findOwlFile(new File(dir)), IRI.create(iri), authorizations);
                 } else if (file != null) {
-                    writePackage(new File(file), IRI.create(iri));
+                    writePackage(new File(file), IRI.create(iri), authorizations);
                 } else {
                     throw new LumifyResourceNotFoundException("iri without file or dir");
                 }
@@ -64,10 +67,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir) throws IOException {
+    protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir, Authorizations authorizations) throws IOException {
         String uri = ontologyClass.getIRI().toString();
 
-        InMemoryConcept parent = (InMemoryConcept) getParentConcept(o, ontologyClass, inDir);
+        InMemoryConcept parent = (InMemoryConcept) getParentConcept(o, ontologyClass, inDir, authorizations);
         InMemoryConcept result = (InMemoryConcept) getOrCreateConcept(parent, uri, getLabel(o, ontologyClass));
 
         String color = getColor(o, ontologyClass);
@@ -160,9 +163,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
@@ -175,7 +179,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
-            Boolean displayTime) {
+            Boolean displayTime,
+            Double boost) {
         InMemoryOntologyProperty property = (InMemoryOntologyProperty) getProperty(propertyName);
         if (property == null) {
             property = new InMemoryOntologyProperty();
@@ -184,6 +189,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             property.setSearchable(searchable);
             property.setTitle(propertyName);
             property.setDisplayTime(displayTime);
+            property.setBoost(boost);
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
