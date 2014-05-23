@@ -2,7 +2,7 @@
 @import (reference) "../util/selection.less";
 @import (reference) "../util/css3.less";
 
-width: 175px;
+width: 215px;
 
 .navbar-search { 
   text-align: center;
@@ -125,6 +125,7 @@ width: 175px;
     width: 100%;
     min-height: 100px;
     max-height: 250px;
+    min-width: inherit;
     overflow: auto;
     li { margin-bottom: 0; }
   }
@@ -172,7 +173,7 @@ width: 175px;
     line-height: 2em;
   }
  
-  li { margin-bottom: 0.5em; }
+  li { margin-bottom: 0.5em; position: relative; }
   li.nav-header { margin-bottom: 1em; }
   li.invalid .add-property input {
     color: red;

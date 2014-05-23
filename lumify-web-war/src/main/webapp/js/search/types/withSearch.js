@@ -23,6 +23,7 @@ define([
 
         this.defaultAttrs({
             resultsSelector: '.search-results',
+            resultsContainerSelector: '.search-results .content > div',
             filtersSelector: '.search-filters'
         });
 
@@ -44,13 +45,12 @@ define([
         };
 
         this.onSearchResultsCompleted = function(event, data) {
-            debugger;
             if (data.success) {
                 var self = this,
                     result = data.result,
                     vertices = result.vertices,
                     $searchResults = this.select('resultsSelector'),
-                    $resultsContainer = $searchResults.find('.content > div')
+                    $resultsContainer = this.select('resultsContainerSelector')
                         .teardownComponent(VertexList)
                         .empty(),
                     $hits = $searchResults.find('.total-hits span').text(
@@ -64,7 +64,8 @@ define([
 
                 VertexList.attachTo($resultsContainer, {
                     vertices: vertices,
-                    infiniteScrolling: true,
+                    nextOffset: result.nextOffset,
+                    infiniteScrolling: this.attr.infiniteScrolling,
                     //verticesConceptId: result.conceptId,
                     total: result.totalHits
                 });
@@ -86,8 +87,11 @@ define([
         };
 
         this.hideSearchResults = function() {
-            this.select('resultsSelector').hide()
-                .find('.content > div').teardownComponent(VertexList).empty();
+            this.select('resultsSelector')
+                .hide();
+            this.select('resultsContainerSelector')
+                .teardownComponent(VertexList)
+                .empty();
             this.trigger(document, 'paneResized');
         };
 

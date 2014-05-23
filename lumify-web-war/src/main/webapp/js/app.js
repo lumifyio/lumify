@@ -156,7 +156,7 @@ define([
                 helpDialog = content.filter('.help-dialog');
 
             // Configure splitpane resizing
-            resizable(searchPane, 'e', 150, 250, this.onPaneResize.bind(this));
+            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
             resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
             resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
