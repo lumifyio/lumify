@@ -67,7 +67,7 @@ public class GraphPropertyThreadedWrapper implements Runnable {
                         workResults.add(new WorkResult(null));
                         workResults.notifyAll();
                     }
-                } catch (Exception ex) {
+                } catch (Throwable ex) {
                     LOGGER.error("failed to complete work", ex);
                     totalErrorCounter.inc();
                     synchronized (workResults) {
@@ -151,13 +151,13 @@ public class GraphPropertyThreadedWrapper implements Runnable {
     }
 
     public static class WorkResult {
-        private final Exception error;
+        private final Throwable error;
 
-        public WorkResult(Exception error) {
+        public WorkResult(Throwable error) {
             this.error = error;
         }
 
-        public Exception getError() {
+        public Throwable getError() {
             return error;
         }
     }

@@ -13,6 +13,7 @@ import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.termMention.TermMentionRowKey;
@@ -123,6 +124,22 @@ public abstract class GraphPropertyWorker {
     @Inject
     public final void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    /**
+     * Determines if this is a property that should be analyzed by text processing tools.
+     */
+    protected boolean isTextProperty(Property property) {
+        if (property == null) {
+            return false;
+        }
+
+        if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+            return false;
+        }
+
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        return !(mimeType == null || !mimeType.startsWith("text"));
     }
 
     protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {

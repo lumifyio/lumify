@@ -8,6 +8,8 @@ import io.lumify.core.model.properties.types.StringLumifyProperty;
  * LumifyProperties specific to Raw entities (e.g. documents, images, video, etc.).
  */
 public class RawLumifyProperties {
+    public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
+
     public static final DateLumifyProperty PUBLISHED_DATE = new DateLumifyProperty("http://lumify.io#publishedDate");
     public static final DateLumifyProperty CREATE_DATE = new DateLumifyProperty("http://lumify.io#createDate");
     public static final StringLumifyProperty FILE_NAME = new StringLumifyProperty("http://lumify.io#fileName");
