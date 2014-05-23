@@ -9,7 +9,6 @@ import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
@@ -111,16 +110,16 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         Vertex resolvedVertex;
         if (graphVertexId == null || graphVertexId.equals("")) {
-            resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
+            resolvedVertexMutation = graph.prepareVertex(lumifyVisibility.getVisibility());
 
             CONCEPT_TYPE.setProperty(resolvedVertexMutation, concept.getTitle(), metadata, lumifyVisibility.getVisibility());
             TITLE.setProperty(resolvedVertexMutation, title, metadata, lumifyVisibility.getVisibility());
 
-            resolvedVertex = resolvedVertexMutation.save();
+            resolvedVertex = resolvedVertexMutation.save(authorizations);
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
             GraphUtil.addJustificationToMutation(resolvedVertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
-            resolvedVertex = resolvedVertexMutation.save();
+            resolvedVertex = resolvedVertexMutation.save(authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, resolvedVertexMutation, resolvedVertex, "", user, lumifyVisibility.getVisibility());
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(resolvedVertexMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
@@ -134,7 +133,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
         }
 
         Edge edge = graph.addEdge(artifactVertex, resolvedVertex, artifactContainsImageOfEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
         // TODO: replace second "" when we implement commenting on ui
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, resolvedVertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
@@ -145,8 +144,8 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
 
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility()).save();
-        resolvedVertexMutation.save();
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility());
+        resolvedVertexMutation.save(authorizations);
 
         graph.flush();
 

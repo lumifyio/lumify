@@ -1,6 +1,8 @@
 package io.lumify.web.routes.workspace;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
@@ -21,11 +23,9 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import com.google.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.securegraph.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -125,7 +125,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                 }
                 Property property = vertex.getProperty(data.getString("key"), data.getString("name"));
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user));
+                responseResult.put("property", workspaceHelper.deleteProperty(vertex, property, workspaceId, user, authorizations));
                 successArray.put(responseResult);
             }
         }

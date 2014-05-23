@@ -68,7 +68,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
                 Map<String, Object> metadata = new HashMap<String, Object>();
                 metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_VIDEO_MP4);
                 MediaLumifyProperties.VIDEO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
+                m.save(getAuthorizations());
             } finally {
                 mp4RelocatedFileIn.close();
             }

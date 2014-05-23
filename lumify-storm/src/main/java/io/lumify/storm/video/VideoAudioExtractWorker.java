@@ -50,7 +50,7 @@ public class VideoAudioExtractWorker extends GraphPropertyWorker {
                 Map<String, Object> metadata = new HashMap<String, Object>();
                 metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP3);
                 MediaLumifyProperties.AUDIO_MP3.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
+                m.save(getAuthorizations());
                 getGraph().flush();
 
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, MediaLumifyProperties.AUDIO_MP3.getKey());

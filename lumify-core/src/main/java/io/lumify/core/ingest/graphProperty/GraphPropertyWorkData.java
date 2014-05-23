@@ -2,10 +2,7 @@ package io.lumify.core.ingest.graphProperty;
 
 import io.lumify.core.security.LumifyVisibilityProperties;
 import org.json.JSONObject;
-import org.securegraph.Element;
-import org.securegraph.ElementBuilder;
-import org.securegraph.Property;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -57,10 +54,10 @@ public class GraphPropertyWorkData {
         }
     }
 
-    public void setVisibilityJsonOnElement(Element element) {
+    public void setVisibilityJsonOnElement(Element element, Authorizations authorizations) {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
         if (visibilityJson != null) {
-            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(element, visibilityJson, getVisibility());
+            LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(element, visibilityJson, getVisibility(), authorizations);
         }
     }
 }

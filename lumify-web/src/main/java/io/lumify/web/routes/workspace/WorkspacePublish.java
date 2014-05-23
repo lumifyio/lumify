@@ -211,7 +211,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                     continue;
                 }
 
-                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user);
+                publishProperty(vertex, action, data.getString("key"), data.getString("name"), workspaceId, user, authorizations);
             } catch (Exception ex) {
                 LOGGER.error("Error publishing %s", data.toString(2), ex);
                 data.put("error_msg", ex.getMessage());
@@ -238,7 +238,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Vertex> vertexElementMutation = vertex.prepareMutation();
-        vertex.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey());
+        vertex.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), authorizations);
         vertexElementMutation.alterElementVisibility(lumifyVisibility.getVisibility());
 
         for (Property property : vertex.getProperties()) {
@@ -252,7 +252,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Map<String, Object> metadata = new HashMap<String, Object>();
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
-        vertexElementMutation.save();
+        vertexElementMutation.save(authorizations);
 
         auditRepository.auditVertex(AuditAction.PUBLISH, vertex.getId(), "", "", user, FlushFlag.FLUSH, lumifyVisibility.getVisibility());
 
@@ -262,9 +262,9 @@ public class WorkspacePublish extends BaseRequestHandler {
         }
     }
 
-    private void publishProperty(Element element, String action, String key, String name, String workspaceId, User user) {
+    private void publishProperty(Element element, String action, String key, String name, String workspaceId, User user, Authorizations authorizations) {
         if (action.equals("delete")) {
-            element.removeProperty(key, name);
+            element.removeProperty(key, name, authorizations);
             return;
         }
         ExistingElementMutation elementMutation = element.prepareMutation();
@@ -274,7 +274,7 @@ public class WorkspacePublish extends BaseRequestHandler {
                 continue;
             }
             if (publishProperty(elementMutation, property, workspaceId, user)) {
-                elementMutation.save();
+                elementMutation.save(authorizations);
                 return;
             }
         }
@@ -323,7 +323,7 @@ public class WorkspacePublish extends BaseRequestHandler {
             publishGlyphIconProperty(edge, workspaceId, user, authorizations);
         }
 
-        edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey());
+        edge.removeProperty(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), authorizations);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         ExistingElementMutation<Edge> edgeExistingElementMutation = edge.prepareMutation();
@@ -339,7 +339,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Map<String, Object> metadata = new HashMap<String, Object>();
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeExistingElementMutation, visibilityJson, metadata, lumifyVisibility.getVisibility());
-        edge = edgeExistingElementMutation.save();
+        edge = edgeExistingElementMutation.save(authorizations);
 
         auditRepository.auditRelationship(AuditAction.PUBLISH, sourceVertex, destVertex, edge, "", "", user, edge.getVisibility());
 
@@ -376,7 +376,7 @@ public class WorkspacePublish extends BaseRequestHandler {
         Iterable<Property> glyphIconProperties = entityVertex.getProperties(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey());
         for (Property glyphIconProperty : glyphIconProperties) {
             if (publishProperty(elementMutation, glyphIconProperty, workspaceId, user)) {
-                elementMutation.save();
+                elementMutation.save(authorizations);
                 return;
             }
         }

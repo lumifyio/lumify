@@ -221,9 +221,9 @@ public abstract class GraphPropertyWorker {
 
             if (vertex == null) {
                 if (termMention.getId() != null) {
-                    vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility(), getAuthorizations());
+                    vertexElementMutation = graph.prepareVertex(termMention.getId(), termMention.getVisibility());
                 } else {
-                    vertexElementMutation = graph.prepareVertex(termMention.getVisibility(), getAuthorizations());
+                    vertexElementMutation = graph.prepareVertex(termMention.getVisibility());
                 }
                 LumifyProperties.TITLE.setProperty(vertexElementMutation, title, metadata, termMention.getVisibility());
                 OntologyLumifyProperties.CONCEPT_TYPE.setProperty(vertexElementMutation, concept.getTitle(), metadata, termMention.getVisibility());
@@ -242,11 +242,11 @@ public abstract class GraphPropertyWorker {
             }
 
             if (!(vertexElementMutation instanceof ExistingElementMutation)) {
-                vertex = vertexElementMutation.save();
+                vertex = vertexElementMutation.save(getAuthorizations());
                 auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
             } else {
                 auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexElementMutation, vertex, termMention.getProcess(), getUser(), termMention.getVisibility());
-                vertex = vertexElementMutation.save();
+                vertex = vertexElementMutation.save(getAuthorizations());
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?

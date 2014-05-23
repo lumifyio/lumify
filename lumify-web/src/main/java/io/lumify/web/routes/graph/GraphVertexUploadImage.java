@@ -1,11 +1,13 @@
 package io.lumify.web.routes.graph;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.EntityLumifyProperties;
@@ -21,15 +23,12 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import org.securegraph.mutation.ElementMutation;
-import org.securegraph.property.StreamingPropertyValue;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+import org.securegraph.*;
+import org.securegraph.mutation.ElementMutation;
+import org.securegraph.property.StreamingPropertyValue;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,8 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.securegraph.util.IterableUtils.toList;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class GraphVertexUploadImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexUploadImage.class);
@@ -126,21 +125,21 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         String title = String.format("Image of %s", LumifyProperties.TITLE.getPropertyValue(entityVertex));
         ElementBuilder<Vertex> artifactVertexBuilder = convertToArtifact(file, title, visibilityJson, metadata, lumifyVisibility, authorizations);
-        Vertex artifactVertex = artifactVertexBuilder.save();
+        Vertex artifactVertex = artifactVertexBuilder.save(authorizations);
         this.graph.flush();
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
         entityVertexMutation.setProperty(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
-        entityVertex = entityVertexMutation.save();
+        entityVertex = entityVertexMutation.save(authorizations);
         graph.flush();
 
         List<Edge> existingEdges = toList(entityVertex.getEdges(artifactVertex, Direction.BOTH, entityHasImageIri, authorizations));
         if (existingEdges.size() == 0) {
-            EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, entityHasImageIri, lumifyVisibility.getVisibility(), authorizations);
+            EdgeBuilder edgeBuilder = graph.prepareEdge(entityVertex, artifactVertex, entityHasImageIri, lumifyVisibility.getVisibility());
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edgeBuilder, visibilityJson, lumifyVisibility.getVisibility());
-            Edge edge = edgeBuilder.save();
+            Edge edge = edgeBuilder.save(authorizations);
             auditRepository.auditRelationship(AuditAction.CREATE, entityVertex, artifactVertex, edge, "", "", user, lumifyVisibility.getVisibility());
         }
 
@@ -184,7 +183,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         rawValue.searchIndex(false);
         rawValue.store(true);
 
-        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility(), authorizations);
+        ElementBuilder<Vertex> vertexBuilder = graph.prepareVertex(lumifyVisibility.getVisibility());
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(vertexBuilder, visibilityJson, lumifyVisibility.getVisibility());
         LumifyProperties.TITLE.setProperty(vertexBuilder, title, metadata, lumifyVisibility.getVisibility());
         RawLumifyProperties.CREATE_DATE.setProperty(vertexBuilder, new Date(), metadata, lumifyVisibility.getVisibility());

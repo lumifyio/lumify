@@ -1,5 +1,6 @@
 package io.lumify.core.model.ontology;
 
+import org.securegraph.Authorizations;
 import org.securegraph.Visibility;
 
 import java.io.InputStream;
@@ -72,7 +73,7 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
-    public void setProperty(String name, Object value, Visibility visibility) {
+    public void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations) {
     }
 
     @Override

@@ -130,7 +130,7 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
 
         String id = "USER_" + graph.getIdGenerator().nextId().toString();
-        VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility(), this.authorizations);
+        VertexBuilder userBuilder = graph.prepareVertex(id, VISIBILITY.getVisibility());
 
         UserLumifyProperties.USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
@@ -141,7 +141,7 @@ public class SecureGraphUserRepository extends UserRepository {
         UserLumifyProperties.AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
         UserLumifyProperties.PRIVILEGES.setProperty(userBuilder, Privilege.toString(getDefaultPrivileges()), VISIBILITY.getVisibility());
 
-        User user = createFromVertex(userBuilder.save());
+        User user = createFromVertex(userBuilder.save(this.authorizations));
         graph.flush();
 
         userListenerUtil.fireNewUserAddedEvent(user);
@@ -154,8 +154,8 @@ public class SecureGraphUserRepository extends UserRepository {
         byte[] salt = UserPasswordUtil.getSalt();
         byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        UserLumifyProperties.PASSWORD_SALT.setProperty(userVertex, salt, VISIBILITY.getVisibility());
-        UserLumifyProperties.PASSWORD_HASH.setProperty(userVertex, passwordHash, VISIBILITY.getVisibility());
+        UserLumifyProperties.PASSWORD_SALT.setProperty(userVertex, salt, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PASSWORD_HASH.setProperty(userVertex, passwordHash, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -174,7 +174,7 @@ public class SecureGraphUserRepository extends UserRepository {
         User user = findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        UserLumifyProperties.CURRENT_WORKSPACE.setProperty(userVertex, workspaceId, VISIBILITY.getVisibility());
+        UserLumifyProperties.CURRENT_WORKSPACE.setProperty(userVertex, workspaceId, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
         return user;
     }
@@ -192,7 +192,7 @@ public class SecureGraphUserRepository extends UserRepository {
         SecureGraphUser user = (SecureGraphUser) findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        UserLumifyProperties.STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility());
+        UserLumifyProperties.STATUS.setProperty(userVertex, status.toString(), VISIBILITY.getVisibility(), authorizations);
         graph.flush();
         user.setUserStatus(status.toString());
         return user;
@@ -201,16 +201,16 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public void addAuthorization(User user, String auth) {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        Set<String> authorizations = getAuthorizations(userVertex);
-        if (authorizations.contains(auth)) {
+        Set<String> authorizationSet = getAuthorizations(userVertex);
+        if (authorizationSet.contains(auth)) {
             return;
         }
-        authorizations.add(auth);
+        authorizationSet.add(auth);
 
         this.authorizationRepository.addAuthorizationToGraph(auth);
 
-        String authorizationsString = StringUtils.join(authorizations, ",");
-        UserLumifyProperties.AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
+        String authorizationsString = StringUtils.join(authorizationSet, ",");
+        UserLumifyProperties.AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
         userAuthorizationCache.invalidate(user.getUserId());
     }
@@ -218,13 +218,13 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public void removeAuthorization(User user, String auth) {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        Set<String> authorizations = getAuthorizations(userVertex);
-        if (!authorizations.contains(auth)) {
+        Set<String> authorizationSet = getAuthorizations(userVertex);
+        if (!authorizationSet.contains(auth)) {
             return;
         }
-        authorizations.remove(auth);
-        String authorizationsString = StringUtils.join(authorizations, ",");
-        UserLumifyProperties.AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility());
+        authorizationSet.remove(auth);
+        String authorizationsString = StringUtils.join(authorizationSet, ",");
+        UserLumifyProperties.AUTHORIZATIONS.setProperty(userVertex, authorizationsString, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
         userAuthorizationCache.invalidate(user.getUserId());
     }
@@ -295,7 +295,7 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public void setPrivileges(User user, Set<Privilege> privileges) {
         Vertex userVertex = findByIdUserVertex(user.getUserId());
-        UserLumifyProperties.PRIVILEGES.setProperty(userVertex, Privilege.toString(privileges), VISIBILITY.getVisibility());
+        UserLumifyProperties.PRIVILEGES.setProperty(userVertex, Privilege.toString(privileges), VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 

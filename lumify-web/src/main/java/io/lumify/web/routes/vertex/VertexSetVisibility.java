@@ -3,7 +3,6 @@ package io.lumify.web.routes.vertex;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -19,12 +18,9 @@ import com.altamiracorp.miniweb.HandlerChain;
 import org.securegraph.*;
 import com.google.inject.Inject;
 import org.json.JSONObject;
-import org.securegraph.mutation.ElementMutation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VertexSetVisibility extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetVisibility.class);
@@ -72,7 +68,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
         }
         LOGGER.info("changing vertex (%s) visibility source to %s", graphVertex.getId().toString(), visibilitySource);
 
-        GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphVertex, GraphUtil.getSandboxStatus(graphVertex, workspaceId), visibilitySource, workspaceId);
+        GraphUtil.VisibilityAndElementMutation<Vertex> setPropertyResult = GraphUtil.updateElementVisibilitySource(visibilityTranslator, graphVertex, GraphUtil.getSandboxStatus(graphVertex, workspaceId), visibilitySource, workspaceId, authorizations);
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, setPropertyResult.elementMutation, graphVertex, "", user, setPropertyResult.visibility.getVisibility());
 
         this.graph.flush();

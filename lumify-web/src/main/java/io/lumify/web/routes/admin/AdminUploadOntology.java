@@ -1,5 +1,7 @@
 package io.lumify.web.routes.admin;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -8,10 +10,9 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.util.FilterIterable;
-import com.google.inject.Inject;
 import org.apache.commons.io.IOUtils;
+import org.securegraph.Authorizations;
+import org.securegraph.util.FilterIterable;
 import org.semanticweb.owlapi.model.IRI;
 
 import javax.servlet.ServletException;
@@ -56,7 +57,8 @@ public class AdminUploadOntology extends BaseRequestHandler {
         IRI documentIRI = IRI.create(documentIRIString);
 
         User user = getUser(request);
-        ontologyRepository.writePackage(tempFile, documentIRI);
+        Authorizations authorizations = getAuthorizations(request, user);
+        ontologyRepository.writePackage(tempFile, documentIRI, authorizations);
 
         tempFile.delete();
 

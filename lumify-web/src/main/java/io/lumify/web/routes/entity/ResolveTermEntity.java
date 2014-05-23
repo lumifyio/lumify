@@ -7,7 +7,6 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
-import io.lumify.core.model.ontology.LabelName;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
@@ -120,13 +119,13 @@ public class ResolveTermEntity extends BaseRequestHandler {
             vertex = graph.getVertex(id, authorizations);
             vertexMutation = vertex.prepareMutation();
         } else {
-            vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility(), authorizations);
+            vertexMutation = graph.prepareVertex(id, lumifyVisibility.getVisibility());
             GraphUtil.addJustificationToMutation(vertexMutation, justificationText, sourceInfo, lumifyVisibility);
 
             CONCEPT_TYPE.setProperty(vertexMutation, conceptId, metadata, lumifyVisibility.getVisibility());
             TITLE.addPropertyValue(vertexMutation, MULTI_VALUE_KEY, title, metadata, lumifyVisibility.getVisibility());
 
-            vertex = vertexMutation.save();
+            vertex = vertexMutation.save(authorizations);
 
             auditRepository.auditVertexElementMutation(AuditAction.UPDATE, vertexMutation, vertex, "", user, lumifyVisibility.getVisibility());
 
@@ -139,7 +138,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         // TODO: a better way to check if the same edge exists instead of looking it up every time?
         Edge edge = graph.addEdge(artifactVertex, vertex, this.artifactHasEntityIri, lumifyVisibility.getVisibility(), authorizations);
-        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility());
+        LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(edge, visibilityJson, metadata, lumifyVisibility.getVisibility(), authorizations);
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
@@ -160,7 +159,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         termMentionRepository.save(termMention);
 
         vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
-        vertexMutation.save();
+        vertexMutation.save(authorizations);
 
         this.graph.flush();
         workQueueRepository.pushTextUpdated(artifactId);

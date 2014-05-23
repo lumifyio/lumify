@@ -56,7 +56,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
                 Map<String, Object> metadata = new HashMap<String, Object>();
                 metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "image/png");
                 MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
-                m.save();
+                m.save(getAuthorizations());
                 getGraph().flush();
             } finally {
                 videoPosterFrameFileIn.close();
