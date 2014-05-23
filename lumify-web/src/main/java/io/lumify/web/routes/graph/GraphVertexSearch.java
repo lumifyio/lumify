@@ -24,10 +24,7 @@ import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import org.securegraph.query.Compare;
-import org.securegraph.query.GeoCompare;
-import org.securegraph.query.Query;
-import org.securegraph.query.TextPredicate;
+import org.securegraph.query.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -133,20 +130,25 @@ public class GraphVertexSearch extends BaseRequestHandler {
             return;
         }
 
-        JSONArray vertices = new JSONArray();
+        JSONArray verticesJson = new JSONArray();
         int verticesCount = 0;
         int count = 0;
         for (Vertex vertex : searchResults) {
             if (verticesCount >= offset && verticesCount <= offset + size) {
-                vertices.put(JsonSerializer.toJson(vertex, workspaceId));
-                vertices.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
+                verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
+                verticesJson.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
                 count++;
             }
             verticesCount++;
         }
 
         JSONObject results = new JSONObject();
-        results.put("vertices", vertices);
+        results.put("vertices", verticesJson);
+
+        if (searchResults instanceof IterableWithFacetedResults) {
+            IterableWithFacetedResults searchResultsFaceted = (IterableWithFacetedResults) searchResults;
+            results.put("totalHits", searchResultsFaceted.getTotalHits());
+        }
 
         long endTime = System.nanoTime();
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);
