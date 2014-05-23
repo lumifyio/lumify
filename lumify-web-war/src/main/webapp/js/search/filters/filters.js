@@ -2,11 +2,12 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'tpl!./filters',
+    'hbs!./filtersTpl',
     'tpl!./item',
     'tpl!./entityItem',
     'data',
     'util/vertex/formatters',
+    'hbs!util/ontology/concept-options',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -17,6 +18,7 @@ define([
     entityItemTemplate,
     appData,
     F,
+    conceptsTemplate,
     FieldSelection,
     OntologyService) {
     'use strict';
@@ -35,7 +37,8 @@ define([
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',
             removeEntityRowSelector: '.entity-filters button.remove',
-            removeRowSelector: '.prop-filters button.remove'
+            removeRowSelector: '.prop-filters button.remove',
+            conceptsSelector: '.concepts-dropdown select'
         });
 
         this.after('initialize', function() {
@@ -54,6 +57,7 @@ define([
             this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
+            this.loadConcepts();
         });
 
         this.onSearchByRelatedEntity = function(event, data) {
@@ -182,6 +186,21 @@ define([
             }
 
             node.empty();
+        };
+
+        this.loadConcepts = function() {
+            var self = this;
+
+            this.ontologyService.concepts().done(function(concepts) {
+                self.select('conceptsSelector').html(
+                    conceptsTemplate({
+                        defaultText: 'All Concepts',
+                        concepts: _.filter(concepts.byTitle, function(c) {
+                            return c.userVisible !== false;
+                        })
+                    })
+                );
+            });
         };
 
         this.loadPropertyFilters = function() {
