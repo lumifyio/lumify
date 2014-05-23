@@ -37,7 +37,8 @@ define([
             this.triggerQueryUpdated = _.debounce(this.triggerQueryUpdated.bind(this), 500);
 
             this.on('click', {
-                segmentedControlSelector: this.onSegmentedControlsClick
+                segmentedControlSelector: this.onSegmentedControlsClick,
+                clearSearchSelector: this.onClearSearchClick
             });
             this.on('change keydown keyup paste', this.onQueryChange);
             this.on(this.select('querySelector'), 'focus', this.onQueryFocus);
@@ -49,12 +50,25 @@ define([
                     var searchType = this.getSearchTypeNode();
 
                     this.trigger(searchType, 'querysubmit', {
-                        value: $.trim($(event.target).val())
+                        value: this.getQueryVal()
                     });
                 }
             } else {
+                this.updateClearSearch();
                 this.triggerQueryUpdated();
             }
+        };
+
+        this.onClearSearchClick = function(event) {
+            var node = this.getSearchTypeNode();
+
+            this.setQueryVal('');
+
+            _.defer(function() {
+                this.select('querySelector').focus()
+            }.bind(this))
+
+            this.trigger(node, 'clearSearch')
         };
 
         this.onSegmentedControlsClick = function(event, data) {
@@ -75,21 +89,14 @@ define([
         };
 
         this.switchSearchType = function(newSearchType) {
-            if (this.searchType === newSearchType) {
+            if (!newSearchType || this.searchType === newSearchType) {
                 return;
             }
 
+            this.updateQueryValue(newSearchType);
+
             var self = this,
-                $query = this.select('querySelector');
-
-            console.log('switching', this.searchType, $query.val())
-            if (this.searchType) {
-                this.savedQueries[this.searchType].query = $query.val();
-            }
-            $query.val(this.savedQueries[newSearchType].query);
-
-            this.searchType = newSearchType;
-            var node = this.getSearchTypeNode()
+                node = this.getSearchTypeNode()
                     .addClass('active')
                     .siblings('.search-type').removeClass('active').end();
 
@@ -97,7 +104,25 @@ define([
                 SearchType.attachTo(node);
 
                 self.trigger('searchtypeloaded', { type: newSearchType });
+                self.trigger('paneResized');
             });
+        };
+
+        this.updateClearSearch = function() {
+            this.select('clearSearchSelector')
+                .toggle(this.getQueryVal().length > 0);
+        }
+
+        this.updateQueryValue = function(newSearchType) {
+            var $query = this.select('querySelector');
+            if (this.searchType) {
+                this.savedQueries[this.searchType].query = $query.val();
+            }
+            this.searchType = newSearchType;
+
+            $query.val(this.savedQueries[newSearchType].query);
+
+            this.updateClearSearch();
         };
 
         this.triggerQueryUpdated = function() {
@@ -107,6 +132,14 @@ define([
             this.trigger(searchType, 'queryupdated', {
                 value: $.trim($query.val())
             });
+        };
+
+        this.getQueryVal = function() {
+            return $.trim(this.select('querySelector').val());
+        };
+
+        this.setQueryVal = function(val) {
+            this.select('querySelector').val(val).change();
         };
 
         this.getSearchTypeNode = function() {

@@ -425,11 +425,11 @@ define([
                     .outerWidth(true) || 0,
 
                 searchResultsWidth = searchWidth > 0 ?
-                    $('.search-results:visible:not(.collapsed)')
+                    $('.active .search-results:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
                 searchFiltersWidth = searchWidth > 0 ?
-                    $('.search-filters:visible:not(.collapsed)')
+                    $('.active .search-filters:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
                 workspacesWidth = this.select('workspacesSelector')

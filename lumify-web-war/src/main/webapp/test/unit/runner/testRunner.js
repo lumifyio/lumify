@@ -23,6 +23,7 @@ requirejs(['/base/js/require.config.js'], function(cfg) {
 
             // MOCKS
             'service/serviceBase': '../test/unit/mocks/serviceBase',
+            'data/withServiceHandlers': '../test/unit/mocks/serviceHandlers',
             testutils: '../test/unit/utils'
         },
 

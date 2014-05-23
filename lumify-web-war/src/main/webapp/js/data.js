@@ -4,6 +4,7 @@ define([
     'flight/lib/registry',
     'data/withVertexCache',
     'data/withAjaxFilters',
+    'data/withServiceHandlers',
     'util/withAsyncQueue',
     'util/keyboard',
     'service/workspace',
@@ -19,7 +20,7 @@ define([
     // Flight
     defineComponent, registry,
     // Mixins
-    withVertexCache, withAjaxFilters, withAsyncQueue,
+    withVertexCache, withAjaxFilters, withServiceHandlers, withAsyncQueue,
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
@@ -29,7 +30,11 @@ define([
     var WORKSPACE_SAVE_DELAY = 1500,
         RELOAD_RELATIONSHIPS_DELAY = 250,
         ADD_VERTICES_DELAY = 100,
-        DataComponent = defineComponent(Data, withAsyncQueue, withVertexCache, withAjaxFilters);
+        DataComponent = defineComponent(Data,
+                                        withAsyncQueue,
+                                        withVertexCache,
+                                        withAjaxFilters,
+                                        withServiceHandlers);
 
     return initializeData();
 

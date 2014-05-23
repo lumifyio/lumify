@@ -49,7 +49,7 @@ module.exports = function(config) {
 
             // test results reporter to use
             // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-            reporters: ['dots'],
+            reporters: ['progress'],
 
             // web server port
             port: 9876,
@@ -84,7 +84,7 @@ module.exports = function(config) {
         },
         coverageType = 'html',
         coverage = process.argv.filter(function(a, index) {
-            if (a == '--coverage') {
+            if (/--coverage/.test(a)) {
                 if ((index + 1) < process.argv.length) {
                     coverageType = process.argv[index + 1];
                 }
@@ -95,14 +95,23 @@ module.exports = function(config) {
 
     if (coverage) {
         karmaConfig.preprocessors = {
-            'js/*.js': 'coverage',
+            'js/*.js,!js/require.config.js': 'coverage',
             'js/**/*.js': 'coverage'
         };
+
         karmaConfig.reporters.push('coverage');
+
         karmaConfig.coverageReporter = {
             type: coverageType,
             dir: 'build/coverage/'
         };
+    }
+
+    try {
+        require('karma-osx-reporter');
+        karmaConfig.reporters.push('osx')
+    } catch (e) {
+        console.log('npm install karma-osx-reporter for Notification Center support')
     }
 
     config.set(karmaConfig);

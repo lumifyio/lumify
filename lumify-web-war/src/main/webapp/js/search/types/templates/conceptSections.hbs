@@ -1,3 +1,6 @@
-<li class="nav-header entities">Entities<span class="badge"/></li>
+<li class="nav-header entities">Entities<span class="badge {{#if loading}}loading{{/if}}"/></li>
 
-<%- resultsHtml %>
+{{#each results}}
+{{> search/types/templates/conceptItem }}
+{{/each}}
+
