@@ -405,7 +405,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
         Vertex relationshipVertex = builder.save(getAuthorizations());
 
-        findOrAddEdge(((SecureGraphConcept) from).getVertex(d), relationshipVertex, LabelName.HAS_EDGE.toString());
+        findOrAddEdge(((SecureGraphConcept) from).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
         findOrAddEdge(relationshipVertex, ((SecureGraphConcept) to).getVertex(), LabelName.HAS_EDGE.toString());
 
         graph.flush();
