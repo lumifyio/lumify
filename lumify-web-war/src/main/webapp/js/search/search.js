@@ -26,6 +26,7 @@ define([
             formSelector: '.navbar-search',
             querySelector: '.navbar-search .search-query',
             queryValidationSelector: '.search-query-validation',
+            queryContainerSelector: '.search-query-container',
             clearSearchSelector: '.search-query-container a',
             segmentedControlSelector: '.segmented-control',
             filtersInfoSelector: '.filter-info',
@@ -42,17 +43,35 @@ define([
             });
             this.on('change keydown keyup paste', this.onQueryChange);
             this.on(this.select('querySelector'), 'focus', this.onQueryFocus);
+
+            this.on('filterschange', this.onFiltersChange);
+            this.on('searchRequestBegan', this.onSearchResultsBegan);
+            this.on('searchRequestCompleted', this.onSearchResultsCompleted);
         });
+
+        this.onSearchResultsBegan = function() {
+            this.select('queryContainerSelector').addClass('loading');
+        };
+
+        this.onSearchResultsCompleted = function() {
+            this.select('queryContainerSelector').removeClass('loading');
+        };
+
+        this.onFiltersChange = function(event, data) {
+            this.filters = data;
+
+            var query = this.getQueryVal();
+            if (!query) {
+                this.select('querySelector').val('*');
+                this.updateClearSearch();
+            }
+            this.triggerQuerySubmit();
+        };
 
         this.onQueryChange = function(event) {
             if (event.which === $.ui.keyCode.ENTER) {
                 if (event.type === 'keyup') {
-                    var searchType = this.getSearchTypeNode();
-
-                    this.trigger(searchType, 'querysubmit', {
-                        value: this.getQueryVal()
-                    });
-
+                    this.triggerQuerySubmit();
                     $(event.target).select()
                 }
             } else {
@@ -64,6 +83,7 @@ define([
         this.onClearSearchClick = function(event) {
             var node = this.getSearchTypeNode();
 
+            this.select('queryContainerSelector').removeClass('loading');
             this.setQueryVal('');
 
             _.defer(function() {
@@ -127,14 +147,18 @@ define([
             this.updateClearSearch();
         };
 
-        this.triggerQueryUpdated = function() {
-            var $query = this.select('querySelector'),
-                searchType = this.getSearchTypeNode();
+        this.triggerOnType = function(eventName) {
+            var searchType = this.getSearchTypeNode();
 
-            this.trigger(searchType, 'queryupdated', {
-                value: $.trim($query.val())
+            this.trigger(searchType, eventName, {
+                value: this.getQueryVal(),
+                filters: this.filters || {}
             });
         };
+
+        this.triggerQuerySubmit = _.partial(this.triggerOnType, 'querysubmit');
+
+        this.triggerQueryUpdated = _.partial(this.triggerOnType, 'queryupdated');
 
         this.getQueryVal = function() {
             return $.trim(this.select('querySelector').val());

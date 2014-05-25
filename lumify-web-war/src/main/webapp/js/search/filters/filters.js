@@ -54,6 +54,9 @@ define([
                 removeEntityRowSelector: this.onRemoveEntityRow,
                 removeRowSelector: this.onRemoveRow
             });
+            this.on('change', {
+                conceptsSelector: this.onConceptChange
+            });
             this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
@@ -71,7 +74,12 @@ define([
                 .after(entityItemTemplate({title: title}))
                 .closest('.entity-filters').show();
             this.notifyOfFilters();
-        }
+        };
+
+        this.onConceptChange = function(event) {
+            this.conceptFilter = $(event.target).val();
+            this.notifyOfFilters();
+        };
 
         this.onClearFilters = function(event, data) {
             var self = this,
@@ -94,6 +102,7 @@ define([
         this.notifyOfFilters = function() {
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
+                conceptFilter: this.conceptFilter,
                 propertyFilters: _.map(this.propertyFilters, function(filter) {
                     return {
                         propertyId: filter.propertyId,
@@ -150,7 +159,6 @@ define([
         };
 
         this.onPropertyInvalid = function(event, data) {
-            console.log(data);
             var li = this.$node.find('li.fId' + data.id);
             li.addClass('invalid');
         };

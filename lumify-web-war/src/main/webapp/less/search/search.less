@@ -39,7 +39,7 @@ width: 215px;
       line-height: 1.4em;
       margin: 0;
       padding: 0;
-      background: url(../img/glyphicons/glyphicons_192_circle_remove.png);
+      background-image: url(../img/glyphicons/glyphicons_192_circle_remove.png);
       background-repeat: no-repeat;
       background-size: 13px;
       background-position: center;
@@ -48,6 +48,17 @@ width: 215px;
 
       &:hover {
         .opacity(60);
+      }
+    }
+
+    &.loading {
+      a {
+        .opacity(80);
+        background-image: url('../img/loading.gif');
+        &:hover {
+          .opacity(60);
+          background-image: url(../img/glyphicons/glyphicons_192_circle_remove.png);
+        }
       }
     }
   }

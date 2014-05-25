@@ -30,52 +30,45 @@ define([
         this.after('initialize', function() {
             this.render();
 
-            this.on('searchRequestBegan', this.onSearchResultsBegan);
-            this.on('searchRequestCompleted', this.onSearchResultsCompleted);
-            this.on('clearSearch', this.onClearSearch);
+            this.on('searchRequestCompleted', function(event, data) {
+                if (data.success) {
+                    var self = this,
+                        result = data.result,
+                        vertices = result.vertices,
+                        $searchResults = this.select('resultsSelector'),
+                        $resultsContainer = this.select('resultsContainerSelector')
+                            .teardownComponent(VertexList)
+                            .empty(),
+                        $hits = $searchResults.find('.total-hits span').text(
+                            'Found ' + F.string.plural(
+                                F.number.pretty(result.totalHits),
+                                'vertex', 'vertices'
+                            )
+                        );
+
+                    VertexList.attachTo($resultsContainer, {
+                        vertices: vertices,
+                        nextOffset: result.nextOffset,
+                        infiniteScrolling: this.attr.infiniteScrolling,
+                        total: result.totalHits
+                    });
+                    this.makeResizable($searchResults);
+                    $searchResults.show().find('.multi-select');
+                    this.trigger(document, 'paneResized');
+                    //} else {
+                    // TODO: show error
+                }
+            });
+            this.on('clearSearch', function() {
+                this.hideSearchResults();
+
+                var filters = this.select('filtersSelector')
+                        .find('.content')
+                        .teardownComponent(Filters);
+
+                Filters.attachTo(filters);
+            });
         });
-
-        this.onClearSearch = function() {
-            // TODO: Rerender filters?
-            this.hideSearchResults();
-        };
-
-        this.onSearchResultsBegan = function() {
-            // TODO: start spinning badge
-        };
-
-        this.onSearchResultsCompleted = function(event, data) {
-            if (data.success) {
-                var self = this,
-                    result = data.result,
-                    vertices = result.vertices,
-                    $searchResults = this.select('resultsSelector'),
-                    $resultsContainer = this.select('resultsContainerSelector')
-                        .teardownComponent(VertexList)
-                        .empty(),
-                    $hits = $searchResults.find('.total-hits span').text(
-                        'Found ' + F.string.plural(
-                            F.number.pretty(result.totalHits),
-                            'vertex', 'vertices'
-                        )
-                    );
-
-                console.log('Hits: ', result.totalHits);
-
-                VertexList.attachTo($resultsContainer, {
-                    vertices: vertices,
-                    nextOffset: result.nextOffset,
-                    infiniteScrolling: this.attr.infiniteScrolling,
-                    //verticesConceptId: result.conceptId,
-                    total: result.totalHits
-                });
-                this.makeResizable($searchResults);
-                $searchResults.show().find('.multi-select');
-                this.trigger(document, 'paneResized');
-            } else {
-                // TODO: show error
-            }
-        };
 
         this.render = function() {
             this.$node.html(template({}));

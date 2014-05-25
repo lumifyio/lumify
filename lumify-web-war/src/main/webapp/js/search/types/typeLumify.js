@@ -16,15 +16,30 @@ define([
 
         this.after('initialize', function() {
             this.on('querysubmit', this.onQuerySubmit);
+            this.on('clearSearch', this.onClearSearch);
             this.on('infiniteScrollRequest', this.onInfiniteScrollRequest);
         });
+
+        this.onClearSearch = function() {
+            if (this.currentRequest) {
+                console.log('cancelling', this.currentRequest)
+                this.currentRequest.cancel();
+                this.currentRequest = null;
+            }
+        };
 
         this.onQuerySubmit = function(event, data) {
             var self = this;
 
             this.currentQuery = data.value;
+            this.currentFilters = data.filters;
             this.trigger('searchRequestBegan');
-            this.triggerRequest(this.currentQuery, [], null, { offset: 0 })
+            this.triggerRequest(
+                this.currentQuery,
+                this.currentFilters.propertyFilters,
+                this.currentFilters.conceptFilter,
+                { offset: 0 }
+            )
                 .fail(function(error) {
                     self.trigger('searchRequestCompleted', { success: false, error: error });
                 })
@@ -47,24 +62,32 @@ define([
             );
         };
 
+        this.getQueryForSubmitting = function() {
+            if (this.currentFilters &&
+                this.currentFilters.entityFilters &&
+                this.currentFilters.entityFilters.relatedToVertexId) {
+                return {
+                    query: this.currentQuery,
+                    relatedToVertexId: this.currentFilters.entityFilters.relatedToVertexId
+                };
+            }
+
+            return this.currentQuery;
+        };
+
         this.onInfiniteScrollRequest = function(event, data) {
-            var query = this.currentQuery,
+            var query = this.getQueryForSubmitting(),
                 trigger = this.trigger.bind(this,
                    this.select('resultsContainerSelector'),
                    'addInfiniteVertices'
                 );
 
-            // TODO
-            /*
-            if (this.entityFilters && this.entityFilters.relatedToVertexId) {
-                query = {
-                    query: query,
-                    relatedToVertexId: this.entityFilters.relatedToVertexId
-                };
-            }
-            */
-
-            this.triggerRequest(query, [], null, data.paging)
+            this.triggerRequest(
+                query,
+                this.currentFilters.propertyFilters,
+                this.currentFilters.conceptFilter,
+                data.paging
+            )
                 .fail(function() {
                     trigger({ success: false });
                 })
