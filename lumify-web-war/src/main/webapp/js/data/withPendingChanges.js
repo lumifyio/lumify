@@ -43,7 +43,7 @@ define([], function() {
         };
 
         this.onAjaxSend = function(event, jqXHR, ajaxOptions) {
-            if(ajaxOptions.type !== 'GET') {
+            if (ajaxOptions.type !== 'GET') {
                 pendingAjaxWrites = pendingAjaxWrites + 1;
                 jqXHR.always(function() {
                     pendingAjaxWrites = pendingAjaxWrites - 1;
