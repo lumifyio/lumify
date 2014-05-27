@@ -29,7 +29,7 @@
     "sf": "git://github.com/joeferner/node-sf.git",
     "threejs": "*",
     "underscore": "~1.6.0",
-    "video.js": "~4.3.0",
+    "video.js": "4.5.2",
     "bootstrap-timepicker": "~0.2.6"
   },
   "devDependencies": {

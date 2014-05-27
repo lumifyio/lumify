@@ -21,7 +21,8 @@ define([
 
         this.defaultAttrs({
             deleteButtonSelector: '.btn-danger',
-            editButtonSelector: '.btn-default',
+            editButtonSelector: '.btn-edit',
+            addButtonSelector: '.btn-add',
             modifiedBySelector: '.property-modifiedBy',
             justificationValueSelector: '.justificationValue'
         });
@@ -35,7 +36,8 @@ define([
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
                 editButtonSelector: this.onEdit,
-            })
+                addButtonSelector: this.onAdd
+            });
 
             this.on('propertyerror', this.onPropertyError);
             this.on('willDisplayPropertyInfo', this.onDisplay);
@@ -93,6 +95,12 @@ define([
             _.delay(function() {
                 button.text(text).removeAttr('disabled');
             }, 3000)
+        };
+
+        this.onAdd = function() {
+            this.trigger('editProperty', {
+                property: _.omit(this.attr.property, 'key')
+            });
         };
 
         this.onEdit = function() {

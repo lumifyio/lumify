@@ -12,7 +12,7 @@ define([
         POSTER = 1,
         FRAMES = 2;
 
-    videojs.options.flash.swf = '/libs/video.js/video-js.swf';
+    videojs.options.flash.swf = '/libs/video.js/dist/video-js/video-js.swf';
 
     return defineComponent(VideoScrubber);
 
@@ -30,7 +30,7 @@ define([
         });
 
         this.showFrames = function(index) {
-            if (index == this.currentFrame) {
+            if (index == this.currentFrame || !this.attr.videoPreviewImageUrl) {
                 return;
             }
 
@@ -102,7 +102,11 @@ define([
             this.trigger('videoPlayerInitialized');
 
             var scrubPercent = this.scrubPercent;
-            _.defer(videojs, video[0], { autoplay: true }, function() {
+            _.defer(videojs, video[0], {
+                controls: true,
+                autoplay: true,
+                preload: 'auto'
+            }, function() {
                 var self = this;
 
                 if (!userClickedPlayButton) {
@@ -132,16 +136,20 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            this.$node.toggleClass('allowPlayback', this.attr.allowPlayback)
+            this.$node
+                .toggleClass('disableScrubbing', !this.attr.videoPreviewImageUrl)
+                .toggleClass('allowPlayback', this.attr.allowPlayback)
                       .html(template({}));
 
-            this.select('backgroundScrubberSelector').css({
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                backgroundRepeat: 'no-repeat',
-                backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
-            });
+            if (this.attr.videoPreviewImageUrl) {
+                this.select('backgroundScrubberSelector').css({
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundImage: 'url(' + this.attr.videoPreviewImageUrl + ')'
+                });
+            }
 
             this.select('backgroundPosterSelector').css({
                 width: '100%',

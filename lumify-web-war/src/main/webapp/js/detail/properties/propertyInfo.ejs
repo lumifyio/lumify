@@ -45,11 +45,13 @@
 
 </table>
 <% 
-  var publicChanged = property.metadata.sandboxStatus === 'PUBLIC_CHANGED';
+  var public = property.metadata.sandboxStatus === 'PUBLIC';
   var private = property.metadata.sandboxStatus === 'PRIVATE';
-  if (publicChanged) { %>
-<button class="btn btn-danger btn-small requires-EDIT">Undo</button>
-<% } else if (private) { %>
+  var editButtonText = public ? 'Add' : 'Edit';
+  var editButtonCls = public ? 'btn-add' : 'btn-edit';
+  if (private) { %>
 <button class="btn btn-danger btn-small requires-EDIT">Delete</button>
-<% } %>
-<button class="btn btn-default btn-small requires-EDIT <%= (publicChanged || private) ? '' : 'noDelete' %>">Edit</button>
+<% 
+  }
+%>
+<button class="btn btn-default btn-small <%= editButtonCls %> requires-EDIT <%= (private) ? '' : 'noDelete' %>"><%= editButtonText %></button>

@@ -248,6 +248,10 @@ define([
             }
 
             if (data.fromPreviousValuePrompt !== true) {
+                previousValues = _.reject(previousValues, function(prevVal) {
+                    return prevVal.sandboxStatus === 'PUBLIC';
+                });
+
                 if (previousValues && previousValues.length) {
                     this.previousValues = previousValues;
                     this.select('previousValuesSelector')

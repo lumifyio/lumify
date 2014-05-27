@@ -200,24 +200,29 @@ define([
                 vertex.imageSrc = 'artifact/thumbnail?graphVertexId=' + entityImageVertexId +
                     '&' + $.param({workspaceId: currentWorkspace});
             } else {
+
+                vertex.imageSrc = vertex.concept.glyphIconHref;
+                vertex.imageRawSrc = artifactUrl({ type: 'raw' });
+                vertex.imageSrcIsFromConcept = true;
+
                 switch (vertex.concept.displayType) {
 
                     case 'image':
                         vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
+                        vertex.imageSrcIsFromConcept = false;
                         vertex.imageDetailSrc = artifactUrl({ type: 'thumbnail' }) + '&width=800';
-                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
                         break;
 
                     case 'video':
-                        vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
-                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
-                        vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
+                        vertex.properties.forEach(function(p) {
+                            if (p.name === 'http://lumify.io#rawPosterFrame') {
+                                vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
+                                vertex.imageSrcIsFromConcept = false;
+                            } else if (p.name === 'http://lumify.io#videoPreviewImage') {
+                                vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
+                            }
+                        });
                         break;
-
-                    default:
-                        vertex.imageSrc = vertex.concept.glyphIconHref;
-                        vertex.imageRawSrc = artifactUrl({ type: 'raw' });
-                        vertex.imageSrcIsFromConcept = true;
                 }
             }
         }
