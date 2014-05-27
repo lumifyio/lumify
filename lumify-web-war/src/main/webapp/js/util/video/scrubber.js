@@ -12,7 +12,7 @@ define([
         POSTER = 1,
         FRAMES = 2;
 
-    videojs.options.flash.swf = '/libs/video.js/video-js.swf';
+    videojs.options.flash.swf = '/libs/video.js/dist/video-js/video-js.swf';
 
     return defineComponent(VideoScrubber);
 
@@ -102,7 +102,11 @@ define([
             this.trigger('videoPlayerInitialized');
 
             var scrubPercent = this.scrubPercent;
-            _.defer(videojs, video[0], { autoplay: true }, function() {
+            _.defer(videojs, video[0], {
+                controls: true,
+                autoplay: true,
+                preload: 'auto'
+            }, function() {
                 var self = this;
 
                 if (!userClickedPlayButton) {

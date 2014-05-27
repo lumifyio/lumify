@@ -42,7 +42,7 @@ var require = {
         'three': '../libs/threejs/build/three',
         'tpl': '../libs/requirejs-ejs/rejs',
         'underscore': '../libs/underscore/underscore',
-        'videojs': '../libs/video.js/video',
+        'videojs': '../libs/video.js/dist/video-js/video',
     },
     shim: {
         'atmosphere': { init: function() { return $.atmosphere; }, deps:['jquery'] },
