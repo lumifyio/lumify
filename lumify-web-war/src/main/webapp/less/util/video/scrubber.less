@@ -27,6 +27,21 @@
     }
   }
 
+  &.disableScrubbing {
+    .scrubbing-line, .background-scrubber {
+      display: none;
+    }
+
+    .scrubbing-play-button, &:hover .scrubbing-play-button {
+      .opacity(60);
+
+      &:hover {
+        .opacity(100);
+      }
+    }
+  }
+
+
   .scrubbing-play-button {
     display: none;
     width: 50px;
