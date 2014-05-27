@@ -785,6 +785,10 @@ define([
                 selected.vertices = selected.vertices || [];
                 selected.edges = selected.edges || [];
 
+                if (window.DEBUG) {
+                    DEBUG.selectedObjects = selected;
+                }
+
                 if (selected.vertices.length) {
                     self.trigger('clipboardSet', {
                         text: F.vertexUrl.url(selected.vertices, self.workspaceId)
