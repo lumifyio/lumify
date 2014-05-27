@@ -121,6 +121,7 @@ define([
             this.on('clipboardCut', this.onClipboardCut);
             this.on('deleteEdges', this.onDeleteEdges);
             this.on('willLogout', this.willLogout);
+            this.on('filterWorkspace', this.onFilterWorkspace);
 
             // Workspaces
             this.on('saveWorkspace', this.onSaveWorkspace);
@@ -859,6 +860,35 @@ define([
 
         this.willLogout = function() {
             this.previousSelection = null;
+        };
+
+        this.onFilterWorkspace = function(event, data) {
+            var self = this,
+                query = $.trim(data.value || '').toLowerCase(),
+                filters = data.filters,
+                conceptFilter = filters && filters.conceptFilter,
+                propertyFilters = filters && filters.propertyFilters,
+                async = $.Deferred();
+
+            if (query || conceptFilter || propertyFilters) {
+                F.vertex.partitionVertices(this.verticesInWorkspace(), query, conceptFilter, propertyFilters)
+                    .done(function(result) {
+                        console.log(arguments)
+                        self.trigger('verticesDeleted', { vertices: result[1] });
+                        self.trigger('verticesAdded', { vertices: result[0], options: { fit: true } });
+                    })
+                    .done(async.resolve);
+            } else {
+                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: true } });
+                async.resolve();
+            }
+
+            async.done(function() {
+                self.relationshipsReady(function(relationships) {
+                    self.trigger('relationshipsLoaded', { relationships: relationships });
+                });
+                self.trigger(event.target, 'workspaceFiltered');
+            });
         };
 
         this.loadActiveWorkspace = function() {

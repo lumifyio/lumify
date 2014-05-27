@@ -74,6 +74,8 @@ define([
                     this.triggerQuerySubmit();
                     $(event.target).select()
                 }
+            } else if (event.which === $.ui.keyCode.ESCAPE) {
+                this.onClearSearchClick();
             } else {
                 this.updateClearSearch();
                 this.triggerQueryUpdated();
@@ -85,6 +87,7 @@ define([
 
             this.select('queryContainerSelector').removeClass('loading');
             this.setQueryVal('');
+            this.filters = null;
 
             _.defer(function() {
                 this.select('querySelector').focus()

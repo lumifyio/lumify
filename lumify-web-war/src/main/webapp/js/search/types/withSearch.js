@@ -31,7 +31,7 @@ define([
             this.render();
 
             this.on('searchRequestCompleted', function(event, data) {
-                if (data.success) {
+                if (data.success && data.result) {
                     var self = this,
                         result = data.result,
                         vertices = result.vertices,

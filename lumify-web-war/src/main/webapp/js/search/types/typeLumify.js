@@ -22,7 +22,6 @@ define([
 
         this.onClearSearch = function() {
             if (this.currentRequest) {
-                console.log('cancelling', this.currentRequest)
                 this.currentRequest.cancel();
                 this.currentRequest = null;
             }

@@ -12,10 +12,16 @@ define([
 
         this.after('initialize', function() {
             this.on('queryupdated', this.onQueryUpdated);
+            this.on('workspaceFiltered', this.onWorkspaceFiltered);
         });
 
         this.onQueryUpdated = function(event, data) {
-            // console.log(data);
+            this.trigger('searchRequestBegan');
+            this.trigger('filterWorkspace', data);
+        };
+
+        this.onWorkspaceFiltered = function(event, data) {
+            this.trigger('searchRequestCompleted', { success: true });
         };
 
     }

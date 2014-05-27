@@ -161,6 +161,9 @@ define([
         this.onPropertyInvalid = function(event, data) {
             var li = this.$node.find('li.fId' + data.id);
             li.addClass('invalid');
+
+            delete this.propertyFilters[data.id];
+            this.notifyOfFilters();
         };
 
         this.createNewRowIfNeeded = function() {
@@ -186,9 +189,7 @@ define([
             if (instanceInfo && instanceInfo.length) {
                 instanceInfo.forEach(function(info) {
                     delete self.propertyFilters[info.instance.attr.id];
-                    if (!info.instance.isValid || info.instance.isValid()) {
-                        self.notifyOfFilters();
-                    }
+                    self.notifyOfFilters();
                     info.instance.teardown();
                 });
             }
