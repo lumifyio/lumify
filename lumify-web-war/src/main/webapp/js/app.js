@@ -129,7 +129,7 @@ define([
             this.trigger(document, 'registerKeyboardShortcuts', {
                 scope: 'Search',
                 shortcuts: {
-                    '/': { fire: 'toggleSearchPane', desc: 'Show search pane' }
+                    '/': { fire: 'toggleSearchPane', desc: 'Show search pane / toggle search type' }
                 }
             });
 
