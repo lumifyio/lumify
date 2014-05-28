@@ -302,6 +302,23 @@ public class SecureGraphAuditRepository extends AuditRepository {
         return audits;
     }
 
+    @Override
+    public Audit auditAnalyzedBy(AuditAction action, Vertex vertex, String process, User user, Visibility visibility) {
+        Audit audit = new Audit(AuditRowKey.build(vertex.getId()));
+        audit.getAuditCommon()
+                .setUser(user, visibility)
+                .setAction(action, visibility)
+                .setType(OntologyRepository.ENTITY_CONCEPT_IRI, visibility)
+                .setProcess(process, visibility)
+                .setUnixBuildTime(versionService.getUnixBuildTime() != null ? versionService.getUnixBuildTime() : -1L, visibility)
+                .setScmBuildNumber(versionService.getScmBuildNumber() != null ? versionService.getScmBuildNumber() : "", visibility)
+                .setVersion(versionService.getVersion() != null ? versionService.getVersion() : "", visibility);
+
+        audit.getAuditEntity().setAnalyzedBy(process, visibility);
+        save(audit);
+        return audit;
+    }
+
     private Audit auditRelationshipHelper(Audit audit, AuditAction action, Vertex sourceVertex, Vertex destVertex,
                                           String label, String process, String comment, User user,
                                           Visibility visibility) {

@@ -3,6 +3,7 @@ package io.lumify.core.ingest.graphProperty;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import io.lumify.core.ingest.term.extraction.TermMention;
+import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
@@ -47,6 +48,8 @@ public abstract class RegexGraphPropertyWorker extends GraphPropertyWorker {
             TermMention termMention = createTerm(matcher, data.getProperty().getKey(), data.getVisibility());
             termMentions.add(termMention);
         }
+        Vertex v = (Vertex)data.getElement();
+        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
         saveTermMentions((Vertex) data.getElement(), termMentions);
     }
 

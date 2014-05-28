@@ -12,6 +12,7 @@ public class AuditEntity extends ColumnFamily {
     public static final String TYPE = "type";
     public static final String SUBTYPE = "subtype";
     public static final String ID = "id";
+    public static final String ANALYZED_BY = "analyzedBy";
 
     public AuditEntity() {
         super(NAME);
@@ -53,6 +54,17 @@ public class AuditEntity extends ColumnFamily {
         return this;
     }
 
+    public String getAnalyzedBy () {
+        Value value = get(ANALYZED_BY);
+
+        return value != null ? Value.toString(get(ANALYZED_BY)) : null;
+    }
+
+    public AuditEntity setAnalyzedBy (Object analyzedBy, Visibility visibility) {
+        set (ANALYZED_BY, analyzedBy, visibility.getVisibilityString());
+        return this;
+    }
+
     @Override
     public JSONObject toJson() {
         try {
@@ -61,6 +73,7 @@ public class AuditEntity extends ColumnFamily {
             json.put("type", this.getType());
             json.put("subType", this.getSubtype());
             json.put("id", this.getId());
+            json.put("analyzedBy", this.getAnalyzedBy());
             return json;
         } catch (JSONException e) {
             throw new RuntimeException(e);

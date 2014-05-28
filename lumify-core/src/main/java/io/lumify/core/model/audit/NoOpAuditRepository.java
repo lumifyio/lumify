@@ -60,6 +60,11 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
+    public Audit auditAnalyzedBy(AuditAction action, Vertex vertex, String process, User user, Visibility visibility) {
+        throw new RuntimeException("not supported");
+    }
+
+    @Override
     public void auditVertexElementMutation(AuditAction action, ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process, User user, Visibility visibility) {
         throw new RuntimeException("not supported");
     }

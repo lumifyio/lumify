@@ -37,6 +37,8 @@ public abstract class AuditRepository extends Repository<Audit> {
                                                           Object oldValue, Object newValue, Edge edge, String process, String comment, User user,
                                                           Visibility visibility);
 
+    public abstract Audit auditAnalyzedBy (AuditAction action, Vertex vertex, String process, User user, Visibility visibility);
+
     public abstract void auditVertexElementMutation(AuditAction action, ElementMutation<Vertex> vertexElementMutation, Vertex vertex, String process,
                                                     User user, Visibility visibility);
 

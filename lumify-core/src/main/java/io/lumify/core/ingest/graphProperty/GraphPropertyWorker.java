@@ -184,6 +184,8 @@ public abstract class GraphPropertyWorker {
     }
 
     protected List<TermMentionWithGraphVertex> saveTermMentions(Vertex artifactGraphVertex, Iterable<TermMention> termMentions) {
+        getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
+                getUser(), artifactGraphVertex.getVisibility());
         for (TermMentionFilter termMentionFilter : this.workerPrepareData.getTermMentionFilters()) {
             try {
                 termMentions = termMentionFilter.apply(artifactGraphVertex, termMentions);
