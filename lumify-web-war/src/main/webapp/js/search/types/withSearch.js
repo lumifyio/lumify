@@ -41,10 +41,10 @@ define([
                             .empty(),
                         $hits = $searchResults.find('.total-hits span').text(
                             'Found ' + F.string.plural(
-                                F.number.pretty(result.totalHits),
+                                F.number.pretty(result.totalHits || 0),
                                 'vertex', 'vertices'
                             )
-                        );
+                        ).toggle(!_.isUndefined(result.totalHits));
 
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,

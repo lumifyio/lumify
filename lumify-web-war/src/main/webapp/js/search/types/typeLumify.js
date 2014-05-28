@@ -31,13 +31,19 @@ define([
         };
 
         this.onQuerySubmit = function(event, data) {
-            var self = this;
+            var self = this,
+                entityFilters = data.filters.entityFilters,
+                relatedToVertexId = entityFilters && entityFilters.relatedToVertexId,
+                query = relatedToVertexId ?  {
+                        query: data.value,
+                        relatedToVertexId: relatedToVertexId
+                    } : data.value;
 
             this.currentQuery = data.value;
             this.currentFilters = data.filters;
             this.trigger('searchRequestBegan');
             this.triggerRequest(
-                this.currentQuery,
+                query,
                 this.currentFilters.propertyFilters,
                 this.currentFilters.conceptFilter,
                 { offset: 0 }

@@ -267,16 +267,27 @@ define([
         };
 
         this.onSearchTitle = function(event, data) {
-            var self = this;
+            var self = this,
+                vertexId = data.vertexId || (
+                    this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+                );
 
-            this.getVertexTitle(data.vertexId)
-                .done(function(title) {
-                    self.trigger('searchByEntity', { query: title });
-                });
+            if (vertexId) {
+                this.getVertexTitle(vertexId)
+                    .done(function(title) {
+                        self.trigger('searchByEntity', { query: title });
+                    });
+            }
         };
 
         this.onSearchRelated = function(event, data) {
-            this.trigger('searchByRelatedEntity', { vertexId: data.vertexId });
+            var vertexId = data.vertexId || (
+                this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+            );
+
+            if (vertexId) {
+                this.trigger('searchByRelatedEntity', { vertexId: vertexId });
+            }
         };
 
         this.onAddRelatedItems = function(event, data) {

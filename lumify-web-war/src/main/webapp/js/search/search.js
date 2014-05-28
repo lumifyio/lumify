@@ -50,8 +50,54 @@ define([
             this.on('clearSearch', this.onClearSearch);
             this.on('searchRequestBegan', this.onSearchResultsBegan);
             this.on('searchRequestCompleted', this.onSearchResultsCompleted);
+            this.on(document, 'searchByEntity', this.onSearchByEntity);
+            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
             this.on(document, 'searchPaneVisible', this.onSearchPaneVisible);
         });
+
+        this.openSearchType = function(searchType) {
+            var self = this,
+                d = $.Deferred();
+
+            if (this.$node.closest('.visible').length === 0) {
+                this.trigger(document, 'menubarToggleDisplay', { name: 'search' });
+            }
+
+            if (this.searchType === searchType) {
+                d.resolve();
+            } else {
+                this.on('searchtypeloaded', function loadedHandler() {
+                    self.off('searchtypeloaded', loadedHandler);
+                    d.resolve();
+                });
+            }
+            this.switchSearchType(searchType);
+            return d;
+        };
+
+        this.onSearchByEntity = function(event, data) {
+            var self = this;
+
+            this.openSearchType('Lumify')
+                .done(function() {
+                    var node = self.getSearchTypeNode();
+                    self.trigger(node, 'clearSearch');
+
+                    self.setQueryVal(data.query).select();
+                    self.triggerQuerySubmit();
+                })
+        };
+
+        this.onSearchByRelatedEntity = function(event, data) {
+            var self = this;
+
+            this.openSearchType('Lumify')
+                .done(function() {
+                    var node = self.getSearchTypeNode().find('.search-filters .content');
+                    self.select('querySelector').val('');
+                    self.trigger(node, 'searchByRelatedEntity', data);
+                });
+        };
 
         this.onSearchPaneVisible = function(event, data) {
             this.select('querySelector').focus();
@@ -105,10 +151,12 @@ define([
                     $(event.target).select()
                 }
             } else if (event.which === $.ui.keyCode.ESCAPE) {
-                if (this.canClearSearch) {
-                    this.onClearSearchClick();
-                } else {
-                    this.select('querySelector').blur();
+                if (event.type == 'keyup') {
+                    if (this.canClearSearch) {
+                        this.onClearSearchClick();
+                    } else {
+                        this.select('querySelector').blur();
+                    }
                 }
             } else {
                 this.updateClearSearch();
@@ -148,11 +196,7 @@ define([
             event.stopPropagation();
 
             this.switchSearchType(
-                $(event.target)
-                    .blur()
-                    .addClass('active')
-                    .siblings('button').removeClass('active').end()
-                    .data('type')
+                $(event.target).blur().data('type')
             );
             this.select('querySelector').focus();
         };
@@ -169,6 +213,9 @@ define([
             this.updateQueryValue(newSearchType);
 
             var self = this,
+                segmentedButton = this.$node.find('.find-' + newSearchType.toLowerCase())
+                    .addClass('active')
+                    .siblings('button').removeClass('active').end(),
                 node = this.getSearchTypeNode()
                     .addClass('active')
                     .siblings('.search-type').removeClass('active').end();
@@ -225,7 +272,7 @@ define([
         };
 
         this.setQueryVal = function(val) {
-            this.select('querySelector').val(val).change();
+            return this.select('querySelector').val(val).change();
         };
 
         this.getSearchTypeNode = function() {

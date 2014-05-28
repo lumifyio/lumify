@@ -57,13 +57,15 @@ define([
             this.on('change', {
                 conceptsSelector: this.onConceptChange
             });
-            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
+            this.on('searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
             this.loadConcepts();
         });
 
         this.onSearchByRelatedEntity = function(event, data) {
+            event.stopPropagation();
+
             this.onClearFilters();
 
             this.entityFilters.relatedToVertexId = data.vertexId;
