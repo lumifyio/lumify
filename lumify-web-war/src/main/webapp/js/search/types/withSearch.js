@@ -62,11 +62,8 @@ define([
             this.on('clearSearch', function() {
                 this.hideSearchResults();
 
-                var filters = this.select('filtersSelector')
-                        .find('.content')
-                        .teardownComponent(Filters);
-
-                Filters.attachTo(filters);
+                var filters = this.select('filtersSelector').find('.content')
+                this.trigger(filters, 'clearfilters');
             });
         });
 

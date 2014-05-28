@@ -877,7 +877,6 @@ define([
             if (query || conceptFilter || propertyFilters) {
                 F.vertex.partitionVertices(this.verticesInWorkspace(), query, conceptFilter, propertyFilters)
                     .done(function(result) {
-                        console.log(arguments)
                         self.trigger('verticesDeleted', { vertices: result[1] });
                         self.trigger('verticesAdded', { vertices: result[0], options: { fit: true } });
                     })

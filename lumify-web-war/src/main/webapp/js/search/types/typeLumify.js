@@ -15,6 +15,9 @@ define([
         });
 
         this.after('initialize', function() {
+            this.on('filterschange', function(event, data) {
+                data.setAsteriskSearchOnEmpty = true;
+            })
             this.on('querysubmit', this.onQuerySubmit);
             this.on('clearSearch', this.onClearSearch);
             this.on('infiniteScrollRequest', this.onInfiniteScrollRequest);
@@ -39,8 +42,8 @@ define([
                 this.currentFilters.conceptFilter,
                 { offset: 0 }
             )
-                .fail(function(error) {
-                    self.trigger('searchRequestCompleted', { success: false, error: error });
+                .fail(function() {
+                    self.trigger('searchRequestCompleted', { success: false, error: 'Invalid Query' });
                 })
                 .done(function(result) {
                     self.trigger('searchRequestCompleted', { success: true, result: result });

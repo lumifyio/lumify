@@ -1,11 +1,13 @@
 define([
     'require',
     'flight/lib/component',
-    'hbs!./searchTpl'
+    'hbs!./searchTpl',
+    'tpl!util/alert'
 ], function(
     require,
     defineComponent,
-    template) {
+    template,
+    alertTemplate) {
     'use strict';
 
     var SEARCH_TYPES = ['Lumify', 'Workspace'];
@@ -47,25 +49,52 @@ define([
             this.on('filterschange', this.onFiltersChange);
             this.on('searchRequestBegan', this.onSearchResultsBegan);
             this.on('searchRequestCompleted', this.onSearchResultsCompleted);
+            this.on(document, 'searchPaneVisible', this.onSearchPaneVisible);
         });
+
+        this.onSearchPaneVisible = function(event, data) {
+            this.select('querySelector').focus();
+        };
 
         this.onSearchResultsBegan = function() {
             this.select('queryContainerSelector').addClass('loading');
         };
 
-        this.onSearchResultsCompleted = function() {
+        this.onSearchResultsCompleted = function(event, data) {
             this.select('queryContainerSelector').removeClass('loading');
+            this.updateQueryError(data);
+        };
+
+        this.updateQueryError = function(data) {
+            var $error = this.select('queryValidationSelector')
+
+            this.$node.toggleClass('hasError', !!(data && !data.success));
+
+            if (!data || data.success) {
+                $error.empty();
+            } else {
+                $error.html(
+                    alertTemplate({ error: data.error || 'Server error' })
+                )
+            }
         };
 
         this.onFiltersChange = function(event, data) {
             this.filters = data;
 
-            var query = this.getQueryVal();
-            if (!query) {
+            var query = this.getQueryVal(),
+                hasFilters = this.hasFilters();
+
+            if (!query && hasFilters && data.setAsteriskSearchOnEmpty) {
                 this.select('querySelector').val('*');
-                this.updateClearSearch();
             }
-            this.triggerQuerySubmit();
+
+            if (query || hasFilters) {
+                this.triggerQueryUpdated();
+                this.triggerQuerySubmit();
+            }
+
+            this.updateClearSearch();
         };
 
         this.onQueryChange = function(event) {
@@ -83,17 +112,25 @@ define([
         };
 
         this.onClearSearchClick = function(event) {
-            var node = this.getSearchTypeNode();
+            var node = this.getSearchTypeNode(),
+                $query = this.select('querySelector'),
+                $clear = this.select('clearSearchSelector'),
+                canClear = (event && event.type === 'click') || this.canClearSearch;
 
             this.select('queryContainerSelector').removeClass('loading');
-            this.setQueryVal('');
+            if (this.getQueryVal()) {
+                this.setQueryVal('');
+            }
             this.filters = null;
+            this.updateQueryError();
 
-            _.defer(function() {
-                this.select('querySelector').focus()
-            }.bind(this))
-
-            this.trigger(node, 'clearSearch')
+            if (canClear) {
+                $clear.hide();
+                _.defer($query.focus.bind($query));
+                this.trigger(node, 'clearSearch')
+            } else {
+                $query.blur();
+            }
         };
 
         this.onSegmentedControlsClick = function(event, data) {
@@ -134,9 +171,17 @@ define([
         };
 
         this.updateClearSearch = function() {
-            this.select('clearSearchSelector')
-                .toggle(this.getQueryVal().length > 0);
+            this.canClearSearch = this.getQueryVal().length > 0 || this.hasFilters();
+            this.select('clearSearchSelector').toggle(this.canClearSearch);
         }
+
+        this.hasFilters = function() {
+            return !!(this.filters && (
+                !_.isEmpty(this.filters.conceptFilter) ||
+                !_.isEmpty(this.filters.propertyFilters) ||
+                !_.isEmpty(this.filters.entityFilters)
+            ));
+        };
 
         this.updateQueryValue = function(newSearchType) {
             var $query = this.select('querySelector');

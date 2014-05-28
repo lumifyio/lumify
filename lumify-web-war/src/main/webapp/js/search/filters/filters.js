@@ -89,6 +89,9 @@ define([
                 self.teardownField($(this));
             }).closest('li:not(.newrow)').remove();
 
+            this.select('conceptsSelector').val('');
+            this.conceptFilter = '';
+
             this.createNewRowIfNeeded();
 
             this.entityFilters = {};

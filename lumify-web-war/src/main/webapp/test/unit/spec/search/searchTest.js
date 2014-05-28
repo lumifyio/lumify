@@ -1,11 +1,16 @@
 
 describeComponent('search/search', function(Search) {
 
-    beforeEach(function() {
-        setupComponent()
-    })
-
     describe('search', function() {
+
+        beforeEach(function(done) {
+            setupComponent()
+            var c = this.component;
+            switchToSearchType(c, 'lumify').done(function() {
+                querySetValue(c, '');
+                done();
+            });
+        })
 
         it('should initialize', function() {
             var c = this.component
@@ -82,9 +87,10 @@ describeComponent('search/search', function(Search) {
                 $q = c.select('querySelector'),
                 $clear = c.select('clearSearchSelector');
 
-            $clear.css('display').should.equal('none')
             querySetValue(c, 'Some text');
             $clear.css('display').should.equal('inline')
+            querySetValue(c, '');
+            $clear.css('display').should.equal('none')
         })
 
         it('should hide clear search button when type changed', function(done) {
@@ -92,7 +98,6 @@ describeComponent('search/search', function(Search) {
                 $q = c.select('querySelector'),
                 $clear = c.select('clearSearchSelector');
 
-            $clear.css('display').should.equal('none')
             querySetValue(c, 'Some text');
             $clear.css('display').should.equal('inline')
 
@@ -113,7 +118,38 @@ describeComponent('search/search', function(Search) {
                 done()
             })
             querySetValue(c, 'Some text')
-            $clear.click()
+            _.defer(function() {
+                $clear.css('display').should.equal('inline')
+                $clear.click()
+            })
+        })
+
+        it('should blur search field on escape', function() {
+            var $q = this.component.select('querySelector'),
+                event = $.Event('keydown');
+
+            $q.focus()
+            document.activeElement.should.equal($q[0])
+            event.which = event.keyCode = $.ui.keyCode.ESCAPE;
+            $q.trigger(event);
+            document.activeElement.should.not.equal($q[0])
+        })
+
+        it('should clear search field on escape when value', function(done) {
+            var c = this.component,
+                $q = c.select('querySelector'),
+                event = $.Event('keydown');
+
+            c.$node.find('.search-type-lumify').on('clearSearch', function() {
+                $q.val().should.be.empty
+                done()
+            })
+
+            $q.focus()
+            querySetValue(c, 'something')
+            document.activeElement.should.equal($q[0])
+            event.which = event.keyCode = $.ui.keyCode.ESCAPE;
+            $q.trigger(event);
         })
 
         it('should trigger submit event on enter', function(done) {
@@ -126,7 +162,55 @@ describeComponent('search/search', function(Search) {
             querySubmit(c);
         })
 
-        it('should select search text after enter')
+        it('should select search text after enter', function(done) {
+            var c = this.component,
+                $q = c.select('querySelector'),
+                event = $.Event('keyup');
+
+            $q.focus()
+            querySetValue(c, 'something')
+            document.activeElement.should.equal($q[0])
+            event.which = event.keyCode = $.ui.keyCode.ENTER
+            $q.trigger(event)
+
+            _.defer(function() {
+                var selection = window.getSelection()
+                selection.rangeCount.should.equal(1)
+                selection.toString().should.equal('something')
+                done()
+            })
+        })
+
+        it('should show search errors', function() {
+            var c = this.component,
+                $error = c.$node.find('.search-query-validation')
+
+            $error.html().should.be.empty
+            c.trigger('searchRequestCompleted', { success: false, error: 'An error message' })
+            $error.html().should.not.be.empty
+            $error.find('button').remove()
+            $.trim($error.text()).should.equal('An error message')
+        })
+
+        it('should show search error when no message is passed', function() {
+            var c = this.component,
+                $error = c.$node.find('.search-query-validation')
+
+            c.trigger('searchRequestCompleted', { success: false })
+            $error.html().should.not.be.empty
+            $error.find('button').remove()
+            $.trim($error.text()).should.equal('Server error')
+        })
+
+        it('should show hide errors on succesfull query', function() {
+            var c = this.component,
+                $error = c.$node.find('.search-query-validation')
+
+            c.trigger('searchRequestCompleted', { success: false })
+            $error.html().should.not.be.empty
+            this.component.trigger('searchRequestCompleted', { success: true })
+            $error.html().should.be.empty
+        })
 
     })
 
@@ -141,9 +225,9 @@ describeComponent('search/search', function(Search) {
 
     function querySetValue(component, string) {
         component.select('querySelector')
-            .focus()
             .val(string)
             .click()
+            .focus()
             .change();
     }
 
