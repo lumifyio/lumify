@@ -15,6 +15,127 @@ define([
                 return (/^private$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
             },
 
+            isKindOfConcept: function(vertex, conceptTypeFilter) {
+                var conceptType = V.prop(vertex, 'conceptType');
+
+                do {
+                    if (conceptType === conceptTypeFilter) {
+                        return true;
+                    }
+
+                    conceptType = ontology.conceptsById[conceptType].parentConcept;
+                } while (conceptType)
+
+                return false;
+            },
+
+            partitionVertices: function(vertices, query, conceptFilter, propertyFilters) {
+                var deferred = $.Deferred(),
+                    hasGeoFilter = _.any(propertyFilters, function(filter) {
+                        var ontologyProperty = ontology.propertiesByTitle[filter.propertyId];
+                        return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
+                    });
+
+                if (hasGeoFilter) {
+                    require(['openlayers'], function(OpenLayers) {
+                        deferred.resolve(OpenLayers);
+                    });
+                } else {
+                    deferred.resolve();
+                }
+
+                return deferred.then(function(OpenLayers) {
+                    return _.partition(vertices, function(v) {
+                        var queryMatch = query && query !== '*' ?
+                                _.chain(v.properties)
+                                    .pluck('value')
+                                    .compact()
+                                    .value()
+                                    .join(' ')
+                                    .toLowerCase()
+                                    .indexOf(query) >= 0 : true,
+                            filterConceptMatch = conceptFilter ?
+                                V.isKindOfConcept(v, conceptFilter) : true,
+                            filterPropertyMatch = propertyFilters && propertyFilters.length ?
+                                V.matchesPropertyFilters(v, propertyFilters, OpenLayers) : true;
+
+                        return queryMatch && filterConceptMatch && filterPropertyMatch;
+                    });
+                }).promise();
+            },
+
+            matchesPropertyFilters: function(vertex, filters, OpenLayers) {
+                return _.every(filters, function(filter) {
+                    var predicate = filter.predicate,
+                        property = ontology.propertiesByTitle[filter.propertyId],
+                        vertexProperty = V.prop(vertex, filter.propertyId),
+                        values = filter.values,
+                        predicateCompare = function(values, actual) {
+                            switch (predicate) {
+                                case '<': return actual <= values[0];
+                                case '>': return actual >= values[0];
+                                case 'range': return actual >= values[0] && actual <= values[1];
+                                case 'equal':
+                                    return _.isEqual(values[0], actual);
+                                case 'contains': return actual.indexOf(values[0]) >= 0;
+
+                                default: console.warn('Unknown predicate:', predicate);
+                            }
+
+                            return false;
+                        },
+                        compareFunction,
+                        transformFunction = _.identity;
+
+                    if (_.isUndefined(vertexProperty)) {
+                        return false;
+                    }
+
+                    switch (property.dataType) {
+                        case 'date':
+                            transformFunction = F.date.utc;
+                            compareFunction = predicateCompare;
+                            break;
+
+                        case 'geoLocation':
+                            transformFunction = function(v) {
+                                return v.latitude ? v : parseFloat(v);
+                            };
+                            compareFunction = function(values, actual) {
+                                var from = new OpenLayers.Geometry.Point(values[1], values[0]),
+                                    to = new OpenLayers.Geometry.Point(actual.longitude, actual.latitude),
+                                    line = new OpenLayers.Geometry.LineString([from, to]),
+                                    km = line.getGeodesicLength(new OpenLayers.Projection('EPSG:4326')) / 1000;
+
+                                return km <= values[2];
+                            };
+                            break;
+
+                        case 'double':
+                        case 'currency':
+                            compareFunction = predicateCompare;
+                            break;
+
+                        case 'boolean':
+                            compareFunction = predicateCompare;
+                            transformFunction = function(v) {
+                                return v === 'true' || v === true;
+                            };
+                            predicate = 'equal';
+                            break;
+
+                        default:
+                            transformFunction = function(v) {
+                                return v.toLowerCase();
+                            };
+                            predicate = 'contains';
+                            compareFunction = predicateCompare;
+                    }
+
+                    return compareFunction(values.map(transformFunction), transformFunction(vertexProperty));
+                });
+            },
+
             propName: function(name) {
                 var autoExpandedName = (/^http:\/\/lumify.io/).test(name) ?
                         name : ('http://lumify.io#' + name),
@@ -53,6 +174,7 @@ define([
                         }
                         return F.date.dateString(value);
                     }
+                    case 'currency':
                     case 'number': return F.number.pretty(value);
                     case 'geoLocation': return F.geoLocation.pretty(value);
                     default: return value;

@@ -4,6 +4,7 @@ define([
     'flight/lib/registry',
     'data/withVertexCache',
     'data/withAjaxFilters',
+    'data/withServiceHandlers',
     'data/withPendingChanges',
     'util/withAsyncQueue',
     'util/withDocumentUnloadHandlers',
@@ -21,7 +22,8 @@ define([
     // Flight
     defineComponent, registry,
     // Mixins
-    withVertexCache, withAjaxFilters, withPendingChanges, withAsyncQueue, withDocumentUnloadHandlers,
+    withVertexCache, withAjaxFilters, withServiceHandlers,
+    withPendingChanges, withAsyncQueue, withDocumentUnloadHandlers,
     // Service
     Keyboard, WorkspaceService, VertexService, OntologyService, ConfigService, UserService,
 
@@ -35,6 +37,7 @@ define([
                                         withAsyncQueue,
                                         withVertexCache,
                                         withAjaxFilters,
+                                        withServiceHandlers,
                                         withDocumentUnloadHandlers,
                                         withPendingChanges);
 
@@ -118,6 +121,9 @@ define([
             this.on('clipboardCut', this.onClipboardCut);
             this.on('deleteEdges', this.onDeleteEdges);
             this.on('willLogout', this.willLogout);
+            this.on('filterWorkspace', this.onFilterWorkspace);
+            this.on('clearWorkspaceFilter', this.onClearWorkspaceFilter);
+            this.on('toggleWorkspaceFilter', this.onToggleWorkspaceFilter);
 
             // Workspaces
             this.on('saveWorkspace', this.onSaveWorkspace);
@@ -261,16 +267,27 @@ define([
         };
 
         this.onSearchTitle = function(event, data) {
-            var self = this;
+            var self = this,
+                vertexId = data.vertexId || (
+                    this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+                );
 
-            this.getVertexTitle(data.vertexId)
-                .done(function(title) {
-                    self.trigger('searchByEntity', { query: title });
-                });
+            if (vertexId) {
+                this.getVertexTitle(vertexId)
+                    .done(function(title) {
+                        self.trigger('searchByEntity', { query: title });
+                    });
+            }
         };
 
         this.onSearchRelated = function(event, data) {
-            this.trigger('searchByRelatedEntity', { vertexId: data.vertexId });
+            var vertexId = data.vertexId || (
+                this.selectedVertexIds.length === 1 && this.selectedVertexIds[0]
+            );
+
+            if (vertexId) {
+                this.trigger('searchByRelatedEntity', { vertexId: vertexId });
+            }
         };
 
         this.onAddRelatedItems = function(event, data) {
@@ -781,6 +798,10 @@ define([
                 selected.vertices = selected.vertices || [];
                 selected.edges = selected.edges || [];
 
+                if (window.DEBUG) {
+                    DEBUG.selectedObjects = selected;
+                }
+
                 if (selected.vertices.length) {
                     self.trigger('clipboardSet', {
                         text: F.vertexUrl.url(selected.vertices, self.workspaceId)
@@ -856,6 +877,61 @@ define([
 
         this.willLogout = function() {
             this.previousSelection = null;
+        };
+
+        this.onClearWorkspaceFilter = function() {
+            this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+            this.currentWorkspaceFilter = null;
+        };
+
+        this.onToggleWorkspaceFilter = function(event, data) {
+            var enabled = data.enabled;
+
+            if (enabled === this.workspaceFilterEnabled) {
+                return;
+            }
+
+            if (enabled && this.filteredWorkspaceVertices) {
+                this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices });
+                this.workspaceFilterEnabled = enabled;
+            } else if (!enabled) {
+                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+                this.workspaceFilterEnabled = enabled;
+            }
+        };
+
+        this.onFilterWorkspace = function(event, data) {
+            var self = this,
+                query = $.trim((data && data.value) || '').toLowerCase(),
+                filters = data.filters,
+                conceptFilter = filters && filters.conceptFilter,
+                propertyFilters = filters && filters.propertyFilters,
+                options = {
+                    fit: true,
+                    preventShake: true
+                },
+                async = $.Deferred();
+
+            if (query || conceptFilter || propertyFilters) {
+                F.vertex.partitionVertices(this.verticesInWorkspace(), query, conceptFilter, propertyFilters)
+                    .done(function(result) {
+                        self.filteredWorkspaceVertices = result[1];
+
+                        self.trigger('verticesDeleted', { vertices: result[1] });
+                        self.trigger('verticesAdded', { vertices: result[0], options: options });
+                    })
+                    .done(async.resolve);
+            } else {
+                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: options });
+                async.resolve();
+            }
+
+            async.done(function() {
+                self.relationshipsReady(function(relationships) {
+                    self.trigger('relationshipsLoaded', { relationships: relationships });
+                });
+                self.trigger(event.target, 'workspaceFiltered');
+            });
         };
 
         this.loadActiveWorkspace = function() {
@@ -1079,6 +1155,7 @@ define([
                             graphVisible = true;
                         }
 
+                        self.trigger('toggleWorkspaceFilter', { enabled: !enabled });
                         if (graphVisible) {
                             if (enabled) {
                                 self.trigger('verticesHovering', {
@@ -1108,6 +1185,7 @@ define([
 
                     self.workspaceReady(function(ws) {
                         if (ws.isEditable) {
+                            self.trigger('clearWorkspaceFilter');
                             self.trigger('verticesDropped', { vertices: vertices });
                         }
                     });

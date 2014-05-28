@@ -1,0 +1,13 @@
+<option value=''>
+  {{#if defaultText}}
+    {{defaultText}}
+  {{else}}
+    Choose a concept...
+  {{/if}}
+</option>
+
+{{#each concepts}}
+  <option {{#if selected}}selected{{/if}}
+          value="{{id}}">{{{indent}}}{{displayName}}</option>
+{{/each}}
+

@@ -2,7 +2,15 @@
 @import (reference) "../util/selection.less";
 @import (reference) "../util/css3.less";
 
-width: 175px;
+width: 215px;
+
+.hasError .search-filters {
+  top: 9.5em;
+}
+
+.search-query-validation button {
+  display: none;
+}
 
 .navbar-search { 
   text-align: center;
@@ -19,6 +27,15 @@ width: 175px;
   .search-query-container {
     position: relative;
 
+    .segmented-control {
+      button:first-child {
+        width: 46%;
+      }
+      button:last-child {
+        width: 54%;
+      }
+    }
+
     a {
       position: absolute;
       font-size: 0;
@@ -30,7 +47,7 @@ width: 175px;
       line-height: 1.4em;
       margin: 0;
       padding: 0;
-      background: url(../img/glyphicons/glyphicons_192_circle_remove.png);
+      background-image: url(../img/glyphicons/glyphicons_192_circle_remove.png);
       background-repeat: no-repeat;
       background-size: 13px;
       background-position: center;
@@ -41,6 +58,24 @@ width: 175px;
         .opacity(60);
       }
     }
+
+    &.loading {
+      a {
+        .opacity(80);
+        background-image: url('../img/loading.gif');
+        &:hover {
+          .opacity(60);
+          background-image: url(../img/glyphicons/glyphicons_192_circle_remove.png);
+        }
+      }
+    }
+  }
+}
+
+.search-type {
+  display: none;
+  &.active {
+    display: block;
   }
 }
 
@@ -49,41 +84,27 @@ width: 175px;
   float:right;
 }
 
-.search-results, .search-filters {
+.search-results {
   .pin-left-split;
 
+  .content {
+    overflow: auto;
+  }
   width: 270px;
   background: @pane-background;
   z-index: 89;  // so it floats above graph, but below splitbar handles
-}
-
-.search-results-summary {
-  cursor: default;
-  .disable-text-selection;
-  a {
-    cursor: pointer;
+  
+  .total-hits {
+    font-size: 100%;
+    text-align: center;    
+    color: darken(@pane-background, 30%);
+    font-weight: normal;
+    margin: 0 0 0.5em 0;
+    padding: 0 1em;
+    span {
+      font-size: 90%;  
+    }    
   }
-}
-
-.search-results-summary.nav-list > li {
-  position: relative;
-}
-.search-results-summary.nav-list > li > a {
-  white-space: nowrap;
-  padding-right: 0.5em;
-
-  .title {
-    overflow: hidden;
-    display: block;
-    text-overflow: ellipsis;
-    padding-right: 0.25em;
-  }
-}
-
-.search-results-summary a .badge {
-  position: relative;
-  float: right;
-  display: block;
 }
 
 .filter-info {
@@ -109,11 +130,26 @@ width: 175px;
 }
 
 .search-filters {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  //background: red;
+  top: 7em;  
+  .content {
+    overflow: auto;
+  }
+  
+  .concepts-dropdown select {
+    width: 100%;
+    font-size: 90%;
+  }
 
   .typeahead {
     width: 100%;
     min-height: 100px;
     max-height: 250px;
+    min-width: inherit;
     overflow: auto;
     li { margin-bottom: 0; }
   }
@@ -161,8 +197,8 @@ width: 175px;
     line-height: 2em;
   }
  
-  li { margin-bottom: 0.5em; position:relative; }
-  li.nav-header { margin-bottom: 1em; }
+  li { margin-bottom: 0.5em; position: relative; }
+  li.nav-header { margin-bottom: 0; }
   li.invalid .add-property input {
     color: red;
   }

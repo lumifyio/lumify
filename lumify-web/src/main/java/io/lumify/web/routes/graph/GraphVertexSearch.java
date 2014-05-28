@@ -24,10 +24,7 @@ import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import org.securegraph.query.Compare;
-import org.securegraph.query.GeoCompare;
-import org.securegraph.query.Query;
-import org.securegraph.query.TextPredicate;
+import org.securegraph.query.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +34,7 @@ import java.util.List;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
 public class GraphVertexSearch extends BaseRequestHandler {
-    //TODO should we limit to 10000??
-    private final int MAX_RESULT_COUNT = 10000;
+    private final int DEFAULT_RESULT_COUNT = 100;
 
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphVertexSearch.class);
     private final Graph graph;
@@ -65,8 +61,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String query;
         final String filter = getRequiredParameter(request, "filter");
-        final long offset = getOptionalParameterLong(request, "offset", 0);
-        final long size = getOptionalParameterLong(request, "size", 100);
+        final int offset = (int) getOptionalParameterLong(request, "offset", 0);
+        final int size = (int) getOptionalParameterLong(request, "size", DEFAULT_RESULT_COUNT);
         final String conceptType = getOptionalParameter(request, "conceptType");
         final String getLeafNodes = getOptionalParameter(request, "leafNodes");
         final String relatedToVertexId = getOptionalParameter(request, "relatedToVertexId");
@@ -125,7 +121,8 @@ public class GraphVertexSearch extends BaseRequestHandler {
             }
         }
 
-        graphQuery.limit(MAX_RESULT_COUNT);
+        graphQuery.limit(size);
+        graphQuery.skip(offset);
         Iterable<Vertex> searchResults;
         try {
             searchResults = graphQuery.vertices();
@@ -134,32 +131,22 @@ public class GraphVertexSearch extends BaseRequestHandler {
             return;
         }
 
-        JSONArray vertices = new JSONArray();
-        JSONObject counts = new JSONObject();
+        JSONArray verticesJson = new JSONArray();
         int verticesCount = 0;
-        int count = 0;
         for (Vertex vertex : searchResults) {
-            if (verticesCount >= offset && verticesCount <= offset + size) {
-                vertices.put(JsonSerializer.toJson(vertex, workspaceId));
-                vertices.getJSONObject(count).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
-                count++;
-            }
-            String type = CONCEPT_TYPE.getPropertyValue(vertex);
-            if (type == null) {
-                type = "Unknown";
-            }
-            if (counts.keySet().contains(type)) {
-                counts.put(type, (counts.getInt(type) + 1));
-            } else {
-                counts.put(type, 1);
-            }
+            verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
+            verticesJson.getJSONObject(verticesCount).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
             verticesCount++;
-            // TODO this used create hierarchical results
         }
 
         JSONObject results = new JSONObject();
-        results.put("vertices", vertices);
-        results.put("verticesCount", counts);
+        results.put("vertices", verticesJson);
+        results.put("nextOffset", offset + size);
+
+        if (searchResults instanceof IterableWithFacetedResults) {
+            IterableWithFacetedResults searchResultsFaceted = (IterableWithFacetedResults) searchResults;
+            results.put("totalHits", searchResultsFaceted.getTotalHits());
+        }
 
         long endTime = System.nanoTime();
         LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);

@@ -2,11 +2,12 @@
 define([
     'flight/lib/component',
     'flight/lib/registry',
-    'tpl!./filters',
+    'hbs!./filtersTpl',
     'tpl!./item',
     'tpl!./entityItem',
     'data',
     'util/vertex/formatters',
+    'hbs!util/ontology/concept-options',
     'fields/selection/selection',
     'service/ontology'
 ], function(
@@ -17,6 +18,7 @@ define([
     entityItemTemplate,
     appData,
     F,
+    conceptsTemplate,
     FieldSelection,
     OntologyService) {
     'use strict';
@@ -35,7 +37,8 @@ define([
         this.defaultAttrs({
             fieldSelectionSelector: '.newrow .add-property',
             removeEntityRowSelector: '.entity-filters button.remove',
-            removeRowSelector: '.prop-filters button.remove'
+            removeRowSelector: '.prop-filters button.remove',
+            conceptsSelector: '.concepts-dropdown select'
         });
 
         this.after('initialize', function() {
@@ -51,12 +54,18 @@ define([
                 removeEntityRowSelector: this.onRemoveEntityRow,
                 removeRowSelector: this.onRemoveRow
             });
-            this.on(document, 'searchByRelatedEntity', this.onSearchByRelatedEntity);
+            this.on('change', {
+                conceptsSelector: this.onConceptChange
+            });
+            this.on('searchByRelatedEntity', this.onSearchByRelatedEntity);
 
             this.loadPropertyFilters();
+            this.loadConcepts();
         });
 
         this.onSearchByRelatedEntity = function(event, data) {
+            event.stopPropagation();
+
             this.onClearFilters();
 
             this.entityFilters.relatedToVertexId = data.vertexId;
@@ -67,7 +76,12 @@ define([
                 .after(entityItemTemplate({title: title}))
                 .closest('.entity-filters').show();
             this.notifyOfFilters();
-        }
+        };
+
+        this.onConceptChange = function(event) {
+            this.conceptFilter = $(event.target).val();
+            this.notifyOfFilters();
+        };
 
         this.onClearFilters = function(event, data) {
             var self = this,
@@ -76,6 +90,9 @@ define([
             nodes.each(function() {
                 self.teardownField($(this));
             }).closest('li:not(.newrow)').remove();
+
+            this.select('conceptsSelector').val('');
+            this.conceptFilter = '';
 
             this.createNewRowIfNeeded();
 
@@ -90,6 +107,7 @@ define([
         this.notifyOfFilters = function() {
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
+                conceptFilter: this.conceptFilter,
                 propertyFilters: _.map(this.propertyFilters, function(filter) {
                     return {
                         propertyId: filter.propertyId,
@@ -146,9 +164,11 @@ define([
         };
 
         this.onPropertyInvalid = function(event, data) {
-            console.log(data);
             var li = this.$node.find('li.fId' + data.id);
             li.addClass('invalid');
+
+            delete this.propertyFilters[data.id];
+            this.notifyOfFilters();
         };
 
         this.createNewRowIfNeeded = function() {
@@ -174,14 +194,27 @@ define([
             if (instanceInfo && instanceInfo.length) {
                 instanceInfo.forEach(function(info) {
                     delete self.propertyFilters[info.instance.attr.id];
-                    if (!info.instance.isValid || info.instance.isValid()) {
-                        self.notifyOfFilters();
-                    }
+                    self.notifyOfFilters();
                     info.instance.teardown();
                 });
             }
 
             node.empty();
+        };
+
+        this.loadConcepts = function() {
+            var self = this;
+
+            this.ontologyService.concepts().done(function(concepts) {
+                self.select('conceptsSelector').html(
+                    conceptsTemplate({
+                        defaultText: 'All Concepts',
+                        concepts: _.filter(concepts.byTitle, function(c) {
+                            return c.userVisible !== false;
+                        })
+                    })
+                );
+            });
         };
 
         this.loadPropertyFilters = function() {

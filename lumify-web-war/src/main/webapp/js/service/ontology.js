@@ -115,11 +115,16 @@ define([
             }
 
             parents.reverse();
-            var leadingSlashIfNeeded = parents.length ? '/' : '';
+            var leadingSlashIfNeeded = parents.length ? '/' : '',
+                flattenedDisplayName = _.pluck(parents, 'displayName')
+                    .join('/') + leadingSlashIfNeeded + concept.displayName,
+                indent = flattenedDisplayName
+                    .replace(/[^\/]/g, '')
+                    .replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 
             return $.extend({}, concept, {
-                flattenedDisplayName: _.pluck(parents, 'displayName').join('/') +
-                                leadingSlashIfNeeded + concept.displayName
+                flattenedDisplayName: flattenedDisplayName,
+                indent: indent
             });
         }
     };

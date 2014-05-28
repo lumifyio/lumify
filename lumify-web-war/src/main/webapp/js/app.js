@@ -156,7 +156,7 @@ define([
                 helpDialog = content.filter('.help-dialog');
 
             // Configure splitpane resizing
-            resizable(searchPane, 'e', 150, 250, this.onPaneResize.bind(this));
+            resizable(searchPane, 'e', 190, 300, this.onPaneResize.bind(this));
             resizable(workspacesPane, 'e', 190, 250, this.onPaneResize.bind(this));
             resizable(detailPane, 'w', 4, 500, this.onPaneResize.bind(this));
 
@@ -425,11 +425,7 @@ define([
                     .outerWidth(true) || 0,
 
                 searchResultsWidth = searchWidth > 0 ?
-                    $('.search-results:visible:not(.collapsed)')
-                        .outerWidth(true) || 0 : 0,
-
-                searchFiltersWidth = searchWidth > 0 ?
-                    $('.search-filters:visible:not(.collapsed)')
+                    $('.active .search-results:visible:not(.collapsed)')
                         .outerWidth(true) || 0 : 0,
 
                 workspacesWidth = this.select('workspacesSelector')
@@ -445,8 +441,7 @@ define([
                     .outerWidth(true) || 0,
 
                 padding = {
-                    l: searchWidth + searchResultsWidth + searchFiltersWidth +
-                      workspacesWidth + workspaceFormWidth,
+                    l: searchWidth + searchResultsWidth + workspacesWidth + workspaceFormWidth,
                     r: detailWidth,
                     t: 0,
                     b: 0

@@ -3,7 +3,7 @@ define([
     '../withDropdown',
     'detail/properties/properties',
     'tpl!./termForm',
-    'tpl!./concept-options',
+    'hbs!util/ontology/concept-options',
     'tpl!./entity',
     'service/vertex',
     'service/ontology',
@@ -524,18 +524,25 @@ define([
                     return c.userVisible !== false;
                 });
 
+                var selectedConceptId = vertexInfo && (
+                    vertexInfo['http://lumify.io#conceptType'] ||
+                    (
+                        vertexInfo.properties &&
+                        vertexInfo.properties['http://lumify.io#conceptType'].value
+                    )
+                ) || '';
+
                 self.select('conceptSelector').html(conceptsTemplate({
-                    concepts: self.allConcepts,
-                    selectedConceptId: (
-                        vertexInfo &&
-                        (
-                            vertexInfo['http://lumify.io#conceptType'] ||
-                            (
-                                vertexInfo.properties &&
-                                vertexInfo.properties['http://lumify.io#conceptType'].value
-                            )
-                        )
-                    ) || ''
+                    concepts: self.allConcepts.map(function(c) {
+                        return {
+                            id: c.id,
+                            displayName: c.displayName,
+                            indent: c.flattenedDisplayName
+                                     .replace(/[^\/]/g, '')
+                                     .replace(/\//g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
+                            selected: selectedConceptId === c.id
+                        }
+                    })
                 }));
 
                 if (self.select('conceptSelector').val() === '') {

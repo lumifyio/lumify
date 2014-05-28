@@ -82,7 +82,7 @@ define([
 
         number: {
             pretty: function(number) {
-                return sf('{0:#,###,###,###}', number);
+                return sf('{0:#,###,###,###.##}', number);
             },
             prettyApproximate: function(number) {
                 if (number >= 1000000000) {

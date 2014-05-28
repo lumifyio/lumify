@@ -271,7 +271,11 @@ define([
                     startX = nextAvailablePosition.x,
                     vertexIds = _.pluck(vertices, 'id'),
                     existingNodes = currentNodes.filter(function(i, n) {
-                        return vertexIds.indexOf(fromCyId(n.id())) >= 0;
+                        var nId = n.id();
+                        if (/^NEW/.test(nId)) {
+                            return -1;
+                        }
+                        return vertexIds.indexOf(fromCyId(nId)) >= 0;
                     }),
                     customLayout = $.Deferred();
 
@@ -971,7 +975,11 @@ define([
 
             if (cyNode !== event.cy && cyNode.group() === 'nodes') {
                 this.mouseoverTimeout = _.delay(function() {
-                    var vertex = appData.vertex(fromCyId(cyNode.id())),
+                    var nId = cyNode.id();
+                    if (/^NEW/.test(nId)) {
+                        return;
+                    }
+                    var vertex = appData.vertex(fromCyId(nId)),
                     truncatedTitle = cyNode.data('truncatedTitle');
 
                     if (vertex) {
