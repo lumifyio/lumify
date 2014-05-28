@@ -123,8 +123,6 @@ define([
                     y: event.pageY
                 }
             });
-
-            this.selectItems($target);
         };
 
         this.move = function(e, data) {
