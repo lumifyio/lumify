@@ -895,6 +895,10 @@ define([
                 filters = data.filters,
                 conceptFilter = filters && filters.conceptFilter,
                 propertyFilters = filters && filters.propertyFilters,
+                options = {
+                    fit: true,
+                    preventShake: true
+                },
                 async = $.Deferred();
 
             if (query || conceptFilter || propertyFilters) {
@@ -903,11 +907,11 @@ define([
                         self.filteredWorkspaceVertices = result[1];
 
                         self.trigger('verticesDeleted', { vertices: result[1] });
-                        self.trigger('verticesAdded', { vertices: result[0], options: { fit: true } });
+                        self.trigger('verticesAdded', { vertices: result[0], options: options });
                     })
                     .done(async.resolve);
             } else {
-                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: true } });
+                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: options });
                 async.resolve();
             }
 

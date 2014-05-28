@@ -193,7 +193,7 @@ define([
         };
 
         this.onVerticesAdded = function(evt, data) {
-            this.updateOrAddVertices(data.vertices, { adding: true });
+            this.updateOrAddVertices(data.vertices, _.extend({ adding: true }, data.options));
         };
 
         this.onVerticesUpdated = function(evt, data) {
