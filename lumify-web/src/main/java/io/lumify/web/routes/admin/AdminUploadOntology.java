@@ -59,6 +59,7 @@ public class AdminUploadOntology extends BaseRequestHandler {
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
         ontologyRepository.writePackage(tempFile, documentIRI, authorizations);
+        ontologyRepository.clearCache();
 
         tempFile.delete();
 
