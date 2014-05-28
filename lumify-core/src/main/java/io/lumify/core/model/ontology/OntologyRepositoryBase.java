@@ -114,6 +114,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         OWLOntologyDocumentSource documentSource = new ReaderDocumentSource(inFileReader, documentIRI);
         OWLOntology o = m.loadOntologyFromOntologyDocument(documentSource, config);
 
+        storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
+
         for (OWLClass ontologyClass : o.getClassesInSignature()) {
             if (!o.isDeclared(ontologyClass, false)) {
                 continue;
@@ -134,8 +136,6 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
             importObjectProperty(o, objectProperty);
         }
-
-        storeOntologyFile(new ByteArrayInputStream(inFileData), documentIRI);
     }
 
     public OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception {
