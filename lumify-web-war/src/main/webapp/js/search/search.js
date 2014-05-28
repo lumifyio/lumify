@@ -47,6 +47,7 @@ define([
             this.on(this.select('querySelector'), 'focus', this.onQueryFocus);
 
             this.on('filterschange', this.onFiltersChange);
+            this.on('clearSearch', this.onClearSearch);
             this.on('searchRequestBegan', this.onSearchResultsBegan);
             this.on('searchRequestCompleted', this.onSearchResultsCompleted);
             this.on(document, 'searchPaneVisible', this.onSearchPaneVisible);
@@ -104,7 +105,11 @@ define([
                     $(event.target).select()
                 }
             } else if (event.which === $.ui.keyCode.ESCAPE) {
-                this.onClearSearchClick();
+                if (this.canClearSearch) {
+                    this.onClearSearchClick();
+                } else {
+                    this.select('querySelector').blur();
+                }
             } else {
                 this.updateClearSearch();
                 this.triggerQueryUpdated();
@@ -114,22 +119,28 @@ define([
         this.onClearSearchClick = function(event) {
             var node = this.getSearchTypeNode(),
                 $query = this.select('querySelector'),
-                $clear = this.select('clearSearchSelector'),
-                canClear = (event && event.type === 'click') || this.canClearSearch;
+                $clear = this.select('clearSearchSelector');
 
-            this.select('queryContainerSelector').removeClass('loading');
-            if (this.getQueryVal()) {
-                this.setQueryVal('');
-            }
-            this.filters = null;
-            this.updateQueryError();
+            $clear.hide();
+            _.defer($query.focus.bind($query));
+            this.trigger(node, 'clearSearch')
+        };
 
-            if (canClear) {
-                $clear.hide();
-                _.defer($query.focus.bind($query));
-                this.trigger(node, 'clearSearch')
+        this.onClearSearch = function(event) {
+            var node = this.getSearchTypeNode(),
+                $query = this.select('querySelector'),
+                $clear = this.select('clearSearchSelector');
+
+            if (node.is(event.target)) {
+                this.select('queryContainerSelector').removeClass('loading');
+                if (this.getQueryVal()) {
+                    this.setQueryVal('');
+                }
+                this.filters = null;
+                this.updateQueryError();
             } else {
-                $query.blur();
+                this.savedQueries[this.otherSearchType].query = '';
+                this.savedQueries[this.otherSearchType].filters = [];
             }
         };
 
@@ -189,6 +200,7 @@ define([
                 this.savedQueries[this.searchType].query = $query.val();
             }
             this.searchType = newSearchType;
+            this.otherSearchType = _.without(SEARCH_TYPES, this.searchType)[0];
 
             $query.val(this.savedQueries[newSearchType].query);
 

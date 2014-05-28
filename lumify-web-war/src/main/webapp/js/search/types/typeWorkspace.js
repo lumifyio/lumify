@@ -13,7 +13,12 @@ define([
         this.after('initialize', function() {
             this.on('queryupdated', this.onQueryUpdated);
             this.on('workspaceFiltered', this.onWorkspaceFiltered);
+            this.on(document, 'clearWorkspaceFilter', this.onClearWorkspaceFilter);
         });
+
+        this.onClearWorkspaceFilter = function() {
+            this.trigger('clearSearch');
+        };
 
         this.onQueryUpdated = function(event, data) {
             this.trigger('searchRequestBegan');

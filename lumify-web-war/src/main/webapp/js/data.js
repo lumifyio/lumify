@@ -122,6 +122,8 @@ define([
             this.on('deleteEdges', this.onDeleteEdges);
             this.on('willLogout', this.willLogout);
             this.on('filterWorkspace', this.onFilterWorkspace);
+            this.on('clearWorkspaceFilter', this.onClearWorkspaceFilter);
+            this.on('toggleWorkspaceFilter', this.onToggleWorkspaceFilter);
 
             // Workspaces
             this.on('saveWorkspace', this.onSaveWorkspace);
@@ -866,9 +868,30 @@ define([
             this.previousSelection = null;
         };
 
+        this.onClearWorkspaceFilter = function() {
+            this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+            this.currentWorkspaceFilter = null;
+        };
+
+        this.onToggleWorkspaceFilter = function(event, data) {
+            var enabled = data.enabled;
+
+            if (enabled === this.workspaceFilterEnabled) {
+                return;
+            }
+
+            if (enabled && this.filteredWorkspaceVertices) {
+                this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices });
+                this.workspaceFilterEnabled = enabled;
+            } else if (!enabled) {
+                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+                this.workspaceFilterEnabled = enabled;
+            }
+        };
+
         this.onFilterWorkspace = function(event, data) {
             var self = this,
-                query = $.trim(data.value || '').toLowerCase(),
+                query = $.trim((data && data.value) || '').toLowerCase(),
                 filters = data.filters,
                 conceptFilter = filters && filters.conceptFilter,
                 propertyFilters = filters && filters.propertyFilters,
@@ -877,6 +900,8 @@ define([
             if (query || conceptFilter || propertyFilters) {
                 F.vertex.partitionVertices(this.verticesInWorkspace(), query, conceptFilter, propertyFilters)
                     .done(function(result) {
+                        self.filteredWorkspaceVertices = result[1];
+
                         self.trigger('verticesDeleted', { vertices: result[1] });
                         self.trigger('verticesAdded', { vertices: result[0], options: { fit: true } });
                     })
@@ -1115,6 +1140,7 @@ define([
                             graphVisible = true;
                         }
 
+                        self.trigger('toggleWorkspaceFilter', { enabled: !enabled });
                         if (graphVisible) {
                             if (enabled) {
                                 self.trigger('verticesHovering', {
@@ -1144,6 +1170,7 @@ define([
 
                     self.workspaceReady(function(ws) {
                         if (ws.isEditable) {
+                            self.trigger('clearWorkspaceFilter');
                             self.trigger('verticesDropped', { vertices: vertices });
                         }
                     });
