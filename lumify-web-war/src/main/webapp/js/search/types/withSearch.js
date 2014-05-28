@@ -38,7 +38,10 @@ define([
                         $searchResults = this.select('resultsSelector'),
                         $resultsContainer = this.select('resultsContainerSelector')
                             .teardownComponent(VertexList)
-                            .empty();
+                            .empty(),
+                        $hits = $searchResults.find('.total-hits').find('span').text(
+                            'Found 0 results'
+                        ).end().toggle(!result.totalHits);
 
                     VertexList.attachTo($resultsContainer, {
                         vertices: vertices,
