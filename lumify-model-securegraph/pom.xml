@@ -33,6 +33,10 @@
         </dependency>
         <dependency>
             <groupId>org.securegraph</groupId>
+            <artifactId>securegraph-elasticsearch-parentchild</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.securegraph</groupId>
             <artifactId>securegraph-accumulo</artifactId>
         </dependency>
     </dependencies>

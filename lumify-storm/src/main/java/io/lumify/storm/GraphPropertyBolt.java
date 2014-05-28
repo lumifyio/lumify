@@ -152,12 +152,10 @@ public class GraphPropertyBolt extends BaseRichBolt {
         processingCounter.inc();
         Timer.Context processingTimeContext = processingTimeTimer.time();
         try {
-            LOGGER.debug("BEGIN %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
-            LOGGER.trace("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
+            LOGGER.debug("BEGIN %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
             try {
                 safeExecute(input);
-                LOGGER.debug("ACK'ing: [MessageID: %s]", input.getMessageId());
-                LOGGER.trace("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input);
+                LOGGER.debug("ACK'ing: [MessageID: %s] %s", input.getMessageId(), input);
                 this.collector.ack(input);
             } catch (Exception e) {
                 totalErrorCounter.inc();
@@ -166,8 +164,7 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 this.collector.fail(input);
             }
 
-            LOGGER.debug("END %s: [MessageID: %s]", getClass().getName(), input.getMessageId());
-            LOGGER.trace("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
+            LOGGER.debug("END %s: [MessageID: %s] %s", getClass().getName(), input.getMessageId(), input);
         } finally {
             processingCounter.dec();
             totalProcessedCounter.inc();
@@ -228,6 +225,11 @@ public class GraphPropertyBolt extends BaseRichBolt {
         if (interestedWorkerWrappers.size() == 0) {
             LOGGER.info("Could not find interested workers for element %s property %s", element.getId(), propertyText);
             return;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            for (GraphPropertyThreadedWrapper interestedWorkerWrapper : interestedWorkerWrappers) {
+                LOGGER.debug("interested worker for element %s property %s: %s", element.getId(), propertyText, interestedWorkerWrapper.getWorker().getClass().getName());
+            }
         }
         GraphPropertyWorkData workData = new GraphPropertyWorkData(element, property);
 

@@ -25,6 +25,7 @@ Lumify has several required dependencies to build from source. Please ensure tha
    * To generate a Google Map V3 api key, please refer to the [documentation](https://developers.google.com/maps/documentation/javascript/tutorial#api_key) provided by Google.
 1. Copy [log4j.xml.sample](./log4j.xml) file into ```/opt/lumify/config/``` and rename it to log4j.xml.
 1. From the top level project directory, run the command ```mvn clean compile```
+1. Install the Elasticsearch securegraph plugin ```sudo bin/plugin --url file:///docs/elasticsearch-securegraph-1.1.2.zip --install securegraph-plugin```
 1. Deploy storm topology jar files
 1. Deploy web war
 
