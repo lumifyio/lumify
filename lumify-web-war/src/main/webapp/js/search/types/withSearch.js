@@ -52,8 +52,6 @@ define([
                     this.makeResizable($searchResults);
                     $searchResults.show().find('.multi-select');
                     this.trigger(document, 'paneResized');
-                    //} else {
-                    // TODO: show error
                 }
             });
             this.on('clearSearch', function() {
