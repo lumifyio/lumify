@@ -82,14 +82,16 @@ define([
                     relatedSubmenuItems.push(DIVIDER);
 
                     list.forEach(function(concept) {
-                        relatedSubmenuItems.push({
-                            label: concept.pluralDisplayName,
-                            event: relatedSubmenuItems[0].event,
-                            selection: 1,
-                            args: {
-                                limitParentConceptId: concept.id
-                            }
-                        })
+                        if (concept.userVisible !== false) {
+                            relatedSubmenuItems.push({
+                                label: concept.pluralDisplayName,
+                                event: relatedSubmenuItems[0].event,
+                                selection: 1,
+                                args: {
+                                    limitParentConceptId: concept.id
+                                }
+                            })
+                        }
                     })
                 }
             });
