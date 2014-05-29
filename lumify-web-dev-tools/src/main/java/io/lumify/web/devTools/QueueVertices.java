@@ -6,7 +6,8 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
-import io.lumify.core.user.User;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class QueueVertices extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(QueueVertices.class);
     private final Graph graph;
     private final WorkQueueRepository workQueueRepository;
 
@@ -33,15 +35,23 @@ public class QueueVertices extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        User user = getUser(request);
-        Authorizations authorizations = getAuthorizations(request, user);
+        final Authorizations authorizations = getUserRepository().getAuthorizations(getUserRepository().getSystemUser());
 
-        Iterable<Vertex> vertices = graph.getVertices(authorizations);
-        for (Vertex vertex : vertices) {
-            workQueueRepository.pushElement(vertex);
-        }
-        workQueueRepository.flush();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LOGGER.info("requeue all vertices");
+                Iterable<Vertex> vertices = graph.getVertices(authorizations);
+                for (Vertex vertex : vertices) {
+                    workQueueRepository.pushElement(vertex);
+                }
+                workQueueRepository.flush();
+                LOGGER.info("requeue all vertices complete");
+            }
+        });
+        t.setName("requeue-vertices");
+        t.start();
 
-        respondWithHtml(response, "OK");
+        respondWithHtml(response, "Started requeue thread");
     }
 }

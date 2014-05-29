@@ -26,6 +26,5 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
         app.post("/admin/queueVertices", authenticationHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
         app.post("/admin/queueEdges", authenticationHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);
-        app.post("/admin/reindex", authenticationHandlerClass, AdminPrivilegeFilter.class, ReIndexAll.class);
     }
 }
