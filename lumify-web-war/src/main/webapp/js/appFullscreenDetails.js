@@ -34,15 +34,21 @@ define([
         this.after('initialize', function() {
             var self = this;
 
-            if (this.attr.workspaceId) {
-                appData.workspaceId = this.attr.workspaceId;
-            }
-
             this.$node.html(template({}));
             this.updateTitle();
 
+            this.on('selectObjects', function(e) {
+                e.stopPropagation();
+                _.defer(function() {
+                    self.trigger(document, 'objectsSelected', {
+                        vertices: [],
+                        edges: []
+                    });
+                });
+            });
             this._windowIsHidden = false;
             this.on(document, 'window-visibility-change', this.onVisibilityChange);
+            this.on(document, 'vertexUrlChanged', this.onVertexUrlChange);
             this.on('click', { closeSelector: this.onClose });
             this.on('click', this.clearFlashing.bind(this));
             $(window).focus(this.clearFlashing.bind(this));
@@ -57,6 +63,13 @@ define([
                     .fail(self.handleVerticesFailed.bind(self))
                     .done(self.handleVerticesLoaded.bind(self));
             });
+
+            this.trigger(document, 'applicationReady');
+            if (this.attr.workspaceId) {
+                this.trigger(document, 'switchWorkspace', {
+                    workspaceId: this.attr.workspaceId
+                });
+            }
         });
 
         this.clearFlashing = function() {
@@ -73,18 +86,15 @@ define([
                 instanceInfos = registry.findInstanceInfoByNode(node[0]);
 
             if (instanceInfos.length) {
+                var ids = [];
                 instanceInfos.forEach(function(info) {
-                    self.vertices = _.reject(self.vertices, function(v) {
-                        return v.id === info.instance.attr.loadGraphVertexData.id;
-                    });
-                    info.instance.teardown();
+                    ids.push(info.instance.attr.loadGraphVertexData.id);
+                });
+
+                this.updateVertices({
+                    remove: ids
                 });
             }
-            pane.remove();
-
-            this.updateLocationHash();
-            this.updateLayout();
-            this.updateTitle();
         };
 
         this.updateLocationHash = function() {
@@ -98,7 +108,7 @@ define([
                 verts = entities + artifacts;
 
             this.$node
-                .removePrefixedClasses('vertices- entities- has- entity-cols- onlyone')
+                .removePrefixedClasses('vertices- artifacts- entities- has- entity-cols- onlyone')
                 .toggleClass('onlyone', verts === 1)
                 .addClass([
                     verts <= 4 ? 'vertices-' + verts : 'vertices-many',
@@ -172,14 +182,16 @@ define([
                 var node = filterEntity(v) ?
                         this.$node.find('.entities-container') :
                         this.$node.find('.artifacts-container'),
-                    type = _.contains('document image video'.split(' '), v.concept.displayType) ? 'artifact' : 'entity',
-                    subType = v.concept.displayType;
+                    type = filterArtifacts(v) ? 'artifact' : 'entity',
+                    subType = v.concept.displayType,
+                    $newPane = $('<div class="detail-pane visible highlight-none"><div class="content"/></div>')
+                        .addClass('type-' + type +
+                                  (subType ? (' subType-' + subType) : '') +
+                                  ' ' + F.className.to(v.id))
+                        .appendTo(node)
+                        .find('.content');
 
-                node.append('<div class="detail-pane visible highlight-none"><div class="content"/></div>');
-
-                Detail.attachTo(this.$node.find('.detail-pane').last()
-                                .addClass('type-' + type + (subType ? (' subType-' + subType) : ''))
-                                .find('.content'), {
+                Detail.attachTo($newPane, {
                     loadGraphVertexData: v,
                     highlightStyle: 2
                 });
@@ -195,12 +207,82 @@ define([
             }
         };
 
+        this.onVertexUrlChange = function(event, data) {
+            var self = this,
+                deferred = $.Deferred();
+
+            if (data.workspaceId) {
+                this.attr.workspaceId = data.workspaceId;
+                if (appData.workspaceId !== this.attr.workspaceId) {
+                    this.on(document, 'workspaceLoaded', function loaded() {
+                        self.off(document, 'workspaceLoaded', loaded);
+                        deferred.resolve();
+                    });
+                    this.trigger(document, 'switchWorkspace', { workspaceId: this.attr.workspaceId });
+                } else deferred.resolve();
+            } else deferred.resolve();
+
+            var toRemove = _.difference(this.attr.graphVertexIds, data.graphVertexIds),
+                toAdd = _.difference(data.graphVertexIds, this.attr.graphVertexIds);
+
+            if (data.graphVertexIds) {
+                this.attr.graphVertexIds = data.graphVertexIds;
+            }
+
+            deferred.done(function() {
+                self.updateVertices({
+                    remove: toRemove,
+                    add: toAdd,
+                    preventRecursiveUrlChange: true
+                });
+            })
+        };
+
         this.onVisibilityChange = function(event, data) {
             this._windowIsHidden = data.hidden;
             if (data.visible) {
                 clearTimeout(this.timer);
                 this.updateTitle();
             }
+        };
+
+        this.updateVertices = function(data) {
+            var self = this,
+                willRemove = !_.isEmpty(data.remove),
+                willAdd = !_.isEmpty(data.add);
+
+            if (!willRemove && !willAdd) {
+                return;
+            }
+
+            if (willAdd) {
+                return appData.refresh(data.add.concat(_.pluck(this.vertices, 'id')))
+                    .done(function(vertices) {
+                        self.handleVerticesLoaded({ vertices: vertices });
+                    });
+            }
+
+            if (willRemove) {
+                data.remove.forEach(function(vertexId) {
+                    var $pane = self.$node.find('.detail-pane.' + F.className.to(vertexId));
+                    if ($pane.length) {
+                        $pane
+                            .find('.content').teardownAllComponents()
+                            .end()
+                            .remove();
+                    }
+                });
+
+                this.vertices = _.reject(this.vertices, function(v) {
+                    return _.contains(data.remove, v.id);
+                });
+            }
+
+            if (data.preventRecursiveUrlChange !== true) {
+                self.updateLocationHash();
+            }
+            self.updateLayout();
+            self.updateTitle();
         };
 
         this.onAddGraphVertices = function(data) {

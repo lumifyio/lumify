@@ -1,6 +1,8 @@
 
 position: relative;
 text-align: center;
+.clearfix;
+min-width: 200px;
 
 .no-results {
   color: #666;
@@ -39,19 +41,22 @@ text-align: center;
 }
 
 .detail-pane {
-  text-align: left;
-  background: white;
+  text-align: left;  
   padding: 0;
-  margin: 0 0 2em 0;
+  margin: 0;  
   height: auto;
   position: relative;
-  overflow: auto;
+  overflow: none;  
 
   .highlight-button {
     display: none;
   }
 
   .content {
+    background: white;
+    margin: 3%;
+    border: 1px solid #ddd;
+    position: relative;
     overflow: visible;
     height: auto;
   }
@@ -61,14 +66,34 @@ text-align: center;
   }
 }
 
-&.onlyone .close-detail-pane {
-  display: none;
+&.onlyone {  
+  .entities-container, .artifacts-container {
+    width: auto;
+    .box-sizing(border-box);    
+    
+  }
+  .detail-pane {
+    width: 100% !important;
+    margin: auto;   
+    &.type-entity {
+      max-width: 50em !important;
+    }
+  }
+  .close-detail-pane {
+    display: none;
+  }
+}
+
+&.artifacts-0 {
+  .entities-container {
+    width: 100%;
+  }
 }
 
 // 2 Column Entities, 1 column
 @media (min-width: 37em) {
-  &.entity-cols-1 .detail-pane.type-entity,
-  &.entity-cols-2 .detail-pane.type-entity {
+  
+  .detail-pane.type-entity {
     display: inline-block;
     vertical-align: top;
     width: 50%;
@@ -82,7 +107,8 @@ text-align: center;
 }
 
 // 3 Column Entities, 1 column
-@media (min-width: 45em) {
+@media (min-width: 50em) {
+  
   &.entity-cols-1 .detail-pane.type-entity,
   &.entity-cols-3 .detail-pane.type-entity {
     display: inline-block;
@@ -92,7 +118,8 @@ text-align: center;
 }
 
 // 4 Column Entities, 1 column
-@media (min-width: 56em) {
+@media (min-width: 70em) {
+  
   &.entity-cols-1 .detail-pane.type-entity,
   &.entity-cols-4 .detail-pane.type-entity {
     display: inline-block;
@@ -101,20 +128,8 @@ text-align: center;
   }
 }
 
-@media (min-width: 65em) {
-  &.entity-cols-2 .detail-pane.type-entity {
-    display: inline-block;
-    vertical-align: top;
-    width: 25%;
-  }
-}
-
 @media (min-width: 50em) {
-
-
-    padding: 1em;
-    .box-sizing(border-box);
-
+  &.has-artifacts.has-entities {          
     .entities-container {
       .detail-pane.type-entity {
         width: 100%;
@@ -129,5 +144,7 @@ text-align: center;
       .box-sizing(border-box);
       float: right;
     }
+  }  
 }
+
 
