@@ -20,7 +20,10 @@ define([
         this.after('initialize', function() {
             var self = this;
 
+            this.on('filterProperties', this.onFilterProperties);
+
             this.$node.html(template({placeholder: this.attr.placeholder}));
+
             if (this.attr.properties.length === 0 || this.attr.properties.length.value === 0) {
                 this.select('findPropertySelection')
                     .attr('placeholder', 'No valid properties')
@@ -54,19 +57,26 @@ define([
                     .typeahead({
                         minLength: 0,
                         items: 100,
-                        source: _.chain(this.attr.properties)
-                            .filter(function(p) {
-                                return typeof p.searchable === 'undefined' ? p.userVisible :
-                                    p.userVisible && p.searchable;
-                            })
-                            .map(function(p) {
-                                return p.displayName || p.title;
-                            })
-                            .sortBy(function(name) {
-                                return name.toLowerCase();
-                            })
-                            .uniq()
-                            .value(),
+                        source: function() {
+                            return _.chain(self.filteredProperties || self.attr.properties)
+                                    .filter(function(p) {
+                                        var visible = p.userVisible !== false;
+
+                                        if (self.attr.onlySearchable) {
+                                            return visible && p.searchable !== false;
+                                        }
+
+                                        return visible;
+                                    })
+                                    .map(function(p) {
+                                        return p.displayName || p.title;
+                                    })
+                                    .sortBy(function(name) {
+                                        return name.toLowerCase();
+                                    })
+                                    .uniq()
+                                    .value()
+                        },
                         matcher: function(item) {
                             if (this.query === ' ') return -1;
                             if (
@@ -93,6 +103,10 @@ define([
                     .data('typeahead').lookup = allowEmptyLookup;
             }
         });
+
+        this.onFilterProperties = function(event, data) {
+            this.filteredProperties = data.properties;
+        };
 
         this.propertySelected = function(name) {
             var property = _.findWhere(this.attr.properties, { displayName: name }) ||

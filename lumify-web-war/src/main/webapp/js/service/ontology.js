@@ -217,8 +217,7 @@ define([
     OntologyService.prototype.propertiesByConceptId = function(conceptId) {
         return this.ontology()
                     .then(function(ontology) {
-                        var
-                            propertyIds = [],
+                        var propertyIds = [],
                             collectPropertyIds = function(conceptId) {
                                 var concept = ontology.conceptsById[conceptId],
                                     properties = concept && concept.properties,

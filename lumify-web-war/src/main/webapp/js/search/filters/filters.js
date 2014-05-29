@@ -79,7 +79,25 @@ define([
         };
 
         this.onConceptChange = function(event) {
+            var self = this,
+                deferred = $.Deferred().done(function(properties) {
+                    self.select('fieldSelectionSelector').each(function() {
+                        self.trigger(this, 'filterProperties', {
+                            properties: properties && properties.list
+                        });
+                    });
+                });
+
             this.conceptFilter = $(event.target).val();
+
+            // Publish change to filter properties typeaheads
+            if (this.conceptFilter) {
+                this.ontologyService.propertiesByConceptId(this.conceptFilter)
+                    .done(deferred.resolve);
+            } else {
+                deferred.resolve();
+            }
+
             this.notifyOfFilters();
         };
 
@@ -176,6 +194,7 @@ define([
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
                 FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                     properties: this.properties,
+                    onlySearchable: true,
                     placeholder: 'Add Filter'
                 });
             }
