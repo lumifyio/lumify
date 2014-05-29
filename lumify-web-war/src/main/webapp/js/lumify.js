@@ -149,9 +149,11 @@ function(jQuery,
             // Is this the default lumify application?
             mainApp = !popoutDetails;
 
-        // Ignore hash change if not in popout and not going to popout
-        if (event && !isPopoutUrl(event.newURL) && !isPopoutUrl(event.oldURL)) {
-            return;
+        if (event && isPopoutUrl(event.oldURL) && isPopoutUrl(event.newURL)) {
+            return $('#app').trigger('vertexUrlChanged', {
+                graphVertexIds: ids,
+                workspaceId: workspaceId
+            });
         }
 
         new UserService().isLoginRequired()
