@@ -70,9 +70,6 @@ public class Router extends HttpServlet {
             app.post("/logout", Logout.class);
 
             app.get("/configuration", authenticator, Configuration.class);
-            // TODO: remove after fixing visibility
-            //app.get("/js/configuration/plugins/*", authenticator, Plugin.class);
-            //app.get("/jsc/configuration/plugins/*", authenticator, Plugin.class);
 
             app.get("/ontology", authenticator, ReadPrivilegeFilter.class, Ontology.class);
 
