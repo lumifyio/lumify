@@ -14,6 +14,7 @@ Lumify has several required dependencies to build from source. Please ensure tha
 * [NodeJS 0.10.21](http://blog.nodejs.org/2013/10/18/node-v0-10-21-stable/)
 * [Bower 1.2.7](https://npmjs.org/package/bower)
 * [Grunt-cli 0.1.11](https://npmjs.org/package/grunt-cli)
+* [SecureGraph](http://securegraph.org/)
 
 ## Getting Started
 
