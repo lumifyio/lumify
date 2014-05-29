@@ -42,7 +42,7 @@
     }, {
         "userVisible": true,
         "dataType": "string",
-        "title": "http://lumify.io/dev#source",
+        "title": "http://lumify.io#source",
         "displayName": "Source"
     }, {
         "userVisible": true,
@@ -449,7 +449,7 @@
         "glyphIconHref": "resource?id=http%3A%2F%2Fwww.w3.org%2F2002%2F07%2Fowl%23Thing",
         "title": "http://www.w3.org/2002/07/owl#Thing",
         "pluralDisplayName": "things",
-        "properties": ["http://lumify.io#title", "http://lumify.io#glyphIcon", "http://lumify.io/dev#source", "http://lumify.io#source", "http://lumify.io#rowKey", "http://lumify.io#mapGlyphIcon", "http://lumify.io#publishedDate", "http://lumify.io#conceptType", "http://lumify.io#mimeType"],
+        "properties": ["http://lumify.io#title", "http://lumify.io#glyphIcon", "http://lumify.io#source", "http://lumify.io#source", "http://lumify.io#rowKey", "http://lumify.io#mapGlyphIcon", "http://lumify.io#publishedDate", "http://lumify.io#conceptType", "http://lumify.io#mimeType"],
         "parentConcept": "http://lumify.io#root",
         "displayName": "thing"
     }]
