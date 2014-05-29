@@ -143,9 +143,11 @@ public class GraphVertexSearch extends BaseRequestHandler {
         results.put("vertices", verticesJson);
         results.put("nextOffset", offset + size);
 
-        if (searchResults instanceof IterableWithFacetedResults) {
-            IterableWithFacetedResults searchResultsFaceted = (IterableWithFacetedResults) searchResults;
-            results.put("totalHits", searchResultsFaceted.getTotalHits());
+        if (searchResults instanceof IterableWithTotalHits) {
+            IterableWithTotalHits searchResultsFaceted = (IterableWithTotalHits) searchResults;
+            if (searchResultsFaceted.getTotalHits() != null) {
+                results.put("totalHits", searchResultsFaceted.getTotalHits());
+            }
         }
 
         long endTime = System.nanoTime();
