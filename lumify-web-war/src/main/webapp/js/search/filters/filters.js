@@ -176,6 +176,7 @@ define([
                 this.$node.find('.prop-filters').append(itemTemplate({properties: this.properties}));
                 FieldSelection.attachTo(this.select('fieldSelectionSelector'), {
                     properties: this.properties,
+                    onlySearchable: true,
                     placeholder: 'Add Filter'
                 });
             }

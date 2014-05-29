@@ -56,8 +56,13 @@ define([
                         items: 100,
                         source: _.chain(this.attr.properties)
                             .filter(function(p) {
-                                return typeof p.searchable === 'undefined' ? p.userVisible :
-                                    p.userVisible && p.searchable;
+                                var visible = p.userVisible !== false;
+
+                                if (self.attr.onlySearchable) {
+                                    return visible && p.searchable !== false;
+                                }
+
+                                return visible;
                             })
                             .map(function(p) {
                                 return p.displayName || p.title;
