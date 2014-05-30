@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class Configuration extends BaseRequestHandler {
-    private static final String EXPOSED_PROPERTIES_PREFIX = "web.ui.";
-
     @Inject
     public Configuration(
             final UserRepository userRepository,
@@ -26,8 +24,8 @@ public class Configuration extends BaseRequestHandler {
 
         JSONObject results = new JSONObject();
         for (String key : getConfiguration().getKeys()) {
-            if (key.startsWith(EXPOSED_PROPERTIES_PREFIX)) {
-                results.put(key.replaceFirst(EXPOSED_PROPERTIES_PREFIX, ""), getConfiguration().get(key, ""));
+            if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
+                results.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), getConfiguration().get(key, ""));
             }
         }
 
