@@ -152,10 +152,13 @@ define([
             this.vertices = _.sortBy(vertices, function(v) {
                 var descriptors = [];
 
-                // TODO: Image/Video before documents
+                // Image/Video/Audio before documents
+                descriptors.push(
+                    /document/.test(v.concept.displayType) ? '1' : '0'
+                );
 
                 // Sort by title
-                descriptors.push(F.vertex.title(v));
+                descriptors.push(F.vertex.title(v).toLowerCase());
                 return descriptors.join('');
             });
 
