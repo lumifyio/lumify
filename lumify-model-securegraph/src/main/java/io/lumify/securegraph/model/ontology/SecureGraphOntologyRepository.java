@@ -166,7 +166,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         String displayName = null;
         if (relationshipIRI != null && !relationshipIRI.trim().isEmpty()) {
             try {
-                Vertex relVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
+                Vertex relVertex = Iterables.getFirst(graph.query(getAuthorizations())
                         .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
                         .has(ONTOLOGY_TITLE.getKey(), relationshipIRI)
                         .vertices(), null);
@@ -399,7 +399,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(relationshipIRI, VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
