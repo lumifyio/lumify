@@ -15,6 +15,7 @@ define([], function() {
             /^workspace\/diff/,
             /^workspace\/relationships/,
             /^workspace\/update/,
+            /^map\/geocode/,
             /^login/,
             /^vertex\/relationships/,
             /^vertex\/removeRelationship/,
