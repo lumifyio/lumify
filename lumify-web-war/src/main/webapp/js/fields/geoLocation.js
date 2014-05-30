@@ -77,6 +77,7 @@ define([
                             request;
 
                         self.select('descriptionSelector')
+                            .parent().css('position', 'relative').end()
                             .typeahead({
                                 items: 15,
                                 minLength: 3,
