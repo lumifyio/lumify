@@ -6,10 +6,11 @@ define([
     'tpl!./appFullscreenDetails',
     'tpl!./appFullscreenDetailsError',
     'service/vertex',
+    'service/workspace',
     'detail/detail',
     'util/vertex/formatters',
     'util/jquery.removePrefixedClasses'
-], function(appData, defineComponent, registry, template, errorTemplate, VertexService, Detail, F) {
+], function(appData, defineComponent, registry, template, errorTemplate, VertexService, WorkspaceService, Detail, F) {
     'use strict';
 
     return defineComponent(FullscreenDetails);
@@ -28,7 +29,8 @@ define([
         this.defaultAttrs({
             detailSelector: '.detail-pane .content',
             closeSelector: '.close-detail-pane',
-            noResultsSelector: '.no-results'
+            noResultsSelector: '.no-results',
+            changeWorkspaceSelector: '.no-workspace-access li a'
         });
 
         this.after('initialize', function() {
@@ -49,7 +51,10 @@ define([
             this._windowIsHidden = false;
             this.on(document, 'window-visibility-change', this.onVisibilityChange);
             this.on(document, 'vertexUrlChanged', this.onVertexUrlChange);
-            this.on('click', { closeSelector: this.onClose });
+            this.on('click', {
+                closeSelector: this.onClose,
+                changeWorkspaceSelector: this.onChangeWorkspace
+            });
             this.on('click', this.clearFlashing.bind(this));
             $(window).focus(this.clearFlashing.bind(this));
 
@@ -57,18 +62,9 @@ define([
             this.fullscreenIdentifier = Math.floor((1 + Math.random()) * 0xFFFFFF).toString(16).substring(1);
             this.$node.addClass('fullscreen-details');
 
-            appData.cachedConceptsDeferred.done(function() {
-                self.vertexService
-                    .getMultiple(self.attr.graphVertexIds)
-                    .fail(self.handleVerticesFailed.bind(self))
-                    .done(self.handleVerticesLoaded.bind(self));
-            });
-
             this.trigger(document, 'applicationReady');
             if (this.attr.workspaceId) {
-                this.trigger(document, 'switchWorkspace', {
-                    workspaceId: this.attr.workspaceId
-                });
+                this.switchWorkspace(this.attr.workspaceId);
             }
         });
 
@@ -102,7 +98,6 @@ define([
         };
 
         this.updateLayout = function() {
-
             var entities = _.filter(this.vertices, filterEntity).length,
                 artifacts = _.filter(this.vertices, filterArtifacts).length,
                 verts = entities + artifacts;
@@ -127,9 +122,15 @@ define([
         };
 
         this.handleNoVertices = function() {
-            document.title = 'No vertices found';
+            var requiredFallback = this.attr.workspaceId !== appData.workspaceId;
+
+            document.title = requiredFallback ? 'Unauthorized' : 'No vertices found';
             this.select('noResultsSelector')
-                .html(errorTemplate({ vertices: this.attr.graphVertexIds }))
+                .html(errorTemplate({
+                    vertices: this.attr.graphVertexIds,
+                    somePublished: false,
+                    requiredFallback: requiredFallback
+                }))
                 .addClass('visible');
         };
 
@@ -138,7 +139,8 @@ define([
         };
 
         this.handleVerticesLoaded = function(data) {
-            var vertices = data.vertices;
+            var vertices = data.vertices,
+                fallbackToPublic = this.attr.workspaceId !== appData.workspaceId;
 
             Detail.teardownAll();
             this.$node.find('.detail-pane').remove();
@@ -150,10 +152,13 @@ define([
             this.vertices = _.sortBy(vertices, function(v) {
                 var descriptors = [];
 
-                // TODO: Image/Video before documents
+                // Image/Video/Audio before documents
+                descriptors.push(
+                    /document/.test(v.concept.displayType) ? '1' : '0'
+                );
 
                 // Sort by title
-                descriptors.push(F.vertex.title(v));
+                descriptors.push(F.vertex.title(v).toLowerCase());
                 return descriptors.join('');
             });
 
@@ -170,10 +175,16 @@ define([
                 });
 
             this.vertices.splice.apply(this.vertices, [0,0].concat(notFound));
-            if (notFound.length) {
+            if (notFound.length || fallbackToPublic) {
                 this.select('noResultsSelector')
-                    .html(errorTemplate({ vertices: notFoundIds }))
+                    .html(errorTemplate({
+                        vertices: notFoundIds,
+                        requiredFallback: fallbackToPublic,
+                        somePublished: true,
+                        workspaceTitle: this.workspaceTitle
+                    }))
                     .addClass('visible someVerticesFound');
+                this.loadWorkspaces();
             }
 
             this.vertices.forEach(function(v) {
@@ -205,6 +216,59 @@ define([
                 this.setupTabCommunications();
                 this._commSetup = true;
             }
+        };
+
+        this.loadWorkspaces = function() {
+            var self = this;
+
+            new WorkspaceService().list()
+                .done(function(data) {
+                    if (data.workspaces.length > 1) {
+                        var template = _.template(
+                            '<li data-id="{workspaceId}" ' +
+                            '<% if (disabled) { %>class="disabled"<% } %>>' +
+                            '<a>{title}</a>' +
+                            '</li>'
+                        );
+                        self.$node.find('.no-workspace-access')
+                            .find('.caret').show()
+                            .end()
+                            .find('.dropdown-menu')
+                            .html(_.chain(data.workspaces)
+                                    .sortBy(function(w) {
+                                        return w.title.toLowerCase();
+                                    })
+                                    .map(function(workspace) {
+                                        workspace.disabled = workspace.workspaceId === self.actualWorkspaceId;
+                                        return template(workspace);
+                                    })
+                                    .value()
+                                    .join(''))
+                            .prev('.dropdown-toggle').removeClass('disabled')
+                    }
+                });
+        };
+
+        this.onChangeWorkspace = function(event) {
+            var workspaceId = $(event.target).closest('li').data('id');
+            this.switchWorkspace(workspaceId);
+        };
+
+        this.switchWorkspace = function(workspaceId) {
+            var self = this;
+
+            this.on(document, 'workspaceLoaded', function loaded(event, workspace) {
+                self.workspaceTitle = workspace.title;
+                self.actualWorkspaceId = workspace.workspaceId;
+                self.off(document, 'workspaceLoaded', loaded);
+                appData.cachedConceptsDeferred.done(function() {
+                    self.vertexService
+                        .getMultiple(self.attr.graphVertexIds, true)
+                        .fail(self.handleVerticesFailed.bind(self))
+                        .done(self.handleVerticesLoaded.bind(self));
+                });
+            });
+            this.trigger(document, 'switchWorkspace', { workspaceId: workspaceId });
         };
 
         this.onVertexUrlChange = function(event, data) {

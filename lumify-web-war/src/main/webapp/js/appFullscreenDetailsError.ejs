@@ -1,13 +1,35 @@
 
+<% if (requiredFallback) { %>
+  <h1>Unauthorized Workspace</h1>
+
+  <div class="no-workspace-access">
+      You do not have access to the requested workspace.<br>
+    <% if (somePublished) { %>
+      Displaying published items using 
+        <div class="btn-group">
+          <a class="btn btn-link dropdown-toggle disabled" data-toggle="dropdown">
+            <%= workspaceTitle %>
+            <span style="display:none" class="caret"></span>
+          </a>
+          <ul class="dropdown-menu"></ul>
+        </div>
+    <% } %>
+  </div>
+<% } %>
+
 <% if (vertices.length === 1) { %>
 
-<h1>Vertex Not Found</h1>
-<p>The vertex with <code>identifier = <%= vertices[0] %></code> does not exist.</p>
+  <% if (!requiredFallback) { %>
+    <h1>Item Not Found</h1>
+  <% } %>
+  <p>The item with <code>identifier = <%= vertices[0] %></code> could not be found.</p>
 
-<% } else { %>
+<% } else if (vertices.length > 1) { %>
 
-  <h1>Vertices Not Found</h1>
-  <p>The vertices with the following identifiers do not exist:</p>
+  <% if (!requiredFallback) { %>
+    <h1>Items Not Found</h1>
+  <% } %>
+  <p>The items with the following identifiers can not be found:</p>
   <p>
     <% vertices.forEach(function(vertex, i) { %>
       <code><%= vertex %></code>
@@ -16,6 +38,8 @@
       <% } %>
     
     <% }); %>
-
+  </p>
 <% } %>
-<p><a href="/">Return to Lumify</a>
+
+
+<p class="return-to-lumify"><a href="/">Return to Lumify</a>

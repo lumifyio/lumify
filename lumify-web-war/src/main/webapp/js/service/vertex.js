@@ -98,11 +98,12 @@ define([
         });
     };
 
-    VertexService.prototype.getMultiple = function(vertexIds) {
+    VertexService.prototype.getMultiple = function(vertexIds, fallbackToPublic) {
         return this._ajaxPost({
             url: 'vertex/multiple',
             data: {
-                vertexIds: vertexIds
+                vertexIds: vertexIds,
+                fallbackToPublic: fallbackToPublic
             }
         });
     };
