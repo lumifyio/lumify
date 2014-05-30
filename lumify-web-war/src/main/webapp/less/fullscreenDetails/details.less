@@ -129,7 +129,10 @@ min-width: 200px;
 }
 
 @media (min-width: 50em) {
-  &.has-artifacts.has-entities {          
+  &.has-artifacts.has-entities { 
+    .detail-pane .content {
+      margin: 1em 0 0 1em;
+    }
     .entities-container {
       .detail-pane.type-entity {
         width: 100%;
@@ -140,9 +143,13 @@ min-width: 200px;
     }
     .artifacts-container {
       width: 70%;
-      padding-left: 1em;
+      padding: 0;      
       .box-sizing(border-box);
       float: right;
+      
+      .detail-pane .content {
+        margin-right: 1em;
+      }
     }
   }  
 }
