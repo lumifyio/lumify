@@ -117,6 +117,7 @@ function(jQuery,
 
         // Default templating
         _.templateSettings.escape = /\{([\s\S]+?)\}/g;
+        _.templateSettings.evaluate = /<%([\s\S]+?)%>/g;
         _.templateSettings.interpolate = /\{-([\s\S]+?)\}/g;
 
         // Default datepicker options
