@@ -250,14 +250,8 @@ public abstract class GraphPropertyWorker {
                 vertexElementMutation = vertex.prepareMutation();
             }
 
-            if (termMention.getPropertyValue() != null) {
-                Map<String, Object> properties = termMention.getPropertyValue();
-                for (String key : properties.keySet()) {
-                    // TODO should we wrap these properties in secure graph Text classes?
-                    // GS - No.  Leave it up to the property generator to provide Text objects if they
-                    // want index control; see CLAVIN for example
-                    vertexElementMutation.setProperty(key, properties.get(key), metadata, termMention.getVisibility());
-                }
+            for (TermMention.TermMentionProperty termMentionProperty : termMention.getNewProperties()) {
+                vertexElementMutation.addPropertyValue(termMentionProperty.getKey(), termMentionProperty.getName(), termMentionProperty.getValue(), metadata, termMention.getVisibility());
             }
 
             if (!(vertexElementMutation instanceof ExistingElementMutation)) {

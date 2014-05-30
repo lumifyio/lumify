@@ -524,24 +524,13 @@
 
     <!-- http://lumify.io/dev#eventGeolocation -->
 
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#eventGeolocation">
+    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#geolocation">
         <rdfs:label xml:lang="en">Geolocation</rdfs:label>
         <lumify:displayType xml:lang="en">geoLocation</lumify:displayType>
         <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#event"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://lumify.io/dev#locationGeolocation -->
-
-    <owl:DatatypeProperty rdf:about="http://lumify.io/dev#locationGeolocation">
-        <rdfs:label xml:lang="en">Geolocation</rdfs:label>
-        <lumify:displayType xml:lang="en">geoLocation</lumify:displayType>
-        <rdfs:range rdf:resource="&lumify;geolocation"/>
         <rdfs:domain rdf:resource="http://lumify.io/dev#location"/>
     </owl:DatatypeProperty>
-
 
 
     <!-- http://lumify.io/dev#netIncome -->

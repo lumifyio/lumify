@@ -2,7 +2,8 @@ package io.lumify.core.ingest.term.extraction;
 
 import org.securegraph.Visibility;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An occurrence of a Term discovered by an extraction process.
@@ -14,7 +15,7 @@ public class TermMention {
     private final String sign;
     private final String ontologyClassUri;
     private final boolean resolved;
-    private final Map<String, Object> properties;
+    private final List<TermMentionProperty> newProperties;
     private final boolean useExisting;
     private final String propertyKey;
     private String process = "";
@@ -28,7 +29,7 @@ public class TermMention {
             String ontologyClassUri,
             String propertyKey,
             boolean resolved,
-            Map<String, Object> propertyValue,
+            List<TermMentionProperty> newProperties,
             boolean useExisting,
             String process,
             Object id,
@@ -39,7 +40,7 @@ public class TermMention {
         this.ontologyClassUri = ontologyClassUri;
         this.propertyKey = propertyKey;
         this.resolved = resolved;
-        this.properties = propertyValue;
+        this.newProperties = newProperties;
         this.useExisting = useExisting;
         this.process = process;
         this.id = id;
@@ -74,8 +75,8 @@ public class TermMention {
         return resolved;
     }
 
-    public Map<String, Object> getPropertyValue() {
-        return properties;
+    public List<TermMentionProperty> getNewProperties() {
+        return newProperties;
     }
 
     public boolean getUseExisting() {
@@ -96,8 +97,8 @@ public class TermMention {
 
     @Override
     public String toString() {
-        return String.format("{id: %s, sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, props: %s, process: %s}",
-                id, sign, start, end, ontologyClassUri, resolved, useExisting, properties, process);
+        return String.format("{id: %s, sign: %s, loc: [%d, %d], ontology: %s, resolved? %s, useExisting? %s, process: %s}",
+                id, sign, start, end, ontologyClassUri, resolved, useExisting, process);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class TermMention {
         hash = 17 * hash + (this.sign != null ? this.sign.hashCode() : 0);
         hash = 17 * hash + (this.ontologyClassUri != null ? this.ontologyClassUri.hashCode() : 0);
         hash = 17 * hash + (this.resolved ? 1 : 0);
-        hash = 17 * hash + (this.properties != null ? this.properties.hashCode() : 0);
+        hash = 17 * hash + (this.newProperties != null ? this.newProperties.hashCode() : 0);
         hash = 17 * hash + (this.useExisting ? 1 : 0);
         hash = 17 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
@@ -138,7 +139,7 @@ public class TermMention {
         if (this.resolved != other.resolved) {
             return false;
         }
-        if (this.properties != other.properties && (this.properties == null || !this.properties.equals(other.properties))) {
+        if (this.newProperties != other.newProperties && (this.newProperties == null || !this.newProperties.equals(other.newProperties))) {
             return false;
         }
         if (this.useExisting != other.useExisting) {
@@ -150,6 +151,30 @@ public class TermMention {
         return true;
     }
 
+    public static class TermMentionProperty {
+        private final String key;
+        private final String name;
+        private final Object value;
+
+        public TermMentionProperty(String key, String name, Object value) {
+            this.key = key;
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+    }
+
     public static class Builder {
 
         private final String propertyKey;
@@ -158,7 +183,7 @@ public class TermMention {
         private String sign;
         private String ontologyClassUri;
         private boolean resolved;
-        private Map<String, Object> properties = new HashMap<String, Object>();
+        private List<TermMentionProperty> newProperties = new ArrayList<TermMentionProperty>();
         private boolean useExisting;
         private final List<String> process = new ArrayList<String>();
         private Object id;
@@ -180,7 +205,6 @@ public class TermMention {
             this.ontologyClassUri = tm.ontologyClassUri;
             this.propertyKey = tm.propertyKey;
             this.resolved = tm.resolved;
-            this.properties = new HashMap<String, Object>(tm.properties);
             this.useExisting = tm.useExisting;
             this.process.add(tm.process);
             this.id = tm.id;
@@ -212,11 +236,6 @@ public class TermMention {
             return this;
         }
 
-        public Builder properties(final Map<String, Object> map) {
-            this.properties = map != null ? new HashMap<String, Object>(map) : new HashMap<String, Object>();
-            return this;
-        }
-
         public Builder id(final Object id) {
             this.id = id;
             return this;
@@ -227,12 +246,8 @@ public class TermMention {
             return this;
         }
 
-        public Builder setProperty(final String key, final Object value) {
-            if (value == null) {
-                this.properties.remove(key);
-            } else {
-                this.properties.put(key, value);
-            }
+        public Builder addProperty(final String key, final String name, final Object value) {
+            this.newProperties.add(new TermMentionProperty(key, name, value));
             return this;
         }
 
@@ -244,7 +259,7 @@ public class TermMention {
                 }
                 procBuilder.append(proc);
             }
-            return new TermMention(start, end, sign, ontologyClassUri, propertyKey, resolved, Collections.unmodifiableMap(properties),
+            return new TermMention(start, end, sign, ontologyClassUri, propertyKey, resolved, newProperties,
                     useExisting, procBuilder.toString(), id, visibility);
         }
     }
