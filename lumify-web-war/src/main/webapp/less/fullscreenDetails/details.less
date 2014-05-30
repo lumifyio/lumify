@@ -34,8 +34,12 @@ min-width: 200px;
     width: 100%;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid darken(desaturate(@background, 30%), 10%);
+    text-shadow: 0 1px 0 white;
+    border-bottom: 2px solid darken(desaturate(@background, 30%), 10%);    
 
+    .dropdown-menu a {
+      text-shadow: none;
+    }
     h1 {
       margin: 0;
       font-size: 140%;
