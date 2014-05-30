@@ -5,16 +5,21 @@
 Lumify has several required dependencies to build from source. Please ensure that the following projects are installed before building:
 * [Java 1.6](http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html)
 * [Maven 3.1.1](http://maven.apache.org/download.cgi)
+* [NodeJS 0.10.21](http://blog.nodejs.org/2013/10/18/node-v0-10-21-stable/)
+* [Bower 1.2.7](https://npmjs.org/package/bower)
+* [Grunt-cli 0.1.11](https://npmjs.org/package/grunt-cli)
+* [SecureGraph](http://securegraph.org/)
+
+
+## Runtime Dependencies
+
+Lumify requires the following server applications, please ensure they are installed and working:
 * [Jetty 8.1.14.v20131031](http://download.eclipse.org/jetty/stable-8/dist/)
 * [CDH 4.4](http://www.cloudera.com/content/support/en/downloads/download-components/download-products.html)
 * [Accumulo 1.5.1](http://accumulo.apache.org/downloads/)
 * [Elastic Search 1.1.0](http://www.elasticsearch.org/downloads/1-1-0/)
 * [Storm 0.8.2](http://storm.incubator.apache.org/downloads.html)
-* [Kafka 0.7.2](http://kafka.apache.org/downloads.html)
-* [NodeJS 0.10.21](http://blog.nodejs.org/2013/10/18/node-v0-10-21-stable/)
-* [Bower 1.2.7](https://npmjs.org/package/bower)
-* [Grunt-cli 0.1.11](https://npmjs.org/package/grunt-cli)
-* [SecureGraph](http://securegraph.org/)
+* [RabbitMQ 3.2.3](http://www.rabbitmq.com/download.html)
 
 ## Getting Started
 
@@ -29,4 +34,3 @@ Lumify has several required dependencies to build from source. Please ensure tha
 1. Install the Elasticsearch securegraph plugin ```sudo bin/plugin --url file:///docs/elasticsearch-securegraph-1.1.2.zip --install securegraph-plugin```
 1. Deploy storm topology jar files
 1. Deploy web war
-
