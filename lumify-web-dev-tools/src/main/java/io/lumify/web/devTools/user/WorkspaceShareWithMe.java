@@ -1,10 +1,11 @@
-package io.lumify.web.routes.user;
+package io.lumify.web.devTools.user;
 
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
+import io.lumify.core.model.workspace.WorkspaceAccess;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
@@ -13,9 +14,9 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserGet extends BaseRequestHandler {
+public class WorkspaceShareWithMe extends BaseRequestHandler {
     @Inject
-    public UserGet(
+    public WorkspaceShareWithMe(
             final UserRepository userRepository,
             final WorkspaceRepository workspaceRepository,
             final Configuration configuration) {
@@ -24,7 +25,10 @@ public class UserGet extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String workspaceId = getRequiredParameter(request, "workspaceId");
         String userName = getRequiredParameter(request, "user-name");
+
+        User me = getUser(request);
 
         User user = this.getUserRepository().findByUsername(userName);
         if (user == null) {
@@ -32,11 +36,15 @@ public class UserGet extends BaseRequestHandler {
             return;
         }
 
-        JSONObject json = getUserRepository().toJsonWithAuths(user);
+        Workspace workspace = getWorkspaceRepository().findById(workspaceId, user);
+        if (workspace == null) {
+            respondWithNotFound(response);
+            return;
+        }
 
-        Iterable<Workspace> workspaces = getWorkspaceRepository().findAll(user);
-        json.put("workspaces", getWorkspaceRepository().toJson(workspaces, user, false));
+        getWorkspaceRepository().updateUserOnWorkspace(workspace, me.getUserId(), WorkspaceAccess.WRITE, user);
 
+        JSONObject json = new JSONObject();
         respondWithJson(response, json);
     }
 }

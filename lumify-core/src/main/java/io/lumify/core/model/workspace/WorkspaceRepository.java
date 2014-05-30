@@ -97,6 +97,14 @@ public abstract class WorkspaceRepository {
 
     public abstract boolean hasReadPermissions(String workspaceId, User user);
 
+    public JSONArray toJson(Iterable<Workspace> workspaces, User user, boolean includeVertices) {
+        JSONArray resultJson = new JSONArray();
+        for (Workspace workspace : workspaces) {
+            resultJson.put(toJson(workspace, user, includeVertices));
+        }
+        return resultJson;
+    }
+
     public JSONObject toJson(Workspace workspace, User user, boolean includeVertices) {
         checkNotNull(workspace, "workspace cannot be null");
         checkNotNull(user, "user cannot be null");

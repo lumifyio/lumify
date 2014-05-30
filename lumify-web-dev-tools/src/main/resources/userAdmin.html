@@ -43,11 +43,20 @@
     <button id="add">Add Auth</button>
 </form>
 
+<h3>Workspaces</h3>
+
+<h4>Current Workspace</h4>
+<div id="current-workspace"></div>
+
+<h4>Workspaces</h4>
+<ul id="workspaces"></ul>
+
 <button onclick="deleteUser()">Delete User</button>
 
 <script type="text/javascript">
     $(function () {
         document.authorizationsTemplate = document.getElementById('authorizationsTemplate').innerHTML;
+        document.workspacesTemplate = document.getElementById('workspacesTemplate').innerHTML;
 
         $('#add').click(function () {
             try {
@@ -90,6 +99,10 @@
                 $('#privilege-edit').attr('checked', data.privileges.indexOf('EDIT') >= 0);
                 $('#privilege-publish').attr('checked', data.privileges.indexOf('PUBLISH') >= 0);
                 $('#privilege-admin').attr('checked', data.privileges.indexOf('ADMIN') >= 0);
+
+                $('#current-workspace').html(document.currentWorkspaceId);
+                html = ejs.render(document.workspacesTemplate, data);
+                $('#workspaces').html(html);
             },
             dataType: 'json'
         });
@@ -132,6 +145,22 @@
         });
     }
 
+    function shareWithMe(workspaceId) {
+        var userNameParameter = getURLParameter('user-name');
+        $.ajax({
+            type: 'POST',
+            url: '/workspace/shareWithMe',
+            data: {
+                'user-name': userNameParameter,
+                workspaceId: workspaceId
+            },
+            success: function (data) {
+                console.log(data);
+                reload();
+            }
+        });
+    }
+
     function updatePrivileges() {
         var userNameParameter = getURLParameter('user-name');
         var privileges = getSelectedPrivilegesAsString();
@@ -163,6 +192,20 @@
     <% authorizations.forEach(function(auth) { %>
     <li>
         <%= auth %> <a href="javascript:removeAuth('<%= auth %>')">remove</a>
+    </li>
+    <% }) %>
+</script>
+
+<script id="workspacesTemplate" type="text/template">
+    <% workspaces.forEach(function(workspace) { %>
+    <li>
+        <%= workspace.title %> (<%= workspace.workspaceId %>) <a href="javascript:shareWithMe('<%= workspace.workspaceId %>')">share with me</a><br/>
+        <b>Users:</b><br/>
+        <ul class="workspace-users">
+            <% workspace.users.forEach(function(user) { %>
+                <li><%= user.userId %> (<%= user.access %>)</li>
+            <% }) %>
+        </ul>
     </li>
     <% }) %>
 </script>
