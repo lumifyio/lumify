@@ -24,9 +24,7 @@ import io.lumify.web.routes.entity.ResolveTermEntity;
 import io.lumify.web.routes.entity.UnresolveDetectedObject;
 import io.lumify.web.routes.entity.UnresolveTermEntity;
 import io.lumify.web.routes.graph.*;
-import io.lumify.web.routes.map.MapInitHandler;
 import io.lumify.web.routes.map.MapMarkerImage;
-import io.lumify.web.routes.map.MapTileHandler;
 import io.lumify.web.routes.ontology.Ontology;
 import io.lumify.web.routes.relationship.*;
 import io.lumify.web.routes.resource.ResourceGet;
@@ -128,9 +126,7 @@ public class Router extends HttpServlet {
             app.get("/users", authenticator, UserList.class);
             app.get("/user/info", authenticator, UserInfo.class);
 
-            app.get("/map/map-init.js", MapInitHandler.class);
             app.get("/map/marker/image", MapMarkerImage.class);
-            app.get("/map/{z}/{x}/{y}.png", MapTileHandler.class);
 
             app.get("/admin", authenticator, AdminPrivilegeFilter.class, AdminList.class);
 
