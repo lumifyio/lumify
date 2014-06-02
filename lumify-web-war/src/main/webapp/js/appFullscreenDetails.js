@@ -320,7 +320,7 @@ define([
             }
 
             if (willAdd) {
-                return appData.refresh(data.add.concat(_.pluck(this.vertices, 'id')))
+                return appData.refresh(_.uniq(data.add.concat(_.pluck(this.vertices, 'id'))))
                     .done(function(vertices) {
                         self.handleVerticesLoaded({ vertices: vertices });
                     });
