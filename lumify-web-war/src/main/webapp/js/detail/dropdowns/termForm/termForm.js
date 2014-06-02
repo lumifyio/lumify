@@ -558,25 +558,26 @@ define([
             if (!this.queryCache) this.queryCache = {};
             if (this.queryCache[query]) return this.queryCache[query];
 
-            var badge = this.select('objectSignSelector').nextAll('.badge');
-
-            badge.addClass('loading');
-
-            this.queryCache[query] = this.vertexService.graphVertexSearch(query)
-                .always(function() {
-                    badge.removeClass('loading');
-                })
-                .then(function(response) {
-                    return _.filter(response.vertices, function(v) {
-                        return ~F.vertex.title(v).toLowerCase().indexOf(query.toLowerCase());
+            var badge = this.select('objectSignSelector').nextAll('.badge')
+                    .addClass('loading'),
+                request = this.vertexService.graphVertexSearch(query)
+                    .always(function() {
+                        badge.removeClass('loading');
+                    })
+                    .then(function(response) {
+                        return _.filter(response.vertices, function(v) {
+                            return ~F.vertex.title(v).toLowerCase().indexOf(query.toLowerCase());
+                        });
+                    })
+                    .fail(function() {
+                        self.updateQueryCountBadge();
+                    })
+                    .done(function(v) {
+                        self.updateQueryCountBadge(v);
+                        self.queryCache[query] = request;
                     });
-                })
-                .fail(function() {
-                    self.updateQueryCountBadge();
-                })
-                .done(this.updateQueryCountBadge.bind(this));
 
-            return this.queryCache[query];
+            return request;
         };
 
         this.updateQueryCountBadge = function(vertices) {
@@ -596,42 +597,48 @@ define([
 
             self.ontologyService.properties().done(function(ontologyProperties) {
                 var debouncedQuery = _.debounce(function(instance, query, callback) {
-                        self.runQuery(query).done(function(entities) {
-                            var all = _.map(entities, function(e) {
-                                return $.extend({
-                                    toLowerCase: function() {
-                                        return F.vertex.title(e).toLowerCase();
-                                    },
-                                    toString: function() {
-                                        return e.id;
-                                    },
-                                    indexOf: function(s) {
-                                        return F.vertex.title(e).indexOf(s);
+                        self.runQuery(query)
+                            .fail(function() {
+                                callback([]);
+                            })
+                            .done(function(entities) {
+                                console.log(entities)
+
+                                var all = _.map(entities, function(e) {
+                                    return $.extend({
+                                        toLowerCase: function() {
+                                            return F.vertex.title(e).toLowerCase();
+                                        },
+                                        toString: function() {
+                                            return e.id;
+                                        },
+                                        indexOf: function(s) {
+                                            return F.vertex.title(e).indexOf(s);
+                                        }
+                                    }, e);
+                                });
+
+                                items = $.extend(true, [], items, _.indexBy(all, 'id'));
+                                items[createNewText] = [query];
+
+                                self.sourceCache[query] = function(aCallback) {
+                                    var list = [createNewText].concat(all);
+                                    aCallback(list);
+
+                                    var selectedId = self.currentGraphVertexId;
+                                    if (selectedId) {
+                                        var shouldSelect = instance.$menu.find('.gId-' + selectedId).closest('li');
+                                        if (shouldSelect.length) {
+                                            instance.$menu.find('.active').not(shouldSelect).removeClass('active');
+                                            shouldSelect.addClass('active');
+                                        }
                                     }
-                                }, e);
+
+                                    self.updateQueryCountBadge(all);
+                                };
+
+                                self.sourceCache[query](callback);
                             });
-
-                            items = $.extend(true, [], items, _.indexBy(all, 'id'));
-                            items[createNewText] = [query];
-
-                            self.sourceCache[query] = function(aCallback) {
-                                var list = [createNewText].concat(all);
-                                aCallback(list);
-
-                                var selectedId = self.currentGraphVertexId;
-                                if (selectedId) {
-                                    var shouldSelect = instance.$menu.find('.gId-' + selectedId).closest('li');
-                                    if (shouldSelect.length) {
-                                        instance.$menu.find('.active').not(shouldSelect).removeClass('active');
-                                        shouldSelect.addClass('active');
-                                    }
-                                }
-
-                                self.updateQueryCountBadge(all);
-                            };
-
-                            self.sourceCache[query](callback);
-                        });
                     }, 500),
                     field = input.typeahead({
                         items: 50,
