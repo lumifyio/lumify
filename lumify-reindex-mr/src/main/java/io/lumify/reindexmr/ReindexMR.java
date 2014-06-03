@@ -49,6 +49,7 @@ public class ReindexMR extends Configured implements Tool {
         job.setMapperClass(ReindexMRMapper.class);
         job.setInputFormatClass(AccumuloVertexInputFormat.class);
         job.setOutputFormatClass(NullOutputFormat.class);
+        job.setNumReduceTasks(0);
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
