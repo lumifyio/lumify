@@ -23,10 +23,21 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        LOGGER.info("setup");
+        LOGGER.info("setup: " + toString(context.getInputSplit().getLocations()));
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
         this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.authorizations = new AccumuloAuthorizations(context.getConfiguration().getStrings(SecureGraphMRUtils.CONFIG_AUTHORIZATIONS));
+    }
+
+    private String toString(String[] locations) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < locations.length; i++) {
+            if (i > 0) {
+                result.append(", ");
+            }
+            result.append(locations[i]);
+        }
+        return result.toString();
     }
 
     @Override
