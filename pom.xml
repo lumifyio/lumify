@@ -53,6 +53,7 @@
         <module>lumify-web-auth-username-only</module>
         <module>lumify-web-auth-username-password</module>
         <module>lumify-web-auth-x509</module>
+        <module>lumify-reindex-mr</module>
     </modules>
 
     <repositories>
