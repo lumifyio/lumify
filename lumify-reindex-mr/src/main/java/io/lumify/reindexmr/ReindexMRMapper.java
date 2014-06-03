@@ -1,6 +1,8 @@
 package io.lumify.reindexmr;
 
 
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.securegraph.Authorizations;
 import org.securegraph.GraphFactory;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRMapper.class);
     private AccumuloGraph graph;
     private Authorizations authorizations;
 
@@ -34,6 +37,10 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
     @Override
     protected void map(String rowKey, Vertex vertex, Context context) throws IOException, InterruptedException {
         context.setStatus(rowKey);
-        graph.getSearchIndex().addElement(graph, vertex, authorizations);
+        try {
+            graph.getSearchIndex().addElement(graph, vertex, authorizations);
+        } catch (Throwable ex) {
+            LOGGER.error("Could not add element: %s", rowKey, ex);
+        }
     }
 }
