@@ -255,10 +255,22 @@ define([
 
     return $.extend({}, F, { vertex: V });
 
+    function treeLookupForConceptProperty(conceptId, propertyName) {
+        var ontologyConcept = conceptId && ontology.conceptsById[conceptId],
+            formulaString = ontologyConcept && ontologyConcept[propertyName];
+
+        if (formulaString) {
+            return formulaString;
+        }
+
+        if (ontologyConcept && ontologyConcept.parentConcept) {
+            return treeLookupForConceptProperty(ontologyConcept.parentConcept, propertyName);
+        }
+    }
+
     function formulaResultForVertex(vertex, formulaKey, defaultValue) {
         var conceptId = V.prop(vertex, 'conceptType'),
-            ontologyConcept = conceptId && ontology.conceptsById[conceptId],
-            formulaString = ontologyConcept && ontologyConcept[formulaKey],
+            formulaString = treeLookupForConceptProperty(conceptId, formulaKey),
             result = defaultValue;
 
         if (formulaString) {
