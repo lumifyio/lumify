@@ -3,6 +3,19 @@ define(['atmosphere'],
     function() {
         'use strict';
 
+        // Add CSRF Header to all non-GET requests
+        $.ajaxPrefilter(function(options) {
+            var eligibleForProtection = options.type !== 'GET',
+                user = window.currentUser,
+                token = user && user.csrfToken;
+
+            if (eligibleForProtection && token) {
+                options.headers = $.extend(options.headers || {}, {
+                    'Lumify-CSRF-Token': token
+                });
+            }
+        });
+
         function ServiceBase(options) {
             options = options || {};
 
