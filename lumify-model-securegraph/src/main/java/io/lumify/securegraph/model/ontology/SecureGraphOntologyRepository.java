@@ -166,11 +166,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         String displayName = null;
         if (relationshipIRI != null && !relationshipIRI.trim().isEmpty()) {
             try {
-                Vertex relVertex = Iterables.getFirst(graph.query(getAuthorizations())
-                        .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
-                        .has(ONTOLOGY_TITLE.getKey(), relationshipIRI)
-                        .vertices(), null);
-                displayName = relVertex != null ? DISPLAY_NAME.getPropertyValue(relVertex) : null;
+                Relationship relationship = getRelationshipByIRI(relationshipIRI);
+                if (relationship != null) {
+                    displayName = relationship.getDisplayName();
+                }
             } catch (IllegalArgumentException iae) {
                 throw new IllegalStateException(String.format("Found multiple vertices for relationship label \"%s\"", relationshipIRI),
                         iae);
@@ -215,7 +214,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Relationship getRelationshipByIRI(String relationshipIRI) {
-        Vertex relationshipVertex = graph.getVertex(relationshipIRI, getAuthorizations());
+        Vertex relationshipVertex = Iterables.getFirst(graph.query(getAuthorizations())
+                .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
+                .has(ONTOLOGY_TITLE.getKey(), relationshipIRI)
+                .vertices(), null);
         if (relationshipVertex == null) {
             return null;
         }
