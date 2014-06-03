@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
@@ -59,6 +60,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        long totalStartTime = System.nanoTime();
         final String query;
         final String filter = getRequiredParameter(request, "filter");
         final int offset = (int) getOptionalParameterLong(request, "offset", 0);
@@ -131,23 +133,37 @@ public class GraphVertexSearch extends BaseRequestHandler {
             return;
         }
 
+        Map<Object, Double> scores = null;
+        if (searchResults instanceof IterableWithScores) {
+            scores = ((IterableWithScores) searchResults).getScores();
+        }
+
         JSONArray verticesJson = new JSONArray();
         int verticesCount = 0;
+        long retrievalStartTime = System.nanoTime();
         for (Vertex vertex : searchResults) {
-            verticesJson.put(JsonSerializer.toJson(vertex, workspaceId));
+            JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId);
+            if (scores != null) {
+                vertexJson.put("score", scores.get(vertex.getId()));
+            }
+            verticesJson.put(vertexJson);
             verticesJson.getJSONObject(verticesCount).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
             verticesCount++;
         }
+        long retrievalEndTime = System.nanoTime();
+        long totalEndTime = System.nanoTime();
 
         JSONObject results = new JSONObject();
         results.put("vertices", verticesJson);
         results.put("nextOffset", offset + size);
+        results.put("retrievalTime", retrievalEndTime - retrievalStartTime);
+        results.put("totalTime", totalEndTime - totalStartTime);
 
         if (searchResults instanceof IterableWithTotalHits) {
-            IterableWithTotalHits searchResultsFaceted = (IterableWithTotalHits) searchResults;
-            if (searchResultsFaceted.getTotalHits() != null) {
-                results.put("totalHits", searchResultsFaceted.getTotalHits());
-            }
+            results.put("totalHits", ((IterableWithTotalHits) searchResults).getTotalHits());
+        }
+        if (searchResults instanceof IterableWithSearchTime) {
+            results.put("searchTime", ((IterableWithSearchTime) searchResults).getSearchTimeNanoSeconds());
         }
 
         long endTime = System.nanoTime();
