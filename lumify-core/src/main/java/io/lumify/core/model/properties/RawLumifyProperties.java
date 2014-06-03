@@ -9,6 +9,7 @@ import io.lumify.core.model.properties.types.StringLumifyProperty;
  */
 public class RawLumifyProperties {
     public static final String META_DATA_LANGUAGE = "http://lumify.io#language";
+    public static final String META_DATA_TEXT_DESCRIPTION = "http://lumify.io#textDescription";
 
     public static final DateLumifyProperty PUBLISHED_DATE = new DateLumifyProperty("http://lumify.io#publishedDate");
     public static final DateLumifyProperty CREATE_DATE = new DateLumifyProperty("http://lumify.io#createDate");
