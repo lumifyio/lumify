@@ -1,10 +1,10 @@
 
 <table cellpadding="0">
 
-  <% if (!predicates) { %>
+  <% if (!predicates || hasGeocoder) { %>
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span style="min-width:5em;" class="add-on">Description</span>
+      <span class="add-on">Description</span>
     </td>
 
     <td class="input-row">
@@ -15,7 +15,7 @@
 
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span style="min-width:5em;" class="add-on">Latitude</span>
+      <span class="add-on">Latitude</span>
     </td>
 
     <td class="input-row">
@@ -25,7 +25,7 @@
 
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span style="min-width:5em;" class="add-on">Longitude</span>
+      <span class="add-on">Longitude</span>
     </td>
 
     <td class="input-row">
@@ -36,7 +36,7 @@
   <% if (predicates) { %>
   <tr class="input-prepend">
     <td class="predicate-row">
-      <span style="min-width:5em;" class="add-on">Radius</span>
+      <span class="add-on">Radius</span>
     </td>
 
     <td class="input-row">
