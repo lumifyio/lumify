@@ -29,8 +29,7 @@ import org.securegraph.query.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.CONCEPT_TYPE;
 
@@ -138,19 +137,32 @@ public class GraphVertexSearch extends BaseRequestHandler {
             scores = ((IterableWithScores) searchResults).getScores();
         }
 
-        JSONArray verticesJson = new JSONArray();
-        int verticesCount = 0;
         long retrievalStartTime = System.nanoTime();
+        List<JSONObject> verticesJsonList = new ArrayList<JSONObject>();
         for (Vertex vertex : searchResults) {
             JSONObject vertexJson = JsonSerializer.toJson(vertex, workspaceId);
             if (scores != null) {
                 vertexJson.put("score", scores.get(vertex.getId()));
             }
-            verticesJson.put(vertexJson);
-            verticesJson.getJSONObject(verticesCount).put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
-            verticesCount++;
+            vertexJson.put("detectedObjects", detectedObjectRepository.toJSON(vertex, modelUserContext, authorizations, workspaceId));
+            verticesJsonList.add(vertexJson);
         }
         long retrievalEndTime = System.nanoTime();
+
+        Collections.sort(verticesJsonList, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject o1, JSONObject o2) {
+                double score1 = o1.optDouble("score", 0.0);
+                double score2 = o2.optDouble("score", 0.0);
+                return -Double.compare(score1, score2);
+            }
+        });
+
+        JSONArray verticesJson = new JSONArray();
+        for (JSONObject vertexJson : verticesJsonList) {
+            verticesJson.put(vertexJson);
+        }
+
         long totalEndTime = System.nanoTime();
 
         JSONObject results = new JSONObject();
@@ -167,7 +179,7 @@ public class GraphVertexSearch extends BaseRequestHandler {
         }
 
         long endTime = System.nanoTime();
-        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesCount, (endTime - startTime) / 1000 / 1000);
+        LOGGER.info("Search for \"%s\" found %d vertices in %dms", query, verticesJsonList.size(), (endTime - startTime) / 1000 / 1000);
 
         respondWithJson(response, results);
     }
