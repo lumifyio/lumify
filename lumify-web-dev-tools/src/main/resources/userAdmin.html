@@ -111,9 +111,11 @@
                 $('#privilege-publish').attr('checked', data.privileges.indexOf('PUBLISH') >= 0);
                 $('#privilege-admin').attr('checked', data.privileges.indexOf('ADMIN') >= 0);
 
-                $('#current-workspace').html(document.currentWorkspaceId);
-                html = ejs.render(document.workspacesTemplate, data);
-                $('#workspaces').html(html);
+                $('#current-workspace').html(data.currentWorkspaceId);
+                if (data.workspaces) {
+                    html = ejs.render(document.workspacesTemplate, data);
+                    $('#workspaces').html(html);
+                }
             },
             dataType: 'json'
         });
