@@ -34,7 +34,7 @@ public class ReindexMR extends Configured implements Tool {
         Configuration conf = getConfiguration(lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
 
-        Job job = new Job(conf, "lumifyReindexMR");
+        Job job = new Job(conf, "lumifyReindex");
 
         String[] authorizations = new String[]{LumifyVisibility.SUPER_USER_VISIBILITY_STRING};
         Map configurationMap = SecureGraphMRUtils.toMap(conf);
