@@ -108,12 +108,6 @@ define([
                     properties.list.forEach(function(property) {
                         if (property.userVisible) {
                             propertiesList.push(_.pick(property, 'displayName', 'title', 'userVisible'));
-                        } else if (property.title === 'http://lumify.io#visibility') {
-                            propertiesList.push({
-                                title: 'http://lumify.io#visibilityJson',
-                                displayName: property.displayName,
-                                userVisible: true
-                            });
                         }
                     });
 
