@@ -12,17 +12,32 @@
 <button onclick="exportWorkspace()">Export</button>
 
 <script type="text/javascript">
+    $.ajaxPrefilter(function(options) {
+        var eligibleForProtection = options.type !== 'GET',
+            token = window.token;
+
+        if (eligibleForProtection && token) {
+            options.headers = $.extend(options.headers || {}, {
+                'Lumify-CSRF-Token': token
+            });
+        }
+    });
+
     $(function() {
-        $.ajax({
-            url: '/workspaces',
-            success: function (data) {
-                var html = "";
-                data.workspaces.forEach(function(workspace) {
-                    html += "<option value='" + encodeURIComponent(workspace.workspaceId) + "'>" + workspace.title + "</option>";
+        $.get('/user/me')
+            .then(function(user) {
+                window.token = user.csrfToken;
+                $.ajax({
+                    url: '/workspaces',
+                    success: function (data) {
+                        var html = "";
+                        data.workspaces.forEach(function(workspace) {
+                            html += "<option value='" + encodeURIComponent(workspace.workspaceId) + "'>" + workspace.title + "</option>";
+                        });
+                        $('#workspace').html(html);
+                    }
                 });
-                $('#workspace').html(html);
-            }
-        });
+            });
     });
 
     function exportWorkspace() {

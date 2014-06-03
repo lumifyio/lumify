@@ -8,7 +8,20 @@
 <h1>Lumify: Workspace Import</h1>
 <form action="/admin/workspace/import" method="post" enctype="multipart/form-data">
     <input type="file" name="workspace">
-    <input type="submit">
+    <input type="hidden" name="csrfToken">
+    <input type="submit" disabled>
 </form>
+<script>
+    $(function() {
+        $.get('/user/me')
+            .fail(function() {
+                alert('Not logged in or no token');
+            })
+            .done(function(user) {
+                $('input[type=submit]').removeAttr('disabled');
+                $('input[type=hidden]').val(user.csrfToken);
+            })
+    });
+</script>
 </body>
 </html>

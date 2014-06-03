@@ -54,6 +54,17 @@
 <button onclick="deleteUser()">Delete User</button>
 
 <script type="text/javascript">
+    $.ajaxPrefilter(function(options) {
+        var eligibleForProtection = options.type !== 'GET',
+            token = window.token;
+
+        if (eligibleForProtection && token) {
+            options.headers = $.extend(options.headers || {}, {
+                'Lumify-CSRF-Token': token
+            });
+        }
+    });
+
     $(function () {
         document.authorizationsTemplate = document.getElementById('authorizationsTemplate').innerHTML;
         document.workspacesTemplate = document.getElementById('workspacesTemplate').innerHTML;
@@ -100,9 +111,11 @@
                 $('#privilege-publish').attr('checked', data.privileges.indexOf('PUBLISH') >= 0);
                 $('#privilege-admin').attr('checked', data.privileges.indexOf('ADMIN') >= 0);
 
-                $('#current-workspace').html(document.currentWorkspaceId);
-                html = ejs.render(document.workspacesTemplate, data);
-                $('#workspaces').html(html);
+                $('#current-workspace').html(data.currentWorkspaceId);
+                if (data.workspaces) {
+                    html = ejs.render(document.workspacesTemplate, data);
+                    $('#workspaces').html(html);
+                }
             },
             dataType: 'json'
         });
@@ -111,6 +124,7 @@
             url: '/user/me',
             success: function (data) {
                 console.log(data);
+                window.token = data.csrfToken;
                 $('#me-user-id').html(data.id);
                 $('#me-user-name').html(data.userName);
             },

@@ -1,18 +1,34 @@
 <html>
 <head>
     <title>Lumify: Admin: Re-queue</title>
+    <script src='/libs/jquery/jquery.js'></script>
 </head>
 <body>
 
 <form method="POST" action="/admin/queueVertices">
-    <input type="submit" value="Re-queue Vertices">
+    <input type="hidden" value="csrfToken">
+    <input type="submit" value="Re-queue Vertices" disabled>
 </form>
 
 <hr/>
 
 <form method="POST" action="/admin/queueEdges">
-    <input type="submit" value="Re-queue Edges">
+    <input type="hidden" value="csrfToken">
+    <input type="submit" value="Re-queue Edges" disabled>
 </form>
+
+<script>
+    $(function() {
+        $.get('/user/me')
+            .fail(function() {
+                alert('Not logged in or no token');
+            })
+            .done(function(user) {
+                $('input[type=submit]').removeAttr('disabled');
+                $('input[type=hidden]').val(user.csrfToken);
+            })
+    });
+</script>
 
 </body>
 </html>
