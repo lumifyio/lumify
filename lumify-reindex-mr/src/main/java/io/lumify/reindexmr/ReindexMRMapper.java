@@ -33,6 +33,7 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
 
     @Override
     protected void map(String rowKey, Vertex vertex, Context context) throws IOException, InterruptedException {
+        context.setStatus(rowKey);
         graph.getSearchIndex().addElement(graph, vertex, authorizations);
     }
 }
