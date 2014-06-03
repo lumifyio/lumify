@@ -348,6 +348,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
+        if (conceptIRI.equals(OntologyRepository.ENTITY_CONCEPT_IRI)) {
+            OntologyLumifyProperties.SUBTITLE_FORMULA.setProperty(builder, "prop('http://lumify.io#source') || ''", VISIBILITY.getVisibility());
+            OntologyLumifyProperties.TIME_FORMULA.setProperty(builder, "prop('http://lumify.io#publishedDate') || ''", VISIBILITY.getVisibility());
+        }
         Vertex vertex = builder.save(getAuthorizations());
 
         concept = new SecureGraphConcept(vertex);
