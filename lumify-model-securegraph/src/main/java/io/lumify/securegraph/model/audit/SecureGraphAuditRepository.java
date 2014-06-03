@@ -65,8 +65,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
         return auditBuilder.getTableName();
     }
 
-    @Override
-    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
+    public Audit createAudit(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
@@ -87,6 +86,12 @@ public class SecureGraphAuditRepository extends AuditRepository {
             audit.getAuditCommon().setProcess(process, visibility);
         }
 
+        return audit;
+    }
+
+    @Override
+    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
+        Audit audit = createAudit(auditAction, vertexId, process, comment, user, flushFlag, visibility);
         save(audit, flushFlag);
         return audit;
     }
