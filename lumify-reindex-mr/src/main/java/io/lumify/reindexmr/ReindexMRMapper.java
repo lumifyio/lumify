@@ -5,6 +5,7 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.securegraph.Authorizations;
+import org.securegraph.Element;
 import org.securegraph.GraphFactory;
 import org.securegraph.Vertex;
 import org.securegraph.accumulo.AccumuloAuthorizations;
@@ -13,12 +14,16 @@ import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
 import org.securegraph.util.MapUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRMapper.class);
+    private static final int BATCH_SIZE = 100;
     private AccumuloGraph graph;
     private Authorizations authorizations;
+    private List<Element> elementCache = new ArrayList<Element>(BATCH_SIZE);
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
@@ -42,6 +47,7 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
 
     @Override
     protected void cleanup(Context context) throws IOException, InterruptedException {
+        writeCache();
         LOGGER.info("cleanup");
         graph.shutdown();
         super.cleanup(context);
@@ -50,10 +56,22 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
     @Override
     protected void map(String rowKey, Vertex vertex, Context context) throws IOException, InterruptedException {
         context.setStatus("Vertex Id: " + vertex.getId());
-        try {
-            graph.getSearchIndex().addElement(graph, vertex, authorizations);
-        } catch (Throwable ex) {
-            LOGGER.error("Could not add element: %s", rowKey, ex);
+        elementCache.add(vertex);
+        if (elementCache.size() >= BATCH_SIZE) {
+            writeCache();
         }
+    }
+
+    private void writeCache() {
+        if (elementCache.size() == 0) {
+            return;
+        }
+
+        try {
+            graph.getSearchIndex().addElements(graph, elementCache, authorizations);
+        } catch (Throwable ex) {
+            LOGGER.error("Could not add elements", ex);
+        }
+        elementCache.clear();
     }
 }
