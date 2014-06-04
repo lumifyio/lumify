@@ -54,6 +54,13 @@
         <module>lumify-web-auth-username-password</module>
         <module>lumify-web-auth-x509</module>
         <module>lumify-reindex-mr</module>
+        <module>lumify-tika-text-extractor</module>
+        <module>lumify-tika-mime-type</module>
+        <module>lumify-known-entity-extractor</module>
+        <module>lumify-phone-number-extractor</module>
+        <module>lumify-zipcode-extractor</module>
+        <module>lumify-email-extractor</module>
+        <module>lumify-zipcode-resolver</module>
     </modules>
 
     <repositories>
