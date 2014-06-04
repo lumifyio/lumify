@@ -223,7 +223,6 @@ define([
         this.updateText = function() {
             var self = this;
 
-
             this.select('textContainerSelector').html(
                 _.map(_.where(this.attr.data.properties, { name: 'http://lumify.io#text' }), function(p) {
                     return textTemplate({
