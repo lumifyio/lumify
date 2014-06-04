@@ -29,9 +29,15 @@ define([
     ConfigService.prototype = Object.create(ServiceBase.prototype);
 
     ConfigService.prototype.getProperties = function(refresh) {
-        if (!refresh && this.cachedProperties) return this.cachedProperties;
+        if (!refresh && this.cachedProperties) {
+            return this.cachedProperties;
+        }
 
-        return (this.cachedProperties = $.get('configuration').then(this.applyDefaults));
+        this.cachedProperties =
+            this._ajaxGet({ url: 'configuration' })
+                .then(this.applyDefaults);
+
+        return this.cachedProperties;
     };
 
     ConfigService.prototype.applyDefaults = function(properties) {
