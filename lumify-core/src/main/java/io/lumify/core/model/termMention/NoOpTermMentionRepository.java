@@ -29,7 +29,7 @@ public class NoOpTermMentionRepository extends TermMentionRepository {
     }
 
     @Override
-    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext) {
+    public Iterable<TermMentionModel> findByGraphVertexIdAndPropertyKey(String graphVertexId, String propertyKey, ModelUserContext modelUserContext) {
         throw new RuntimeException("not supported");
     }
 

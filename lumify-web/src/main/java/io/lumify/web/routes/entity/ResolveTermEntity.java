@@ -79,16 +79,15 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        final String artifactId = getRequiredParameter(request, "artifactId");
+        final String graphVertexId = getRequiredParameter(request, "graphVertexId");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String title = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
-        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        final String rowKey = getOptionalParameter(request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -109,7 +108,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
-        final Vertex artifactVertex = graph.getVertex(artifactId, authorizations);
+        final Vertex artifactVertex = graph.getVertex(graphVertexId, authorizations);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
         Map<String, Object> metadata = new HashMap<String, Object>();
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
@@ -142,13 +141,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        String propertyKey = "";
-        if (rowKey != null) {
-            TermMentionRowKey analyzedRowKey = new TermMentionRowKey(rowKey);
-            propertyKey = analyzedRowKey.getPropertyKey();
-        }
-
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
@@ -162,7 +155,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         vertexMutation.save(authorizations);
 
         this.graph.flush();
-        workQueueRepository.pushTextUpdated(artifactId);
+        workQueueRepository.pushTextUpdated(graphVertexId);
 
         workQueueRepository.pushElement(edge);
 

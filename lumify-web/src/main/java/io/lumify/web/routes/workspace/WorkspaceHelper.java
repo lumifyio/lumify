@@ -62,7 +62,7 @@ public class WorkspaceHelper {
             Vertex artifactVertex = graph.getVertex(termMention.getRowKey().getGraphVertexId(), authorizations);
 
             // If there is only instance of the term entity in this artifact delete the relationship
-            Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexId(termMention.getRowKey().getGraphVertexId(), modelUserContext).iterator();
+            Iterator<TermMentionModel> termMentionModels = termMentionRepository.findByGraphVertexIdAndPropertyKey(termMention.getRowKey().getGraphVertexId(), termMention.getRowKey().getPropertyKey(), modelUserContext).iterator();
             int termCount = 0;
             while (termMentionModels.hasNext()) {
                 TermMentionModel termMentionModel = termMentionModels.next();

@@ -69,7 +69,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         if (text == null) {
             highlightedText = "";
         } else {
-            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(artifactVertex.getId().toString(), modelUserContext);
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
             highlightedText = entityHighlighter.getHighlightedText(text, termMentions);
         }
 
