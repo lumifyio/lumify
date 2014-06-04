@@ -166,12 +166,13 @@ define([
         });
     };
 
-    VertexService.prototype.getArtifactHighlightedTextById = function(graphVertexId) {
+    VertexService.prototype.getArtifactHighlightedTextById = function(graphVertexId, propertyKey) {
         return this._ajaxGet({
             dataType: 'html',
             url: 'artifact/highlightedText',
             data: {
-                graphVertexId: graphVertexId
+                graphVertexId: graphVertexId,
+                propertyKey: propertyKey
             }
         });
     };

@@ -209,7 +209,8 @@
         padding: 0.25em 1em;
         margin: 0;
         background: darken(@pane-background, 3%);
-        cursor: pointer;     
+        cursor: pointer;    
+        position: relative;
         .disable-text-selection;
         
         &:before, strong {
@@ -225,6 +226,7 @@
           left: 1.5ex;
           font-size: 50%;
           .transition-transform(ease-in-out);
+          .transform-origin(~"30% 45%");
         }
                
         &:hover {
@@ -240,6 +242,8 @@
       
       .text {
         display: none;
+        margin: 0;
+        padding: 1em;
       }
     }
   }

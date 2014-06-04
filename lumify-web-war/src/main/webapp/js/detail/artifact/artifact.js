@@ -212,6 +212,11 @@ define([
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
             this.updateText();
+
+            var displayType = this.attr.data.concept.displayType;
+            if (this[displayType + 'Setup']) {
+                this[displayType + 'Setup'](this.attr.data);
+            }
         };
 
         this.onTextUpdated = function(event, data) {
@@ -221,16 +226,27 @@ define([
         };
 
         this.updateText = function() {
-            var self = this;
+            var self = this,
+                scrollParent = this.$node.scrollParent(),
+                scrollTop = scrollParent.scrollTop(),
+                expandedKey = this.$node.find('.text-section.expanded').data('key');
 
             this.select('textContainerSelector').html(
                 _.map(_.where(this.attr.data.properties, { name: 'http://lumify.io#text' }), function(p) {
                     return textTemplate({
                         description: p['http://lumify.io#textDescription'] || p.key,
-                        key: p.key
+                        key: p.key,
+                        cls: F.className.to(p.key)
                     })
                 })
             );
+
+            if (expandedKey) {
+                this.openText(expandedKey)
+                    .done(function() {
+                        scrollParent.scrollTop(scrollTop);
+                    });
+            }
         };
 
         this.onPlayerTimeUpdate = function(evt, data) {
@@ -276,14 +292,38 @@ define([
             return sf('{0:h:mm:ss}', new sf.TimeSpan(time));
         };
 
+        this.openText = function(propertyKey) {
+            var self = this,
+                $section = this.$node.find('.' + F.className.to(propertyKey)).addClass('expanded');
+
+            return this.handleCancelling(
+                this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
+            ).done(function(artifactText) {
+                var textElement = $section.find('.text').html(
+                    !artifactText ?
+                     '' :
+                     artifactText.replace(/(\n+)/g, '<br><br>$1')
+                );
+
+                if (self.attr.focusOffsets) {
+                    // TODO: highlight correct text key
+                    rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
+                }
+
+                self.updateEntityAndArtifactDraggables();
+            });
+        };
+
         this.onTextHeaderClicked = function(event) {
-            var $section = $(event.target).closest('.text-section').toggleClass('expanded');
+            var $section = $(event.target)
+                    .closest('.text-section').toggleClass('expanded')
+                    .siblings('.expanded').removeClass('expanded')
+                    .end(),
+                propertyKey = $section.data('key');
 
-            this.$node.find('.text-section.expanded').not($section).removeClass('expanded');
-
-            var propertyKey = $section.data('key');
-
-            $section.find('.text').html('TODO: load ' + propertyKey);
+            if ($section.hasClass('expanded')) {
+                this.openText(propertyKey);
+            }
 
             /*
             this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
