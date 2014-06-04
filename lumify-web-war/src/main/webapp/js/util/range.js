@@ -3,10 +3,8 @@ define([
     'rangy',
     'rangy-text',
     'rangy-highlighter'
-], function(
-    rangy,
-    rangyText
-) {
+], function(rangy) {
+    'use strict';
 
     if (!rangy.initialized) rangy.init();
 
