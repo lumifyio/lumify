@@ -5,7 +5,7 @@ define(['atmosphere'],
 
         // Add CSRF Header to all non-GET requests
         $.ajaxPrefilter(function(options) {
-            var eligibleForProtection = options.type !== 'GET',
+            var eligibleForProtection = !(/get/i).test(options.type),
                 user = window.currentUser,
                 token = user && user.csrfToken;
 

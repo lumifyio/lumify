@@ -18,7 +18,7 @@ public class ImportExportWorkspaceWebAppPlugin implements WebAppPlugin {
 
         app.get("/admin/workspaceImport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceImport.html", "text/html"));
         app.get("/admin/workspaceExport.html", authenticationHandler, new StaticResourceHandler(getClass(), "/workspaceExport.html", "text/html"));
-        app.get("/admin/workspace/export", authenticationHandlerClass, AdminPrivilegeFilter.class, Export.class);
+        app.get("/admin/workspace/export", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, Export.class);
         app.post("/admin/workspace/import", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, Import.class);
     }
 }
