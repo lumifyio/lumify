@@ -11,6 +11,7 @@ define([
     'detail/properties/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
+    'hbs!./text',
     'tpl!util/alert',
     'util/range',
     'util/vertex/formatters',
@@ -28,6 +29,7 @@ define([
     Properties,
     template,
     transcriptEntryTemplate,
+    textTemplate,
     alertTemplate,
     rangeUtils,
     F,
@@ -54,17 +56,19 @@ define([
             artifactSelector: '.artifact-image',
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
-            textSelector: '.text'
+            textContainerSelector: '.texts',
+            textContainerHeaderSelector: '.texts .text-section h1'
         });
 
         this.after('initialize', function() {
             var self = this;
 
             this.on('click', {
-                detectedObjectSelector: this.onDetectedObjectClicked
+                detectedObjectSelector: this.onDetectedObjectClicked,
+                textContainerHeaderSelector: this.onTextHeaderClicked
             });
             this.on('copy cut', {
-                textSelector: this.onCopyText
+                textContainerSelector: this.onCopyText
             });
             this.on('scrubberFrameChange', this.onScrubberFrameChange);
             this.on('playerTimeUpdate', this.onPlayerTimeUpdate);
@@ -219,28 +223,15 @@ define([
         this.updateText = function() {
             var self = this;
 
-            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
-                .done(function(artifactText, status, xhr) {
-                    var displayType = self.attr.data.concept.displayType,
-                        textElement = self.select('textSelector');
 
-                    if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
-                        textElement.html(alertTemplate({ error: 'No Text Available' }));
-                    } else {
-                        textElement.html(!artifactText ?
-                             '' :
-                             artifactText
-                                .replace(/(\n+)/g, '<br><br>$1'));
-
-                        if (self.attr.focusOffsets) {
-                            rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
-                        }
-                    }
-                    self.updateEntityAndArtifactDraggables();
-                    if (self[displayType + 'Setup']) {
-                        self[displayType + 'Setup'](self.attr.data);
-                    }
-            });
+            this.select('textContainerSelector').html(
+                _.map(_.where(this.attr.data.properties, { name: 'http://lumify.io#text' }), function(p) {
+                    return textTemplate({
+                        description: p['http://lumify.io#textDescription'] || p.key,
+                        key: p.key
+                    })
+                })
+            );
         };
 
         this.onPlayerTimeUpdate = function(evt, data) {
@@ -284,6 +275,41 @@ define([
 
         this.formatTimeOffset = function(time) {
             return sf('{0:h:mm:ss}', new sf.TimeSpan(time));
+        };
+
+        this.onTextHeaderClicked = function(event) {
+            var $section = $(event.target).closest('.text-section').toggleClass('expanded');
+
+            this.$node.find('.text-section.expanded').not($section).removeClass('expanded');
+
+            var propertyKey = $section.data('key');
+
+            $section.find('.text').html('TODO: load ' + propertyKey);
+
+            /*
+            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
+                .done(function(artifactText, status, xhr) {
+                    var displayType = self.attr.data.concept.displayType,
+                        textElement = self.select('textSelector');
+
+                    if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
+                        textElement.html(alertTemplate({ error: 'No Text Available' }));
+                    } else {
+                        textElement.html(!artifactText ?
+                             '' :
+                             artifactText
+                                .replace(/(\n+)/g, '<br><br>$1'));
+
+                        if (self.attr.focusOffsets) {
+                            rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
+                        }
+                    }
+                    self.updateEntityAndArtifactDraggables();
+                    if (self[displayType + 'Setup']) {
+                        self[displayType + 'Setup'](self.attr.data);
+                    }
+            });
+            */
         };
 
         this.onDetectedObjectClicked = function(event) {

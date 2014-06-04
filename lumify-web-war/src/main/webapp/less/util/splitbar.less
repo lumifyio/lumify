@@ -1,16 +1,15 @@
 @import (reference) "gradient";
 
 .splitbar() {
-  @border: darken(@pane-background, 10%);
-
   &:before {
     content: '';
     display: block;
     position: absolute;
     height: 100%;
     width: 1px;
-    background: @border;
+    background: @pane-border;
     top: 0;
+    bottom: 0;
   }
 }
 

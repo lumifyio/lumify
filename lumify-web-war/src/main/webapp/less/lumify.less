@@ -115,6 +115,13 @@ html.fullscreenDetails {
       .splitbar;
     }
   }
+  
+  .detail-pane {
+    border-left: 1px solid @pane-border;    
+    .ui-resizable-handle:before {
+      background: transparent;
+    }
+  }
 }
 
 .graph-pane, .map-pane, .dashboard-pane {
