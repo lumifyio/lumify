@@ -197,9 +197,7 @@
       
       &.expanded {
         h1:before {
-          content: '▼';  
-          left: 0.95ex;
-          font-size: 55%;
+          .rotate(90deg);
         }
         .text {
           display: block;
@@ -225,7 +223,8 @@
           content: '▶';          
           position: absolute;
           left: 1.5ex;
-          font-size: 50%;         
+          font-size: 50%;
+          .transition-transform(ease-in-out);
         }
                
         &:hover {
