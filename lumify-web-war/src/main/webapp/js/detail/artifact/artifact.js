@@ -11,6 +11,7 @@ define([
     'detail/properties/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
+    'hbs!./transcriptEntries',
     'hbs!./text',
     'tpl!util/alert',
     'util/range',
@@ -29,6 +30,7 @@ define([
     Properties,
     template,
     transcriptEntryTemplate,
+    transcriptEntriesTemplate,
     textTemplate,
     alertTemplate,
     rangeUtils,
@@ -57,7 +59,8 @@ define([
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
             textContainerSelector: '.texts',
-            textContainerHeaderSelector: '.texts .text-section h1'
+            textContainerHeaderSelector: '.texts .text-section h1',
+            timestampAnchorSelector: '.av-times a'
         });
 
         this.after('initialize', function() {
@@ -65,7 +68,8 @@ define([
 
             this.on('click', {
                 detectedObjectSelector: this.onDetectedObjectClicked,
-                textContainerHeaderSelector: this.onTextHeaderClicked
+                textContainerHeaderSelector: this.onTextHeaderClicked,
+                timestampAnchorSelector: this.onTimestampClicked
             });
             this.on('copy cut', {
                 textContainerSelector: this.onCopyText
@@ -336,6 +340,16 @@ define([
             }
         };
 
+        this.onTimestampClicked = function(event) {
+            var millis = $(event.target).data('millis');
+
+            this.trigger(
+                this.select('audioPreviewSelector').add(this.select('previewSelector')),
+                'seekToTime', {
+                seekTo: millis
+            });
+        };
+
         this.onDetectedObjectClicked = function(event) {
             if (Privileges.missingEDIT) {
                 return;
@@ -454,28 +468,28 @@ define([
         };
 
         this.processArtifactText = function(text, element) {
+            var self = this;
+
             // Looks like JSON ?
             if (/^\s*{/.test(text)) {
+                var json;
                 try {
-                    var json = JSON.parse(text);
-                    if (json.entries) {
-                        var entryTemplate = _.template('<dt>{time}</dt><dd>{text}</dd>');
-                        return element.html(
-                            '<dl class="av-times">' +
-                            _.map(json.entries, function(entry) {
-                                return entryTemplate({
-                                    time: (_.isUndefined(entry.start) ? '' :
-                                            sf('{0:h:mm:ss.f}', new sf.TimeSpan(entry.start))) +
-                                            ' - ' +
-                                          (_.isUndefined(entry.end) ? '' :
-                                            sf('{0:h:mm:ss.f}', new sf.TimeSpan(entry.end))),
-                                    text: entry.text
-                                });
-                            }).join('') +
-                            '</dl>'
-                        );
-                    }
+                    json = JSON.parse(text);
                 } catch(e) { }
+
+                if (json && json.entries) {
+                    return element.html(transcriptEntriesTemplate({
+                        entries: _.map(json.entries, function(e) {
+                            return {
+                                millis: e.start || e.end,
+                                time: (_.isUndefined(e.start) ? '' : self.formatTimeOffset(e.start)) +
+                                        ' - ' +
+                                      (_.isUndefined(e.end) ? '' : self.formatTimeOffset(e.end)),
+                                text: e.text
+                            };
+                        })
+                    }));
+                }
             }
 
             element.html(

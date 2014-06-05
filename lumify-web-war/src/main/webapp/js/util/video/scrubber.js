@@ -75,62 +75,92 @@ define([
                 return;
             }
 
+            var userClickedPlayButton = $(event.target).is('.scrubbing-play-button');
+
+            if (userClickedPlayButton) {
+                this.startVideo();
+            } else {
+                this.startVideo({
+                    percentSeek: this.scrubPercent
+                })
+            }
+        };
+
+        this.startVideo = function(opts) {
             var self = this,
-                userClickedPlayButton = $(event.target).is('.scrubbing-play-button'),
-                players = videojs.players,
-                video = $(videoTemplate(
-                    _.tap(this.attr, function(attrs) {
-                        var url = attrs.rawUrl;
-                        if (~url.indexOf('?')) {
-                            url += '&';
-                        } else {
-                            url += '?';
-                        }
-                        url += 'playback=true';
-                        attrs.url = url;
-                    })
-                ));
+                options = opts || {},
+                $video = this.select('videoSelector'),
+                videoPlayer = $video.length && $video[0];
 
-            this.$node.html(video);
-            Object.keys(players).forEach(function(player) {
-                if (players[player]) {
-                    players[player].dispose();
-                    delete players[player];
-                }
-            });
+            if (videoPlayer && videoPlayer.readyState === 4) {
+                videoPlayer.currentTime = Math.max(0.0,
+                       (options.percentSeek ?
+                            options.percentSeek * videoPlayer.duration :
+                            options.seek ? options.seek : 0.0
+                       ) - 1.0
+                );
+                videoPlayer.play();
+            } else {
+                var players = videojs.players,
+                    video = $(videoTemplate(
+                        _.tap(this.attr, function(attrs) {
+                            var url = attrs.rawUrl;
+                            if (~url.indexOf('?')) {
+                                url += '&';
+                            } else {
+                                url += '?';
+                            }
+                            url += 'playback=true';
+                            attrs.url = url;
+                        })
+                    ));
 
-            this.trigger('videoPlayerInitialized');
-
-            var scrubPercent = this.scrubPercent;
-            _.defer(videojs, video[0], {
-                controls: true,
-                autoplay: true,
-                preload: 'auto'
-            }, function() {
-                var self = this;
-
-                if (!userClickedPlayButton) {
-                    self.on('durationchange', durationchange);
-                    self.on('loadedmetadata', durationchange);
-                }
-                self.on('timeupdate', timeupdate);
-
-                function timeupdate(event) {
-                    self.trigger('playerTimeUpdate', {
-                        currentTime: self.currentTime(),
-                        duration: self.duration()
-                    });
-                }
-
-                function durationchange(event) {
-                    var duration = self.duration();
-                    if (duration > 0.0 && scrubPercent > 0.0) {
-                        self.off('durationchange', durationchange);
-                        self.off('loadedmetadata', durationchange);
-                        self.currentTime(Math.max(0.0, duration * scrubPercent - 1.0));
+                this.$node.html(video);
+                Object.keys(players).forEach(function(player) {
+                    if (players[player]) {
+                        players[player].dispose();
+                        delete players[player];
                     }
-                }
-            });
+                });
+
+                this.trigger('videoPlayerInitialized');
+
+                _.defer(videojs, video[0], {
+                    controls: true,
+                    autoplay: true,
+                    preload: 'auto'
+                }, function() {
+                    var self = this;
+
+                    if (options.seek || options.percentSeek) {
+                        self.on('durationchange', durationchange);
+                        self.on('loadedmetadata', durationchange);
+                    }
+                    self.on('timeupdate', timeupdate);
+
+                    function timeupdate(event) {
+                        self.trigger('playerTimeUpdate', {
+                            currentTime: self.currentTime(),
+                            duration: self.duration()
+                        });
+                    }
+
+                    function durationchange(event) {
+                        var duration = self.duration();
+                        if (duration > 0.0) {
+                            self.off('durationchange', durationchange);
+                            self.off('loadedmetadata', durationchange);
+                            self.currentTime(
+                                Math.max(0.0,
+                                    (options.percentSeek ?
+                                        duration * scrubPercent :
+                                        options.seek) - 1.0
+                                )
+                            );
+                        }
+                    }
+                });
+            }
         };
 
         this.after('initialize', function() {
@@ -192,7 +222,15 @@ define([
                     self.showPoster();
                 })
                 .on('click', self.onClick.bind(self));
+
+            this.on('seekToTime', this.onSeekToTime);
         });
+
+        this.onSeekToTime = function(event, data) {
+            this.startVideo({
+                seek: data.seekTo / 1000
+            });
+        };
     }
 
     return VideoScrubber;
