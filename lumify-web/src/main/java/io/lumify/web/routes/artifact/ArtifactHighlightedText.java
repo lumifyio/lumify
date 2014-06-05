@@ -5,6 +5,8 @@ import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.EntityHighlighter;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.ingest.video.VideoTranscript;
+import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -59,23 +61,26 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         }
 
         StreamingPropertyValue textPropertyValue = RawLumifyProperties.TEXT.getPropertyValue(artifactVertex, propertyKey);
-        if (textPropertyValue == null) {
-            respondWithNotFound(response);
+        if (textPropertyValue != null) {
+            String highlightedText;
+            String text = IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8");
+            if (text == null) {
+                highlightedText = "";
+            } else {
+                Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
+                highlightedText = entityHighlighter.getHighlightedText(text, termMentions);
+            }
+
+            respondWithHtml(response, highlightedText);
             return;
         }
 
-        String highlightedText;
-        String text = IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8");
-        if (text == null) {
-            highlightedText = "";
-        } else {
-            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
-            highlightedText = entityHighlighter.getHighlightedText(text, termMentions);
+        VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
+        if (videoTranscript != null) {
+            respondWithJson(response, videoTranscript.toJson());
+            return;
         }
 
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-
-        IOUtils.write(highlightedText, response.getOutputStream(), "UTF-8");
+        respondWithNotFound(response);
     }
 }
