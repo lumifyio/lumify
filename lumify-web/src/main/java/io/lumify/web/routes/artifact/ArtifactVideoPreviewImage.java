@@ -91,8 +91,9 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
 
         StreamingPropertyValue videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
         if (videoPreviewImageValue == null) {
-            generateAndSaveVideoPreviewImage(artifactVertex, authorizations);
-            videoPreviewImageValue = VIDEO_PREVIEW_IMAGE.getPropertyValue(artifactVertex);
+            LOGGER.warn("Could not find video preview image for artifact: %s", artifactVertex.getId().toString());
+            respondWithNotFound(response);
+            return;
         }
         InputStream in = videoPreviewImageValue.getInputStream();
         try {
@@ -111,89 +112,4 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             in.close();
         }
     }
-
-    private void generateAndSaveVideoPreviewImage(Vertex artifactVertex, Authorizations authorizations) {
-        LOGGER.info("Generating video preview for %s", artifactVertex.getId().toString());
-
-        try {
-            Iterable<Property> videoFrames = getVideoFrameProperties(artifactVertex);
-            List<Property> videoFramesForPreview = getFramesForPreview(videoFrames);
-            BufferedImage previewImage = createPreviewImage(videoFramesForPreview);
-            saveImage(artifactVertex, previewImage, authorizations);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create preview image for artifact: " + artifactVertex.getId(), e);
-        }
-
-        LOGGER.debug("Finished creating preview for: %s", artifactVertex.getId().toString());
-    }
-
-    private void saveImage(Vertex artifactVertex, BufferedImage previewImage, Authorizations authorizations) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write(previewImage, "png", out);
-        StreamingPropertyValue spv = new StreamingPropertyValue(new ByteArrayInputStream(out.toByteArray()), byte[].class);
-        spv.searchIndex(false);
-        MediaLumifyProperties.VIDEO_PREVIEW_IMAGE.setProperty(artifactVertex, spv, artifactVertex.getVisibility(), authorizations);
-        graph.flush();
-    }
-
-    private BufferedImage createPreviewImage(List<Property> videoFrames) throws IOException {
-        BufferedImage previewImage = new BufferedImage(ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH * videoFrames.size(), ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics g = previewImage.getGraphics();
-        for (int i = 0; i < videoFrames.size(); i++) {
-            Property videoFrame = videoFrames.get(i);
-            Image img = loadImage(videoFrame);
-            int dx1 = i * ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
-            int dy1 = 0;
-            int dx2 = dx1 + ArtifactThumbnailRepository.PREVIEW_FRAME_WIDTH;
-            int dy2 = ArtifactThumbnailRepository.PREVIEW_FRAME_HEIGHT;
-            int sx1 = 0;
-            int sy1 = 0;
-            int sx2 = img.getWidth(null);
-            int sy2 = img.getHeight(null);
-            g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
-        }
-        return previewImage;
-    }
-
-    private Image loadImage(Property videoFrame) throws IOException {
-        StreamingPropertyValue spv = (StreamingPropertyValue) videoFrame.getValue();
-        InputStream spvIn = spv.getInputStream();
-        try {
-            BufferedImage img = ImageIO.read(spvIn);
-            checkNotNull(img, "Could not load image from frame: " + videoFrame);
-            return img;
-        } finally {
-            spvIn.close();
-        }
-    }
-
-    private Iterable<Property> getVideoFrameProperties(Vertex artifactVertex) {
-        List<Property> videoFrameProperties = toList(artifactVertex.getProperties(MediaLumifyProperties.VIDEO_FRAME.getKey()));
-        Collections.sort(videoFrameProperties, new Comparator<Property>() {
-            @Override
-            public int compare(Property p1, Property p2) {
-                Long p1StartTime = (Long) p1.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
-                Long p2StartTime = (Long) p2.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
-                return p1StartTime.compareTo(p2StartTime);
-            }
-        });
-        return videoFrameProperties;
-    }
-
-    private List<Property> getFramesForPreview(Iterable<Property> videoFramesIterable) {
-        List<Property> videoFrames = toList(videoFramesIterable);
-        ArrayList<Property> results = new ArrayList<Property>();
-        double skip = (double) videoFrames.size() / (double) ArtifactThumbnailRepository.FRAMES_PER_PREVIEW;
-        for (double i = 0; i < videoFrames.size(); i += skip) {
-            results.add(videoFrames.get((int) Math.floor(i)));
-        }
-        if (results.size() < 20) {
-            results.add(videoFrames.get(videoFrames.size() - 1));
-        }
-        if (results.size() > 20) {
-            results.remove(results.size() - 1);
-        }
-        return results;
-    }
-
 }
