@@ -6,14 +6,14 @@
 <body>
 
 <form method="POST" action="/admin/queueVertices">
-    <input type="hidden" value="csrfToken">
+    <input type="hidden" name="csrfToken">
     <input type="submit" value="Re-queue Vertices" disabled>
 </form>
 
 <hr/>
 
 <form method="POST" action="/admin/queueEdges">
-    <input type="hidden" value="csrfToken">
+    <input type="hidden" name="csrfToken">
     <input type="submit" value="Re-queue Edges" disabled>
 </form>
 
@@ -25,7 +25,7 @@
             })
             .done(function(user) {
                 $('input[type=submit]').removeAttr('disabled');
-                $('input[type=hidden]').val(user.csrfToken);
+                $('input[name=csrfToken]').val(user.csrfToken);
             })
     });
 </script>
