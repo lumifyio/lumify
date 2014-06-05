@@ -231,7 +231,10 @@ define([
                 scrollParent = this.$node.scrollParent(),
                 scrollTop = scrollParent.scrollTop(),
                 expandedKey = this.$node.find('.text-section.expanded').data('key'),
-                textProperties = _.where(this.attr.data.properties, { name: 'http://lumify.io#text' });
+                textProperties = _.filter(this.attr.data.properties, function(p) {
+                    return p.name === 'http://lumify.io#videoTranscript' ||
+                        p.name === 'http://lumify.io#text'
+                });
 
             this.select('textContainerSelector').html(
                 _.map(textProperties, function(p) {
