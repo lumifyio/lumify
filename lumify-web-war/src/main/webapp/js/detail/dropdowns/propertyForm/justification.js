@@ -109,7 +109,7 @@ define([
                     valid: $.trim(value).length > 0
                 });
             } else {
-                var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet');
+                var sourceInfo = _.pick(value, 'startOffset', 'endOffset', 'vertexId', 'snippet', 'textPropertyKey');
                 this.toggleView(true, value);
                 this.trigger('justificationchange', { sourceInfo: sourceInfo, valid: true });
             }

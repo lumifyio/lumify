@@ -158,6 +158,7 @@ define([
                     endOffset: offsets[1],
                     snippet: contextHighlight,
                     vertexId: this.attr.data.id,
+                    textPropertyKey: $anchor.closest('.text-section').data('key'),
                     text: selection.toString(),
                     vertexTitle: F.vertex.title(this.attr.data)
                 });
@@ -242,7 +243,14 @@ define([
                 })
             );
 
-            if (expandedKey || textProperties.length === 1) {
+            if (this.attr.focus) {
+                this.openText(this.attr.focus.textPropertyKey)
+                    .done(function() {
+                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text');
+                        rangeUtils.highlightOffsets($text.get(0), self.attr.focus.offsets);
+                        self.attr.focus = null;
+                    });
+            } else if (expandedKey || textProperties.length === 1) {
                 this.openText(expandedKey || textProperties[0].key)
                     .done(function() {
                         scrollParent.scrollTop(scrollTop);
@@ -310,11 +318,6 @@ define([
 
                 $section.addClass('expanded').removeClass('loading');
 
-                if (self.attr.focusOffsets) {
-                    // TODO: highlight correct text key
-                    rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
-                }
-
                 self.updateEntityAndArtifactDraggables();
             });
         };
@@ -331,31 +334,6 @@ define([
             } else {
                 this.openText(propertyKey);
             }
-
-            /*
-            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
-                .done(function(artifactText, status, xhr) {
-                    var displayType = self.attr.data.concept.displayType,
-                        textElement = self.select('textSelector');
-
-                    if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
-                        textElement.html(alertTemplate({ error: 'No Text Available' }));
-                    } else {
-                        textElement.html(!artifactText ?
-                             '' :
-                             artifactText
-                                .replace(/(\n+)/g, '<br><br>$1'));
-
-                        if (self.attr.focusOffsets) {
-                            rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
-                        }
-                    }
-                    self.updateEntityAndArtifactDraggables();
-                    if (self[displayType + 'Setup']) {
-                        self[displayType + 'Setup'](self.attr.data);
-                    }
-            });
-            */
         };
 
         this.onDetectedObjectClicked = function(event) {
