@@ -229,10 +229,11 @@ define([
             var self = this,
                 scrollParent = this.$node.scrollParent(),
                 scrollTop = scrollParent.scrollTop(),
-                expandedKey = this.$node.find('.text-section.expanded').data('key');
+                expandedKey = this.$node.find('.text-section.expanded').data('key'),
+                textProperties = _.where(this.attr.data.properties, { name: 'http://lumify.io#text' });
 
             this.select('textContainerSelector').html(
-                _.map(_.where(this.attr.data.properties, { name: 'http://lumify.io#text' }), function(p) {
+                _.map(textProperties, function(p) {
                     return textTemplate({
                         description: p['http://lumify.io#textDescription'] || p.key,
                         key: p.key,
@@ -241,8 +242,8 @@ define([
                 })
             );
 
-            if (expandedKey) {
-                this.openText(expandedKey)
+            if (expandedKey || textProperties.length === 1) {
+                this.openText(expandedKey || textProperties[0].key)
                     .done(function() {
                         scrollParent.scrollTop(scrollTop);
                     });
@@ -294,7 +295,9 @@ define([
 
         this.openText = function(propertyKey) {
             var self = this,
-                $section = this.$node.find('.' + F.className.to(propertyKey)).addClass('expanded');
+                $section = this.$node.find('.' + F.className.to(propertyKey))
+                    .siblings('.loading').removeClass('loading').end()
+                    .addClass('loading');
 
             return this.handleCancelling(
                 this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
@@ -304,6 +307,8 @@ define([
                      '' :
                      artifactText.replace(/(\n+)/g, '<br><br>$1')
                 );
+
+                $section.addClass('expanded').removeClass('loading');
 
                 if (self.attr.focusOffsets) {
                     // TODO: highlight correct text key
@@ -316,12 +321,14 @@ define([
 
         this.onTextHeaderClicked = function(event) {
             var $section = $(event.target)
-                    .closest('.text-section').toggleClass('expanded')
+                    .closest('.text-section')
                     .siblings('.expanded').removeClass('expanded')
                     .end(),
                 propertyKey = $section.data('key');
 
             if ($section.hasClass('expanded')) {
+                $section.removeClass('expanded');
+            } else {
                 this.openText(propertyKey);
             }
 

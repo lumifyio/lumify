@@ -190,6 +190,7 @@ define([
             }
             var parameters = {
                 sign: newObjectSign,
+                propertyKey: this.attr.propertyKey,
                 conceptId: this.select('conceptSelector').val(),
                 mentionStart: mentionStart,
                 mentionEnd: mentionEnd,
@@ -199,7 +200,8 @@ define([
             };
 
             if (this.currentGraphVertexId) {
-                parameters.graphVertexId = this.currentGraphVertexId;
+                parameters.resolvedVertexId =
+                    parameters.graphVertexId = this.currentGraphVertexId;
                 parameters.edgeId = $mentionNode.data('info') ? $mentionNode.data('info').edgeId : null;
             }
 
