@@ -1,6 +1,11 @@
 @import (reference) "../util/constants.less";
 @import (reference) "../util/selection.less";
 
+.av-time-display {
+  font-family: "Lucida Console", Monaco, monospace;
+  color: #aaa;
+}
+
 .content {
 
   padding: 2.5em 1em 0 1em;
@@ -108,8 +113,7 @@
 
       .time {
           font-size: 85%;
-          font-family: "Lucida Console", Monaco, monospace;
-          color: #aaa;
+          .av-time-display;
       }
   }
 
@@ -290,6 +294,18 @@
       &.focused {
         color: @normal-color;
       }
+    }
+  }
+  
+  .av-times {    
+    margin-top: -0.5em;
+    
+    dt {
+      .av-time-display;
+      font-size: 80%;
+    }
+    dd {
+      margin: 0 0 1em 0;      
     }
   }
 

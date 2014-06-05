@@ -313,11 +313,8 @@ define([
             return this.handleCancelling(
                 this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
             ).done(function(artifactText) {
-                var textElement = $section.find('.text').html(
-                    !artifactText ?
-                     '' :
-                     artifactText.replace(/(\n+)/g, '<br><br>$1')
-                );
+                var textElement = $section.find('.text');
+                self.processArtifactText(artifactText, textElement);
 
                 $section.addClass('expanded').removeClass('loading');
 
@@ -455,6 +452,38 @@ define([
                 info
             );
         };
+
+        this.processArtifactText = function(text, element) {
+            // Looks like JSON ?
+            if (/^\s*{/.test(text)) {
+                try {
+                    var json = JSON.parse(text);
+                    if (json.entries) {
+                        var entryTemplate = _.template('<dt>{time}</dt><dd>{text}</dd>');
+                        return element.html(
+                            '<dl class="av-times">' +
+                            _.map(json.entries, function(entry) {
+                                return entryTemplate({
+                                    time: (_.isUndefined(entry.start) ? '' :
+                                            sf('{0:h:mm:ss.f}', new sf.TimeSpan(entry.start))) +
+                                            ' - ' +
+                                          (_.isUndefined(entry.end) ? '' :
+                                            sf('{0:h:mm:ss.f}', new sf.TimeSpan(entry.end))),
+                                    text: entry.text
+                                });
+                            }).join('') +
+                            '</dl>'
+                        );
+                    }
+                } catch(e) { }
+            }
+
+            element.html(
+                !text ?
+                 '' :
+                 text.replace(/(\n+)/g, '<br><br>$1')
+            );
+        }
 
         this.audioSetup = function(vertex) {
             AudioScrubber.attachTo(this.select('audioPreviewSelector'), {
