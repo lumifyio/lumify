@@ -229,10 +229,11 @@ define([
             var self = this,
                 scrollParent = this.$node.scrollParent(),
                 scrollTop = scrollParent.scrollTop(),
-                expandedKey = this.$node.find('.text-section.expanded').data('key');
+                expandedKey = this.$node.find('.text-section.expanded').data('key'),
+                textProperties = _.where(this.attr.data.properties, { name: 'http://lumify.io#text' });
 
             this.select('textContainerSelector').html(
-                _.map(_.where(this.attr.data.properties, { name: 'http://lumify.io#text' }), function(p) {
+                _.map(textProperties, function(p) {
                     return textTemplate({
                         description: p['http://lumify.io#textDescription'] || p.key,
                         key: p.key,
@@ -241,8 +242,8 @@ define([
                 })
             );
 
-            if (expandedKey) {
-                this.openText(expandedKey)
+            if (expandedKey || textProperties.length === 1) {
+                this.openText(expandedKey || textProperties[0].key)
                     .done(function() {
                         scrollParent.scrollTop(scrollTop);
                     });
