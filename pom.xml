@@ -61,6 +61,7 @@
         <module>lumify-zipcode-extractor</module>
         <module>lumify-email-extractor</module>
         <module>lumify-zipcode-resolver</module>
+        <module>lumify-google-analytics</module>
     </modules>
 
     <repositories>
