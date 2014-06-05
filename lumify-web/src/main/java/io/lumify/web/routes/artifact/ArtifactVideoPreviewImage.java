@@ -5,7 +5,6 @@ import com.altamiracorp.miniweb.utils.UrlUtils;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
-import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
@@ -15,28 +14,15 @@ import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
-import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.properties.MediaLumifyProperties.VIDEO_PREVIEW_IMAGE;
-import static org.securegraph.util.IterableUtils.toList;
 
 public class ArtifactVideoPreviewImage extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactVideoPreviewImage.class);
