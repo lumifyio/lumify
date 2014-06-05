@@ -13,6 +13,7 @@ import io.lumify.core.model.termMention.TermMentionRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
+import io.lumify.core.util.JsonSerializer;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
@@ -76,6 +77,12 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         }
 
         VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
+        if (videoTranscript != null) {
+            respondWithJson(response, videoTranscript.toJson());
+            return;
+        }
+
+        videoTranscript = JsonSerializer.getSynthesisedVideoTranscription(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             respondWithJson(response, videoTranscript.toJson());
             return;
