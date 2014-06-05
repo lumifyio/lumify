@@ -3,23 +3,21 @@ package io.lumify.web;
 import com.altamiracorp.miniweb.App;
 import com.altamiracorp.miniweb.Handler;
 import com.google.inject.Injector;
+import io.lumify.core.exception.LumifyException;
 import org.apache.commons.io.IOUtils;
-import org.securegraph.SecureGraphException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 
 public class WebApp extends App {
     private final Injector injector;
-    private List<String> javaScriptSources = new ArrayList<String>();
-    private List<String> cssSources = new ArrayList<String>();
+    private Map<String, String> javaScriptSources = new HashMap<String, String>();
+    private Map<String, String> cssSources = new HashMap<String, String>();
 
     public WebApp(final ServletConfig servletConfig, final Injector injector) {
         super(servletConfig);
@@ -53,12 +51,12 @@ public class WebApp extends App {
     public void registerJavaScript(String scriptResourceName) {
         InputStream stream = WebApp.class.getResourceAsStream(scriptResourceName);
         if (stream == null) {
-            throw new SecureGraphException("Could not find script resource: " + scriptResourceName);
+            throw new LumifyException("Could not find script resource: " + scriptResourceName);
         }
         try {
-            javaScriptSources.add(IOUtils.toString(stream));
+            javaScriptSources.put(scriptResourceName, IOUtils.toString(stream));
         } catch (IOException e) {
-            throw new SecureGraphException("Could not read script resource: " + scriptResourceName);
+            throw new LumifyException("Could not read script resource: " + scriptResourceName);
         } finally {
             IOUtils.closeQuietly(stream);
         }
@@ -67,22 +65,22 @@ public class WebApp extends App {
     public void registerCss(String cssResourceName) {
         InputStream stream = WebApp.class.getResourceAsStream(cssResourceName);
         if (stream == null) {
-            throw new SecureGraphException("Could not find css resource: " + cssResourceName);
+            throw new LumifyException("Could not find css resource: " + cssResourceName);
         }
         try {
-            cssSources.add(IOUtils.toString(stream));
+            cssSources.put(cssResourceName, IOUtils.toString(stream));
         } catch (IOException e) {
-            throw new SecureGraphException("Could not read css resource: " + cssResourceName);
+            throw new LumifyException("Could not read css resource: " + cssResourceName);
         } finally {
             IOUtils.closeQuietly(stream);
         }
     }
 
-    public Iterable<String> getJavaScriptSources() {
+    public Map<String, String> getJavaScriptSources() {
         return javaScriptSources;
     }
 
-    public Iterable<String> getCssSources() {
+    public Map<String, String> getCssSources() {
         return cssSources;
     }
 }
