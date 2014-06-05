@@ -3,6 +3,7 @@ package io.lumify.core.model.termMention;
 import com.altamiracorp.bigtable.model.RowKey;
 import io.lumify.core.util.RowKeyHelper;
 import org.apache.commons.lang.StringUtils;
+import org.securegraph.SecureGraphException;
 
 public class TermMentionRowKey extends RowKey {
     public static char ROW_KEY_SEP = '\u001e';
@@ -20,6 +21,8 @@ public class TermMentionRowKey extends RowKey {
     }
 
     private static String buildKey(String graphVertexId, String propertyKey, long startOffset, long endOffset) {
+        assertDoesNotContainRowKeySeparator(graphVertexId, "graphVertexId");
+        assertDoesNotContainRowKeySeparator(propertyKey, "propertyKey");
         return graphVertexId
                 + ROW_KEY_SEP
                 + propertyKey
@@ -30,6 +33,9 @@ public class TermMentionRowKey extends RowKey {
     }
 
     private static String buildKey(String graphVertexId, String propertyKey, long startOffset, long endOffset, String uniqueId) {
+        assertDoesNotContainRowKeySeparator(graphVertexId, "graphVertexId");
+        assertDoesNotContainRowKeySeparator(propertyKey, "propertyKey");
+        assertDoesNotContainRowKeySeparator(uniqueId, "uniqueId");
         return graphVertexId
                 + ROW_KEY_SEP
                 + propertyKey
@@ -39,6 +45,12 @@ public class TermMentionRowKey extends RowKey {
                 + StringUtils.leftPad(Long.toString(startOffset), RowKeyHelper.OFFSET_WIDTH, '0')
                 + ROW_KEY_SEP
                 + uniqueId;
+    }
+
+    private static void assertDoesNotContainRowKeySeparator(String value, String valueName) {
+        if (value.indexOf(ROW_KEY_SEP) >= 0) {
+            throw new SecureGraphException(valueName + " \"" + value + "\" cannot contain a row key separator");
+        }
     }
 
     public String getGraphVertexId() {
@@ -67,7 +79,7 @@ public class TermMentionRowKey extends RowKey {
         return Long.parseLong(keyElements[keyElements.length - 3]);
     }
 
-    public String getUniqueId () {
+    public String getUniqueId() {
         String[] keyElements = this.toString().split("" + ROW_KEY_SEP);
         if (keyElements.length == 5) {
             return keyElements[keyElements.length - 1];
