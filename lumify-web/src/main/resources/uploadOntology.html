@@ -7,7 +7,7 @@
 <body>
 <form method="POST" action="/admin/uploadOntology" enctype="multipart/form-data">
     <b>Document IRI</b><br/>
-    <input type="hidden" value="csrfToken">
+    <input type="hidden" name="csrfToken">
     <input type="text" name="documentIRI"/><br/>
     <br/>
 
@@ -24,7 +24,7 @@
             })
             .done(function(user) {
                 $('input[type=submit]').removeAttr('disabled');
-                $('input[type=hidden]').val(user.csrfToken);
+                $('input[name=csrfToken]').val(user.csrfToken);
             })
     });
 </script>

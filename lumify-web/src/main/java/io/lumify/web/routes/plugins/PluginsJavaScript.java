@@ -11,6 +11,7 @@ import io.lumify.web.WebApp;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class PluginsJavaScript extends BaseRequestHandler {
     @Inject
@@ -24,9 +25,10 @@ public class PluginsJavaScript extends BaseRequestHandler {
 
         response.setHeader("Content-Type", "application/javascript");
         ServletOutputStream out = response.getOutputStream();
-        for (String cssSource : webApp.getJavaScriptSources()) {
-            out.write(cssSource.getBytes());
-            out.write("\n\n/******************************************************************************************************/\n\n".getBytes());
+        for (Map.Entry<String, String> jsSource : webApp.getJavaScriptSources().entrySet()) {
+            String start = "\n/* " + jsSource.getKey() + " */\n";
+            out.write(start.getBytes());
+            out.write(jsSource.getValue().getBytes());
         }
         out.close();
     }

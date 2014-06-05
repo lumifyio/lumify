@@ -11,6 +11,7 @@ import io.lumify.web.WebApp;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class PluginsCss extends BaseRequestHandler {
     @Inject
@@ -24,9 +25,10 @@ public class PluginsCss extends BaseRequestHandler {
 
         response.setHeader("Content-Type", "text/css");
         ServletOutputStream out = response.getOutputStream();
-        for (String cssSource : webApp.getCssSources()) {
-            out.write(cssSource.getBytes());
-            out.write("\n\n/******************************************************************************************************/\n\n".getBytes());
+        for (Map.Entry<String, String> cssSource : webApp.getCssSources().entrySet()) {
+            String start = "\n/* " + cssSource.getKey() + " */\n";
+            out.write(start.getBytes());
+            out.write(cssSource.getValue().getBytes());
         }
         out.close();
     }
