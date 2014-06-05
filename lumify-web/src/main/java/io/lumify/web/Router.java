@@ -27,6 +27,8 @@ import io.lumify.web.routes.entity.UnresolveTermEntity;
 import io.lumify.web.routes.graph.*;
 import io.lumify.web.routes.map.MapMarkerImage;
 import io.lumify.web.routes.ontology.Ontology;
+import io.lumify.web.routes.plugins.PluginsCss;
+import io.lumify.web.routes.plugins.PluginsJavaScript;
 import io.lumify.web.routes.relationship.*;
 import io.lumify.web.routes.resource.ResourceGet;
 import io.lumify.web.routes.user.*;
@@ -71,6 +73,8 @@ public class Router extends HttpServlet {
             app.post("/logout", csrfProtector, Logout.class);
 
             app.get("/configuration", authenticator, csrfProtector, Configuration.class);
+            app.get("/plugins.js", authenticator, csrfProtector, PluginsJavaScript.class);
+            app.get("/plugins.css", authenticator, csrfProtector, PluginsCss.class);
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 
