@@ -358,10 +358,13 @@ define([
         this.dropdownEntity = function(creating, insertAfterNode, selection, text) {
             this.tearDownDropdowns();
 
-            var form = $('<div class="underneath"/>');
-            $(insertAfterNode).after(form);
+            var form = $('<div class="underneath"/>'),
+                $node = $(insertAfterNode);
+
+            $node.after(form);
             TermForm.attachTo(form, {
                 sign: text,
+                propertyKey: $node.closest('.text-section').data('key'),
                 selection: selection,
                 mentionNode: insertAfterNode,
                 existing: !creating,
