@@ -1,5 +1,6 @@
 package io.lumify.web;
 
+import com.altamiracorp.miniweb.App;
 import com.altamiracorp.miniweb.Handler;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.altamiracorp.miniweb.utils.UrlUtils;
@@ -370,5 +371,9 @@ public abstract class BaseRequestHandler implements Handler {
 
     public WorkspaceRepository getWorkspaceRepository() {
         return workspaceRepository;
+    }
+
+    public WebApp getWebApp(HttpServletRequest request) {
+        return (WebApp) App.getApp(request);
     }
 }

@@ -27,5 +27,8 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
         app.post("/admin/queueVertices", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
         app.post("/admin/queueEdges", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);
+
+        app.registerJavaScript("/io/lumify/web/devTools/dev.js");
+        app.registerCss("/io/lumify/web/devTools/dev.css");
     }
 }
