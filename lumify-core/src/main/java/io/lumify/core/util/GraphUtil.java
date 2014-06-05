@@ -154,7 +154,8 @@ public class GraphUtil {
         int endOffset = sourceObject.getInt("endOffset");
         String vertexId = sourceObject.getString("vertexId");
         String snippet = sourceObject.getString("snippet");
-        return new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+        String textPropertyKey = sourceObject.getString("textPropertyKey");
+        return new PropertySourceMetadata(vertexId, textPropertyKey, startOffset, endOffset, snippet);
     }
 
     public static Edge addEdge(
