@@ -6,7 +6,8 @@ define([
 ], function(sf) {
     'use strict';
 
-    var classNameIndex = 0,
+    var BITS_FOR_INDEX = 12,
+        classNameIndex = 0,
         toClassNameMap = {},
         fromClassNameMap = {},
         isMac = checkIfMac(),
@@ -92,6 +93,16 @@ define([
                 } else if (number >= 1000) {
                     return (decimalAdjust('round', number / 1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
+            },
+            offsetValues: function(value) {
+                var indexMask = (1 << BITS_FOR_INDEX) - 1;
+                return {
+                    index: value & indexMask,
+                    offset: value >> BITS_FOR_INDEX
+                };
+            },
+            compactOffsetValues: function(index, offset) {
+                return (offset << BITS_FOR_INDEX) | index;
             }
         },
 

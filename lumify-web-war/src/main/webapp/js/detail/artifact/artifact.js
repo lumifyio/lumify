@@ -40,8 +40,6 @@ define([
     appData) {
     'use strict';
 
-    var BITS_FOR_INDEX = 12;
-
     return defineComponent(Artifact, withTypeContent, withHighlighting);
 
     function Artifact() {
@@ -138,18 +136,6 @@ define([
             });
         };
 
-        this.bitMaskedValue = function(index, offset) {
-            return (offset << BITS_FOR_INDEX) | index;
-        };
-
-        this.valuesForBitMaskOffset = function(value) {
-            var indexMask = (1 << BITS_FOR_INDEX) - 1;
-            return {
-                index: value & indexMask,
-                offset: value >> BITS_FOR_INDEX
-            };
-        };
-
         this.offsetsForTranscript = function(input) {
             var self = this,
                 index = input[0].el.closest('dd').data('index'),
@@ -160,9 +146,9 @@ define([
             }
 
             var rawOffsets = this.offsetsForText(input, 'dd', function(offset) {
-                    return self.valuesForBitMaskOffset(offset).offset;
+                    return F.number.offsetValues(offset).offset;
                 }),
-                bitMaskedOffset = _.map(rawOffsets, _.bind(this.bitMaskedValue, this, index));
+                bitMaskedOffset = _.map(rawOffsets, _.partial(F.number.compactOffsetValues, index));
 
             return bitMaskedOffset;
         };
@@ -297,8 +283,8 @@ define([
                             focusOffsets = self.attr.focus.offsets;
 
                         if ($transcript.length) {
-                            var start = self.valuesForBitMaskOffset(focusOffsets[0]),
-                                end = self.valuesForBitMaskOffset(focusOffsets[1]),
+                            var start = F.number.offsetValues(focusOffsets[0]),
+                                end = F.number.offsetValues(focusOffsets[1]),
                                 $container = $transcript.find('dd').eq(start.index);
 
                             rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
