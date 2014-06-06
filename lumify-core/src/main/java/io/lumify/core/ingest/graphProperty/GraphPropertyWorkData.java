@@ -38,7 +38,7 @@ public class GraphPropertyWorkData {
         return getElement().getVisibility();
     }
 
-    public Map<String, Object> getPropertyMetadata() {
+    public Map<String, Object> createPropertyMetadata() {
         Map<String, Object> metadata = new HashMap<String, Object>();
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(getElement());
         if (visibilityJson != null) {
