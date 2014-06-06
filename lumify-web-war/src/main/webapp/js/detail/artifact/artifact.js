@@ -373,7 +373,26 @@ define([
                 $section.addClass('expanded').removeClass('loading');
 
                 self.updateEntityAndArtifactDraggables();
+
+                self.scrollToRevealSection($section);
             });
+        };
+
+        this.scrollToRevealSection = function($section) {
+            var scrollIfWithinPixelsFromBottom = 150,
+                y = $section.offset().top,
+                scrollParent = $section.scrollParent(),
+                scrollTop = scrollParent.scrollTop(),
+                scrollHeight = scrollParent[0].scrollHeight,
+                height = scrollParent.outerHeight(),
+                maxScroll = height * 0.5,
+                fromBottom = height - y;
+
+            if (fromBottom < scrollIfWithinPixelsFromBottom) {
+                scrollParent.animate({
+                    scrollTop: Math.min(scrollHeight - scrollTop, maxScroll)
+                }, 'fast');
+            }
         };
 
         this.onTextHeaderClicked = function(event) {
