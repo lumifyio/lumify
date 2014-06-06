@@ -537,7 +537,8 @@ define([
         };
 
         this.processArtifactText = function(text, element) {
-            var self = this;
+            var self = this,
+                warningText = 'No Text Available';
 
             // Looks like JSON ?
             if (/^\s*{/.test(text)) {
@@ -546,7 +547,7 @@ define([
                     json = JSON.parse(text);
                 } catch(e) { }
 
-                if (json && json.entries) {
+                if (json && !_.isEmpty(json.entries)) {
                     return element.html(transcriptEntriesTemplate({
                         entries: _.map(json.entries, function(e) {
                             return {
@@ -558,13 +559,16 @@ define([
                             };
                         })
                     }));
+                } else if (json) {
+                    text = null;
+                    warningText = 'No Transcripts Available';
                 }
             }
 
             element.html(
                 !text ?
-                 '' :
-                 text.replace(/(\n+)/g, '<br><br>$1')
+                    alertTemplate({ warning: warningText }) :
+                    text.replace(/(\n+)/g, '<br><br>$1')
             );
         }
 
