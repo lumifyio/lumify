@@ -1,6 +1,7 @@
 require([
+    'jquery',
     'service/config'
-], function(ConfigService) {
+], function($, ConfigService) {
     'use strict';
 
     var configService = new ConfigService();
@@ -21,5 +22,21 @@ require([
         } else {
             console.log("required configuration properties for Google Analytics are not available");
         }
+    });
+
+    $(document).on('querysubmit', function(e, data) {
+        ga('send', 'event', 'feature', 'querysubmit', data.value);
+    });
+
+    $(document).on('switchWorkspace', function(e, data) {
+        ga('send', 'event', 'feature', 'switchWorkspace', data.workspaceId);
+    });
+
+    $(document).on('toggleGraphDimensions', function(e, data) {
+        ga('send', 'event', 'feature', 'toggleGraphDimensions');
+    });
+
+    $(document).on('mapShow', function(e, data) {
+        ga('send', 'event', 'feature', 'mapShow');
     });
 });
