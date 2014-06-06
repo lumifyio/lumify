@@ -28,6 +28,10 @@ require([
         ga('send', 'event', 'feature', 'querysubmit', data.value);
     });
 
+    $(document).on('filterWorkspace', function(e, data) {
+        ga('send', 'event', 'feature', 'filterWorkspace', data.value);
+    });
+
     $(document).on('switchWorkspace', function(e, data) {
         ga('send', 'event', 'feature', 'switchWorkspace', data.workspaceId);
     });
@@ -38,5 +42,45 @@ require([
 
     $(document).on('mapShow', function(e, data) {
         ga('send', 'event', 'feature', 'mapShow');
+    });
+
+    $(document).on('fit', function(e, data) {
+        ga('send', 'event', 'feature', 'fit');
+    });
+
+    $(document).on('escape', function(e, data) {
+        ga('send', 'event', 'feature', 'escape');
+    });
+
+    $(document).on('showVertexContextMenu', function(e, data) {
+        ga('send', 'event', 'feature', 'showVertexContextMenu');
+    });
+
+    $(document).on('searchByEntity', function(e, data) {
+        ga('send', 'event', 'feature', 'searchByEntity');
+    });
+
+    $(document).on('searchByRelatedEntity', function(e, data) {
+        ga('send', 'event', 'feature', 'searchByRelatedEntity');
+    });
+
+    $(document).on('toggleAuditDisplay', function(e, data) {
+        ga('send', 'event', 'feature', 'toggleAuditDisplay');
+    });
+
+    $(document).on('addVertices', function(e, data) {
+        ga('send', 'event', 'vertices', 'add', data.vertices.length);
+    });
+
+    $(document).on('updateVertices', function(e, data) {
+        ga('send', 'event', 'vertices', 'update', data.vertices.length);
+    });
+
+    $(document).on('deleteVertices', function(e, data) {
+        ga('send', 'event', 'vertices', 'delete', data.vertices.length);
+    });
+
+    $(document).on('selectObjects', function(e, data) {
+        ga('send', 'event', 'vertices', 'selectObjects', data.vertices.length);
     });
 });
