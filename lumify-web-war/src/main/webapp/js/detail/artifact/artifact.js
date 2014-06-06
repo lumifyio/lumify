@@ -40,6 +40,8 @@ define([
     appData) {
     'use strict';
 
+    var BITS_FOR_INDEX = 12;
+
     return defineComponent(Artifact, withTypeContent, withHighlighting);
 
     function Artifact() {
@@ -97,6 +99,74 @@ define([
             this.select('propertiesSelector').teardownComponent(Properties);
         });
 
+        this.offsetsForText = function(input, parentSelector, offsetTransform) {
+            var offsets = [];
+            input.forEach(function(node) {
+                var parentInfo = node.el.closest('.entity').data('info'),
+                    offset = 0;
+
+                if (parentInfo) {
+                    offset = offsetTransform(parentInfo.start);
+                } else {
+                    var previousEntity = node.el.prevAll('.entity').first(),
+                    previousInfo = previousEntity.data('info'),
+                    dom = previousInfo ?
+                        previousEntity.get(0) :
+                        node.el.closest(parentSelector)[0].childNodes[0],
+                    el = node.el.get(0);
+
+                    if (previousInfo) {
+                        offset = offsetTransform(previousInfo.end);
+                        dom = dom.nextSibling;
+                    }
+
+                    while (dom && dom !== el) {
+                        if (dom.nodeType === 3) {
+                            offset += dom.length;
+                        } else {
+                            offset += dom.textContent.length;
+                        }
+                        dom = dom.nextSibling;
+                    }
+                }
+
+                offsets.push(offset + node.offset);
+            });
+
+            return _.sortBy(offsets, function(a, b) {
+                return a - b
+            });
+        };
+
+        this.bitMaskedValue = function(index, offset) {
+            return (offset << BITS_FOR_INDEX) | index;
+        };
+
+        this.valuesForBitMaskOffset = function(value) {
+            var indexMask = (1 << BITS_FOR_INDEX) - 1;
+            return {
+                index: value & indexMask,
+                offset: value >> BITS_FOR_INDEX
+            };
+        };
+
+        this.offsetsForTranscript = function(input) {
+            var self = this,
+                index = input[0].el.closest('dd').data('index'),
+                endIndex = input[1].el.closest('dd').data('index');
+
+            if (index !== endIndex) {
+                return console.warn('Unable to select across timestamps');
+            }
+
+            var rawOffsets = this.offsetsForText(input, 'dd', function(offset) {
+                    return self.valuesForBitMaskOffset(offset).offset;
+                }),
+                bitMaskedOffset = _.map(rawOffsets, _.bind(this.bitMaskedValue, this, index));
+
+            return bitMaskedOffset;
+        };
+
         this.onCopyText = function(event) {
             var selection = getSelection(),
                 target = event.target;
@@ -105,48 +175,15 @@ define([
 
                 var $anchor = $(selection.anchorNode),
                     $focus = $(selection.focusNode),
-                    offsets = [];
-
-                [
-                    {el: $anchor, offset: selection.anchorOffset},
-                    {el: $focus, offset: selection.focusOffset}
-                ].forEach(function(node) {
-                    var parentInfo = node.el.closest('.entity').data('info'),
-                        offset = 0;
-
-                    if (parentInfo) {
-                        offset = parentInfo.start;
-                    } else {
-                        var previousEntity = node.el.prevAll('.entity').first(),
-                        previousInfo = previousEntity.data('info'),
-                        dom = previousInfo ?
-                            previousEntity.get(0) :
-                            node.el.closest('.text')[0].childNodes[0],
-                        el = node.el.get(0);
-
-                        if (previousInfo) {
-                            offset = previousInfo.end;
-                            dom = dom.nextSibling;
-                        }
-
-                        while (dom && dom !== el) {
-                            if (dom.nodeType === 3) {
-                                offset += dom.length;
-                            } else {
-                                offset += dom.textContent.length;
-                            }
-                            dom = dom.nextSibling;
-                        }
-                    }
-
-                    offsets.push(offset + node.offset);
-                });
-
-                offsets = _.sortBy(offsets, function(a, b) {
-                    return a - b
-                });
-
-                var range = selection.getRangeAt(0),
+                    isTranscript = $anchor.closest('.av-times').length,
+                    offsetsFunction = isTranscript ?
+                        'offsetsForTranscript' :
+                        'offsetsForText',
+                    offsets = this[offsetsFunction]([
+                        {el: $anchor, offset: selection.anchorOffset},
+                        {el: $focus, offset: selection.focusOffset}
+                    ], '.text', _.identity),
+                    range = selection.getRangeAt(0),
                     output = {},
                     contextRange = rangeUtils.expandRangeByWords(range, 4, output),
                     context = contextRange.toString(),
@@ -157,15 +194,17 @@ define([
                         output.after +
                         '...';
 
-                this.trigger('copydocumenttext', {
-                    startOffset: offsets[0],
-                    endOffset: offsets[1],
-                    snippet: contextHighlight,
-                    vertexId: this.attr.data.id,
-                    textPropertyKey: $anchor.closest('.text-section').data('key'),
-                    text: selection.toString(),
-                    vertexTitle: F.vertex.title(this.attr.data)
-                });
+                if (offsets) {
+                    this.trigger('copydocumenttext', {
+                        startOffset: offsets[0],
+                        endOffset: offsets[1],
+                        snippet: contextHighlight,
+                        vertexId: this.attr.data.id,
+                        textPropertyKey: $anchor.closest('.text-section').data('key'),
+                        text: selection.toString(),
+                        vertexTitle: F.vertex.title(this.attr.data)
+                    });
+                }
             }
         };
 
@@ -253,8 +292,19 @@ define([
             if (this.attr.focus) {
                 this.openText(this.attr.focus.textPropertyKey)
                     .done(function() {
-                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text');
-                        rangeUtils.highlightOffsets($text.get(0), self.attr.focus.offsets);
+                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
+                            $transcript = $text.find('.av-times'),
+                            focusOffsets = self.attr.focus.offsets;
+
+                        if ($transcript.length) {
+                            var start = self.valuesForBitMaskOffset(focusOffsets[0]),
+                                end = self.valuesForBitMaskOffset(focusOffsets[1]),
+                                $container = $transcript.find('dd').eq(start.index);
+
+                            rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
+                        } else {
+                            rangeUtils.highlightOffsets($text.get(0), focusOffsets);
+                        }
                         self.attr.focus = null;
                     });
             } else if (expandedKey || textProperties.length === 1) {
