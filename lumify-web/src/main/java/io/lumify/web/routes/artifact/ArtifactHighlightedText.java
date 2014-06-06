@@ -14,6 +14,9 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.util.JsonSerializer;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.RowKeyHelper;
 import io.lumify.web.BaseRequestHandler;
 import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ArtifactHighlightedText extends BaseRequestHandler {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactHighlightedText.class);
     private final Graph graph;
     private final TermMentionRepository termMentionRepository;
     private final EntityHighlighter entityHighlighter;
@@ -63,6 +67,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
 
         StreamingPropertyValue textPropertyValue = RawLumifyProperties.TEXT.getPropertyValue(artifactVertex, propertyKey);
         if (textPropertyValue != null) {
+            LOGGER.debug("returning text for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
             String highlightedText;
             String text = IOUtils.toString(textPropertyValue.getInputStream(), "UTF-8");
             if (text == null) {
@@ -78,13 +83,17 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
 
         VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
         if (videoTranscript != null) {
+            LOGGER.debug("returning video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
             respondWithJson(response, videoTranscript.toJson());
             return;
         }
 
         videoTranscript = JsonSerializer.getSynthesisedVideoTranscription(artifactVertex, propertyKey);
         if (videoTranscript != null) {
-            respondWithJson(response, videoTranscript.toJson());
+            LOGGER.debug("returning synthesised video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId().toString() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions);
+            respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
         }
 

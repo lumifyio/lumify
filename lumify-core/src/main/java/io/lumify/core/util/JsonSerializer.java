@@ -1,5 +1,7 @@
 package io.lumify.core.util;
 
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
@@ -19,8 +21,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.securegraph.util.IterableUtils.toList;
@@ -92,9 +92,9 @@ public class JsonSerializer {
             Property property = propertiesList.get(i);
             String sandboxStatus = sandboxStatuses[i].toString();
             VideoFrameInfo videoFrameInfo;
-            if ((videoFrameInfo = getVideoFrameInfoFromProperty(property)) != null) {
+            if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
                 String textDescription = (String) property.getMetadata().get(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION);
-                addVideoFramePropertyToResults(resultsJson, videoFrameInfo.propertyKey, textDescription, sandboxStatus);
+                addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
             } else {
                 JSONObject propertyJson = toJsonProperty(property);
                 propertyJson.put("sandboxStatus", sandboxStatus);
@@ -105,35 +105,15 @@ public class JsonSerializer {
         return resultsJson;
     }
 
-    private static class VideoFrameInfo {
-        public String propertyKey;
-        public long frameStartTime;
-    }
-
-    private static VideoFrameInfo getVideoFrameInfoFromProperty(Property property) {
-        Object mimeType = property.getMetadata().get(RawLumifyProperties.META_DATA_MIME_TYPE);
-        if (mimeType == null || !mimeType.equals("text/plain")) {
-            return null;
-        }
-        Pattern pattern = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getKey() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)$");
-        Matcher m = pattern.matcher(property.getKey());
-        if (m.find()) {
-            VideoFrameInfo videoFrameInfo = new VideoFrameInfo();
-            videoFrameInfo.propertyKey = m.group(1);
-            videoFrameInfo.frameStartTime = Long.parseLong(m.group(2));
-            return videoFrameInfo;
-        }
-        return null;
-    }
 
     public static VideoTranscript getSynthesisedVideoTranscription(Vertex artifactVertex, String propertyKey) throws IOException {
         VideoTranscript videoTranscript = new VideoTranscript();
         for (Property property : artifactVertex.getProperties()) {
-            VideoFrameInfo videoFrameInfo = getVideoFrameInfoFromProperty(property);
+            VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property);
             if (videoFrameInfo == null) {
                 continue;
             }
-            if (videoFrameInfo.propertyKey.equals(propertyKey)) {
+            if (videoFrameInfo.getPropertyKey().equals(propertyKey)) {
                 Object value = property.getValue();
                 String text;
                 if (value instanceof StreamingPropertyValue) {
@@ -141,7 +121,7 @@ public class JsonSerializer {
                 } else {
                     text = value.toString();
                 }
-                videoTranscript.add(new VideoTranscript.Time(videoFrameInfo.frameStartTime, null), text);
+                videoTranscript.add(new VideoTranscript.Time(videoFrameInfo.getFrameStartTime(), null), text);
             }
         }
         if (videoTranscript.getEntries().size() > 0) {

@@ -1,5 +1,8 @@
 package io.lumify.core;
 
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.ingest.video.VideoPropertyHelper;
+import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
@@ -8,23 +11,20 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class EntityHighlighter {
     public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions) {
         List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions);
-        return getHighlightedText(text, 0, offsetItems);
+        return getHighlightedText(text, offsetItems);
     }
 
     // TODO: change to use an InputStream?
-    public static String getHighlightedText(String text, int textStartOffset, List<OffsetItem> offsetItems) throws JSONException {
+    public static String getHighlightedText(String text, List<OffsetItem> offsetItems) throws JSONException {
         Collections.sort(offsetItems);
         StringBuilder result = new StringBuilder();
         PriorityQueue<Integer> endOffsets = new PriorityQueue<Integer>();
-        int lastStart = textStartOffset;
+        int lastStart = 0;
         for (int i = 0; i < offsetItems.size(); i++) {
             OffsetItem offsetItem = offsetItems.get(i);
 
@@ -32,7 +32,8 @@ public class EntityHighlighter {
             if (offsetItem instanceof TermMentionOffsetItem) {
                 for (int j = 0; j < i; j++) {
                     OffsetItem compareItem = offsetItems.get(j);
-                    if (compareItem instanceof TermMentionOffsetItem && (compareItem.getEnd() >= offsetItem.getEnd()
+                    if (compareItem instanceof TermMentionOffsetItem
+                            && (compareItem.getEnd() >= offsetItem.getEnd()
                             || compareItem.getEnd() > offsetItem.getStart())) {
                         overlapsPreviousItem = true;
                         offsetItems.remove(i--);
@@ -43,7 +44,7 @@ public class EntityHighlighter {
             if (overlapsPreviousItem) {
                 continue;
             }
-            if (offsetItem.getStart() < textStartOffset || offsetItem.getEnd() < textStartOffset) {
+            if (offsetItem.getStart() < 0 || offsetItem.getEnd() < 0) {
                 continue;
             }
             if (!offsetItem.shouldHighlight()) {
@@ -52,11 +53,11 @@ public class EntityHighlighter {
 
             while (endOffsets.size() > 0 && endOffsets.peek() <= offsetItem.getStart()) {
                 int end = endOffsets.poll();
-                result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, end - textStartOffset)));
+                result.append(escapeHtml(safeSubstring(text, lastStart, end)));
                 result.append("</span>");
                 lastStart = end;
             }
-            result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, (int) (offsetItem.getStart() - textStartOffset))));
+            result.append(escapeHtml(safeSubstring(text, lastStart, (int) (offsetItem.getStart()))));
 
             JSONObject infoJson = offsetItem.getInfoJson();
 
@@ -79,13 +80,69 @@ public class EntityHighlighter {
 
         while (endOffsets.size() > 0) {
             int end = endOffsets.poll();
-            result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset, end - textStartOffset)));
+            result.append(escapeHtml(safeSubstring(text, lastStart, end)));
             result.append("</span>");
             lastStart = end;
         }
-        result.append(escapeHtml(safeSubstring(text, lastStart - textStartOffset)));
+        result.append(escapeHtml(safeSubstring(text, lastStart)));
 
         return result.toString();
+    }
+
+    public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<TermMentionModel> termMentions) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions);
+        return getHighlightedVideoTranscript(videoTranscript, offsetItems);
+    }
+
+    private VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, List<OffsetItem> offsetItems) {
+        Map<Integer, List<OffsetItem>> videoTranscriptOffsetItems = convertOffsetItemsToVideoTranscriptOffsetItems(videoTranscript, offsetItems);
+        return getHighlightedVideoTranscript(videoTranscript, videoTranscriptOffsetItems);
+    }
+
+    private VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Map<Integer, List<OffsetItem>> videoTranscriptOffsetItems) {
+        VideoTranscript result = new VideoTranscript();
+        int entryIndex = 0;
+        for (VideoTranscript.TimedText videoTranscriptEntry : videoTranscript.getEntries()) {
+            VideoTranscript.TimedText entry = videoTranscript.getEntries().get(entryIndex);
+
+            List<OffsetItem> offsetItems = videoTranscriptOffsetItems.get(entryIndex);
+            String highlightedText;
+            if (offsetItems == null) {
+                highlightedText = entry.getText();
+            } else {
+                highlightedText = getHighlightedText(entry.getText(), offsetItems);
+            }
+            result.add(videoTranscriptEntry.getTime(), highlightedText);
+            entryIndex++;
+        }
+        return result;
+    }
+
+    private Map<Integer, List<OffsetItem>> convertOffsetItemsToVideoTranscriptOffsetItems(VideoTranscript videoTranscript, List<OffsetItem> offsetItems) {
+        Map<Integer, List<OffsetItem>> results = new HashMap<Integer, List<OffsetItem>>();
+        for (OffsetItem offsetItem : offsetItems) {
+            Integer videoTranscriptEntryIndex = getVideoTranscriptEntryIndex(videoTranscript, offsetItem);
+
+            List<OffsetItem> currentList = results.get(videoTranscriptEntryIndex);
+            if (currentList == null) {
+                currentList = new ArrayList<OffsetItem>();
+                results.put(videoTranscriptEntryIndex, currentList);
+            }
+            currentList.add(offsetItem);
+        }
+        return results;
+    }
+
+    private static int getVideoTranscriptEntryIndex(VideoTranscript videoTranscript, OffsetItem offsetItem) {
+        Integer videoTranscriptEntryIndex = null;
+        VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfo(offsetItem.getRowKey());
+        if (videoFrameInfo != null) {
+            videoTranscriptEntryIndex = videoTranscript.findEntryIndexFromStartTime(videoFrameInfo.getFrameStartTime());
+        }
+        if (videoTranscriptEntryIndex == null) {
+            videoTranscriptEntryIndex = offsetItem.getVideoTranscriptEntryIndex();
+        }
+        return videoTranscriptEntryIndex;
     }
 
     private static String safeSubstring(String text, int beginIndex) {
