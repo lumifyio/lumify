@@ -37,7 +37,7 @@ public class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
-        Map<String, Object> mimeTypeMetadata = data.getPropertyMetadata();
+        Map<String, Object> mimeTypeMetadata = data.createPropertyMetadata();
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(data.getElement());
         if (visibilityJson != null) {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(mimeTypeMetadata, visibilityJson);

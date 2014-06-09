@@ -18,6 +18,7 @@ import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
 import org.securegraph.util.FilterIterable;
+import org.securegraph.util.IterableUtils;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.model.*;
@@ -149,9 +150,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
-                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
-                            return new SecureGraphRelationship(vertex, sourceVertexId, destVertexId);
+                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
+                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
+                            final List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(vertex);
+                            return new SecureGraphRelationship(vertex, sourceVertexId, destVertexId, inverseOfIRIs);
                         }
                     });
                 }
@@ -159,6 +161,15 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         } catch (ExecutionException e) {
             throw new LumifyException("Could not get relationship labels");
         }
+    }
+
+    private List<String> getRelationshipInverseOfIRIs(final Vertex vertex) {
+        return IterableUtils.toList(new ConvertingIterable<Vertex, String>(vertex.getVertices(Direction.OUT, LabelName.INVERSE_OF.toString(), getAuthorizations())) {
+            @Override
+            protected String convert(Vertex inverseOfVertex) {
+                return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(inverseOfVertex);
+            }
+        });
     }
 
     @Override
@@ -223,7 +234,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         }
         String from = single(relationshipVertex.getVertexIds(Direction.IN, getAuthorizations())).toString();
         String to = single(relationshipVertex.getVertexIds(Direction.OUT, getAuthorizations())).toString();
-        return new SecureGraphRelationship(relationshipVertex, from, to);
+        List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(relationshipVertex);
+        return new SecureGraphRelationship(relationshipVertex, from, to, inverseOfIRIs);
     }
 
     @Override
@@ -400,6 +412,15 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
+    protected void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship) {
+        SecureGraphRelationship fromRelationshipSg = (SecureGraphRelationship) fromRelationship;
+        SecureGraphRelationship inverseOfRelationshipSg = (SecureGraphRelationship) inverseOfRelationship;
+
+        findOrAddEdge(fromRelationshipSg.getVertex(), inverseOfRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
+        findOrAddEdge(inverseOfRelationshipSg.getVertex(), fromRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
+    }
+
+    @Override
     public Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName) {
         Relationship relationship = getRelationshipByIRI(relationshipIRI);
         if (relationship != null) {
@@ -415,8 +436,10 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         findOrAddEdge(((SecureGraphConcept) from).getVertex(), relationshipVertex, LabelName.HAS_EDGE.toString());
         findOrAddEdge(relationshipVertex, ((SecureGraphConcept) to).getVertex(), LabelName.HAS_EDGE.toString());
 
+        List<String> inverseOfIRIs = new ArrayList<String>(); // no inverse of because this relationship is new
+
         graph.flush();
-        return new SecureGraphRelationship(relationshipVertex, from.getTitle(), to.getTitle());
+        return new SecureGraphRelationship(relationshipVertex, from.getTitle(), to.getTitle(), inverseOfIRIs);
     }
 
     private OntologyProperty getOrCreatePropertyType(

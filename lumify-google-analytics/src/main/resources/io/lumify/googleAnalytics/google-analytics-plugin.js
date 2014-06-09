@@ -1,6 +1,8 @@
 require([
+    'jquery',
+    'underscore',
     'service/config'
-], function(ConfigService) {
+], function($, _, ConfigService) {
     'use strict';
 
     var configService = new ConfigService();
@@ -18,6 +20,55 @@ require([
 
             ga('create', key, domain);
             ga('send', 'pageview');
+
+            var send = _.partial(ga, 'send', 'event');
+
+            $(document)
+                .on('querysubmit', function(e, data) {
+                    send('feature', 'querysubmit', data.value);
+                })
+                .on('filterWorkspace', function(e, data) {
+                    send('feature', 'filterWorkspace', data.value);
+                })
+                .on('switchWorkspace', function(e, data) {
+                    send('feature', 'switchWorkspace', data.workspaceId);
+                 })
+                .on('toggleGraphDimensions', function(e, data) {
+                    send('feature', 'toggleGraphDimensions');
+                })
+                .on('mapShow', function(e, data) {
+                    send('feature', 'mapShow');
+                })
+                .on('fit', function(e, data) {
+                    send('feature', 'fit');
+                })
+                .on('escape', function(e, data) {
+                    send('feature', 'escape');
+                })
+                .on('showVertexContextMenu', function(e, data) {
+                    send('feature', 'showVertexContextMenu');
+                })
+                .on('searchByEntity', function(e, data) {
+                    send('feature', 'searchByEntity');
+                })
+                .on('searchByRelatedEntity', function(e, data) {
+                    send('feature', 'searchByRelatedEntity');
+                })
+                .on('toggleAuditDisplay', function(e, data) {
+                    send('feature', 'toggleAuditDisplay');
+                })
+                .on('addVertices', function(e, data) {
+                    send('vertices', 'add', data.vertices.length);
+                })
+                .on('updateVertices', function(e, data) {
+                    send('vertices', 'update', data.vertices.length);
+                })
+                .on('deleteVertices', function(e, data) {
+                    send('vertices', 'delete', data.vertices.length);
+                })
+                .on('selectObjects', function(e, data) {
+                    send('vertices', 'selectObjects', data.vertices.length);
+                });
         } else {
             console.log("required configuration properties for Google Analytics are not available");
         }

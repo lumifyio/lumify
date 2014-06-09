@@ -84,7 +84,7 @@ public class SecureGraphUserRepository extends UserRepository {
         String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
-        LOGGER.debug("Creating user from UserRow. userName: %s, authorizations: %s", userName, UserLumifyProperties.AUTHORIZATIONS.getPropertyValue(user));
+        LOGGER.debug("Creating user from UserRow. userName: %s", userName);
         return new SecureGraphUser(userId, userName, displayName, modelUserContext, userStatus, privileges, currentWorkspaceId);
     }
 

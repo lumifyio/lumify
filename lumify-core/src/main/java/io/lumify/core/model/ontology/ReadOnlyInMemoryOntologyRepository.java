@@ -171,6 +171,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         return property;
     }
 
+    @Override
+    protected void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship) {
+        InMemoryRelationship fromRelationshipMem = (InMemoryRelationship) fromRelationship;
+        InMemoryRelationship inverseOfRelationshipMem = (InMemoryRelationship) inverseOfRelationship;
+
+        fromRelationshipMem.addInverseOf(inverseOfRelationshipMem);
+        inverseOfRelationshipMem.addInverseOf(fromRelationshipMem);
+    }
+
     private InMemoryOntologyProperty getOrCreatePropertyType(
             final String propertyName,
             final PropertyType dataType,

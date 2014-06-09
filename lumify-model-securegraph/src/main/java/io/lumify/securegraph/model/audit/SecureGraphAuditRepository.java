@@ -374,7 +374,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             for (Property property : vertexElementMutation.getProperties()) {
                 Object oldPropertyValue = oldVertex.getPropertyValue(property.getKey());
                 Object newPropertyValue = property.getValue();
-                checkNotNull(newPropertyValue, "new property value cannot be null");
+                checkNotNull(newPropertyValue, "new property (" + property + ") value cannot be null");
                 if (!newPropertyValue.equals(oldPropertyValue) || !oldVertex.getVisibility().getVisibilityString().equals(property.getVisibility().getVisibilityString())) {
                     auditEntityProperty(action, oldVertex.getId(), property.getKey(), property.getName(), oldPropertyValue,
                             newPropertyValue, process, "", property.getMetadata(), user, visibility);
@@ -384,7 +384,7 @@ public class SecureGraphAuditRepository extends AuditRepository {
             auditVertexCreate(vertex.getId(), process, "", user, visibility);
             for (Property property : vertexElementMutation.getProperties()) {
                 Object newPropertyValue = property.getValue();
-                checkNotNull(newPropertyValue, "new property value cannot be null");
+                checkNotNull(newPropertyValue, "new property (" + property + ") value cannot be null");
                 auditEntityProperty(action, vertex.getId(), property.getKey(), property.getName(), null, newPropertyValue, process, "",
                         property.getMetadata(), user, visibility);
             }

@@ -57,7 +57,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", frameStartTime);
-                    Map<String, Object> metadata = data.getPropertyMetadata();
+                    Map<String, Object> metadata = data.createPropertyMetadata();
                     metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());

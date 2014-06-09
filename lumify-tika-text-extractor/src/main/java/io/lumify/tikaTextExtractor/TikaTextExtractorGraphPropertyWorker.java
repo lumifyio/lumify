@@ -107,11 +107,11 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
         String author = extractTextField(metadata, authorKeys);
         if (author != null && author.length() > 0) {
-            RawLumifyProperties.AUTHOR.addPropertyValue(m, MULTIVALUE_KEY, author, data.getPropertyMetadata(), data.getVisibility());
+            RawLumifyProperties.AUTHOR.addPropertyValue(m, MULTIVALUE_KEY, author, data.createPropertyMetadata(), data.getVisibility());
         }
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
-        Map<String, Object> textMetadata = new HashMap<String, Object>(data.getPropertyMetadata());
+        Map<String, Object> textMetadata = data.createPropertyMetadata();
         textMetadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "text/plain");
         textMetadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text");
 
@@ -126,11 +126,11 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
                 Date lastupdate = GenericDateExtractor
                         .extractSingleDate(customImageMetadataJson.get("lastupdate").toString());
-                RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, lastupdate, data.getPropertyMetadata(), data.getVisibility());
+                RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, lastupdate, data.createPropertyMetadata(), data.getVisibility());
 
                 // TODO set("retrievalTime", Long.parseLong(customImageMetadataJson.get("atc:retrieval-timestamp").toString()));
 
-                Map<String, Object> titleMetadata = data.getPropertyMetadata();
+                Map<String, Object> titleMetadata = data.createPropertyMetadata();
                 LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
                 LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, customImageMetadataJson.get("title").toString(), titleMetadata, data.getVisibility());
             } catch (JSONException e) {
@@ -140,10 +140,10 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             StreamingPropertyValue textValue = new StreamingPropertyValue(new ByteArrayInputStream(text.getBytes()), String.class);
             RawLumifyProperties.TEXT.addPropertyValue(m, MULTIVALUE_KEY, textValue, textMetadata, data.getVisibility());
 
-            RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.getPropertyMetadata(), data.getVisibility());
+            RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
             String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
             if (title != null && title.length() > 0) {
-                LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, title, data.getPropertyMetadata(), data.getVisibility());
+                LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, title, data.createPropertyMetadata(), data.getVisibility());
             }
 
             // TODO set("retrievalTime", extractRetrievalTime(metadata));
