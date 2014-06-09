@@ -23,7 +23,9 @@ public class UserSetUiPreferences extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        JSONObject uiPreferences = new JSONObject(getRequiredParameter(request, "ui-preferences"));
+        String uiPreferencesString = getOptionalParameter(request, "ui-preferences");
+        String propertyName = getOptionalParameter(request, "name");
+        String propertyValue = getOptionalParameter(request, "value");
 
         User user = getUser(request);
         if (user == null || user.getUsername() == null) {
@@ -31,7 +33,14 @@ public class UserSetUiPreferences extends BaseRequestHandler {
             return;
         }
 
-        getUserRepository().setUiPreferences(user, uiPreferences);
+        if (uiPreferencesString != null) {
+            getUserRepository().setUiPreferences(user, new JSONObject(uiPreferencesString));
+        } else if (propertyName != null) {
+            user.getUiPreferences().put(propertyName, propertyValue);
+            getUserRepository().setUiPreferences(user, user.getUiPreferences());
+        } else {
+            respondWithBadRequest(response, "ui-preferences", "either ui-preferences or name,value are required parameters.");
+        }
 
         user = getUser(request);
         JSONObject userJson = getUserRepository().toJsonWithAuths(user);
