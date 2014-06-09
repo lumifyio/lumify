@@ -145,12 +145,15 @@ public class SecureGraphUserRepository extends UserRepository {
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         UserLumifyProperties.USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
-        UserLumifyProperties.EMAIL_ADDRESS.setProperty(userBuilder, emailAddress, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         UserLumifyProperties.STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
         UserLumifyProperties.AUTHORIZATIONS.setProperty(userBuilder, authorizationsString, VISIBILITY.getVisibility());
         UserLumifyProperties.PRIVILEGES.setProperty(userBuilder, Privilege.toString(getDefaultPrivileges()), VISIBILITY.getVisibility());
+
+        if (emailAddress != null) {
+            UserLumifyProperties.EMAIL_ADDRESS.setProperty(userBuilder, emailAddress, VISIBILITY.getVisibility());
+        }
 
         User user = createFromVertex(userBuilder.save(this.authorizations));
         graph.flush();
