@@ -738,6 +738,8 @@
         <rdfs:label xml:lang="en">Organization</rdfs:label>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_043_group@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(137, 39, 26)</lumify:color>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#abbreviation&apos; || &apos;&apos;)</lumify:subtitleFormula>
+        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#formationDate&apos;)</lumify:timeFormula>
     </owl:Class>
     
 
@@ -748,6 +750,7 @@
         <rdfs:label xml:lang="en">Person</rdfs:label>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_003_user@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+        <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/dev#birthDate&apos; || &apos;&apos;)</lumify:timeFormula>
     </owl:Class>
     
 
@@ -759,6 +762,7 @@
         <rdfs:subClassOf rdf:resource="http://lumify.io/dev#event"/>
         <lumify:glyphIconFileName xml:lang="en">glyphicons_164_iphone_transfer@2x.png</lumify:glyphIconFileName>
         <lumify:color xml:lang="en">rgb(225, 225, 24)</lumify:color>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/dev#duration&apos; || &apos;&apos;)</lumify:subtitleFormula>
     </owl:Class>
     
 
