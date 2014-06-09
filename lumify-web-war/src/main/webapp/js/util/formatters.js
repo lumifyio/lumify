@@ -99,18 +99,18 @@ define([
              * Split 32-bit integers into 12-bit index, 20-bit offset
              */
             offsetValues: function(value) {
-            	var offsetMask = (1 << BITS_FOR_INDEX) - 1;
-            	
-            	return {
+                var offsetMask = (1 << BITS_FOR_INDEX) - 1;
+
+                return {
                     index: value >> BITS_FOR_OFFSET,
-		    offset: value & offsetMask
-            	};
+                    offset: value & offsetMask
+                };
             },
             /**
              * Combine 12-bit index, 20-bit offset into 32-bit integer
              */
             compactOffsetValues: function(index, offset) {
-            	return (index << BITS_FOR_OFFSET) | offset;
+                return (index << BITS_FOR_OFFSET) | offset;
             }
         },
 
