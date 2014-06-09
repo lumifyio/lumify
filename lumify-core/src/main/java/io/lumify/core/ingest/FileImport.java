@@ -120,7 +120,7 @@ public class FileImport {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
             RawLumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
-            LumifyProperties.ROW_KEY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
+            LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
             RawLumifyProperties.FILE_NAME.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             RawLumifyProperties.FILE_NAME_EXTENSION.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, FilenameUtils.getExtension(f.getName()), propertyMetadata, visibility);
             RawLumifyProperties.CREATE_DATE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, new Date(f.lastModified()), propertyMetadata, visibility);
@@ -166,7 +166,7 @@ public class FileImport {
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {
         Iterator<Vertex> existingVertices = this.graph.query(authorizations)
-                .has(LumifyProperties.ROW_KEY.getPropertyName(), hash)
+                .has(LumifyProperties.CONTENT_HASH.getPropertyName(), hash)
                 .vertices()
                 .iterator();
         if (existingVertices.hasNext()) {

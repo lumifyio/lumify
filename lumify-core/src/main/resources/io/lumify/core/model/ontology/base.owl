@@ -18,7 +18,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="http://lumify.io"/>
-    
+
 
 
     <!-- 
@@ -29,7 +29,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://lumify.io#color -->
@@ -38,7 +38,7 @@
         <textIndexHints>NONE</textIndexHints>
         <userVisible>false</userVisible>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#displayType -->
@@ -47,7 +47,7 @@
         <textIndexHints>NONE</textIndexHints>
         <userVisible>false</userVisible>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#glyphIconFileName -->
@@ -56,7 +56,7 @@
         <userVisible>false</userVisible>
         <textIndexHints>NONE</textIndexHints>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#mapGlyphIconFileName -->
@@ -65,19 +65,19 @@
         <userVisible>false</userVisible>
         <textIndexHints>NONE</textIndexHints>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#mappingKey -->
 
     <owl:AnnotationProperty rdf:about="&lumify;mappingKey"/>
-    
+
 
 
     <!-- http://lumify.io#possibleValues -->
 
     <owl:AnnotationProperty rdf:about="&lumify;possibleValues"/>
-    
+
 
 
     <!-- http://lumify.io#textIndexHints -->
@@ -86,7 +86,7 @@
         <userVisible>false</userVisible>
         <textIndexHints>NONE</textIndexHints>
     </owl:AnnotationProperty>
-    
+
 
 
     <!-- http://lumify.io#titleFormula -->
@@ -113,7 +113,7 @@
     <!-- http://lumify.io#userVisible -->
 
     <owl:AnnotationProperty rdf:about="&lumify;userVisible"/>
-    
+
 
     <!-- http://lumify.io#searchable -->
 
@@ -136,25 +136,25 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://lumify.io#currency -->
 
     <rdfs:Datatype rdf:about="&lumify;currency"/>
-    
+
 
 
     <!-- http://lumify.io#geolocation -->
 
     <rdfs:Datatype rdf:about="&lumify;geolocation"/>
-    
+
 
 
     <!-- http://lumify.io#image -->
 
     <rdfs:Datatype rdf:about="&lumify;image"/>
-    
+
 
 
     <!-- 
@@ -165,7 +165,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://lumify.io#author -->
@@ -177,7 +177,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#color -->
@@ -188,7 +188,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#conceptType -->
@@ -200,7 +200,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#confidence -->
@@ -211,7 +211,7 @@
         <rdfs:range rdf:resource="&xsd;double"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#createDate -->
@@ -222,7 +222,7 @@
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#dataType -->
@@ -233,7 +233,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#displayName -->
@@ -244,7 +244,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#displayType -->
@@ -255,7 +255,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#entityImageVertexId -->
@@ -267,7 +267,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#fileName -->
@@ -279,7 +279,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#fileNameExtension -->
@@ -291,7 +291,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#glyphIconFileName -->
@@ -302,7 +302,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#mapGlyphIconFileName -->
@@ -313,7 +313,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#mappingJson -->
@@ -325,7 +325,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#mimeType -->
@@ -337,7 +337,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#modifiedBy -->
@@ -349,7 +349,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#modifiedDate -->
@@ -360,7 +360,7 @@
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#ontologyTitle -->
@@ -371,7 +371,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#process -->
@@ -383,7 +383,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#publishedDate -->
@@ -393,7 +393,7 @@
         <rdfs:range rdf:resource="&xsd;dateTime"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#raw -->
@@ -404,8 +404,18 @@
         <rdfs:range rdf:resource="&xsd;hexBinary"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
 
+
+
+    <!-- http://lumify.io#contentHash -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;contentHash">
+        <rdfs:label xml:lang="en">Content Hash</rdfs:label>
+        <textIndexHints>EXACT_MATCH</textIndexHints>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
     <!-- http://lumify.io#rowKey -->
 
@@ -416,7 +426,6 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
 
 
     <!-- http://lumify.io#source -->
@@ -427,7 +436,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#textIndexHints -->
@@ -438,7 +447,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#title -->
@@ -451,7 +460,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#titleFormula -->
@@ -462,7 +471,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#visibility -->
@@ -474,7 +483,7 @@
         <rdfs:range rdf:resource="&xsd;string"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://lumify.io#visibilityJson -->
