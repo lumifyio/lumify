@@ -7,6 +7,7 @@ define([
     'use strict';
 
     var BITS_FOR_INDEX = 12,
+        BITS_FOR_OFFSET = 32 - BITS_FOR_INDEX,
         classNameIndex = 0,
         toClassNameMap = {},
         fromClassNameMap = {},
@@ -94,15 +95,22 @@ define([
                     return (decimalAdjust('round', number / 1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
             },
+            /**
+             * Split 32-bit integers into 12-bit index, 20-bit offset
+             */
             offsetValues: function(value) {
-                var indexMask = (1 << BITS_FOR_INDEX) - 1;
-                return {
-                    index: value & indexMask,
-                    offset: value >> BITS_FOR_INDEX
-                };
+            	var offsetMask = (1 << BITS_FOR_INDEX) - 1;
+            	
+            	return {
+                    index: value >> BITS_FOR_OFFSET,
+		    offset: value & offsetMask
+            	};
             },
+            /**
+             * Combine 12-bit index, 20-bit offset into 32-bit integer
+             */
             compactOffsetValues: function(index, offset) {
-                return (offset << BITS_FOR_INDEX) | index;
+            	return (index << BITS_FOR_OFFSET) | offset;
             }
         },
 
