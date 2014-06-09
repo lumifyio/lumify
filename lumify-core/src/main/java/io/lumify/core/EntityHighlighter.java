@@ -33,8 +33,8 @@ public class EntityHighlighter {
                 for (int j = 0; j < i; j++) {
                     OffsetItem compareItem = offsetItems.get(j);
                     if (compareItem instanceof TermMentionOffsetItem
-                            && (compareItem.getEnd() >= offsetItem.getEnd()
-                            || compareItem.getEnd() > offsetItem.getStart())) {
+                            && (OffsetItem.getOffset(compareItem.getEnd()) >= OffsetItem.getOffset(offsetItem.getEnd())
+                            || OffsetItem.getOffset(compareItem.getEnd()) > OffsetItem.getOffset(offsetItem.getStart()))) {
                         overlapsPreviousItem = true;
                         offsetItems.remove(i--);
                         break;
@@ -44,20 +44,20 @@ public class EntityHighlighter {
             if (overlapsPreviousItem) {
                 continue;
             }
-            if (offsetItem.getStart() < 0 || offsetItem.getEnd() < 0) {
+            if (OffsetItem.getOffset(offsetItem.getStart()) < 0 || OffsetItem.getOffset(offsetItem.getEnd()) < 0) {
                 continue;
             }
             if (!offsetItem.shouldHighlight()) {
                 continue;
             }
 
-            while (endOffsets.size() > 0 && endOffsets.peek() <= offsetItem.getStart()) {
+            while (endOffsets.size() > 0 && endOffsets.peek() <= OffsetItem.getOffset(offsetItem.getStart())) {
                 int end = endOffsets.poll();
                 result.append(escapeHtml(safeSubstring(text, lastStart, end)));
                 result.append("</span>");
                 lastStart = end;
             }
-            result.append(escapeHtml(safeSubstring(text, lastStart, (int) (offsetItem.getStart()))));
+            result.append(escapeHtml(safeSubstring(text, lastStart, (int) OffsetItem.getOffset(offsetItem.getStart()))));
 
             JSONObject infoJson = offsetItem.getInfoJson();
 
@@ -74,8 +74,8 @@ public class EntityHighlighter {
             result.append(StringEscapeUtils.escapeHtml(infoJson.toString()));
             result.append("\"");
             result.append(">");
-            endOffsets.add((int) offsetItem.getEnd());
-            lastStart = (int) offsetItem.getStart();
+            endOffsets.add((int) OffsetItem.getOffset(offsetItem.getEnd()));
+            lastStart = (int) OffsetItem.getOffset(offsetItem.getStart());
         }
 
         while (endOffsets.size() > 0) {

@@ -95,12 +95,12 @@ public abstract class OffsetItem implements Comparable {
 
         OffsetItem other = (OffsetItem) o;
 
-        if (getStart() != other.getStart()) {
-            return getStart() < other.getStart() ? -1 : 1;
+        if (getOffset(getStart()) != getOffset(other.getStart())) {
+            return getOffset(getStart()) < getOffset(other.getStart()) ? -1 : 1;
         }
 
-        if (getEnd() != other.getEnd()) {
-            return getEnd() < other.getEnd() ? -1 : 1;
+        if (getOffset(getEnd()) != getOffset(other.getEnd())) {
+            return getOffset(getEnd()) < getOffset(other.getEnd()) ? -1 : 1;
         }
 
         if (getGraphVertexId() == null && other.getGraphVertexId() == null) {
@@ -116,5 +116,9 @@ public abstract class OffsetItem implements Comparable {
         }
 
         return getGraphVertexId().compareTo(other.getGraphVertexId());
+    }
+
+    public static long getOffset(long offset) {
+        return offset & ((2 << (OffsetItem.VIDEO_TRANSCRIPT_OFFSET_BITS - 1)) - 1L);
     }
 }

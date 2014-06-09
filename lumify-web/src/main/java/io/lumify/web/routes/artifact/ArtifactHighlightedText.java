@@ -23,6 +23,7 @@ import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.util.JoinIterable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,15 +85,19 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         VideoTranscript videoTranscript = MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyValue(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             LOGGER.debug("returning video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-            respondWithJson(response, videoTranscript.toJson());
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions);
+            respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
         }
 
         videoTranscript = JsonSerializer.getSynthesisedVideoTranscription(artifactVertex, propertyKey);
         if (videoTranscript != null) {
             LOGGER.debug("returning synthesised video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
-            Iterable<TermMentionModel> termMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId().toString() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
-            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions);
+            Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
+            Iterable<TermMentionModel> frameTermMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId().toString() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
+            JoinIterable<TermMentionModel> allTermMentions = new JoinIterable<TermMentionModel>(termMentions, frameTermMentions);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, allTermMentions);
             respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
         }
