@@ -3,15 +3,19 @@ package io.lumify.securegraph.model.ontology;
 import io.lumify.core.model.ontology.Relationship;
 import org.securegraph.Vertex;
 
+import java.util.List;
+
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.ONTOLOGY_TITLE;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 
 public class SecureGraphRelationship extends Relationship {
     private final Vertex vertex;
+    private final List<String> inverseOfIRIs;
 
-    public SecureGraphRelationship(Vertex vertex, String sourceConceptIRI, String destConceptIRI) {
+    public SecureGraphRelationship(Vertex vertex, String sourceConceptIRI, String destConceptIRI, List<String> inverseOfIRIs) {
         super(sourceConceptIRI, destConceptIRI);
         this.vertex = vertex;
+        this.inverseOfIRIs = inverseOfIRIs;
     }
 
     public String getIRI() {
@@ -20,5 +24,14 @@ public class SecureGraphRelationship extends Relationship {
 
     public String getDisplayName() {
         return DISPLAY_NAME.getPropertyValue(vertex);
+    }
+
+    @Override
+    public Iterable<String> getInverseOfIRIs() {
+        return inverseOfIRIs;
+    }
+
+    public Vertex getVertex() {
+        return vertex;
     }
 }

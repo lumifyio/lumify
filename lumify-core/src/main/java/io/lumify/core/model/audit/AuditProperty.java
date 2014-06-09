@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AuditProperty extends ColumnFamily {
+    public static final String PROPERTY_AUDIT = "propertyAudit";
     public static final String NAME = "property";
     public static final String PREVIOUS_VALUE = "previousValue";
     public static final String NEW_VALUE = "newValue";

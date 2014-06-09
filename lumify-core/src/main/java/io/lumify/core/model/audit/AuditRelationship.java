@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AuditRelationship extends ColumnFamily {
+    public static final String RELATIONSHIP_AUDIT = "relationshipAudit";
     public static final String NAME = "relationship";
     public static final String SOURCE_TYPE = "sourceType";
     public static final String SOURCE_TITLE = "sourceTitle";

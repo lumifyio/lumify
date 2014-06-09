@@ -136,6 +136,13 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
             importObjectProperty(o, objectProperty);
         }
+
+        for (OWLObjectProperty objectProperty : o.getObjectPropertiesInSignature()) {
+            if (!o.isDeclared(objectProperty, false)) {
+                continue;
+            }
+            importInverseOf(o, objectProperty);
+        }
     }
 
     public OWLOntologyManager createOwlOntologyManager(OWLOntologyLoaderConfiguration config, IRI excludeDocumentIRI) throws Exception {
@@ -304,17 +311,37 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             Double boost);
 
     protected void importObjectProperty(OWLOntology o, OWLObjectProperty objectProperty) {
-        String uri = objectProperty.getIRI().toString();
+        String iri = objectProperty.getIRI().toString();
         String label = getLabel(o, objectProperty);
-        checkNotNull(label, "label cannot be null or empty for " + uri);
-        LOGGER.info("Importing ontology object property " + uri + " (label: " + label + ")");
+        checkNotNull(label, "label cannot be null or empty for " + iri);
+        LOGGER.info("Importing ontology object property " + iri + " (label: " + label + ")");
 
         for (Concept domain : getDomainsConcepts(o, objectProperty)) {
             for (Concept range : getRangesConcepts(o, objectProperty)) {
-                getOrCreateRelationshipType(domain, range, uri, label);
+                getOrCreateRelationshipType(domain, range, iri, label);
             }
         }
     }
+
+    protected void importInverseOf(OWLOntology o, OWLObjectProperty objectProperty) {
+        String iri = objectProperty.getIRI().toString();
+        Relationship fromRelationship = null;
+
+        for (OWLObjectPropertyExpression inverseOf : objectProperty.getInverses(o)) {
+            if (inverseOf instanceof OWLObjectProperty) {
+                if (fromRelationship == null) {
+                    fromRelationship = getRelationshipByIRI(iri);
+                }
+
+                OWLObjectProperty inverseOfOWLObjectProperty = (OWLObjectProperty) inverseOf;
+                String inverseOfIri = inverseOfOWLObjectProperty.getIRI().toString();
+                Relationship inverseOfRelationship = getRelationshipByIRI(inverseOfIri);
+                getOrCreateInverseOfRelationship(fromRelationship, inverseOfRelationship);
+            }
+        }
+    }
+
+    protected abstract void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship);
 
     private Iterable<Concept> getRangesConcepts(OWLOntology o, OWLObjectProperty objectProperty) {
         String uri = objectProperty.getIRI().toString();
