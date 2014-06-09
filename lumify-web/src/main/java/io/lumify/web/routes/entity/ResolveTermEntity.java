@@ -23,6 +23,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.RowKeyHelper;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -89,6 +90,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         final String resolvedVertexId = getOptionalParameter(request, "resolvedVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        String termMentionRowKeyString = getOptionalParameter(request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -142,7 +144,12 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        TermMentionRowKey termMentionRowKey;
+        if (termMentionRowKeyString != null) {
+            termMentionRowKey = new TermMentionRowKey(RowKeyHelper.jsonDecode(termMentionRowKeyString));
+        } else {
+            termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
+        }
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
