@@ -1,7 +1,8 @@
 require([
     'jquery',
+    'underscore',
     'service/config'
-], function($, ConfigService) {
+], function($, _, ConfigService) {
     'use strict';
 
     var configService = new ConfigService();
@@ -19,68 +20,57 @@ require([
 
             ga('create', key, domain);
             ga('send', 'pageview');
+
+            var send = _.partial(ga, 'send', 'event');
+
+            $(document)
+                .on('querysubmit', function(e, data) {
+                    send('feature', 'querysubmit', data.value);
+                })
+                .on('filterWorkspace', function(e, data) {
+                    send('feature', 'filterWorkspace', data.value);
+                })
+                .on('switchWorkspace', function(e, data) {
+                    send('feature', 'switchWorkspace', data.workspaceId);
+                 })
+                .on('toggleGraphDimensions', function(e, data) {
+                    send('feature', 'toggleGraphDimensions');
+                })
+                .on('mapShow', function(e, data) {
+                    send('feature', 'mapShow');
+                })
+                .on('fit', function(e, data) {
+                    send('feature', 'fit');
+                })
+                .on('escape', function(e, data) {
+                    send('feature', 'escape');
+                })
+                .on('showVertexContextMenu', function(e, data) {
+                    send('feature', 'showVertexContextMenu');
+                })
+                .on('searchByEntity', function(e, data) {
+                    send('feature', 'searchByEntity');
+                })
+                .on('searchByRelatedEntity', function(e, data) {
+                    send('feature', 'searchByRelatedEntity');
+                })
+                .on('toggleAuditDisplay', function(e, data) {
+                    send('feature', 'toggleAuditDisplay');
+                })
+                .on('addVertices', function(e, data) {
+                    send('vertices', 'add', data.vertices.length);
+                })
+                .on('updateVertices', function(e, data) {
+                    send('vertices', 'update', data.vertices.length);
+                })
+                .on('deleteVertices', function(e, data) {
+                    send('vertices', 'delete', data.vertices.length);
+                })
+                .on('selectObjects', function(e, data) {
+                    send('vertices', 'selectObjects', data.vertices.length);
+                });
         } else {
             console.log("required configuration properties for Google Analytics are not available");
         }
-    });
-
-    $(document).on('querysubmit', function(e, data) {
-        ga('send', 'event', 'feature', 'querysubmit', data.value);
-    });
-
-    $(document).on('filterWorkspace', function(e, data) {
-        ga('send', 'event', 'feature', 'filterWorkspace', data.value);
-    });
-
-    $(document).on('switchWorkspace', function(e, data) {
-        ga('send', 'event', 'feature', 'switchWorkspace', data.workspaceId);
-    });
-
-    $(document).on('toggleGraphDimensions', function(e, data) {
-        ga('send', 'event', 'feature', 'toggleGraphDimensions');
-    });
-
-    $(document).on('mapShow', function(e, data) {
-        ga('send', 'event', 'feature', 'mapShow');
-    });
-
-    $(document).on('fit', function(e, data) {
-        ga('send', 'event', 'feature', 'fit');
-    });
-
-    $(document).on('escape', function(e, data) {
-        ga('send', 'event', 'feature', 'escape');
-    });
-
-    $(document).on('showVertexContextMenu', function(e, data) {
-        ga('send', 'event', 'feature', 'showVertexContextMenu');
-    });
-
-    $(document).on('searchByEntity', function(e, data) {
-        ga('send', 'event', 'feature', 'searchByEntity');
-    });
-
-    $(document).on('searchByRelatedEntity', function(e, data) {
-        ga('send', 'event', 'feature', 'searchByRelatedEntity');
-    });
-
-    $(document).on('toggleAuditDisplay', function(e, data) {
-        ga('send', 'event', 'feature', 'toggleAuditDisplay');
-    });
-
-    $(document).on('addVertices', function(e, data) {
-        ga('send', 'event', 'vertices', 'add', data.vertices.length);
-    });
-
-    $(document).on('updateVertices', function(e, data) {
-        ga('send', 'event', 'vertices', 'update', data.vertices.length);
-    });
-
-    $(document).on('deleteVertices', function(e, data) {
-        ga('send', 'event', 'vertices', 'delete', data.vertices.length);
-    });
-
-    $(document).on('selectObjects', function(e, data) {
-        ga('send', 'event', 'vertices', 'selectObjects', data.vertices.length);
     });
 });
