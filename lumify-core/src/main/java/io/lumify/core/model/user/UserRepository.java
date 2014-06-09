@@ -35,7 +35,7 @@ public abstract class UserRepository {
 
     public abstract User findById(String userId);
 
-    public abstract User addUser(String username, String displayName, String password, String[] userAuthorizations);
+    public abstract User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations);
 
     public abstract void setPassword(User user, String password);
 
@@ -142,10 +142,10 @@ public abstract class UserRepository {
         return new SystemUser(getModelUserContext(LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
     }
 
-    public User findOrAddUser(String username, String displayName, String password, String[] authorizations) {
+    public User findOrAddUser(String username, String displayName, String emailAddress, String password, String[] authorizations) {
         User user = findByUsername(username);
         if (user == null) {
-            user = addUser(username, displayName, password, authorizations);
+            user = addUser(username, displayName, emailAddress, password, authorizations);
         }
         return user;
     }

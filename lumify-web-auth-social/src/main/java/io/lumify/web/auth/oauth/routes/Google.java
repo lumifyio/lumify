@@ -124,7 +124,7 @@ public class Google implements Handler {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
-            user = userRepository.addUser(username, displayName, randomPassword, new String[0]);
+            user = userRepository.addUser(username, displayName, email, randomPassword, new String[0]);
         }
         userRepository.recordLogin(user, httpRequest.getRemoteAddr());
 

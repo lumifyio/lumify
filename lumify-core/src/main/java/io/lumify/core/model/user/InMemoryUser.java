@@ -23,11 +23,11 @@ public class InMemoryUser implements User {
     private String previousLoginRemoteAddr;
     private int loginCount;
 
-    public InMemoryUser(String userName, String displayName, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
+    public InMemoryUser(String userName, String displayName, String emailAddress, Set<Privilege> privileges, String[] authorizations, String currentWorkspaceId) {
         this.userId = UUID.randomUUID().toString();
         this.userName = userName;
         this.displayName = displayName;
-        this.emailAddress = this.userName + "@memory";
+        this.emailAddress = emailAddress;
         this.createDate = new Date();
         this.privileges = privileges;
         this.authorizations = new ArrayList<String>();

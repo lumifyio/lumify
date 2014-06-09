@@ -13,10 +13,10 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 public class Login extends BaseRequestHandler {
-    private static final String PASSWORD = "8XXuk2tQ523b";
-
     @Inject
     public Login(UserRepository userRepository, WorkspaceRepository workspaceRepository, Configuration configuration) {
         super(userRepository, workspaceRepository, configuration);
@@ -29,7 +29,8 @@ public class Login extends BaseRequestHandler {
         User user = getUserRepository().findByUsername(username);
         if (user == null) {
             // For form based authentication, username and displayName will be the same
-            user = getUserRepository().addUser(username, username, PASSWORD, new String[0]);
+            String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
+            user = getUserRepository().addUser(username, username, null, randomPassword, new String[0]);
         }
         getUserRepository().recordLogin(user, request.getRemoteAddr());
 

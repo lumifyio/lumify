@@ -83,7 +83,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -94,14 +94,15 @@ public class SqlUserRepository extends UserRepository {
         try {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
+            newUser.setUsername(username);
             newUser.setDisplayName(displayName);
+            newUser.setEmailAddress(emailAddress);
             if (password != null && !password.equals("")) {
                 byte[] salt = UserPasswordUtil.getSalt();
                 byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
                 newUser.setPasswordSalt(salt);
                 newUser.setPasswordHash(passwordHash);
             }
-            newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
             newUser.setPrivileges(Privilege.toString(getDefaultPrivileges()));
             LOGGER.debug("add %s to user table", displayName);

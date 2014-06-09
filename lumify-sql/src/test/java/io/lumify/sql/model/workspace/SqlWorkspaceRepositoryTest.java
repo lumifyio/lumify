@@ -54,7 +54,7 @@ public class SqlWorkspaceRepositoryTest {
         Configuration lumifyConfiguration = new Configuration(configMap);
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
         sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
-        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, new String[0]);
+        testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class SqlWorkspaceRepositoryTest {
         assertTrue(workspaceUsers.size() == 1);
         assertEquals(workspaceUsers.get(0).getWorkspaceAccess(), WorkspaceAccess.WRITE);
 
-        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", "", new String[0]);
+        SqlUser testUser2 = (SqlUser) sqlUserRepository.addUser("456", "qwe", null, "", new String[0]);
         sqlWorkspaceRepository.updateUserOnWorkspace(sqlWorkspace, "2", WorkspaceAccess.READ, testUser2);
         workspaceUsers = sqlWorkspaceRepository.findUsersWithAccess(sqlWorkspace.getId(), testUser2);
         assertTrue(workspaceUsers.size() == 2);
