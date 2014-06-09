@@ -3,9 +3,11 @@ package io.lumify.web.routes.audit;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.Audit;
+import io.lumify.core.model.audit.AuditEntity;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
+import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
 import com.altamiracorp.miniweb.HandlerChain;
@@ -43,6 +45,9 @@ public class VertexAudit extends BaseRequestHandler {
         JSONArray audits = new JSONArray();
         for (Audit audit : rows) {
             JSONObject data = audit.toJson();
+            if (data.keySet().contains(AuditEntity.ENTITY_AUDIT) && !getPrivileges(user).contains(Privilege.ADMIN)) {
+                continue;
+            }
             audits.put(data);
         }
         results.put("auditHistory", audits);
