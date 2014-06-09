@@ -21,9 +21,9 @@ import java.util.Map;
  */
 public abstract class LumifyProperty<TRaw, TGraph> {
     /**
-     * The property key.
+     * The property propertyName.
      */
-    private final String key;
+    private final String propertyName;
 
     /**
      * The raw conversion function.
@@ -31,12 +31,12 @@ public abstract class LumifyProperty<TRaw, TGraph> {
     private final Function<Object, TRaw> rawConverter;
 
     /**
-     * Create a new LumifyProperty with the given key.
+     * Create a new LumifyProperty with the given propertyName.
      *
-     * @param inKey the property key
+     * @param propertyName the property propertyName
      */
-    protected LumifyProperty(final String inKey) {
-        this.key = inKey;
+    protected LumifyProperty(final String propertyName) {
+        this.propertyName = propertyName;
         this.rawConverter = new RawConverter();
     }
 
@@ -59,12 +59,12 @@ public abstract class LumifyProperty<TRaw, TGraph> {
     public abstract TRaw unwrap(final Object value);
 
     /**
-     * Get the property key for this property.
+     * Get the property propertyName for this property.
      *
-     * @return the property key
+     * @return the property propertyName
      */
-    public final String getKey() {
-        return key;
+    public final String getPropertyName() {
+        return propertyName;
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param visibility the property visibility
      */
     public final void setProperty(final ElementMutation<?> mutation, final TRaw value, final Visibility visibility) {
-        mutation.setProperty(key, wrap(value), visibility);
+        mutation.setProperty(propertyName, wrap(value), visibility);
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param visibility the property visibility
      */
     public final void setProperty(final ElementMutation<?> mutation, final TRaw value, final Map<String, Object> metadata, final Visibility visibility) {
-        mutation.setProperty(key, wrap(value), metadata, visibility);
+        mutation.setProperty(propertyName, wrap(value), metadata, visibility);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param visibility the property visibility
      */
     public final void setProperty(final Element element, final TRaw value, final Visibility visibility, Authorizations authorizations) {
-        element.setProperty(key, wrap(value), visibility, authorizations);
+        element.setProperty(propertyName, wrap(value), visibility, authorizations);
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param visibility the property visibility
      */
     public final void setProperty(final Element element, final TRaw value, final Map<String, Object> metadata, final Visibility visibility, Authorizations authorizations) {
-        element.setProperty(key, wrap(value), metadata, visibility, authorizations);
+        element.setProperty(propertyName, wrap(value), metadata, visibility, authorizations);
     }
 
     /**
@@ -122,11 +122,11 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @param visibility the property visibility
      */
     public final void addPropertyValue(final ElementMutation<?> mutation, final String multiKey, final TRaw value, final Visibility visibility) {
-        mutation.addPropertyValue(multiKey, key, wrap(value), visibility);
+        mutation.addPropertyValue(multiKey, propertyName, wrap(value), visibility);
     }
 
     public final void addPropertyValue(final Element element, final String multiKey, final TRaw value, final Visibility visibility, Authorizations authorizations) {
-        element.addPropertyValue(multiKey, key, wrap(value), visibility, authorizations);
+        element.addPropertyValue(multiKey, propertyName, wrap(value), visibility, authorizations);
     }
 
     /**
@@ -143,7 +143,7 @@ public abstract class LumifyProperty<TRaw, TGraph> {
                                        final TRaw value,
                                        final Map<String, Object> metadata,
                                        final Visibility visibility) {
-        mutation.addPropertyValue(multiKey, key, wrap(value), metadata, visibility);
+        mutation.addPropertyValue(multiKey, propertyName, wrap(value), metadata, visibility);
     }
 
     /**
@@ -153,12 +153,12 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      * @return the value of this property on the given Element or null if it is not configured
      */
     public final TRaw getPropertyValue(final Element element) {
-        Object value = element != null ? element.getPropertyValue(key) : null;
+        Object value = element != null ? element.getPropertyValue(propertyName) : null;
         return value != null ? rawConverter.apply(value) : null;
     }
 
     public final TRaw getPropertyValue(final Element element, String propertyKey) {
-        Object value = element != null ? element.getPropertyValue(propertyKey, key) : null;
+        Object value = element != null ? element.getPropertyValue(propertyKey, propertyName) : null;
         return value != null ? rawConverter.apply(value) : null;
     }
 
@@ -170,35 +170,35 @@ public abstract class LumifyProperty<TRaw, TGraph> {
      */
     @SuppressWarnings("unchecked")
     public final Iterable<TRaw> getPropertyValues(final Element element) {
-        Iterable<Object> values = element != null ? element.getPropertyValues(key) : null;
+        Iterable<Object> values = element != null ? element.getPropertyValues(propertyName) : null;
         return values != null ? Iterables.transform(values, rawConverter) : Collections.EMPTY_LIST;
     }
 
     public boolean hasProperty(Element element, String propertyKey) {
-        return element.getProperty(propertyKey, getKey()) != null;
+        return element.getProperty(propertyKey, getPropertyName()) != null;
     }
 
     public TRaw getMetadataValue(Map<String, Object> metadata) {
-        return unwrap(metadata.get(key));
+        return unwrap(metadata.get(propertyName));
     }
 
     public TRaw getMetadataValue(Map<String, Object> metadata, TRaw defaultValue) {
-        if (!metadata.containsKey(key)) {
+        if (!metadata.containsKey(propertyName)) {
             return defaultValue;
         }
-        return unwrap(metadata.get(key));
+        return unwrap(metadata.get(propertyName));
     }
 
     public void setMetadata(Map<String, Object> metadata, TRaw value) {
-        metadata.put(key, wrap(value));
+        metadata.put(propertyName, wrap(value));
     }
 
     public Property getProperty(Element element) {
-        return element.getProperty(getKey());
+        return element.getProperty(getPropertyName());
     }
 
     public Iterable<Property> getProperties(Element element) {
-        return element.getProperties(getKey());
+        return element.getProperties(getPropertyName());
     }
 
     /**

@@ -134,11 +134,11 @@ public abstract class GraphPropertyWorker {
             return false;
         }
 
-        if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 
@@ -227,8 +227,8 @@ public abstract class GraphPropertyWorker {
                     vertex = graph.getVertex(termMention.getId(), getAuthorizations());
                 } else {
                     vertex = trySingle(graph.query(getAuthorizations())
-                            .has(LumifyProperties.TITLE.getKey(), title)
-                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), concept.getTitle())
+                            .has(LumifyProperties.TITLE.getPropertyName(), title)
+                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), concept.getTitle())
                             .vertices());
                 }
             }

@@ -18,7 +18,7 @@ public class VideoPropertyHelper {
     }
 
     public static VideoFrameInfo getVideoFrameInfo(String propertyKey) {
-        Pattern pattern = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getKey() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
+        Pattern pattern = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
         Matcher m = pattern.matcher(propertyKey);
         if (m.find()) {
             VideoFrameInfo videoFrameInfo = new VideoFrameInfo(Long.parseLong(m.group(2)), m.group(1));

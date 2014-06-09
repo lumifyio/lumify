@@ -159,7 +159,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
                 .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save(authorizations);
 
         this.graph.flush();

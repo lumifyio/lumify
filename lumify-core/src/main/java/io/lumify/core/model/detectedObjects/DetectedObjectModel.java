@@ -35,7 +35,7 @@ public class DetectedObjectModel extends Row<DetectedObjectRowKey> {
             if (getMetadata().getResolvedId() == null) {
                 json.put("classifierConcept", getMetadata().getClassiferConcept());
             }
-            json.put(LumifyProperties.ROW_KEY.getKey(), getRowKey());
+            json.put(LumifyProperties.ROW_KEY.getPropertyName(), getRowKey());
             json.put("x1", getMetadata().getX1());
             json.put("y1", getMetadata().getY1());
             json.put("x2", getMetadata().getX2());

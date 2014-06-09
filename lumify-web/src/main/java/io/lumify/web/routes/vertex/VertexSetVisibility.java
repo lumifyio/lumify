@@ -73,7 +73,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         this.graph.flush();
 
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey());
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName());
 
         JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId);
         respondWithJson(response, json);

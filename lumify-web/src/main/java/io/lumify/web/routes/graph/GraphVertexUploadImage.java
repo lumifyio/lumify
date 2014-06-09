@@ -130,7 +130,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
 
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, artifactVertexBuilder, artifactVertex, "", user, lumifyVisibility.getVisibility());
 
-        entityVertexMutation.setProperty(EntityLumifyProperties.IMAGE_VERTEX_ID.getKey(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
+        entityVertexMutation.setProperty(EntityLumifyProperties.IMAGE_VERTEX_ID.getPropertyName(), artifactVertex.getId(), metadata, lumifyVisibility.getVisibility());
         auditRepository.auditVertexElementMutation(AuditAction.UPDATE, entityVertexMutation, entityVertex, "", user, lumifyVisibility.getVisibility());
         entityVertex = entityVertexMutation.save(authorizations);
         graph.flush();
@@ -147,7 +147,7 @@ public class GraphVertexUploadImage extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, entityVertex.getId(), null, null, null, user);
 
         graph.flush();
-        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, RawLumifyProperties.RAW.getKey());
+        workQueueRepository.pushGraphPropertyQueue(artifactVertex, null, RawLumifyProperties.RAW.getPropertyName());
 
         respondWithJson(response, JsonSerializer.toJson(entityVertex, workspaceId));
     }

@@ -58,7 +58,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     frameValue.searchIndex(false);
                     String key = String.format("%08d", frameStartTime);
                     Map<String, Object> metadata = data.createPropertyMetadata();
-                    metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "image/png");
+                    metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
                     MediaLumifyProperties.VIDEO_FRAME.addPropertyValue(mutation, key, frameValue, metadata, data.getVisibility());
                     propertyKeys.add(key);
@@ -73,7 +73,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             generateAndSaveVideoPreviewImage((Vertex)data.getElement());
 
             for (String propertyKey : propertyKeys) {
-                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getKey());
+                getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getPropertyName());
             }
         } finally {
             FileUtils.deleteDirectory(tempDir);
@@ -99,10 +99,10 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }
@@ -166,7 +166,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private Iterable<Property> getVideoFrameProperties(Vertex artifactVertex) {
-        List<Property> videoFrameProperties = toList(artifactVertex.getProperties(MediaLumifyProperties.VIDEO_FRAME.getKey()));
+        List<Property> videoFrameProperties = toList(artifactVertex.getProperties(MediaLumifyProperties.VIDEO_FRAME.getPropertyName()));
         Collections.sort(videoFrameProperties, new Comparator<Property>() {
             @Override
             public int compare(Property p1, Property p2) {

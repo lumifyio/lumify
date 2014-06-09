@@ -154,7 +154,7 @@ public class WorkspaceHelper {
     public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
 
-        Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getKey()).iterator();
+        Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName()).iterator();
         while (rowKeys.hasNext()) {
             Property rowKeyProperty = rowKeys.next();
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey((String) rowKeyProperty.getValue(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));

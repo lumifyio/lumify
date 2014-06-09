@@ -25,7 +25,6 @@ import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.util.ConvertingIterable;
 
-import java.net.InetAddress;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -102,15 +101,15 @@ public class SecureGraphUserRepository extends UserRepository {
     @Override
     public User findByUsername(String username) {
         return createFromVertex(Iterables.getFirst(graph.query(authorizations)
-                .has(UserLumifyProperties.USERNAME.getKey(), username)
-                .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), userConceptId)
+                .has(UserLumifyProperties.USERNAME.getPropertyName(), username)
+                .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
                 .vertices(), null));
     }
 
     @Override
     public Iterable<User> findAll() {
         return new ConvertingIterable<Vertex, User>(graph.query(authorizations)
-                .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), userConceptId)
+                .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
                 .vertices()) {
             @Override
             protected User convert(Vertex vertex) {

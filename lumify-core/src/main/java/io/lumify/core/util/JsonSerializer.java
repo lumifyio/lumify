@@ -73,11 +73,11 @@ public class JsonSerializer {
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", GraphUtil.getSandboxStatus(element, workspaceId).toString());
         if (element.getVisibility() != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), element.getVisibility().toString());
+            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), element.getVisibility().toString());
         }
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
         if (visibilityJson != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilityJson);
+            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson);
         }
 
         return json;
@@ -131,11 +131,11 @@ public class JsonSerializer {
     }
 
     private static void addVideoFramePropertyToResults(JSONArray resultsJson, String propertyKey, String textDescription, String sandboxStatus) {
-        JSONObject json = findProperty(resultsJson, MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey(), propertyKey);
+        JSONObject json = findProperty(resultsJson, MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName(), propertyKey);
         if (json == null) {
             json = new JSONObject();
             json.put("key", propertyKey);
-            json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey());
+            json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
             json.put("sandboxStatus", sandboxStatus);
             json.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
             json.put("streamingPropertyValue", true);
@@ -167,7 +167,7 @@ public class JsonSerializer {
         }
 
         if (property.getVisibility() != null) {
-            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), property.getVisibility().toString());
+            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
             Object value = property.getMetadata().get(key);

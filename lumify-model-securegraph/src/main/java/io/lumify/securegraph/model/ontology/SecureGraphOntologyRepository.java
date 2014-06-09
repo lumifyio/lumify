@@ -85,7 +85,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
         raw.searchIndex(false);
-        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getKey(), raw, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getPropertyName(), raw, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 
@@ -143,7 +143,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 @Override
                 public List<Relationship> callWithTime() throws Exception {
                     Iterable<Vertex> vertices = graph.query(getAuthorizations())
-                            .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
+                            .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
                             .limit(10000)
                             .vertices();
 
@@ -196,7 +196,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                 @Override
                 public List<OntologyProperty> callWithTime() throws Exception {
                     return toList(new ConvertingIterable<Vertex, OntologyProperty>(graph.query(getAuthorizations())
-                            .has(CONCEPT_TYPE.getKey(), TYPE_PROPERTY)
+                            .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
                             .vertices()) {
                         @Override
                         protected OntologyProperty convert(Vertex vertex) {
@@ -214,8 +214,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     public OntologyProperty getProperty(String propertyIRI) {
         try {
             Vertex propVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
-                    .has(CONCEPT_TYPE.getKey(), TYPE_PROPERTY)
-                    .has(ONTOLOGY_TITLE.getKey(), propertyIRI)
+                    .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
+                    .has(ONTOLOGY_TITLE.getPropertyName(), propertyIRI)
                     .vertices(), null);
             return propVertex != null ? new SecureGraphOntologyProperty(propVertex) : null;
         } catch (IllegalArgumentException iae) {
@@ -226,8 +226,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     @Override
     public Relationship getRelationshipByIRI(String relationshipIRI) {
         Vertex relationshipVertex = Iterables.getFirst(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getKey(), TYPE_RELATIONSHIP)
-                .has(ONTOLOGY_TITLE.getKey(), relationshipIRI)
+                .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
+                .has(ONTOLOGY_TITLE.getPropertyName(), relationshipIRI)
                 .vertices(), null);
         if (relationshipVertex == null) {
             return null;
@@ -259,7 +259,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     private Iterable<Concept> getConcepts(final boolean withProperties) {
         return new ConvertingIterable<Vertex, Concept>(graph.query(getAuthorizations())
-                .has(CONCEPT_TYPE.getKey(), TYPE_CONCEPT)
+                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
                 .vertices()) {
             @Override
             protected Concept convert(Vertex vertex) {

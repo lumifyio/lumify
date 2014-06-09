@@ -43,7 +43,7 @@ public class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(mimeTypeMetadata, visibilityJson);
         }
         RawLumifyProperties.MIME_TYPE.setProperty(m, mimeType, mimeTypeMetadata, data.getVisibility());
-        m.alterPropertyMetadata(data.getProperty(), RawLumifyProperties.MIME_TYPE.getKey(), mimeType);
+        m.alterPropertyMetadata(data.getProperty(), RawLumifyProperties.MIME_TYPE.getPropertyName(), mimeType);
         Vertex v = m.save(getAuthorizations());
         getAuditRepository().auditVertexElementMutation(AuditAction.UPDATE, m, v, MimeTypeGraphPropertyWorker.class.getName(), getUser(), data.getVisibility());
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
@@ -58,7 +58,7 @@ public class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
         if (RawLumifyProperties.MIME_TYPE.getPropertyValue(element) != null) {

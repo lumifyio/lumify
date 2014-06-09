@@ -161,12 +161,12 @@ public class FileImport {
 
     private void pushOnQueue(Vertex vertex) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, RawLumifyProperties.RAW.getKey());
+        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, RawLumifyProperties.RAW.getPropertyName());
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {
         Iterator<Vertex> existingVertices = this.graph.query(authorizations)
-                .has(LumifyProperties.ROW_KEY.getKey(), hash)
+                .has(LumifyProperties.ROW_KEY.getPropertyName(), hash)
                 .vertices()
                 .iterator();
         if (existingVertices.hasNext()) {

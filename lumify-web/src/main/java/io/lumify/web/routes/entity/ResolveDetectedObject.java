@@ -144,7 +144,7 @@ public class ResolveDetectedObject extends BaseRequestHandler {
 
         JSONObject result = detectedObjectRepository.toJSON(detectedObjectModel, authorizations);
 
-        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility());
+        resolvedVertexMutation.addPropertyValue(resolvedVertex.getId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), detectedObjectModel.getRowKey().toString(), lumifyVisibility.getVisibility());
         resolvedVertexMutation.save(authorizations);
 
         graph.flush();

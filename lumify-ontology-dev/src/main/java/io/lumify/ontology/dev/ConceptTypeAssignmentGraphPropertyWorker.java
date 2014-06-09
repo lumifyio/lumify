@@ -39,7 +39,7 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
         LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getElement().getId());
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.createPropertyMetadata(), data.getVisibility(), getAuthorizations());
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, OntologyLumifyProperties.CONCEPT_TYPE.getKey());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ConceptTypeAssignmentGraphPropertyWorker extends GraphPropertyWorke
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 

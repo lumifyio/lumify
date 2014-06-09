@@ -79,11 +79,11 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             return false;
         }
 
-        if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
     }
 

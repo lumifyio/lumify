@@ -38,7 +38,7 @@ public abstract class OffsetItem implements Comparable {
             JSONObject infoJson = new JSONObject();
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
-            infoJson.put(LumifyProperties.ROW_KEY.getKey(), RowKeyHelper.jsonEncode(getRowKey()));
+            infoJson.put(LumifyProperties.ROW_KEY.getPropertyName(), RowKeyHelper.jsonEncode(getRowKey()));
             if (getGraphVertexId() != null && !getGraphVertexId().equals("") && getEdgeId() != null && !getEdgeId().equals("")) {
                 infoJson.put("graphVertexId", getGraphVertexId());
                 infoJson.put("edgeId", getEdgeId());

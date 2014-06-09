@@ -101,12 +101,12 @@ public class BigTableDetectedObjectRepository extends DetectedObjectRepository{
         JSONObject object = detectedObjectModel.toJson();
         if (detectedObjectModel.getMetadata().getResolvedId() != null) {
             Vertex vertex = graph.getVertex(detectedObjectModel.getMetadata().getResolvedId(), authorizations);
-            object.put("title", vertex.getPropertyValue(LumifyProperties.TITLE.getKey()));
+            object.put("title", vertex.getPropertyValue(LumifyProperties.TITLE.getPropertyName()));
             object.put("graphVertexId", vertex.getId());
             object.put("edgeId", detectedObjectModel.getRowKey().getEdgeId());
             object.put("http://lumify.io#conceptType", vertex.getPropertyValue("http://lumify.io#conceptType"));
         }
-        object.put(LumifyProperties.ROW_KEY.getKey(), detectedObjectModel.getRowKey().toString());
+        object.put(LumifyProperties.ROW_KEY.getPropertyName(), detectedObjectModel.getRowKey().toString());
 
         return object;
     }
