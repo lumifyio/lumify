@@ -126,6 +126,7 @@ public class Google implements Handler {
             String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
             user = userRepository.addUser(username, displayName, randomPassword, new String[0]);
         }
+        userRepository.recordLogin(user, httpRequest.getRemoteAddr());
 
         CurrentUser.set(httpRequest, user.getUserId());
         httpResponse.sendRedirect(httpRequest.getServletContext().getContextPath() + "/");

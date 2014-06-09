@@ -31,6 +31,7 @@ public class Login extends BaseRequestHandler {
             // For form based authentication, username and displayName will be the same
             user = getUserRepository().addUser(username, username, PASSWORD, new String[0]);
         }
+        getUserRepository().recordLogin(user, request.getRemoteAddr());
 
         CurrentUser.set(request, user.getUserId());
         JSONObject json = new JSONObject();
