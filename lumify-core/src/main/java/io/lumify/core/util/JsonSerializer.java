@@ -121,7 +121,7 @@ public class JsonSerializer {
                 } else {
                     text = value.toString();
                 }
-                videoTranscript.add(new VideoTranscript.Time(videoFrameInfo.getFrameStartTime(), null), text);
+                videoTranscript.add(new VideoTranscript.Time(videoFrameInfo.getFrameStartTime(), videoFrameInfo.getFrameEndTime()), text);
             }
         }
         if (videoTranscript.getEntries().size() > 0) {

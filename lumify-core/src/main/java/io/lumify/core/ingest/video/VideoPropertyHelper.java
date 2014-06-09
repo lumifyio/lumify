@@ -9,6 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VideoPropertyHelper {
+    private static final Pattern START_TIME_AND_END_TIME_PATTERN = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
+    private static final Pattern START_TIME_ONLY_PATTERN = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
+
     public static VideoFrameInfo getVideoFrameInfoFromProperty(Property property) {
         Object mimeType = property.getMetadata().get(RawLumifyProperties.META_DATA_MIME_TYPE);
         if (mimeType == null || !mimeType.equals("text/plain")) {
@@ -18,11 +21,14 @@ public class VideoPropertyHelper {
     }
 
     public static VideoFrameInfo getVideoFrameInfo(String propertyKey) {
-        Pattern pattern = Pattern.compile("^(.*)" + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + "([0-9]+)");
-        Matcher m = pattern.matcher(propertyKey);
+        Matcher m = START_TIME_AND_END_TIME_PATTERN.matcher(propertyKey);
         if (m.find()) {
-            VideoFrameInfo videoFrameInfo = new VideoFrameInfo(Long.parseLong(m.group(2)), m.group(1));
-            return videoFrameInfo;
+            return new VideoFrameInfo(Long.parseLong(m.group(2)), Long.parseLong(m.group(3)), m.group(1));
+        }
+
+        m = START_TIME_ONLY_PATTERN.matcher(propertyKey);
+        if (m.find()) {
+            return new VideoFrameInfo(Long.parseLong(m.group(2)), null, m.group(1));
         }
         return null;
     }
