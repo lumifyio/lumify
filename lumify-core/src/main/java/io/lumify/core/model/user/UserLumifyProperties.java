@@ -16,7 +16,7 @@ public final class UserLumifyProperties {
     public static final StringLumifyProperty PRIVILEGES = new StringLumifyProperty("http://lumify.io/user/privileges");
     public static final StringLumifyProperty STATUS = new StringLumifyProperty("http://lumify.io/user/status");
     public static final StringLumifyProperty CURRENT_WORKSPACE = new StringLumifyProperty("http://lumify.io/user/currentWorkspace");
-    public static final JsonLumifyProperty PREFERENCES = new JsonLumifyProperty("http://lumify.io/user/preferences");
+    public static final JsonLumifyProperty UI_PREFERENCES = new JsonLumifyProperty("http://lumify.io/user/uiPreferences");
     public static final ByteArrayLumifyProperty PASSWORD_SALT = new ByteArrayLumifyProperty("http://lumify.io/user/passwordSalt");
     public static final ByteArrayLumifyProperty PASSWORD_HASH = new ByteArrayLumifyProperty("http://lumify.io/user/passwordHash");
 }

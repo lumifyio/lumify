@@ -73,7 +73,7 @@ public class SystemUser implements User {
     }
 
     @Override
-    public JSONObject getPreferences() { return new JSONObject(); }
+    public JSONObject getUiPreferences() { return new JSONObject(); }
 
     @Override
     public String toString() {

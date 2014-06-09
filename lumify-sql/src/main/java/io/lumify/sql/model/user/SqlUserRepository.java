@@ -246,13 +246,13 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public void setPreferences(User user, JSONObject preferences) {
+    public void setUiPreferences(User user, JSONObject preferences) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
 
-            ((SqlUser) user).setPreferences(preferences);
+            ((SqlUser) user).setUiPreferences(preferences);
 
             session.update(user);
             transaction.commit();

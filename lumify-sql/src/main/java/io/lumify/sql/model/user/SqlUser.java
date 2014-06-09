@@ -65,8 +65,8 @@ public class SqlUser implements User {
     @Column(name = "privileges")
     private String privileges;
 
-    @Column(name = "preferences")
-    private String preferences;
+    @Column(name = "ui_preferences")
+    private String uiPreferences;
 
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "workspace_id")
@@ -206,9 +206,9 @@ public class SqlUser implements User {
     }
 
     @Override
-    public JSONObject getPreferences() { return new JSONObject(preferences); }
+    public JSONObject getUiPreferences() { return new JSONObject(uiPreferences); }
 
-    public void setPreferences(JSONObject preferences) { this.preferences = preferences.toString(); }
+    public void setUiPreferences(JSONObject uiPreferences) { this.uiPreferences = uiPreferences.toString(); }
 
     // TODO: remove unused code
     public Set<SqlWorkspaceUser> getSqlWorkspaceUsers() {

@@ -38,5 +38,5 @@ public interface User extends Serializable {
 
     public String getCurrentWorkspaceId();
 
-    public JSONObject getPreferences();
+    public JSONObject getUiPreferences();
 }

@@ -139,12 +139,12 @@ public class ProxyUser implements User {
     }
 
     @Override
-    public JSONObject getPreferences() {
+    public JSONObject getUiPreferences() {
         ensureUser();
         if (proxiedUser == null) {
             return null;
         }
-        return proxiedUser.getPreferences();
+        return proxiedUser.getUiPreferences();
     }
 
     private void ensureUser() {

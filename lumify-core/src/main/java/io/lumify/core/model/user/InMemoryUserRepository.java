@@ -71,7 +71,7 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
-    public void setPreferences(User user, JSONObject preferences) {
+    public void setUiPreferences(User user, JSONObject preferences) {
         throw new RuntimeException("Not implemented");
     }
 

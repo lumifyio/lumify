@@ -11,7 +11,6 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
-import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.*;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -93,7 +92,7 @@ public class SecureGraphUserRepository extends UserRepository {
         String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
-        JSONObject preferences = UserLumifyProperties.PREFERENCES.getPropertyValue(user);
+        JSONObject preferences = UserLumifyProperties.UI_PREFERENCES.getPropertyValue(user);
 
         LOGGER.debug("Creating user from UserRow. username: %s", username);
         return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences);
@@ -222,9 +221,9 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
-    public void setPreferences(User user, JSONObject preferences) {
+    public void setUiPreferences(User user, JSONObject preferences) {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
-        UserLumifyProperties.PREFERENCES.setProperty(userVertex, preferences, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.UI_PREFERENCES.setProperty(userVertex, preferences, VISIBILITY.getVisibility(), authorizations);
         graph.flush();
     }
 

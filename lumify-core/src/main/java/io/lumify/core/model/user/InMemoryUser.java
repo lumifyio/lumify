@@ -103,7 +103,7 @@ public class InMemoryUser implements User {
     }
 
     @Override
-    public JSONObject getPreferences() { return preferences; }
+    public JSONObject getUiPreferences() { return preferences; }
 
     public void setPreferences(JSONObject preferences) {
         this.preferences = preferences;

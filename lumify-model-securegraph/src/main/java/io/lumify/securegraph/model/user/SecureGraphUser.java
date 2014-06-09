@@ -116,7 +116,7 @@ public class SecureGraphUser implements User, Serializable {
     }
 
     @Override
-    public JSONObject getPreferences() { return preferences; }
+    public JSONObject getUiPreferences() { return preferences; }
 
     @Override
     public String toString() {

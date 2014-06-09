@@ -57,7 +57,7 @@ public abstract class UserRepository {
 
     public abstract Set<Privilege> getPrivileges(User user);
 
-    public abstract void setPreferences(User user, JSONObject preferences);
+    public abstract void setUiPreferences(User user, JSONObject preferences);
 
     public JSONObject toJsonWithAuths(User user) {
         JSONObject json = toJson(user);
@@ -67,6 +67,8 @@ public abstract class UserRepository {
             authorizations.put(a);
         }
         json.put("authorizations", authorizations);
+
+        json.put("uiPreferences", user.getUiPreferences());
 
         Set<Privilege> privileges = getPrivileges(user);
         json.put("privileges", Privilege.toJson(privileges));
