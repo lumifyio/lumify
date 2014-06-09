@@ -59,11 +59,11 @@ public class Audit extends Row<AuditRowKey> {
             json.put("data", this.getAuditCommon().toJson());
             String type = this.getAuditCommon().getType();
             if (type.equals(OntologyRepository.TYPE_PROPERTY)) {
-                json.put("propertyAudit", this.getAuditProperty().toJson());
+                json.put(AuditProperty.PROPERTY_AUDIT, this.getAuditProperty().toJson());
             } else if (type.equals(OntologyRepository.TYPE_RELATIONSHIP)) {
-                json.put("relationshipAudit", this.getAuditRelationship().toJson());
+                json.put(AuditRelationship.RELATIONSHIP_AUDIT, this.getAuditRelationship().toJson());
             } else {
-                json.put("entityAudit", this.getAuditEntity().toJson());
+                json.put(AuditEntity.ENTITY_AUDIT, this.getAuditEntity().toJson());
             }
             String[] rowKey = RowKeyHelper.splitOnMinorFieldSeperator(getRowKey().toString());
             json.put("graphVertexID", rowKey[0]);

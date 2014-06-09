@@ -156,10 +156,9 @@ define([
                             }),
                             auditGroups = _.groupBy(audits, function(a) {
                                 if (a.entityAudit) {
-                                    var concept = ontology.conceptsById[a.data.type]
-                                    if (concept) {
-                                        a.data.displayType = concept.displayName;
-                                    }
+                                   if (a.entityAudit.analyzedBy) {
+                                       a.data.displayType = a.entityAudit.analyzedBy;
+                                   }
                                 }
 
                                 if (a.propertyAudit) {
