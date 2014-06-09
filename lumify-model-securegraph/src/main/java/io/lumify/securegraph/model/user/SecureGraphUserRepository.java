@@ -19,12 +19,15 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.VertexBuilder;
 import org.securegraph.util.ConvertingIterable;
 
+import java.net.InetAddress;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -75,17 +78,25 @@ public class SecureGraphUserRepository extends UserRepository {
             return null;
         }
 
+        String userId = (String) user.getId();
+        String username = UserLumifyProperties.USERNAME.getPropertyValue(user);
+        String displayName = UserLumifyProperties.DISPLAY_NAME.getPropertyValue(user);
+        String emailAddress = UserLumifyProperties.EMAIL_ADDRESS.getPropertyValue(user);
+        Date createDate = UserLumifyProperties.CREATE_DATE.getPropertyValue(user);
+        Date currentLoginDate = UserLumifyProperties.CURRENT_LOGIN_DATE.getPropertyValue(user);
+        String currentLoginRemoteAddr = UserLumifyProperties.CURRENT_LOGIN_REMOTE_ADDR.getPropertyValue(user);
+        Date previousLoginDate = UserLumifyProperties.PREVIOUS_LOGIN_DATE.getPropertyValue(user);
+        String previousLoginRemoteAddr = UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.getPropertyValue(user);
+        int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(user, 0);
         String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
-
-        String userName = UserLumifyProperties.USERNAME.getPropertyValue(user);
-        String displayName = UserLumifyProperties.DISPLAY_NAME.getPropertyValue(user);
-        String userId = (String) user.getId();
         String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
         String currentWorkspaceId = UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(user);
-        LOGGER.debug("Creating user from UserRow. userName: %s", userName);
-        return new SecureGraphUser(userId, userName, displayName, modelUserContext, userStatus, privileges, currentWorkspaceId);
+        JSONObject preferences = UserLumifyProperties.PREFERENCES.getPropertyValue(user);
+
+        LOGGER.debug("Creating user from UserRow. username: %s", username);
+        return new SecureGraphUser(userId, username, displayName, emailAddress, createDate, currentLoginDate, currentLoginRemoteAddr, previousLoginDate, previousLoginRemoteAddr, loginCount, modelUserContext, userStatus, privileges, currentWorkspaceId, preferences);
     }
 
     @Override
@@ -170,6 +181,24 @@ public class SecureGraphUserRepository extends UserRepository {
     }
 
     @Override
+    public void recordLogin(User user, String remoteAddr) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+
+        Date currentLoginDate = UserLumifyProperties.CURRENT_LOGIN_DATE.getPropertyValue(userVertex);
+        String currentLoginRemoteAddr = UserLumifyProperties.CURRENT_LOGIN_REMOTE_ADDR.getPropertyValue(userVertex);
+        UserLumifyProperties.PREVIOUS_LOGIN_DATE.setProperty(userVertex, currentLoginDate, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.setProperty(userVertex, currentLoginRemoteAddr, VISIBILITY.getVisibility(), authorizations);
+
+        UserLumifyProperties.CURRENT_LOGIN_DATE.setProperty(userVertex, new Date(), VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.setProperty(userVertex, remoteAddr, VISIBILITY.getVisibility(), authorizations);
+
+        int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(userVertex, 0);
+        UserLumifyProperties.LOGIN_COUNT.setProperty(userVertex, loginCount + 1, VISIBILITY.getVisibility(), authorizations);
+
+        graph.flush();
+    }
+
+    @Override
     public User setCurrentWorkspace(String userId, String workspaceId) {
         User user = findById(userId);
         checkNotNull(user, "Could not find user: " + userId);
@@ -185,6 +214,13 @@ public class SecureGraphUserRepository extends UserRepository {
         checkNotNull(user, "Could not find user: " + userId);
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
         return UserLumifyProperties.CURRENT_WORKSPACE.getPropertyValue(userVertex);
+    }
+
+    @Override
+    public void setPreferences(User user, JSONObject preferences) {
+        Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
+        UserLumifyProperties.PREFERENCES.setProperty(userVertex, preferences, VISIBILITY.getVisibility(), authorizations);
+        graph.flush();
     }
 
     @Override

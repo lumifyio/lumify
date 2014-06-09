@@ -4,6 +4,7 @@ import io.lumify.core.config.Configuration;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.user.User;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
 
@@ -55,12 +56,22 @@ public class InMemoryUserRepository extends UserRepository {
     }
 
     @Override
+    public void recordLogin(User user, String remoteAddr) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
     public User setCurrentWorkspace(String userId, String workspaceId) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
     public String getCurrentWorkspaceId(String userId) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void setPreferences(User user, JSONObject preferences) {
         throw new RuntimeException("Not implemented");
     }
 

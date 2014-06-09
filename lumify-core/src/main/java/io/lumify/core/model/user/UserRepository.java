@@ -41,6 +41,8 @@ public abstract class UserRepository {
 
     public abstract boolean isPasswordValid(User user, String password);
 
+    public abstract void recordLogin(User user, String remoteAddr);
+
     public abstract User setCurrentWorkspace(String userId, String workspaceId);
 
     public abstract String getCurrentWorkspaceId(String userId);
@@ -54,6 +56,8 @@ public abstract class UserRepository {
     public abstract org.securegraph.Authorizations getAuthorizations(User user, String... additionalAuthorizations);
 
     public abstract Set<Privilege> getPrivileges(User user);
+
+    public abstract void setPreferences(User user, JSONObject preferences);
 
     public JSONObject toJsonWithAuths(User user) {
         JSONObject json = toJson(user);

@@ -48,6 +48,7 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
                 respondWithAuthenticationFailure(response);
                 return;
             }
+            userRepository.recordLogin(user, request.getRemoteAddr());
             CurrentUser.set(request, user.getUserId());
         }
         chain.next(request, response);
