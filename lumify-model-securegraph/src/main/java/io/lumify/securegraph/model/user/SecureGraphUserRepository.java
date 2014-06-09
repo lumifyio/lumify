@@ -11,6 +11,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.user.*;
 import io.lumify.core.security.LumifyVisibility;
 import io.lumify.core.user.Privilege;
@@ -184,12 +185,17 @@ public class SecureGraphUserRepository extends UserRepository {
         Vertex userVertex = graph.getVertex(user.getUserId(), authorizations);
 
         Date currentLoginDate = UserLumifyProperties.CURRENT_LOGIN_DATE.getPropertyValue(userVertex);
+        if (currentLoginDate != null) {
+            UserLumifyProperties.PREVIOUS_LOGIN_DATE.setProperty(userVertex, currentLoginDate, VISIBILITY.getVisibility(), authorizations);
+        }
+
         String currentLoginRemoteAddr = UserLumifyProperties.CURRENT_LOGIN_REMOTE_ADDR.getPropertyValue(userVertex);
-        UserLumifyProperties.PREVIOUS_LOGIN_DATE.setProperty(userVertex, currentLoginDate, VISIBILITY.getVisibility(), authorizations);
-        UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.setProperty(userVertex, currentLoginRemoteAddr, VISIBILITY.getVisibility(), authorizations);
+        if (currentLoginRemoteAddr != null) {
+            UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.setProperty(userVertex, currentLoginRemoteAddr, VISIBILITY.getVisibility(), authorizations);
+        }
 
         UserLumifyProperties.CURRENT_LOGIN_DATE.setProperty(userVertex, new Date(), VISIBILITY.getVisibility(), authorizations);
-        UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.setProperty(userVertex, remoteAddr, VISIBILITY.getVisibility(), authorizations);
+        UserLumifyProperties.CURRENT_LOGIN_REMOTE_ADDR.setProperty(userVertex, remoteAddr, VISIBILITY.getVisibility(), authorizations);
 
         int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(userVertex, 0);
         UserLumifyProperties.LOGIN_COUNT.setProperty(userVertex, loginCount + 1, VISIBILITY.getVisibility(), authorizations);
