@@ -29,6 +29,15 @@ define([
                     .attr('placeholder', 'No valid properties')
                     .attr('disabled', true);
             } else {
+                var properties = self.filteredProperties || self.attr.properties,
+                    displayName = function(p) {
+                        return p.displayName || p.title;
+                    },
+                    groupedByDisplay = _.groupBy(properties, displayName),
+                    displayForTitle = {};
+
+                this.queryPropertyMap = {};
+
                 this.select('findPropertySelection')
                     .on('focus', function(e) {
                         var target = $(e.target);
@@ -58,7 +67,7 @@ define([
                         minLength: 0,
                         items: 100,
                         source: function() {
-                            return _.chain(self.filteredProperties || self.attr.properties)
+                            return _.chain(properties)
                                     .filter(function(p) {
                                         var visible = p.userVisible !== false;
 
@@ -69,33 +78,59 @@ define([
                                         return visible;
                                     })
                                     .map(function(p) {
-                                        return p.displayName || p.title;
+                                        var name = displayName(p),
+                                            duplicates = groupedByDisplay[name].length > 1;
+
+                                        self.queryPropertyMap[p.title] = p;
+
+                                        return JSON.stringify({
+                                            displayName: name,
+                                            title: p.title,
+                                            duplicates: duplicates
+                                        });
                                     })
-                                    .sortBy(function(name) {
-                                        return name.toLowerCase();
+                                    .sortBy(function(itemJson) {
+                                        var item = JSON.parse(itemJson);
+                                        return item.displayName.toLowerCase();
                                     })
-                                    .uniq()
                                     .value()
                         },
-                        matcher: function(item) {
+                        matcher: function(itemJson) {
                             if (this.query === ' ') return -1;
+
+                            var item = JSON.parse(itemJson);
+
                             if (
                                 this.query &&
                                 self.currentProperty &&
-                                    (self.currentProperty.displayName === this.query ||
-                                     self.currentProperty.title === this.query)
-                            ) {
+                                self.currentProperty.title === item.title) {
                                 return 1;
                             }
-                            return Object.getPrototypeOf(this).matcher.apply(this, arguments);
+                            return 1;//Object.getPrototypeOf(this).matcher.apply(this, [item.displayName]);
+                        },
+                        highlighter: function(itemJson) {
+                            var item = JSON.parse(itemJson);
+                            if (item.duplicates) {
+                                return item.displayName +
+                                    _.template('<div title="{title}" class="subtitle">{title}</div>')(item)
+                            }
+                            return item.displayName;
                         },
                         sorter: function(items) {
-                            var sorted = Object.getPrototypeOf(this).sorter.apply(this, arguments),
-                                index;
+                            var query = this.query;
 
-                            return sorted;
+                            return _.sortBy(items, function(json) {
+                                var item = JSON.parse(json);
+
+                                if (item.displayName === query) {
+                                    return '0';
+                                }
+
+                                return '1' + item.displayName;
+                            });
                         },
-                        updater: function(item) {
+                        updater: function(itemJson) {
+                            var item = JSON.parse(itemJson);
                             self.propertySelected(item);
                             return item;
                         }
@@ -108,9 +143,8 @@ define([
             this.filteredProperties = data.properties;
         };
 
-        this.propertySelected = function(name) {
-            var property = _.findWhere(this.attr.properties, { displayName: name }) ||
-                           _.findWhere(this.attr.properties, { title: name });
+        this.propertySelected = function(item) {
+            var property = this.queryPropertyMap[item.title];
 
             if (property) {
                 this.currentProperty = property;
