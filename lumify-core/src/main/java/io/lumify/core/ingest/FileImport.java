@@ -108,10 +108,13 @@ public class FileImport {
         FileInputStream fileInputStream = new FileInputStream(f);
         try {
             JSONObject metadataJson = loadMetadataJson(f);
-            String predefinedId = metadataJson.optString("id", null);
-            String metadataVisibilitySource = metadataJson.optString("visibilitySource", null);
-            if (metadataVisibilitySource != null) {
-                visibilitySource = metadataVisibilitySource;
+            String predefinedId = null;
+            if (metadataJson != null) {
+                predefinedId = metadataJson.optString("id", null);
+                String metadataVisibilitySource = metadataJson.optString("visibilitySource", null);
+                if (metadataVisibilitySource != null) {
+                    visibilitySource = metadataVisibilitySource;
+                }
             }
 
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);

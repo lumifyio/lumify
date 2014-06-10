@@ -7,6 +7,7 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.term.extraction.TermExtractionResult;
 import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.ingest.term.extraction.TermRelationship;
+import io.lumify.core.ingest.term.extraction.VertexRelationship;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -172,6 +173,33 @@ public abstract class GraphPropertyWorker {
     protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
         List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions());
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
+        saveVertexRelationships(termExtractionResult.getVertexRelationships(), termMentionsResults);
+    }
+
+    private void saveVertexRelationships(List<VertexRelationship> vertexRelationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices) {
+        for (VertexRelationship vertexRelationship : vertexRelationships) {
+            TermMentionWithGraphVertex sourceTermMentionsWithGraphVertex = findTermMentionWithGraphVertex(termMentionsWithGraphVertices, vertexRelationship.getSource());
+            checkNotNull(sourceTermMentionsWithGraphVertex, "Could not find source");
+            checkNotNull(sourceTermMentionsWithGraphVertex.getVertex(), "Could not find source vertex");
+
+            Vertex targetVertex = graph.getVertex(vertexRelationship.getTargetId(), getAuthorizations());
+            checkNotNull(sourceTermMentionsWithGraphVertex, "Could not find target vertex");
+
+            String label = vertexRelationship.getLabel();
+            checkNotNull(label, "label is required");
+
+            Edge edge = trySingle(sourceTermMentionsWithGraphVertex.getVertex().getEdges(targetVertex, Direction.OUT, label, getAuthorizations()));
+            if (edge == null) {
+                LOGGER.debug("adding edge %s -> %s (%s)", sourceTermMentionsWithGraphVertex.getVertex().getId(), targetVertex.getId(), label);
+                graph.addEdge(
+                        sourceTermMentionsWithGraphVertex.getVertex(),
+                        targetVertex,
+                        label,
+                        vertexRelationship.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+        }
     }
 
     private void saveRelationships(List<TermRelationship> relationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices) {
