@@ -165,8 +165,8 @@ public abstract class GraphPropertyWorker {
     }
 
     private String getVideoTranscriptTimedTextPropertyKey(String propertyKey, VideoTranscript.TimedText entry) {
-        String startTime = String.format("%08d", entry.getTime().getStart());
-        String endTime = String.format("%08d", entry.getTime().getEnd());
+        String startTime = String.format("%08d", Math.max(0L, entry.getTime().getStart()));
+        String endTime = String.format("%08d", Math.max(0L, entry.getTime().getEnd()));
         return propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + startTime + RowKeyHelper.MINOR_FIELD_SEPARATOR + endTime;
     }
 

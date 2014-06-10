@@ -11,7 +11,9 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
 import org.apache.commons.io.FileUtils;
-import org.securegraph.*;
+import org.securegraph.Element;
+import org.securegraph.Property;
+import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.property.StreamingPropertyValue;
 
@@ -56,7 +58,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
                     ExistingElementMutation<Vertex> mutation = data.getElement().prepareMutation();
                     StreamingPropertyValue frameValue = new StreamingPropertyValue(frameFileIn, byte[].class);
                     frameValue.searchIndex(false);
-                    String key = String.format("%08d", frameStartTime);
+                    String key = String.format("%08d", Math.max(0L, frameStartTime));
                     Map<String, Object> metadata = data.createPropertyMetadata();
                     metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
                     metadata.put(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME, frameStartTime);
@@ -70,7 +72,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
             getGraph().flush();
 
-            generateAndSaveVideoPreviewImage((Vertex)data.getElement());
+            generateAndSaveVideoPreviewImage((Vertex) data.getElement());
 
             for (String propertyKey : propertyKeys) {
                 getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), propertyKey, MediaLumifyProperties.VIDEO_FRAME.getPropertyName());
