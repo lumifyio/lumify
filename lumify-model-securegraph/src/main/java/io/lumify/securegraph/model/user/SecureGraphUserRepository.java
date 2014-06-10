@@ -145,6 +145,7 @@ public class SecureGraphUserRepository extends UserRepository {
         OntologyLumifyProperties.CONCEPT_TYPE.setProperty(userBuilder, userConceptId, VISIBILITY.getVisibility());
         UserLumifyProperties.USERNAME.setProperty(userBuilder, username, VISIBILITY.getVisibility());
         UserLumifyProperties.DISPLAY_NAME.setProperty(userBuilder, displayName, VISIBILITY.getVisibility());
+        UserLumifyProperties.CREATE_DATE.setProperty(userBuilder, new Date(), VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_SALT.setProperty(userBuilder, salt, VISIBILITY.getVisibility());
         UserLumifyProperties.PASSWORD_HASH.setProperty(userBuilder, passwordHash, VISIBILITY.getVisibility());
         UserLumifyProperties.STATUS.setProperty(userBuilder, UserStatus.OFFLINE.toString(), VISIBILITY.getVisibility());
