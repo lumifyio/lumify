@@ -183,7 +183,7 @@ public abstract class GraphPropertyWorker {
             checkNotNull(sourceTermMentionsWithGraphVertex.getVertex(), "Could not find source vertex");
 
             Vertex targetVertex = graph.getVertex(vertexRelationship.getTargetId(), getAuthorizations());
-            checkNotNull(sourceTermMentionsWithGraphVertex, "Could not find target vertex");
+            checkNotNull(targetVertex, "Could not find target vertex: " + vertexRelationship.getTargetId());
 
             String label = vertexRelationship.getLabel();
             checkNotNull(label, "label is required");
