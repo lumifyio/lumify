@@ -96,6 +96,7 @@ public class SqlUserRepository extends UserRepository {
             newUser = new SqlUser();
             newUser.setUsername(username);
             newUser.setDisplayName(displayName);
+            newUser.setCreateDate(new Date());
             newUser.setEmailAddress(emailAddress);
             if (password != null && !password.equals("")) {
                 byte[] salt = UserPasswordUtil.getSalt();
