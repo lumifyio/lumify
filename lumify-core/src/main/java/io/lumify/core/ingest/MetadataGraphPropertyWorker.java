@@ -27,7 +27,11 @@ public class MetadataGraphPropertyWorker extends GraphPropertyWorker {
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         JSONObject metadataJson = getMetadataJson(data);
 
-        JSONArray propertiesJson = metadataJson.getJSONArray("properties");
+        JSONArray propertiesJson = metadataJson.optJSONArray("properties");
+        if (propertiesJson == null) {
+            return;
+        }
+
         for (int i = 0; i < propertiesJson.length(); i++) {
             JSONObject propertyJson = propertiesJson.getJSONObject(i);
             setProperty(propertyJson, data);
