@@ -7,6 +7,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -149,7 +150,7 @@ public class UserAdmin extends CommandLineBase {
         System.out.println("                  Username: " + user.getUsername());
         System.out.println("            E-Mail Address: " + valueOrBlank(user.getEmailAddress()));
         System.out.println("              Display Name: " + user.getDisplayName());
-        System.out.println("               Create Date: " + user.getCreateDate());
+        System.out.println("               Create Date: " + valueOrBlank(user.getCreateDate()));
         System.out.println("        Current Login Date: " + valueOrBlank(user.getCurrentLoginDate()));
         System.out.println(" Current Login Remote Addr: " + valueOrBlank(user.getCurrentLoginRemoteAddr()));
         System.out.println("       Previous Login Date: " + valueOrBlank(user.getPreviousLoginDate()));
@@ -176,12 +177,10 @@ public class UserAdmin extends CommandLineBase {
             }
             String format = String.format("%%%ds %%%ds %%%ds %%%ds %%%dd %%%ds%%n", -1 * maxIdWidth, -1 * maxUsernameWidth, -1 * maxEmailAddressWidth, -1 * maxDisplayNameWidth, maxLoginCountWidth, -1 * maxPrivilegesWidth);
             for (User user : users) {
-                String emailAddress = user.getEmailAddress();
-                emailAddress = emailAddress != null ? emailAddress : "";
                 System.out.printf(format,
                         user.getUserId(),
                         user.getUsername(),
-                        emailAddress,
+                        valueOrBlank(user.getEmailAddress()),
                         user.getDisplayName(),
                         user.getLoginCount(),
                         privilegesAsString(getUserRepository().getPrivileges(user))
@@ -211,7 +210,14 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private String valueOrBlank(Object o) {
-        return o != null ? o.toString() : "";
+        if (o == null) {
+            return "";
+        } else if (o instanceof Date) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+            return sdf.format(o);
+        } else {
+            return o.toString();
+        }
     }
 
     private int maxWidth(Object o, int max) {
