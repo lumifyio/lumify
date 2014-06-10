@@ -21,6 +21,7 @@ public class RawLumifyProperties {
     public static final StreamingLumifyProperty RAW = new StreamingLumifyProperty("http://lumify.io#raw");
     public static final StreamingLumifyProperty TEXT = new StreamingLumifyProperty("http://lumify.io#text");
     public static final StreamingLumifyProperty MAPPING_JSON = new StreamingLumifyProperty("http://lumify.io#mappingJson");
+    public static final StreamingLumifyProperty METADATA_JSON = new StreamingLumifyProperty("http://lumify.io#metadataJson");
 
     private RawLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");

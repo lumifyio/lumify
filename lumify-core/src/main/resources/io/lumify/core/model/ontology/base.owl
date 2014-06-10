@@ -326,6 +326,15 @@
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
 
+    <!-- http://lumify.io#metadataJson -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;metadataJson">
+        <rdfs:label xml:lang="en">Metadata JSON</rdfs:label>
+        <textIndexHints>NONE</textIndexHints>
+        <userVisible>false</userVisible>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io#mimeType -->
