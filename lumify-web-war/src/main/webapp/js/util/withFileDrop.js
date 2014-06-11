@@ -45,6 +45,7 @@ define([
                     e.stopPropagation();
 
                     if (self.$node.hasClass('uploading')) return;
+                    if (e.dataTransfer.files.length === 0) return;
 
                     self.handleFilesDropped(e.dataTransfer.files, e);
                 }
