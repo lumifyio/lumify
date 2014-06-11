@@ -134,15 +134,48 @@ width: 215px;
   left: 0;
   right: 0;
   bottom: 0;
-  //background: red;
   top: 7em;  
   .content {
     overflow: auto;
+    overflow-x: hidden;
   }
   
   .concepts-dropdown select {
     width: 100%;
     font-size: 90%;
+  }
+
+  svg {
+    margin: 0 -1em;
+
+    .bar rect {
+      fill: @blue-color;
+      shape-rendering: crispEdges;
+    }
+
+    .bar text {
+      fill: #fff;
+    }
+
+    .axis path, .axis line {
+      fill: none;
+      stroke: #999;
+      shape-rendering: crispEdges;
+    }
+    .brush .extent {
+      stroke: @blue-color;
+      fill: @blue-color;
+      fill-opacity: .125;
+      shape-rendering: crispEdges;
+    }
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+    .scrub {
+      fill: #999;
+    }
+
   }
 
   .typeahead {
@@ -270,5 +303,51 @@ width: 215px;
       }
     }
   }
-}
 
+  .configuration {
+
+    &.alternate {
+      .segmented-control {
+        button {
+          &:first-child {
+          }
+
+          &:last-child {
+          }
+        }
+      }
+
+      table {
+        display: none;
+      }
+      .histogram {
+        display: block;
+      }
+    }
+
+    .segmented-control {
+      width: auto;
+      display: inline-block;
+      margin: 0;
+      button {
+        width: auto;
+        padding: 0.1em 0.4em 0.4em 0.5em;
+      }
+    }
+    
+    .histogram {
+      display: none;
+      position: relative;
+      .segmented-control {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        margin-bottom: 0.5em;
+        button {
+          padding: 0.5em;          
+          line-height: 1em;
+        }
+      }    
+    }
+  }
+}
