@@ -12,7 +12,7 @@ define([
     var propertiesByTitle = ontology.propertiesByTitle,
         V = {
             sandboxStatus: function(vertex) {
-                return (/^private$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
+                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
             },
 
             isKindOfConcept: function(vertex, conceptTypeFilter) {

@@ -16,11 +16,11 @@
   </tr>
   <% } %>
 
-  <% var status = property.metadata.sandboxStatus === 'PRIVATE';
+  <% var status = F.vertex.sandboxStatus(property.metadata)
      if (status) { %>
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value property-status">unpublished</td>
+    <td class="property-value property-status"><%= status %></td>
   </tr>
   <% } %>
 
