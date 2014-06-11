@@ -100,7 +100,7 @@ define([
                 });
             } else {
                 (F.vertex.isEdge(vertex) ?
-                    ontologyService.propertiesByRelationshipLabel(F.vertex.prop(vertex, 'relationshipType')) :
+                    ontologyService.propertiesByRelationshipLabel(vertex.label) :
                     ontologyService.propertiesByConceptId(F.vertex.prop(vertex, 'conceptType'))
                 ).done(function(properties) {
                     var propertiesList = [];

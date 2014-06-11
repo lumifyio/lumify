@@ -248,15 +248,23 @@ define([
     };
 
     OntologyService.prototype.propertiesByRelationshipLabel = function(relationshipLabel) {
+        if (!relationshipLabel) {
+            throw new Error('Relationship Label must be provided');
+        }
+
         return this.ontology()
                     .then(function(ontology) {
                         var relationship = _.findWhere(ontology.relationships, {
-                                displayName: relationshipLabel
+                                title: relationshipLabel
                             }),
-                            propertyIds = relationship.properties || [],
+                            propertyIds = (relationship && relationship.properties) || [],
                             properties = _.map(propertyIds, function(pId) {
                                 return ontology.propertiesByTitle[pId];
                             });
+
+                        if (!relationship) {
+                            console.error('Relationship label ' + relationshipLabel + ' is not in ontology');
+                        }
 
                         return {
                             list: _.sortBy(properties, 'displayName'),
