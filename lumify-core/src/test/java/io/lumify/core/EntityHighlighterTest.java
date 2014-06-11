@@ -48,7 +48,7 @@ public class EntityHighlighterTest {
         terms.add(createTermMention("joe ferner", 18, 28, "1"));
         terms.add(createTermMention("jeff kunkle", 33, 44, "1", "uniq1"));
         List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms);
-        String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner and Jeff Kunkle.", 0, termAndTermMetadata);
+        String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner and Jeff Kunkle.", termAndTermMetadata);
         assertEquals("Test highlight of <span class=\"entity\" title=\"joe ferner\" data-info=\"{&quot;title&quot;:&quot;joe ferner&quot;,&quot;start&quot;:18,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;http://lumify.io#rowKey&quot;:&quot;1\\u001e\\u001e0000000000000028\\u001e0000000000000018&quot;,&quot;end&quot;:28}\">Joe Ferner</span> and <span class=\"entity\" title=\"jeff kunkle\" data-info=\"{&quot;title&quot;:&quot;jeff kunkle&quot;,&quot;start&quot;:33,&quot;type&quot;:&quot;http://www.w3.org/2002/07/owl#Thing&quot;,&quot;http://lumify.io#rowKey&quot;:&quot;1\\u001e\\u001e0000000000000044\\u001e0000000000000033\\u001euniq1&quot;,&quot;end&quot;:44}\">Jeff Kunkle</span>.", highlightText);
     }
 
@@ -69,7 +69,7 @@ public class EntityHighlighterTest {
         terms.add(createTermMention("joe ferner", 18, 28, "1"));
         terms.add(createTermMention("jeff kunkle", 18, 21, "1"));
         List<OffsetItem> termAndTermMetadata = new EntityHighlighter().convertTermMentionsToOffsetItems(terms);
-        String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner.", 0, termAndTermMetadata);
+        String highlightText = EntityHighlighter.getHighlightedText("Test highlight of Joe Ferner.", termAndTermMetadata);
         assertEquals("Test highlight of <span class=\"entity person\" term-key=\"joe ferner\\x1Fee\\x1Fperson\"><span class=\"entity person\" term-key=\"joe\\x1Fee\\x1Fperson\">Joe</span> Ferner</span>.", highlightText);
     }
 
@@ -120,7 +120,7 @@ public class EntityHighlighterTest {
         when(mockEntity5.getInfoJson()).thenReturn(new JSONObject("{\"data\":\"attribute\"}"));
         offsetItems.add(mockEntity5);
 
-        String highlightedText = EntityHighlighter.getHighlightedText(text, 0, offsetItems);
+        String highlightedText = EntityHighlighter.getHighlightedText(text, offsetItems);
         Assert.assertEquals("<span class=\"first\" data-info=\"{&quot;data&quot;:&quot;attribute&quot;}\">This</span> " +
                         "<span class=\"fourth\" data-info=\"{&quot;data&quot;:&quot;attribute&quot;}\">is a</span> test <span " +
                         "class=\"fifth\" data-info=\"{&quot;data&quot;:&quot;attribute&quot;}\">sentence</span>",

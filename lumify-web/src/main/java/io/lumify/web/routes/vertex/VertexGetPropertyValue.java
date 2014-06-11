@@ -172,7 +172,7 @@ public class VertexGetPropertyValue extends BaseRequestHandler {
     }
 
     private String getMimeType(Property property) {
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType != null) {
             return mimeType;
         }

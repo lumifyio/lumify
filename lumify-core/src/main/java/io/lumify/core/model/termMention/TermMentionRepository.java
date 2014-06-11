@@ -7,7 +7,7 @@ import com.altamiracorp.bigtable.model.Row;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 
-public abstract class TermMentionRepository extends Repository<TermMentionModel>{
+public abstract class TermMentionRepository extends Repository<TermMentionModel> {
     @Inject
     public TermMentionRepository(final ModelSession modelSession) {
         super(modelSession);
@@ -19,7 +19,7 @@ public abstract class TermMentionRepository extends Repository<TermMentionModel>
 
     public abstract String getTableName();
 
-    public abstract Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext);
+    public abstract Iterable<TermMentionModel> findByGraphVertexIdAndPropertyKey(String graphVertexId, String propertyKey, ModelUserContext modelUserContext);
 
-    public abstract void updateColumnVisibility (TermMentionModel termMentionModel, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag);
+    public abstract void updateColumnVisibility(TermMentionModel termMentionModel, String originalEdgeVisibility, String visibilityString, FlushFlag flushFlag);
 }

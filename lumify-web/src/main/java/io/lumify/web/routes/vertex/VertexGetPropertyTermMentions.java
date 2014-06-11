@@ -1,6 +1,8 @@
 package io.lumify.web.routes.vertex;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -8,15 +10,12 @@ import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.User;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,9 +40,9 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        String graphVertexId = UrlUtils.urlDecode(getAttributeString(request, "graphVertexId"));
-        String propertyName = UrlUtils.urlDecode(getAttributeString(request, "propertyName"));
-        String propertyKey = UrlUtils.urlDecode(getAttributeString(request, "propertyKey"));
+        String graphVertexId = getRequiredParameter(request, "graphVertexId");
+        String propertyName = getRequiredParameter(request, "propertyName");
+        String propertyKey = getRequiredParameter(request, "propertyKey");
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
@@ -61,7 +60,7 @@ public class VertexGetPropertyTermMentions extends BaseRequestHandler {
             return;
         }
 
-        Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexId(vertex.getId().toString(), modelUserContext);
+        Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(vertex.getId().toString(), propertyKey, modelUserContext);
         JSONObject json = new JSONObject();
         JSONArray termMentionsJson = termMentionsToJson(termMentions);
         json.put("termMentions", termMentionsJson);

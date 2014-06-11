@@ -87,10 +87,10 @@ public class GraphUtil {
         ExistingElementMutation m = element.prepareMutation().alterElementVisibility(lumifyVisibility.getVisibility());
         if (LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element) != null) {
             Property visibilityJsonProperty = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getProperty(element);
-            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), lumifyVisibility.getVisibility());
+            m.alterPropertyVisibility(visibilityJsonProperty.getKey(), LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), lumifyVisibility.getVisibility());
         }
         Map<String, Object> metadata = new HashMap<String, Object>();
-        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilityJson.toString());
+        metadata.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson.toString());
 
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setProperty(m, visibilityJson, metadata, lumifyVisibility.getVisibility());
         m.save(authorizations);
@@ -154,7 +154,8 @@ public class GraphUtil {
         int endOffset = sourceObject.getInt("endOffset");
         String vertexId = sourceObject.getString("vertexId");
         String snippet = sourceObject.getString("snippet");
-        return new PropertySourceMetadata(startOffset, endOffset, vertexId, snippet);
+        String textPropertyKey = sourceObject.getString("textPropertyKey");
+        return new PropertySourceMetadata(vertexId, textPropertyKey, startOffset, endOffset, snippet);
     }
 
     public static Edge addEdge(

@@ -22,6 +22,7 @@ define([
             this.on('finishedLoadingTypeContent', this.onFinishedTypeContent);
 
             this.on(document, 'objectsSelected', this.onObjectsSelected);
+            this.on('selectObjects', this.onSelectObjects);
             this.preventDropEventsFromPropagating();
 
             this.before('teardown', this.teardownComponents);
@@ -32,6 +33,10 @@ define([
                 this.onObjectsSelected(null, { vertices: [this.attr.loadGraphVertexData] });
             }
         });
+
+        this.onSelectObjects = function(event, data) {
+            this.onObjectsSelected(null, data);
+        };
 
         this.onFinishedTypeContent = function() {
             this.$node.removeClass('loading');
@@ -108,7 +113,7 @@ define([
                 Module.attachTo(self.select('detailTypeContentSelector'), {
                     data: moduleData,
                     highlightStyle: self.attr.highlightStyle,
-                    focusOffsets: data.focus && data.focus.offsets
+                    focus: data.focus
                 });
             });
         };

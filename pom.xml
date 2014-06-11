@@ -62,6 +62,9 @@
         <module>lumify-email-extractor</module>
         <module>lumify-zipcode-resolver</module>
         <module>lumify-google-analytics</module>
+        <module>lumify-opennlp-dictionary-extractor</module>
+        <module>lumify-opennlp-dictionary-extractor-web</module>
+        <module>lumify-opennlp-me-extractor</module>
     </modules>
 
     <repositories>

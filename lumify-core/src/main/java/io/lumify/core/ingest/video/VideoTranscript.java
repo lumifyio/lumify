@@ -90,6 +90,17 @@ public class VideoTranscript implements Serializable {
         return 0;
     }
 
+    public Integer findEntryIndexFromStartTime(long frameStartTime) {
+        int entryIndex = 0;
+        for (TimedText entry : getEntries()) {
+            if (entry.getTime().getStart() == frameStartTime) {
+                return entryIndex;
+            }
+            entryIndex++;
+        }
+        return null;
+    }
+
     public static class TimedText implements Comparable<TimedText>, Serializable {
         private Time time;
         private String text;

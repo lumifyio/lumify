@@ -115,6 +115,7 @@ define([
             this.on('addVertices', this.onAddVertices);
             this.on('updateVertices', this.onUpdateVertices);
             this.on('deleteVertices', this.onDeleteVertices);
+            this.on('verticesDeleted', this.onVerticesDeleted);
             this.on('refreshRelationships', this.refreshRelationships);
             this.on('selectObjects', this.onSelectObjects);
             this.on('clipboardPaste', this.onClipboardPaste);
@@ -229,6 +230,15 @@ define([
                             self.trigger('verticesUpdated', { vertices: [updated] });
                         }
                     }
+                    break;
+                case 'entityImageUpdated':
+                    if (message.data && message.data.graphVertexId) {
+                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
+                        if (updated) {
+                            self.trigger('verticesUpdated', { vertices: [updated] });
+                            self.trigger('iconUpdated', { src: null });
+                        }
+                    } else console.warn('entityImageUpdated event received with no graphVertexId', message);
                     break;
 
                 case 'textUpdated':
@@ -825,6 +835,22 @@ define([
             })
         };
 
+        this.onVerticesDeleted = function(evt, data) {
+            var self = this;
+            if (data && data.vertices) {
+                data.vertices.forEach(function(vertex) {
+                    var workspaceInfo = self.workspaceVertices[vertex.id];
+                    if (workspaceInfo) {
+                        delete self.workspaceVertices[vertex.id];
+                    }
+                    var cache = self.vertex(vertex.id);
+                    if (cache) {
+                        cache.workspace = {};
+                    }
+                });
+            }
+        };
+
         this.onDeleteVertices = function(evt, data) {
             var self = this;
             this.workspaceReady(function(ws) {
@@ -840,11 +866,6 @@ define([
                         undoDelete.push(self.copy(self.vertex(deletedVertex.id)));
                         toDelete.push(self.vertex(deletedVertex.id));
 
-                        delete self.workspaceVertices[deletedVertex.id];
-                    }
-                    var cache = self.vertex(deletedVertex.id);
-                    if (cache) {
-                        cache.workspace = {};
                     }
                 });
 
@@ -880,7 +901,10 @@ define([
         };
 
         this.onClearWorkspaceFilter = function() {
-            this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+            var vertices = this.verticesInWorkspace();
+            if (vertices.length) {
+                this.trigger('verticesAdded', { vertices: vertices, options: { fit: false } });
+            }
             this.currentWorkspaceFilter = null;
         };
 
@@ -895,7 +919,10 @@ define([
                 this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices });
                 this.workspaceFilterEnabled = enabled;
             } else if (!enabled) {
-                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+                var vertices = this.verticesInWorkspace();
+                if (vertices.length) {
+                    this.trigger('verticesAdded', { vertices: vertices, options: { fit: false } });
+                }
                 this.workspaceFilterEnabled = enabled;
             }
         };
@@ -917,12 +944,19 @@ define([
                     .done(function(result) {
                         self.filteredWorkspaceVertices = result[1];
 
-                        self.trigger('verticesDeleted', { vertices: result[1] });
-                        self.trigger('verticesAdded', { vertices: result[0], options: options });
+                        if (result[1].length) {
+                            self.trigger('verticesDeleted', { vertices: result[1] });
+                        }
+                        if (result[0].length) {
+                            self.trigger('verticesAdded', { vertices: result[0], options: options });
+                        }
                     })
                     .done(async.resolve);
             } else {
-                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: options });
+                var vertices = this.verticesInWorkspace();
+                if (vertices.length) {
+                    this.trigger('verticesAdded', { vertices: vertices, options: options });
+                }
                 async.resolve();
             }
 

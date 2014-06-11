@@ -54,7 +54,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(videoPosterFrameFileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "image/png");
+                metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "image/png");
                 MediaLumifyProperties.RAW_POSTER_FRAME.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save(getAuthorizations());
                 getGraph().flush();
@@ -72,10 +72,10 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("video")) {
             return false;
         }

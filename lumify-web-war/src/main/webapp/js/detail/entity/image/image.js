@@ -38,7 +38,7 @@ define([
             this.on('fileprogress', this.onUpdateProgress);
             this.on('filecomplete', this.onUploadComplete);
             this.on('fileerror', this.onUploadError);
-            this.on('iconUpdated', this.onUpdateIcon);
+            this.on(document, 'iconUpdated', this.onUpdateIcon);
 
             this.updateImageBackground();
 

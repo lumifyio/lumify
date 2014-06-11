@@ -639,7 +639,6 @@ define([
                 displayType = ontologyProperty && ontologyProperty.dataType,
                 visibility = property['http://lumify.io#visibilityJson'],
                 isEdge = F.vertex.isEdge({properties: properties}),
-                isRelationshipType = name === 'relationshipType' && isEdge,
                 propertyView;
 
             if (ontologyProperty && ontologyProperty.userVisible) {

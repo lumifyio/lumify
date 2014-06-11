@@ -16,12 +16,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -85,7 +83,7 @@ public class SqlUserRepository extends UserRepository {
     }
 
     @Override
-    public User addUser(String username, String displayName, String password, String[] userAuthorizations) {
+    public User addUser(String username, String displayName, String emailAddress, String password, String[] userAuthorizations) {
         Session session = sessionFactory.openSession();
         if (findByUsername(username) != null) {
             throw new LumifyException("User already exists");
@@ -96,14 +94,16 @@ public class SqlUserRepository extends UserRepository {
         try {
             transaction = session.beginTransaction();
             newUser = new SqlUser();
+            newUser.setUsername(username);
             newUser.setDisplayName(displayName);
+            newUser.setCreateDate(new Date());
+            newUser.setEmailAddress(emailAddress);
             if (password != null && !password.equals("")) {
                 byte[] salt = UserPasswordUtil.getSalt();
                 byte[] passwordHash = UserPasswordUtil.hashPassword(password, salt);
                 newUser.setPasswordSalt(salt);
                 newUser.setPasswordHash(passwordHash);
             }
-            newUser.setUsername(username);
             newUser.setUserStatus(UserStatus.OFFLINE.name());
             newUser.setPrivileges(Privilege.toString(getDefaultPrivileges()));
             LOGGER.debug("add %s to user table", displayName);
@@ -113,7 +113,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while adding user", e);
         } finally {
             session.close();
         }
@@ -145,7 +145,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while setting password", e);
         } finally {
             session.close();
         }
@@ -162,6 +162,36 @@ public class SqlUserRepository extends UserRepository {
             return false;
         }
         return UserPasswordUtil.validatePassword(password, ((SqlUser) user).getPasswordSalt(), ((SqlUser) user).getPasswordHash());
+    }
+
+    @Override
+    public void recordLogin(User user, String remoteAddr) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            Date currentLoginDate = user.getCurrentLoginDate();
+            String currentLoginRemoteAddr = user.getCurrentLoginRemoteAddr();
+            ((SqlUser) user).setPreviousLoginDate(currentLoginDate);
+            ((SqlUser) user).setPreviousLoginRemoteAddr(currentLoginRemoteAddr);
+
+            ((SqlUser) user).setCurrentLoginDate(new Date());
+            ((SqlUser) user).setCurrentLoginRemoteAddr(remoteAddr);
+
+            int loginCount = user.getLoginCount();
+            ((SqlUser) user).setLoginCount(loginCount + 1);
+
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while recording login", e);
+        } finally {
+            session.close();
+        }
     }
 
     @Override
@@ -190,7 +220,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while setting current workspace", e);
         } finally {
             session.close();
         }
@@ -211,7 +241,28 @@ public class SqlUserRepository extends UserRepository {
             }
             return sqlUser.getCurrentWorkspace() == null ? null : sqlUser.getCurrentWorkspace().getId();
         } catch (HibernateException e) {
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while getting current workspace", e);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void setUiPreferences(User user, JSONObject preferences) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            ((SqlUser) user).setUiPreferences(preferences);
+
+            session.update(user);
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new LumifyException("HibernateException while setting preferences", e);
         } finally {
             session.close();
         }
@@ -239,7 +290,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while setting status", e);
         } finally {
             session.close();
         }
@@ -282,7 +333,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while deleting user", e);
         } finally {
             session.close();
         }
@@ -307,7 +358,7 @@ public class SqlUserRepository extends UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException(e);
+            throw new LumifyException("HibernateException while setting privileges", e);
         } finally {
             session.close();
         }

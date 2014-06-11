@@ -86,7 +86,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getKey());
+        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_TEXT);
         extractor.execute(in, workData);
@@ -111,7 +111,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getKey());
+        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_NEW_LINES);
         extractor.execute(in, workData);
@@ -136,7 +136,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         RawLumifyProperties.TEXT.setProperty(vertexBuilder, textPropertyValue, visibility);
         Vertex vertex = vertexBuilder.save(authorizations);
 
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getKey());
+        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         in = asStream(PHONE_MISSING);
         extractor.execute(in, workData);

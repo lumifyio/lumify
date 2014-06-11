@@ -3,7 +3,7 @@ define([
     'flight/lib/component',
     'tpl!./propertyInfo',
     'service/user',
-    'util/formatters',
+    'util/vertex/formatters',
     'data'
 ], function(
     defineComponent,

@@ -16,11 +16,11 @@
   </tr>
   <% } %>
 
-  <% var status = property.metadata.sandboxStatus === 'PRIVATE';
+  <% var status = F.vertex.sandboxStatus(property.metadata)
      if (status) { %>
   <tr>
     <td class="property-name">Status</td>
-    <td class="property-value property-status">unpublished</td>
+    <td class="property-value property-status"><%= status %></td>
   </tr>
   <% } %>
 
@@ -45,13 +45,11 @@
 
 </table>
 <% 
-  var public = property.metadata.sandboxStatus === 'PUBLIC';
-  var private = property.metadata.sandboxStatus === 'PRIVATE';
-  var editButtonText = public ? 'Add' : 'Edit';
-  var editButtonCls = public ? 'btn-add' : 'btn-edit';
-  if (private) { %>
+  var editButtonText = !status ? 'Add' : 'Edit';
+  var editButtonCls = !status ? 'btn-add' : 'btn-edit';
+  if (status) { %>
 <button class="btn btn-danger btn-small requires-EDIT">Delete</button>
 <% 
   }
 %>
-<button class="btn btn-default btn-small <%= editButtonCls %> requires-EDIT <%= (private) ? '' : 'noDelete' %>"><%= editButtonText %></button>
+<button class="btn btn-default btn-small <%= editButtonCls %> requires-EDIT <%= (status) ? '' : 'noDelete' %>"><%= editButtonText %></button>

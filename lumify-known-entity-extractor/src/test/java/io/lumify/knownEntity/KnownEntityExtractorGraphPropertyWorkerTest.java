@@ -82,7 +82,7 @@ public class KnownEntityExtractorGraphPropertyWorkerTest {
         Vertex vertex = vertexBuilder.save(authorizations);
 
         in = getClass().getResourceAsStream("bffls.txt");
-        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getKey());
+        Property property = vertex.getProperty(RawLumifyProperties.TEXT.getPropertyName());
         GraphPropertyWorkData workData = new GraphPropertyWorkData(vertex, property);
         extractor.execute(in, workData);
         assertEquals(3, termMentions.size());

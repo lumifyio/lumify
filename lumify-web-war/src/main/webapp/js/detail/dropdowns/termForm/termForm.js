@@ -190,6 +190,7 @@ define([
             }
             var parameters = {
                 sign: newObjectSign,
+                propertyKey: this.attr.propertyKey,
                 conceptId: this.select('conceptSelector').val(),
                 mentionStart: mentionStart,
                 mentionEnd: mentionEnd,
@@ -199,7 +200,8 @@ define([
             };
 
             if (this.currentGraphVertexId) {
-                parameters.graphVertexId = this.currentGraphVertexId;
+                parameters.resolvedVertexId =
+                    parameters.graphVertexId = this.currentGraphVertexId;
                 parameters.edgeId = $mentionNode.data('info') ? $mentionNode.data('info').edgeId : null;
             }
 
@@ -809,9 +811,11 @@ define([
 
         this.promoteSelectionToSpan = function() {
             var textVertex = this.node,
+                isTranscript = this.$node.closest('.av-times').length,
                 range = this.attr.selection.range,
                 el,
                 tempTextNode,
+                transcriptIndex = 0,
                 span = document.createElement('span');
 
             span.className = 'entity focused';
@@ -821,12 +825,24 @@ define([
             newRange.setEnd(range.endContainer, range.endOffset);
 
             var r = range.cloneRange();
-            r.selectNodeContents($('.detail-pane .text').get(0));
+
+            if (isTranscript) {
+                var dd = this.$node.closest('dd');
+                r.selectNodeContents(dd.get(0));
+                transcriptIndex = dd.data('index');
+            } else {
+                r.selectNodeContents(this.$node.closest('.text').get(0));
+            }
             r.setEnd(range.startContainer, range.startOffset);
             var l = r.toString().length;
 
             this.selectedStart = l;
             this.selectedEnd = l + range.toString().length;
+
+            if (isTranscript) {
+                this.selectedStart = F.number.compactOffsetValues(transcriptIndex, this.selectedStart);
+                this.selectedEnd = F.number.compactOffsetValues(transcriptIndex, this.selectedEnd);
+            }
 
             // Special case where the start/end is inside an inner span
             // (surroundsContents will fail so expand the selection

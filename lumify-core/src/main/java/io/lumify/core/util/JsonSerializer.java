@@ -1,5 +1,7 @@
 package io.lumify.core.util;
 
+import io.lumify.core.ingest.video.VideoFrameInfo;
+import io.lumify.core.ingest.video.VideoPropertyHelper;
 import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.PropertyJustificationMetadata;
 import io.lumify.core.model.PropertySourceMetadata;
@@ -71,11 +73,11 @@ public class JsonSerializer {
         json.put("properties", toJsonProperties(element.getProperties(), workspaceId));
         json.put("sandboxStatus", GraphUtil.getSandboxStatus(element, workspaceId).toString());
         if (element.getVisibility() != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), element.getVisibility().toString());
+            json.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), element.getVisibility().toString());
         }
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
         if (visibilityJson != null) {
-            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getKey(), visibilityJson);
+            json.put(LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), visibilityJson);
         }
 
         return json;
@@ -86,79 +88,67 @@ public class JsonSerializer {
         List<Property> propertiesList = toList(properties);
         Collections.sort(propertiesList, new ConfidencePropertyComparator());
         SandboxStatus[] sandboxStatuses = GraphUtil.getPropertySandboxStatuses(propertiesList, workspaceId);
-        VideoTranscript allVideoTranscripts = new VideoTranscript();
         for (int i = 0; i < propertiesList.size(); i++) {
             Property property = propertiesList.get(i);
-            allVideoTranscripts = mergePropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
-            JSONObject propertyJson = toJsonProperty(property);
-            propertyJson.put("sandboxStatus", sandboxStatuses[i].toString());
-            resultsJson.put(propertyJson);
-        }
-
-        if (allVideoTranscripts.getEntries().size() > 0) {
-            JSONObject videoTranscriptJson = new JSONObject();
-            videoTranscriptJson.put("value", allVideoTranscripts.toJson());
-            resultsJson.put(videoTranscriptJson);
+            String sandboxStatus = sandboxStatuses[i].toString();
+            VideoFrameInfo videoFrameInfo;
+            if ((videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property)) != null) {
+                String textDescription = (String) property.getMetadata().get(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION);
+                addVideoFramePropertyToResults(resultsJson, videoFrameInfo.getPropertyKey(), textDescription, sandboxStatus);
+            } else {
+                JSONObject propertyJson = toJsonProperty(property);
+                propertyJson.put("sandboxStatus", sandboxStatus);
+                resultsJson.put(propertyJson);
+            }
         }
 
         return resultsJson;
     }
 
-    // TODO remove this when the front end supports multiple video transcript properties
-    private static VideoTranscript mergePropertyIntoTranscript(List<Property> propertiesList, Property property, VideoTranscript allVideoTranscripts) {
-        if (property.getValue() instanceof StreamingPropertyValue) {
-            try {
-                if (property.getName().equals(MediaLumifyProperties.VIDEO_TRANSCRIPT.getKey())) {
-                    allVideoTranscripts = mergeVideoTranscriptPropertyIntoTranscript(property, allVideoTranscripts);
-                } else if (property.getName().equals(RawLumifyProperties.TEXT.getKey())) {
-                    mergeTextPropertyIntoTranscript(propertiesList, property, allVideoTranscripts);
+
+    public static VideoTranscript getSynthesisedVideoTranscription(Vertex artifactVertex, String propertyKey) throws IOException {
+        VideoTranscript videoTranscript = new VideoTranscript();
+        for (Property property : artifactVertex.getProperties()) {
+            VideoFrameInfo videoFrameInfo = VideoPropertyHelper.getVideoFrameInfoFromProperty(property);
+            if (videoFrameInfo == null) {
+                continue;
+            }
+            if (videoFrameInfo.getPropertyKey().equals(propertyKey)) {
+                Object value = property.getValue();
+                String text;
+                if (value instanceof StreamingPropertyValue) {
+                    text = IOUtils.toString(((StreamingPropertyValue) value).getInputStream());
+                } else {
+                    text = value.toString();
                 }
-            } catch (Exception ex) {
-                LOGGER.error("Could not read video transcript from property %s", property.toString(), ex);
+                videoTranscript.add(new VideoTranscript.Time(videoFrameInfo.getFrameStartTime(), videoFrameInfo.getFrameEndTime()), text);
             }
         }
-        return allVideoTranscripts;
+        if (videoTranscript.getEntries().size() > 0) {
+            return videoTranscript;
+        }
+        return null;
     }
 
-    private static void mergeTextPropertyIntoTranscript(List<Property> propertiesList, Property property, VideoTranscript allVideoTranscripts) throws IOException {
-        String[] nameParts = RowKeyHelper.splitOnMajorFieldSeperator(property.getKey());
-        if (nameParts.length != 3) {
-            return;
+    private static void addVideoFramePropertyToResults(JSONArray resultsJson, String propertyKey, String textDescription, String sandboxStatus) {
+        JSONObject json = findProperty(resultsJson, MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName(), propertyKey);
+        if (json == null) {
+            json = new JSONObject();
+            json.put("key", propertyKey);
+            json.put("name", MediaLumifyProperties.VIDEO_TRANSCRIPT.getPropertyName());
+            json.put("sandboxStatus", sandboxStatus);
+            json.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, textDescription);
+            json.put("streamingPropertyValue", true);
+            resultsJson.put(json);
         }
-
-        String refPropertyName = nameParts[1];
-        String refPropertyKey = nameParts[2];
-        Property refProperty = findProperty(propertiesList, refPropertyName, refPropertyKey);
-        if (refProperty == null) {
-            return;
-        }
-
-        Long videoFrameStartTime = (Long) refProperty.getMetadata().get(MediaLumifyProperties.METADATA_VIDEO_FRAME_START_TIME);
-        if (videoFrameStartTime == null) {
-            return;
-        }
-
-        VideoTranscript.Time time = new VideoTranscript.Time(videoFrameStartTime, null);
-        String text = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
-        allVideoTranscripts.add(time, text);
     }
 
-    private static VideoTranscript mergeVideoTranscriptPropertyIntoTranscript(Property property, VideoTranscript allVideoTranscripts) throws IOException {
-        String videoTranscriptJsonString = IOUtils.toString(((StreamingPropertyValue) property.getValue()).getInputStream());
-        try {
-            JSONObject videoTranscriptJson = new JSONObject(videoTranscriptJsonString);
-            VideoTranscript videoTranscript = new VideoTranscript(videoTranscriptJson);
-            allVideoTranscripts = allVideoTranscripts.merge(videoTranscript);
-        } catch (Exception ex) {
-            LOGGER.error("Could not parse video transcript on property " + property + "\n" + videoTranscriptJsonString, ex);
-        }
-        return allVideoTranscripts;
-    }
-
-    private static Property findProperty(Iterable<Property> properties, String propertyName, String propertyKey) {
-        for (Property property : properties) {
-            if (property.getName().equals(propertyName) && property.getKey().equals(propertyKey)) {
-                return property;
+    private static JSONObject findProperty(JSONArray resultsJson, String propertyName, String propertyKey) {
+        for (int i = 0; i < resultsJson.length(); i++) {
+            JSONObject json = resultsJson.getJSONObject(i);
+            if (json.getString("name").equals(propertyName)
+                    && json.getString("key").equals(propertyKey)) {
+                return json;
             }
         }
         return null;
@@ -177,7 +167,7 @@ public class JsonSerializer {
         }
 
         if (property.getVisibility() != null) {
-            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getKey(), property.getVisibility().toString());
+            result.put(LumifyVisibilityProperties.VISIBILITY_PROPERTY.getPropertyName(), property.getVisibility().toString());
         }
         for (String key : property.getMetadata().keySet()) {
             Object value = property.getMetadata().get(key);

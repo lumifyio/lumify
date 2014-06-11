@@ -11,6 +11,8 @@ define([
     'detail/properties/properties',
     'tpl!./artifact',
     'tpl!./transcriptEntry',
+    'hbs!./transcriptEntries',
+    'hbs!./text',
     'tpl!util/alert',
     'util/range',
     'util/vertex/formatters',
@@ -28,6 +30,8 @@ define([
     Properties,
     template,
     transcriptEntryTemplate,
+    transcriptEntriesTemplate,
+    textTemplate,
     alertTemplate,
     rangeUtils,
     F,
@@ -54,17 +58,21 @@ define([
             artifactSelector: '.artifact-image',
             propertiesSelector: '.properties',
             titleSelector: '.artifact-title',
-            textSelector: '.text'
+            textContainerSelector: '.texts',
+            textContainerHeaderSelector: '.texts .text-section h1',
+            timestampAnchorSelector: '.av-times a'
         });
 
         this.after('initialize', function() {
             var self = this;
 
             this.on('click', {
-                detectedObjectSelector: this.onDetectedObjectClicked
+                detectedObjectSelector: this.onDetectedObjectClicked,
+                textContainerHeaderSelector: this.onTextHeaderClicked,
+                timestampAnchorSelector: this.onTimestampClicked
             });
             this.on('copy cut', {
-                textSelector: this.onCopyText
+                textContainerSelector: this.onCopyText
             });
             this.on('scrubberFrameChange', this.onScrubberFrameChange);
             this.on('playerTimeUpdate', this.onPlayerTimeUpdate);
@@ -89,6 +97,62 @@ define([
             this.select('propertiesSelector').teardownComponent(Properties);
         });
 
+        this.offsetsForText = function(input, parentSelector, offsetTransform) {
+            var offsets = [];
+            input.forEach(function(node) {
+                var parentInfo = node.el.closest('.entity').data('info'),
+                    offset = 0;
+
+                if (parentInfo) {
+                    offset = offsetTransform(parentInfo.start);
+                } else {
+                    var previousEntity = node.el.prevAll('.entity').first(),
+                    previousInfo = previousEntity.data('info'),
+                    dom = previousInfo ?
+                        previousEntity.get(0) :
+                        node.el.closest(parentSelector)[0].childNodes[0],
+                    el = node.el.get(0);
+
+                    if (previousInfo) {
+                        offset = offsetTransform(previousInfo.end);
+                        dom = dom.nextSibling;
+                    }
+
+                    while (dom && dom !== el) {
+                        if (dom.nodeType === 3) {
+                            offset += dom.length;
+                        } else {
+                            offset += dom.textContent.length;
+                        }
+                        dom = dom.nextSibling;
+                    }
+                }
+
+                offsets.push(offset + node.offset);
+            });
+
+            return _.sortBy(offsets, function(a, b) {
+                return a - b
+            });
+        };
+
+        this.offsetsForTranscript = function(input) {
+            var self = this,
+                index = input[0].el.closest('dd').data('index'),
+                endIndex = input[1].el.closest('dd').data('index');
+
+            if (index !== endIndex) {
+                return console.warn('Unable to select across timestamps');
+            }
+
+            var rawOffsets = this.offsetsForText(input, 'dd', function(offset) {
+                    return F.number.offsetValues(offset).offset;
+                }),
+                bitMaskedOffset = _.map(rawOffsets, _.partial(F.number.compactOffsetValues, index));
+
+            return bitMaskedOffset;
+        };
+
         this.onCopyText = function(event) {
             var selection = getSelection(),
                 target = event.target;
@@ -97,48 +161,15 @@ define([
 
                 var $anchor = $(selection.anchorNode),
                     $focus = $(selection.focusNode),
-                    offsets = [];
-
-                [
-                    {el: $anchor, offset: selection.anchorOffset},
-                    {el: $focus, offset: selection.focusOffset}
-                ].forEach(function(node) {
-                    var parentInfo = node.el.closest('.entity').data('info'),
-                        offset = 0;
-
-                    if (parentInfo) {
-                        offset = parentInfo.start;
-                    } else {
-                        var previousEntity = node.el.prevAll('.entity').first(),
-                        previousInfo = previousEntity.data('info'),
-                        dom = previousInfo ?
-                            previousEntity.get(0) :
-                            node.el.closest('.text')[0].childNodes[0],
-                        el = node.el.get(0);
-
-                        if (previousInfo) {
-                            offset = previousInfo.end;
-                            dom = dom.nextSibling;
-                        }
-
-                        while (dom && dom !== el) {
-                            if (dom.nodeType === 3) {
-                                offset += dom.length;
-                            } else {
-                                offset += dom.textContent.length;
-                            }
-                            dom = dom.nextSibling;
-                        }
-                    }
-
-                    offsets.push(offset + node.offset);
-                });
-
-                offsets = _.sortBy(offsets, function(a, b) {
-                    return a - b
-                });
-
-                var range = selection.getRangeAt(0),
+                    isTranscript = $anchor.closest('.av-times').length,
+                    offsetsFunction = isTranscript ?
+                        'offsetsForTranscript' :
+                        'offsetsForText',
+                    offsets = this[offsetsFunction]([
+                        {el: $anchor, offset: selection.anchorOffset},
+                        {el: $focus, offset: selection.focusOffset}
+                    ], '.text', _.identity),
+                    range = selection.getRangeAt(0),
                     output = {},
                     contextRange = rangeUtils.expandRangeByWords(range, 4, output),
                     context = contextRange.toString(),
@@ -149,14 +180,17 @@ define([
                         output.after +
                         '...';
 
-                this.trigger('copydocumenttext', {
-                    startOffset: offsets[0],
-                    endOffset: offsets[1],
-                    snippet: contextHighlight,
-                    vertexId: this.attr.data.id,
-                    text: selection.toString(),
-                    vertexTitle: F.vertex.title(this.attr.data)
-                });
+                if (offsets) {
+                    this.trigger('copydocumenttext', {
+                        startOffset: offsets[0],
+                        endOffset: offsets[1],
+                        snippet: contextHighlight,
+                        vertexId: this.attr.data.id,
+                        textPropertyKey: $anchor.closest('.text-section').data('key'),
+                        text: selection.toString(),
+                        vertexTitle: F.vertex.title(this.attr.data)
+                    });
+                }
             }
         };
 
@@ -208,6 +242,11 @@ define([
             Properties.attachTo(this.select('propertiesSelector'), { data: vertex });
 
             this.updateText();
+
+            var displayType = this.attr.data.concept.displayType;
+            if (this[displayType + 'Setup']) {
+                this[displayType + 'Setup'](this.attr.data);
+            }
         };
 
         this.onTextUpdated = function(event, data) {
@@ -217,30 +256,50 @@ define([
         };
 
         this.updateText = function() {
-            var self = this;
+            var self = this,
+                scrollParent = this.$node.scrollParent(),
+                scrollTop = scrollParent.scrollTop(),
+                expandedKey = this.$node.find('.text-section.expanded').data('key'),
+                textProperties = _.filter(this.attr.data.properties, function(p) {
+                    return p.name === 'http://lumify.io#videoTranscript' ||
+                        p.name === 'http://lumify.io#text'
+                });
 
-            this.handleCancelling(this.vertexService.getArtifactHighlightedTextById(this.attr.data.id))
-                .done(function(artifactText, status, xhr) {
-                    var displayType = self.attr.data.concept.displayType,
-                        textElement = self.select('textSelector');
+            this.select('textContainerSelector').html(
+                _.map(textProperties, function(p) {
+                    return textTemplate({
+                        description: p['http://lumify.io#textDescription'] || p.key,
+                        key: p.key,
+                        cls: F.className.to(p.key)
+                    })
+                })
+            );
 
-                    if (xhr.status === 204 && displayType != 'image' && displayType != 'video') {
-                        textElement.html(alertTemplate({ error: 'No Text Available' }));
-                    } else {
-                        textElement.html(!artifactText ?
-                             '' :
-                             artifactText
-                                .replace(/(\n+)/g, '<br><br>$1'));
+            if (this.attr.focus) {
+                this.openText(this.attr.focus.textPropertyKey)
+                    .done(function() {
+                        var $text = self.$node.find('.' + F.className.to(self.attr.focus.textPropertyKey) + ' .text'),
+                            $transcript = $text.find('.av-times'),
+                            focusOffsets = self.attr.focus.offsets;
 
-                        if (self.attr.focusOffsets) {
-                            rangeUtils.highlightOffsets(textElement.get(0), self.attr.focusOffsets);
+                        if ($transcript.length) {
+                            var start = F.number.offsetValues(focusOffsets[0]),
+                                end = F.number.offsetValues(focusOffsets[1]),
+                                $container = $transcript.find('dd').eq(start.index);
+
+                            rangeUtils.highlightOffsets($container.get(0), [start.offset, end.offset]);
+                        } else {
+                            rangeUtils.highlightOffsets($text.get(0), focusOffsets);
                         }
-                    }
-                    self.updateEntityAndArtifactDraggables();
-                    if (self[displayType + 'Setup']) {
-                        self[displayType + 'Setup'](self.attr.data);
-                    }
-            });
+                        self.attr.focus = null;
+                    });
+            } else if (expandedKey || textProperties.length === 1) {
+                this.openText(expandedKey || textProperties[0].key, {
+                    scrollToSection: textProperties.length !== 1
+                }).done(function() {
+                    scrollParent.scrollTop(scrollTop);
+                });
+            }
         };
 
         this.onPlayerTimeUpdate = function(evt, data) {
@@ -284,6 +343,69 @@ define([
 
         this.formatTimeOffset = function(time) {
             return sf('{0:h:mm:ss}', new sf.TimeSpan(time));
+        };
+
+        this.openText = function(propertyKey, options) {
+            var self = this,
+                $section = this.$node.find('.' + F.className.to(propertyKey))
+                    .siblings('.loading').removeClass('loading').end()
+                    .addClass('loading');
+
+            return this.handleCancelling(
+                this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
+            ).done(function(artifactText) {
+                var textElement = $section.find('.text');
+                self.processArtifactText(artifactText, textElement);
+
+                $section.addClass('expanded').removeClass('loading');
+
+                self.updateEntityAndArtifactDraggables();
+
+                if (!options || options.scrollToSection !== false) {
+                    self.scrollToRevealSection($section);
+                }
+            });
+        };
+
+        this.scrollToRevealSection = function($section) {
+            var scrollIfWithinPixelsFromBottom = 150,
+                y = $section.offset().top,
+                scrollParent = $section.scrollParent(),
+                scrollTop = scrollParent.scrollTop(),
+                scrollHeight = scrollParent[0].scrollHeight,
+                height = scrollParent.outerHeight(),
+                maxScroll = height * 0.5,
+                fromBottom = height - y;
+
+            if (fromBottom < scrollIfWithinPixelsFromBottom) {
+                scrollParent.animate({
+                    scrollTop: Math.min(scrollHeight - scrollTop, maxScroll)
+                }, 'fast');
+            }
+        };
+
+        this.onTextHeaderClicked = function(event) {
+            var $section = $(event.target)
+                    .closest('.text-section')
+                    .siblings('.expanded').removeClass('expanded')
+                    .end(),
+                propertyKey = $section.data('key');
+
+            if ($section.hasClass('expanded')) {
+                $section.removeClass('expanded');
+            } else {
+                this.openText(propertyKey);
+            }
+        };
+
+        this.onTimestampClicked = function(event) {
+            var millis = $(event.target).data('millis');
+
+            this.trigger(
+                this.select('audioPreviewSelector').add(this.select('previewSelector')),
+                'seekToTime', {
+                seekTo: millis
+            });
         };
 
         this.onDetectedObjectClicked = function(event) {
@@ -337,12 +459,11 @@ define([
                     });
 
                     self.on('resolve.actionbar', function() {
+                        self.trigger(self.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
                         _.defer(self.showForm.bind(self), info, this.attr.data, $target);
                     })
                 }
             });
-
-            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
         };
 
         this.onCoordsChanged = function(event, data) {
@@ -362,7 +483,8 @@ define([
                 }));
             }
 
-            if (width < 5 || height < 5) {
+            if ((this.$node.width() * width) < 5 ||
+                (this.$node.height() * height) < 5) {
                 this.$node.find('.underneath').teardownComponent(TermForm)
                 return;
             }
@@ -402,6 +524,42 @@ define([
                 info
             );
         };
+
+        this.processArtifactText = function(text, element) {
+            var self = this,
+                warningText = 'No Text Available';
+
+            // Looks like JSON ?
+            if (/^\s*{/.test(text)) {
+                var json;
+                try {
+                    json = JSON.parse(text);
+                } catch(e) { }
+
+                if (json && !_.isEmpty(json.entries)) {
+                    return element.html(transcriptEntriesTemplate({
+                        entries: _.map(json.entries, function(e) {
+                            return {
+                                millis: e.start || e.end,
+                                time: (_.isUndefined(e.start) ? '' : self.formatTimeOffset(e.start)) +
+                                        ' - ' +
+                                      (_.isUndefined(e.end) ? '' : self.formatTimeOffset(e.end)),
+                                text: e.text
+                            };
+                        })
+                    }));
+                } else if (json) {
+                    text = null;
+                    warningText = 'No Transcripts Available';
+                }
+            }
+
+            element.html(
+                !text ?
+                    alertTemplate({ warning: warningText }) :
+                    text.replace(/(\n+)/g, '<br><br>$1')
+            );
+        }
 
         this.audioSetup = function(vertex) {
             AudioScrubber.attachTo(this.select('audioPreviewSelector'), {

@@ -7,6 +7,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -144,10 +146,17 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private void printUser(User user) {
-        System.out.println("          ID: " + user.getUserId());
-        System.out.println("    Username: " + user.getUsername());
-        System.out.println("Display Name: " + user.getDisplayName());
-        System.out.println("  Privileges: " + privilegesAsString(getUserRepository().getPrivileges(user)));
+        System.out.println("                        ID: " + user.getUserId());
+        System.out.println("                  Username: " + user.getUsername());
+        System.out.println("            E-Mail Address: " + valueOrBlank(user.getEmailAddress()));
+        System.out.println("              Display Name: " + user.getDisplayName());
+        System.out.println("               Create Date: " + valueOrBlank(user.getCreateDate()));
+        System.out.println("        Current Login Date: " + valueOrBlank(user.getCurrentLoginDate()));
+        System.out.println(" Current Login Remote Addr: " + valueOrBlank(user.getCurrentLoginRemoteAddr()));
+        System.out.println("       Previous Login Date: " + valueOrBlank(user.getPreviousLoginDate()));
+        System.out.println("Previous Login Remote Addr: " + valueOrBlank(user.getPreviousLoginRemoteAddr()));
+        System.out.println("               Login Count: " + user.getLoginCount());
+        System.out.println("                Privileges: " + privilegesAsString(getUserRepository().getPrivileges(user)));
         System.out.println("");
     }
 
@@ -155,25 +164,25 @@ public class UserAdmin extends CommandLineBase {
         if (users != null) {
             int maxIdWidth = 1;
             int maxUsernameWidth = 1;
+            int maxEmailAddressWidth = 1;
             int maxDisplayNameWidth = 1;
-            int maxPrivilegesWith = privilegesAsString(Privilege.ALL).length();
+            int maxLoginCountWidth = 1;
+            int maxPrivilegesWidth = privilegesAsString(Privilege.ALL).length();
             for (User user : users) {
-                String id = user.getUserId();
-                int idWidth = id != null ? id.length() : 0;
-                maxIdWidth = idWidth > maxIdWidth ? idWidth : maxIdWidth;
-                String username = user.getUsername();
-                int usernameWidth = username != null ? username.length() : 0;
-                maxUsernameWidth = usernameWidth > maxUsernameWidth ? usernameWidth : maxUsernameWidth;
-                String displayName = user.getDisplayName();
-                int displayNameWidth = displayName != null ? displayName.length() : 0;
-                maxDisplayNameWidth = displayNameWidth > maxDisplayNameWidth ? displayNameWidth : maxDisplayNameWidth;
+                maxIdWidth = maxWidth(user.getUserId(), maxIdWidth);
+                maxUsernameWidth = maxWidth(user.getUsername(), maxUsernameWidth);
+                maxEmailAddressWidth = maxWidth(user.getEmailAddress(), maxEmailAddressWidth);
+                maxDisplayNameWidth = maxWidth(user.getDisplayName(), maxDisplayNameWidth);
+                maxLoginCountWidth = maxWidth(Integer.toString(user.getLoginCount()), maxLoginCountWidth);
             }
-            String format = String.format("%%%ds %%%ds %%%ds %%%ds%%n", -1 * maxIdWidth, -1 * maxUsernameWidth, -1 * maxDisplayNameWidth, -1 * maxPrivilegesWith);
+            String format = String.format("%%%ds %%%ds %%%ds %%%ds %%%dd %%%ds%%n", -1 * maxIdWidth, -1 * maxUsernameWidth, -1 * maxEmailAddressWidth, -1 * maxDisplayNameWidth, maxLoginCountWidth, -1 * maxPrivilegesWidth);
             for (User user : users) {
                 System.out.printf(format,
                         user.getUserId(),
                         user.getUsername(),
+                        valueOrBlank(user.getEmailAddress()),
                         user.getDisplayName(),
+                        user.getLoginCount(),
                         privilegesAsString(getUserRepository().getPrivileges(user))
                 );
             }
@@ -200,4 +209,19 @@ public class UserAdmin extends CommandLineBase {
         }
     }
 
+    private String valueOrBlank(Object o) {
+        if (o == null) {
+            return "";
+        } else if (o instanceof Date) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+            return sdf.format(o);
+        } else {
+            return o.toString();
+        }
+    }
+
+    private int maxWidth(Object o, int max) {
+        int width = valueOrBlank(o).length();
+        return width > max ? width : max;
+    }
 }

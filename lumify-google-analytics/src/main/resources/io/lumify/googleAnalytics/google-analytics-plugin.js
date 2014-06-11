@@ -58,16 +58,16 @@ require([
                     send('feature', 'toggleAuditDisplay');
                 })
                 .on('addVertices', function(e, data) {
-                    send('vertices', 'add', data.vertices.length);
+                    send('vertices', 'add', data ? data.vertices.length : 0);
                 })
                 .on('updateVertices', function(e, data) {
-                    send('vertices', 'update', data.vertices.length);
+                    send('vertices', 'update', data ? data.vertices.length : 0);
                 })
                 .on('deleteVertices', function(e, data) {
-                    send('vertices', 'delete', data.vertices.length);
+                    send('vertices', 'delete', data ? data.vertices.length : 0);
                 })
                 .on('selectObjects', function(e, data) {
-                    send('vertices', 'selectObjects', data.vertices.length);
+                    send('vertices', 'selectObjects', data ? data.vertices.length : 0);
                 });
         } else {
             console.log("required configuration properties for Google Analytics are not available");

@@ -45,7 +45,7 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
                 StreamingPropertyValue spv = new StreamingPropertyValue(mp4FileIn, byte[].class);
                 spv.searchIndex(false);
                 Map<String, Object> metadata = new HashMap<String, Object>();
-                metadata.put(RawLumifyProperties.MIME_TYPE.getKey(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP4);
+                metadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), MediaLumifyProperties.MIME_TYPE_AUDIO_MP4);
                 MediaLumifyProperties.AUDIO_MP4.addPropertyValue(m, PROPERTY_KEY, spv, metadata, data.getProperty().getVisibility());
                 m.save(getAuthorizations());
             } finally {
@@ -62,10 +62,10 @@ public class AudioMp4EncodingWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null || !mimeType.startsWith("audio")) {
             return false;
         }

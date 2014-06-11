@@ -80,10 +80,10 @@ public class SecureGraphWorkspaceRepositoryTest {
 
         Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
         InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration, userListenerUtil);
-        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
+        user1 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);
 
-        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", "none", new String[0]);
+        user2 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user2.getUserId(), visibility, authorizations);
 
         when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);

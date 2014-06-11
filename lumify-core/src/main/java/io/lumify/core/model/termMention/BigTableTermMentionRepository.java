@@ -30,8 +30,8 @@ public class BigTableTermMentionRepository extends TermMentionRepository {
     }
 
     @Override
-    public Iterable<TermMentionModel> findByGraphVertexId(String graphVertexId, ModelUserContext modelUserContext) {
-        return findByRowStartsWith(graphVertexId + TermMentionRowKey.ROW_KEY_SEP, modelUserContext);
+    public Iterable<TermMentionModel> findByGraphVertexIdAndPropertyKey(String graphVertexId, String propertyKey, ModelUserContext modelUserContext) {
+        return findByRowStartsWith(graphVertexId + TermMentionRowKey.ROW_KEY_SEP + propertyKey + TermMentionRowKey.ROW_KEY_SEP, modelUserContext);
     }
 
     @Override

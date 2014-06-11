@@ -76,4 +76,8 @@ public class RowKeyHelper {
     public static String jsonEncode(String rowKey) {
         return rowKey.replaceAll("\\x1f", "\\\\x1F");
     }
+
+    public static String jsonDecode(String rowKey) {
+        return rowKey.replaceAll("\\\\x1F", "" + MINOR_FIELD_SEPARATOR);
+    }
 }

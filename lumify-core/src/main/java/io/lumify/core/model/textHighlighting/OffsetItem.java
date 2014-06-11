@@ -10,7 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class OffsetItem implements Comparable {
+    public static final int VIDEO_TRANSCRIPT_INDEX_BITS = 12;
+    public static final int VIDEO_TRANSCRIPT_OFFSET_BITS = 20;
+
     public abstract long getStart();
+
+    public int getVideoTranscriptEntryIndex() {
+        return (int) (getStart() >> VIDEO_TRANSCRIPT_OFFSET_BITS);
+    }
 
     public abstract long getEnd();
 
@@ -31,7 +38,7 @@ public abstract class OffsetItem implements Comparable {
             JSONObject infoJson = new JSONObject();
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
-            infoJson.put(LumifyProperties.ROW_KEY.getKey(), RowKeyHelper.jsonEncode(getRowKey()));
+            infoJson.put(LumifyProperties.ROW_KEY.getPropertyName(), RowKeyHelper.jsonEncode(getRowKey()));
             if (getGraphVertexId() != null && !getGraphVertexId().equals("") && getEdgeId() != null && !getEdgeId().equals("")) {
                 infoJson.put("graphVertexId", getGraphVertexId());
                 infoJson.put("edgeId", getEdgeId());
@@ -88,12 +95,12 @@ public abstract class OffsetItem implements Comparable {
 
         OffsetItem other = (OffsetItem) o;
 
-        if (getStart() != other.getStart()) {
-            return getStart() < other.getStart() ? -1 : 1;
+        if (getOffset(getStart()) != getOffset(other.getStart())) {
+            return getOffset(getStart()) < getOffset(other.getStart()) ? -1 : 1;
         }
 
-        if (getEnd() != other.getEnd()) {
-            return getEnd() < other.getEnd() ? -1 : 1;
+        if (getOffset(getEnd()) != getOffset(other.getEnd())) {
+            return getOffset(getEnd()) < getOffset(other.getEnd()) ? -1 : 1;
         }
 
         if (getGraphVertexId() == null && other.getGraphVertexId() == null) {
@@ -109,5 +116,9 @@ public abstract class OffsetItem implements Comparable {
         }
 
         return getGraphVertexId().compareTo(other.getGraphVertexId());
+    }
+
+    public static long getOffset(long offset) {
+        return offset & ((2 << (OffsetItem.VIDEO_TRANSCRIPT_OFFSET_BITS - 1)) - 1L);
     }
 }

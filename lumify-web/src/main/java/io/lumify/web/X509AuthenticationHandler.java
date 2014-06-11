@@ -48,6 +48,7 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
                 respondWithAuthenticationFailure(response);
                 return;
             }
+            userRepository.recordLogin(user, request.getRemoteAddr());
             CurrentUser.set(request, user.getUserId());
         }
         chain.next(request, response);
@@ -63,7 +64,7 @@ public abstract class X509AuthenticationHandler extends AuthenticationHandler {
             return null;
         }
         String randomPassword = new BigInteger(120, new SecureRandom()).toString(32);
-        return userRepository.findOrAddUser(username, displayName, randomPassword, new String[0]);
+        return userRepository.findOrAddUser(username, displayName, null, randomPassword, new String[0]);
     }
 
     protected boolean isInvalid(X509Certificate cert) {

@@ -115,6 +115,13 @@ html.fullscreenDetails {
       .splitbar;
     }
   }
+  
+  .detail-pane {
+    border-left: 1px solid @pane-border;    
+    .ui-resizable-handle:before {
+      background: transparent;
+    }
+  }
 }
 
 .graph-pane, .map-pane, .dashboard-pane {
@@ -275,6 +282,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 
 .alert {
   word-break: break-word;
+  .disable-text-selection;
 }
 
 .justification-selection {

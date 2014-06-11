@@ -39,14 +39,10 @@ define([
             this.$node.html(template({}));
             this.updateTitle();
 
-            this.on('selectObjects', function(e) {
+            this.on('selectObjects', function(e, d) {
                 e.stopPropagation();
-                _.defer(function() {
-                    self.trigger(document, 'objectsSelected', {
-                        vertices: [],
-                        edges: []
-                    });
-                });
+                // TODO: update location hash
+                // need some way to remove from self.vertices with d.vertices
             });
             this._windowIsHidden = false;
             this.on(document, 'window-visibility-change', this.onVisibilityChange);

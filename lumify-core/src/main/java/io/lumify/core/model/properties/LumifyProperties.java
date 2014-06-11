@@ -10,6 +10,7 @@ public class LumifyProperties {
     public static final StringLumifyProperty DISPLAY_NAME = new StringLumifyProperty("http://lumify.io#displayName");
     public static final StringLumifyProperty PROCESS = new StringLumifyProperty("http://lumify.io#process");
     public static final StringLumifyProperty ROW_KEY = new StringLumifyProperty("http://lumify.io#rowKey");
+    public static final StringLumifyProperty CONTENT_HASH = new StringLumifyProperty("http://lumify.io#contentHash");
     public static final StreamingLumifyProperty GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#glyphIcon");
     public static final StreamingLumifyProperty MAP_GLYPH_ICON = new StreamingLumifyProperty("http://lumify.io#mapGlyphIcon");
     public static final StringLumifyProperty TITLE = new StringLumifyProperty("http://lumify.io#title");

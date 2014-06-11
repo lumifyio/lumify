@@ -13,6 +13,7 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.*;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
@@ -106,6 +107,16 @@ public class FileImport {
 
         FileInputStream fileInputStream = new FileInputStream(f);
         try {
+            JSONObject metadataJson = loadMetadataJson(f);
+            String predefinedId = null;
+            if (metadataJson != null) {
+                predefinedId = metadataJson.optString("id", null);
+                String metadataVisibilitySource = metadataJson.optString("visibilitySource", null);
+                if (metadataVisibilitySource != null) {
+                    visibilitySource = metadataVisibilitySource;
+                }
+            }
+
             StreamingPropertyValue rawValue = new StreamingPropertyValue(fileInputStream, byte[].class);
             rawValue.searchIndex(false);
 
@@ -116,11 +127,16 @@ public class FileImport {
             LumifyProperties.CONFIDENCE.setMetadata(propertyMetadata, 0.1);
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(propertyMetadata, visibilityJson);
 
-            VertexBuilder vertexBuilder = this.graph.prepareVertex(visibility);
+            VertexBuilder vertexBuilder;
+            if (predefinedId == null) {
+                vertexBuilder = this.graph.prepareVertex(visibility);
+            } else {
+                vertexBuilder = this.graph.prepareVertex(predefinedId, visibility);
+            }
             LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, visibilityJson, visibility);
             RawLumifyProperties.RAW.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, rawValue, propertyMetadata, visibility);
             LumifyProperties.TITLE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
-            LumifyProperties.ROW_KEY.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
+            LumifyProperties.CONTENT_HASH.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, hash, propertyMetadata, visibility);
             RawLumifyProperties.FILE_NAME.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, f.getName(), propertyMetadata, visibility);
             RawLumifyProperties.FILE_NAME_EXTENSION.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, FilenameUtils.getExtension(f.getName()), propertyMetadata, visibility);
             RawLumifyProperties.CREATE_DATE.addPropertyValue(vertexBuilder, MULTI_VALUE_KEY, new Date(f.lastModified()), propertyMetadata, visibility);
@@ -150,6 +166,20 @@ public class FileImport {
         }
     }
 
+    private JSONObject loadMetadataJson(File f) throws IOException {
+        File metadataFile = MetadataFileImportSupportingFileHandler.getMetadataFile(f);
+        if (metadataFile.exists()) {
+            FileInputStream in = new FileInputStream(metadataFile);
+            try {
+                String fileContents = IOUtils.toString(in);
+                return new JSONObject(fileContents);
+            } finally {
+                in.close();
+            }
+        }
+        return null;
+    }
+
     private void ensureInitialized() {
         if (fileImportSupportingFileHandlers == null) {
             fileImportSupportingFileHandlers = toList(ServiceLoaderUtil.load(FileImportSupportingFileHandler.class));
@@ -161,12 +191,13 @@ public class FileImport {
 
     private void pushOnQueue(Vertex vertex) {
         LOGGER.debug("pushing %s on to %s queue", vertex.getId().toString(), WorkQueueRepository.GRAPH_PROPERTY_QUEUE_NAME);
-        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, RawLumifyProperties.RAW.getKey());
+        this.workQueueRepository.pushElement(vertex);
+        this.workQueueRepository.pushGraphPropertyQueue(vertex, MULTI_VALUE_KEY, RawLumifyProperties.RAW.getPropertyName());
     }
 
     private Vertex findExistingVertexWithHash(String hash, Authorizations authorizations) {
         Iterator<Vertex> existingVertices = this.graph.query(authorizations)
-                .has(LumifyProperties.ROW_KEY.getKey(), hash)
+                .has(LumifyProperties.CONTENT_HASH.getPropertyName(), hash)
                 .vertices()
                 .iterator();
         if (existingVertices.hasNext()) {

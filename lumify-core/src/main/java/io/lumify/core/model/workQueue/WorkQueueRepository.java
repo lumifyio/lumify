@@ -32,6 +32,28 @@ public abstract class WorkQueueRepository {
         pushGraphPropertyQueue(element, property.getKey(), property.getName());
     }
 
+    public void pushElementImageQueue (final Element element, final Property property) {
+        pushElementImageQueue(element, property.getKey(), property.getName());
+    }
+
+    public void pushElementImageQueue(final Element element, String propertyKey, final String propertyName) {
+        getGraph().flush();
+        checkNotNull(element);
+        JSONObject data = new JSONObject();
+        if (element instanceof Vertex) {
+            data.put("graphVertexId", element.getId());
+        } else if (element instanceof Edge) {
+            data.put("graphEdgeId", element.getId());
+        } else {
+            throw new LumifyException("Unexpected element type: " + element.getClass().getName());
+        }
+        data.put("propertyKey", propertyKey);
+        data.put("propertyName", propertyName);
+        pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
+
+        broadcastEntityImage(element, propertyKey, propertyName);
+    }
+
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
         getGraph().flush();
         checkNotNull(element);
@@ -160,7 +182,29 @@ public abstract class WorkQueueRepository {
         }
     }
 
+    protected void broadcastEntityImage(Element element, String propertyKey, String propertyName) {
+        try {
+            JSONObject json = getBroadcastEntityImageJson((Vertex) element);
+            broadcastJson(json);
+        } catch (Exception ex) {
+            throw new LumifyException("Could not broadcast property change", ex);
+        }
+    }
+
     protected abstract void broadcastJson(JSONObject json);
+
+    protected JSONObject getBroadcastEntityImageJson(Vertex graphVertex) {
+        JSONObject dataJson = new JSONObject();
+
+        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null);
+        dataJson.put("vertex", vertexJson);
+        dataJson.put("graphVertexId", graphVertex.getId());
+
+        JSONObject json = new JSONObject();
+        json.put("type", "entityImageUpdated");
+        json.put("data", dataJson);
+        return json;
+    }
 
     protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName) {
         JSONObject dataJson = new JSONObject();

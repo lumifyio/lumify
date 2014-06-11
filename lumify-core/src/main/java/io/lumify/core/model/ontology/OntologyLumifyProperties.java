@@ -41,6 +41,8 @@ public final class OntologyLumifyProperties {
 
     public static final StringLumifyProperty MAP_GLYPH_ICON_FILE_NAME = new StringLumifyProperty("http://lumify.io#mapGlyphIconFileName");
 
+    public static final StringLumifyProperty ENTITY_HAS_IMAGE_VERTEX_ID = new StringLumifyProperty("http://lumify.io#entityImageVertexId");
+
     private OntologyLumifyProperties() {
         throw new UnsupportedOperationException("do not construct utility class");
     }

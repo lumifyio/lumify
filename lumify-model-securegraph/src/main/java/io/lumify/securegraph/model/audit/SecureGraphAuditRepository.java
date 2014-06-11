@@ -351,9 +351,9 @@ public class SecureGraphAuditRepository extends AuditRepository {
         }
 
         String sourceVertexConceptType = CONCEPT_TYPE.getPropertyValue(sourceVertex);
-        checkNotNull(sourceVertexConceptType, "vertex " + sourceVertex.getId() + " has a null " + CONCEPT_TYPE.getKey());
+        checkNotNull(sourceVertexConceptType, "vertex " + sourceVertex.getId() + " has a null " + CONCEPT_TYPE.getPropertyName());
         String destVertexConceptType = CONCEPT_TYPE.getPropertyValue(destVertex);
-        checkNotNull(destVertexConceptType, "vertex " + destVertex.getId() + " has a null " + CONCEPT_TYPE.getKey());
+        checkNotNull(destVertexConceptType, "vertex " + destVertex.getId() + " has a null " + CONCEPT_TYPE.getPropertyName());
 
         audit.getAuditRelationship()
                 .setSourceId(sourceVertex.getId(), visibility)

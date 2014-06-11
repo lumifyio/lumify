@@ -11,6 +11,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TermExtractionResult {
     private final List<TermMention> termMentions = Lists.newArrayList();
     private final List<TermRelationship> relationships = Lists.newArrayList();
+    private final List<VertexRelationship> vertexRelationships = Lists.newArrayList();
 
     public void add(TermMention termMention) {
         checkNotNull(termMention);
@@ -32,12 +33,21 @@ public class TermExtractionResult {
         this.relationships.addAll(relationships);
     }
 
+    public void addAllVertexRelationships(List<VertexRelationship> relationships) {
+        checkNotNull(relationships);
+        this.vertexRelationships.addAll(relationships);
+    }
+
     public List<TermMention> getTermMentions() {
         return termMentions;
     }
 
     public List<TermRelationship> getRelationships() {
         return this.relationships;
+    }
+
+    public List<VertexRelationship> getVertexRelationships() {
+        return vertexRelationships;
     }
 
     public void replace(final TermMention orig, final TermMention updated) {

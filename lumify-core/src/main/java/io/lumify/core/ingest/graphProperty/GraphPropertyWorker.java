@@ -7,12 +7,15 @@ import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.term.extraction.TermExtractionResult;
 import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.ingest.term.extraction.TermRelationship;
+import io.lumify.core.ingest.term.extraction.VertexRelationship;
+import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -23,11 +26,14 @@ import io.lumify.core.security.VisibilityTranslator;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.RowKeyHelper;
 import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
+import org.securegraph.property.StreamingPropertyValue;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,17 +140,66 @@ public abstract class GraphPropertyWorker {
             return false;
         }
 
-        if (property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
+    }
+
+    protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Map<String, Object> metadata, Visibility visibility) {
+        metadata.put(RawLumifyProperties.META_DATA_MIME_TYPE, "text/plain");
+        for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
+            String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
+            StreamingPropertyValue value = new StreamingPropertyValue(new ByteArrayInputStream(entry.getText().getBytes()), String.class);
+            RawLumifyProperties.TEXT.addPropertyValue(mutation, textPropertyKey, value, metadata, visibility);
+        }
+    }
+
+    protected void pushVideoTranscriptTextPropertiesOnWorkQueue(Element element, String propertyKey, VideoTranscript videoTranscript) {
+        for (VideoTranscript.TimedText entry : videoTranscript.getEntries()) {
+            String textPropertyKey = getVideoTranscriptTimedTextPropertyKey(propertyKey, entry);
+            getWorkQueueRepository().pushGraphPropertyQueue(element, textPropertyKey, RawLumifyProperties.TEXT.getPropertyName());
+        }
+    }
+
+    private String getVideoTranscriptTimedTextPropertyKey(String propertyKey, VideoTranscript.TimedText entry) {
+        String startTime = String.format("%08d", Math.max(0L, entry.getTime().getStart()));
+        String endTime = String.format("%08d", Math.max(0L, entry.getTime().getEnd()));
+        return propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR + MediaLumifyProperties.VIDEO_FRAME.getPropertyName() + RowKeyHelper.MINOR_FIELD_SEPARATOR + startTime + RowKeyHelper.MINOR_FIELD_SEPARATOR + endTime;
     }
 
     protected void saveTermExtractionResult(Vertex artifactGraphVertex, TermExtractionResult termExtractionResult) {
         List<TermMentionWithGraphVertex> termMentionsResults = saveTermMentions(artifactGraphVertex, termExtractionResult.getTermMentions());
         saveRelationships(termExtractionResult.getRelationships(), termMentionsResults);
+        saveVertexRelationships(termExtractionResult.getVertexRelationships(), termMentionsResults);
+    }
+
+    private void saveVertexRelationships(List<VertexRelationship> vertexRelationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices) {
+        for (VertexRelationship vertexRelationship : vertexRelationships) {
+            TermMentionWithGraphVertex sourceTermMentionsWithGraphVertex = findTermMentionWithGraphVertex(termMentionsWithGraphVertices, vertexRelationship.getSource());
+            checkNotNull(sourceTermMentionsWithGraphVertex, "Could not find source");
+            checkNotNull(sourceTermMentionsWithGraphVertex.getVertex(), "Could not find source vertex");
+
+            Vertex targetVertex = graph.getVertex(vertexRelationship.getTargetId(), getAuthorizations());
+            checkNotNull(targetVertex, "Could not find target vertex: " + vertexRelationship.getTargetId());
+
+            String label = vertexRelationship.getLabel();
+            checkNotNull(label, "label is required");
+
+            Edge edge = trySingle(sourceTermMentionsWithGraphVertex.getVertex().getEdges(targetVertex, Direction.OUT, label, getAuthorizations()));
+            if (edge == null) {
+                LOGGER.debug("adding edge %s -> %s (%s)", sourceTermMentionsWithGraphVertex.getVertex().getId(), targetVertex.getId(), label);
+                graph.addEdge(
+                        sourceTermMentionsWithGraphVertex.getVertex(),
+                        targetVertex,
+                        label,
+                        vertexRelationship.getVisibility(),
+                        getAuthorizations()
+                );
+            }
+        }
     }
 
     private void saveRelationships(List<TermRelationship> relationships, List<TermMentionWithGraphVertex> termMentionsWithGraphVertices) {
@@ -227,8 +282,8 @@ public abstract class GraphPropertyWorker {
                     vertex = graph.getVertex(termMention.getId(), getAuthorizations());
                 } else {
                     vertex = trySingle(graph.query(getAuthorizations())
-                            .has(LumifyProperties.TITLE.getKey(), title)
-                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getKey(), concept.getTitle())
+                            .has(LumifyProperties.TITLE.getPropertyName(), title)
+                            .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), concept.getTitle())
                             .vertices());
                 }
             }

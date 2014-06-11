@@ -92,8 +92,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-        String mimeType = (String) data.getProperty().getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
-        checkNotNull(mimeType, RawLumifyProperties.MIME_TYPE.getKey() + " is a required metadata field");
+        String mimeType = (String) data.getProperty().getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
+        checkNotNull(mimeType, RawLumifyProperties.MIME_TYPE.getPropertyName() + " is a required metadata field");
 
         Metadata metadata = new Metadata();
         String text = extractText(in, mimeType, metadata);
@@ -112,7 +112,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
 
         String customImageMetadata = extractTextField(metadata, customFlickrMetadataKeys);
         Map<String, Object> textMetadata = data.createPropertyMetadata();
-        textMetadata.put(RawLumifyProperties.MIME_TYPE.getKey(), "text/plain");
+        textMetadata.put(RawLumifyProperties.MIME_TYPE.getPropertyName(), "text/plain");
         textMetadata.put(RawLumifyProperties.META_DATA_TEXT_DESCRIPTION, "Extracted Text");
 
         if (customImageMetadata != null && !customImageMetadata.equals("")) {
@@ -154,7 +154,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         getAuditRepository().auditAnalyzedBy(AuditAction.ANALYZED_BY, v, getClass().getSimpleName(), getUser(), v.getVisibility());
 
         getGraph().flush();
-        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY, RawLumifyProperties.TEXT.getKey());
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), MULTIVALUE_KEY, RawLumifyProperties.TEXT.getPropertyName());
     }
 
     private String extractText(InputStream in, String mimeType, Metadata metadata) throws IOException, SAXException, TikaException, BoilerpipeProcessingException {
@@ -283,11 +283,11 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             return false;
         }
 
-        if (!property.getName().equals(RawLumifyProperties.RAW.getKey())) {
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
             return false;
         }
 
-        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getKey());
+        String mimeType = (String) property.getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         if (mimeType == null) {
             return false;
         }

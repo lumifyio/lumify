@@ -115,10 +115,10 @@ public class GraphVertexSearch extends BaseRequestHandler {
                         conceptIds[count] = c.getTitle();
                         count++;
                     }
-                    graphQuery.has(CONCEPT_TYPE.getKey(), Compare.IN, conceptIds);
+                    graphQuery.has(CONCEPT_TYPE.getPropertyName(), Compare.IN, conceptIds);
                 }
             } else {
-                graphQuery.has(CONCEPT_TYPE.getKey(), conceptType);
+                graphQuery.has(CONCEPT_TYPE.getPropertyName(), conceptType);
             }
         }
 

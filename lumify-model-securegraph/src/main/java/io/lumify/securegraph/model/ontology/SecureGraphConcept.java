@@ -32,7 +32,7 @@ public class SecureGraphConcept extends Concept {
     @Override
     public boolean hasGlyphIconResource() {
         // TODO: This can be changed to GLYPH_ICON.getPropertyValue(vertex) once ENTITY_IMAGE_URL is added
-        return vertex.getPropertyValue(LumifyProperties.GLYPH_ICON.getKey()) != null;
+        return vertex.getPropertyValue(LumifyProperties.GLYPH_ICON.getPropertyName()) != null;
     }
 
     @Override

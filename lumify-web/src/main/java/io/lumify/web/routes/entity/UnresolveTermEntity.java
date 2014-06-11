@@ -1,6 +1,8 @@
 package io.lumify.web.routes.entity;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -17,13 +19,11 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import io.lumify.web.routes.workspace.WorkspaceHelper;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
-import com.google.inject.Inject;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,18 +56,17 @@ public class UnresolveTermEntity extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         // required parameters
-        final String artifactId = getRequiredParameter(request, "artifactId");
+        final String graphVertexId = getRequiredParameter(request, "graphVertexId");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String sign = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
-        final String graphVertexId = getRequiredParameter(request, "graphVertexId");
         final String edgeId = getRequiredParameter(request, "edgeId");
         final String rowKey = getOptionalParameter(request, "rowKey");
 
         LOGGER.debug(
-                "UnresolveTermEntity (artifactId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
-                artifactId,
+                "UnresolveTermEntity (graphVertexId: %s, mentionStart: %d, mentionEnd: %d, sign: %s, conceptId: %s, graphVertexId: %s)",
+                graphVertexId,
                 mentionStart,
                 mentionEnd,
                 sign,
@@ -107,7 +106,7 @@ public class UnresolveTermEntity extends BaseRequestHandler {
             propertyKey = analyzedTermMentionRowKey.getPropertyKey();
         }
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edgeId);
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edgeId);
         TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
 

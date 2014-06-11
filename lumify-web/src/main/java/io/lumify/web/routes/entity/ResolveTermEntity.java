@@ -23,6 +23,7 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import io.lumify.core.util.RowKeyHelper;
 import io.lumify.web.BaseRequestHandler;
 import org.json.JSONObject;
 import org.securegraph.Authorizations;
@@ -80,15 +81,16 @@ public class ResolveTermEntity extends BaseRequestHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
         final String artifactId = getRequiredParameter(request, "artifactId");
+        final String propertyKey = getRequiredParameter(request, "propertyKey");
         final long mentionStart = getRequiredParameterAsLong(request, "mentionStart");
         final long mentionEnd = getRequiredParameterAsLong(request, "mentionEnd");
         final String title = getRequiredParameter(request, "sign");
         final String conceptId = getRequiredParameter(request, "conceptId");
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
-        final String graphVertexId = getOptionalParameter(request, "graphVertexId");
+        final String resolvedVertexId = getOptionalParameter(request, "resolvedVertexId");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
-        final String rowKey = getOptionalParameter(request, "rowKey");
+        String termMentionRowKeyString = getOptionalParameter(request, "rowKey");
 
         User user = getUser(request);
         String workspaceId = getActiveWorkspaceId(request);
@@ -105,7 +107,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
             return;
         }
 
-        Object id = graphVertexId == null ? graph.getIdGenerator().nextId() : graphVertexId;
+        Object id = resolvedVertexId == null ? graph.getIdGenerator().nextId() : resolvedVertexId;
 
         Concept concept = ontologyRepository.getConceptByIRI(conceptId);
 
@@ -115,7 +117,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
         LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.setMetadata(metadata, visibilityJson);
         ElementMutation<Vertex> vertexMutation;
         Vertex vertex;
-        if (graphVertexId != null) {
+        if (resolvedVertexId != null) {
             vertex = graph.getVertex(id, authorizations);
             vertexMutation = vertex.prepareMutation();
         } else {
@@ -142,13 +144,12 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        String propertyKey = "";
-        if (rowKey != null) {
-            TermMentionRowKey analyzedRowKey = new TermMentionRowKey(rowKey);
-            propertyKey = analyzedRowKey.getPropertyKey();
+        TermMentionRowKey termMentionRowKey;
+        if (termMentionRowKeyString != null) {
+            termMentionRowKey = new TermMentionRowKey(RowKeyHelper.jsonDecode(termMentionRowKeyString));
+        } else {
+            termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         }
-
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
@@ -158,7 +159,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
                 .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
         termMentionRepository.save(termMention);
 
-        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getKey(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
+        vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save(authorizations);
 
         this.graph.flush();

@@ -38,12 +38,14 @@ define([
 
             var metadata = this.attr.sourceMetadata,
                 vertexId = metadata.vertexId,
+                textPropertyKey = metadata.textPropertyKey,
                 offsets = [metadata.startOffset, metadata.endOffset];
 
             this.trigger('selectObjects', {
                 vertices: [ { id: vertexId } ],
                 focus: {
                     vertexId: vertexId,
+                    textPropertyKey: textPropertyKey,
                     offsets: offsets
                 }
             })

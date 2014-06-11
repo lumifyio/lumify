@@ -1,6 +1,11 @@
 @import (reference) "../util/constants.less";
 @import (reference) "../util/selection.less";
 
+.av-time-display {
+  font-family: "Lucida Console", Monaco, monospace;
+  color: #aaa;
+}
+
 .content {
 
   padding: 2.5em 1em 0 1em;
@@ -108,8 +113,7 @@
 
       .time {
           font-size: 85%;
-          font-family: "Lucida Console", Monaco, monospace;
-          color: #aaa;
+          .av-time-display;
       }
   }
 
@@ -188,6 +192,84 @@
       }
     }
   }
+  
+  .texts {
+    margin: 0 -1em;    
+    .text-section {
+      margin: 1px 0;
+      padding: 0;
+      
+      &.expanded {
+        h1:before {
+          .rotate(90deg);
+        }
+        .text {
+          display: block;
+        }
+      }
+      
+      &.loading {
+        .badge {
+          display: block;
+        }
+        strong {
+          padding-right: 1em;
+        }
+      }
+      
+      .badge {
+        display: none;
+        position: absolute;
+        right: 1ex;
+        left: auto;
+        top: 0.4ex;
+      }
+      
+      h1 {
+        font-size: 100%;
+        padding: 0.25em 1em;
+        margin: 0;
+        background: darken(@pane-background, 3%);
+        cursor: pointer;    
+        position: relative;
+        .disable-text-selection;
+        
+        &:before, strong {
+          font-size: 80%;
+          font-variant: small-caps;
+          color: #999;      
+          text-shadow: 0 1px 0 white;
+          text-transform: uppercase;
+        }
+        &:before {
+          content: '▶';          
+          position: absolute;
+          left: 1.5ex;
+          font-size: 50%;
+          .transition-transform(ease-in-out);
+          .transform-origin(~"30% 45%");
+        }
+               
+        &:hover {
+          background: darken(@pane-background, 6%);
+        }
+        strong {
+          display: block;          
+          text-overflow: ellipsis;
+          overflow: hidden;      
+          white-space: nowrap;
+        }
+      }
+      
+      & > .text {
+        display: none;
+        margin: 0;
+        padding: 1em;
+        // For actionbar space
+        padding-bottom: 2.5em;
+      }
+    }
+  }
 
   .text {
     margin: 2em 0;
@@ -214,6 +296,19 @@
       &.focused {
         color: @normal-color;
       }
+    }
+  }
+  
+  .av-times {    
+    margin-top: -0.5em;
+    
+    dt {
+      .av-time-display;
+      font-size: 80%;
+      .disable-text-selection;
+    }
+    dd {
+      margin: 0 0 1em 0;      
     }
   }
 
@@ -427,7 +522,7 @@
       }
 
       .rel-arrow {
-        color: #999;
+        color: #555;
         text-shadow: 0 1px 0 white;
       }
 
