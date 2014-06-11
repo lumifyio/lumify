@@ -294,10 +294,11 @@ define([
                         self.attr.focus = null;
                     });
             } else if (expandedKey || textProperties.length === 1) {
-                this.openText(expandedKey || textProperties[0].key)
-                    .done(function() {
-                        scrollParent.scrollTop(scrollTop);
-                    });
+                this.openText(expandedKey || textProperties[0].key, {
+                    scrollToSection: textProperties.length !== 1
+                }).done(function() {
+                    scrollParent.scrollTop(scrollTop);
+                });
             }
         };
 
@@ -344,7 +345,7 @@ define([
             return sf('{0:h:mm:ss}', new sf.TimeSpan(time));
         };
 
-        this.openText = function(propertyKey) {
+        this.openText = function(propertyKey, options) {
             var self = this,
                 $section = this.$node.find('.' + F.className.to(propertyKey))
                     .siblings('.loading').removeClass('loading').end()
@@ -360,7 +361,9 @@ define([
 
                 self.updateEntityAndArtifactDraggables();
 
-                self.scrollToRevealSection($section);
+                if (!options || options.scrollToSection !== false) {
+                    self.scrollToRevealSection($section);
+                }
             });
         };
 
