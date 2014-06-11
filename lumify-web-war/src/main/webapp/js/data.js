@@ -230,6 +230,15 @@ define([
                         }
                     }
                     break;
+                case 'entityImageUpdated':
+                    if (message.data && message.data.graphVertexId) {
+                        updated = self.updateCacheWithVertex(message.data.vertex, { returnNullIfNotChanged: true });
+                        if (updated) {
+                            self.trigger('verticesUpdated', { vertices: [updated] });
+                            self.trigger('iconUpdated', { src: null });
+                        }
+                    } else console.warn('entityImageUpdated event received with no graphVertexId', message);
+                    break;
 
                 case 'textUpdated':
                     if (message.data && message.data.graphVertexId) {

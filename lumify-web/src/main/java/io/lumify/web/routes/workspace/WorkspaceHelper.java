@@ -8,6 +8,7 @@ import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
+import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -151,8 +152,14 @@ public class WorkspaceHelper {
         return json;
     }
 
-    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, User user, Authorizations authorizations) {
+    public JSONObject deleteEdge(Edge edge, Vertex sourceVertex, Vertex destVertex, String imageRelationshipLabel, User user, Authorizations authorizations) {
         graph.removeEdge(edge, authorizations);
+
+        if (edge.getLabel().equals(imageRelationshipLabel)) {
+            Property entityHasImage = sourceVertex.getProperty(OntologyLumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+            sourceVertex.removeProperty(entityHasImage.getName(), authorizations);
+            this.workQueueRepository.pushElementImageQueue(sourceVertex, entityHasImage);
+        }
 
         Iterator<Property> rowKeys = destVertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName()).iterator();
         while (rowKeys.hasNext()) {

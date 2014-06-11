@@ -4,9 +4,11 @@ import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.detectedObjects.DetectedObjectRepository;
 import io.lumify.core.model.detectedObjects.DetectedObjectRowKey;
+import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.termMention.TermMentionRepository;
@@ -30,6 +32,8 @@ import org.securegraph.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Iterator;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WorkspaceUndo extends BaseRequestHandler {
@@ -41,6 +45,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
     private final UserRepository userRepository;
     private final WorkQueueRepository workQueueRepository;
     private final WorkspaceHelper workspaceHelper;
+    private final String entityHasImageIri;
 
     @Inject
     public WorkspaceUndo(
@@ -61,6 +66,11 @@ public class WorkspaceUndo extends BaseRequestHandler {
         this.workspaceHelper = workspaceHelper;
         this.userRepository = userRepository;
         this.workQueueRepository = workQueueRepository;
+
+        this.entityHasImageIri = this.getConfiguration().get(Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        if (this.entityHasImageIri == null) {
+            throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ENTITY_HAS_IMAGE);
+        }
     }
 
     @Override
@@ -108,7 +118,7 @@ public class WorkspaceUndo extends BaseRequestHandler {
                     continue;
                 }
                 JSONObject responseResult = new JSONObject();
-                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, user, authorizations));
+                responseResult.put("edges", workspaceHelper.deleteEdge(edge, sourceVertex, destVertex, entityHasImageIri, user, authorizations));
                 successArray.put(responseResult);
             } else if (type.equals("property")) {
                 checkNotNull(data.getString("vertexId"));
@@ -146,6 +156,18 @@ public class WorkspaceUndo extends BaseRequestHandler {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(vertex);
         visibilityJson = GraphUtil.updateVisibilityJsonRemoveFromAllWorkspace(visibilityJson);
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
+
+        Iterator<Edge> hasImageEdges = vertex.getEdges(Direction.BOTH, entityHasImageIri, authorizations).iterator();
+        while (hasImageEdges.hasNext()) {
+            Edge edge = hasImageEdges.next();
+            if (edge.getVertexId(Direction.IN).equals(vertex.getId())) {
+                Vertex outVertex = edge.getVertex(Direction.OUT, authorizations);
+                Property entityHasImage = outVertex.getProperty(OntologyLumifyProperties.ENTITY_HAS_IMAGE_VERTEX_ID.getPropertyName());
+                outVertex.removeProperty(entityHasImage.getName(), authorizations);
+                this.workQueueRepository.pushElementImageQueue(outVertex, entityHasImage);
+            }
+        }
+
         for (Property rowKeyProperty : vertex.getProperties(LumifyProperties.ROW_KEY.getPropertyName())) {
             TermMentionModel termMentionModel = termMentionRepository.findByRowKey(rowKeyProperty.getValue().toString(), userRepository.getModelUserContext(authorizations, LumifyVisibility.SUPER_USER_VISIBILITY_STRING));
             if (termMentionModel == null) {
