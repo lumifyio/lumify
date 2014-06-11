@@ -115,6 +115,7 @@ define([
             this.on('addVertices', this.onAddVertices);
             this.on('updateVertices', this.onUpdateVertices);
             this.on('deleteVertices', this.onDeleteVertices);
+            this.on('verticesDeleted', this.onVerticesDeleted);
             this.on('refreshRelationships', this.refreshRelationships);
             this.on('selectObjects', this.onSelectObjects);
             this.on('clipboardPaste', this.onClipboardPaste);
@@ -834,6 +835,22 @@ define([
             })
         };
 
+        this.onVerticesDeleted = function(evt, data) {
+            var self = this;
+            if (data && data.vertices) {
+                data.vertices.forEach(function(vertex) {
+                    var workspaceInfo = self.workspaceVertices[vertex.id];
+                    if (workspaceInfo) {
+                        delete self.workspaceVertices[vertex.id];
+                    }
+                    var cache = self.vertex(vertex.id);
+                    if (cache) {
+                        cache.workspace = {};
+                    }
+                });
+            }
+        };
+
         this.onDeleteVertices = function(evt, data) {
             var self = this;
             this.workspaceReady(function(ws) {
@@ -849,11 +866,6 @@ define([
                         undoDelete.push(self.copy(self.vertex(deletedVertex.id)));
                         toDelete.push(self.vertex(deletedVertex.id));
 
-                        delete self.workspaceVertices[deletedVertex.id];
-                    }
-                    var cache = self.vertex(deletedVertex.id);
-                    if (cache) {
-                        cache.workspace = {};
                     }
                 });
 
