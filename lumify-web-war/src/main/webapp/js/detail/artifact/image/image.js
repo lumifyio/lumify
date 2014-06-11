@@ -2,8 +2,9 @@
 define([
     'flight/lib/component',
     'tpl!./image',
-    'util/withAsyncQueue'
-], function(defineComponent, template, withAsyncQueue) {
+    'util/withAsyncQueue',
+    'util/privileges'
+], function(defineComponent, template, withAsyncQueue, Privileges) {
     'use strict';
 
     return defineComponent(ImageView, withAsyncQueue);
@@ -39,6 +40,11 @@ define([
             if (naturalWidth === 0 || naturalHeight === 0) {
                 image.on('load', this.setupEditingFacebox.bind(this));
                 return;
+            }
+
+            if (Privileges.missingEDIT) {
+                this.$node.css('cursor', 'default')
+                return this.imageMarkReady(imageEl);
             }
 
             this.on('click', function(event) {
