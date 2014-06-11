@@ -9,7 +9,7 @@ define([
     });
 
     Handlebars.registerHelper('relativedate', function(date) {
-        return F.date.relativeToNow(new Date(date));
+        return F.date.relativeToNow(F.date.utc(date));
     });
 
 });
