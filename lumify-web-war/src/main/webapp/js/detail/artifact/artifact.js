@@ -483,7 +483,8 @@ define([
                 }));
             }
 
-            if (width < 5 || height < 5) {
+            if ((this.$node.width() * width) < 5 ||
+                (this.$node.height() * height) < 5) {
                 this.$node.find('.underneath').teardownComponent(TermForm)
                 return;
             }
