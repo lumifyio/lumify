@@ -935,7 +935,7 @@ define([
                         if (result[1].length) {
                             self.trigger('verticesDeleted', { vertices: result[1] });
                         }
-                        if (results[0].length) {
+                        if (result[0].length) {
                             self.trigger('verticesAdded', { vertices: result[0], options: options });
                         }
                     })
