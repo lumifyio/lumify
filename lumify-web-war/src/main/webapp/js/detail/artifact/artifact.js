@@ -459,12 +459,11 @@ define([
                     });
 
                     self.on('resolve.actionbar', function() {
+                        self.trigger(self.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
                         _.defer(self.showForm.bind(self), info, this.attr.data, $target);
                     })
                 }
             });
-
-            this.trigger(this.select('imagePreviewSelector'), 'DetectedObjectEdit', info);
         };
 
         this.onCoordsChanged = function(event, data) {
