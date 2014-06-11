@@ -331,7 +331,17 @@ define([
             this.mapReady(function(map) {
                 vertices.forEach(function(vertex) {
                     var inWorkspace = appData.inWorkspace(vertex),
+                        marker;
+
+                    if (!adding && !inWorkspace) {
+                        // Only update marker if it exists
+                        marker = map.featuresLayer.getFeatureById(vertex.id);
+                        if (marker) {
+                            marker = self.findOrCreateMarker(map, vertex);
+                        }
+                    } else {
                         marker = self.findOrCreateMarker(map, vertex);
+                    }
 
                     if (marker) {
                         validAddition = true;

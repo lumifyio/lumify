@@ -889,7 +889,10 @@ define([
         };
 
         this.onClearWorkspaceFilter = function() {
-            this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+            var vertices = this.verticesInWorkspace();
+            if (vertices.length) {
+                this.trigger('verticesAdded', { vertices: vertices, options: { fit: false } });
+            }
             this.currentWorkspaceFilter = null;
         };
 
@@ -904,7 +907,10 @@ define([
                 this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices });
                 this.workspaceFilterEnabled = enabled;
             } else if (!enabled) {
-                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: { fit: false } });
+                var vertices = this.verticesInWorkspace();
+                if (vertices.length) {
+                    this.trigger('verticesAdded', { vertices: vertices, options: { fit: false } });
+                }
                 this.workspaceFilterEnabled = enabled;
             }
         };
@@ -926,12 +932,19 @@ define([
                     .done(function(result) {
                         self.filteredWorkspaceVertices = result[1];
 
-                        self.trigger('verticesDeleted', { vertices: result[1] });
-                        self.trigger('verticesAdded', { vertices: result[0], options: options });
+                        if (result[1].length) {
+                            self.trigger('verticesDeleted', { vertices: result[1] });
+                        }
+                        if (results[0].length) {
+                            self.trigger('verticesAdded', { vertices: result[0], options: options });
+                        }
                     })
                     .done(async.resolve);
             } else {
-                this.trigger('verticesAdded', { vertices: this.verticesInWorkspace(), options: options });
+                var vertices = this.verticesInWorkspace();
+                if (vertices.length) {
+                    this.trigger('verticesAdded', { vertices: vertices, options: options });
+                }
                 async.resolve();
             }
 
