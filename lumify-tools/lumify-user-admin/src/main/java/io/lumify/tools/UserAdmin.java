@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Set;
 
 public class UserAdmin extends CommandLineBase {
-    private static final String CMD_OPT_USERNAME = "username";
     private static final String CMD_OPT_USERID = "userid";
+    private static final String CMD_OPT_USERNAME = "username";
+    private static final String CMD_OPT_PASSWORD = "password";
     private static final String CMD_OPT_PRIVILEGES = "privileges";
     private static final String CMD_OPT_AS_TABLE = "as-table";
     private static final String CMD_ACTION_LIST = "list";
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
+    private static final String CMD_ACTION_CREATE = "create";
+    private static final String CMD_ACTION_UPDATE_PASSWORD = "update-password";
 
     public static void main(String[] args) throws Exception {
         int res = new UserAdmin().run(args);
@@ -46,6 +49,14 @@ public class UserAdmin extends CommandLineBase {
                         .withDescription("The username of the user you would like to view or edit")
                         .hasArg()
                         .create("u")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                    .withLongOpt(CMD_OPT_PASSWORD)
+                    .withDescription("The password to set")
+                    .hasArg()
+                    .create()
         );
 
         opts.addOption(
@@ -81,19 +92,15 @@ public class UserAdmin extends CommandLineBase {
             return setPrivileges(cmd);
         }
 
-        System.out.println(cmd.toString());
-        return 0;
-    }
-
-    private int delete(CommandLine cmd) {
-        User user = findUser(cmd);
-        if (user == null) {
-            printUserNotFoundError(cmd);
-            return 2;
+        if (args.contains(CMD_ACTION_CREATE)) {
+            return create(cmd);
         }
 
-        getUserRepository().delete(user);
-        System.out.println("Deleted user " + user.getUserId());
+        if (args.contains(CMD_ACTION_UPDATE_PASSWORD)) {
+            return updatePassword(cmd);
+        }
+
+        System.out.println(cmd.toString());
         return 0;
     }
 
@@ -106,6 +113,18 @@ public class UserAdmin extends CommandLineBase {
                 printUser(user);
             }
         }
+        return 0;
+    }
+
+    private int delete(CommandLine cmd) {
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        getUserRepository().delete(user);
+        System.out.println("Deleted user " + user.getUserId());
         return 0;
     }
 
@@ -128,6 +147,32 @@ public class UserAdmin extends CommandLineBase {
             user = getUserRepository().findById(user.getUserId());
         }
 
+        printUser(user);
+        return 0;
+    }
+
+    private int create(CommandLine cmd) {
+        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
+        String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
+        String[] authorizations = new String[] {};
+
+        getUserRepository().addUser(username, username, null, password, authorizations);
+
+        User user = getUserRepository().findByUsername(username);
+        printUser(user);
+        return 0;
+    }
+
+    private int updatePassword(CommandLine cmd) {
+        User user = findUser(cmd);
+
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
+        getUserRepository().setPassword(user, password);
         printUser(user);
         return 0;
     }
