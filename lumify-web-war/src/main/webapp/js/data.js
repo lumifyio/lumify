@@ -836,8 +836,10 @@ define([
         };
 
         this.onVerticesDeleted = function(evt, data) {
-            var self = this;
-            if (data && data.vertices) {
+            var self = this,
+                softDeletion = data.options && data.options.soft === true;
+
+            if (!softDeletion && data && data.vertices) {
                 data.vertices.forEach(function(vertex) {
                     var workspaceInfo = self.workspaceVertices[vertex.id];
                     if (workspaceInfo) {
@@ -916,7 +918,7 @@ define([
             }
 
             if (enabled && this.filteredWorkspaceVertices) {
-                this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices });
+                this.trigger('verticesDeleted', { vertices: this.filteredWorkspaceVertices, options: { soft: true } });
                 this.workspaceFilterEnabled = enabled;
             } else if (!enabled) {
                 var vertices = this.verticesInWorkspace();
@@ -945,7 +947,7 @@ define([
                         self.filteredWorkspaceVertices = result[1];
 
                         if (result[1].length) {
-                            self.trigger('verticesDeleted', { vertices: result[1] });
+                            self.trigger('verticesDeleted', { vertices: result[1], options: { soft: true } });
                         }
                         if (result[0].length) {
                             self.trigger('verticesAdded', { vertices: result[0], options: options });
