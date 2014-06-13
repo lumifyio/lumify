@@ -8,7 +8,10 @@ define([
     d3) {
     'use strict';
 
-    var MAX_ZOOM = 8;
+    var BRUSH_PADDING = 0,
+        BRUSH_TEXT_PADDING = 2,
+        BRUSH_BACKGROUND_HEIGHT = 13,
+        MAX_ZOOM = 20;
 
     return defineComponent(Histogram);
 
@@ -62,15 +65,7 @@ define([
                     return d.y;
                 })])
 
-            var domainRange = x.domain()[1] - x.domain()[0];
-            if (domainRange < 0.5) {
-                this.xAxis.tickFormat(d3.format(',.2f'))
-            } else if (domainRange < 3.0) {
-                this.xAxis.tickFormat(d3.format(',.1f'))
-            } else this.xAxis.tickFormat(d3.format(',.0f'))
-
             this.brush.x(this.zoom.x())
-            this.svg.selectAll('.bar').remove();
             this.createBars(data);
             this.svg.select('.brush').call(this.brush.x(x));
             this.svg.select('.x.axis').call(this.xAxis.orient('bottom'));
@@ -81,10 +76,17 @@ define([
             var self = this,
 
                 // Generate a Bates distribution of 10 random variables.
-                values = this.values = d3.range(100).map(d3.random.bates(10))
+                values = this.values =
+                    //[95, 95, 3, 30],
+                    ///*
+                    d3.range(100).map(d3.random.bates(10))
+                    .concat(d3.range(2000).map(function() {
+                        return d3.random.bates(10)() * 10;
+                    }))
                     .concat(d3.range(200).map(function() {
-                        return d3.random.bates(10)() + 3;
+                        return d3.random.bates(10)() * 1.5 + 1;
                     })),
+                    //*/
 
                 // A formatter for counts.
                 formatCount = d3.format(',.0f'),
@@ -112,25 +114,21 @@ define([
 
                 xAxis = d3.svg.axis()
                     .scale(x)
-                    .ticks(5)
-                    .tickFormat(d3.format(',.1f'))
+                    .ticks(4)
+                    .tickSize(5, 0)
+                    .tickFormat(function(d) {
+                        var s = d3.format('s')(d)
+                            f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
+                                .replace(/[0.]+$/g, '')
+                                .replace(/^(-?)0+/, '$1');
+
+                        if (f === '.' || f === '') return '0';
+                        return f;
+                    })
                     .orient('bottom'),
 
                 zoom = this.zoom = d3.behavior.zoom()
                     .x(x)
-                    /*
-                    .scale((function() {
-                        var extent = x.(),
-                            e = d3.extent(data),
-                            dataDelta = (e[1].x - e[0].x),
-                            scaleDelta = (extent[1] - extent[2]),
-                            scale = dataDelta / scaleDelta;
-
-                        console.log(dataDelta, scaleDelta, scale);
-
-                        return scale;
-                    })())
-                    */
                     .scaleExtent([1 / MAX_ZOOM, MAX_ZOOM])
                     .on('zoom', zoomed),
 
@@ -138,7 +136,7 @@ define([
                     .x(zoom.x())
                     .on('brush', brushed),
 
-                svg = this.svg = d3.select(this.node).append('svg')
+                svgOuter = this.svg = d3.select(this.node).append('svg')
                     .attr('width', width + margin.left + margin.right)
                     .attr('height', height + margin.top + margin.bottom)
                     .call(zoom)
@@ -150,21 +148,85 @@ define([
                         if (!d3.event.toElement || $(d3.event.toElement).closest('svg').length === 0) {
                             focus.style('display', 'none');
                         }
+                    }),
+
+                preventDragOverGraph = svgOuter.append('rect')
+                    .attr({
+                        class: 'preventDrag',
+                        x: 0,
+                        y: 0,
+                        width: '100%',
+                        height: height + margin.top
                     })
+                    .on('mousedown', function() {
+                        d3.event.stopPropagation();
+                    }),
+
+                axisOverlay = svgOuter.append('rect')
+                    .attr({
+                        class: 'axis-overlay',
+                        x: 0,
+                        y: height + margin.top,
+                        width: '100%',
+                        height: margin.bottom
+                    }),
+
+                svg = svgOuter
                     .append('g')
                     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
 
-                barGroup = this.barGroup = svg.append('g').attr('class', 'barGroup'),
+                barGroup = this.barGroup = svg.append('g')
+                    .attr('class', 'barGroup'),
 
                 bar = this.createBars(data),
 
                 focus = svg.append('g')
                     .attr('class', 'focus')
-                    .style('display', 'none');
+                    .style('display', 'none'),
 
-                //gBrush = svg.append('g')
-                    //.attr('class', 'brush')
-                    //.call(brush);
+                gBrush = svgOuter.append('g')
+                    .attr('class', 'brush')
+                    .attr(
+                        'transform',
+                        'translate(' + margin.left + ',' + Math.max(0, margin.top - BRUSH_PADDING - 1) + ')'
+                    )
+                    .on('mousedown', function() {
+                        d3.event.stopPropagation();
+                    })
+                    .call(brush),
+
+                gBrushRects = gBrush.selectAll('rect')
+                    .attr('height', height + BRUSH_PADDING * 2),
+
+                gBrushText = gBrush.append('g')
+                    .style('display', 'none')
+                    .attr('class', 'brushText'),
+
+                gBrushTextStartBackground = gBrushText.append('rect')
+                    .attr({
+                        x: 0.5,
+                        y: 0.5,
+                        height: BRUSH_BACKGROUND_HEIGHT
+                    }),
+
+                gBrushTextEndBackground = gBrushText.append('rect')
+                    .attr({
+                        x: 0.5,
+                        y: height - BRUSH_BACKGROUND_HEIGHT,
+                        height: BRUSH_BACKGROUND_HEIGHT
+                    }),
+
+                gBrushTextStart = gBrushText.append('text')
+                    .attr({
+                        x: BRUSH_TEXT_PADDING,
+                        y: Math.max(0, margin.top - BRUSH_PADDING + BRUSH_TEXT_PADDING)
+                    }),
+
+                gBrushTextEnd = gBrushText.append('text')
+                    .attr({
+                        y: height + BRUSH_PADDING - BRUSH_TEXT_PADDING,
+                        'text-anchor': 'end'
+                    });
 
             this.xAxis = xAxis;
             this.brush = brush;
@@ -180,38 +242,49 @@ define([
                 .attr('width', 1)
                 .attr('height', margin.bottom * 0.6);
 
-            //gBrush.selectAll('rect')
-                //.attr('height', height);
-
             var axis = svg.append('g')
                 .attr('class', 'x axis')
                 .attr('transform', 'translate(0,' + height + ')');
             axis.call(xAxis);
-            //axis.call(zoom);
 
             function zoomed() {
-
-                // TODO: this is the filter?
-                //console.log(x.domain())
-                /* Attempt at clamping
-                var dom = x.domain(),
-                    dt = dom[1] - dom[0],
-                    dataExtent = d3.extent(data);
-
-                if (dom[0] < dataExtent[0].x) dom[0] = dataExtent[0].x;
-                else dom[1] = dom[0] + dt;
-                if (dom[1] > dataExtent[1].x) dom[1] = dataExtent[1].x;
-                else dom[0] = dom[1] - dt;
-                x.domain(dom);
-                */
                 var scale = d3.event.scale,
                     scaleChange = scale !== self.previousScale;
                 self.redraw(scaleChange);
                 self.previousScale = scale;
+                updateBrushInfo();
             }
 
+            var brushedTextFormat = d3.format('0.2f');
             function brushed() {
-                //console.log(brush.extent());
+                requestAnimationFrame(function() {
+                    var extent = brush.extent(),
+                        delta = extent[1] - extent[0];
+
+                    gBrushText
+                        .style('display', delta < 0.01 ? 'none' : '')
+                        .attr('transform', 'translate(' + x(extent[0]) + ', 0)');
+
+                    updateBrushInfo(extent, delta);
+                });
+            }
+
+            function updateBrushInfo(brushExtent, brushExtentDelta) {
+                var extent = brushExtent || brush.extent(),
+                    delta = _.isUndefined(brushExtent) ?
+                        (extent[1] - extent[0]) : brushExtentDelta,
+                    width = Math.max(0, x(x.domain()[0] + delta) - 1);
+
+                gBrushTextStartBackground.attr('width', width);
+                gBrushTextEndBackground.attr('width', width);
+                gBrushTextStart.text(brushedTextFormat(extent[0]));
+
+                gBrushTextEnd
+                    .text(brushedTextFormat(extent[1]))
+                    .attr(
+                        'transform',
+                        'translate(' + (width - BRUSH_TEXT_PADDING) + ', 0)'
+                    );
             }
 
             function mousemove() {
@@ -233,23 +306,6 @@ define([
                 y = this.y,
                 bars = this.barGroup.selectAll('.bar').data(data);
 
-            window.data = data;
-
-            /*
-            bars.enter()
-                .append('g')
-                    .attr('class', 'bar')
-                    .attr('transform', function(d) {
-                        return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
-                    })
-                .append('rect')
-                    .attr('x', 1)
-                    .attr('width', x(data[0].dx))
-                    .attr('height', function(d) {
-                        return height - y(d.y);
-                    });
-            */
-
             bars.enter()
                 .append('g')
                     .attr('class', 'bar')
@@ -258,7 +314,7 @@ define([
             bars.attr('transform', function(d) {
                 return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
             }).select('rect')
-                    .attr('width', 1)//x(data[0].dx))
+                    .attr('width', Math.max(1, x(x.domain()[0] + data[0].dx) - 1))
                     .attr('height', function(d) {
                         return height - y(d.y);
                     });

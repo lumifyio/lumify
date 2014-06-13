@@ -156,11 +156,19 @@ width: 215px;
     .bar text {
       fill: #fff;
     }
-
+    .preventDrag, .axis-overlay {
+      opacity: 0;     
+    }
+    .axis-overlay {
+      cursor: move;
+    }
     .axis path, .axis line {
       fill: none;
       stroke: #999;
       shape-rendering: crispEdges;
+    }
+    .axis * {
+      pointer-events: none;
     }
     .brush .extent {
       stroke: @blue-color;
@@ -168,12 +176,32 @@ width: 215px;
       fill-opacity: .125;
       shape-rendering: crispEdges;
     }
+    .brushText rect {
+      fill: white;
+      fill-opacity: 0.75;
+      pointer-events: none;
+    }
+    .brush text {      
+      font-size: 80%;
+      font-variant: small-caps;
+      text-transform: lowercase;
+      pointer-events: none;
+    }
+    .resize path {
+      fill: @blue-color;
+      fill-opacity: .125;
+      stroke: @blue-color;
+      stroke-width: 1px;
+    }
     .overlay {
       fill: none;
       pointer-events: all;
     }
+    .focus  {
+      pointer-events: none;
+    }
     .scrub {
-      fill: #999;
+      fill: #999;      
     }
 
   }
