@@ -119,8 +119,11 @@ define([
                     .tickFormat(function(d) {
                         var s = d3.format('s')(d)
                             f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
-                                .replace(/[0.]+$/g, '')
                                 .replace(/^(-?)0+/, '$1');
+
+                        if (f.indexOf('.') >= 0) {
+                            f = f.replace(/[0.]+$/g, '')
+                        }
 
                         if (f === '.' || f === '') return '0';
                         return f;
