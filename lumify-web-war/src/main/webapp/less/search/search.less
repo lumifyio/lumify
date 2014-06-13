@@ -163,9 +163,13 @@ width: 215px;
       cursor: move;
     }
     .axis path, .axis line {
-      fill: none;
-      stroke: #999;
+      fill: none;      
+      stroke: lighten(black, 40%);
       shape-rendering: crispEdges;
+    }
+    .axis text {
+      font-size: 85%;
+      fill: lighten(black, 40%);
     }
     .axis * {
       pointer-events: none;
@@ -186,6 +190,7 @@ width: 215px;
       font-variant: small-caps;
       text-transform: lowercase;
       pointer-events: none;
+      fill: darken(@blue-color, 15%);
     }
     .resize path {
       fill: @blue-color;
@@ -199,11 +204,13 @@ width: 215px;
     }
     .focus  {
       pointer-events: none;
+      text {
+        fill: lighten(black, 40%);
+      }
     }
     .scrub {
-      fill: #999;      
+      fill: lighten(black, 40%);
     }
-
   }
 
   .typeahead {
