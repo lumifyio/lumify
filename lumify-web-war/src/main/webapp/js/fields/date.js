@@ -3,12 +3,13 @@ define([
     'flight/lib/component',
     'hbs!./dateTpl',
     './withPropertyField',
+    './withHistogram',
     'util/formatters',
     'chrono'
-], function(defineComponent, template, withPropertyField, F, chrono) {
+], function(defineComponent, template, withPropertyField, withHistogram, F, chrono) {
     'use strict';
 
-    return defineComponent(DateField, withPropertyField);
+    return defineComponent(DateField, withPropertyField, withHistogram);
 
     function DateField() {
 

@@ -12,7 +12,9 @@ define([
         BRUSH_PADDING = 0,
         BRUSH_TEXT_PADDING = 2,
         BRUSH_BACKGROUND_HEIGHT = 13,
-        MAX_ZOOM = 20;
+        MAX_ZOOM_IN = 1000,
+        MAX_ZOOM_OUT = 100,
+        DAY = 24 * 60 * 60 * 1000;
 
     return defineComponent(Histogram);
 
@@ -26,11 +28,14 @@ define([
         var margin = {top: 10, right: 16, bottom: 40, left: 16};
 
         this.after('initialize', function() {
+            console.log(this.attr.property)
             this.$node.html(template({}));
             this.renderChart();
 
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 500);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
+
+            this.trigger('requestHistogramValues', { property: this.attr.property });
         });
 
         this.onGraphPaddingUpdated = function(event, data) {
@@ -51,7 +56,7 @@ define([
                 data = this.data;
 
             if (rebin) {
-                data = d3.layout.histogram().bins(Math.min(this.width, this.values.length))(this.values);
+                data = d3.layout.histogram().bins(this.binCount)(this.values);
             }
 
             y.domain([0, d3.max(data, function(d) {
@@ -68,9 +73,17 @@ define([
 
             var self = this,
 
+                isDate = this.attr.property.dataType === 'date',
+
                 // Generate a Bates distribution of 10 random variables.
                 values = this.values =
-                    //[95, 95, 3, 30],
+                    isDate ?
+                        [
+                            d3.time.day.utc.floor(new Date()),
+                            d3.time.day.utc.floor(new Date()),
+                            d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -350),
+                            d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -400)
+                        ] :
                     ///*
                     d3.range(100).map(d3.random.bates(10))
                     .concat(d3.range(2000).map(function() {
@@ -86,16 +99,31 @@ define([
 
                 width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
                 height = this.height = HEIGHT - margin.top - margin.bottom,
+                binCount = this.binCount = width,//Math.min(width, values.length),
 
                 data = this.data = d3.layout.histogram()
-                            .bins(
-                                Math.min(width, values.length)
-                            )(values),
+                            .bins(binCount)(values),
 
-                x = this.x = d3.scale.linear()
-                    .domain(d3.extent(data, function(d) {
-                        return d.x;
-                    }))
+                x = this.x = (isDate ? d3.time.scale.utc : d3.scale.linear)()
+                    .domain(values.length === 0 ?
+                            (
+                                isDate ?
+                                [
+                                    new Date(new Date().getTime() - DAY),
+                                    new Date(new Date().getTime() + DAY)
+                                ] :
+                                [0, 100]
+                            ) :
+                            values.length === 1 ?
+                            (
+                                isDate ?
+                                [values[0], new Date(values[0].getTime() + DAY)] :
+                                [values[0] - 1, values[0] + 1]
+                            ) :
+                            d3.extent(data, function(d) {
+                                return d.x;
+                            })
+                    )
                     .range([0, width]),
 
                 y = this.y = d3.scale.linear()
@@ -106,25 +134,14 @@ define([
 
                 xAxis = d3.svg.axis()
                     .scale(x)
-                    .ticks(4)
+                    .ticks(isDate ? 3 : 4)
                     .tickSize(5, 0)
-                    .tickFormat(function(d) {
-                        var s = d3.format('s')(d)
-                            f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
-                                .replace(/^(-?)0+/, '$1');
-
-                        if (f.indexOf('.') >= 0) {
-                            f = f.replace(/[0.]+$/g, '')
-                        }
-
-                        if (f === '.' || f === '') return '0';
-                        return f;
-                    })
                     .orient('bottom'),
 
                 zoom = this.zoom = d3.behavior.zoom()
                     .x(x)
-                    .scaleExtent([1 / MAX_ZOOM, MAX_ZOOM])
+                    // TODO: look at data?
+                    .scaleExtent([1 / MAX_ZOOM_OUT, MAX_ZOOM_IN])
                     .on('zoom', zoomed),
 
                 brush = d3.svg.brush()
@@ -223,6 +240,21 @@ define([
                         'text-anchor': 'end'
                     });
 
+            if (!isDate) {
+                xAxis.tickFormat(function(d) {
+                    var s = d3.format('s')(d)
+                        f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
+                            .replace(/^(-?)0+/, '$1');
+
+                    if (f.indexOf('.') >= 0) {
+                        f = f.replace(/[0.]+$/g, '')
+                    }
+
+                    if (f === '.' || f === '') return '0';
+                    return f;
+                })
+            }
+
             this.xAxis = xAxis;
             this.brush = brush;
             this.focus = focus;
@@ -269,7 +301,11 @@ define([
                 var extent = brushExtent || brush.extent(),
                     delta = _.isUndefined(brushExtent) ?
                         (extent[1] - extent[0]) : brushExtentDelta,
-                    width = Math.max(0, x(x.domain()[0] + delta) - 1);
+                    width = Math.max(0, x(
+                             isDate ?
+                             new Date(x.domain()[0].getTime() + delta) :
+                             (x.domain()[0] + delta)
+                        ) - 1);
 
                 gBrushTextStartBackground.attr('width', width);
                 gBrushTextEndBackground.attr('width', width);
@@ -293,8 +329,12 @@ define([
                 if (mouse !== null) {
                     requestAnimationFrame(function() {
                         var x0 = x.invert(mouse - margin.left);
-                        focus.attr('transform', 'translate(' + (x(x0)) + ', 0)');
-                        focus.select('text').text(x0.toFixed(2));
+                        focus.attr('transform', 'translate(' + x(x0) + ', 0)');
+                        if (isDate) {
+                            focus.select('text').text(d3.time.format.utc('%Y-%m-%d %I %p')(x0));
+                        } else {
+                            focus.select('text').text(x0.toFixed(2));
+                        }
                     });
                 }
             }
@@ -307,7 +347,9 @@ define([
             var height = this.height,
                 x = this.x,
                 y = this.y,
-                bars = this.barGroup.selectAll('.bar').data(data);
+                dx = data.length > 0 ? data[0].dx : 0,
+                bars = this.barGroup.selectAll('.bar').data(data),
+                isDate = this.attr.property.dataType === 'date';
 
             bars.enter()
                 .append('g')
@@ -317,7 +359,12 @@ define([
             bars.attr('transform', function(d) {
                 return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
             }).select('rect')
-                    .attr('width', Math.max(1, x(x.domain()[0] + data[0].dx) - 1))
+                    .attr('width',
+                        Math.max(1, x(isDate ?
+                            (new Date(x.domain()[0].getTime() + dx)) :
+                            (x.domain()[0] + dx)
+                        ) - 1)
+                    )
                     .attr('height', function(d) {
                         return height - y(d.y);
                     });
