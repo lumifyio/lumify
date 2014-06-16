@@ -248,6 +248,7 @@ define([
                 self.redraw(scaleChange);
                 self.previousScale = scale;
                 updateBrushInfo();
+                updateFocusInfo();
             }
 
             var brushedTextFormat = d3.format('0.2f');
@@ -282,13 +283,20 @@ define([
                     );
             }
 
+            var mouse = null;
             function mousemove() {
-                var mouse = d3.mouse(this)[0];
-                requestAnimationFrame(function() {
-                    var x0 = x.invert(mouse - margin.left);
-                    focus.attr('transform', 'translate(' + (x(x0)) + ', 0)');
-                    focus.select('text').text(x0.toFixed(2));
-                });
+                mouse = d3.mouse(this)[0];
+                updateFocusInfo();
+            }
+
+            function updateFocusInfo() {
+                if (mouse !== null) {
+                    requestAnimationFrame(function() {
+                        var x0 = x.invert(mouse - margin.left);
+                        focus.attr('transform', 'translate(' + (x(x0)) + ', 0)');
+                        focus.select('text').text(x0.toFixed(2));
+                    });
+                }
             }
 
             this.redraw();
