@@ -8,7 +8,8 @@ define([
     d3) {
     'use strict';
 
-    var BRUSH_PADDING = 0,
+    var HEIGHT = 100,
+        BRUSH_PADDING = 0,
         BRUSH_TEXT_PADDING = 2,
         BRUSH_BACKGROUND_HEIGHT = 13,
         MAX_ZOOM = 20;
@@ -50,20 +51,12 @@ define([
                 data = this.data;
 
             if (rebin) {
-                var valuesInDomain = _.filter(this.values, function(v) {
-                        return true;//inDomain(v, x);
-                    });
-
-                data = d3.layout.histogram()
-                        .bins(
-                            Math.min(this.width, valuesInDomain.length)
-                            //x.ticks(100)
-                        )(valuesInDomain);
+                data = d3.layout.histogram().bins(Math.min(this.width, this.values.length))(this.values);
             }
 
-                y.domain([0, d3.max(data, function(d) {
-                    return d.y;
-                })])
+            y.domain([0, d3.max(data, function(d) {
+                return d.y;
+            })])
 
             this.brush.x(this.zoom.x())
             this.createBars(data);
@@ -92,12 +85,11 @@ define([
                 formatCount = d3.format(',.0f'),
 
                 width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
-                height = this.height = 100 - margin.top - margin.bottom,
+                height = this.height = HEIGHT - margin.top - margin.bottom,
 
                 data = this.data = d3.layout.histogram()
                             .bins(
                                 Math.min(width, values.length)
-                                //x.ticks(100)
                             )(values),
 
                 x = this.x = d3.scale.linear()
