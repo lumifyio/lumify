@@ -150,7 +150,7 @@ public abstract class BaseRequestHandler implements Handler {
         }
 
         for (int i = 0; i < paramValues.length; i++) {
-            paramValues[i] = UrlUtils.urlDecode(paramValues[i]);
+            paramValues[i] = paramValues[i];
         }
 
         return paramValues;
@@ -167,7 +167,7 @@ public abstract class BaseRequestHandler implements Handler {
             return null;
         }
 
-        return UrlUtils.urlDecode(paramValue);
+        return paramValue;
     }
 
     protected String getAttributeString(final HttpServletRequest request, final String name) {
