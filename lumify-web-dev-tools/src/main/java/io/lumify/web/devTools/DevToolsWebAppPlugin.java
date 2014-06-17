@@ -5,6 +5,7 @@ import com.altamiracorp.miniweb.StaticResourceHandler;
 import io.lumify.web.LumifyCsrfHandler;
 import io.lumify.web.WebApp;
 import io.lumify.web.WebAppPlugin;
+import io.lumify.web.devTools.ontology.SaveOntologyConcept;
 import io.lumify.web.devTools.user.*;
 import io.lumify.web.privilegeFilters.AdminPrivilegeFilter;
 
@@ -27,6 +28,9 @@ public class DevToolsWebAppPlugin implements WebAppPlugin {
         app.get("/admin/requeue.html", authenticationHandler, new StaticResourceHandler(getClass(), "/requeue.html", "text/html"));
         app.post("/admin/queueVertices", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueVertices.class);
         app.post("/admin/queueEdges", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, QueueEdges.class);
+
+        app.get("/admin/editOntology.html", authenticationHandler, new StaticResourceHandler(getClass(), "/editOntology.html", "text/html"));
+        app.post("/admin/saveOntologyConcept", authenticationHandlerClass, csrfHandlerClass, AdminPrivilegeFilter.class, SaveOntologyConcept.class);
 
         app.registerJavaScript("/io/lumify/web/devTools/dev.js");
         app.registerCss("/io/lumify/web/devTools/dev.css");
