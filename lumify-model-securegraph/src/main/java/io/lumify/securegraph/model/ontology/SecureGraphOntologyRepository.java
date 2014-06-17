@@ -2,7 +2,6 @@ package io.lumify.securegraph.model.ontology;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -32,7 +31,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
-import static io.lumify.core.util.CollectionUtil.single;
+import static org.securegraph.util.IterableUtils.single;
+import static org.securegraph.util.IterableUtils.singleOrDefault;
 import static org.securegraph.util.IterableUtils.toList;
 
 @Singleton
@@ -213,7 +213,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     @Override
     public OntologyProperty getProperty(String propertyIRI) {
         try {
-            Vertex propVertex = Iterables.getOnlyElement(graph.query(getAuthorizations())
+            Vertex propVertex = singleOrDefault(graph.query(getAuthorizations())
                     .has(CONCEPT_TYPE.getPropertyName(), TYPE_PROPERTY)
                     .has(ONTOLOGY_TITLE.getPropertyName(), propertyIRI)
                     .vertices(), null);
@@ -225,7 +225,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Relationship getRelationshipByIRI(String relationshipIRI) {
-        Vertex relationshipVertex = Iterables.getFirst(graph.query(getAuthorizations())
+        Vertex relationshipVertex = singleOrDefault(graph.query(getAuthorizations())
                 .has(CONCEPT_TYPE.getPropertyName(), TYPE_RELATIONSHIP)
                 .has(ONTOLOGY_TITLE.getPropertyName(), relationshipIRI)
                 .vertices(), null);
@@ -494,7 +494,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     private Vertex getParentConceptVertex(Vertex conceptVertex) {
         try {
-            return Iterables.getOnlyElement(conceptVertex.getVertices(Direction.OUT, LabelName.IS_A.toString(), getAuthorizations()), null);
+            return singleOrDefault(conceptVertex.getVertices(Direction.OUT, LabelName.IS_A.toString(), getAuthorizations()), null);
         } catch (IllegalArgumentException iae) {
             throw new IllegalStateException(String.format("Unexpected number of parents for concept %s",
                     TITLE.getPropertyValue(conceptVertex)), iae);

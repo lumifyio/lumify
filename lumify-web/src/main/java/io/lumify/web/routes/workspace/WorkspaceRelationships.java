@@ -1,5 +1,7 @@
 package io.lumify.web.routes.workspace;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.Workspace;
@@ -10,22 +12,20 @@ import io.lumify.core.util.GraphUtil;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.Direction;
 import org.securegraph.Edge;
 import org.securegraph.Graph;
 import org.securegraph.util.ConvertingIterable;
-import com.google.inject.Inject;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 
-import static io.lumify.core.util.CollectionUtil.toList;
+import static org.securegraph.util.IterableUtils.toList;
 
 public class WorkspaceRelationships extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WorkspaceRelationships.class);

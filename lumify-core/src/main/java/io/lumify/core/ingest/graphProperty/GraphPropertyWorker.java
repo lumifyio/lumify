@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.lumify.core.util.CollectionUtil.trySingle;
+import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
@@ -188,7 +188,7 @@ public abstract class GraphPropertyWorker {
             String label = vertexRelationship.getLabel();
             checkNotNull(label, "label is required");
 
-            Edge edge = trySingle(sourceTermMentionsWithGraphVertex.getVertex().getEdges(targetVertex, Direction.OUT, label, getAuthorizations()));
+            Edge edge = singleOrDefault(sourceTermMentionsWithGraphVertex.getVertex().getEdges(targetVertex, Direction.OUT, label, getAuthorizations()), null);
             if (edge == null) {
                 LOGGER.debug("adding edge %s -> %s (%s)", sourceTermMentionsWithGraphVertex.getVertex().getId(), targetVertex.getId(), label);
                 graph.addEdge(
@@ -213,7 +213,7 @@ public abstract class GraphPropertyWorker {
             String label = relationship.getLabel();
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?
-            Edge edge = trySingle(sourceTermMentionsWithGraphVertex.getVertex().getEdges(destTermMentionsWithGraphVertex.getVertex(), Direction.OUT, label, getAuthorizations()));
+            Edge edge = singleOrDefault(sourceTermMentionsWithGraphVertex.getVertex().getEdges(destTermMentionsWithGraphVertex.getVertex(), Direction.OUT, label, getAuthorizations()), null);
             if (edge == null) {
                 graph.addEdge(
                         sourceTermMentionsWithGraphVertex.getVertex(),
@@ -281,10 +281,10 @@ public abstract class GraphPropertyWorker {
                 if (termMention.getId() != null) {
                     vertex = graph.getVertex(termMention.getId(), getAuthorizations());
                 } else {
-                    vertex = trySingle(graph.query(getAuthorizations())
+                    vertex = singleOrDefault(graph.query(getAuthorizations())
                             .has(LumifyProperties.TITLE.getPropertyName(), title)
                             .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), concept.getTitle())
-                            .vertices());
+                            .vertices(), null);
                 }
             }
             JSONObject visibilityJson = new JSONObject();
@@ -318,7 +318,7 @@ public abstract class GraphPropertyWorker {
             }
 
             // TODO: a better way to check if the same edge exists instead of looking it up every time?
-            Edge edge = trySingle(artifactGraphVertex.getEdges(vertex, Direction.OUT, artifactHasEntityIri, getAuthorizations()));
+            Edge edge = singleOrDefault(artifactGraphVertex.getEdges(vertex, Direction.OUT, artifactHasEntityIri, getAuthorizations()), null);
             if (edge == null) {
                 edge = graph.addEdge(artifactGraphVertex, vertex, artifactHasEntityIri, termMention.getVisibility(), getAuthorizations());
                 auditRepository.auditRelationship(AuditAction.CREATE, artifactGraphVertex, vertex, edge, termMention.getProcess(), "", getUser(), termMention.getVisibility());
