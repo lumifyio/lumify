@@ -73,7 +73,11 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
-    public void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations) {
+    public void setProperty(String name, Object value, Authorizations authorizations) {
+    }
+
+    @Override
+    public void removeProperty(String name, Authorizations authorizations) {
     }
 
     @Override

@@ -109,7 +109,9 @@ public abstract class Concept {
         return conceptsJson;
     }
 
-    public abstract void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations);
+    public abstract void setProperty(String name, Object value, Authorizations authorizations);
+
+    public abstract void removeProperty(String name, Authorizations authorizations);
 
     public abstract InputStream getGlyphIcon();
 

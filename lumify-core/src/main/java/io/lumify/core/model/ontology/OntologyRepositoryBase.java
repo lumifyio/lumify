@@ -196,31 +196,31 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
-            result.setProperty(OntologyLumifyProperties.COLOR.getPropertyName(), color, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+            result.setProperty(OntologyLumifyProperties.COLOR.getPropertyName(), color, authorizations);
         }
 
         String displayType = getDisplayType(o, ontologyClass);
         if (displayType != null) {
-            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+            result.setProperty(OntologyLumifyProperties.DISPLAY_TYPE.getPropertyName(), displayType, authorizations);
         }
 
         String titleFormula = getTitleFormula(o, ontologyClass);
         if (titleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+            result.setProperty(OntologyLumifyProperties.TITLE_FORMULA.getPropertyName(), titleFormula, authorizations);
         }
 
         String subtitleFormula = getSubtitleFormula(o, ontologyClass);
         if (subtitleFormula != null) {
-            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+            result.setProperty(OntologyLumifyProperties.SUBTITLE_FORMULA.getPropertyName(), subtitleFormula, authorizations);
         }
 
         String timeFormula = getTimeFormula(o, ontologyClass);
         if (timeFormula != null) {
-            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+            result.setProperty(OntologyLumifyProperties.TIME_FORMULA.getPropertyName(), timeFormula, authorizations);
         }
 
         boolean userVisible = getUserVisible(o, ontologyClass);
-        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+        result.setProperty(OntologyLumifyProperties.USER_VISIBLE.getPropertyName(), userVisible, authorizations);
 
         String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
         setIconProperty(result, inDir, glyphIconFileName, LumifyProperties.GLYPH_ICON.getPropertyName(), authorizations);
@@ -242,7 +242,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 StreamingPropertyValue value = new StreamingPropertyValue(iconFileIn, byte[].class);
                 value.searchIndex(false);
                 value.store(true);
-                concept.setProperty(propertyKey, value, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+                concept.setProperty(propertyKey, value, authorizations);
             } finally {
                 iconFileIn.close();
             }

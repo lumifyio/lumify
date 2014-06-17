@@ -31,9 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.lumify.core.model.ontology.OntologyLumifyProperties.*;
 import static io.lumify.core.model.properties.LumifyProperties.DISPLAY_NAME;
 import static io.lumify.core.model.properties.LumifyProperties.TITLE;
-import static org.securegraph.util.IterableUtils.single;
-import static org.securegraph.util.IterableUtils.singleOrDefault;
-import static org.securegraph.util.IterableUtils.toList;
+import static org.securegraph.util.IterableUtils.*;
 
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
@@ -75,6 +73,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     @Override
     public void clearCache() {
         LOGGER.info("clearing ontology cache");
+        graph.flush();
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
         this.conceptsCache.invalidateAll();
@@ -85,7 +84,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
         StreamingPropertyValue raw = new StreamingPropertyValue(new ByteArrayInputStream(rawImg), byte[].class);
         raw.searchIndex(false);
-        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getPropertyName(), raw, OntologyRepository.VISIBILITY.getVisibility(), authorizations);
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getPropertyName(), raw, authorizations);
         graph.flush();
     }
 
