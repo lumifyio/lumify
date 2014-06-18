@@ -15,7 +15,7 @@ define([
         });
 
         this.after('initialize', function() {
-            if (this.attr.predicates) {
+            if (this.attr.predicates && this.attr.supportsHistogram) {
                 this.$node.prepend(template({}));
 
                 this.on('click', {

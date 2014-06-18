@@ -10,11 +10,20 @@ define([
 
     function SearchTypeWorkspace() {
 
+        this.before('initialize', function(node, config) {
+            config.supportsHistogram = true;
+        });
+
         this.after('initialize', function() {
             this.on('queryupdated', this.onQueryUpdated);
             this.on('workspaceFiltered', this.onWorkspaceFiltered);
+            this.on('requestHistogramValues', this.onRequestHistogramValues);
             this.on(document, 'clearWorkspaceFilter', this.onClearWorkspaceFilter);
         });
+
+        this.onRequestHistogramValues = function() {
+            console.log(this.attr)
+        };
 
         this.onClearWorkspaceFilter = function() {
             this.trigger('clearSearch');

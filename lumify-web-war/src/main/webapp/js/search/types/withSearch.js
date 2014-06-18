@@ -68,7 +68,9 @@ define([
             this.hideSearchResults();
 
             var filters = this.select('filtersSelector');
-            Filters.attachTo(filters.find('.content'));
+            Filters.attachTo(filters.find('.content'), {
+                supportsHistogram: this.attr.supportsHistogram === true
+            });
         };
 
         this.hideSearchResults = function() {

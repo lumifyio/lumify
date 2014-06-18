@@ -165,14 +165,15 @@ define([
                     'fields/' + property.dataType;
 
             require([fieldComponent], function(PropertyFieldItem) {
-                var node = li.find('.configuration');
+                var node = li.find('.configuration').removeClass('alternate');
 
                 self.teardownField(node);
 
                 PropertyFieldItem.attachTo(node, {
                     property: property,
                     id: self.filterId++,
-                    predicates: true
+                    predicates: true,
+                    supportsHistogram: self.attr.supportsHistogram
                 });
 
                 li.removeClass('newrow');
