@@ -36,6 +36,9 @@ define([
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
             this.trigger('requestHistogramValues', { property: this.attr.property });
+
+            this.redraw = _.throttle(this.redraw.bind(this), 16);
+
         });
 
         this.onGraphPaddingUpdated = function(event, data) {
@@ -45,29 +48,52 @@ define([
 
             this.$node.find('svg').attr('width', width + margin.left + margin.right);
 
-            this.x.range([0, width]);
+            this.xScale.range([0, width]);
             this.focus.style('display', 'none');
             this.redraw();
         };
 
         this.redraw = function(rebin) {
-            var x = this.x,
-                y = this.y,
-                data = this.data;
+            var self = this,
+                xScale = this.xScale,
+                yScale = this.yScale,
+                data = this.data,
+                updateElements = function(animate) {
+                    yScale.domain([0, d3.max(data, function(d) {
+                        return d.y;
+                    })])
+
+                    self.brush.x(self.zoom.x())
+                    self.createBars(data, animate);
+                    self.svg.select('.brush').call(self.brush.x(xScale));
+                    self.svg.select('.x.axis').call(self.xAxis.orient('bottom'));
+                };
 
             if (rebin) {
-                data = d3.layout.histogram().bins(this.binCount)(this.values);
+                if (!this.debouncedBin) {
+                    this.debouncedBin = _.debounce(function() {
+                        self.binCount = null;
+                        data = self.data = self.binValues();
+                        updateElements(true);
+                    }, 250);
+                }
+                this.debouncedBin();
+            }
+            updateElements();
+        };
+
+        this.binValues = function() {
+            var isDate = this.attr.property.dataType === 'date',
+                xScale = this.xScale;
+
+            if (!this.binCount) {
+                this.binCount = isDate ? xScale.ticks(25) : 25;//this.width;
             }
 
-            y.domain([0, d3.max(data, function(d) {
-                return d.y;
-            })])
-
-            this.brush.x(this.zoom.x())
-            this.createBars(data);
-            this.svg.select('.brush').call(this.brush.x(x));
-            this.svg.select('.x.axis').call(this.xAxis.orient('bottom'));
-        };
+            return d3.layout.histogram().bins(this.binCount)(_.filter(this.values, function(v) {
+                return inDomain(v, xScale);
+            }));
+        }
 
         this.renderChart = function(optionalHeight) {
 
@@ -75,14 +101,26 @@ define([
 
                 isDate = this.attr.property.dataType === 'date',
 
+                isDateTime = this.attr.property.displayTime === true,
+
                 // Generate a Bates distribution of 10 random variables.
                 values = this.values =
                     isDate ?
                         [
-                            d3.time.day.utc.floor(new Date()),
-                            d3.time.day.utc.floor(new Date()),
+                            new Date(2014, 7, 17),
+                            new Date(2014, 7, 17),
+                            new Date(2014, 7, 10),
+                            new Date(2014, 7, 10),
+                            new Date(2014, 7, 13),
+                            new Date(2014, 7, 14),
+                            new Date(1950, 7, 16),
+                            new Date()
+                            /*
+                            d3.time.day.floor(new Date()),
+                            d3.time.day.floor(new Date()),
                             d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -350),
                             d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -400)
+                            */
                         ] :
                     ///*
                     d3.range(100).map(d3.random.bates(10))
@@ -99,50 +137,26 @@ define([
 
                 width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
                 height = this.height = HEIGHT - margin.top - margin.bottom,
-                binCount = this.binCount = width,//Math.min(width, values.length),
 
-                data = this.data = d3.layout.histogram()
-                            .bins(binCount)(values),
+                valuesExtent = window.valuesExtent = calculateValuesExtent(),
 
-                x = this.x = (isDate ? d3.time.scale.utc : d3.scale.linear)()
-                    .domain(values.length === 0 ?
-                            (
-                                isDate ?
-                                [
-                                    new Date(new Date().getTime() - DAY),
-                                    new Date(new Date().getTime() + DAY)
-                                ] :
-                                [0, 100]
-                            ) :
-                            values.length === 1 ?
-                            (
-                                isDate ?
-                                [values[0], new Date(values[0].getTime() + DAY)] :
-                                [values[0] - 1, values[0] + 1]
-                            ) :
-                            d3.extent(data, function(d) {
-                                return d.x;
-                            })
-                    )
-                    .range([0, width]),
+                xScale = this.xScale = createXScale(),
 
-                y = this.y = d3.scale.linear()
+                data = this.data = this.binValues(),
+
+                yScale = this.yScale = d3.scale.linear()
                     .domain([0, d3.max(data, function(d) {
                         return d.y;
                     })])
                     .range([height, 0]),
 
                 xAxis = d3.svg.axis()
-                    .scale(x)
+                    .scale(xScale)
                     .ticks(isDate ? 3 : 4)
                     .tickSize(5, 0)
                     .orient('bottom'),
 
-                zoom = this.zoom = d3.behavior.zoom()
-                    .x(x)
-                    // TODO: look at data?
-                    .scaleExtent([1 / MAX_ZOOM_OUT, MAX_ZOOM_IN])
-                    .on('zoom', zoomed),
+                zoom = this.zoom = createZoomBehavior(),
 
                 brush = d3.svg.brush()
                     .x(zoom.x())
@@ -240,7 +254,34 @@ define([
                         'text-anchor': 'end'
                     });
 
-            if (!isDate) {
+            if (isDate) {
+                xAxis.tickFormat(d3.time.format.multi([
+                    ['.%L', function(d) {
+                        return d.getMilliseconds();
+                    }],
+                    [':%S', function(d) {
+                        return d.getSeconds();
+                    }],
+                    ['%I:%M', function(d) {
+                        return d.getMinutes();
+                    }],
+                    ['%I %p', function(d) {
+                        return d.getHours();
+                    }],
+                    ['%a %d', function(d) {
+                        return d.getDay() && d.getDate() != 1;
+                    }],
+                    ['%b %d', function(d) {
+                        return d.getDate() != 1;
+                    }],
+                    ['%b', function(d) {
+                        return d.getMonth();
+                    }],
+                    ['%Y', function() {
+                        return true;
+                    }]
+                ]));
+            } else {
                 xAxis.tickFormat(function(d) {
                     var s = d3.format('s')(d)
                         f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
@@ -274,16 +315,76 @@ define([
                 .attr('transform', 'translate(0,' + height + ')');
             axis.call(xAxis);
 
+            function calculateValuesExtent() {
+                if (isDate) {
+                    if (values.length === 0) {
+                        return [
+                            d3.time.day.offset(new Date(), -1),
+                            d3.time.day.offset(new Date(), 2)
+                        ];
+                    } else if (values.length === 1) {
+                        return [
+                            d3.time.day.offset(values[0], -1),
+                            d3.time.day.offset(values[0], 2)
+                        ];
+                    } else {
+                        var min = d3.min(values),
+                            max = d3.max(values),
+                            delta = max - min,
+                            days = Math.max(1, parseInt(Math.round(delta / 1000 / 60 / 60 / 24 * 0.1), 10));
+
+                        return [
+                            //min, max
+                            d3.time.day.offset(min, days * -1),
+                            d3.time.day.offset(max, days)
+                        ];
+                    }
+                } else if (values.length === 0) {
+                    return [0, 100];
+                } else if (values.length === 1) {
+                    return [values[0] - 1, values[0] + 1];
+                }
+
+                return d3.extent(values);
+            }
+
+            function createZoomBehavior() {
+                var delta = valuesExtent[1] - valuesExtent[0],
+                    maxZoomIn = delta / (isDateTime ? 36e5 : isDate ? 36e5 * 48 : 0.5),
+                    maxZoomOut = delta / (isDate ? (50 * 365 * 24 * 36e5) : 1);
+
+                return d3.behavior.zoom()
+                    .x(xScale)
+                    .scaleExtent([1 / 2, maxZoomIn])
+                    .on('zoom', zoomed);
+            }
+
+            function createXScale() {
+                if (isDateTime || isDate) {
+                    return d3.time.scale()
+                        .domain(valuesExtent)
+                        .range([0, width]);
+                }
+
+                return d3.scale.linear()
+                    .domain(valuesExtent)
+                    .range([0, width]);
+            }
+
             function zoomed() {
                 var scale = d3.event.scale,
-                    scaleChange = scale !== self.previousScale;
-                self.redraw(scaleChange);
+                    scaleChange = scale !== self.previousScale,
+                    translate = d3.event.translate[0],
+                    translateChange = translate !== self.previousTranslate;
+
+                self.redraw(scaleChange || translateChange);
                 self.previousScale = scale;
+                self.previousTranslate = translate;
                 updateBrushInfo();
                 updateFocusInfo();
             }
 
-            var brushedTextFormat = d3.format('0.2f');
+            var brushedTextFormat = xAxis.tickFormat();//d3.format('0.2f');
             function brushed() {
                 requestAnimationFrame(function() {
                     var extent = brush.extent(),
@@ -291,7 +392,7 @@ define([
 
                     gBrushText
                         .style('display', delta < 0.01 ? 'none' : '')
-                        .attr('transform', 'translate(' + x(extent[0]) + ', 0)');
+                        .attr('transform', 'translate(' + xScale(extent[0]) + ', 0)');
 
                     updateBrushInfo(extent, delta);
                 });
@@ -301,10 +402,10 @@ define([
                 var extent = brushExtent || brush.extent(),
                     delta = _.isUndefined(brushExtent) ?
                         (extent[1] - extent[0]) : brushExtentDelta,
-                    width = Math.max(0, x(
+                    width = Math.max(0, xScale(
                              isDate ?
-                             new Date(x.domain()[0].getTime() + delta) :
-                             (x.domain()[0] + delta)
+                             new Date(xScale.domain()[0].getTime() + delta) :
+                             (xScale.domain()[0] + delta)
                         ) - 1);
 
                 gBrushTextStartBackground.attr('width', width);
@@ -325,17 +426,23 @@ define([
                 updateFocusInfo();
             }
 
+            var format = isDate && '%Y-%m-%d';
+            if (isDateTime) {
+                format += ' %I %p';
+            }
+            format = format && d3.time.format(format);
+            if (format) {
+                brushedTextFormat = format;
+            }
             function updateFocusInfo() {
                 if (mouse !== null) {
-                    requestAnimationFrame(function() {
-                        var x0 = x.invert(mouse - margin.left);
-                        focus.attr('transform', 'translate(' + x(x0) + ', 0)');
-                        if (isDate) {
-                            focus.select('text').text(d3.time.format.utc('%Y-%m-%d %I %p')(x0));
-                        } else {
-                            focus.select('text').text(x0.toFixed(2));
-                        }
-                    });
+                    var x0 = xScale.invert(mouse - margin.left);
+                    focus.attr('transform', 'translate(' + xScale(x0) + ', 0)');
+                    if (isDate) {
+                        focus.select('text').text(format(x0));
+                    } else {
+                        focus.select('text').text(x0.toFixed(2));
+                    }
                 }
             }
 
@@ -343,32 +450,41 @@ define([
 
         }
 
-        this.createBars = function(data) {
+        this.createBars = function(data, animate) {
             var height = this.height,
-                x = this.x,
-                y = this.y,
+                xScale = this.xScale,
+                yScale = this.yScale,
                 dx = data.length > 0 ? data[0].dx : 0,
+                keys = {},
                 bars = this.barGroup.selectAll('.bar').data(data),
-                isDate = this.attr.property.dataType === 'date';
+                isDate = this.attr.property.dataType === 'date',
+                isDateTime = this.attr.property.displayTime === true;
 
             bars.enter()
-                .append('g')
-                    .attr('class', 'bar')
-                .append('rect')
-                    .attr('x', 1);
-            bars.attr('transform', function(d) {
-                return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
-            }).select('rect')
+                .append('g').attr('class', 'bar')
+                .append('rect');
+
+            bars
+                .attr('transform', function(d) {
+                    var dX = isDate && !isDateTime ? d3.time.day.floor(d.x) : d.x;
+                    return 'translate(' + xScale(dX) + ',' + yScale(d.y) + ')';
+                }).select('rect')
                     .attr('width',
-                        Math.max(1, x(isDate ?
-                            (new Date(x.domain()[0].getTime() + dx)) :
-                            (x.domain()[0] + dx)
-                        ) - 1)
+                        Math.max(1,
+                            (isDate ?
+                             xScale(xScale.domain()[0].getTime() + data[0].dx) :
+                             xScale(xScale.domain()[0] + dx)
+                            ) - 1
+                        )
                     )
                     .attr('height', function(d) {
-                        return height - y(d.y);
+                        return height - yScale(d.y);
                     });
+
             bars.exit().remove();
+            this.barGroup.selectAll('.bar').filter(function(d) {
+                return d.y === 0;
+            }).remove();
 
             return bars;
         }
