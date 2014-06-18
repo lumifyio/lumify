@@ -1,7 +1,7 @@
 package io.lumify.core.util;
 
 import com.altamiracorp.bigtable.model.ModelSession;
-import io.lumify.core.model.artifactThumbnails.ArtifactThumbnail;
+import io.lumify.core.model.artifactThumbnails.BigTableArtifactThumbnail;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.detectedObjects.DetectedObjectModel;
 import io.lumify.core.model.termMention.TermMentionModel;
@@ -14,7 +14,7 @@ public class ModelUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ModelUtil.class);
 
     private static final List<String> tables = Arrays.asList(
-            ArtifactThumbnail.TABLE_NAME,
+            BigTableArtifactThumbnail.TABLE_NAME,
             TermMentionModel.TABLE_NAME,
             Audit.TABLE_NAME,
             DetectedObjectModel.TABLE_NAME,

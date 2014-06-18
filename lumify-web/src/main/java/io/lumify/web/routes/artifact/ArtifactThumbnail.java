@@ -1,5 +1,8 @@
 package io.lumify.web.routes.artifact;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -8,13 +11,10 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -64,11 +64,11 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         io.lumify.core.model.artifactThumbnails.ArtifactThumbnail thumbnail =
                 artifactThumbnailRepository.getThumbnail(artifactVertex.getId(), "raw", boundaryDims[0], boundaryDims[1], user);
         if (thumbnail != null) {
-            String format = thumbnail.getMetadata().getFormat();
+            String format = thumbnail.getFormat();
             response.setContentType("image/" + format);
             response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
 
-            thumbnailData = thumbnail.getMetadata().getData();
+            thumbnailData = thumbnail.getThumbnailData();
             if (thumbnailData != null) {
                 LOGGER.debug("Cache hit for: %s (raw) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
@@ -89,11 +89,11 @@ public class ArtifactThumbnail extends BaseRequestHandler {
         try {
             thumbnail = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "raw", in, boundaryDims, user);
 
-            String format = thumbnail.getMetadata().getFormat();
+            String format = thumbnail.getFormat();
             response.setContentType("image/" + format);
             response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
 
-            thumbnailData = thumbnail.getMetadata().getData();
+            thumbnailData = thumbnail.getThumbnailData();
         } finally {
             in.close();
         }
