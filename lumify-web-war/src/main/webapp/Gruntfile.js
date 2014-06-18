@@ -34,6 +34,11 @@ module.exports = function(grunt) {
             command: 'make minify',
             stdout: false,
             cwd: 'libs/cytoscape.js'
+        },
+        buildPathFinding: {
+            command: 'npm install -q && make',
+            stdout: false,
+            cwd: 'libs/PathFinding.js'
         }
     },
 
