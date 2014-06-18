@@ -30,16 +30,20 @@ define([
         this.after('initialize', function() {
             console.log(this.attr.property)
             this.$node.html(template({}));
-            this.renderChart();
 
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 500);
             this.on(document, 'graphPaddingUpdated', this.onGraphPaddingUpdated);
 
+            this.on('histogramValuesRequested', this.onHistogramValuesRequested);
             this.trigger('requestHistogramValues', { property: this.attr.property });
 
             this.redraw = _.throttle(this.redraw.bind(this), 16);
-
         });
+
+        this.onHistogramValuesRequested = function(event, data) {
+            event.stopPropagation();
+            this.renderChart(data.values);
+        };
 
         this.onGraphPaddingUpdated = function(event, data) {
             var padding = data.padding,
@@ -90,12 +94,13 @@ define([
                 this.binCount = isDate ? xScale.ticks(25) : 25;//this.width;
             }
 
-            return d3.layout.histogram().bins(this.binCount)(_.filter(this.values, function(v) {
+            var count = this.values.length === 0 ? 0 : this.binCount;
+            return d3.layout.histogram().bins(count)(_.filter(this.values, function(v) {
                 return inDomain(v, xScale);
             }));
         }
 
-        this.renderChart = function(optionalHeight) {
+        this.renderChart = function(vals) {
 
             var self = this,
 
@@ -103,37 +108,7 @@ define([
 
                 isDateTime = this.attr.property.displayTime === true,
 
-                // Generate a Bates distribution of 10 random variables.
-                values = this.values =
-                    isDate ?
-                        [
-                            new Date(2014, 7, 17),
-                            new Date(2014, 7, 17),
-                            new Date(2014, 7, 10),
-                            new Date(2014, 7, 10),
-                            new Date(2014, 7, 13),
-                            new Date(2014, 7, 14),
-                            new Date(1950, 7, 16),
-                            new Date()
-                            /*
-                            d3.time.day.floor(new Date()),
-                            d3.time.day.floor(new Date()),
-                            d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -350),
-                            d3.time.day.utc.offset(d3.time.day.utc.floor(new Date()), -400)
-                            */
-                        ] :
-                    ///*
-                    d3.range(100).map(d3.random.bates(10))
-                    .concat(d3.range(2000).map(function() {
-                        return d3.random.bates(10)() * 10;
-                    }))
-                    .concat(d3.range(200).map(function() {
-                        return d3.random.bates(10)() * 1.5 + 1;
-                    })),
-                    //*/
-
-                // A formatter for counts.
-                formatCount = d3.format(',.0f'),
+                values = this.values = vals,
 
                 width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
                 height = this.height = HEIGHT - margin.top - margin.bottom,
@@ -472,7 +447,7 @@ define([
                     .attr('width',
                         Math.max(1,
                             (isDate ?
-                             xScale(xScale.domain()[0].getTime() + data[0].dx) :
+                             xScale(xScale.domain()[0].getTime() + dx) :
                              xScale(xScale.domain()[0] + dx)
                             ) - 1
                         )

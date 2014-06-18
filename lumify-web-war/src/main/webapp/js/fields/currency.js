@@ -2,11 +2,12 @@
 define([
     'flight/lib/component',
     'tpl!./currency',
+    './withHistogram',
     './withPropertyField'
-], function(defineComponent, template, withPropertyField) {
+], function(defineComponent, template, withHistogram, withPropertyField) {
     'use strict';
 
-    return defineComponent(CurrencyField, withPropertyField);
+    return defineComponent(CurrencyField, withPropertyField, withHistogram);
 
     function makeNumber(v) {
         return parseFloat(v.replace(/[$,]/g, ''), 10);

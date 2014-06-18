@@ -140,6 +140,7 @@ define([
 
             // Service requests
             this.on('requestUsersForChat', this.onRequestUsersForChat);
+            this.on('requestHistogramValues', this.onRequestHistogramValues);
 
             this.on('socketMessage', this.onSocketMessage);
 
@@ -193,6 +194,17 @@ define([
                     self.socketSubscribeMarkReady(response);
                 }
             });
+        };
+
+        this.onRequestHistogramValues = function(event, data) {
+            this.trigger(event.target, 'histogramValuesRequested', {
+                values: _.chain(this.verticesInWorkspace())
+                    .map(function(v) {
+                        return F.vertex.prop(v, data.property.title);
+                    })
+                    .compact()
+                    .value()
+            })
         };
 
         this.onRequestUsersForChat = function(event, data) {
