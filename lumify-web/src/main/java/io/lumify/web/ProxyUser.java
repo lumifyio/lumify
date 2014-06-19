@@ -19,7 +19,14 @@ public class ProxyUser implements User {
     }
 
     @Override
-    public String getUserId() { return userId; }
+    public String getUserId() {
+        return userId;
+    }
+
+    public User getProxiedUser() {
+        ensureUser();
+        return proxiedUser;
+    }
 
     @Override
     public ModelUserContext getModelUserContext() {
