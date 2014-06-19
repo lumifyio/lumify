@@ -32,6 +32,7 @@ define([
     return defineComponent(Multiple, withTypeContent);
 
     function Multiple() {
+        var d3;
         this.vertexService = new VertexService();
         this.ontologyService = new OntologyService();
 
@@ -61,7 +62,8 @@ define([
                 this.handleCancelling(this.ontologyService.concepts()),
                 this.handleCancelling(this.ontologyService.properties()),
                 d3Deferred
-            ).done(function(verticesResponse, concepts, properties, d3) {
+            ).done(function(verticesResponse, concepts, properties, _d3) {
+                d3 = _d3;
                 var vertices = verticesResponse[0].vertices;
 
                 VertexList.attachTo(self.select('vertexListSelector'), {
