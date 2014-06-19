@@ -62,7 +62,7 @@ public class WebApp extends App {
         } catch (IOException e) {
             throw new LumifyException("Could not read script resource: " + scriptResourceName);
         } finally {
-            IOUtils.closeQuietly(stream);
+            closeQuietly(stream);
         }
     }
 
@@ -77,7 +77,7 @@ public class WebApp extends App {
         } catch (IOException e) {
             throw new LumifyException("Could not read css resource: " + cssResourceName);
         } finally {
-            IOUtils.closeQuietly(stream);
+            closeQuietly(stream);
         }
     }
 

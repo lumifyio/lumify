@@ -54,7 +54,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         } catch (Exception e) {
             throw new LumifyException("Could not import ontology file", e);
         } finally {
-            IOUtils.closeQuietly(baseOwlFile);
+            CloseableUtils.closeQuietly(baseOwlFile);
         }
     }
 
