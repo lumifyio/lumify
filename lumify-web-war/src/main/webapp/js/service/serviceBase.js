@@ -1,6 +1,6 @@
 
-define(['atmosphere'],
-    function() {
+define(['atmosphere', 'util/offlineOverlay'],
+    function(atmosphere, Overlay) {
         'use strict';
 
         // Add CSRF Header to all non-GET requests
@@ -94,9 +94,9 @@ define(['atmosphere'],
                         if (config.onMessage) config.onMessage(response.error, null);
 
                         // Might be closing because of browser refresh, delay
-                        // logout so it only happens if server went down
+                        // so it only happens if server went down
                         _.delay(function() {
-                            $(document).trigger('logout');
+                            Overlay.attachTo(document);
                         }, 1000);
                     }
                 };
