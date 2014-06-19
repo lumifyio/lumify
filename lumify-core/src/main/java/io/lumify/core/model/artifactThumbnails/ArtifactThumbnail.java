@@ -1,24 +1,39 @@
 package io.lumify.core.model.artifactThumbnails;
 
-import com.altamiracorp.bigtable.model.Row;
-import com.altamiracorp.bigtable.model.RowKey;
+public class ArtifactThumbnail {
+    private byte[] thumbnail;
+    private int type;
+    private String format;
 
-public class ArtifactThumbnail extends Row<ArtifactThumbnailRowKey> {
-    public static final String TABLE_NAME = "lumify_artifactThumbnail";
-
-    public ArtifactThumbnail(ArtifactThumbnailRowKey rowKey) {
-        super(TABLE_NAME, rowKey);
+    public ArtifactThumbnail(byte[] thumbnail,
+                             int type,
+                             String format) {
+        this.thumbnail = thumbnail;
+        this.type = type;
+        this.format = format;
     }
 
-    public ArtifactThumbnail(RowKey rowKey) {
-        super(TABLE_NAME, new ArtifactThumbnailRowKey(rowKey.toString()));
+    public byte[] getThumbnailData() {
+        return thumbnail;
     }
 
-    public ArtifactThumbnailMetadata getMetadata() {
-        ArtifactThumbnailMetadata artifactThumbnailMetadata = get(ArtifactThumbnailMetadata.NAME);
-        if (artifactThumbnailMetadata == null) {
-            addColumnFamily(new ArtifactThumbnailMetadata());
-        }
-        return get(ArtifactThumbnailMetadata.NAME);
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 }

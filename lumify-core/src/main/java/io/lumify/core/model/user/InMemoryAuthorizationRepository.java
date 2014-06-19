@@ -4,11 +4,12 @@ import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.securegraph.Authorizations;
 import org.securegraph.inmemory.InMemoryAuthorizations;
-import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static org.securegraph.util.IterableUtils.toArray;
 
 public class InMemoryAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InMemoryAuthorizationRepository.class);
@@ -34,6 +35,6 @@ public class InMemoryAuthorizationRepository implements AuthorizationRepository 
 
     @Override
     public Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new InMemoryAuthorizations(Iterables.toArray(authorizationsSet, String.class));
+        return new InMemoryAuthorizations(toArray(authorizationsSet, String.class));
     }
 }

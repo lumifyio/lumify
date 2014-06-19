@@ -69,11 +69,10 @@ public class Router extends HttpServlet {
             Class<? extends Handler> csrfProtector = LumifyCsrfHandler.class;
 
             app.get("/", userAgentFilter, new StaticFileHandler(config, "/index.html"));
+            app.get("/plugins.css", csrfProtector, PluginsCss.class);
+            app.get("/plugins.js", csrfProtector, PluginsJavaScript.class);
+            app.get("/configuration", csrfProtector, Configuration.class);
             app.post("/logout", csrfProtector, Logout.class);
-
-            app.get("/configuration", authenticator, csrfProtector, Configuration.class);
-            app.get("/plugins.js", authenticator, csrfProtector, PluginsJavaScript.class);
-            app.get("/plugins.css", authenticator, csrfProtector, PluginsCss.class);
 
             app.get("/ontology", authenticator, csrfProtector, ReadPrivilegeFilter.class, Ontology.class);
 

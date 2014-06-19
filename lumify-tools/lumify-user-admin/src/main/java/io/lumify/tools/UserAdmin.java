@@ -6,20 +6,27 @@ import io.lumify.core.user.User;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang.StringUtils;
+import org.securegraph.Authorizations;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class UserAdmin extends CommandLineBase {
-    private static final String CMD_OPT_USERNAME = "username";
-    private static final String CMD_OPT_USERID = "userid";
-    private static final String CMD_OPT_PRIVILEGES = "privileges";
-    private static final String CMD_OPT_AS_TABLE = "as-table";
+    private static final String CMD_ACTION_CREATE = "create";
     private static final String CMD_ACTION_LIST = "list";
+    private static final String CMD_ACTION_UPDATE_PASSWORD = "update-password";
     private static final String CMD_ACTION_DELETE = "delete";
     private static final String CMD_ACTION_SET_PRIVILEGES = "set-privileges";
+    private static final String CMD_ACTION_SET_AUTHORIZATIONS = "set-authorizations";
+
+    private static final String CMD_OPT_USERID = "userid";
+    private static final String CMD_OPT_USERNAME = "username";
+    private static final String CMD_OPT_PASSWORD = "password";
+    private static final String CMD_OPT_PRIVILEGES = "privileges";
+    private static final String CMD_OPT_AUTHORIZATIONS = "authorizations";
+
+    private static final String CMD_OPT_AS_TABLE = "as-table";
 
     public static void main(String[] args) throws Exception {
         int res = new UserAdmin().run(args);
@@ -35,7 +42,7 @@ public class UserAdmin extends CommandLineBase {
         opts.addOption(
                 OptionBuilder
                         .withLongOpt(CMD_OPT_USERID)
-                        .withDescription("The user id of the user you would like to view or edit")
+                        .withDescription("The id of the user to view or edit")
                         .hasArg()
                         .create("i")
         );
@@ -43,17 +50,33 @@ public class UserAdmin extends CommandLineBase {
         opts.addOption(
                 OptionBuilder
                         .withLongOpt(CMD_OPT_USERNAME)
-                        .withDescription("The username of the user you would like to view or edit")
+                        .withDescription("The username of the user to view or edit")
                         .hasArg()
                         .create("u")
         );
 
         opts.addOption(
                 OptionBuilder
+                    .withLongOpt(CMD_OPT_PASSWORD)
+                    .withDescription("The password value to set")
+                    .hasArg()
+                    .create()
+        );
+
+        opts.addOption(
+                OptionBuilder
                         .withLongOpt(CMD_OPT_PRIVILEGES)
-                        .withDescription("Comma separated list of privileges " + privilegesAsString(Privilege.ALL))
+                        .withDescription("Comma separated list of privileges to set, one or more of: " + privilegesAsString(Privilege.ALL))
                         .hasArg()
                         .create("p")
+        );
+
+        opts.addOption(
+                OptionBuilder
+                        .withLongOpt(CMD_OPT_AUTHORIZATIONS)
+                        .withDescription("Comma separated list of authorizations to set, or none")
+                        .hasOptionalArg()
+                        .create("a")
         );
 
         opts.addOption(
@@ -69,31 +92,50 @@ public class UserAdmin extends CommandLineBase {
     @Override
     protected int run(CommandLine cmd) throws Exception {
         List args = cmd.getArgList();
+
+        if (args.contains(CMD_ACTION_CREATE)) {
+            return create(cmd);
+        }
         if (args.contains(CMD_ACTION_LIST)) {
             return list(cmd);
         }
-
+        if (args.contains(CMD_ACTION_UPDATE_PASSWORD)) {
+            return updatePassword(cmd);
+        }
         if (args.contains(CMD_ACTION_DELETE)) {
             return delete(cmd);
         }
-
         if (args.contains(CMD_ACTION_SET_PRIVILEGES)) {
             return setPrivileges(cmd);
         }
-
-        System.out.println(cmd.toString());
-        return 0;
-    }
-
-    private int delete(CommandLine cmd) {
-        User user = findUser(cmd);
-        if (user == null) {
-            printUserNotFoundError(cmd);
-            return 2;
+        if (args.contains(CMD_ACTION_SET_AUTHORIZATIONS)) {
+            return setAuthorizations(cmd);
         }
 
-        getUserRepository().delete(user);
-        System.out.println("Deleted user " + user.getUserId());
+        System.out.println(cmd.toString());
+        return -1;
+    }
+
+    private int create(CommandLine cmd) {
+        String username = cmd.getOptionValue(CMD_OPT_USERNAME);
+        String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
+        String[] authorizations = new String[] {};
+
+        getUserRepository().addUser(username, username, null, password, authorizations);
+
+        User user = getUserRepository().findByUsername(username);
+
+        String privilegesString = cmd.getOptionValue(CMD_OPT_PRIVILEGES);
+        Set<Privilege> privileges;
+        if (privilegesString != null) {
+            privileges = Privilege.stringToPrivileges(privilegesString);
+        } else {
+            privileges = new HashSet<Privilege>();
+            privileges.add(Privilege.READ);
+        }
+        getUserRepository().setPrivileges(user, privileges);
+
+        printUser(user);
         return 0;
     }
 
@@ -106,6 +148,32 @@ public class UserAdmin extends CommandLineBase {
                 printUser(user);
             }
         }
+        return 0;
+    }
+
+    private int updatePassword(CommandLine cmd) {
+        User user = findUser(cmd);
+
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        String password = cmd.getOptionValue(CMD_OPT_PASSWORD);
+        getUserRepository().setPassword(user, password);
+        printUser(user);
+        return 0;
+    }
+
+    private int delete(CommandLine cmd) {
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        getUserRepository().delete(user);
+        System.out.println("Deleted user " + user.getUserId());
         return 0;
     }
 
@@ -127,6 +195,38 @@ public class UserAdmin extends CommandLineBase {
             getUserRepository().setPrivileges(user, privileges);
             user = getUserRepository().findById(user.getUserId());
         }
+
+        printUser(user);
+        return 0;
+    }
+
+    private int setAuthorizations(CommandLine cmd) {
+        String authorizationsString = cmd.getOptionValue(CMD_OPT_AUTHORIZATIONS);
+        List<String> authorizations = new ArrayList<String>();
+        if (authorizationsString != null && authorizationsString.length() > 0) {
+            authorizations.addAll(Arrays.asList(StringUtils.split(authorizationsString, ',')));
+        }
+
+        User user = findUser(cmd);
+        if (user == null) {
+            printUserNotFoundError(cmd);
+            return 2;
+        }
+
+        for (String auth : getUserRepository().getAuthorizations(user).getAuthorizations()) {
+            if (authorizations.contains(auth)) {
+                System.out.println("Keeping authorization:  " + auth);
+                authorizations.remove(auth); // so we don't add it later
+            } else {
+                System.out.println("Removing authorization: " + auth);
+                getUserRepository().removeAuthorization(user, auth);
+            }
+        }
+        for (String auth : authorizations) {
+            System.out.println("Adding authorization:   " + auth);
+            getUserRepository().addAuthorization(user, auth);
+        }
+        System.out.println("");
 
         printUser(user);
         return 0;
@@ -157,6 +257,7 @@ public class UserAdmin extends CommandLineBase {
         System.out.println("Previous Login Remote Addr: " + valueOrBlank(user.getPreviousLoginRemoteAddr()));
         System.out.println("               Login Count: " + user.getLoginCount());
         System.out.println("                Privileges: " + privilegesAsString(getUserRepository().getPrivileges(user)));
+        System.out.println("            Authorizations: " + authorizationsAsString(getUserRepository().getAuthorizations(user)));
         System.out.println("");
     }
 
@@ -193,6 +294,16 @@ public class UserAdmin extends CommandLineBase {
 
     private String privilegesAsString(Set<Privilege> privileges) {
         return privileges.toString().replaceAll(" ", "");
+    }
+
+    private String authorizationsAsString(Authorizations authorizations) {
+        List<String> list = Arrays.asList(authorizations.getAuthorizations());
+        if (list.size() > 0) {
+            Collections.sort(list);
+            return "[" + StringUtils.join(list, ',') + "]";
+        } else {
+            return "";
+        }
     }
 
     private void printUserNotFoundError(CommandLine cmd) {

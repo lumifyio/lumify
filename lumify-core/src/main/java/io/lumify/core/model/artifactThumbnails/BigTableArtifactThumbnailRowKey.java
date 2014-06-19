@@ -3,12 +3,12 @@ package io.lumify.core.model.artifactThumbnails;
 import com.altamiracorp.bigtable.model.RowKey;
 import org.apache.commons.lang.StringUtils;
 
-public class ArtifactThumbnailRowKey extends RowKey {
-    public ArtifactThumbnailRowKey(String rowKey) {
+public class BigTableArtifactThumbnailRowKey extends RowKey {
+    public BigTableArtifactThumbnailRowKey(String rowKey) {
         super(rowKey);
     }
 
-    public ArtifactThumbnailRowKey(Object artifactVertexId, String thumbnailType, int width, int height) {
+    public BigTableArtifactThumbnailRowKey(Object artifactVertexId, String thumbnailType, int width, int height) {
         super(buildKey(artifactVertexId, thumbnailType, width, height));
     }
 

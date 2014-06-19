@@ -1,9 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import org.securegraph.Authorizations;
-import org.securegraph.Visibility;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -18,7 +16,7 @@ public class InMemoryConcept extends Concept {
     private ArrayList<OntologyProperty> properties;
     private boolean glyphIconResource;
     private String conceptIRI;
-    private InputStream glyphIconInputStream;
+    private byte[] glyphIcon;
     private boolean userVisible;
 
     protected InMemoryConcept(String conceptIRI, String parentIRI, Collection<OntologyProperty> properties) {
@@ -73,24 +71,28 @@ public class InMemoryConcept extends Concept {
     }
 
     @Override
-    public void setProperty(String name, Object value, Visibility visibility, Authorizations authorizations) {
+    public void setProperty(String name, Object value, Authorizations authorizations) {
     }
 
     @Override
-    public InputStream getGlyphIcon() {
-        return glyphIconInputStream;
+    public void removeProperty(String name, Authorizations authorizations) {
+    }
+
+    @Override
+    public byte[] getGlyphIcon() {
+        return glyphIcon;
     }
 
     public void setHasGlyphIcon(boolean hasGlyphIcon) {
         glyphIconResource = hasGlyphIcon;
     }
 
-    public void setGlyphIconInputStream(InputStream inputStream) {
-        this.glyphIconInputStream = inputStream;
+    public void setGlyphIcon(byte[] inputStream) {
+        this.glyphIcon = inputStream;
     }
 
     @Override
-    public InputStream getMapGlyphIcon() {
+    public byte[] getMapGlyphIcon() {
         return null;
     }
 

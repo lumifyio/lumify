@@ -3,6 +3,7 @@ package io.lumify.securegraph.model.audit;
 import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
+import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -12,13 +13,11 @@ import io.lumify.core.model.audit.*;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.PropertyType;
+import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
 import io.lumify.core.version.VersionService;
 import org.json.JSONObject;
-import org.securegraph.Edge;
-import org.securegraph.Property;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
+import org.securegraph.*;
 import org.securegraph.mutation.ElementMutation;
 import org.securegraph.mutation.ExistingElementMutation;
 import org.securegraph.type.GeoPoint;
@@ -40,14 +39,17 @@ public class SecureGraphAuditRepository extends AuditRepository {
     private final VersionService versionService;
     private final Configuration configuration;
     private final OntologyRepository ontologyRepository;
+    private final UserRepository userRepository;
 
     @Inject
     public SecureGraphAuditRepository(final ModelSession modelSession, final VersionService versionService,
-                                      final Configuration configuration, final OntologyRepository ontologyRepository) {
+                                      final Configuration configuration, final OntologyRepository ontologyRepository,
+                                      final UserRepository userRepository) {
         super(modelSession);
         this.versionService = versionService;
         this.configuration = configuration;
         this.ontologyRepository = ontologyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -65,7 +67,13 @@ public class SecureGraphAuditRepository extends AuditRepository {
         return auditBuilder.getTableName();
     }
 
-    public Audit createAudit(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
+    @Override
+    public Iterable<Audit> getAudits(String vertexId, String workspaceId, Authorizations authorizations) {
+        ModelUserContext modelUserContext = userRepository.getModelUserContext(authorizations, workspaceId);
+        return findByRowStartsWith(vertexId, modelUserContext);
+    }
+
+    public Audit createAudit(AuditAction auditAction, Object vertexId, String process, String comment, User user, Visibility visibility) {
         checkNotNull(vertexId, "vertexId cannot be null");
         checkNotNull(comment, "comment cannot be null");
         checkNotNull(user, "user cannot be null");
@@ -90,9 +98,9 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
-        Audit audit = createAudit(auditAction, vertexId, process, comment, user, flushFlag, visibility);
-        save(audit, flushFlag);
+    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, Visibility visibility) {
+        Audit audit = createAudit(auditAction, vertexId, process, comment, user, visibility);
+        save(audit, FlushFlag.FLUSH);
         return audit;
     }
 
@@ -417,8 +425,8 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     @Override
-    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
-        getModelSession().alterColumnsVisibility(audit, orVisibility(originalEdgeVisibility).getVisibilityString(), visibilityString, flushFlag);
+    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString) {
+        getModelSession().alterColumnsVisibility(audit, orVisibility(originalEdgeVisibility).getVisibilityString(), visibilityString, FlushFlag.FLUSH);
     }
 
     private JSONObject jsonMetadata(Map<String, Object> metadata) {
@@ -460,6 +468,6 @@ public class SecureGraphAuditRepository extends AuditRepository {
     }
 
     private Audit auditVertexCreate(Object vertexId, String process, String comment, User user, Visibility visibility) {
-        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, FlushFlag.DEFAULT, visibility);
+        return auditVertex(AuditAction.CREATE, vertexId, process, comment, user, visibility);
     }
 }

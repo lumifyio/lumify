@@ -1,18 +1,22 @@
 package io.lumify.core.model.user;
 
+import com.google.inject.Inject;
 import io.lumify.core.model.lock.Lock;
 import io.lumify.core.model.lock.LockRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
+import org.apache.accumulo.core.Constants;
+import org.apache.accumulo.core.security.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.AccumuloGraph;
-import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
-import org.apache.accumulo.core.Constants;
-import org.apache.accumulo.core.security.Authorizations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import static org.securegraph.util.IterableUtils.toArray;
 
 public class AccumuloAuthorizationRepository implements AuthorizationRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(AccumuloAuthorizationRepository.class);
@@ -113,12 +117,16 @@ public class AccumuloAuthorizationRepository implements AuthorizationRepository 
     }
 
     public org.securegraph.Authorizations createAuthorizations(Set<String> authorizationsSet) {
-        return new AccumuloAuthorizations(Iterables.toArray(authorizationsSet, String.class));
+        return new AccumuloAuthorizations(toArray(authorizationsSet, String.class));
     }
 
     @Inject
-    public void setGraph (Graph graph) { this.graph = graph; }
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
 
     @Inject
-    public void setLockRepository (LockRepository lockRepository) { this.lockRepository = lockRepository; }
+    public void setLockRepository(LockRepository lockRepository) {
+        this.lockRepository = lockRepository;
+    }
 }

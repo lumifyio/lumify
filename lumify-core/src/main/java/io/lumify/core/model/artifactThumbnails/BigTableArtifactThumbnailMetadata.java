@@ -8,13 +8,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class ArtifactThumbnailMetadata extends ColumnFamily {
+public class BigTableArtifactThumbnailMetadata extends ColumnFamily {
     public static final String NAME = "metadata";
     private static final String DATA = "data";
     private static final String TYPE = "type";
     private static final String FORMAT = "format";
 
-    public ArtifactThumbnailMetadata() {
+    public BigTableArtifactThumbnailMetadata() {
         super(NAME);
     }
 
@@ -22,7 +22,7 @@ public class ArtifactThumbnailMetadata extends ColumnFamily {
         return Value.toBytes(get(DATA));
     }
 
-    public ArtifactThumbnailMetadata setData(byte[] data) {
+    public BigTableArtifactThumbnailMetadata setData(byte[] data) {
         set(DATA, data);
         return this;
     }
@@ -31,7 +31,7 @@ public class ArtifactThumbnailMetadata extends ColumnFamily {
         return Value.toInteger(get(TYPE));
     }
 
-    public ArtifactThumbnailMetadata setType(int type) {
+    public BigTableArtifactThumbnailMetadata setType(int type) {
         set(TYPE, type);
         return this;
     }
@@ -40,7 +40,7 @@ public class ArtifactThumbnailMetadata extends ColumnFamily {
         return Value.toString(get(FORMAT));
     }
 
-    public ArtifactThumbnailMetadata setFormat(String format) {
+    public BigTableArtifactThumbnailMetadata setFormat(String format) {
         set(FORMAT, format);
         return this;
     }

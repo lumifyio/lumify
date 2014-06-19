@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
+import static org.securegraph.util.CloseableUtils.closeQuietly;
+
 /**
  * Helper class to handle Runtime.exec() output.
  */
@@ -79,9 +81,9 @@ public class StreamHelper extends Thread {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } finally {
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(isreader);
-            IOUtils.closeQuietly(writer);
+            closeQuietly(reader);
+            closeQuietly(isreader);
+            closeQuietly(writer);
         }
     }
 

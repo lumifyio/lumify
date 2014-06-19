@@ -1,17 +1,18 @@
 package io.lumify.core.model.audit;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
+import com.beust.jcommander.internal.Nullable;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.lumify.core.user.User;
+import org.securegraph.Authorizations;
 import org.securegraph.Edge;
 import org.securegraph.Vertex;
 import org.securegraph.Visibility;
 import org.securegraph.mutation.ElementMutation;
-import com.beust.jcommander.internal.Nullable;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,12 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
-    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, FlushFlag flushFlag, Visibility visibility) {
+    public Iterable<Audit> getAudits(String vertexId, String workspaceId, Authorizations authorizations) {
+        return new ArrayList<Audit>();
+    }
+
+    @Override
+    public Audit auditVertex(AuditAction auditAction, Object vertexId, String process, String comment, User user, Visibility visibility) {
         throw new RuntimeException("not supported");
     }
 
@@ -75,7 +81,7 @@ public class NoOpAuditRepository extends AuditRepository {
     }
 
     @Override
-    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString, FlushFlag flushFlag) {
+    public void updateColumnVisibility(Audit audit, Visibility originalEdgeVisibility, String visibilityString) {
         throw new RuntimeException("not supported");
     }
 }

@@ -87,7 +87,7 @@ public class WorkspaceHelper {
 
             graph.flush();
 
-            auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+            auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
             result.put("success", true);
         }
         return result;
@@ -125,7 +125,7 @@ public class WorkspaceHelper {
             graph.removeEdge(edge, systemAuthorization);
         }
 
-        auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, FlushFlag.FLUSH, visibility.getVisibility());
+        auditRepository.auditVertex(AuditAction.UNRESOLVE, vertex.getId(), "", "", user, visibility.getVisibility());
 
         JSONObject artifactJson = JsonSerializer.toJson(artifactVertex, workspaceId);
         artifactJson.put("detectedObjects", detectedObjectRepository.toJSON(artifactVertex, modelUserContext, authorizations, workspaceId));

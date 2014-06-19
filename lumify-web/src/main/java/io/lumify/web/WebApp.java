@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import static org.securegraph.util.CloseableUtils.closeQuietly;
+
 
 public class WebApp extends App {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
@@ -62,7 +64,7 @@ public class WebApp extends App {
         } catch (IOException e) {
             throw new LumifyException("Could not read script resource: " + scriptResourceName);
         } finally {
-            IOUtils.closeQuietly(stream);
+            closeQuietly(stream);
         }
     }
 
@@ -77,7 +79,7 @@ public class WebApp extends App {
         } catch (IOException e) {
             throw new LumifyException("Could not read css resource: " + cssResourceName);
         } finally {
-            IOUtils.closeQuietly(stream);
+            closeQuietly(stream);
         }
     }
 

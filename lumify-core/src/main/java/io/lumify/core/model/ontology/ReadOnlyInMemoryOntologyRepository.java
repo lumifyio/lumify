@@ -107,7 +107,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
             InputStream iconFileIn = new FileInputStream(iconFile);
-            result.setGlyphIconInputStream(iconFileIn);
+            result.setGlyphIcon(IOUtils.toByteArray(iconFileIn));
             result.setHasGlyphIcon(true);
         }
         conceptsCache.put(uri, result);
@@ -116,8 +116,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(rawImg);
-        ((InMemoryConcept) entityConcept).setGlyphIconInputStream(inputStream);
+        ((InMemoryConcept) entityConcept).setGlyphIcon(rawImg);
     }
 
     @Override

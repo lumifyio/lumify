@@ -85,7 +85,7 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
                 byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "poster-frame", in,
-                        boundaryDims, user).getMetadata().getData();
+                        boundaryDims, user).getThumbnailData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();

@@ -3,7 +3,6 @@ package io.lumify.securegraph.model.user;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
@@ -32,6 +31,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.securegraph.util.IterableUtils.singleOrDefault;
+import static org.securegraph.util.IterableUtils.toArray;
 
 @Singleton
 public class SecureGraphUserRepository extends UserRepository {
@@ -87,7 +88,7 @@ public class SecureGraphUserRepository extends UserRepository {
         Date previousLoginDate = UserLumifyProperties.PREVIOUS_LOGIN_DATE.getPropertyValue(user);
         String previousLoginRemoteAddr = UserLumifyProperties.PREVIOUS_LOGIN_REMOTE_ADDR.getPropertyValue(user);
         int loginCount = UserLumifyProperties.LOGIN_COUNT.getPropertyValue(user, 0);
-        String[] authorizations = Iterables.toArray(getAuthorizations(user), String.class);
+        String[] authorizations = toArray(getAuthorizations(user), String.class);
         ModelUserContext modelUserContext = getModelUserContext(authorizations);
         String userStatus = UserLumifyProperties.STATUS.getPropertyValue(user);
         Set<Privilege> privileges = Privilege.stringToPrivileges(UserLumifyProperties.PRIVILEGES.getPropertyValue(user));
@@ -100,7 +101,7 @@ public class SecureGraphUserRepository extends UserRepository {
 
     @Override
     public User findByUsername(String username) {
-        return createFromVertex(Iterables.getFirst(graph.query(authorizations)
+        return createFromVertex(singleOrDefault(graph.query(authorizations)
                 .has(UserLumifyProperties.USERNAME.getPropertyName(), username)
                 .has(OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName(), userConceptId)
                 .vertices(), null));

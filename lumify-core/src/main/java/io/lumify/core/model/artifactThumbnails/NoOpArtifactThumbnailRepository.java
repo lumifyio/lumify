@@ -16,12 +16,12 @@ public class NoOpArtifactThumbnailRepository extends ArtifactThumbnailRepository
     }
 
     @Override
-    public ArtifactThumbnail fromRow(Row row) {
+    public BigTableArtifactThumbnail fromRow(Row row) {
         throw new RuntimeException("not supported");
     }
 
     @Override
-    public Row toRow(ArtifactThumbnail artifactThumbnail) {
+    public Row toRow(BigTableArtifactThumbnail artifactThumbnail) {
         throw new RuntimeException("not supported");
     }
 
@@ -32,21 +32,16 @@ public class NoOpArtifactThumbnailRepository extends ArtifactThumbnailRepository
 
     @Override
     public ArtifactThumbnail getThumbnail(Object artifactVertexId, String thumbnailType, int width, int height, User user) {
-        throw new RuntimeException("not supported");
+        return null;
     }
 
     @Override
     public byte[] getThumbnailData(Object artifactVertexId, String thumbnailType, int width, int height, User user) {
-        throw new RuntimeException("not supported");
+        return new byte[0];
     }
 
     @Override
     public ArtifactThumbnail createThumbnail(Object artifactVertexId, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
-        throw new RuntimeException("not supported");
-    }
-
-    @Override
-    public int[] getScaledDimension(int[] imgSize, int[] boundary) {
-        throw new RuntimeException("not supported");
+        return super.generateThumbnail(in, boundaryDims);
     }
 }

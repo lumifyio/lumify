@@ -20,7 +20,7 @@ import org.securegraph.util.ConvertingIterable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static io.lumify.core.util.CollectionUtil.toIterable;
+import static org.securegraph.util.IterableUtils.toIterable;
 
 public class VertexMultiple extends BaseRequestHandler {
     private final Graph graph;

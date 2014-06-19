@@ -18,9 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class SqlUser implements User {
-    @Transient
-    private ModelUserContext modelUserContext;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", unique = true)
@@ -84,11 +81,7 @@ public class SqlUser implements User {
     }
 
     public ModelUserContext getModelUserContext() {
-        return modelUserContext;
-    }
-
-    public void setModelUserContext(ModelUserContext modelUserContext) {
-        this.modelUserContext = modelUserContext;
+        return null;
     }
 
     @Transient
@@ -210,14 +203,8 @@ public class SqlUser implements User {
 
     public void setUiPreferences(JSONObject uiPreferences) { this.uiPreferences = uiPreferences.toString(); }
 
-    // TODO: remove unused code
     public Set<SqlWorkspaceUser> getSqlWorkspaceUsers() {
         return sqlWorkspaceUsers;
-    }
-
-    // TODO: remove unused code
-    public void setSqlWorkspaceUsers(Set<SqlWorkspaceUser> sqlWorkspaceUsers) {
-        this.sqlWorkspaceUsers = sqlWorkspaceUsers;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package io.lumify.phoneNumber;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.Iterables;
 import com.google.common.io.CharStreams;
 import com.google.i18n.phonenumbers.PhoneNumberMatch;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -22,6 +21,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.securegraph.util.IterableUtils.count;
 
 public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(PhoneNumberGraphPropertyWorker.class);
@@ -64,7 +65,7 @@ public class PhoneNumberGraphPropertyWorker extends GraphPropertyWorker {
         saveTermMentions((Vertex) data.getElement(), termMentions);
         getGraph().flush();
 
-        LOGGER.debug("Number of phone numbers extracted: %d", Iterables.size(phoneNumbers));
+        LOGGER.debug("Number of phone numbers extracted: %d", count(phoneNumbers));
     }
 
     private TermMention createTerm(final PhoneNumberMatch phoneNumber, String propertyKey, Visibility visibility) {
