@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.property.StreamingPropertyValue;
+import org.securegraph.util.CloseableUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;

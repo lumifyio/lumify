@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
+import static org.securegraph.util.CloseableUtils.closeQuietly;
+
 /**
  * Helper class to handle Runtime.exec() output.
  */

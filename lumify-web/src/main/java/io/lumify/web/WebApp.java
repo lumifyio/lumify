@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import static org.securegraph.util.CloseableUtils.closeQuietly;
+
 
 public class WebApp extends App {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(WebApp.class);
