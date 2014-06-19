@@ -310,6 +310,8 @@ define([
             axis.call(xAxis);
 
             function calculateValuesExtent() {
+                var min, max, delta;
+
                 if (isDate) {
                     if (values.length === 0) {
                         return [
@@ -322,10 +324,13 @@ define([
                             d3.time.day.offset(values[0], 2)
                         ];
                     } else {
-                        var min = d3.min(values),
-                            max = d3.max(values),
-                            delta = max - min,
-                            days = Math.max(1, parseInt(Math.round(delta / 1000 / 60 / 60 / 24 * 0.1), 10));
+                        min = d3.min(values);
+                        max = d3.max(values);
+                        delta = max - min;
+
+                        var days = Math.max(1,
+                            parseInt(Math.round(delta / 1000 / 60 / 60 / 24 * 0.1), 10)
+                        );
 
                         return [
                             d3.time.day.offset(min, days * -1),
@@ -338,9 +343,9 @@ define([
                     return [values[0] - 1, values[0] + 1];
                 }
 
-                var min = d3.min(values),
-                    max = d3.max(values),
-                    delta = max - min;
+                min = d3.min(values);
+                max = d3.max(values);
+                delta = max - min;
 
                 return [
                     min - delta * 0.1,
