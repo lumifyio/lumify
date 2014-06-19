@@ -62,9 +62,7 @@ define([
                 if (vertexState.inGraph) classes.push('graph-displayed');
                 if (vertexState.inMap) classes.push('map-displayed');
 
-                if (!v.imageSrcIsFromConcept) {
-                    classes.push('has_preview');
-                }
+                classes.push('has_preview');
 
                 classNamesForVertex[v.id] = classes.join(' ');
             });
@@ -280,7 +278,7 @@ define([
                 var li = $(this),
                     vertex = appData.vertex(li.data('vertexId'));
 
-                if (vertex && !vertex.imageSrcIsFromConcept && !li.data('previewLoaded')) {
+                if (vertex && !li.data('previewLoaded')) {
 
                     var preview = li.data('previewLoaded', true)
                                     .find('.preview');
@@ -291,7 +289,7 @@ define([
                             videoPreviewImageUrl: vertex.imageFramesSrc
                         });
                     } else {
-                        preview.html("<img src='" + vertex.imageSrc + "' />");
+                        preview.css('background-image', 'url(' + vertex.imageSrc + ')');
                     }
                 }
             });
@@ -377,7 +375,6 @@ define([
                     var newHtml = newAnchor.html();
                     if (currentAnchor.length && newHtml !== currentHtml) {
                         li.data('previewLoaded', null);
-                        currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', showImageSrc);
                     }
                 }
             });

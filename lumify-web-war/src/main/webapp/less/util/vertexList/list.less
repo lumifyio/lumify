@@ -69,35 +69,46 @@ body > .vertex-dragging {
       &.graph-displayed li.graph { display: block; }
       &.map-displayed li.map { display: block; }
 
-      @preview-width: 100px;
+      @preview-width: 35px;
       &.has_preview {
-        padding-left: @preview-width - 15px;
-        a { padding-left: 30px; }
+        //padding-left: @preview-width;
+        a { 
+          padding-left: @preview-width + @preview-width * 0.5;           
+          padding-top: 0.8em;
+         }
         .preview {
           display: block;
+          height: 2em;
+          top: 0.9em;
+          left: -0.7em;
+          background-size: contain;
         }
-        ul { left: 83px; }
+        ul { left: @preview-width - (@preview-width * 0.4); }
       }
 
       .preview {
         display: none;
         width: @preview-width;
         position: absolute;
-        left: -15px;
+        left: @preview-width / -2 + 5;
         top: 0;
         bottom: 1px;
         overflow: hidden;
+        //max-height: 3em;
+        //background-color: #444;
         background-repeat: no-repeat;
+        background-size: auto 50%;
+        background-position: center;
       }
 
       ul {
         position: absolute;
         left: -16px;
-        top: 2px;
+        top: 0.6em;
         margin: 0;
         padding: 0;
         width: 16px;
-        overflow: hidden;
+        overflow: hidden;        
 
         li {
           display: none;
@@ -111,6 +122,7 @@ body > .vertex-dragging {
             width: 100%;
             font-size: 0;
             border: 0;
+            .opacity(50);        
           }
 
           &.graph button {
@@ -127,21 +139,25 @@ body > .vertex-dragging {
 
 
   a {
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
     cursor: pointer;
-
+    border-bottom: 1px solid #eee;    
+    line-height: 1em;
+    
     &.ui-selecting, &.ui-selected {
       .active-selection;
     }
 
-    div {
-      min-height: 1.5em;
+    div {      
+      line-height: 1.5em;
       .clearfix;
     }
     .source, .date {
       color: #555;
-      font-size: x-small;
-
+      font-size: x-small;      
     }
     .date:empty:after {
       content: ' ';
