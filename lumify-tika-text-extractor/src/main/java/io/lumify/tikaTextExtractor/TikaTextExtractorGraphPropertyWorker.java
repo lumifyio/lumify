@@ -187,6 +187,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     private String extractTextFromHtml(String text) throws BoilerpipeProcessingException {
         String extractedText;
 
+        text = cleanHtml(text);
+
         extractedText = NumWordsRulesExtractor.INSTANCE.getText(text);
         if (extractedText != null && extractedText.length() > 0) {
             return extractedText;
@@ -198,6 +200,13 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         }
 
         return null;
+    }
+
+    private String cleanHtml(String text) {
+        text = text.replaceAll("&mdash;", "-");
+        text = text.replaceAll("&ldquo;", "\"");
+        text = text.replaceAll("&rdquo;", "\"");
+        return text;
     }
 
     private Date extractDate(Metadata metadata) {
