@@ -11,6 +11,7 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
+import org.securegraph.Property;
 import org.securegraph.Vertex;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,15 +36,27 @@ public class QueueVertices extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
+        String propertyName = getOptionalParameter(request, "propertyName");
+        if (propertyName != null && propertyName.trim().length() == 0) {
+            propertyName = null;
+        }
         final Authorizations authorizations = getUserRepository().getAuthorizations(getUserRepository().getSystemUser());
 
+        final String finalPropertyName = propertyName;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 LOGGER.info("requeue all vertices");
                 Iterable<Vertex> vertices = graph.getVertices(authorizations);
                 for (Vertex vertex : vertices) {
-                    workQueueRepository.pushElement(vertex);
+                    if (finalPropertyName == null) {
+                        workQueueRepository.pushElement(vertex);
+                    } else {
+                        Iterable<Property> properties = vertex.getProperties(finalPropertyName);
+                        for (Property property : properties) {
+                            workQueueRepository.pushGraphPropertyQueue(vertex, property);
+                        }
+                    }
                 }
                 workQueueRepository.flush();
                 LOGGER.info("requeue all vertices complete");
