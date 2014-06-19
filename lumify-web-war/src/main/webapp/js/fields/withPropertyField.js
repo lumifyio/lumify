@@ -44,7 +44,7 @@ define(['util/withTeardown'], function(withTeardown) {
             }
         });
 
-        this.filterUpdated = function(values, predicate) {
+        this.filterUpdated = function(values, predicate, options) {
             values = $.isArray(values) ? values : [values];
 
             if (!_.isFunction(this.isValid) || this.isValid()) {
@@ -61,7 +61,8 @@ define(['util/withTeardown'], function(withTeardown) {
                         id: this.attr.id,
                         propertyId: this.attr.property.title,
                         values: values,
-                        predicate: predicate
+                        predicate: predicate,
+                        options: options
                     });
                 }
 
@@ -77,8 +78,35 @@ define(['util/withTeardown'], function(withTeardown) {
             }
         };
 
+        this.setValues = function(val1, val2, options) {
+            var inputs = this.$node.find('.input-row input'),
+                values = ['', ''];
+
+            if (val1 && _.isDate(val1)) {
+                inputs.eq(0).datepicker('setDate', val1);
+                inputs.eq(1).datepicker('setDate', val2);
+                values = this.getValues();
+            } else {
+                if (val1) {
+                    values = [val1.toFixed(2), val2.toFixed(2)];
+                }
+                inputs.eq(0).val(values[0]);
+                inputs.eq(1).val(values[1]);
+            }
+
+            this.filterUpdated(
+                values,
+                this.select('predicateSelector').val(),
+                options
+            );
+        };
+
         this.getValues = function() {
-            return this.select('visibleInputsSelector').map(function() {
+            var inputs = this.$node.hasClass('alternate') ?
+                this.$node.find('.input-row input') :
+                this.select('visibleInputsSelector');
+
+            return inputs.map(function() {
                 var $this = $(this);
                 if ($this.is('input[type=checkbox]')) {
                     return $this.prop('checked');

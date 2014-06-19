@@ -42,6 +42,7 @@ define([
         });
 
         this.after('initialize', function() {
+            this.throttledNotifyOfFilters = _.throttle(this.notifyOfFilters.bind(this), 100);
             this.notifyOfFilters = _.debounce(this.notifyOfFilters.bind(this), FILTER_SEARCH_DELAY_SECONDS * 1000);
 
             this.$node.html(template({}));
@@ -122,7 +123,7 @@ define([
             }
         };
 
-        this.notifyOfFilters = function() {
+        this.notifyOfFilters = function(options) {
             this.trigger('filterschange', {
                 entityFilters: this.entityFilters,
                 conceptFilter: this.conceptFilter,
@@ -132,7 +133,8 @@ define([
                         predicate: filter.predicate,
                         values: filter.values
                     };
-                })
+                }),
+                options: options
             });
         };
 
@@ -204,7 +206,11 @@ define([
         this.onPropertyFieldItemChanged = function(event, data) {
             this.$node.find('li.fId' + data.id).removeClass('invalid');
             this.propertyFilters[data.id] = data;
-            this.notifyOfFilters();
+            if (data && data.options && data.options.isScrubbing === true) {
+                this.throttledNotifyOfFilters(data.options);
+            } else {
+                this.notifyOfFilters();
+            }
             event.stopPropagation();
         };
 

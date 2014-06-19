@@ -28,7 +28,6 @@ define([
         var margin = {top: 10, right: 16, bottom: 40, left: 16};
 
         this.after('initialize', function() {
-            console.log(this.attr.property)
             this.$node.html(template({}));
 
             this.onGraphPaddingUpdated = _.debounce(this.onGraphPaddingUpdated.bind(this), 500);
@@ -131,11 +130,39 @@ define([
                     .tickSize(5, 0)
                     .orient('bottom'),
 
+                onZoomedUpdate = _.throttle(function() {
+                    updateBrushInfo();
+                    updateFocusInfo();
+                }, 1000 / 30),
+
+                onZoomed = function() {
+                    var scale = d3.event.scale,
+                        scaleChange = scale !== self.previousScale,
+                        translate = d3.event.translate[0],
+                        translateChange = translate !== self.previousTranslate;
+
+                    self.redraw(scaleChange || translateChange);
+                    self.previousScale = scale;
+                    self.previousTranslate = translate;
+                    onZoomedUpdate();
+                },
+
                 zoom = this.zoom = createZoomBehavior(),
+
+                onBrushed = _.throttle(function() {
+                    var extent = brush.extent(),
+                    delta = extent[1] - extent[0];
+
+                    gBrushText
+                        .style('display', delta < 0.01 ? 'none' : '')
+                        .attr('transform', 'translate(' + xScale(extent[0]) + ', 0)');
+
+                    updateBrushInfo(extent, delta);
+                }, 1000 / 30),
 
                 brush = d3.svg.brush()
                     .x(zoom.x())
-                    .on('brush', brushed),
+                    .on('brush', onBrushed),
 
                 svgOuter = this.svg = d3.select(this.node).append('svg')
                     .attr('width', width + margin.left + margin.right)
@@ -258,17 +285,9 @@ define([
                 ]));
             } else {
                 xAxis.tickFormat(function(d) {
-                    var s = d3.format('s')(d)
-                        f = s.replace(/^(-?)(\d+(\.\d{1,2})?).*$/, '$1$2')
-                            .replace(/^(-?)0+/, '$1');
-
-                    if (f.indexOf('.') >= 0) {
-                        f = f.replace(/[0.]+$/g, '')
-                    }
-
-                    if (f === '.' || f === '') return '0';
-                    return f;
-                })
+                    return d3.format('s')(d)
+                        .replace(/(\.\d{2})\d+/, '$1');
+                });
             }
 
             this.xAxis = xAxis;
@@ -309,7 +328,6 @@ define([
                             days = Math.max(1, parseInt(Math.round(delta / 1000 / 60 / 60 / 24 * 0.1), 10));
 
                         return [
-                            //min, max
                             d3.time.day.offset(min, days * -1),
                             d3.time.day.offset(max, days)
                         ];
@@ -320,18 +338,25 @@ define([
                     return [values[0] - 1, values[0] + 1];
                 }
 
-                return d3.extent(values);
+                var min = d3.min(values),
+                    max = d3.max(values),
+                    delta = max - min;
+
+                return [
+                    min - delta * 0.1,
+                    max + delta * 0.1
+                ];
             }
 
             function createZoomBehavior() {
                 var delta = valuesExtent[1] - valuesExtent[0],
-                    maxZoomIn = delta / (isDateTime ? 36e5 : isDate ? 36e5 * 48 : 0.5),
+                    maxZoomIn = delta / (isDateTime ? 36e5 : isDate ? 36e5 * 48 : 10),
                     maxZoomOut = delta / (isDate ? (50 * 365 * 24 * 36e5) : 1);
 
                 return d3.behavior.zoom()
                     .x(xScale)
                     .scaleExtent([1 / 2, maxZoomIn])
-                    .on('zoom', zoomed);
+                    .on('zoom', onZoomed);
             }
 
             function createXScale() {
@@ -346,32 +371,7 @@ define([
                     .range([0, width]);
             }
 
-            function zoomed() {
-                var scale = d3.event.scale,
-                    scaleChange = scale !== self.previousScale,
-                    translate = d3.event.translate[0],
-                    translateChange = translate !== self.previousTranslate;
-
-                self.redraw(scaleChange || translateChange);
-                self.previousScale = scale;
-                self.previousTranslate = translate;
-                updateBrushInfo();
-                updateFocusInfo();
-            }
-
             var brushedTextFormat = xAxis.tickFormat();//d3.format('0.2f');
-            function brushed() {
-                requestAnimationFrame(function() {
-                    var extent = brush.extent(),
-                        delta = extent[1] - extent[0];
-
-                    gBrushText
-                        .style('display', delta < 0.01 ? 'none' : '')
-                        .attr('transform', 'translate(' + xScale(extent[0]) + ', 0)');
-
-                    updateBrushInfo(extent, delta);
-                });
-            }
 
             function updateBrushInfo(brushExtent, brushExtentDelta) {
                 var extent = brushExtent || brush.extent(),
@@ -382,6 +382,10 @@ define([
                              new Date(xScale.domain()[0].getTime() + delta) :
                              (xScale.domain()[0] + delta)
                         ) - 1);
+
+                self.trigger('updateHistogramExtent', {
+                    extent: delta < 0.00001 ? null : extent
+                });
 
                 gBrushTextStartBackground.attr('width', width);
                 gBrushTextEndBackground.attr('width', width);
@@ -416,7 +420,7 @@ define([
                     if (isDate) {
                         focus.select('text').text(format(x0));
                     } else {
-                        focus.select('text').text(x0.toFixed(2));
+                        focus.select('text').text(xAxis.tickFormat()(x0));
                     }
                 }
             }

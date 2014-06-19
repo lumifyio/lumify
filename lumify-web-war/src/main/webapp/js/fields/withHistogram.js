@@ -22,11 +22,27 @@ define([
                     segmentedControlSelector: this.onChangeView
                 });
 
+                this.onUpdateHistogramExtent = _.throttle(this.onUpdateHistogramExtent.bind(this), 100);
+                this.on('updateHistogramExtent', this.onUpdateHistogramExtent);
+
                 Histogram.attachTo(this.$node.children('.histogram'), {
                     property: this.attr.property
                 });
             }
         });
+
+        this.onUpdateHistogramExtent = function(event, data) {
+            this.$node.find('select.predicate')
+                .val('range')
+                .change();
+
+            var val1 = data.extent && data.extent[0],
+                val2 = data.extent && data.extent[1];
+
+            this.setValues(val1, val2, {
+                isScrubbing: true
+            });
+        };
 
         this.onChangeView = function(event) {
             var $target = $(event.target).closest('button');

@@ -200,8 +200,10 @@ define([
             this.trigger(event.target, 'histogramValuesRequested', {
                 values: _.chain(this.verticesInWorkspace())
                     .map(function(v) {
-                        return F.vertex.prop(v, data.property.title);
+                        var props = F.vertex.props(v, data.property.title);
+                        return props.map(F.vertex.prop);
                     })
+                    .flatten(true)
                     .compact()
                     .value()
             })

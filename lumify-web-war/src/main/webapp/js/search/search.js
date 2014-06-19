@@ -37,6 +37,7 @@ define([
 
         this.after('initialize', function() {
             this.render();
+            this.triggerQueryUpdatedThrottled = _.throttle(this.triggerQueryUpdated.bind(this), 100);
             this.triggerQueryUpdated = _.debounce(this.triggerQueryUpdated.bind(this), 500);
 
             this.on('click', {
@@ -137,7 +138,12 @@ define([
             }
 
             if (query || hasFilters) {
-                this.triggerQueryUpdated();
+                console.log(data.options)
+                if (data.options && data.options.isScrubbing) {
+                    this.triggerQueryUpdatedThrottled();
+                } else {
+                    this.triggerQueryUpdated();
+                }
                 this.triggerQuerySubmit();
             }
 

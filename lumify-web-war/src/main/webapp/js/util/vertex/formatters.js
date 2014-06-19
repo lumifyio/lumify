@@ -93,7 +93,16 @@ define([
 
                     switch (property.dataType) {
                         case 'date':
-                            transformFunction = F.date.utc;
+                            if (property.displayTime) {
+                                transformFunction = F.date.utc;
+                            } else {
+                                transformFunction = function(v, i) {
+                                    if (_.isUndefined(i)) {
+                                        return new Date(v);
+                                    }
+                                    return F.date.utc(v);
+                                }
+                            }
                             compareFunction = predicateCompare;
                             break;
 

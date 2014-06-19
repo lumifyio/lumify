@@ -34,7 +34,10 @@ define([
             }
 
             this.getValues = function() {
-                var values = this.select('visibleInputsSelector').map(function() {
+                var inputs = this.$node.hasClass('alternate') ?
+                        this.$node.find('.input-row input') :
+                        this.select('visibleInputsSelector'),
+                    values = inputs.map(function() {
                         return $(this).val();
                     }).toArray();
 
