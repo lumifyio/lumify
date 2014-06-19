@@ -138,7 +138,6 @@ define([
             }
 
             if (query || hasFilters) {
-                console.log(data.options)
                 if (data.options && data.options.isScrubbing) {
                     this.triggerQueryUpdatedThrottled();
                 } else {
