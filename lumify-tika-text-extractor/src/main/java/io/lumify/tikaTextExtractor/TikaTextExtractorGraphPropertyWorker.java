@@ -206,6 +206,8 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
         text = text.replaceAll("&mdash;", "-");
         text = text.replaceAll("&ldquo;", "\"");
         text = text.replaceAll("&rdquo;", "\"");
+        text = text.replaceAll("&lsquo;", "'");
+        text = text.replaceAll("&rsquo;", "'");
         return text;
     }
 
