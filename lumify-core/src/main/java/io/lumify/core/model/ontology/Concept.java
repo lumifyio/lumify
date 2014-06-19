@@ -113,7 +113,7 @@ public abstract class Concept {
 
     public abstract void removeProperty(String name, Authorizations authorizations);
 
-    public abstract InputStream getGlyphIcon();
+    public abstract byte[] getGlyphIcon();
 
-    public abstract InputStream getMapGlyphIcon();
+    public abstract byte[] getMapGlyphIcon();
 }

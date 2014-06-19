@@ -34,17 +34,12 @@ public class ResourceGet extends BaseRequestHandler {
         final String id = getAttributeString(request, "id");
 
         Concept concept = ontologyRepository.getConceptByIRI(id);
-        InputStream glyphIconIn = concept.getGlyphIcon();
+        byte[] rawImg = concept.getGlyphIcon();
 
-        if (glyphIconIn == null) {
+        if (rawImg == null || rawImg.length <= 0) {
             respondWithNotFound(response);
             return;
         }
-
-        ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-        IOUtils.copy(glyphIconIn, imgOut);
-
-        byte[] rawImg = imgOut.toByteArray();
 
         // TODO change content type if we use this route for more than getting glyph icons
         response.setContentType("image/png");

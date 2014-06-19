@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +67,7 @@ public class MapMarkerImage extends BaseRequestHandler {
             }
 
             boolean isMapGlyphIcon = false;
-            InputStream glyphIcon = getMapGlyphIcon(concept, user);
+            byte[] glyphIcon = getMapGlyphIcon(concept, user);
             if (glyphIcon != null) {
                 isMapGlyphIcon = true;
             } else {
@@ -77,7 +78,7 @@ public class MapMarkerImage extends BaseRequestHandler {
                 }
             }
 
-            imageData = getMarkerImage(glyphIcon, scale, selected, heading, isMapGlyphIcon);
+            imageData = getMarkerImage(new ByteArrayInputStream(glyphIcon), scale, selected, heading, isMapGlyphIcon);
             imageCache.put(cacheKey, imageData);
         }
 
@@ -160,16 +161,16 @@ public class MapMarkerImage extends BaseRequestHandler {
         return imageData.toByteArray();
     }
 
-    private InputStream getMapGlyphIcon(Concept concept, User user) {
-        InputStream mapGlyphIcon = null;
+    private byte[] getMapGlyphIcon(Concept concept, User user) {
+        byte[] mapGlyphIcon = null;
         for (Concept con = concept; mapGlyphIcon == null && con != null; con = ontologyRepository.getParentConcept(con)) {
             mapGlyphIcon = con.getMapGlyphIcon();
         }
         return mapGlyphIcon;
     }
 
-    private InputStream getGlyphIcon(Concept concept, User user) {
-        InputStream glyphIcon = null;
+    private byte[] getGlyphIcon(Concept concept, User user) {
+        byte [] glyphIcon = null;
         for (Concept con = concept; glyphIcon == null && con != null; con = ontologyRepository.getParentConcept(con)) {
             glyphIcon = con.hasGlyphIconResource() ? con.getGlyphIcon() : null;
         }

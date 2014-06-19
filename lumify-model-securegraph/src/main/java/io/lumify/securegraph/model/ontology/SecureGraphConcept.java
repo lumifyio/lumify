@@ -1,15 +1,17 @@
 package io.lumify.securegraph.model.ontology;
 
+import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.ontology.OntologyProperty;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.properties.LumifyProperties;
+import org.codehaus.plexus.util.IOUtil;
 import org.securegraph.Authorizations;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Collection;
 
 public class SecureGraphConcept extends Concept {
@@ -81,21 +83,29 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
-    public InputStream getGlyphIcon() {
-        StreamingPropertyValue spv = LumifyProperties.GLYPH_ICON.getPropertyValue(getVertex());
-        if (spv == null) {
-            return null;
+    public byte[] getGlyphIcon() {
+        try {
+            StreamingPropertyValue spv = LumifyProperties.GLYPH_ICON.getPropertyValue(getVertex());
+            if (spv == null) {
+                return null;
+            }
+            return IOUtil.toByteArray(spv.getInputStream());
+        } catch (IOException e) {
+            throw new LumifyResourceNotFoundException("Could not retrieve glyph icon");
         }
-        return spv.getInputStream();
     }
 
     @Override
-    public InputStream getMapGlyphIcon() {
-        StreamingPropertyValue spv = LumifyProperties.MAP_GLYPH_ICON.getPropertyValue(getVertex());
-        if (spv == null) {
-            return null;
+    public byte[] getMapGlyphIcon() {
+        try {
+            StreamingPropertyValue spv = LumifyProperties.MAP_GLYPH_ICON.getPropertyValue(getVertex());
+            if (spv == null) {
+                return null;
+            }
+            return IOUtil.toByteArray(spv.getInputStream());
+        } catch (IOException e) {
+            throw new LumifyResourceNotFoundException("Could not retrieve map glyph icon");
         }
-        return spv.getInputStream();
     }
 
     @Override
