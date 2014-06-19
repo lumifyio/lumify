@@ -32,8 +32,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             .build();
     private Cache<String, InMemoryRelationship> relationshipsCache = CacheBuilder.newBuilder()
             .build();
-    private Cache<String, byte[]> fileCache = CacheBuilder.newBuilder()
-            .build();
+    private List<OwlData> fileCache = new ArrayList<OwlData>();
 
     public void init(Configuration config) throws Exception {
         Map<String, String> ontologies = config.getSubset(Configuration.ONTOLOGY_REPOSITORY_OWL);
@@ -123,7 +122,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     protected void storeOntologyFile(InputStream inputStream, IRI documentIRI) {
         try {
             byte[] inFileData = IOUtils.toByteArray(inputStream);
-            fileCache.put(documentIRI.toString(), inFileData);
+            fileCache.add(new OwlData(documentIRI.toString(), inFileData));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -132,16 +131,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     protected List<OWLOntology> loadOntologyFiles(OWLOntologyManager m, OWLOntologyLoaderConfiguration config, IRI excludedIRI) throws Exception {
         List<OWLOntology> loadedOntologies = new ArrayList<OWLOntology>();
-        ConcurrentMap<String, byte[]> concurrentMap = fileCache.asMap();
-        for (String key : concurrentMap.keySet()) {
-            IRI lumifyBaseOntologyIRI = IRI.create(key);
+        for (OwlData owlData : fileCache) {
+            IRI lumifyBaseOntologyIRI = IRI.create(owlData.iri);
             if (excludedIRI != null && excludedIRI.equals(lumifyBaseOntologyIRI)) {
                 continue;
             }
-            InputStream lumifyBaseOntologyIn = new ByteArrayInputStream(concurrentMap.get(key));
+            InputStream lumifyBaseOntologyIn = new ByteArrayInputStream(owlData.data);
             try {
                 Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
-                LOGGER.info("Loading existing ontology: %s", key);
+                LOGGER.info("Loading existing ontology: %s", owlData.iri);
                 OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
                 OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
                 loadedOntologies.add(o);
@@ -212,7 +210,6 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     @Override
     public void clearCache() {
         LOGGER.info("clearing ReadOnlyInMemoryOntologyRepository cache");
-        fileCache.invalidateAll();
         propertiesCache.invalidateAll();
         relationshipsCache.invalidateAll();
         conceptsCache.invalidateAll();
@@ -372,5 +369,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         InMemoryRelationship inMemRelationship = new InMemoryRelationship(relationshipIRI, displayName, ((InMemoryConcept) from).getConceptIRI(), ((InMemoryConcept) to).getConceptIRI());
         relationshipsCache.put(relationshipIRI, inMemRelationship);
         return inMemRelationship;
+    }
+
+    private static class OwlData {
+        public final String iri;
+        public final byte[] data;
+
+        public OwlData(String iri, byte[] data) {
+            this.iri = iri;
+            this.data = data;
+        }
     }
 }
