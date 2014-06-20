@@ -16,7 +16,6 @@ import static org.securegraph.util.IterableUtils.toList;
 
 public class OwlToJava extends CommandLineBase {
     private OntologyRepository ontologyRepository;
-    private String inFileName;
 
     public static void main(String[] args) throws Exception {
         int res = new OwlToJava().run(args);
@@ -40,12 +39,6 @@ public class OwlToJava extends CommandLineBase {
         );
 
         return options;
-    }
-
-    @Override
-    protected void processOptions(CommandLine cmd) throws Exception {
-        super.processOptions(cmd);
-        this.inFileName = cmd.getOptionValue("in");
     }
 
     @Override
