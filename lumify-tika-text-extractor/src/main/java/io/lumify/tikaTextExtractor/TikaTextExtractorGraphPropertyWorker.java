@@ -203,7 +203,7 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private String cleanHtml(String text) {
-        text = text.replaceAll("&mdash;", "-");
+        text = text.replaceAll("&mdash;", "--");
         text = text.replaceAll("&ldquo;", "\"");
         text = text.replaceAll("&rdquo;", "\"");
         text = text.replaceAll("&lsquo;", "'");
