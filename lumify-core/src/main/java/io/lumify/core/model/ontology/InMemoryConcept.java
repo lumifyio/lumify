@@ -13,16 +13,14 @@ public class InMemoryConcept extends Concept {
     private String titleFormula;
     private String subtitleFormula;
     private String timeFormula;
-    private ArrayList<OntologyProperty> properties;
     private boolean glyphIconResource;
     private String conceptIRI;
     private byte[] glyphIcon;
     private boolean userVisible;
 
-    protected InMemoryConcept(String conceptIRI, String parentIRI, Collection<OntologyProperty> properties) {
-        super(parentIRI, properties);
+    protected InMemoryConcept(String conceptIRI, String parentIRI) {
+        super(parentIRI, new ArrayList<OntologyProperty>());
         this.conceptIRI = conceptIRI;
-        this.properties = (ArrayList<OntologyProperty>) properties;
     }
 
     @Override
@@ -118,14 +116,6 @@ public class InMemoryConcept extends Concept {
 
     public void setUserVisible(boolean userVisible) {
         this.userVisible = userVisible;
-    }
-
-    public ArrayList<OntologyProperty> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(ArrayList<OntologyProperty> properties) {
-        this.properties = properties;
     }
 
     public String getConceptIRI() {

@@ -164,6 +164,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             Double boost) {
         checkNotNull(concept, "concept was null");
         InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
+        ((InMemoryConcept) concept).getProperties().add(property);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
@@ -342,15 +343,10 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         if (concept != null) {
             return concept;
         }
-        InMemoryOntologyProperty inMememoryOntologyProperty = new InMemoryOntologyProperty();
-        inMememoryOntologyProperty.setDisplayName(displayName);
-        Collection<OntologyProperty> ontologyProperties = new ArrayList<OntologyProperty>();
-        ontologyProperties.add(inMememoryOntologyProperty);
-
         if (parent == null) {
-            concept = new InMemoryConcept(conceptIRI, null, ontologyProperties);
+            concept = new InMemoryConcept(conceptIRI, null);
         } else {
-            concept = new InMemoryConcept(conceptIRI, ((InMemoryConcept) parent).getConceptIRI(), ontologyProperties);
+            concept = new InMemoryConcept(conceptIRI, ((InMemoryConcept) parent).getConceptIRI());
         }
         concept.setTitle(conceptIRI);
         concept.setDisplayName(displayName);
