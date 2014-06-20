@@ -199,7 +199,7 @@ public class SqlUser implements User {
     }
 
     @Override
-    public JSONObject getUiPreferences() { return new JSONObject(uiPreferences); }
+    public JSONObject getUiPreferences() { return uiPreferences != null ? new JSONObject(uiPreferences) : null; }
 
     public void setUiPreferences(JSONObject uiPreferences) { this.uiPreferences = uiPreferences.toString(); }
 
