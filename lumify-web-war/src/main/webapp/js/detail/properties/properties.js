@@ -518,7 +518,7 @@ define([
                     var previousName,
                         repeatCount = 0,
                         lastNonHidden = _.first(filtered),
-                        max = config['properties.multivalue.defaultVisibleCount'],
+                        max = parseInt(config['properties.multivalue.defaultVisibleCount'], 0),
                         formatNumber = function(c) {
                             var numberHidden = Math.max(0, c - max);
                             if (numberHidden) {
@@ -527,11 +527,10 @@ define([
                         },
                         props = $(propertiesTemplate({
                             properties: _.map(filtered, function(p, i) {
-                                var count = repeatCount;
                                 p.isRepeated = !!(previousName && previousName === p.name);
                                 if (!p.isRepeated) {
                                     if (previousName) {
-                                        lastNonHidden.hiddenNumber = formatNumber(count);
+                                        lastNonHidden.hiddenNumber = formatNumber(repeatCount);
                                     }
                                     repeatCount = 0;
                                 }
@@ -542,7 +541,7 @@ define([
                                 }
                                 p.popout = popoutEnabled;
                                 if (i === (filtered.length - 1) && previousName) {
-                                    lastNonHidden.hiddenNumber = formatNumber(count + 1);
+                                    lastNonHidden.hiddenNumber = formatNumber(repeatCount);
                                 }
 
                                 previousName = p.name;
