@@ -26,6 +26,8 @@ public class Configuration extends BaseRequestHandler {
         for (String key : getConfiguration().getKeys()) {
             if (key.startsWith(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX)) {
                 results.put(key.replaceFirst(io.lumify.core.config.Configuration.WEB_PROPERTIES_PREFIX, ""), getConfiguration().get(key, ""));
+            } else if (key.startsWith(io.lumify.core.config.Configuration.ONTOLOGY_IRI_PREFIX)) {
+                results.put(key, getConfiguration().get(key, ""));
             }
         }
 
