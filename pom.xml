@@ -65,6 +65,13 @@
         <module>lumify-opennlp-dictionary-extractor</module>
         <module>lumify-opennlp-dictionary-extractor-web</module>
         <module>lumify-opennlp-me-extractor</module>
+        <module>lumify-sphinx</module>
+        <module>lumify-tesseract</module>
+        <module>lumify-ccextractor</module>
+        <module>lumify-subrip-parser</module>
+        <module>lumify-youtube-transcript</module>
+        <module>lumify-subrip-transcript</module>
+        <module>lumify-geocoder-bing</module>
     </modules>
 
     <repositories>
