@@ -83,8 +83,15 @@ define(['util/withTeardown'], function(withTeardown) {
                 values = ['', ''];
 
             if (val1 && _.isDate(val1)) {
-                inputs.eq(0).datepicker('setDate', val1);
-                inputs.eq(1).datepicker('setDate', val2);
+                if (inputs.length === 4) {
+                    inputs.eq(0).datepicker('setDate', val1);
+                    inputs.eq(1).timepicker('setTime', val1);
+                    inputs.eq(2).datepicker('setDate', val2);
+                    inputs.eq(3).timepicker('setTime', val2);
+                } else {
+                    inputs.eq(0).datepicker('setDate', val1);
+                    inputs.eq(1).datepicker('setDate', val2);
+                }
                 values = this.getValues();
             } else {
                 if (val1) {
