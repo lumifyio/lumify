@@ -72,6 +72,7 @@
         <module>lumify-youtube-transcript</module>
         <module>lumify-subrip-transcript</module>
         <module>lumify-geocoder-bing</module>
+        <module>lumify-friendster</module>
     </modules>
 
     <repositories>
