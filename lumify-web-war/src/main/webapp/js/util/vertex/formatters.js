@@ -11,6 +11,11 @@ define([
 
     var propertiesByTitle = ontology.propertiesByTitle,
         V = {
+
+            isPublished: function(vertex) {
+                return V.sandboxStatus(vertex) === undefined;
+            },
+
             sandboxStatus: function(vertex) {
                 return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
             },

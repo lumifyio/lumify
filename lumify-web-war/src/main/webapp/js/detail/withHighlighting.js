@@ -7,6 +7,7 @@ define([
     'colorjs',
     'service/vertex',
     'service/ontology',
+    'util/vertex/formatters',
     'util/popovers/withVertexScrollingPositionUpdates',
     'util/range',
     'util/jquery.withinScrollable'
@@ -18,6 +19,7 @@ define([
     colorjs,
     VertexService,
     OntologyService,
+    F,
     withPositionUpdates,
     range) {
     'use strict';
@@ -408,7 +410,7 @@ define([
                         alignTo: 'node',
                         actions: $.extend({
                             Open: 'open.actionbar'
-                        }, Privileges.canEDIT ? {
+                        }, Privileges.canEDIT && !F.vertex.isPublished($target.data('info')) ? {
                             Unresolve: 'unresolve.actionbar'
                         } : {})
                     });
