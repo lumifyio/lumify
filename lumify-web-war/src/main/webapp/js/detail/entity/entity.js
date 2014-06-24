@@ -49,8 +49,9 @@ define([
         this.defaultAttrs({
             glyphIconSelector: '.entity-glyphIcon',
             propertiesSelector: '.properties',
-            relationshipsSelector: '.relationships',
-            titleSelector: '.entity-title'
+            relationshipsSelector: 'section .relationships',
+            titleSelector: '.entity-title',
+            relationshipsHeaderSelector: 'section.relationships'
         });
 
         this.after('teardown', function() {
@@ -63,9 +64,43 @@ define([
 
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
             this.on('infiniteScrollRequest', this.handleReferenceLoadingRequest);
+            this.on('click', {
+                relationshipsHeaderSelector: this.onToggleRelationships
+            });
 
-            self.loadEntity();
+            this.loadEntity();
         });
+
+        this.onToggleRelationships = function(event) {
+            var self = this,
+                $section = $(event.target).closest('.collapsible'),
+                $badge = $section.find('.badge');
+
+            if ($section.hasClass('expanded')) {
+                return $section.removeClass('expanded');
+            }
+
+            $badge.addClass('loading');
+
+            this.vertexRefresh
+                .then(function(vertex) {
+                    $.when(
+                            self.handleCancelling(ontologyService.relationships()),
+                            self.handleCancelling(vertexService.getVertexRelationships(vertex.id))
+                        )
+                        .always(function() {
+                            $badge.removeClass('loading');
+                            $section.addClass('expanded');
+                        })
+                        .fail(function() {
+                            self.select('relationshipsSelector').html(alertTemplate({
+                                error: 'Unable to load relationships'
+                            }));
+                        })
+                        .done(self.loadRelationships.bind(self, vertex));
+                });
+
+        };
 
         this.onVerticesUpdated = function(event, data) {
             var self = this;
@@ -78,11 +113,13 @@ define([
         };
 
         this.loadEntity = function() {
-            var self = this;
+            var self = this,
+                vertexRefresh = this.handleCancelling(appData.refresh(this.attr.data));
 
-            this.handleCancelling(appData.refresh(this.attr.data))
+            this.vertexRefresh = vertexRefresh;
+
+            vertexRefresh
                 .done(function(vertex) {
-
                     self.$node.html(template({
                         vertex: vertex,
                         fullscreenButton: self.fullscreenButton([vertex.id]),
@@ -101,16 +138,6 @@ define([
 
                    self.updateEntityAndArtifactDraggables();
 
-                    $.when(
-                            self.handleCancelling(ontologyService.relationships()),
-                            self.handleCancelling(vertexService.getVertexRelationships(vertex.id))
-                        )
-                        .fail(function() {
-                            self.select('relationshipsSelector').html(alertTemplate({
-                                error: 'Unable to load relationships'
-                            }));
-                        })
-                        .done(self.loadRelationships.bind(self, vertex));
                 });
         };
 
