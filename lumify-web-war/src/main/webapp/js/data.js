@@ -812,7 +812,8 @@ define([
                         return v.concept ? 'vertices' : 'edges';
                     });
 
-                if (_.isArray(self.previousSelection) &&
+                if ((!data || !data.options || data.options.forceSelectEvenIfSame !== true) &&
+                    _.isArray(self.previousSelection) &&
                     _.isArray(selectedIds) &&
                     _.isEqual(self.previousSelection, selectedIds)) {
                     return;

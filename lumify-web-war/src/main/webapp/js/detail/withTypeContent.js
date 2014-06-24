@@ -30,6 +30,8 @@ define([
         });
 
         this.after('initialize', function() {
+            var self = this,
+                previousConcept = this.attr.data.concept.id;
 
             if (!window.isFullscreenDetails) {
                 this.on('clearAvailableFullscreenDetails', this.onFullscreenClear);
@@ -47,6 +49,20 @@ define([
 
             this.on('click', {
                 auditSelector: this.onAuditToggle
+            });
+
+            this.on(document, 'verticesUpdated', function(event, data) {
+                if (data && data.vertices) {
+                    var current = _.findWhere(data.vertices, { id: this.attr.data.id });
+                    if (current && current.concept && current.concept.id !== previousConcept) {
+                        self.trigger(document, 'selectObjects', {
+                            vertices: [current],
+                            options: {
+                                forceSelectEvenIfSame: true
+                            }
+                        });
+                    }
+                }
             });
         });
 
