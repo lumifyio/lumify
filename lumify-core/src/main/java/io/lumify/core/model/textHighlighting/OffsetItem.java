@@ -1,6 +1,7 @@
 package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.properties.LumifyProperties;
+import io.lumify.core.model.workspace.diff.SandboxStatus;
 import io.lumify.core.util.RowKeyHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +34,14 @@ public abstract class OffsetItem implements Comparable {
         return null;
     }
 
+    public abstract SandboxStatus getSandboxStatus();
+
     public JSONObject getInfoJson() {
         try {
             JSONObject infoJson = new JSONObject();
             infoJson.put("start", getStart());
             infoJson.put("end", getEnd());
+            infoJson.put("sandboxStatus", getSandboxStatus().toString());
             infoJson.put(LumifyProperties.ROW_KEY.getPropertyName(), RowKeyHelper.jsonEncode(getRowKey()));
             if (getGraphVertexId() != null && !getGraphVertexId().equals("") && getEdgeId() != null && !getEdgeId().equals("")) {
                 infoJson.put("graphVertexId", getGraphVertexId());

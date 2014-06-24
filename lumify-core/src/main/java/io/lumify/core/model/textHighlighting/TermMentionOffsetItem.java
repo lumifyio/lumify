@@ -2,6 +2,7 @@ package io.lumify.core.model.textHighlighting;
 
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.termMention.TermMentionModel;
+import io.lumify.core.model.workspace.diff.SandboxStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,9 +11,11 @@ import java.util.List;
 
 public class TermMentionOffsetItem extends OffsetItem {
     private final TermMentionModel termMention;
+    private final SandboxStatus sandboxStatus;
 
-    public TermMentionOffsetItem(TermMentionModel termMention) {
+    public TermMentionOffsetItem(TermMentionModel termMention, SandboxStatus sandboxStatus) {
         this.termMention = termMention;
+        this.sandboxStatus = sandboxStatus;
     }
 
     @Override
@@ -47,6 +50,11 @@ public class TermMentionOffsetItem extends OffsetItem {
     @Override
     public String getEdgeId() {
         return termMention.getMetadata().getEdgeId();
+    }
+
+    @Override
+    public SandboxStatus getSandboxStatus() {
+        return sandboxStatus;
     }
 
     public String getTitle() {
