@@ -124,7 +124,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         auditRepository.auditRelationshipProperty(AuditAction.DELETE, sourceId, destId, propertyKey, propertyName, oldValue, null, edge, "", "",
                 user, setPropertyResult.visibility.getVisibility());
 
-        this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
+        this.workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName, workspaceId);
 
         JSONArray resultsJson = JsonSerializer.toJsonProperties(edge.getProperties(), workspaceId);
         respondWithJson(response, resultsJson);
