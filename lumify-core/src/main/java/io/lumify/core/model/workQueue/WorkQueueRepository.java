@@ -174,7 +174,7 @@ public abstract class WorkQueueRepository {
         try {
             JSONObject json;
             if (element instanceof Vertex) {
-                json = getBroadcastPropertyChangeJson((Vertex) element, propertyKey, propertyName);
+                json = getBroadcastPropertyChangeJson((Vertex) element, propertyKey, propertyName, workspaceId);
             } else if (element instanceof Edge) {
                 json = getBroadcastPropertyChangeJson((Edge) element, propertyKey, propertyName, workspaceId);
             } else {
@@ -210,10 +210,10 @@ public abstract class WorkQueueRepository {
         return json;
     }
 
-    protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName) {
+    protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName, String workspaceId) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null);
+        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId);
         dataJson.put("vertex", vertexJson);
 
         JSONObject propertyJson = new JSONObject();
