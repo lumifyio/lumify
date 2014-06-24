@@ -55,7 +55,7 @@ public abstract class WorkQueueRepository {
     }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
-        pushGraphPropertyQueue(element, propertyKey, propertyName);
+        pushGraphPropertyQueue(element, propertyKey, propertyName, null);
     }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName, String workspaceId) {
