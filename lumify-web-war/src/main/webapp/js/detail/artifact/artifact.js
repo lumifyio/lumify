@@ -18,6 +18,7 @@ define([
     'util/vertex/formatters',
     'service/ontology',
     'service/vertex',
+    'service/config',
     'data'
 ], function(
     defineComponent,
@@ -37,6 +38,7 @@ define([
     F,
     OntologyService,
     VertexService,
+    ConfigService,
     appData) {
     'use strict';
 
@@ -208,21 +210,28 @@ define([
             var self = this,
                 vertex = self.attr.data;
 
-            this.handleCancelling(appData.refresh(vertex))
-                .done(this.handleVertexLoaded.bind(this));
+            $.when(
+                this.handleCancelling(appData.refresh(vertex)),
+                new ConfigService().getProperties()
+            ).done(this.handleVertexLoaded.bind(this));
         };
 
-        this.handleVertexLoaded = function(vertex) {
+        this.handleVertexLoaded = function(vertexResponse, config) {
             var self = this,
+                vertex = vertexResponse[0],
+                displayType = this.attr.data.concept.displayType,
                 properties = vertex && vertex.properties;
 
             this.attr.data = vertex;
 
-            if (properties) {
-                this.videoTranscript = ('http://lumify.io#videoTranscript' in properties) ?
-                    properties['http://lumify.io#videoTranscript'].value : {};
-                this.videoDuration = ('http://lumify.io#videoDuration' in properties) ?
-                    properties['http://lumify.io#videoDuration'].value : 0;
+            if (properties && displayType) {
+                var durationProperty = _.findWhere(properties, {
+                    name: config['ontology.iri.' + displayType + 'Duration']
+                });
+
+                if (durationProperty) {
+                    this.duration = durationProperty.value * 1000;
+                }
             }
 
             vertex.detectedObjects = vertex.detectedObjects.sort(function(a, b) {
@@ -243,7 +252,6 @@ define([
 
             this.updateText();
 
-            var displayType = this.attr.data.concept.displayType;
             if (this[displayType + 'Setup']) {
                 this[displayType + 'Setup'](this.attr.data);
             }
@@ -299,6 +307,10 @@ define([
                 }).done(function() {
                     scrollParent.scrollTop(scrollTop);
                 });
+            } else if (textProperties.length > 1) {
+                this.openText(textProperties[0].key, {
+                    expand: false
+                });
             }
         };
 
@@ -310,7 +322,7 @@ define([
         this.onScrubberFrameChange = function(evt, data) {
             var frameIndex = data.index,
                 numberOfFrames = data.numberOfFrames,
-                time = (this.videoDuration / numberOfFrames) * frameIndex;
+                time = (this.duration / numberOfFrames) * frameIndex;
 
             this.updateCurrentTranscript(time);
         };
@@ -329,13 +341,13 @@ define([
         };
 
         this.findTranscriptEntryForTime = function(time) {
-            if (!this.videoTranscript || !this.videoTranscript.entries) {
+            if (!this.currentTranscript || !this.currentTranscript.entries) {
                 return null;
             }
-            var bestMatch = this.videoTranscript.entries[0];
-            for (var i = 0; i < this.videoTranscript.entries.length; i++) {
-                if (this.videoTranscript.entries[i].start <= time) {
-                    bestMatch = this.videoTranscript.entries[i];
+            var bestMatch = this.currentTranscript.entries[0];
+            for (var i = 0; i < this.currentTranscript.entries.length; i++) {
+                if (this.currentTranscript.entries[i].start <= time) {
+                    bestMatch = this.currentTranscript.entries[i];
                 }
             }
             return bestMatch;
@@ -347,22 +359,25 @@ define([
 
         this.openText = function(propertyKey, options) {
             var self = this,
-                $section = this.$node.find('.' + F.className.to(propertyKey))
-                    .siblings('.loading').removeClass('loading').end()
-                    .addClass('loading');
+                expand = !options || options.expand !== false,
+                $section = this.$node.find('.' + F.className.to(propertyKey));
+
+            if (expand) {
+                $section.siblings('.loading').removeClass('loading').end().addClass('loading');
+            }
 
             return this.handleCancelling(
                 this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
             ).done(function(artifactText) {
-                var textElement = $section.find('.text');
-                self.processArtifactText(artifactText, textElement);
+                var html = self.processArtifactText(artifactText);
+                if (expand) {
+                    $section.find('.text').html(html);
+                    $section.addClass('expanded').removeClass('loading');
 
-                $section.addClass('expanded').removeClass('loading');
-
-                self.updateEntityAndArtifactDraggables();
-
-                if (!options || options.scrollToSection !== false) {
-                    self.scrollToRevealSection($section);
+                    self.updateEntityAndArtifactDraggables();
+                    if (!options || options.scrollToSection !== false) {
+                        self.scrollToRevealSection($section);
+                    }
                 }
             });
         };
@@ -525,7 +540,7 @@ define([
             );
         };
 
-        this.processArtifactText = function(text, element) {
+        this.processArtifactText = function(text) {
             var self = this,
                 warningText = 'No Text Available';
 
@@ -537,7 +552,8 @@ define([
                 } catch(e) { }
 
                 if (json && !_.isEmpty(json.entries)) {
-                    return element.html(transcriptEntriesTemplate({
+                    this.currentTranscript = json;
+                    return transcriptEntriesTemplate({
                         entries: _.map(json.entries, function(e) {
                             return {
                                 millis: e.start || e.end,
@@ -547,18 +563,14 @@ define([
                                 text: e.text
                             };
                         })
-                    }));
+                    });
                 } else if (json) {
                     text = null;
                     warningText = 'No Transcripts Available';
                 }
             }
 
-            element.html(
-                !text ?
-                    alertTemplate({ warning: warningText }) :
-                    text.replace(/(\n+)/g, '<br><br>$1')
-            );
+            return !text ?  alertTemplate({ warning: warningText }) : text.replace(/(\n+)/g, '<br><br>$1');
         }
 
         this.audioSetup = function(vertex) {

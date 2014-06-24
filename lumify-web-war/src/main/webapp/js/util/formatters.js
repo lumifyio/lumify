@@ -259,9 +259,14 @@ define([
             }
         },
         date: {
-            utc: function(str) {
+            local: function(str) {
                 var millis = _.isString(str) && !isNaN(Number(str)) ? Number(str) : str,
-                    dateInLocale = _.isDate(millis) ? millis : new Date(millis),
+                    dateInLocale = _.isDate(millis) ? millis : new Date(millis);
+
+                return dateInLocale;
+            },
+            utc: function(str) {
+                var dateInLocale = FORMATTERS.date.local(str),
                     millisInMinutes = 1000 * 60,
                     millisFromLocaleToUTC = dateInLocale.getTimezoneOffset() * millisInMinutes,
                     dateInUTC = new Date(dateInLocale.getTime() + millisFromLocaleToUTC);
@@ -269,15 +274,24 @@ define([
             },
             dateString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return sf('{0:yyyy-MM-dd}', FORMATTERS.date.utc(millisStr));
+                return sf('{0:yyyy-MM-dd}', FORMATTERS.date.local(millisStr));
             },
             dateTimeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.utc(millisStr));
+                return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.local(millisStr));
+            },
+            dateStringUtc: function(millisStr) {
+                return FORMATTERS.date.dateString(FORMATTERS.date.utc(millisStr));
+            },
+            dateTimeStringUtc: function(millisStr) {
+                return FORMATTERS.date.dateTimeString(FORMATTERS.date.utc(millisStr));
             },
             timeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return sf('{0:HH:mm}', FORMATTERS.date.utc(millisStr));
+                return sf('{0:HH:mm}', FORMATTERS.date.local(millisStr));
+            },
+            timeStringUtc: function(millisStr) {
+                return FORMATTERS.date.timeString(FORMATTERS.date.utc(millisStr));
             },
             relativeToNow: function(date) {
                 var span = new sf.TimeSpan(FORMATTERS.date.utc(Date.now()) - date),

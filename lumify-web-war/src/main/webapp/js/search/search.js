@@ -128,6 +128,8 @@ define([
         };
 
         this.onFiltersChange = function(event, data) {
+            var hadFilters = this.hasFilters();
+
             this.filters = data;
 
             var query = this.getQueryVal(),
@@ -137,7 +139,7 @@ define([
                 this.select('querySelector').val('*');
             }
 
-            if (query || hasFilters) {
+            if (query || hasFilters || hadFilters) {
                 if (data.options && data.options.isScrubbing) {
                     this.triggerQueryUpdatedThrottled();
                 } else {
@@ -197,6 +199,7 @@ define([
                 }
                 this.filters = null;
                 this.updateQueryError();
+                this.triggerQueryUpdated();
             } else {
                 this.savedQueries[this.otherSearchType].query = '';
                 this.savedQueries[this.otherSearchType].filters = [];
