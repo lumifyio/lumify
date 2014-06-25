@@ -6,6 +6,7 @@ import io.lumify.core.bootstrap.lib.LibLoader;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.ingest.FileImportSupportingFileHandler;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import io.lumify.core.ingest.graphProperty.PostMimeTypeWorker;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.model.user.UserListener;
 import io.lumify.core.model.user.UserRepository;
@@ -38,6 +39,7 @@ public class PluginList extends BaseRequestHandler {
 
         json.put("loadedLibFiles", getLoadedLibFilesJson());
         json.put("graphPropertyWorkers", getGraphPropertyWorkersJson());
+        json.put("postMimeTypeWorkers", getPostMimeTypeWorkersJson());
         json.put("userListeners", getUserListenersJson());
         json.put("libLoaders", getLibLoadersJson());
         json.put("fileImportSupportingFileHandlers", getFileImportSupportingFileHandlersJson());
@@ -72,6 +74,20 @@ public class PluginList extends BaseRequestHandler {
     private JSONObject getGraphPropertyWorkerJson(GraphPropertyWorker graphPropertyWorker) {
         JSONObject json = new JSONObject();
         json.put("className", graphPropertyWorker.getClass().getName());
+        return json;
+    }
+
+    private JSONArray getPostMimeTypeWorkersJson() {
+        JSONArray json = new JSONArray();
+        for (PostMimeTypeWorker postMimeTypeWorker : ServiceLoader.load(PostMimeTypeWorker.class)) {
+            json.put(getPostMimeTypeWorkerJson(postMimeTypeWorker));
+        }
+        return json;
+    }
+
+    private JSONObject getPostMimeTypeWorkerJson(PostMimeTypeWorker postMimeTypeWorker) {
+        JSONObject json = new JSONObject();
+        json.put("className", postMimeTypeWorker.getClass().getName());
         return json;
     }
 
