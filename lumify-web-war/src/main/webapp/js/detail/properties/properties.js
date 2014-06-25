@@ -7,6 +7,7 @@ define([
     'service/audit',
     'service/config',
     'util/vertex/formatters',
+    'util/privileges',
     '../dropdowns/propertyForm/propForm',
     'hbs!./template',
     'hbs!../audit/audit-list',
@@ -20,6 +21,7 @@ define([
     AuditService,
     ConfigService,
     F,
+    Privileges,
     PropertyForm,
     propertiesTemplate,
     auditsListTemplate,
@@ -439,6 +441,12 @@ define([
 
                     if (property.name === 'http://lumify.io#visibilityJson' || ontologyProperty) {
                         $this.popover('destroy');
+                        if (!F.vertex.hasMetadata(property) && Privileges.missingEDIT) {
+                            $this.hide();
+                            return;
+                        } else {
+                            $this.show();
+                        }
                         $this.popover({
                             trigger: 'click',
                             placement: 'top',
