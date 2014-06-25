@@ -26,7 +26,7 @@ define([
                     modifiedDate =  property.metadata['http://lumify.io#modifiedDate'],
                     justification = property.metadata._justificationMetadata,
                     source = property.metadata._sourceMetadata;
-                    
+
                 return (status || justification || source || modifiedBy || modifiedDate);
             },
 
