@@ -81,7 +81,7 @@ public abstract class MimeTypeGraphPropertyWorker extends GraphPropertyWorker {
         for (PostMimeTypeWorker postMimeTypeWorker : postMimeTypeWorkers) {
             try {
                 LOGGER.debug("running PostMimeTypeWorker: %s on element: %s, mimeType: %s", postMimeTypeWorker.getClass().getName(), data.getElement().getId(), mimeType);
-                postMimeTypeWorker.execute(mimeType, data);
+                postMimeTypeWorker.execute(mimeType, data, getAuthorizations());
             } catch (Exception ex) {
                 throw new LumifyException("Failed running PostMimeTypeWorker " + postMimeTypeWorker.getClass().getName(), ex);
             }
