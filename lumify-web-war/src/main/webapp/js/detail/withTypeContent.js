@@ -31,7 +31,7 @@ define([
 
         this.after('initialize', function() {
             var self = this,
-                previousConcept = this.attr.data.concept.id;
+                previousConcept = this.attr.data.concept && this.attr.data.concept.id;
 
             if (!window.isFullscreenDetails) {
                 this.on('clearAvailableFullscreenDetails', this.onFullscreenClear);
