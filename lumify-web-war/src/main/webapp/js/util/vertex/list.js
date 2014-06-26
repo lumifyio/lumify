@@ -64,6 +64,9 @@ define([
                 if (vertexState.inMap) classes.push('map-displayed');
 
                 classes.push('has_preview');
+                if (!v.imageSrcIsFromConcept) {
+                    classes.push('non_concept_preview');
+                }
 
                 classNamesForVertex[v.id] = classes.join(' ');
             });
@@ -368,17 +371,19 @@ define([
                         F: F
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.imageSrc,
-                    showImageSrc = src && !vertex.imageSrcIsFromConcept;
+                    src = vertex.imageSrc;
+
+                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept);
 
                 if (currentAnchor.length) {
-                    if (showImageSrc) {
-                        $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
+                    if (src) {
+                        newAnchor.find('.preview').css('background-image', 'url(' + src + ')');
                     }
 
                     var newHtml = newAnchor.html();
                     if (currentAnchor.length && newHtml !== currentHtml) {
                         li.data('previewLoaded', null);
+                        currentAnchor.html(newHtml);
                     }
                 }
             });
