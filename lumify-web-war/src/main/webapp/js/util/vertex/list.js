@@ -6,6 +6,7 @@ define([
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
+    'promise!util/service/ontologyPromise',
     'util/video/scrubber',
     'util/vertex/formatters',
     'util/popovers/withVertexScrollingPositionUpdates',
@@ -18,6 +19,7 @@ define([
     template,
     vertexTemplate,
     alertTemplate,
+    ontologyPromise,
     VideoScrubber,
     F,
     withPositionUpdates) {
@@ -36,11 +38,10 @@ define([
             var inWorkspace = appData.inWorkspace(vertex);
             return {
                 inGraph: inWorkspace,
-                inMap: inWorkspace && !!(
-                        vertex.properties.geoLocation ||
-                        (vertex.location || (vertex.locations && vertex.locations.length)) ||
-                        (vertex.properties.latitude && vertex.properties.longitude)
-                )
+                inMap: inWorkspace && _.some(vertex.properties, function(p) {
+                    var ontologyProperty = ontologyPromise.propertiesByTitle[p.name];
+                    return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
+                })
             };
         };
 
