@@ -9,6 +9,10 @@
       <ul class="dropdown-menu">
         <li><a class="" href="<%= vertex.imageRawSrc %>" target="_blank">Open <%= vertex.concept.displayType %></a></li>
         <li><a class="" href="<%= vertex.imageRawSrc %><%= /\?/.test(vertex.imageRawSrc) ? '&' : '?' %>download=true" target="_blank">Download <%= vertex.concept.displayType %></a></li>
+        <% var sourceUrl = _.findWhere(vertex.properties, { name: 'http://lumify.io#sourceUrl' }); %>
+        <% if (sourceUrl) { %>
+          <li><a target="_blank" class="" href="<%= sourceUrl.value %>">Source URL</a></li>
+        <% } %>
       </ul>
     </div>
 
