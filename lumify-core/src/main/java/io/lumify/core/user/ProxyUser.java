@@ -7,6 +7,11 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+/**
+ * This class is used to store the userId only in a web session. If we were to store the entire
+ * user object in the session, any changes to the user would not be reflected unless the user object
+ * was refreshed.
+ */
 public class ProxyUser implements User {
     private final String userId;
     private final UserRepository userRepository;
