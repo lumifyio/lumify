@@ -6,10 +6,12 @@ import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.workspace.*;
 import io.lumify.core.model.workspace.diff.DiffItem;
+import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.sql.model.user.SqlUser;
+import io.lumify.sql.model.user.SqlUserRepository;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,10 +30,12 @@ import static org.securegraph.util.IterableUtils.toList;
 public class SqlWorkspaceRepository extends WorkspaceRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SqlWorkspaceRepository.class);
     private final SessionFactory sessionFactory;
+    private final SqlUserRepository userRepository;
 
     @Inject
-    public SqlWorkspaceRepository(final SessionFactory sessionFactory) {
+    public SqlWorkspaceRepository(final SessionFactory sessionFactory, final SqlUserRepository userRepository) {
         this.sessionFactory = sessionFactory;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -83,6 +87,9 @@ public class SqlWorkspaceRepository extends WorkspaceRepository {
             transaction = session.beginTransaction();
             newWorkspace = new SqlWorkspace();
             newWorkspace.setDisplayTitle(title);
+            if (user instanceof ProxyUser) {
+                user = userRepository.findById(user.getUserId());
+            }
             newWorkspace.setCreator((SqlUser) user);
 
             SqlWorkspaceUser sqlWorkspaceUser = new SqlWorkspaceUser();
