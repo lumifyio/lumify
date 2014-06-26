@@ -63,7 +63,6 @@ define([
                 if (vertexState.inGraph) classes.push('graph-displayed');
                 if (vertexState.inMap) classes.push('map-displayed');
 
-                classes.push('has_preview');
                 if (!v.imageSrcIsFromConcept) {
                     classes.push('non_concept_preview');
                 }

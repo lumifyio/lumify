@@ -70,42 +70,38 @@ body > .vertex-dragging {
       &.map-displayed li.map { display: block;margin-top: -0.4em; }
 
       @preview-width: 35px;
-      &.has_preview {        
-        a { 
-          padding-left: @preview-width + @preview-width * 0.5;           
-          padding-right: 1.3em;
-          padding-top: 0.8em;
-         }
-        .preview {
-          display: block;
-          height: 2em;
-          top: 0.9em;
-          left: -0.7em;
-          background-size: contain;
+      a { 
+        padding-left: @preview-width + @preview-width * 0.5;           
+        padding-right: 1.3em;
+        padding-top: 0.8em;          
+        line-height: 2.2em;
+      }
+      &.has-timeSubtitle, &.has-subtitle {
+        a {
+          line-height: 1.2em;
         }
       }
 
       &.non_concept_preview .preview {
         left: -1em;
         top: 0;
-        width: 3.5em;
+        width: 3.3em;
         background-size: contain;
         height: 4em;
       }
 
       .preview {
-        display: none;
-        width: @preview-width;
+        display: block;
         position: absolute;
-        left: @preview-width / -2 + 5;
-        top: 0;
         bottom: 1px;
         overflow: hidden;
-        //max-height: 3em;
-        //background-color: #444;
         background-repeat: no-repeat;
-        background-size: auto 50%;
         background-position: center;
+        height: 2em;
+        top: 0.9em;
+        left: 0.3em;
+        width: @preview-width * 0.4;
+        background-size: contain;
       }
 
       ul {
@@ -171,11 +167,15 @@ body > .vertex-dragging {
       content: ' ';
     }
     
-    .date {
-      float: right;
-    }
     .source {
       float: left;
     }
+  }
+
+  ul li.has-timeSubtitle a .date {
+    float: left;
+  }
+  ul li.has-timeSubtitle.has-subtitle a .date {
+    float: right;
   }
 }
