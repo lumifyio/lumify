@@ -1,9 +1,8 @@
-package io.lumify.web;
+package io.lumify.core.user;
 
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.user.UserType;
-import io.lumify.core.user.User;
 import org.json.JSONObject;
 
 import java.util.Date;
