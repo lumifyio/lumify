@@ -85,7 +85,7 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
         try {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "video-preview", in,
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "video-preview", in,
                         boundaryDims, user).getThumbnailData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);

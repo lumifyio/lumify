@@ -4,9 +4,11 @@ import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
-import io.lumify.core.user.User;
 import com.beust.jcommander.internal.Nullable;
 import com.google.inject.Inject;
+import io.lumify.core.config.Configuration;
+import io.lumify.core.user.User;
+import org.securegraph.Vertex;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +16,8 @@ import java.util.Collection;
 
 public class BigTableArtifactThumbnailRepository extends ArtifactThumbnailRepository {
     @Inject
-    public BigTableArtifactThumbnailRepository(@Nullable final ModelSession modelSession) {
-        super(modelSession);
+    public BigTableArtifactThumbnailRepository(@Nullable final ModelSession modelSession, final Configuration configuration) {
+        super(modelSession, configuration);
     }
 
     @Override
@@ -65,9 +67,9 @@ public class BigTableArtifactThumbnailRepository extends ArtifactThumbnailReposi
     }
 
     @Override
-    public ArtifactThumbnail createThumbnail(Object artifactVertexId, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
-        ArtifactThumbnail thumbnail = super.generateThumbnail(in, boundaryDims);
-        saveThumbnail(artifactVertexId, thumbnailType, boundaryDims, thumbnail.getThumbnailData(), thumbnail.getType(), thumbnail.getFormat());
+    public ArtifactThumbnail createThumbnail(Vertex artifactVertex, String thumbnailType, InputStream in, int[] boundaryDims, User user) throws IOException {
+        ArtifactThumbnail thumbnail = super.generateThumbnail(artifactVertex, in, boundaryDims);
+        saveThumbnail(artifactVertex, thumbnailType, boundaryDims, thumbnail.getThumbnailData(), thumbnail.getType(), thumbnail.getFormat());
         return thumbnail;
     }
 
