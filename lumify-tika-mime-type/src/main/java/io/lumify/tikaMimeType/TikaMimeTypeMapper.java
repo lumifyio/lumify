@@ -25,14 +25,17 @@ public class TikaMimeTypeMapper {
     }
 
     public String guessMimeType(InputStream in, String fileName) throws Exception {
-        String mimeType = URLConnection.guessContentTypeFromName(fileName);
-        if (mimeType != null) {
-            return mimeType;
-        }
+        String mimeType;
+        if (fileName != null) {
+            mimeType = URLConnection.guessContentTypeFromName(fileName);
+            if (mimeType != null) {
+                return mimeType;
+            }
 
-        mimeType = setContentTypeUsingFileExt(FilenameUtils.getExtension(fileName).toLowerCase());
-        if (mimeType != null) {
-            return mimeType;
+            mimeType = setContentTypeUsingFileExt(FilenameUtils.getExtension(fileName).toLowerCase());
+            if (mimeType != null) {
+                return mimeType;
+            }
         }
 
         DefaultDetector detector = new DefaultDetector();

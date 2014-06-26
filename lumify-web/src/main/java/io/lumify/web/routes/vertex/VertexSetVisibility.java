@@ -1,5 +1,7 @@
 package io.lumify.web.routes.vertex;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.audit.AuditRepository;
@@ -14,10 +16,11 @@ import io.lumify.core.util.JsonSerializer;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import org.securegraph.*;
-import com.google.inject.Inject;
 import org.json.JSONObject;
+import org.securegraph.Authorizations;
+import org.securegraph.Graph;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,7 +76,7 @@ public class VertexSetVisibility extends BaseRequestHandler {
 
         this.graph.flush();
 
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName());
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyName(), workspaceId);
 
         JSONObject json = JsonSerializer.toJson(graphVertex, workspaceId);
         respondWithJson(response, json);

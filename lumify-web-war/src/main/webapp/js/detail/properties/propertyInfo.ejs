@@ -37,12 +37,6 @@
     
   <% } %>
 
-  <% if (!status && !(j || s) && !modifiedBy && !modifiedDate) { %>
-    <tr>
-      <td colspan="2">No metadata found</td>
-    </tr>
-  <% } %>
-
 </table>
 <% 
   var editButtonText = !status ? 'Add' : 'Edit';

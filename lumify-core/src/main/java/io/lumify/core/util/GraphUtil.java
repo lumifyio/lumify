@@ -24,10 +24,20 @@ import java.util.Map;
 public class GraphUtil {
     public static SandboxStatus getSandboxStatus(Element element, String workspaceId) {
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getPropertyValue(element);
-        return getPropertySandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
+        return getSandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
     }
 
-    private static SandboxStatus getPropertySandboxStatusFromVisibilityJsonString(JSONObject visibilityJson, String workspaceId) {
+    public static SandboxStatus getSandboxStatusFromVisibilityString(String visibility, String workspaceId) {
+        if (visibility == null) {
+            return SandboxStatus.PUBLIC;
+        }
+        if (!visibility.contains(workspaceId)) {
+            return SandboxStatus.PUBLIC;
+        }
+        return SandboxStatus.PRIVATE;
+    }
+
+    public static SandboxStatus getSandboxStatusFromVisibilityJsonString(JSONObject visibilityJson, String workspaceId) {
         if (visibilityJson == null) {
             return SandboxStatus.PUBLIC;
         }
@@ -46,7 +56,7 @@ public class GraphUtil {
         for (int i = 0; i < properties.size(); i++) {
             Property property = properties.get(i);
             JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(property.getMetadata());
-            sandboxStatuses[i] = getPropertySandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
+            sandboxStatuses[i] = getSandboxStatusFromVisibilityJsonString(visibilityJson, workspaceId);
         }
 
         for (int i = 0; i < properties.size(); i++) {

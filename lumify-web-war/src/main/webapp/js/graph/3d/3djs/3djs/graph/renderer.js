@@ -8,6 +8,17 @@ define([
     function GraphRenderer(domElement, options) {
         this.domElement = domElement;
         this.options = options || {};
+
+        this.browserSupported = (function() {
+            try {
+                var canvas = document.createElement('canvas');
+                return !!window.WebGLRenderingContext && (
+                    canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+                );
+            } catch(e) {
+                return false;
+            }
+        })();
     }
 
     GraphRenderer.prototype = {

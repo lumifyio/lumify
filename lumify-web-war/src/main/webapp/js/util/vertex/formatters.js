@@ -11,8 +11,23 @@ define([
 
     var propertiesByTitle = ontology.propertiesByTitle,
         V = {
+
+            isPublished: function(vertex) {
+                return V.sandboxStatus(vertex) === undefined;
+            },
+
             sandboxStatus: function(vertex) {
                 return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
+            },
+
+            hasMetadata: function(property) {
+                var status = V.sandboxStatus(property.metadata),
+                    modifiedBy = property.metadata['http://lumify.io#modifiedBy'],
+                    modifiedDate =  property.metadata['http://lumify.io#modifiedDate'],
+                    justification = property.metadata._justificationMetadata,
+                    source = property.metadata._sourceMetadata;
+
+                return (status || justification || source || modifiedBy || modifiedDate);
             },
 
             isKindOfConcept: function(vertex, conceptTypeFilter) {

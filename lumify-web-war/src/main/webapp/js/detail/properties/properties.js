@@ -7,6 +7,7 @@ define([
     'service/audit',
     'service/config',
     'util/vertex/formatters',
+    'util/privileges',
     '../dropdowns/propertyForm/propForm',
     'hbs!./template',
     'hbs!../audit/audit-list',
@@ -20,6 +21,7 @@ define([
     AuditService,
     ConfigService,
     F,
+    Privileges,
     PropertyForm,
     propertiesTemplate,
     auditsListTemplate,
@@ -439,6 +441,12 @@ define([
 
                     if (property.name === 'http://lumify.io#visibilityJson' || ontologyProperty) {
                         $this.popover('destroy');
+                        if (!F.vertex.hasMetadata(property) && Privileges.missingEDIT) {
+                            $this.hide();
+                            return;
+                        } else {
+                            $this.show();
+                        }
                         $this.popover({
                             trigger: 'click',
                             placement: 'top',
@@ -518,7 +526,7 @@ define([
                     var previousName,
                         repeatCount = 0,
                         lastNonHidden = _.first(filtered),
-                        max = config['properties.multivalue.defaultVisibleCount'],
+                        max = parseInt(config['properties.multivalue.defaultVisibleCount'], 0),
                         formatNumber = function(c) {
                             var numberHidden = Math.max(0, c - max);
                             if (numberHidden) {
@@ -527,11 +535,10 @@ define([
                         },
                         props = $(propertiesTemplate({
                             properties: _.map(filtered, function(p, i) {
-                                var count = repeatCount;
                                 p.isRepeated = !!(previousName && previousName === p.name);
                                 if (!p.isRepeated) {
                                     if (previousName) {
-                                        lastNonHidden.hiddenNumber = formatNumber(count);
+                                        lastNonHidden.hiddenNumber = formatNumber(repeatCount);
                                     }
                                     repeatCount = 0;
                                 }
@@ -542,7 +549,7 @@ define([
                                 }
                                 p.popout = popoutEnabled;
                                 if (i === (filtered.length - 1) && previousName) {
-                                    lastNonHidden.hiddenNumber = formatNumber(count + 1);
+                                    lastNonHidden.hiddenNumber = formatNumber(repeatCount);
                                 }
 
                                 previousName = p.name;

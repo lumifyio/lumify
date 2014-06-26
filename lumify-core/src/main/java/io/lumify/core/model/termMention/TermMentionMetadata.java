@@ -1,5 +1,6 @@
 package io.lumify.core.model.termMention;
 
+import com.altamiracorp.bigtable.model.Column;
 import com.altamiracorp.bigtable.model.ColumnFamily;
 import com.altamiracorp.bigtable.model.Value;
 import org.securegraph.Visibility;
@@ -33,6 +34,14 @@ public class TermMentionMetadata extends ColumnFamily {
 
     public String getSign() {
         return Value.toString(get(SIGN));
+    }
+
+    public String getSignVisibility() {
+        Column column = getColumn(SIGN);
+        if (column == null) {
+            return null;
+        }
+        return column.getVisibility();
     }
 
     public TermMentionMetadata setVertexId(String vertexId, Visibility visibility) {

@@ -1,14 +1,19 @@
 package io.lumify.core.bootstrap;
 
+import com.fasterxml.jackson.module.guice.ObjectMapperModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import io.lumify.core.bootstrap.lib.LibLoader;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ServiceLoaderUtil;
-import com.fasterxml.jackson.module.guice.ObjectMapperModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.securegraph.util.IterableUtils.toList;
 
 public class InjectHelper {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(InjectHelper.class);
@@ -40,6 +45,14 @@ public class InjectHelper {
             throw new RuntimeException("Could not find injector");
         }
         return injector.getInstance(clazz);
+    }
+
+    public static <T> Collection<T> getInjectedServices(Class<T> clazz) {
+        List<T> workers = toList(ServiceLoaderUtil.load(clazz));
+        for (T worker : workers) {
+            inject(worker);
+        }
+        return workers;
     }
 
     public static interface ModuleMaker {

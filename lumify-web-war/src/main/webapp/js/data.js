@@ -30,7 +30,7 @@ define([
     undoManager, ClipboardManager, Privileges, F) {
     'use strict';
 
-    var WORKSPACE_SAVE_DELAY = 1500,
+    var WORKSPACE_SAVE_DELAY = 500,
         RELOAD_RELATIONSHIPS_DELAY = 250,
         ADD_VERTICES_DELAY = 100,
         DataComponent = defineComponent(Data,
@@ -812,7 +812,8 @@ define([
                         return v.concept ? 'vertices' : 'edges';
                     });
 
-                if (_.isArray(self.previousSelection) &&
+                if ((!data || !data.options || data.options.forceSelectEvenIfSame !== true) &&
+                    _.isArray(self.previousSelection) &&
                     _.isArray(selectedIds) &&
                     _.isEqual(self.previousSelection, selectedIds)) {
                     return;

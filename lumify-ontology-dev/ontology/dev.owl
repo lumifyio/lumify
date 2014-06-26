@@ -497,6 +497,8 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#duration">
         <rdfs:label xml:lang="en">Duration</rdfs:label>
         <rdfs:domain rdf:resource="http://lumify.io/dev#phoneCall"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#audio"/>
+        <rdfs:domain rdf:resource="http://lumify.io/dev#video"/>
         <rdfs:range rdf:resource="&xsd;double"/>
     </owl:DatatypeProperty>
     

@@ -32,6 +32,7 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -78,10 +79,9 @@ public class GraphPropertyBolt extends BaseRichBolt {
                 this.user,
                 this.authorizations,
                 InjectHelper.getInjector());
-        List<GraphPropertyWorker> workers = toList(ServiceLoaderUtil.load(GraphPropertyWorker.class));
+        Collection<GraphPropertyWorker> workers = InjectHelper.getInjectedServices(GraphPropertyWorker.class);
         this.workerWrappers = new ArrayList<GraphPropertyThreadedWrapper>(workers.size());
         for (GraphPropertyWorker worker : workers) {
-            InjectHelper.inject(worker);
             try {
                 worker.prepare(workerPrepareData);
             } catch (Exception ex) {

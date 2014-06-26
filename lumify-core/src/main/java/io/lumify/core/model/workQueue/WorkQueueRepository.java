@@ -32,7 +32,7 @@ public abstract class WorkQueueRepository {
         pushGraphPropertyQueue(element, property.getKey(), property.getName());
     }
 
-    public void pushElementImageQueue (final Element element, final Property property) {
+    public void pushElementImageQueue(final Element element, final Property property) {
         pushElementImageQueue(element, property.getKey(), property.getName());
     }
 
@@ -55,6 +55,10 @@ public abstract class WorkQueueRepository {
     }
 
     public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName) {
+        pushGraphPropertyQueue(element, propertyKey, propertyName, null);
+    }
+
+    public void pushGraphPropertyQueue(final Element element, String propertyKey, final String propertyName, String workspaceId) {
         getGraph().flush();
         checkNotNull(element);
         JSONObject data = new JSONObject();
@@ -69,7 +73,7 @@ public abstract class WorkQueueRepository {
         data.put("propertyName", propertyName);
         pushOnQueue(GRAPH_PROPERTY_QUEUE_NAME, FlushFlag.DEFAULT, data);
 
-        broadcastPropertyChange(element, propertyKey, propertyName);
+        broadcastPropertyChange(element, propertyKey, propertyName, workspaceId);
     }
 
     public void pushElement(Element element) {
@@ -92,8 +96,8 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    public void pushVerticesDeletion (JSONArray verticesDeleted) {
-        broadcastVerticesDeletion (verticesDeleted);
+    public void pushVerticesDeletion(JSONArray verticesDeleted) {
+        broadcastVerticesDeletion(verticesDeleted);
     }
 
     protected void broadcastVerticesDeletion(JSONArray verticesDeleted) {
@@ -166,13 +170,13 @@ public abstract class WorkQueueRepository {
         broadcastJson(json);
     }
 
-    protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName) {
+    protected void broadcastPropertyChange(Element element, String propertyKey, String propertyName, String workspaceId) {
         try {
             JSONObject json;
             if (element instanceof Vertex) {
-                json = getBroadcastPropertyChangeJson((Vertex) element, propertyKey, propertyName);
+                json = getBroadcastPropertyChangeJson((Vertex) element, propertyKey, propertyName, workspaceId);
             } else if (element instanceof Edge) {
-                json = getBroadcastPropertyChangeJson((Edge) element, propertyKey, propertyName);
+                json = getBroadcastPropertyChangeJson((Edge) element, propertyKey, propertyName, workspaceId);
             } else {
                 throw new LumifyException("Unexpected element type: " + element.getClass().getName());
             }
@@ -206,10 +210,10 @@ public abstract class WorkQueueRepository {
         return json;
     }
 
-    protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName) {
+    protected JSONObject getBroadcastPropertyChangeJson(Vertex graphVertex, String propertyKey, String propertyName, String workspaceId) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, null);
+        JSONObject vertexJson = JsonSerializer.toJson(graphVertex, workspaceId);
         dataJson.put("vertex", vertexJson);
 
         JSONObject propertyJson = new JSONObject();
@@ -227,10 +231,10 @@ public abstract class WorkQueueRepository {
         return json;
     }
 
-    protected JSONObject getBroadcastPropertyChangeJson(Edge edge, String propertyKey, String propertyName) {
+    protected JSONObject getBroadcastPropertyChangeJson(Edge edge, String propertyKey, String propertyName, String workspaceId) {
         JSONObject dataJson = new JSONObject();
 
-        JSONObject vertexJson = JsonSerializer.toJson(edge, null);
+        JSONObject vertexJson = JsonSerializer.toJson(edge, workspaceId);
         dataJson.put("edge", vertexJson);
 
         JSONObject propertyJson = new JSONObject();

@@ -98,6 +98,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
         FileInputStream inFileIn = new FileInputStream(inFile);
         try {
+            LOGGER.debug("importing %s", inFile.getAbsolutePath());
             importFile(inFileIn, documentIRI, inDir, authorizations);
         } finally {
             inFileIn.close();

@@ -6,6 +6,8 @@ import io.lumify.core.ingest.video.VideoTranscript;
 import io.lumify.core.model.termMention.TermMentionModel;
 import io.lumify.core.model.textHighlighting.OffsetItem;
 import io.lumify.core.model.textHighlighting.TermMentionOffsetItem;
+import io.lumify.core.model.workspace.diff.SandboxStatus;
+import io.lumify.core.util.GraphUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -14,8 +16,8 @@ import org.json.JSONObject;
 import java.util.*;
 
 public class EntityHighlighter {
-    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions) {
-        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions);
+    public String getHighlightedText(String text, Iterable<TermMentionModel> termMentions, String workspaceId) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId);
         return getHighlightedText(text, offsetItems);
     }
 
@@ -89,8 +91,8 @@ public class EntityHighlighter {
         return result.toString();
     }
 
-    public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<TermMentionModel> termMentions) {
-        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions);
+    public VideoTranscript getHighlightedVideoTranscript(VideoTranscript videoTranscript, Iterable<TermMentionModel> termMentions, String workspaceId) {
+        List<OffsetItem> offsetItems = convertTermMentionsToOffsetItems(termMentions, workspaceId);
         return getHighlightedVideoTranscript(videoTranscript, offsetItems);
     }
 
@@ -163,10 +165,12 @@ public class EntityHighlighter {
                 .replaceAll(">", "&gt;");
     }
 
-    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions) {
+    public List<OffsetItem> convertTermMentionsToOffsetItems(Iterable<TermMentionModel> termMentions, String workspaceId) {
         ArrayList<OffsetItem> termMetadataOffsetItems = new ArrayList<OffsetItem>();
         for (TermMentionModel termMention : termMentions) {
-            termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention));
+            String visibility = termMention.getMetadata().getSignVisibility();
+            SandboxStatus sandboxStatus = GraphUtil.getSandboxStatusFromVisibilityString(visibility, workspaceId);
+            termMetadataOffsetItems.add(new TermMentionOffsetItem(termMention, sandboxStatus));
         }
         return termMetadataOffsetItems;
     }

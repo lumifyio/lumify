@@ -93,6 +93,9 @@ define([
             var vertices = data.vertices,
                 first = vertices[0];
 
+            if (vertices.length === 0) {
+                return;
+            }
             if (this._selectedGraphId === first.id) {
                 this.$node.find('.multiple').removeClass('viewing-vertex');
                 this.$node.find('.vertices-list').show().find('.active').removeClass('active');

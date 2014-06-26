@@ -7,7 +7,6 @@ define([
     var DEFAULTS = {
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
-        'ontology.iri.artifactHasEntity': 'http://lumify.io/dev#rawHasEntity',
         'properties.multivalue.defaultVisibleCount': 2,
         'map.provider': 'google',
         'map.provider.osm.url': 'https://a.tile.openstreetmap.org/${z}/${x}/${y}.png,' +

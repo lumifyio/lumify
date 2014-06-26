@@ -83,7 +83,7 @@ public class DeleteRelationshipProperty extends BaseRequestHandler {
             properties.add(p);
         }
 
-        workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName);
+        workQueueRepository.pushGraphPropertyQueue(edge, null, propertyName, workspaceId);
 
         JSONArray resultsJson = JsonSerializer.toJsonProperties(properties, workspaceId);
         respondWithJson(response, resultsJson);

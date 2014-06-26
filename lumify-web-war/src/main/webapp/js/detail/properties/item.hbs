@@ -6,7 +6,7 @@
 
     {{#if isVisibility}}
         {{> detail/properties/types/visibility }}
-        <button data-property="{{json}}" class="info"></button>
+        <button style="display:none" data-property="{{json}}" class="info"></button>
     {{else}}
       {{#if justification}}
           {{> detail/properties/types/justification }}
@@ -16,7 +16,7 @@
         {{else}}
           {{stringValue}}
         {{/if}}
-        <button data-property="{{json}}" class="info"></button>
+        <button style="display:none" data-property="{{json}}" class="info"></button>
         {{#unless hideVisibility}}
         <span class="visibility" data-visibility="{{visibilityJson}}"></span>
         {{/unless}}

@@ -329,6 +329,9 @@ define([
                     };
                 });
             }
+            if (vertices.length === 0) {
+                return;
+            }
             this.trigger(document, 'defocusVertices');
             this.trigger('selectObjects', { vertices: vertices });
         };

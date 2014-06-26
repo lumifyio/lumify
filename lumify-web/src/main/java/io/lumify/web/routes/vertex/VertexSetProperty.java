@@ -126,7 +126,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         this.workspaceRepository.updateEntityOnWorkspace(workspace, graphVertex.getId(), null, null, null, user);
 
         // TODO: use property key from client when we implement multi-valued properties
-        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName);
+        this.workQueueRepository.pushGraphPropertyQueue(graphVertex, null, propertyName, workspaceId);
 
         JSONObject result = JsonSerializer.toJson(graphVertex, workspaceId);
         respondWithJson(response, result);

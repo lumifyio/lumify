@@ -75,7 +75,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
                 highlightedText = "";
             } else {
                 Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
-                highlightedText = entityHighlighter.getHighlightedText(text, termMentions);
+                highlightedText = entityHighlighter.getHighlightedText(text, termMentions, workspaceId);
             }
 
             respondWithHtml(response, highlightedText);
@@ -86,7 +86,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
         if (videoTranscript != null) {
             LOGGER.debug("returning video transcript for vertexId:%s property:%s", artifactVertex.getId(), propertyKey);
             Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
-            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, termMentions, workspaceId);
             respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
         }
@@ -97,7 +97,7 @@ public class ArtifactHighlightedText extends BaseRequestHandler {
             Iterable<TermMentionModel> termMentions = termMentionRepository.findByGraphVertexIdAndPropertyKey(artifactVertex.getId().toString(), propertyKey, modelUserContext);
             Iterable<TermMentionModel> frameTermMentions = termMentionRepository.findByRowStartsWith(artifactVertex.getId().toString() + RowKeyHelper.MAJOR_FIELD_SEPARATOR + propertyKey + RowKeyHelper.MINOR_FIELD_SEPARATOR, modelUserContext);
             JoinIterable<TermMentionModel> allTermMentions = new JoinIterable<TermMentionModel>(termMentions, frameTermMentions);
-            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, allTermMentions);
+            VideoTranscript highlightedVideoTranscript = entityHighlighter.getHighlightedVideoTranscript(videoTranscript, allTermMentions, workspaceId);
             respondWithJson(response, highlightedVideoTranscript.toJson());
             return;
         }
