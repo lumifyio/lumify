@@ -16,14 +16,16 @@ import javax.swing.ImageIcon;
 
 public class ImageUtils {
 
-    public static Image rotateImage(Image img,double degree, int type){
+    public static Image rotateImage(Image img, double degree){
         BufferedImage bufImg = toBufferedImage(img);
         double angle = Math.toRadians(degree);
 
-        return tilt(bufImg,angle, type);
+        return tilt(bufImg, angle);
     }
 
-    public static BufferedImage tilt(BufferedImage image, double angle, int type) {
+    public static BufferedImage tilt(BufferedImage image, double angleInDegrees) {
+        double angle = Math.toRadians(angleInDegrees);
+        int type = thumbnailType(image);
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
         int width = image.getWidth();
         int height = image.getHeight();
@@ -121,4 +123,19 @@ public class ImageUtils {
         ColorModel cm = pg.getColorModel();
         return cm.hasAlpha();
     }
+
+    public static int thumbnailType(BufferedImage image) {
+        if (image.getColorModel().getNumComponents() > 3) {
+            return BufferedImage.TYPE_4BYTE_ABGR;
+        }
+        return BufferedImage.TYPE_INT_RGB;
+    }
+
+    public static String thumbnailFormat(BufferedImage image) {
+        if (image.getColorModel().getNumComponents() > 3) {
+            return "png";
+        }
+        return "jpg";
+    }
+
 }

@@ -53,29 +53,31 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
         try {
 
             BufferedImage originalImage = ImageIO.read(in);
-            type = thumnbailType(originalImage);
-            format = thumbnailFormat(originalImage);
+            type = ImageUtils.thumbnailType(originalImage);
+            format = ImageUtils.thumbnailFormat(originalImage);
 
-            //Flip and Rotate the original image, to create the transformed image.
+            //Flip and Rotate the original image, to create the transformed image. Only supports rotate. Not flip.
             LOGGER.info("The cwRotationNeededPropertyIri is (From Constructor):" + cwRotationNeededPropertyIri );
             BufferedImage transformedImage = originalImage;
             if (cwRotationNeededPropertyIri != null) {
-                //Integer imageOrientation = (Integer) artifactVertex.getPropertyValue(imageOrientationPropertyIri);
                 Integer cwRotationNeeded = (Integer) artifactVertex.getPropertyValue(cwRotationNeededPropertyIri);
                 Boolean yAxisFlipNeeded = (Boolean) artifactVertex.getPropertyValue(yAxisFlipNeededPropertyIri);
                 LOGGER.info("cwRotationNeeded: " + cwRotationNeeded);
                 LOGGER.info("yAxisFlipNeeded: " + yAxisFlipNeeded);
-                if (cwRotationNeeded.intValue() == 90) {
-                    // TODO rotate/flip image
-                    transformedImage = ImageUtils.tilt(originalImage, Math.PI/2, type);
 
+                if (cwRotationNeeded % 360 != 0) {
+                    transformedImage = ImageUtils.tilt(originalImage, cwRotationNeeded );
+                    LOGGER.info("cwRotationNeeded. rotating the image. inside the if statement. ");
+                }
+                else {
+                    LOGGER.info("cwRotationNeeded. inside the else statement. ");
                 }
             }
+
 
             //Get new image dimensions, which will be used for the icon.
             int[] transformedImageDims = new int[]{transformedImage.getWidth(), transformedImage.getHeight()};
             int[] newImageDims = getScaledDimension(transformedImageDims, boundaryDims);
-
             if (newImageDims[0] >= transformedImageDims[0] || newImageDims[1] >= transformedImageDims[1]) {
                 LOGGER.info("Original image dimensions %d x %d are smaller "
                                 + "than requested dimensions %d x %d returning original.",
@@ -84,32 +86,18 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             }
 
 
-            //New.
+            //Resize the image.
             BufferedImage resizedImage = new BufferedImage(newImageDims[0], newImageDims[1], type);
             Graphics2D g = resizedImage.createGraphics();
             if (transformedImage.getColorModel().getNumComponents() > 3) {
-                g.drawImage(transformedImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
                 g.drawImage(transformedImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
             } else {
                 g.drawImage(transformedImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), Color.BLACK, null);
             }
             g.dispose();
-            ImageIO.write(resizedImage, format, out);
 
-            //Old.
-            /*
-            BufferedImage resizedImage = new BufferedImage(newImageDims[0], newImageDims[1], type);
-            Graphics2D g = resizedImage.createGraphics();
-            if (originalImage.getColorModel().getNumComponents() > 3) {
-                g.drawImage(originalImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
-                g.drawImage(originalImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
-                //TODO. BufferedImageOp OR AffineTransform for image rotation should be implemented here.
-            } else {
-                g.drawImage(originalImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), Color.BLACK, null);
-            }
-            g.dispose();
+            //Write the bufferedImage to a file.
             ImageIO.write(resizedImage, format, out);
-            */
         } catch (IOException e) {
             throw new LumifyResourceNotFoundException("Error reading inputstream");
         }
@@ -135,19 +123,5 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
         }
 
         return new int[]{newWidth, newHeight};
-    }
-
-    private int thumnbailType(BufferedImage image) {
-        if (image.getColorModel().getNumComponents() > 3) {
-            return BufferedImage.TYPE_4BYTE_ABGR;
-        }
-        return BufferedImage.TYPE_INT_RGB;
-    }
-
-    private String thumbnailFormat(BufferedImage image) {
-        if (image.getColorModel().getNumComponents() > 3) {
-            return "png";
-        }
-        return "jpg";
     }
 }
