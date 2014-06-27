@@ -166,7 +166,7 @@ define([
                                 if (a.propertyAudit) {
                                     a.propertyAudit.isVisibility =
                                         a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
-                                    a.propertyAudit.visibilityValue =
+                                    a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
                                         a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
                                     a.propertyAudit.formattedValue = F.vertex.displayProp({
                                         name: a.propertyAudit.propertyName,

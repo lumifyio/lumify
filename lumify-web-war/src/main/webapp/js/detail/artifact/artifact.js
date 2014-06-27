@@ -602,8 +602,13 @@ define([
 
         this.showForm = function(dataInfo, artifactInfo, $target) {
             this.$node.find('.underneath').teardownComponent(TermForm)
-            var root = $('<div class="underneath">')
-                .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
+            var root = $('<div class="underneath">');
+
+            if (dataInfo.isNew) {
+                root.insertAfter($target.closest('.type-content').find('.image-preview'));
+            } else {
+                root.insertAfter($target.closest('.type-content').find('.detected-object-labels'));
+            }
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,

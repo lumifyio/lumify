@@ -36,7 +36,7 @@
   <div class="currentTranscript"></div>
 <% } %>
 
-<div class='detected-object-labels' style="display:none"><%
+<div class='detected-object-labels'><%
   (vertex.detectedObjects).forEach(function(object) {
     if (object.graphVertexId) {
         var conceptType = object['http://lumify.io#conceptType'];
