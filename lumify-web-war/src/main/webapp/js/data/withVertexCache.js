@@ -205,6 +205,7 @@ define([
 
                 // TODO: scale glyphs
                 vertex.imageSrc = vertex.concept.glyphIconHref;
+                vertex.imageDetailSrc = vertex.concept.glyphIconHref;
                 vertex.imageRawSrc = artifactUrl('raw');
                 vertex.imageSrcIsFromConcept = true;
 
@@ -220,6 +221,7 @@ define([
                         vertex.properties.forEach(function(p) {
                             if (p.name === 'http://lumify.io#rawPosterFrame') {
                                 vertex.imageSrc = artifactUrl('poster-frame');
+                                vertex.imageDetailSrc = artifactUrl('poster-frame');
                                 vertex.imageSrcIsFromConcept = false;
                             } else if (p.name === 'http://lumify.io#videoPreviewImage') {
                                 vertex.imageFramesSrc = artifactUrl('video-preview');
