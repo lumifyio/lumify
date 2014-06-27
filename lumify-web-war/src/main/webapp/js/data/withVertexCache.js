@@ -191,35 +191,38 @@ define([
                     workspaceId: currentWorkspace,
                     graphVertexId: vertex.id
                 },
-                artifactUrl = _.template('artifact/{ type }?' + $.param(params)),
+                artifactUrl = function(type, p) {
+                    return _.template('artifact/{ type }?' + $.param($.extend(params, p || {})), { type: type });
+                },
                 entityImageVertexId = F.vertex.prop(vertex, 'entityImageVertexId');
 
             vertex.imageSrcIsFromConcept = false;
 
             if (entityImageVertexId) {
-                vertex.imageSrc = 'artifact/thumbnail?graphVertexId=' + entityImageVertexId +
-                    '&' + $.param({workspaceId: currentWorkspace});
+                vertex.imageSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 150 });
+                vertex.imageDetailSrc = artifactUrl('thumbnail', { graphVertexId: entityImageVertexId, width: 800 });
             } else {
 
+                // TODO: scale glyphs
                 vertex.imageSrc = vertex.concept.glyphIconHref;
-                vertex.imageRawSrc = artifactUrl({ type: 'raw' });
+                vertex.imageRawSrc = artifactUrl('raw');
                 vertex.imageSrcIsFromConcept = true;
 
                 switch (vertex.concept.displayType) {
 
                     case 'image':
-                        vertex.imageSrc = artifactUrl({ type: 'thumbnail' });
+                        vertex.imageSrc = artifactUrl('thumbnail', { width: 150 });
                         vertex.imageSrcIsFromConcept = false;
-                        vertex.imageDetailSrc = artifactUrl({ type: 'thumbnail' }) + '&width=800';
+                        vertex.imageDetailSrc = artifactUrl('thumbnail', { width: 800 });
                         break;
 
                     case 'video':
                         vertex.properties.forEach(function(p) {
                             if (p.name === 'http://lumify.io#rawPosterFrame') {
-                                vertex.imageSrc = artifactUrl({ type: 'poster-frame' });
+                                vertex.imageSrc = artifactUrl('poster-frame');
                                 vertex.imageSrcIsFromConcept = false;
                             } else if (p.name === 'http://lumify.io#videoPreviewImage') {
-                                vertex.imageFramesSrc = artifactUrl({ type: 'video-preview' });
+                                vertex.imageFramesSrc = artifactUrl('video-preview');
                             }
                         });
                         break;
