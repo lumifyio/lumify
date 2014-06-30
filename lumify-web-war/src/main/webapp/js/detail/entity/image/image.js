@@ -76,7 +76,9 @@ define([
         this.updateImageBackground = function(src) {
             this.$node
                 .addClass('accepts-file')
-                .css({ backgroundImage: 'url("' + this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc) + '")' })
+                .css({ backgroundImage: 'url("' +
+                     this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc) + '")'
+                })
                 .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
         };
 
