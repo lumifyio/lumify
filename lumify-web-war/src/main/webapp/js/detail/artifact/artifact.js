@@ -367,19 +367,26 @@ define([
         this.openText = function(propertyKey, options) {
             var self = this,
                 expand = !options || options.expand !== false,
-                $section = this.$node.find('.' + F.className.to(propertyKey));
+                $section = this.$node.find('.' + F.className.to(propertyKey)),
+                $badge = $section.find('.badge');
 
             if (expand) {
-                $section.siblings('.loading').removeClass('loading').end().addClass('loading');
+                $section.closest('.texts').find('.loading').removeClass('loading');
+                $badge.addClass('loading');
+            }
+
+            if (this.openTextRequest && this.openTextRequest.abort) {
+                this.openTextRequest.abort();
             }
 
             return this.handleCancelling(
-                this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
+                this.openTextRequest = this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
             ).done(function(artifactText) {
                 var html = self.processArtifactText(artifactText);
                 if (expand) {
                     $section.find('.text').html(html);
-                    $section.addClass('expanded').removeClass('loading');
+                    $section.addClass('expanded');
+                    $badge.removeClass('loading');
 
                     self.updateEntityAndArtifactDraggables();
                     if (!options || options.scrollToSection !== false) {
