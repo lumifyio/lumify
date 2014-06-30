@@ -4,11 +4,13 @@ import io.lumify.core.cmdline.CommandLineBase;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang.StringUtils;
 import org.securegraph.Authorizations;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -112,7 +114,9 @@ public class UserAdmin extends CommandLineBase {
             return setAuthorizations(cmd);
         }
 
-        System.out.println(cmd.toString());
+        String actions = StringUtils.join(getActions(), " | ");
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(UserAdmin.class.getSimpleName() + " < " + actions + " >", getOptions());
         return -1;
     }
 
@@ -263,6 +267,7 @@ public class UserAdmin extends CommandLineBase {
 
     private void printUsers(Iterable<User> users) {
         if (users != null) {
+            int maxCreateDateWidth = 1;
             int maxIdWidth = 1;
             int maxUsernameWidth = 1;
             int maxEmailAddressWidth = 1;
@@ -270,15 +275,23 @@ public class UserAdmin extends CommandLineBase {
             int maxLoginCountWidth = 1;
             int maxPrivilegesWidth = privilegesAsString(Privilege.ALL).length();
             for (User user : users) {
+                maxCreateDateWidth = maxWidth(user.getCreateDate(), maxCreateDateWidth);
                 maxIdWidth = maxWidth(user.getUserId(), maxIdWidth);
                 maxUsernameWidth = maxWidth(user.getUsername(), maxUsernameWidth);
                 maxEmailAddressWidth = maxWidth(user.getEmailAddress(), maxEmailAddressWidth);
                 maxDisplayNameWidth = maxWidth(user.getDisplayName(), maxDisplayNameWidth);
                 maxLoginCountWidth = maxWidth(Integer.toString(user.getLoginCount()), maxLoginCountWidth);
             }
-            String format = String.format("%%%ds %%%ds %%%ds %%%ds %%%dd %%%ds%%n", -1 * maxIdWidth, -1 * maxUsernameWidth, -1 * maxEmailAddressWidth, -1 * maxDisplayNameWidth, maxLoginCountWidth, -1 * maxPrivilegesWidth);
+            String format = String.format("%%%ds %%%ds %%%ds %%%ds %%%ds %%%dd %%%ds%%n", -1 * maxCreateDateWidth,
+                                                                                          -1 * maxIdWidth,
+                                                                                          -1 * maxUsernameWidth,
+                                                                                          -1 * maxEmailAddressWidth,
+                                                                                          -1 * maxDisplayNameWidth,
+                                                                                          maxLoginCountWidth,
+                                                                                          -1 * maxPrivilegesWidth);
             for (User user : users) {
                 System.out.printf(format,
+                        valueOrBlank(user.getCreateDate()),
                         user.getUserId(),
                         user.getUsername(),
                         valueOrBlank(user.getEmailAddress()),
@@ -334,5 +347,19 @@ public class UserAdmin extends CommandLineBase {
     private int maxWidth(Object o, int max) {
         int width = valueOrBlank(o).length();
         return width > max ? width : max;
+    }
+
+    private List<String> getActions() {
+        List<String> actions = new ArrayList<String>();
+        for (Field field : UserAdmin.class.getDeclaredFields()) {
+            if (field.getName().startsWith("CMD_ACTION_")) {
+                try {
+                    actions.add(field.get(new UserAdmin()).toString());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return actions;
     }
 }
