@@ -610,7 +610,8 @@ define([
                 metadata: _.pick(
                     _.findWhere(properties, {name: visibilityJsonName}) || {},
                     'http://lumify.io#modifiedBy',
-                    'http://lumify.io#modifiedDate'
+                    'http://lumify.io#modifiedDate',
+                    'http://lumify.io#confidence'
                 )
             };
 
@@ -665,6 +666,7 @@ define([
                         '_sourceMetadata',
                         'http://lumify.io#modifiedBy',
                         'http://lumify.io#modifiedDate',
+                        'http://lumify.io#confidence',
                         'sandboxStatus'
                     )
                 }

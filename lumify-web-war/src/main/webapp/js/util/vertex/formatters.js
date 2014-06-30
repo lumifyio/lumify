@@ -23,11 +23,19 @@ define([
             hasMetadata: function(property) {
                 var status = V.sandboxStatus(property.metadata),
                     modifiedBy = property.metadata['http://lumify.io#modifiedBy'],
-                    modifiedDate =  property.metadata['http://lumify.io#modifiedDate'],
+                    modifiedDate = property.metadata['http://lumify.io#modifiedDate'],
+                    confidence = property.metadata['http://lumify.io#confidence'],
                     justification = property.metadata._justificationMetadata,
                     source = property.metadata._sourceMetadata;
 
-                return (status || justification || source || modifiedBy || modifiedDate);
+                return (
+                    status ||
+                    justification ||
+                    source ||
+                    modifiedBy ||
+                    modifiedDate ||
+                    confidence
+                );
             },
 
             isKindOfConcept: function(vertex, conceptTypeFilter) {
