@@ -130,27 +130,27 @@ define([
                     autoplay: true,
                     preload: 'auto'
                 }, function() {
-                    var self = this;
+                    var $this = this;
 
                     if (options.seek || options.percentSeek) {
-                        self.on('durationchange', durationchange);
-                        self.on('loadedmetadata', durationchange);
+                        $this.on('durationchange', durationchange);
+                        $this.on('loadedmetadata', durationchange);
                     }
-                    self.on('timeupdate', timeupdate);
+                    $this.on('timeupdate', timeupdate);
 
                     function timeupdate(event) {
                         self.trigger('playerTimeUpdate', {
-                            currentTime: self.currentTime(),
-                            duration: self.duration()
+                            currentTime: $this.currentTime(),
+                            duration: $this.duration()
                         });
                     }
 
                     function durationchange(event) {
-                        var duration = self.duration();
+                        var duration = $this.duration();
                         if (duration > 0.0) {
-                            self.off('durationchange', durationchange);
-                            self.off('loadedmetadata', durationchange);
-                            self.currentTime(
+                            $this.off('durationchange', durationchange);
+                            $this.off('loadedmetadata', durationchange);
+                            $this.currentTime(
                                 Math.max(0.0,
                                     (options.percentSeek ?
                                         duration * scrubPercent :

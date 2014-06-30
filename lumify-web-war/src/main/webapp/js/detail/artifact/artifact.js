@@ -320,6 +320,13 @@ define([
         };
 
         this.onScrubberFrameChange = function(evt, data) {
+            if (!this.duration) {
+                if (!this._noDurationWarned) {
+                    console.warn('No duration property for artifact, unable to sync transcript');
+                    this._noDurationWarned = true;
+                }
+                return;
+            }
             var frameIndex = data.index,
                 numberOfFrames = data.numberOfFrames,
                 time = (this.duration / numberOfFrames) * frameIndex;
