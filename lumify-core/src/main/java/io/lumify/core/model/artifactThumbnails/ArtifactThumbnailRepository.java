@@ -52,6 +52,7 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             type = ImageUtils.thumbnailType(originalImage);
             format = ImageUtils.thumbnailFormat(originalImage);
 
+            //Rotate and flip image.
             Integer cwRotationNeeded;
             if (cwRotationNeededPropertyIri != null) {
                 cwRotationNeeded = (Integer) artifactVertex.getPropertyValue(cwRotationNeededPropertyIri);
@@ -67,7 +68,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             }
 
             BufferedImage transformedImage = ImageUtils.rotateAndFlipBufferedImage(originalImage, cwRotationNeeded, yAxisFlipNeeded);
-
 
             //Get new image dimensions, which will be used for the icon.
             int[] transformedImageDims = new int[]{transformedImage.getWidth(), transformedImage.getHeight()};
