@@ -8,7 +8,6 @@ import io.lumify.core.exception.LumifyResourceNotFoundException;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-
 import org.securegraph.Vertex;
 
 import javax.imageio.ImageIO;
@@ -30,8 +29,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
         super(modelSession);
         this.yAxisFlipNeededPropertyIri = configuration.get("ontology.iri.yAxisFlipNeeded", null);
         this.cwRotationNeededPropertyIri = configuration.get("ontology.iri.cwRotationNeeded", null);
-        LOGGER.info("The yAxisFlipNeededPropertyIri is (From Constructor):" + yAxisFlipNeededPropertyIri );
-        LOGGER.info("The cwRotationNeededPropertyIri is (From Constructor):" + cwRotationNeededPropertyIri );
     }
 
     public abstract BigTableArtifactThumbnail fromRow(Row row);
@@ -57,20 +54,13 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             format = ImageUtils.thumbnailFormat(originalImage);
 
             //Flip and Rotate the original image, to create the transformed image. Only supports rotate. Not flip.
-            LOGGER.info("The cwRotationNeededPropertyIri is (From Constructor):" + cwRotationNeededPropertyIri );
             BufferedImage transformedImage = originalImage;
             if (cwRotationNeededPropertyIri != null) {
                 Integer cwRotationNeeded = (Integer) artifactVertex.getPropertyValue(cwRotationNeededPropertyIri);
                 Boolean yAxisFlipNeeded = (Boolean) artifactVertex.getPropertyValue(yAxisFlipNeededPropertyIri);
-                LOGGER.info("cwRotationNeeded: " + cwRotationNeeded);
-                LOGGER.info("yAxisFlipNeeded: " + yAxisFlipNeeded);
 
                 if (cwRotationNeeded % 360 != 0) {
-                    transformedImage = ImageUtils.tilt(originalImage, cwRotationNeeded );
-                    LOGGER.info("cwRotationNeeded. rotating the image. inside the if statement. ");
-                }
-                else {
-                    LOGGER.info("cwRotationNeeded. inside the else statement. ");
+                    transformedImage = ImageUtils.tilt(originalImage, cwRotationNeeded);
                 }
             }
 
