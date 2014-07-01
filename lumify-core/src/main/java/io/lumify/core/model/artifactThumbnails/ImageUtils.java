@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 public class ImageUtils {
 
     public static BufferedImage rotateAndFlipBufferedImage(BufferedImage image,
-                                                           Integer rotationNeeded,
-                                                           Boolean yAxisFlipNeeded) {
+                                                           Integer rotationNeeded) {
+
         double angle = Math.toRadians(rotationNeeded);
         int type = thumbnailType(image);
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
