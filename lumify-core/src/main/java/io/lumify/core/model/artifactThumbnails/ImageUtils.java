@@ -7,7 +7,9 @@ public class ImageUtils {
 
     public static BufferedImage rotateAndFlipBufferedImage(BufferedImage image,
                                                            Integer rotationNeeded) {
-
+        if (rotationNeeded == null){
+            rotationNeeded = 0;
+        }
         double angle = Math.toRadians(rotationNeeded);
         int type = thumbnailType(image);
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
