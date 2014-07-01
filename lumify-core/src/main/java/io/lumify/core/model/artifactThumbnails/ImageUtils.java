@@ -7,7 +7,7 @@ public class ImageUtils {
 
     public static BufferedImage rotateAndFlipBufferedImage(BufferedImage image,
                                                            Integer rotationNeeded) {
-        if (rotationNeeded == null){
+        if (rotationNeeded == null) {
             rotationNeeded = 0;
         }
         double angle = Math.toRadians(rotationNeeded);
