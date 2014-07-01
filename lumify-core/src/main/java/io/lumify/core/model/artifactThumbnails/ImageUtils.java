@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class ImageUtils {
 
-    public static BufferedImage tilt(BufferedImage image, double angleInDegrees) {
+    public static BufferedImage rotateAndFlipBufferedImage(BufferedImage image, double angleInDegrees) {
         double angle = Math.toRadians(angleInDegrees);
         int type = thumbnailType(image);
         double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
