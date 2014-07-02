@@ -446,6 +446,15 @@
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:DatatypeProperty>
 
+    <!-- http://lumify.io#sourceUrl -->
+
+    <owl:DatatypeProperty rdf:about="&lumify;sourceUrl">
+        <userVisible>false</userVisible>
+        <rdfs:label xml:lang="en">Source URL</rdfs:label>
+        <textIndexHints>FULL_TEXT,EXACT_MATCH</textIndexHints>
+        <rdfs:range rdf:resource="&xsd;string"/>
+        <rdfs:domain rdf:resource="&owl;Thing"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://lumify.io#textIndexHints -->

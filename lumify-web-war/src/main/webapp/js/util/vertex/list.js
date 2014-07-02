@@ -6,6 +6,7 @@ define([
     'tpl!./list',
     'tpl!./item',
     'tpl!util/alert',
+    'promise!util/service/ontologyPromise',
     'util/video/scrubber',
     'util/vertex/formatters',
     'util/popovers/withVertexScrollingPositionUpdates',
@@ -18,6 +19,7 @@ define([
     template,
     vertexTemplate,
     alertTemplate,
+    ontologyPromise,
     VideoScrubber,
     F,
     withPositionUpdates) {
@@ -36,11 +38,10 @@ define([
             var inWorkspace = appData.inWorkspace(vertex);
             return {
                 inGraph: inWorkspace,
-                inMap: inWorkspace && !!(
-                        vertex.properties.geoLocation ||
-                        (vertex.location || (vertex.locations && vertex.locations.length)) ||
-                        (vertex.properties.latitude && vertex.properties.longitude)
-                )
+                inMap: inWorkspace && _.some(vertex.properties, function(p) {
+                    var ontologyProperty = ontologyPromise.propertiesByTitle[p.name];
+                    return ontologyProperty && ontologyProperty.dataType === 'geoLocation';
+                })
             };
         };
 
@@ -63,7 +64,7 @@ define([
                 if (vertexState.inMap) classes.push('map-displayed');
 
                 if (!v.imageSrcIsFromConcept) {
-                    classes.push('has_preview');
+                    classes.push('non_concept_preview');
                 }
 
                 classNamesForVertex[v.id] = classes.join(' ');
@@ -280,7 +281,7 @@ define([
                 var li = $(this),
                     vertex = appData.vertex(li.data('vertexId'));
 
-                if (vertex && !vertex.imageSrcIsFromConcept && !li.data('previewLoaded')) {
+                if (vertex && !li.data('previewLoaded')) {
 
                     var preview = li.data('previewLoaded', true)
                                     .find('.preview');
@@ -291,7 +292,7 @@ define([
                             videoPreviewImageUrl: vertex.imageFramesSrc
                         });
                     } else {
-                        preview.html("<img src='" + vertex.imageSrc + "' />");
+                        preview.css('background-image', 'url(' + vertex.imageSrc + ')');
                     }
                 }
             });
@@ -369,18 +370,19 @@ define([
                         F: F
                     })).children('a'),
                     currentHtml = currentAnchor.html(),
-                    src = vertex.imageSrc,
-                    showImageSrc = src && !vertex.imageSrcIsFromConcept;
+                    src = vertex.imageSrc;
+
+                li.toggleClass('non_concept_preview', !vertex.imageSrcIsFromConcept);
 
                 if (currentAnchor.length) {
-                    if (showImageSrc) {
-                        $('<img/>').attr('src', src).appendTo(newAnchor.find('.preview'));
+                    if (src) {
+                        newAnchor.find('.preview').css('background-image', 'url(' + src + ')');
                     }
 
                     var newHtml = newAnchor.html();
                     if (currentAnchor.length && newHtml !== currentHtml) {
                         li.data('previewLoaded', null);
-                        currentAnchor.html(newHtml).closest('.vertex-item').toggleClass('has_preview', showImageSrc);
+                        currentAnchor.html(newHtml);
                     }
                 }
             });

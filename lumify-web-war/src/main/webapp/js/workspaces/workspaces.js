@@ -220,18 +220,30 @@ define([
         };
 
         this.onWorkspaceRemoteSave = function(event, data) {
+            var self = this;
+
             if (!data || !data.remoteEvent) return;
 
             this.currentUserReady(function(currentUser) {
-                var userAccess = _.findWhere(data.users, { userId: currentUser.id });
-                data.isEditable = (/write/i).test(userAccess && userAccess.access);
-                data.isSharedToUser = data.createdBy !== currentUser.id;
+                self.workspaceService.getByRowKey(data.workspaceId)
+                    .fail(function() {
+                        if (self.workspaceId === data.workspaceId) {
+                            self.loadWorkspaceList(true);
+                        } else {
+                            self.loadWorkspaceList();
+                        }
+                    })
+                    .done(function(data) {
+                        var userAccess = _.findWhere(data.users, { userId: currentUser.id });
+                        data.isEditable = (/write/i).test(userAccess && userAccess.access);
+                        data.isSharedToUser = data.createdBy !== currentUser.id;
 
-                if (this.workspaceId === data.workspaceId) {
-                    appData.loadWorkspace(data);
-                } else {
-                    this.updateListItemWithData(data);
-                }
+                        if (self.workspaceId === data.workspaceId) {
+                            appData.loadWorkspace(data);
+                        } else {
+                            self.updateListItemWithData(data);
+                        }
+                    });
             });
         };
 
@@ -260,7 +272,7 @@ define([
             }
         };
 
-        this.loadWorkspaceList = function() {
+        this.loadWorkspaceList = function(switchToFirst) {
             var self = this;
 
             return $.when(
@@ -291,6 +303,9 @@ define([
                             })
                         );
                         self.trigger(document, 'paneResized');
+                        if (switchToFirst) {
+                            self.switchToWorkspace(workspaces[0].workspaceId);
+                        }
                     });
         };
 

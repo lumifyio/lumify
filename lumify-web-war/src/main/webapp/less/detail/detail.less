@@ -8,7 +8,7 @@
 
 .content {
 
-  padding: 2.5em 1em 0 1em;
+  padding: 2.5em 0;
 
   &.loading {
 
@@ -33,6 +33,8 @@
   .type-content > .preview, .content > .preview {
     height: 300px;
     cursor: pointer;
+    background: black;
+    margin-top: 1em;
   }
 
   .entity_audit_events .audit-list {
@@ -118,7 +120,8 @@
   }
 
   .detected-object-labels {
-    padding: 0.5em 0 2em 0;
+    margin: 2em 0 0 0;
+    padding: 0 1em;
     &:empty {
       display:none;
     }
@@ -173,11 +176,9 @@
     left: 0;
     right: 0;
     padding: 0 1em;
-    margin: 0 max(@scrollbar-width,16px) 0 0;
-    background: fadeout(@pane-background, 20%);
+    margin: 0 20px 0 0;
     white-space: nowrap;
     z-index: 1;
-
     .btn-toolbar {
 
       .checked a {
@@ -194,8 +195,7 @@
   }
 
   section.collapsible {
-    .badge {
-      display: none;
+    .badge {      
       position: absolute;
       right: 1ex;
       left: auto;
@@ -211,10 +211,7 @@
       }
     }
     
-    &.loading {
-      .badge {
-        display: block;
-      }
+    &.loading {      
       strong {
         padding-right: 1em;
       }
@@ -262,7 +259,7 @@
   }
   
   .texts {
-    margin: 0 -1em;    
+    margin: 0;
     .text-section {
       margin: 1px 0;
       padding: 0;
@@ -272,6 +269,10 @@
         padding: 1em;
         // For actionbar space
         padding-bottom: 2.5em;
+        
+        .underneath {
+          padding: 0;
+        }
       }
     }
   }
@@ -325,15 +326,6 @@
       margin: 0;
       padding: 0;
 
-      .vertex-list ul li ul {
-        left: 0;
-      }
-      .details-container .vertex-list ul li ul {
-        left: -1em;
-      }
-      .vertex-list ul li.has_preview ul {
-        left: 83px;
-      }
       .multiple-container { 
         display:none;
       }
@@ -369,12 +361,17 @@
         .detail-pane .content .vertices-list > ul.multi-select.nav-list li {
           padding: 0;
         }
-        .detail-pane .content .vertex-list ul li .preview {
-          //display: none;
+               
+        ul li .preview {
+          left: 0.2em;
+          width: 3em;
+        }
+        
+        ul li ul {
+          right: 0;
         }
 
-        li a {
-          //padding-left: 100px;
+        li a {          
           margin: 0;
         }
       }
@@ -400,14 +397,14 @@
     }
 
     .multi-select {
-      margin: 0 -1em;
+      margin: 0;
       padding-left: 16px;
     }
 
     ul.histograms {
       list-style: none;
       padding: 0;
-      margin: 0 0 3em 0;
+      margin: 0 1em 3em 1em;
       li {
         padding: 0;
         margin: 1em 0;
@@ -422,6 +419,9 @@
     max-width: 100%;
     position: relative;
     cursor: crosshair;
+    margin: 1em 0 -1.5em 0;
+    width: 100%;
+    overflow: hidden;
 
     .facebox {
       cursor: move;
@@ -508,13 +508,23 @@
   }
 
   @import "properties";
+  
+  .properties .buttons .underneath {
+    margin: 1em 0;       
+  }
 
-  .artifact-header {
-    margin: 0 -1em;
+  .artifact-title {
+    padding: 1em 1em 0 1em;
+    margin: 0; 
+    font-size: 130%;
+  }
+  .artifact-header {    
+    margin: 1em 0 0 0;
+    padding: 0;
   }
 
   .nav-with-background {
-    margin: 125px -1em 0 -1em;
+    margin: 175px 0 0 0;
 
     .relationships {
       padding-bottom: 1em;
@@ -546,7 +556,7 @@
       }
     }
 
-    .underneath {
+    .underneath {      
       .buttons {
         text-align: right;
       }
@@ -556,9 +566,9 @@
   .entity-background {
     position: absolute;
     width: 100%;
-    height: 150px;
+    height: 200px;
     top: 0;
-    margin: 0 -1em;
+    margin: 0;
     padding: 0 1em;
     border-bottom: 3px solid #0088cc;
     z-index: 1;

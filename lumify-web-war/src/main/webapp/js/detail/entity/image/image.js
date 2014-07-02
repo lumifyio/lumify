@@ -67,13 +67,18 @@ define([
         });
 
         this.srcForGlyphIconUrl = function(url) {
+            if (url === this.attr.data.imageDetailSrc) {
+                return url;
+            }
             return url ? url.replace(/\/thumbnail/, '/raw') : '';
         };
 
         this.updateImageBackground = function(src) {
             this.$node
                 .addClass('accepts-file')
-                .css({ backgroundImage: 'url("' + this.srcForGlyphIconUrl(src || this.attr.data.imageSrc) + '")' })
+                .css({ backgroundImage: 'url("' +
+                     this.srcForGlyphIconUrl(src || this.attr.data.imageDetailSrc) + '")'
+                })
                 .toggleClass('custom-image', !!(src || !this.attr.data.imageSrcIsFromConcept));
         };
 
@@ -106,7 +111,7 @@ define([
         this.onUpdateIcon = function(e, data) {
             var src = this.srcForGlyphIconUrl(data.src);
 
-            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageSrc)) {
+            if (src !== this.srcForGlyphIconUrl(this.attr.data.imageDetailSrc)) {
                 this.updateImageBackground(src);
             }
         };
@@ -202,7 +207,7 @@ define([
                 this.cleanup(true);
             }
 
-            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageSrc));
+            this.updateImageBackground(this.srcForGlyphIconUrl(data.vertex.imageDetailSrc));
 
             this.trigger(document, 'updateVertices', { vertices: [data.vertex] });
         };

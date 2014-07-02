@@ -24,6 +24,14 @@
   </tr>
   <% } %>
 
+  <% var confidence =  property.metadata['http://lumify.io#confidence'];
+     if (confidence) { %>
+  <tr>
+    <td class="property-name">Confidence</td>
+    <td class="property-value"><%= Math.round(confidence * 100) %>%</td>
+  </tr>
+  <% } %>
+
   <% var j = property.metadata._justificationMetadata,
          s = property.metadata._sourceMetadata;
      if (j || s) {  %>
@@ -37,16 +45,11 @@
     
   <% } %>
 
-  <% if (!status && !(j || s) && !modifiedBy && !modifiedDate) { %>
-    <tr>
-      <td colspan="2">No metadata found</td>
-    </tr>
-  <% } %>
-
 </table>
 <% 
-  var editButtonText = !status ? 'Add' : 'Edit';
-  var editButtonCls = !status ? 'btn-add' : 'btn-edit';
+  var canEdit = !!status || property.name === 'http://lumify.io#visibilityJson';
+  var editButtonText = canEdit ? 'Edit' : 'Add';
+  var editButtonCls = canEdit ? 'btn-edit' : 'btn-add';
   if (status) { %>
 <button class="btn btn-danger btn-small requires-EDIT">Delete</button>
 <% 

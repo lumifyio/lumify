@@ -84,7 +84,14 @@ define([
 
         number: {
             pretty: function(number) {
-                return sf('{0:#,###,###,###.##}', number);
+                if (_.isString) {
+                    number = parseFloat(number);
+                }
+                if (_.isNumber) {
+                    return sf('{0:#,###,###,###.##}', number);
+                }
+
+                return '';
             },
             prettyApproximate: function(number) {
                 if (number >= 1000000000) {

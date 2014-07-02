@@ -58,20 +58,18 @@ define([
 
             var self = this;
             $(document).off('.actionbar').on('click.actionbar', function() {
-                $(document).off('.actionbar');
-                self.teardown();
+                _.defer(function() {
+                    $(document).off('.actionbar');
+                    self.teardown();
+                });
             });
         });
 
         this.onActionClick = function(event) {
-            var self = this,
-                $target = $(event.target).blur();
+            var $target = $(event.target).blur();
 
+            this.trigger($target.data('event'));
             this.$tip.hide();
-
-            _.defer(function() {
-                self.trigger($target.data('event'));
-            });
         };
 
         this.nodeUpdatePosition = function() {

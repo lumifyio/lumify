@@ -1,6 +1,9 @@
 
-<li class="<%= classNamesForVertex[vertex.id] || '' %> vertex-item" 
-    data-vertex-id="<%= vertex.id %>"
+<% var timeSubtitle = F.vertex.time(vertex),
+       subtitle = F.vertex.subtitle(vertex); %>
+<li class="<%= classNamesForVertex[vertex.id] || '' %> vertex-item 
+            <% if (timeSubtitle) { %> has-timeSubtitle<%}%>
+            <% if (subtitle) { %> has-subtitle<%}%>" data-vertex-id="<%= vertex.id %>"
     ><a><%= F.vertex.title(vertex) %>
       <ul>
         <li class="graph"><button title="Displayed in Graph" href="#">Graph</button></li>
@@ -8,8 +11,8 @@
       </ul>
       <div>
         <span class="preview"/>
-        <span class="date"><%= F.vertex.time(vertex) %></span>
-        <span class="source"><%= F.vertex.subtitle(vertex) %></span>
+        <span class="date"><%= timeSubtitle %></span>
+        <span class="source"><%= subtitle %></span>
       </div>
     </a>
 </li>
