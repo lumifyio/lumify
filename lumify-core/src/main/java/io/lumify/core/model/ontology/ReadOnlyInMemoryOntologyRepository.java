@@ -53,7 +53,11 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
             if (iri != null) {
                 if (dir != null) {
-                    importFile(findOwlFile(new File(dir)), IRI.create(iri), authorizations);
+                    File owlFile = findOwlFile(new File(dir));
+                    if (owlFile == null) {
+                        throw new LumifyResourceNotFoundException("could not find owl file in directory " + new File(dir).getAbsolutePath());
+                    }
+                    importFile(owlFile, IRI.create(iri), authorizations);
                 } else if (file != null) {
                     writePackage(new File(file), IRI.create(iri), authorizations);
                 } else {

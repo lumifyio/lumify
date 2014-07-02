@@ -91,6 +91,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
     @Override
     public void importFile(File inFile, IRI documentIRI, Authorizations authorizations) throws Exception {
+        checkNotNull(inFile, "inFile cannot be null");
         if (!inFile.exists()) {
             throw new LumifyException("File " + inFile + " does not exist");
         }
