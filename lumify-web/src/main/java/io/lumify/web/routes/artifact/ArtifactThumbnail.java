@@ -87,7 +87,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
 
         InputStream in = rawPropertyValue.getInputStream();
         try {
-            thumbnail = artifactThumbnailRepository.createThumbnail(artifactVertex.getId(), "raw", in, boundaryDims, user);
+            thumbnail = artifactThumbnailRepository.createThumbnail(artifactVertex, "raw", in, boundaryDims, user);
 
             String format = thumbnail.getFormat();
             response.setContentType("image/" + format);
