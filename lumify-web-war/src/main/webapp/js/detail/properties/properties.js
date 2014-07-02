@@ -7,6 +7,7 @@ define([
     'service/audit',
     'service/config',
     'util/vertex/formatters',
+    'util/privileges',
     '../dropdowns/propertyForm/propForm',
     'hbs!./template',
     'hbs!../audit/audit-list',
@@ -20,6 +21,7 @@ define([
     AuditService,
     ConfigService,
     F,
+    Privileges,
     PropertyForm,
     propertiesTemplate,
     auditsListTemplate,
@@ -72,6 +74,17 @@ define([
             this.on('deleteProperty', this.onDeleteProperty);
             this.on('editProperty', this.onEditProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+
+            var self = this,
+                positionPopovers = _.throttle(function() {
+                    self.trigger('positionPropertyInfo');
+                }, 1000 / 60),
+                scrollParent = this.$node.scrollParent();
+
+            this.on(document, 'graphPaddingUpdated', positionPopovers);
+            if (scrollParent.length) {
+                this.on(scrollParent, 'scroll', positionPopovers);
+            }
 
             this.$node
                 .closest('.type-content')
@@ -164,7 +177,7 @@ define([
                                 if (a.propertyAudit) {
                                     a.propertyAudit.isVisibility =
                                         a.propertyAudit.propertyName === 'http://lumify.io#visibilityJson';
-                                    a.propertyAudit.visibilityValue =
+                                    a.propertyAudit.visibilityValue = a.propertyAudit.propertyMetadata &&
                                         a.propertyAudit.propertyMetadata['http://lumify.io#visibilityJson'];
                                     a.propertyAudit.formattedValue = F.vertex.displayProp({
                                         name: a.propertyAudit.propertyName,
@@ -434,27 +447,44 @@ define([
 
                 infos.each(function() {
                     var $this = $(this),
-                    property = $this.data('property'),
-                    ontologyProperty = self.ontologyProperties.byTitle[property.name];
+                        popover = $this.data('popover'),
+                        property = $this.data('property'),
+                        ontologyProperty = self.ontologyProperties.byTitle[property.name];
 
                     if (property.name === 'http://lumify.io#visibilityJson' || ontologyProperty) {
-                        $this.popover('destroy');
+                        if (!F.vertex.hasMetadata(property) && Privileges.missingEDIT) {
+                            $this.hide();
+                            return;
+                        } else {
+                            $this.show();
+                        }
+
+                        if (popover) {
+                            popover.destroy();
+                        }
+
                         $this.popover({
                             trigger: 'click',
                             placement: 'top',
                             content: 'Loading...',
-                            //delay: { show: 100, hide: 1000 }
                         });
 
-                        var popover = $this.data('popover'),
-                            tip = popover.tip(),
+                        popover = $this.data('popover');
+
+                        var tip = popover.tip(),
                             content = tip.find('.popover-content');
 
-                        $this.on('shown', function() {
-                            infos.not($this).popover('hide');
+                        $this.off('shown').on('shown', _.throttle(function(e) {
+                            var b = $(this),
+                                p = b.data('popover'),
+                                t = p.$tip;
+
+                            e.stopPropagation();
+
                             $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
                                 var $target = $(event.target);
 
+                                infos.not($this).popover('hide');
                                 if (!$target.is($this) &&
                                     $target.closest('.popover').length === 0) {
 
@@ -464,18 +494,40 @@ define([
                             });
 
                             self.off('positionPropertyInfo').on('positionPropertyInfo', function() {
-                                var pos = popover.getPosition(),
-                                    actualWidth  = tip[0].offsetWidth,
-                                    actualHeight = tip[0].offsetHeight,
-                                    calculatedOffset = {
-                                        top: pos.top - actualHeight,
-                                        left: pos.left + pos.width / 2 - actualWidth / 2
-                                    };
+                                    var buttonWidth = b.width(),
+                                        buttonHeight = b.height(),
+                                        buttonOffset = b.offset(),
+                                        padding = 5,
+                                        popoverWidth = t.width(),
+                                        popoverHeight = t.height(),
+                                        positionBottom = buttonOffset.top < popoverHeight,
+                                        actualTop = positionBottom ?
+                                            (buttonOffset.top + buttonHeight + padding) :
+                                            (buttonOffset.top - popoverHeight - padding),
+                                        placementPageCoordinates = {
+                                            top: Math.max(0, actualTop),
+                                            left: Math.min(
+                                                buttonOffset.left - popoverWidth / 2 + buttonWidth / 2 + 3,
+                                                $(window).width() - popoverWidth - padding * 2
+                                            )
+                                        },
+                                        placementParentCoordinates = {
+                                            top: placementPageCoordinates.top - b.offsetParent().offset().top,
+                                            left: placementPageCoordinates.left - b.offsetParent().offset().left,
+                                        };
 
-                                popover.applyPlacement(calculatedOffset, 'top');
+                                if (buttonOffset.top < 0) {
+                                    p.hide();
+                                    $(document).off('.propertyInfo');
+                                    return;
+                                }
+
+                                t.css(placementParentCoordinates)
+                                t.removeClass('top bottom').addClass(positionBottom ? 'bottom' : 'top');
                             });
+                            self.trigger('positionPropertyInfo');
                             self.trigger(content, 'willDisplayPropertyInfo');
-                        });
+                        }, 1000));
 
                         popover.setContent = function() {
                             var $tip = this.tip()
@@ -602,7 +654,8 @@ define([
                 metadata: _.pick(
                     _.findWhere(properties, {name: visibilityJsonName}) || {},
                     'http://lumify.io#modifiedBy',
-                    'http://lumify.io#modifiedDate'
+                    'http://lumify.io#modifiedDate',
+                    'http://lumify.io#confidence'
                 )
             };
 
@@ -657,6 +710,7 @@ define([
                         '_sourceMetadata',
                         'http://lumify.io#modifiedBy',
                         'http://lumify.io#modifiedDate',
+                        'http://lumify.io#confidence',
                         'sandboxStatus'
                     )
                 }

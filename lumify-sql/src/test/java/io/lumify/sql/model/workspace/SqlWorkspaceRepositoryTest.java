@@ -53,7 +53,7 @@ public class SqlWorkspaceRepositoryTest {
         Map<?, ?> configMap = new HashMap<Object, Object>();
         Configuration lumifyConfiguration = new Configuration(configMap);
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
-        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory);
+        sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory, sqlUserRepository);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);
     }
 

@@ -29,11 +29,6 @@
         </dependency>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-sql</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-fs-hdfs</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -320,6 +320,13 @@ define([
         };
 
         this.onScrubberFrameChange = function(evt, data) {
+            if (!this.duration) {
+                if (!this._noDurationWarned) {
+                    console.warn('No duration property for artifact, unable to sync transcript');
+                    this._noDurationWarned = true;
+                }
+                return;
+            }
             var frameIndex = data.index,
                 numberOfFrames = data.numberOfFrames,
                 time = (this.duration / numberOfFrames) * frameIndex;
@@ -360,19 +367,26 @@ define([
         this.openText = function(propertyKey, options) {
             var self = this,
                 expand = !options || options.expand !== false,
-                $section = this.$node.find('.' + F.className.to(propertyKey));
+                $section = this.$node.find('.' + F.className.to(propertyKey)),
+                $badge = $section.find('.badge');
 
             if (expand) {
-                $section.siblings('.loading').removeClass('loading').end().addClass('loading');
+                $section.closest('.texts').find('.loading').removeClass('loading');
+                $badge.addClass('loading');
+            }
+
+            if (this.openTextRequest && this.openTextRequest.abort) {
+                this.openTextRequest.abort();
             }
 
             return this.handleCancelling(
-                this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
+                this.openTextRequest = this.vertexService.getArtifactHighlightedTextById(this.attr.data.id, propertyKey)
             ).done(function(artifactText) {
                 var html = self.processArtifactText(artifactText);
                 if (expand) {
                     $section.find('.text').html(html);
-                    $section.addClass('expanded').removeClass('loading');
+                    $section.addClass('expanded');
+                    $badge.removeClass('loading');
 
                     self.updateEntityAndArtifactDraggables();
                     if (!options || options.scrollToSection !== false) {
@@ -602,8 +616,13 @@ define([
 
         this.showForm = function(dataInfo, artifactInfo, $target) {
             this.$node.find('.underneath').teardownComponent(TermForm)
-            var root = $('<div class="underneath">')
-                .insertAfter($target.closest('.type-content').find('.detected-object-labels'));
+            var root = $('<div class="underneath">');
+
+            if (dataInfo.isNew) {
+                root.insertAfter($target.closest('.type-content').find('.image-preview'));
+            } else {
+                root.insertAfter($target.closest('.type-content').find('.detected-object-labels'));
+            }
 
             TermForm.attachTo (root, {
                 artifactData: artifactInfo,

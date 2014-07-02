@@ -59,8 +59,6 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
                 } else {
                     throw new LumifyResourceNotFoundException("iri without file or dir");
                 }
-            } else {
-                break;
             }
         }
     }

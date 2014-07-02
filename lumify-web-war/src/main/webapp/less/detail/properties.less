@@ -81,7 +81,7 @@
 
 
     .popover-content {
-      min-width: 8em;
+      min-width: 225px;
       padding: 0.5em;
 
       table {
@@ -121,7 +121,8 @@
         word-break: normal;
         margin-bottom: 1em;
         float: right;
-        width: 45%;
+        width: 50%;
+        width: calc(50% - 1px);
         display: block;
         &.noDelete {
           float: none;
@@ -130,6 +131,12 @@
         }
         &.btn-danger {
           float: left;
+        }
+        &.loading { 
+          margin-left: 0;
+          position: relative;
+          left: 24px;
+          width: calc(50% - 11px);
         }
       }
     }

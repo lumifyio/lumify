@@ -134,7 +134,7 @@
     "requireLineFeedAtFileEnd": true,
     "maximumLineLength": 120,
     "requireCapitalizedConstructors": true,
-    "safeContextKeyword": [ "self", "cy" ],
+    "safeContextKeyword": [ "self", "cy", "$this" ],
     "requireDotNotation": true,
     "disallowYodaConditions": true,
     "excludeFiles": ["node_modules/**", "libs/**"]

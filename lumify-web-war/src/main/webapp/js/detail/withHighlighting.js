@@ -336,7 +336,8 @@ define([
                         }
                     });
 
-                    self.off('.actionbar').on('resolve.actionbar', function() {
+                    self.off('.actionbar').on('resolve.actionbar', function(event) {
+                        event.stopPropagation();
 
                         var isEndTextNode = endContainer.nodeType === 1;
                         if (isEndTextNode) {
@@ -415,7 +416,9 @@ define([
                         } : {})
                     });
 
-                    self.on('open.actionbar', function() {
+                    self.off('.actionbar')
+                        .on('open.actionbar', function(event) {
+                            event.stopPropagation();
 
                             self.trigger('selectObjects', {
                                 vertices: [
@@ -425,7 +428,8 @@ define([
                                 ]
                             });
                     });
-                    self.on('unresolve.actionbar', function() {
+                    self.on('unresolve.actionbar', function(event) {
+                        event.stopPropagation();
                         _.defer(self.dropdownEntity.bind(self), false, $target);
                     });
 
@@ -438,8 +442,10 @@ define([
                         }
                     });
 
-                    self.on('resolve.actionbar', function() {
+                    self.off('.actionbar')
+                        .on('resolve.actionbar', function(event) {
                         _.defer(self.dropdownEntity.bind(self), false, $target);
+                        event.stopPropagation();
                     })
                 }
             });

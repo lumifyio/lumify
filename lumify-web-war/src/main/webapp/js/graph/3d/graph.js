@@ -3,8 +3,9 @@ define([
     'flight/lib/component',
     'service/ontology',
     './3djs/3djs',
-    'util/vertex/formatters'
-], function(defineComponent, OntologyService, $3djs, F) {
+    'util/vertex/formatters',
+    'tpl!util/alert'
+], function(defineComponent, OntologyService, $3djs, F, alertTemplate) {
     'use strict';
 
     var MAX_TITLE_LENGTH = 15,
@@ -45,22 +46,25 @@ define([
             var self = this;
 
             this.graph = new $3djs.Graph();
-            this.load3djs();
+            var loadSuccess = this.load3djs();
+            if (loadSuccess) {
+                if (this.attr.vertices && this.attr.vertices.length) {
+                    this.addVertices(this.attr.vertices);
+                }
 
-            if (this.attr.vertices && this.attr.vertices.length) {
-                this.addVertices(this.attr.vertices);
+                this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
+                this.on(document, 'verticesAdded', this.onVerticesAdded);
+                this.on(document, 'verticesDropped', this.onVerticesDropped);
+                this.on(document, 'verticesDeleted', this.onVerticesDeleted);
+                this.on(document, 'verticesUpdated', this.onVerticesUpdated);
+                this.on(document, 'existingVerticesAdded', this.onExistingVerticesAdded);
+                this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
+
+                this.on('showPanel', this.onShowPanel);
+                this.on('hidePanel', this.onHidePanel);
+            } else {
+                this.$node.html(alertTemplate({error: 'Error: WebGL is not available'}));
             }
-
-            this.on(document, 'workspaceLoaded', this.onWorkspaceLoaded);
-            this.on(document, 'verticesAdded', this.onVerticesAdded);
-            this.on(document, 'verticesDropped', this.onVerticesDropped);
-            this.on(document, 'verticesDeleted', this.onVerticesDeleted);
-            this.on(document, 'verticesUpdated', this.onVerticesUpdated);
-            this.on(document, 'existingVerticesAdded', this.onExistingVerticesAdded);
-            this.on(document, 'relationshipsLoaded', this.onRelationshipsLoaded);
-
-            this.on('showPanel', this.onShowPanel);
-            this.on('hidePanel', this.onHidePanel);
         });
 
         this.onShowPanel = function() {
@@ -191,19 +195,25 @@ define([
                 self = this,
                 graphRenderer = new $3djs.GraphRenderer(this.node);
 
-            this.graphRenderer = graphRenderer;
-            graphRenderer.renderGraph(this.graph);
-            graphRenderer.addToRenderLoop();
-            //graphRenderer.showStats();
+            if (graphRenderer.browserSupported) {
+                this.graphRenderer = graphRenderer;
+                graphRenderer.renderGraph(this.graph);
+                graphRenderer.addToRenderLoop();
+                //graphRenderer.showStats();
 
-            graphRenderer.addEventListener('node_click', function(event) {
-                var selected = [];
-                if (event.content) {
-                    var data = graph.node(event.content).data.vertex;
-                    selected.push(data);
-                }
-                self.trigger('selectObjects', { vertices: selected });
-            }, false);
+                graphRenderer.addEventListener('node_click', function(event) {
+                    var selected = [];
+                    if (event.content) {
+                        var data = graph.node(event.content).data.vertex;
+                        selected.push(data);
+                    }
+                    self.trigger('selectObjects', { vertices: selected });
+                }, false);
+
+                return true;
+            }
+
+            return false;
         };
     }
 });

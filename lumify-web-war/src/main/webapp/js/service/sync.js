@@ -44,7 +44,7 @@ define(
                 },
                 data: {
                     eventName: eventName,
-                    eventData: eventData
+                    eventData: _.pick(eventData, 'workspaceId')
                 }
             };
 
