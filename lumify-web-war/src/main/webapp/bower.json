@@ -30,7 +30,9 @@
     "threejs": "*",
     "underscore": "~1.6.0",
     "video.js": "4.5.2",
-    "bootstrap-timepicker": "~0.2.6"
+    "bootstrap-timepicker": "~0.2.6",
+    "jstz-detect": "~1.0.5",
+    "timezone-js": "~0.4.11"
   },
   "devDependencies": {
     "sinon": "~1.9.0",

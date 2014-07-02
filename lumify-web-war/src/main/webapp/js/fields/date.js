@@ -2,19 +2,32 @@
 define([
     'flight/lib/component',
     'hbs!./dateTpl',
+    'hbs!./dateTimezone',
     './withPropertyField',
     './withHistogram',
     'util/formatters',
-    'chrono'
-], function(defineComponent, template, withPropertyField, withHistogram, F, chrono) {
+    'util/popovers/withElementScrollingPositionUpdates',
+    'chrono',
+    'jstz'
+], function(
+    defineComponent,
+    template,
+    timezoneTemplate,
+    withPropertyField,
+    withHistogram,
+    F,
+    withPositionUpdates,
+    chrono,
+    jstz) {
     'use strict';
 
-    return defineComponent(DateField, withPropertyField, withHistogram);
+    return defineComponent(DateField, withPropertyField, withHistogram, withPositionUpdates);
 
     function DateField() {
 
         this.defaultAttrs({
-            timeFieldSelector: '.timepicker'
+            timeFieldSelector: '.timepicker',
+            timezoneSelector: '.timezone'
         });
 
         this.before('initialize', function(node, config) {
@@ -24,14 +37,30 @@ define([
         });
 
         this.after('initialize', function() {
-            var value = '',
+            F.timezone.init().done(this.init.bind(this));
+        });
+
+        this.init = function() {
+            var self = this,
+                value = '',
                 dateString = '',
                 timeString = '';
 
             if (this.attr.value) {
+                // TODO: load using sourceTimezone
                 dateString = value = F.date.dateString(this.attr.value);
                 timeString = F.date.timeString(this.attr.value);
             }
+
+            this.$node.html(template({
+                dateString: dateString,
+                timeString: timeString,
+                today: F.date.dateString(new Date()),
+                todayTime: F.date.timeString(new Date()),
+                displayTime: this.attr.property.displayTime,
+                predicates: this.attr.predicates
+            }));
+            this.updateTimezone()
 
             this.getValues = function() {
                 var inputs = this.$node.hasClass('alternate') ?
@@ -46,20 +75,16 @@ define([
                     for (i = 0; i < values.length; i += 2) {
                         newValues.push(values[i] + ' ' + values[i + 1]);
                     }
-                    return newValues;
+                    values = newValues;
                 }
 
-                return values;
+                return values.map(function(v) {
+                    if (self.attr.property.displayTime) {
+                        return F.timezone.dateTimeStringToUtc(v, self.currentTimezone.name);
+                    }
+                    return F.timezone.dateStringToUtc(v, self.currentTimezone.name);
+                });
             };
-
-            this.$node.html(template({
-                dateString: dateString,
-                timeString: timeString,
-                today: F.date.dateString(new Date()),
-                todayTime: F.date.timeString(new Date()),
-                displayTime: this.attr.property.displayTime,
-                predicates: this.attr.predicates
-            }));
 
             this.select('timeFieldSelector').timepicker({
                 template: false,
@@ -72,16 +97,25 @@ define([
             this.updateRangeVisibility();
             this.filterUpdated(
                 this.getValues(),
-                this.select('predicateSelector').val()
+                this.select('predicateSelector').val(),
+                {
+                    metadata: this.currentTimezoneMetadata
+                }
             );
 
             this.on('change keyup', {
                     inputSelector: function() {
                         this.updateRangeVisibility();
 
+                        var values = this.getValues();
+
+                        this.updateTimezone();
                         this.filterUpdated(
-                            this.getValues(),
-                            this.select('predicateSelector').val()
+                            values,
+                            this.select('predicateSelector').val(),
+                            {
+                                metadata: this.currentTimezoneMetadata
+                            }
                         );
                     }
                 });
@@ -106,8 +140,73 @@ define([
                         }
                     }
                 }, 500)
-            })
-        });
+            });
+
+            this.timezoneOpened = false;
+            this.on('click', {
+                timezoneSelector: this.onTimezoneOpen
+            });
+
+            this.on('selectTimezone', this.onSelectTimezone);
+        };
+
+        this.onSelectTimezone = function(event, data) {
+            if (data.name) {
+                this.updateTimezone(data.name)
+            }
+        };
+
+        this.updateTimezone = function(tz) {
+            var values = this.getValues(),
+                date = (values && values[0]) ? new Date(values[0]) : null;
+
+            if (tz) {
+                if (!_.isString(tz)) {
+                    tz = tz.name;
+                }
+                this.currentTimezone = F.timezone.lookupTimezone(tz, date);
+            } else {
+                if (!this.currentTimezone) {
+                    this.currentTimezone = F.timezone.currentTimezone(date);
+                } else {
+                    this.currentTimezone = F.timezone.lookupTimezone(this.currentTimezone.name, date);
+                }
+            }
+
+            this.currentTimezoneMetadata = {
+                'http://lumify.io#sourceTimezone': this.currentTimezone.name,
+                'http://lumify.io#sourceTimezoneOffset': this.currentTimezone.offset,
+                'http://lumify.io#sourceTimezoneOffsetDst': this.currentTimezone.tzOffset
+            };
+
+            this.select('timezoneSelector').replaceWith(
+                timezoneTemplate(this.currentTimezone)
+            );
+        };
+
+        this.onTimezoneOpen = function(event) {
+            var self = this,
+                $target = $(event.target).closest('.timezone');
+
+            event.preventDefault();
+
+            if (!this.Timezone) {
+                require(['util/popovers/timezone/timezone'], function(Timezone) {
+                    self.Timezone = Timezone;
+                    self.onTimezoneOpen(event);
+                });
+                return;
+            }
+
+            if ($target.lookupComponent(this.Timezone)) {
+                return;
+            }
+
+            this.Timezone.attachTo($target, {
+                scrollSelector: '.content',
+                timezone: this.currentTimezone.name
+            });
+        };
 
         this.isValid = function() {
             var dateRegex = /^\s*\d{4}-\d{1,2}-\d{1,2}\s*$/,

@@ -428,6 +428,8 @@ define([
                     longitude: data.values[2]
                 });
             }
+
+            this.currentMetadata = data.metadata;
         };
 
         this.onPropertyError = function(event, data) {
@@ -477,7 +479,8 @@ define([
                             key: propertyKey,
                             name: propertyName,
                             value: value,
-                            visibilitySource: this.visibilitySource.value
+                            visibilitySource: this.visibilitySource.value,
+                            metadata: this.currentMetadata
                         }, justification)
                 });
             }

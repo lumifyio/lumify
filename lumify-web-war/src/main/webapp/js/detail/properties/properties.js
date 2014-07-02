@@ -386,7 +386,8 @@ define([
                         data.property.value,
                         data.property.visibilitySource,
                         data.property.justificationText,
-                        data.property.sourceInfo)
+                        data.property.sourceInfo,
+                        data.property.metadata)
                     .fail(this.requestFailure.bind(this))
                     .done(done);
             }
