@@ -205,9 +205,9 @@ define([
         this.onRegisterForPositionChanges = function(event, data) {
             var self = this;
 
-            if (data && data.page) {
+            if (data && data.anchorTo && data.anchorTo.page) {
                 this.trigger(event.target, 'positionChanged', {
-                    position: data.page
+                    position: data.anchorTo.page
                 });
             }
         };

@@ -53,10 +53,10 @@ define([
         this.registerAnchorTo = function() {
             var self = this;
 
-            this.positionDialog = _.throttle(this.positionDialog.bind(this), 1000 / 30);
+            this.positionDialog = _.throttle(this.positionDialog.bind(this), 1000 / 60);
             this.after('onPositionChange', this.positionDialog);
             this.on('positionChanged', this.onPositionChange);
-            this.trigger('registerForPositionChanges', this.attr.anchorTo);
+            this.trigger('registerForPositionChanges', this.attr);
 
             this.positionChangeErrorCheck = _.delay(function() {
                 if (!self.dialogPosition) {
@@ -74,25 +74,29 @@ define([
 
         this.positionDialog = function() {
             if (this.dialogPosition) {
-                var width = this.popover.outerWidth(),
+                var padding = 10,
+                    width = this.popover.outerWidth(),
                     height = this.popover.outerHeight(),
                     windowWidth = $(window).width(),
                     windowHeight = $(window).height(),
                     maxLeft = windowWidth - width,
                     maxTop = windowHeight - height,
                     calcLeft = this.dialogPosition.x - (width / 2),
-                    calcTop = this.dialogPosition.y - height,
+                    calcTop = (this.dialogPosition.yMin || this.dialogPosition.y) - height,
                     proposed = {
-                        left: Math.max(0, Math.min(maxLeft, calcLeft)),
-                        top: Math.max(0, Math.min(maxTop, calcTop)),
+                        left: Math.max(padding, Math.min(maxLeft - padding, calcLeft)),
+                        top: Math.max(padding, Math.min(maxTop - padding, calcTop)),
                     };
 
                 if (this.dialogPosition.y < height) {
-                    proposed.top = Math.min(maxTop, this.dialogPosition.y);
+                    proposed.top = Math.min(maxTop, this.dialogPosition.yMax || this.dialogPosition.y);
                     this.popover.removeClass('top').addClass('bottom');
                 } else {
                     this.popover.removeClass('bottom').addClass('top');
                 }
+
+                var percent = ((this.dialogPosition.x - proposed.left) / width * 100) + '%';
+                this.dialog.find('.arrow').css('left', percent);
 
                 this.dialog.css(proposed);
                 this.popover.show();

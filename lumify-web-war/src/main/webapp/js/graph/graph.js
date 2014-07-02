@@ -1110,9 +1110,10 @@ define([
         };
 
         this.onRegisterForPositionChanges = function(event, data) {
-            var self = this;
+            var self = this,
+                anchorTo = data && data.anchorTo;
 
-            if (!data || (!data.vertexId && !data.page)) {
+            if (!anchorTo || (!anchorTo.vertexId && !anchorTo.page)) {
                 return console.error('Registering for position events requires a vertexId');
             }
 
@@ -1122,18 +1123,18 @@ define([
 
                 event.stopPropagation();
 
-                var cyNode = data.vertexId && cy.getElementById(toCyId(data.vertexId)),
+                var cyNode = anchorTo.vertexId && cy.getElementById(toCyId(anchorTo.vertexId)),
                     offset = self.$node.offset(),
-                    cyPosition = data.page && cy.renderer().projectIntoViewport(
-                        data.page.x + offset.left,
-                        data.page.y + offset.top
+                    cyPosition = anchorTo.page && cy.renderer().projectIntoViewport(
+                        anchorTo.page.x + offset.left,
+                        anchorTo.page.y + offset.top
                     );
 
                 if (!self.onViewportChangesForPositionChanges) {
                     self.onViewportChangesForPositionChanges = function() {
                         var position;
 
-                        if (data.vertexId) {
+                        if (anchorTo.vertexId) {
                             var positionInNode = retina.pixelsToPoints(cyNode.renderedPosition());
 
                             position = {
@@ -1141,7 +1142,7 @@ define([
                                 y: positionInNode.y + offset.top,
                             };
 
-                        } else if (data.page) {
+                        } else if (anchorTo.page) {
                             position = retina.pixelsToPoints({
                                 x: cyPosition[0] * cy.zoom() + cy.pan().x,
                                 y: cyPosition[1] * cy.zoom() + cy.pan().y
