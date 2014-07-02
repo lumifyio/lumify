@@ -26,6 +26,7 @@ import org.securegraph.Visibility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class SetRelationshipProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SetRelationshipProperty.class);
@@ -65,6 +66,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationString");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String metadataString = getOptionalParameter(request, "metadata");
 
         String workspaceId = getActiveWorkspaceId(request);
 
@@ -78,6 +80,8 @@ public class SetRelationshipProperty extends BaseRequestHandler {
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId().toString();
         }
+
+        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
         User user = getUser(request);
         Authorizations authorizations = getAuthorizations(request, user);
@@ -110,6 +114,7 @@ public class SetRelationshipProperty extends BaseRequestHandler {
                 propertyName,
                 propertyKey,
                 value,
+                metadata,
                 visibilitySource,
                 workspaceId,
                 this.visibilityTranslator,

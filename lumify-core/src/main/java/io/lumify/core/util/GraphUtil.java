@@ -78,6 +78,18 @@ public class GraphUtil {
         return sandboxStatuses;
     }
 
+    public static Map<String, Object> metadataStringToMap(String metadataString) {
+        Map<String, Object> metadata = new HashMap<String, Object>();
+        if (metadataString != null && metadataString.length() > 0) {
+            JSONObject metadataJson = new JSONObject(metadataString);
+            for (Object keyObj : metadataJson.keySet()) {
+                String key = "" + keyObj;
+                metadata.put(key, metadataJson.get(key));
+            }
+        }
+        return metadata;
+    }
+
     public static class VisibilityAndElementMutation<T extends Element> {
         public final ElementMutation<T> elementMutation;
         public final LumifyVisibility visibility;
@@ -113,6 +125,7 @@ public class GraphUtil {
             String propertyName,
             String propertyKey,
             Object value,
+            Map<String, Object> metadata,
             String visibilitySource,
             String workspaceId,
             VisibilityTranslator visibilityTranslator,
@@ -131,6 +144,9 @@ public class GraphUtil {
         } else {
             propertyMetadata = new HashMap<String, Object>();
         }
+
+        mergeMetadata(propertyMetadata, metadata);
+
         ExistingElementMutation<T> elementMutation = element.prepareMutation();
 
         JSONObject visibilityJson = LumifyVisibilityProperties.VISIBILITY_JSON_PROPERTY.getMetadataValue(propertyMetadata);
@@ -157,6 +173,15 @@ public class GraphUtil {
 
         elementMutation.addPropertyValue(propertyKey, propertyName, value, propertyMetadata, lumifyVisibility.getVisibility());
         return new VisibilityAndElementMutation<T>(lumifyVisibility, elementMutation);
+    }
+
+    private static void mergeMetadata(Map<String, Object> metadata, Map<String, Object> additionalMetadata) {
+        if (additionalMetadata == null) {
+            return;
+        }
+        for (Map.Entry<String, Object> entry : additionalMetadata.entrySet()) {
+            metadata.put(entry.getKey(), entry.getValue());
+        }
     }
 
     private static PropertySourceMetadata createPropertySourceMetadata(JSONObject sourceObject) {

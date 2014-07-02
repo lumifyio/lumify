@@ -26,6 +26,7 @@ import org.securegraph.Visibility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class VertexSetProperty extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VertexSetProperty.class);
@@ -65,6 +66,7 @@ public class VertexSetProperty extends BaseRequestHandler {
         final String visibilitySource = getRequiredParameter(request, "visibilitySource");
         final String justificationText = getOptionalParameter(request, "justificationText");
         final String sourceInfo = getOptionalParameter(request, "sourceInfo");
+        final String metadataString = getOptionalParameter(request, "metadata");
         User user = getUser(request);
 
         String workspaceId = getActiveWorkspaceId(request);
@@ -79,6 +81,8 @@ public class VertexSetProperty extends BaseRequestHandler {
         if (propertyKey == null) {
             propertyKey = this.graph.getIdGenerator().nextId().toString();
         }
+
+        Map<String, Object> metadata = GraphUtil.metadataStringToMap(metadataString);
 
         Authorizations authorizations = getAuthorizations(request, user);
 
@@ -110,6 +114,7 @@ public class VertexSetProperty extends BaseRequestHandler {
                 propertyName,
                 propertyKey,
                 value,
+                metadata,
                 visibilitySource,
                 workspaceId,
                 this.visibilityTranslator,
