@@ -60,6 +60,8 @@ define([
                 displayTime: this.attr.property.displayTime,
                 predicates: this.attr.predicates
             }));
+
+            this.updateRangeVisibility();
             this.updateTimezone()
 
             this.getValues = function() {
@@ -94,29 +96,10 @@ define([
                 showMeridian: false
             });
 
-            this.updateRangeVisibility();
-            this.filterUpdated(
-                this.getValues(),
-                this.select('predicateSelector').val(),
-                {
-                    metadata: this.currentTimezoneMetadata
-                }
-            );
-
             this.on('change keyup', {
                     inputSelector: function() {
                         this.updateRangeVisibility();
-
-                        var values = this.getValues();
-
                         this.updateTimezone();
-                        this.filterUpdated(
-                            values,
-                            this.select('predicateSelector').val(),
-                            {
-                                metadata: this.currentTimezoneMetadata
-                            }
-                        );
                     }
                 });
 
@@ -182,6 +165,15 @@ define([
             this.select('timezoneSelector').replaceWith(
                 timezoneTemplate(this.currentTimezone)
             );
+
+            this.filterUpdated(
+                this.getValues(),
+                this.select('predicateSelector').val(),
+                {
+                    metadata: this.currentTimezoneMetadata
+                }
+            );
+
         };
 
         this.onTimezoneOpen = function(event) {

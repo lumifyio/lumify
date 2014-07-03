@@ -334,28 +334,27 @@ define([
         },
         timezone: {
             init: function() {
-                var d = $.Deferred();
+                if (FORMATTERS.timezone._deferredInit) {
+                    return FORMATTERS.timezone._deferredInit;
+                }
+
+                FORMATTERS.timezone._deferredInit = $.Deferred();
 
                 require(['jstz', 'timezone-js'], function(_jstz, _timezoneJS) {
                     jstz = _jstz;
                     timezoneJS = _timezoneJS;
-
-                    if (FORMATTERS.timezone._initialized) {
-                        return d.resolve(jstz, timezoneJS);
-                    }
-
-                    FORMATTERS.timezone._initialized = true;
 
                     timezoneJS.timezone.zoneFileBasePath = '/tz';
                     timezoneJS.timezone.defaultZoneFile = ['backward', 'northamerica', 'etcetera'];
 
                     timezoneJS.timezone.init({
                         callback: function() {
-                            d.resolve(jstz, timezoneJS);
+                            FORMATTERS.timezone._deferredInit.resolve(jstz, timezoneJS);
                         }
                     });
                 });
-                return d;
+
+                return FORMATTERS.timezone._deferredInit;
             },
             checkInit: function(andThrow) {
                 if (!jstz || !timezoneJS) {
@@ -367,6 +366,7 @@ define([
                 return true;
             },
             dateStringToUtc: function(dateStr, timezone) {
+                FORMATTERS.timezone.checkInit(true);
                 if (/^\s*$/.test(dateStr)) {
                     return dateStr;
                 }
@@ -377,6 +377,7 @@ define([
                 return date.toString('yyyy-MM-dd', 'Etc/UTC');
             },
             dateTimeStringToUtc: function(dateStr, timezone) {
+                FORMATTERS.timezone.checkInit(true);
                 if (/^\s*$/.test(dateStr)) {
                     return dateStr;
                 }
@@ -385,6 +386,14 @@ define([
                 }
                 var date = new timezoneJS.Date(dateStr, timezone);
                 return date.toString('yyyy-MM-dd HH:mm', 'Etc/UTC');
+            },
+            dateStringToTimezone: function(millis, timezone) {
+                FORMATTERS.timezone.checkInit(true);
+            },
+            dateTimeStringToTimezone: function(millis, timezone) {
+                FORMATTERS.timezone.checkInit(true);
+                var date = new timezoneJS.Date(millis, timezone);
+                return date.toString('yyyy-MM-dd HH:mm');
             },
             offsetDisplay: function(offsetMinutes) {
                 var negative = offsetMinutes < 0,

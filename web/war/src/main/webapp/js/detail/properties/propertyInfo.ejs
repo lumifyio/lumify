@@ -1,5 +1,13 @@
 <table class="table">
 
+  <% var sourceTimezone = property.metadata['http://lumify.io#sourceTimezone'];
+     if (sourceTimezone) { %>
+    <tr>
+      <td class="property-name">Original</td>
+      <td class="property-value property-sourceTimezone"><span class="badge loading" style="float: left;"></span></td>
+    </tr>
+  <% } %>
+
   <% var modifiedDate =  property.metadata['http://lumify.io#modifiedDate'];
      if (modifiedDate) { %>
   <tr>

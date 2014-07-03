@@ -24,10 +24,26 @@ define([
             editButtonSelector: '.btn-edit',
             addButtonSelector: '.btn-add',
             modifiedBySelector: '.property-modifiedBy',
+            sourceTimezoneSelector: '.property-sourceTimezone',
             justificationValueSelector: '.justificationValue'
         });
 
         this.after('initialize', function() {
+            var self = this,
+                sourceTimezone = this.attr.property.metadata['http://lumify.io#sourceTimezone'];
+
+        
+            if (sourceTimezone) {
+                F.timezone.init().done(function() {
+                    self.select('sourceTimezoneSelector').html(
+                        F.timezone.dateTimeStringToTimezone(
+                            self.attr.property.value,
+                            sourceTimezone
+                        ) + '<br>' + sourceTimezone
+                    )
+                });
+            }
+
             this.$node.html(template({
                 property: this.attr.property,
                 F: F
