@@ -174,6 +174,7 @@ public class WorkspaceHelper {
                 }
             } else if (termMentionModel.getMetadata().getEdgeId().equals(edge.getId())) {
                 termMentionRepository.delete(termMentionModel.getRowKey());
+                workQueueRepository.pushTextUpdated(sourceVertex.getId().toString());
             }
         }
 
