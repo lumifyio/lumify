@@ -35,44 +35,12 @@
     </licenses>
 
     <modules>
-        <module>lumify-core</module>
-        <module>lumify-sql</module>
-        <module>lumify-fs-hdfs</module>
-        <module>lumify-model-bigtable-queue</module>
-        <module>lumify-storm</module>
-        <module>lumify-web</module>
-        <module>lumify-web-server</module>
-        <module>lumify-web-war</module>
-        <module>lumify-tools</module>
-        <module>lumify-ontology-dev</module>
-        <module>lumify-web-dev-tools</module>
-        <module>lumify-model-securegraph</module>
-        <module>lumify-model-rabbitmq</module>
-        <module>lumify-web-import-export-workspaces</module>
-        <module>lumify-web-auth-social</module>
-        <module>lumify-web-auth-username-only</module>
-        <module>lumify-web-auth-username-password</module>
-        <module>lumify-web-auth-x509</module>
-        <module>lumify-reindex-mr</module>
-        <module>lumify-tika-text-extractor</module>
-        <module>lumify-tika-mime-type</module>
-        <module>lumify-known-entity-extractor</module>
-        <module>lumify-phone-number-extractor</module>
-        <module>lumify-zipcode-extractor</module>
-        <module>lumify-email-extractor</module>
-        <module>lumify-zipcode-resolver</module>
-        <module>lumify-google-analytics</module>
-        <module>lumify-opennlp-dictionary-extractor</module>
-        <module>lumify-opennlp-dictionary-extractor-web</module>
-        <module>lumify-opennlp-me-extractor</module>
-        <module>lumify-sphinx</module>
-        <module>lumify-tesseract</module>
-        <module>lumify-ccextractor</module>
-        <module>lumify-subrip-parser</module>
-        <module>lumify-youtube-transcript</module>
-        <module>lumify-subrip-transcript</module>
-        <module>lumify-geocoder-bing</module>
-        <module>lumify-friendster</module>
+        <module>core</module>
+        <module>datasets</module>
+        <module>examples</module>
+        <module>storm</module>
+        <module>tools</module>
+        <module>web</module>
     </modules>
 
     <repositories>
