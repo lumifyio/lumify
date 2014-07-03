@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://lumify.io/java-code-ingest#"
+     xml:base="http://lumify.io/java-code-ingest"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/java-code-ingest">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io#glyphIconFileName -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;glyphIconFileName"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#argument -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#argument">
+        <rdfs:label xml:lang="en">Argument</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#method"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#classContains -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#classContains">
+        <rdfs:label xml:lang="en">Contains</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#field"/>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#method"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#classFileContainsClass -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#classFileContainsClass">
+        <rdfs:label xml:lang="en">Contains</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#classFile"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#classReferences -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#classReferences">
+        <rdfs:label xml:lang="en">References</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#class"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#fieldType -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#fieldType">
+        <rdfs:label xml:lang="en">Field Type</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#field"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#invoked -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#invoked">
+        <rdfs:label xml:lang="en">Invokes</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#method"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#method"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#jarFileContains -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#jarFileContains">
+        <rdfs:label xml:lang="en">Contains</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#file"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#jarFile"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#methodReturnType -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/java-code-ingest#methodReturnType">
+        <rdfs:label xml:lang="en">Return Type</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/java-code-ingest#class"/>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#method"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#argumentName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/java-code-ingest#argumentName">
+        <rdfs:label xml:lang="en">Argument Name</rdfs:label>
+        <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#className -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/java-code-ingest#className">
+        <rdfs:label xml:lang="en">Class Name</rdfs:label>
+        <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#class -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#class">
+        <rdfs:label xml:lang="en">Class</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <lumify:glyphIconFileName xml:lang="en">java-class.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#classFile -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#classFile">
+        <rdfs:label xml:lang="en">Class File</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#file"/>
+        <lumify:glyphIconFileName>class-icon.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#code -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#code">
+        <rdfs:label xml:lang="en">Code</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#field -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#field">
+        <rdfs:label xml:lang="en">Field</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <lumify:glyphIconFileName xml:lang="en">java-field.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#file -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#file">
+        <rdfs:label xml:lang="en">File</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#code"/>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#interface -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#interface">
+        <rdfs:label xml:lang="en">Interface</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <lumify:glyphIconFileName xml:lang="en">java-interface.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#jarFile -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#jarFile">
+        <rdfs:label xml:lang="en">Jar File</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#file"/>
+        <lumify:glyphIconFileName>jar-icon.jpg</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/java-code-ingest#method -->
+
+    <owl:Class rdf:about="http://lumify.io/java-code-ingest#method">
+        <rdfs:label xml:lang="en">Method</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/java-code-ingest#code"/>
+        <lumify:glyphIconFileName xml:lang="en">java-method.png</lumify:glyphIconFileName>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
