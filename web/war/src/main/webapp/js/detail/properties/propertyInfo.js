@@ -32,7 +32,11 @@ define([
             var self = this,
                 sourceTimezone = this.attr.property.metadata['http://lumify.io#sourceTimezone'];
 
-        
+            this.$node.html(template({
+                property: this.attr.property,
+                F: F
+            }));
+
             if (sourceTimezone) {
                 F.timezone.init().done(function() {
                     self.select('sourceTimezoneSelector').html(
@@ -43,11 +47,6 @@ define([
                     )
                 });
             }
-
-            this.$node.html(template({
-                property: this.attr.property,
-                F: F
-            }));
 
             this.on('click', {
                 deleteButtonSelector: this.onDelete,
