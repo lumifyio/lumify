@@ -101,13 +101,14 @@ public class UnresolveTermEntity extends BaseRequestHandler {
         LumifyVisibility lumifyVisibility = visibilityTranslator.toVisibility(visibilityJson);
 
         String propertyKey = "";
+        TermMentionModel termMention;
         if (rowKey != null) {
-            TermMentionRowKey analyzedTermMentionRowKey = new TermMentionRowKey(rowKey);
-            propertyKey = analyzedTermMentionRowKey.getPropertyKey();
+            termMention = termMentionRepository.findByRowKey(rowKey, modelUserContext);
+        } else {
+            TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edgeId);
+            termMention = termMentionRepository.findByRowKey(termMentionRowKey.getRowKey(), modelUserContext);
         }
 
-        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(graphVertexId, propertyKey, mentionStart, mentionEnd, edgeId);
-        TermMentionModel termMention = termMentionRepository.findByRowKey(termMentionRowKey.toString(), modelUserContext);
         JSONObject result = workspaceHelper.unresolveTerm(resolvedVertex, edgeId, termMention, lumifyVisibility, modelUserContext, user, authorizations);
 
         respondWithJson(response, result);

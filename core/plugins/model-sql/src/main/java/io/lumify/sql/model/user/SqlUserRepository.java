@@ -5,7 +5,6 @@ import com.google.inject.Singleton;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.*;
-import io.lumify.core.model.workspace.Workspace;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
@@ -15,7 +14,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.json.JSONObject;
 import org.securegraph.util.ConvertingIterable;
 
@@ -44,41 +42,41 @@ public class SqlUserRepository extends UserRepository {
     @Override
     public User findByUsername(String username) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("username", username)).list();
+        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.username=:username")
+                .setParameter("username", username)
+                .list();
         session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
             throw new LumifyException("more than one user was returned");
         } else {
-            return (SqlUser) users.get(0);
+            return users.get(0);
         }
     }
 
     @Override
     public Iterable<User> findAll() {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).list();
+        List<User> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user")
+                .list();
         session.close();
-        return new ConvertingIterable<Object, User>(users) {
-            @Override
-            protected User convert(Object obj) {
-                return (SqlUser) obj;
-            }
-        };
+        return users;
     }
 
     @Override
     public User findById(String userId) {
         Session session = sessionFactory.openSession();
-        List users = session.createCriteria(SqlUser.class).add(Restrictions.eq("id", Integer.parseInt(userId))).list();
+        List<SqlUser> users = session.createQuery("select user from " + SqlUser.class.getSimpleName() + " as user where user.id=:id")
+                .setParameter("id", Integer.parseInt(userId))
+                .list();
         session.close();
         if (users.size() == 0) {
             return null;
         } else if (users.size() > 1) {
             throw new LumifyException("more than one user was returned");
         } else {
-            return (SqlUser) users.get(0);
+            return users.get(0);
         }
     }
 
@@ -209,11 +207,14 @@ public class SqlUserRepository extends UserRepository {
             if (sqlUser == null) {
                 throw new LumifyException("User does not exist");
             }
-            List workspaces = session.createCriteria(SqlWorkspace.class).add(Restrictions.eq("workspaceId", Integer.parseInt(workspaceId))).list();
+            List<SqlWorkspace> workspaces = session.createQuery
+                    ("select workspace from " + SqlWorkspace.class.getSimpleName() + " as workspace where workspace.workspaceId=:id")
+                    .setParameter("id", Integer.parseInt(workspaceId))
+                    .list();
             if (workspaces.size() == 0) {
                 throw new LumifyException("Could not find workspace with id: " + workspaceId);
             }
-            sqlUser.setCurrentWorkspace((Workspace) workspaces.get(0));
+            sqlUser.setCurrentWorkspace(workspaces.get(0));
             session.merge(sqlUser);
             transaction.commit();
         } catch (HibernateException e) {
