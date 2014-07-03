@@ -35,5 +35,6 @@
         <module>translator-bing</module>
         <module>opencv-object-detector</module>
         <module>clavin</module>
+        <module>drewnoakes-image-metadata-extractor</module>
     </modules>
 </project>
