@@ -30,5 +30,6 @@
         <module>youtube-transcript</module>
         <module>zipcode-extractor</module>
         <module>zipcode-resolver</module>
+        <module>reindex</module>
     </modules>
 </project>
