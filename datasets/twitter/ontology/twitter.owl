@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://lumify.io/twitter#"
+     xml:base="http://lumify.io/twitter"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/twitter">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/twitter#mentioned -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/twitter#mentioned">
+        <rdfs:label xml:lang="en">Mentioned</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#tweet"/>
+        <rdfs:range rdf:resource="http://lumify.io/twitter#user"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/twitter#refUrl -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/twitter#refUrl">
+        <rdfs:label xml:lang="en">Referenced URL</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#tweet"/>
+        <rdfs:range rdf:resource="http://lumify.io/twitter#url"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/twitter#retweet -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/twitter#retweet">
+        <rdfs:label xml:lang="en">Retweeted</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#tweet"/>
+        <rdfs:range rdf:resource="http://lumify.io/twitter#tweet"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/twitter#tagged -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/twitter#tagged">
+        <rdfs:label xml:lang="en">Tagged</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/twitter#hashtag"/>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#tweet"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/twitter#tweeted -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/twitter#tweeted">
+        <rdfs:label xml:lang="en">Tweeted</rdfs:label>
+        <rdfs:range rdf:resource="http://lumify.io/twitter#tweet"/>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#user"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/twitter#profileImageUrl -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/twitter#profileImageUrl">
+        <rdfs:label xml:lang="en">Profile Image URL</rdfs:label>
+        <lumify:textIndexHints>NONE</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#user"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/twitter#screenName -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/twitter#screenName">
+        <rdfs:label xml:lang="en">Screen Name</rdfs:label>
+        <lumify:textIndexHints>FULL_TEXT,EXACT_MATCH</lumify:textIndexHints>
+        <rdfs:domain rdf:resource="http://lumify.io/twitter#user"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/twitter#hashtag -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#hashtag">
+        <rdfs:label xml:lang="en">Hashtag</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/twitter#twitter"/>
+        <lumify:glyphIconFileName xml:lang="en">hashtag.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/twitter#profileImage -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#profileImage">
+        <rdfs:label xml:lang="en">Profile Image</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/twitter#twitter"/>
+        <lumify:displayType xml:lang="en">image</lumify:displayType>
+        <lumify:color xml:lang="en">rgb(176, 87, 53)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/twitter#tweet -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#tweet">
+        <rdfs:label xml:lang="en">Tweet</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/twitter#twitter"/>
+        <lumify:displayType xml:lang="en">document</lumify:displayType>
+        <lumify:color xml:lang="en">rgb(176, 87, 53)</lumify:color>
+        <lumify:glyphIconFileName xml:lang="en">tweet.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/twitter#twitter -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#twitter">
+        <rdfs:label xml:lang="en">Twitter</rdfs:label>
+        <lumify:color xml:lang="en">rgb(219, 63, 219)</lumify:color>
+        <lumify:glyphIconFileName xml:lang="en">tweet.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/twitter#url -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#url">
+        <rdfs:label xml:lang="en">URL</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/twitter#twitter"/>
+        <lumify:color xml:lang="en">rgb(203, 130, 4)</lumify:color>
+        <lumify:glyphIconFileName xml:lang="en">url.png</lumify:glyphIconFileName>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/twitter#user -->
+
+    <owl:Class rdf:about="http://lumify.io/twitter#user">
+        <rdfs:label xml:lang="en">User</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/twitter#twitter"/>
+        <lumify:color xml:lang="en">rgb(23, 30, 239)</lumify:color>
+        <lumify:glyphIconFileName xml:lang="en">user.png</lumify:glyphIconFileName>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
