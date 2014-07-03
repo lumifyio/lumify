@@ -1,6 +1,5 @@
 package io.lumify.web.routes.workspace;
 
-import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.bigtable.model.user.ModelUserContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
