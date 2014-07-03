@@ -19,5 +19,7 @@
         <module>model-rabbitmq</module>
         <module>model-securegraph</module>
         <module>model-sql</module>
+        <module>newuser-workspace-copy</module>
+        <module>newuser-workspace-sharer</module>
     </modules>
 </project>
