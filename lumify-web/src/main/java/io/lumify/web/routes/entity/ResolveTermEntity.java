@@ -1,5 +1,6 @@
 package io.lumify.web.routes.entity;
 
+import com.altamiracorp.bigtable.model.FlushFlag;
 import com.altamiracorp.miniweb.HandlerChain;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
@@ -144,12 +145,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
 
         auditRepository.auditRelationship(AuditAction.CREATE, artifactVertex, vertex, edge, "", "", user, lumifyVisibility.getVisibility());
 
-        TermMentionRowKey termMentionRowKey;
-        if (termMentionRowKeyString != null) {
-            termMentionRowKey = new TermMentionRowKey(RowKeyHelper.jsonDecode(termMentionRowKeyString));
-        } else {
-            termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
-        }
+        TermMentionRowKey termMentionRowKey = new TermMentionRowKey(artifactId, propertyKey, mentionStart, mentionEnd, edge.getId().toString());
         TermMentionModel termMention = new TermMentionModel(termMentionRowKey);
         termMention.getMetadata()
                 .setSign(title, lumifyVisibility.getVisibility())
@@ -157,7 +153,7 @@ public class ResolveTermEntity extends BaseRequestHandler {
                 .setConceptGraphVertexId(concept.getTitle(), lumifyVisibility.getVisibility())
                 .setVertexId(vertex.getId().toString(), lumifyVisibility.getVisibility())
                 .setEdgeId(edge.getId().toString(), lumifyVisibility.getVisibility());
-        termMentionRepository.save(termMention);
+        termMentionRepository.save(termMention, FlushFlag.FLUSH);
 
         vertexMutation.addPropertyValue(graph.getIdGenerator().nextId().toString(), LumifyProperties.ROW_KEY.getPropertyName(), termMentionRowKey.toString(), metadata, lumifyVisibility.getVisibility());
         vertexMutation.save(authorizations);
