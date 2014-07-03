@@ -12,13 +12,6 @@ Lumify supplies a pre-built virtual machine to get you started quickly, but you 
 
 [Build from source] (docs/BUILD_FROM_SOURCE.md)
 
-## Less Source Maps in Chrome
-
-To get live editing of less files in chrome:
-
-1. Configure Chrome: [Working with CSS Preprocessors] (https://developers.google.com/chrome-developer-tools/docs/css-preprocessors)
-2. Configure a workspace in Chrome Web inspector and map a less file in sources tab to workspace file
-3. `src/main/webapp$ grunt watch` 
 
 ## License
 
