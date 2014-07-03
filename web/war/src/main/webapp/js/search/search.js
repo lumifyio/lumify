@@ -165,7 +165,7 @@ define([
                         this.select('querySelector').blur();
                     }
                 }
-            } else if (event.keyCode === 191 /* FORWARD SLASH */) {
+            } else if (event.keyCode === 191)  /* FORWARD SLASH */ {
                 event.preventDefault();
                 event.stopPropagation();
                 if (event.type === 'keyup') {
