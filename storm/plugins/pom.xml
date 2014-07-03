@@ -31,5 +31,8 @@
         <module>zipcode-extractor</module>
         <module>zipcode-resolver</module>
         <module>reindex</module>
+        <module>translate</module>
+        <module>translator-bing</module>
+        <module>opencv-object-detector</module>
     </modules>
 </project>
