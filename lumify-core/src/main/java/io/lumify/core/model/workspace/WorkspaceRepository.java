@@ -21,7 +21,6 @@ public abstract class WorkspaceRepository {
     public static String WORKSPACE_TO_USER_RELATIONSHIP_NAME = "http://lumify.io/workspace/toUser";
     public static String WORKSPACE_ID_PREFIX = "WORKSPACE_";
 
-    // change Workspace to workspace id?
     public abstract void delete(Workspace workspace, User user);
 
     public abstract Workspace findById(String workspaceId, User user);
@@ -46,20 +45,16 @@ public abstract class WorkspaceRepository {
 
     public abstract Iterable<Workspace> findAll(User user);
 
-    // TODO change Workspace to workspace id?
     public abstract void setTitle(Workspace workspace, String title, User user);
 
     public abstract List<WorkspaceUser> findUsersWithAccess(String workspaceId, User user);
 
-    // TODO change Workspace to workspace id?
     public abstract List<WorkspaceEntity> findEntities(Workspace workspace, User user);
 
-    // TODO change Workspace to workspace id?
     public Workspace copy(Workspace workspace, User user) {
         return copyTo(workspace, user, user);
     }
 
-    // TODO change Workspace to workspace id?
     public Workspace copyTo(Workspace workspace, User destinationUser, User user) {
         Workspace newWorkspace = add("Copy of " + workspace.getDisplayTitle(), destinationUser);
         List<WorkspaceEntity> entities = findEntities(workspace, user);
@@ -69,19 +64,14 @@ public abstract class WorkspaceRepository {
         return newWorkspace;
     }
 
-    // TODO change Workspace to workspace id?
     public abstract void softDeleteEntityFromWorkspace(Workspace workspace, Object vertexId, User user);
 
-    // TODO change Workspace to workspace id?
     public abstract void updateEntityOnWorkspace(Workspace workspace, Object vertexId, Boolean visible, Integer graphPositionX, Integer graphPositionY, User user);
 
-    // TODO change Workspace to workspace id?
     public abstract void deleteUserFromWorkspace(Workspace workspace, String userId, User user);
 
-    // TODO change Workspace to workspace id?
     public abstract void updateUserOnWorkspace(Workspace workspace, String userId, WorkspaceAccess workspaceAccess, User user);
 
-    // TODO change Workspace to workspace id?
     public abstract List<DiffItem> getDiff(Workspace workspace, User user);
 
     public String getCreatorUserId(Workspace workspace, User user) {
