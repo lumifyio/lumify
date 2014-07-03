@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-flight-track</artifactId>
+    <artifactId>lumify-flight-aware</artifactId>
     <name>Lumify: Datasets: Flight Aware</name>
 
     <dependencies>
