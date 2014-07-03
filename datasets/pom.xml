@@ -16,5 +16,6 @@
     <modules>
         <module>friendster</module>
         <module>wikipedia</module>
+        <module>flight-aware</module>
     </modules>
 </project>
