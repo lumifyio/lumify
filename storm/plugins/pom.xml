@@ -34,5 +34,6 @@
         <module>translate</module>
         <module>translator-bing</module>
         <module>opencv-object-detector</module>
+        <module>clavin</module>
     </modules>
 </project>
