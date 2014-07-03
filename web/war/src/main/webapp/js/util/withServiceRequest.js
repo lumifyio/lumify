@@ -33,7 +33,7 @@ define([], function() {
             })
         });
 
-        this.serviceRequest = function(service, method) /*, args */ {
+        this.serviceRequest = function(service, method /*, args */) {
             var self = this,
                 args = arguments.length > 2 ? _.rest(arguments, 2) : [],
                 thisRequestId = serviceRequestId++,
