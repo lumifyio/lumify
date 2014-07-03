@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY lumify "http://lumify.io#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://lumify.io/flightTrack#"
+     xml:base="http://lumify.io/flightTrack"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:lumify="http://lumify.io#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/flightTrack">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/flightTrack#airlineHasAirplane -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/flightTrack#airlineHasAirplane">
+        <rdfs:label>Has Airplane</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airline"/>
+        <rdfs:range rdf:resource="http://lumify.io/flightTrack#airplane"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#airplaneDestination -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/flightTrack#airplaneDestination">
+        <rdfs:label>Has Destination</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:range rdf:resource="http://lumify.io/flightTrack#airport"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#airplaneOrigin -->
+
+    <owl:ObjectProperty rdf:about="http://lumify.io/flightTrack#airplaneOrigin">
+        <rdfs:label>Has Origin</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:range rdf:resource="http://lumify.io/flightTrack#airport"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/flightTrack#airlinePrefix -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#airlinePrefix">
+        <rdfs:label xml:lang="en">Airline Prefix</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airline"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#airportCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#airportCode">
+        <rdfs:label xml:lang="en">Airport Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airport"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#altitude -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#altitude">
+        <rdfs:label xml:lang="en">Altitude</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#geoLocation -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#geoLocation">
+        <rdfs:label xml:lang="en">Location</rdfs:label>
+        <rdfs:range rdf:resource="&lumify;geolocation"/>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airport"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#heading -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#heading">
+        <rdfs:label xml:lang="en">Heading</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/flightTrack#ident -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/flightTrack#ident">
+        <rdfs:label xml:lang="en">Ident</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/flightTrack#airplane"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io/flightTrack#airline -->
+
+    <owl:Class rdf:about="http://lumify.io/flightTrack#airline">
+        <rdfs:label xml:lang="en">Airline</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/flightTrack#flightTrack"/>
+        <lumify:glyphIconFileName xml:lang="en">airline.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(163, 163, 40)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/flightTrack#airplane -->
+
+    <owl:Class rdf:about="http://lumify.io/flightTrack#airplane">
+        <rdfs:label xml:lang="en">Airplane</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/flightTrack#flightTrack"/>
+        <lumify:mapGlyphIconFileName xml:lang="en">airplane.png</lumify:mapGlyphIconFileName>
+        <lumify:glyphIconFileName xml:lang="en">airplane.png</lumify:glyphIconFileName>
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/flightTrack#ident&apos;)</lumify:titleFormula>
+        <lumify:color xml:lang="en">rgb(163, 163, 40)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/flightTrack#airport -->
+
+    <owl:Class rdf:about="http://lumify.io/flightTrack#airport">
+        <rdfs:label xml:lang="en">Airport</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://lumify.io/flightTrack#flightTrack"/>
+        <lumify:glyphIconFileName xml:lang="en">airport.png</lumify:glyphIconFileName>
+        <lumify:color xml:lang="en">rgb(40, 163, 163)</lumify:color>
+    </owl:Class>
+    
+
+
+    <!-- http://lumify.io/flightTrack#flightTrack -->
+
+    <owl:Class rdf:about="http://lumify.io/flightTrack#flightTrack">
+        <rdfs:label xml:lang="en">Flight Track</rdfs:label>
+        <lumify:color xml:lang="en">rgb(163, 163, 40)</lumify:color>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
