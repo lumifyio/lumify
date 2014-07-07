@@ -1,0 +1,93 @@
+package io.lumify.mimeTypeOntologyMapper;
+
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
+import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
+import io.lumify.core.model.ontology.Concept;
+import io.lumify.core.model.ontology.OntologyLumifyProperties;
+import io.lumify.core.model.properties.RawLumifyProperties;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
+import org.securegraph.Element;
+import org.securegraph.Property;
+
+import java.io.InputStream;
+
+import static org.securegraph.util.Preconditions.checkNotNull;
+
+public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWorker {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MimeTypeOntologyMapperGraphPropertyWorker.class);
+    private Concept imageConcept;
+    private Concept audioConcept;
+    private Concept videoConcept;
+    private Concept documentConcept;
+
+    @Override
+    public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
+        super.prepare(workerPrepareData);
+
+        String imageIri = getConfiguration().get("ontology.iri.image");
+        if (imageIri != null) {
+            imageConcept = getOntologyRepository().getConceptByIRI(imageIri);
+            checkNotNull(imageConcept, "Could not find concept " + imageIri);
+        }
+
+        String audioIri = getConfiguration().get("ontology.iri.audio");
+        if (audioIri != null) {
+            audioConcept = getOntologyRepository().getConceptByIRI(audioIri);
+            checkNotNull(audioConcept, "Could not find concept " + audioIri);
+        }
+
+        String videoIri = getConfiguration().get("ontology.iri.video");
+        if (videoIri != null) {
+            videoConcept = getOntologyRepository().getConceptByIRI(videoIri);
+            checkNotNull(videoConcept, "Could not find concept " + videoIri);
+        }
+
+        String documentIri = getConfiguration().get("ontology.iri.document");
+        if (documentIri != null) {
+            documentConcept = getOntologyRepository().getConceptByIRI(documentIri);
+            checkNotNull(documentConcept, "Could not find concept " + documentIri);
+        }
+    }
+
+    @Override
+    public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(data.getElement());
+        Concept concept = null;
+
+        if (imageConcept != null && mimeType.startsWith("image")) {
+            concept = imageConcept;
+        } else if (audioConcept != null && mimeType.startsWith("audio")) {
+            concept = audioConcept;
+        } else if (videoConcept != null && mimeType.startsWith("video")) {
+            concept = videoConcept;
+        } else if (documentConcept != null) {
+            concept = documentConcept;
+        }
+
+        if (concept == null) {
+            LOGGER.debug("skipping, no concept mapped for vertex " + data.getElement().getId());
+            return;
+        }
+
+        LOGGER.debug("assigning concept type %s to vertex %s", concept.getTitle(), data.getElement().getId());
+        OntologyLumifyProperties.CONCEPT_TYPE.setProperty(data.getElement(), concept.getTitle(), data.createPropertyMetadata(), data.getVisibility(), getAuthorizations());
+        getGraph().flush();
+        getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), null, OntologyLumifyProperties.CONCEPT_TYPE.getPropertyName());
+    }
+
+    @Override
+    public boolean isHandled(Element element, Property property) {
+        if (property == null) {
+            return false;
+        }
+
+        if (!property.getName().equals(RawLumifyProperties.RAW.getPropertyName())) {
+            return false;
+        }
+
+        String mimeType = RawLumifyProperties.MIME_TYPE.getPropertyValue(element);
+        return mimeType != null;
+    }
+}
