@@ -16,20 +16,21 @@ define([
     function Timezone() {
 
         this.defaultAttrs({
-            acceptSelector: '.btn-primary',
-            cancelSelector: '.btn-default',
+            toggleSelector: '.toggle'
         });
 
         this.before('initialize', function(node, config) {
-            var timezone = config.timezone || jstz.determine().name();
+            var localTimezone = jstz.determine().name(),
+                timezone = config.timezone || (config.timezone = localTimezone);
+
             config.template = 'timezone/template';
+            config.localTimezone = localTimezone;
 
             this.after('setupWithTemplate', function() {
                 var self = this;
 
                 this.on(this.popover, 'click', {
-                    acceptSelector: this.onAccept,
-                    cancelSelector: this.onCancel
+                    toggleSelector: this.onToggle
                 });
 
                 var timezoneToInfo = {};
@@ -114,6 +115,7 @@ define([
 
                 typeahead.lookup().show();
                 typeahead.$element[0].select();
+                this.typeahead = typeahead;
                 this.positionDialog();
                 /*
                 var active = this.popover.find('.active');
@@ -124,10 +126,17 @@ define([
             });
         });
 
-        this.onAccept = function(e) {
-        };
+        this.onToggle = function(e) {
+            e.stopPropagation();
 
-        this.onCancel = function() {
+            var button = $(e.target),
+                content = button.closest('.popover-content').toggleClass('show-source'),
+                tz = this.attr.sourceTimezone;
+
+            this.trigger('selectTimezone', {
+                name: tz,
+                shiftTime: true
+            });
             this.teardown();
         };
     }

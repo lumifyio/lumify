@@ -2,12 +2,26 @@
 .timezonePopover {  
   .popover-content {
     min-width: 18em;
-    
+        
     .dst {
-      margin: 0.5em 0 0 0;
-      color: #666;
+      margin: 0.5em 0 0 0;      
       font-size: small;
       text-align: center;
+    }
+    .dst, label {
+      color: #666;
+      font-style: italic;      
+    }
+
+    label {           
+      margin: 0 0.5em;
+      text-align: right;
+      button {
+        width: auto;
+        padding: 0 0 0 0.5em;
+        margin: 0;
+        vertical-align: baseline;
+      }
     }
   }
   .navbar-search {

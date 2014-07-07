@@ -92,7 +92,7 @@ define([
                 this.trigger('propertyselected', {
                     disablePreviousValuePrompt: true,
                     property: _.chain(this.attr.property)
-                        .pick('displayName key name value visibility'.split(' '))
+                        .pick('displayName key name value visibility metadata'.split(' '))
                         .extend({
                             title: this.attr.property.name
                         })
@@ -322,6 +322,7 @@ define([
 
                         PropertyField.attachTo(config, {
                             property: propertyDetails,
+                            vertexProperty: vertexProperty,
                             value: previousValue,
                             predicates: false,
                             tooltip: {

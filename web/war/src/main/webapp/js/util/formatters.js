@@ -395,6 +395,16 @@ define([
                 var date = new timezoneJS.Date(millis, timezone);
                 return date.toString('yyyy-MM-dd HH:mm');
             },
+            date: function(dateStr, timezone) {
+                FORMATTERS.timezone.checkInit(true);
+                if (/^\s*$/.test(dateStr)) {
+                    return dateStr;
+                }
+                if (isNaN(new Date(dateStr).getTime())) {
+                    return dateStr;
+                }
+                return new timezoneJS.Date(dateStr, timezone);
+            },
             offsetDisplay: function(offsetMinutes) {
                 var negative = offsetMinutes < 0,
                     offsetMinutesAbs = Math.abs(offsetMinutes),
@@ -442,7 +452,11 @@ define([
 
                 timezoneJS.timezone.loadZoneFile(region, { async: false });
 
-                if (!withOffsetForDate || isNaN(withOffsetForDate.getTime())) {
+                if (withOffsetForDate && withOffsetForDate.getTime) {
+                    withOffsetForDate = withOffsetForDate.getTime();
+                }
+
+                if (!withOffsetForDate || isNaN(withOffsetForDate)) {
                     withOffsetForDate = Date.now();
                 }
 

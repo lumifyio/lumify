@@ -47,7 +47,6 @@ define([
                 timeString = '';
 
             if (this.attr.value) {
-                // TODO: load using sourceTimezone
                 dateString = value = F.date.dateString(this.attr.value);
                 timeString = F.date.timeString(this.attr.value);
             }
@@ -135,19 +134,34 @@ define([
 
         this.onSelectTimezone = function(event, data) {
             if (data.name) {
-                this.updateTimezone(data.name)
+                this.updateTimezone(data);
             }
         };
 
         this.updateTimezone = function(tz) {
-            var values = this.getValues(),
-                date = (values && values[0]) ? new Date(values[0]) : null;
+            var self = this,
+                values = this.getValues(),
+                date = (values && values[0]) ? new Date(values[0]) : null,
+                shiftTime = tz && tz.shiftTime;
 
             if (tz) {
                 if (!_.isString(tz)) {
                     tz = tz.name;
                 }
-                this.currentTimezone = F.timezone.lookupTimezone(tz, date);
+                if (shiftTime) {
+                    var date, inputs = this.$node.find('input');
+
+                    if (values && values[0] && inputs.length > 1) {
+                        date = F.timezone.date(values[0], 'Etc/UTC');
+                        inputs.eq(0).val(date.toString('yyyy-MM-dd', tz)).datepicker('update')
+                        inputs.eq(1).data('timepicker').setTime(date.toString('HH:mm', tz));
+                    } else if (values && values[1] && inputs.length > 3) {
+                        date = F.timezone.date(values[1], 'Etc/UTC');
+                        inputs.eq(2).val(date.toString('yyyy-MM-dd', tz)).datepicker('update');
+                        inputs.eq(3).data('timepicker').setTime(date.toString('HH:mm', tz));
+                    }
+                }
+                this.currentTimezone = F.timezone.lookupTimezone(tz, date.getTime());
             } else {
                 if (!this.currentTimezone) {
                     this.currentTimezone = F.timezone.currentTimezone(date);
@@ -196,7 +210,9 @@ define([
 
             this.Timezone.attachTo($target, {
                 scrollSelector: '.content',
-                timezone: this.currentTimezone.name
+                timezone: this.currentTimezone.name,
+                sourceTimezone: this.attr.vertexProperty &&
+                    this.attr.vertexProperty['http://lumify.io#sourceTimezone']
             });
         };
 

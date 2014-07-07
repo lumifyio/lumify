@@ -2,11 +2,14 @@
   <div class="arrow"></div>
   <div class="popover-content">
 
+    {{#if sourceTimezone}}
+    <label class="toggle-source">Edit Original:<button class="toggle btn btn-link">{{sourceTimezone}}</button></label>
+    {{/if}}
+
     <div class="navbar-search">
       <input type="text" class="search-query" placeholder="Search">
     </div>
 
     <div class="dst">* Observes Daylight Saving</div>
-
   </div>
 </div>
