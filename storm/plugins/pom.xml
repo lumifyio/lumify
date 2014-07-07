@@ -37,5 +37,6 @@
         <module>clavin</module>
         <module>drewnoakes-image-metadata-extractor</module>
         <module>java-code</module>
+        <module>csv-structured-ingest</module>
     </modules>
 </project>
