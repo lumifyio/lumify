@@ -58,7 +58,11 @@ require([
                     send('feature', 'toggleAuditDisplay');
                 })
                 .on('addVertices', function(e, data) {
-                    send('vertices', 'add', data ? data.vertices.length : 0);
+                    if (data && data.options && data.options.fileDropPosition) {
+                        send('vertices', 'upload', data ? data.vertices.length : 0);
+                    } else {
+                        send('vertices', 'add', data ? data.vertices.length : 0);
+                    }
                 })
                 .on('updateVertices', function(e, data) {
                     send('vertices', 'update', data ? data.vertices.length : 0);
