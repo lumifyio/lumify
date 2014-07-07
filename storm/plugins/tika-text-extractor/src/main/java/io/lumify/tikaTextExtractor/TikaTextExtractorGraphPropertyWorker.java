@@ -143,7 +143,9 @@ public class TikaTextExtractorGraphPropertyWorker extends GraphPropertyWorker {
             RawLumifyProperties.CREATE_DATE.addPropertyValue(m, MULTIVALUE_KEY, extractDate(metadata), data.createPropertyMetadata(), data.getVisibility());
             String title = extractTextField(metadata, subjectKeys).replaceAll(",", " ");
             if (title != null && title.length() > 0) {
-                LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, title, data.createPropertyMetadata(), data.getVisibility());
+                Map<String, Object> titleMetadata = data.createPropertyMetadata();
+                LumifyProperties.CONFIDENCE.setMetadata(titleMetadata, 0.4);
+                LumifyProperties.TITLE.addPropertyValue(m, MULTIVALUE_KEY, title, titleMetadata, data.getVisibility());
             }
 
             // TODO set("retrievalTime", extractRetrievalTime(metadata));
