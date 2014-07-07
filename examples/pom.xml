@@ -14,7 +14,6 @@
     <name>Lumify: Examples</name>
 
     <modules>
-        <module>ontology-dev</module>
         <module>food-truck</module>
     </modules>
 </project>
