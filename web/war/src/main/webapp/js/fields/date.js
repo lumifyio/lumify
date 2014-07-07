@@ -47,7 +47,7 @@ define([
                 timeString = '';
 
             if (this.attr.value) {
-                dateString = value = F.date.dateString(this.attr.value);
+                dateString = value = F.date.dateStringUtc(this.attr.value);
                 timeString = F.date.timeString(this.attr.value);
             }
 
@@ -83,7 +83,7 @@ define([
                     if (self.attr.property.displayTime) {
                         return F.timezone.dateTimeStringToUtc(v, self.currentTimezone.name);
                     }
-                    return F.timezone.dateStringToUtc(v, self.currentTimezone.name);
+                    return v;
                 });
             };
 
@@ -139,46 +139,49 @@ define([
         };
 
         this.updateTimezone = function(tz) {
-            var self = this,
-                values = this.getValues(),
-                date = (values && values[0]) ? new Date(values[0]) : null,
-                shiftTime = tz && tz.shiftTime;
+            if (this.attr.property.displayTime) {
+                var self = this,
+                    values = this.getValues(),
+                    date = (values && values[0]) ? new Date(values[0]) : null,
+                    shiftTime = tz && tz.shiftTime;
 
-            if (tz) {
-                if (!_.isString(tz)) {
-                    tz = tz.name;
-                }
-                if (shiftTime) {
-                    var date, inputs = this.$node.find('input');
+                if (tz) {
+                    if (!_.isString(tz)) {
+                        tz = tz.name;
+                    }
+                    if (shiftTime) {
+                        var date, inputs = this.$node.find('input');
 
-                    if (values && values[0] && inputs.length > 1) {
-                        date = F.timezone.date(values[0], 'Etc/UTC');
-                        inputs.eq(0).val(date.toString('yyyy-MM-dd', tz)).datepicker('update')
-                        inputs.eq(1).data('timepicker').setTime(date.toString('HH:mm', tz));
-                    } else if (values && values[1] && inputs.length > 3) {
-                        date = F.timezone.date(values[1], 'Etc/UTC');
-                        inputs.eq(2).val(date.toString('yyyy-MM-dd', tz)).datepicker('update');
-                        inputs.eq(3).data('timepicker').setTime(date.toString('HH:mm', tz));
+                        if (values && values[0] && inputs.length > 1) {
+                            date = F.timezone.date(values[0], 'Etc/UTC');
+                            inputs.eq(0).val(date.toString('yyyy-MM-dd', tz)).datepicker('update')
+                            inputs.eq(1).data('timepicker').setTime(date.toString('HH:mm', tz));
+                        } else if (values && values[1] && inputs.length > 3) {
+                            date = F.timezone.date(values[1], 'Etc/UTC');
+                            inputs.eq(2).val(date.toString('yyyy-MM-dd', tz)).datepicker('update');
+                            inputs.eq(3).data('timepicker').setTime(date.toString('HH:mm', tz));
+                        }
+                    }
+                    this.currentTimezone = F.timezone.lookupTimezone(tz, date.getTime());
+                } else {
+                    if (!this.currentTimezone) {
+                        this.currentTimezone = F.timezone.currentTimezone(date);
+                    } else {
+                        this.currentTimezone = F.timezone.lookupTimezone(this.currentTimezone.name, date);
                     }
                 }
-                this.currentTimezone = F.timezone.lookupTimezone(tz, date.getTime());
-            } else {
-                if (!this.currentTimezone) {
-                    this.currentTimezone = F.timezone.currentTimezone(date);
-                } else {
-                    this.currentTimezone = F.timezone.lookupTimezone(this.currentTimezone.name, date);
-                }
+
+                this.currentTimezoneMetadata = {
+                    'http://lumify.io#sourceTimezone': this.currentTimezone.name,
+                    'http://lumify.io#sourceTimezoneOffset': this.currentTimezone.offset,
+                    'http://lumify.io#sourceTimezoneOffsetDst': this.currentTimezone.tzOffset
+                };
+
+                this.select('timezoneSelector').replaceWith(
+                    timezoneTemplate(this.currentTimezone)
+                );
+
             }
-
-            this.currentTimezoneMetadata = {
-                'http://lumify.io#sourceTimezone': this.currentTimezone.name,
-                'http://lumify.io#sourceTimezoneOffset': this.currentTimezone.offset,
-                'http://lumify.io#sourceTimezoneOffsetDst': this.currentTimezone.tzOffset
-            };
-
-            this.select('timezoneSelector').replaceWith(
-                timezoneTemplate(this.currentTimezone)
-            );
 
             this.filterUpdated(
                 this.getValues(),

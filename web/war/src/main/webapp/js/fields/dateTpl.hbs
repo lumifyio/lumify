@@ -30,7 +30,7 @@
   {{else}}
   <tr class="input-append">
 
-    <td class="input-row">
+    <td class="input-row"{{#if displayTime}}colspan="2"{{/if}}>
 
       {{#if displayTime}}
         <div class="controls-row">{{> fields/dateTimeTpl }}</div>
@@ -44,9 +44,11 @@
 
     </td>
 
+    {{#if displayTime}}
     <td class="predicate-row">
        <span class="add-on timezone"></span>
     </td>
+    {{/if}}
 
   </tr>
   {{/if}}

@@ -206,7 +206,7 @@ define([
                         if (ontologyProperty.displayTime) {
                             return F.date.dateTimeString(value);
                         }
-                        return F.date.dateString(value);
+                        return F.date.dateStringUtc(value);
                     }
                     case 'currency':
                     case 'number': return F.number.pretty(value);
