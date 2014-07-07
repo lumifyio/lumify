@@ -38,14 +38,12 @@ define([
             }));
 
             if (sourceTimezone) {
-                F.timezone.init().done(function() {
-                    self.select('sourceTimezoneSelector').html(
-                        F.timezone.dateTimeStringToTimezone(
-                            self.attr.property.value,
-                            sourceTimezone
-                        ) + '<br>' + sourceTimezone
-                    )
-                });
+                this.select('sourceTimezoneSelector').html(
+                    F.timezone.dateTimeStringToTimezone(
+                        self.attr.property.value,
+                        sourceTimezone
+                    ) + '<br>' + sourceTimezone
+                )
             }
 
             this.on('click', {

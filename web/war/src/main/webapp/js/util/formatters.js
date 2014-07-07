@@ -1,9 +1,11 @@
 
 define([
     'sf',
+    'jstz',
+    'timezone-js',
     'jquery',
-    'underscore'
-], function(sf) {
+    'underscore',
+], function(sf, jstz, timezoneJS) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
@@ -31,8 +33,11 @@ define([
                 right: '→',
                 drag: isMac ? (isFirefox ? null : '') : null
             }
-        },
-        jstz, timezoneJS;
+        };
+
+    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.defaultZoneFile = [];
+    timezoneJS.timezone.init();
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
@@ -286,7 +291,11 @@ define([
             },
             dateTimeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.local(millisStr));
+                var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                return sf('{0:yyyy-MM-dd HH:mm}{1}',
+                    FORMATTERS.date.local(millisStr),
+                    tzInfo ? (' ' + tzInfo.tzAbbr) : ''
+                );
             },
             dateStringUtc: function(millisStr) {
                 return FORMATTERS.date.dateString(FORMATTERS.date.utc(millisStr));
@@ -333,40 +342,7 @@ define([
             }
         },
         timezone: {
-            init: function() {
-                if (FORMATTERS.timezone._deferredInit) {
-                    return FORMATTERS.timezone._deferredInit;
-                }
-
-                FORMATTERS.timezone._deferredInit = $.Deferred();
-
-                require(['jstz', 'timezone-js'], function(_jstz, _timezoneJS) {
-                    jstz = _jstz;
-                    timezoneJS = _timezoneJS;
-
-                    timezoneJS.timezone.zoneFileBasePath = '/tz';
-                    timezoneJS.timezone.defaultZoneFile = ['backward', 'northamerica', 'etcetera'];
-
-                    timezoneJS.timezone.init({
-                        callback: function() {
-                            FORMATTERS.timezone._deferredInit.resolve(jstz, timezoneJS);
-                        }
-                    });
-                });
-
-                return FORMATTERS.timezone._deferredInit;
-            },
-            checkInit: function(andThrow) {
-                if (!jstz || !timezoneJS) {
-                    if (andThrow) {
-                        throw new Error('Call F.timezone.init() before using timezone methods');
-                    }
-                    return false;
-                }
-                return true;
-            },
             dateStringToUtc: function(dateStr, timezone) {
-                FORMATTERS.timezone.checkInit(true);
                 if (/^\s*$/.test(dateStr)) {
                     return dateStr;
                 }
@@ -377,7 +353,6 @@ define([
                 return date.toString('yyyy-MM-dd', 'Etc/UTC');
             },
             dateTimeStringToUtc: function(dateStr, timezone) {
-                FORMATTERS.timezone.checkInit(true);
                 if (/^\s*$/.test(dateStr)) {
                     return dateStr;
                 }
@@ -387,16 +362,11 @@ define([
                 var date = new timezoneJS.Date(dateStr, timezone);
                 return date.toString('yyyy-MM-dd HH:mm', 'Etc/UTC');
             },
-            dateStringToTimezone: function(millis, timezone) {
-                FORMATTERS.timezone.checkInit(true);
-            },
             dateTimeStringToTimezone: function(millis, timezone) {
-                FORMATTERS.timezone.checkInit(true);
                 var date = new timezoneJS.Date(millis, timezone);
-                return date.toString('yyyy-MM-dd HH:mm');
+                return date.toString('yyyy-MM-dd HH:mm Z');
             },
             date: function(dateStr, timezone) {
-                FORMATTERS.timezone.checkInit(true);
                 if (/^\s*$/.test(dateStr)) {
                     return dateStr;
                 }
@@ -421,8 +391,6 @@ define([
                 return (negative ? '-' : '+') + hours + ':' + minutes;
             },
             list: function() {
-                FORMATTERS.timezone.checkInit(true);
-
                 return _.chain(jstz.olson.timezones)
                     .map(function(name, key) {
                         var components = key.split(','),
@@ -444,8 +412,6 @@ define([
             },
 
             lookupTimezone: function(name, withOffsetForDate) {
-                FORMATTERS.timezone.checkInit(true);
-
                 var list = FORMATTERS.timezone.list(),
                     tz = list[name],
                     region = timezoneJS.timezone.getRegionForTimezone(name);

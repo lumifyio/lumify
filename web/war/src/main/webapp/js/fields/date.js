@@ -37,10 +37,6 @@ define([
         });
 
         this.after('initialize', function() {
-            F.timezone.init().done(this.init.bind(this));
-        });
-
-        this.init = function() {
             var self = this,
                 value = '',
                 dateString = '',
@@ -130,7 +126,8 @@ define([
             });
 
             this.on('selectTimezone', this.onSelectTimezone);
-        };
+            this.updateTimezone();
+        });
 
         this.onSelectTimezone = function(event, data) {
             if (data.name) {
@@ -150,7 +147,7 @@ define([
                         tz = tz.name;
                     }
                     if (shiftTime) {
-                        var date, inputs = this.$node.find('input');
+                        var inputs = this.$node.find('input');
 
                         if (values && values[0] && inputs.length > 1) {
                             date = F.timezone.date(values[0], 'Etc/UTC');
