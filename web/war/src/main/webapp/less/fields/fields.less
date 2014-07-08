@@ -4,12 +4,14 @@
       width: 100%;
   }
   
-  tr.input-prepend {
+  tr.input-prepend, tr.input-append {
     display: table-row;
   }
 
   .input-row {
     width: 100%;
+    position: relative;
+
     input, .controls-row {
       margin-left: -1px;
     }
@@ -18,6 +20,24 @@
   .predicate-row span {
     width: 100%;    
     text-align: right;
+
+    &.timezone {
+      font-variant: small-caps;
+      text-transform: uppercase;
+      cursor: pointer;
+      .disable-text-selection;
+      &:hover strong:after {
+        display: inline;
+      }
+      strong {
+        font-weight: normal;
+        font-size: 9pt;
+        &:after {
+          content: " " attr(data-display-offset);
+          display: none;
+        }
+      }
+    }
   }
 
   .input-row > *, .predicate-row span {
@@ -36,7 +56,7 @@
         border-bottom-left-radius: 4px;        
       }
     } 
-    .input-prepend {
+    .input-prepend, .input-append {
       position: relative;
     }
   }

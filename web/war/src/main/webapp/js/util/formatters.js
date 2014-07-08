@@ -1,9 +1,11 @@
 
 define([
     'sf',
+    'jstz',
+    'timezone-js',
     'jquery',
-    'underscore'
-], function(sf) {
+    'underscore',
+], function(sf, jstz, timezoneJS) {
     'use strict';
 
     var BITS_FOR_INDEX = 12,
@@ -32,6 +34,10 @@ define([
                 drag: isMac ? (isFirefox ? null : '') : null
             }
         };
+
+    timezoneJS.timezone.zoneFileBasePath = '/tz';
+    timezoneJS.timezone.defaultZoneFile = [];
+    timezoneJS.timezone.init();
 
     function checkIfMac() {
         return ~navigator.userAgent.indexOf('Mac OS X');
@@ -285,7 +291,11 @@ define([
             },
             dateTimeString: function(millisStr) {
                 if (_.isUndefined(millisStr)) return '';
-                return sf('{0:yyyy-MM-dd HH:mm}', FORMATTERS.date.local(millisStr));
+                var tzInfo = FORMATTERS.timezone.currentTimezone(FORMATTERS.date.local(millisStr));
+                return sf('{0:yyyy-MM-dd HH:mm}{1}',
+                    FORMATTERS.date.local(millisStr),
+                    tzInfo ? (' ' + tzInfo.tzAbbr) : ''
+                );
             },
             dateStringUtc: function(millisStr) {
                 return FORMATTERS.date.dateString(FORMATTERS.date.utc(millisStr));
@@ -329,6 +339,104 @@ define([
                 }
 
                 return time + ' ago';
+            }
+        },
+        timezone: {
+            dateStringToUtc: function(dateStr, timezone) {
+                if (/^\s*$/.test(dateStr)) {
+                    return dateStr;
+                }
+                if (isNaN(new Date(dateStr).getTime())) {
+                    return dateStr;
+                }
+                var date = new timezoneJS.Date(dateStr, timezone);
+                return date.toString('yyyy-MM-dd', 'Etc/UTC');
+            },
+            dateTimeStringToUtc: function(dateStr, timezone) {
+                if (/^\s*$/.test(dateStr)) {
+                    return dateStr;
+                }
+                if (isNaN(new Date(dateStr).getTime())) {
+                    return dateStr;
+                }
+                var date = new timezoneJS.Date(dateStr, timezone);
+                return date.toString('yyyy-MM-dd HH:mm', 'Etc/UTC');
+            },
+            dateTimeStringToTimezone: function(millis, timezone) {
+                var date = new timezoneJS.Date(millis, timezone);
+                return date.toString('yyyy-MM-dd HH:mm Z');
+            },
+            date: function(dateStr, timezone) {
+                if (/^\s*$/.test(dateStr)) {
+                    return dateStr;
+                }
+                if (isNaN(new Date(dateStr).getTime())) {
+                    return dateStr;
+                }
+                return new timezoneJS.Date(dateStr, timezone);
+            },
+            offsetDisplay: function(offsetMinutes) {
+                var negative = offsetMinutes < 0,
+                    offsetMinutesAbs = Math.abs(offsetMinutes),
+                    hours = Math.floor(offsetMinutesAbs / 60),
+                    minutes = Math.floor(offsetMinutesAbs % 60);
+
+                if (('' + hours).length === 1) {
+                    hours = '0' + hours;
+                }
+                if (('' + minutes).length === 1) {
+                    minutes = '0' + minutes;
+                }
+
+                return (negative ? '-' : '+') + hours + ':' + minutes;
+            },
+            list: function() {
+                return _.chain(jstz.olson.timezones)
+                    .map(function(name, key) {
+                        var components = key.split(','),
+                            offsetMinutes = parseInt(components[0], 10),
+                            dst = components.length > 1 && components[1] === '1';
+
+                        return [
+                            name,
+                            {
+                                offset: offsetMinutes,
+                                offsetDisplay: FORMATTERS.timezone.offsetDisplay(offsetMinutes),
+                                name: name,
+                                dst: dst
+                            }
+                        ];
+                    })
+                    .object()
+                    .value();
+            },
+
+            lookupTimezone: function(name, withOffsetForDate) {
+                var list = FORMATTERS.timezone.list(),
+                    tz = list[name],
+                    region = timezoneJS.timezone.getRegionForTimezone(name);
+
+                timezoneJS.timezone.loadZoneFile(region, { async: false });
+
+                if (withOffsetForDate && withOffsetForDate.getTime) {
+                    withOffsetForDate = withOffsetForDate.getTime();
+                }
+
+                if (!withOffsetForDate || isNaN(withOffsetForDate)) {
+                    withOffsetForDate = Date.now();
+                }
+
+                var tzInfo = timezoneJS.timezone.getTzInfo(withOffsetForDate, name)
+
+                // Returns opposite of what we want
+                tzInfo.tzOffset *= -1;
+                tzInfo.tzOffsetDisplay = FORMATTERS.timezone.offsetDisplay(tzInfo.tzOffset);
+
+                return $.extend({}, tz, tzInfo);
+            },
+
+            currentTimezone: function(withOffsetForDate) {
+                return FORMATTERS.timezone.lookupTimezone(jstz.determine().name());
             }
         }
     };

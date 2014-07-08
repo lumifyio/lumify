@@ -9,7 +9,7 @@ define([
     'promise!util/service/ontologyPromise',
     'util/video/scrubber',
     'util/vertex/formatters',
-    'util/popovers/withVertexScrollingPositionUpdates',
+    'util/popovers/withElementScrollingPositionUpdates',
     'util/jquery.withinScrollable',
     'util/jquery.ui.draggable.multiselect'
 ], function(

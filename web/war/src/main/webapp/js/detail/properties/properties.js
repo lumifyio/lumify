@@ -386,7 +386,8 @@ define([
                         data.property.value,
                         data.property.visibilitySource,
                         data.property.justificationText,
-                        data.property.sourceInfo)
+                        data.property.sourceInfo,
+                        data.property.metadata)
                     .fail(this.requestFailure.bind(this))
                     .done(done);
             }
@@ -655,6 +656,7 @@ define([
                     _.findWhere(properties, {name: visibilityJsonName}) || {},
                     'http://lumify.io#modifiedBy',
                     'http://lumify.io#modifiedDate',
+                    'http://lumify.io#sourceTimezone',
                     'http://lumify.io#confidence'
                 )
             };
@@ -710,6 +712,7 @@ define([
                         '_sourceMetadata',
                         'http://lumify.io#modifiedBy',
                         'http://lumify.io#modifiedDate',
+                        'http://lumify.io#sourceTimezone',
                         'http://lumify.io#confidence',
                         'sandboxStatus'
                     )

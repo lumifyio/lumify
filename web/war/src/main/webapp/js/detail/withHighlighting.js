@@ -8,7 +8,7 @@ define([
     'service/vertex',
     'service/ontology',
     'util/vertex/formatters',
-    'util/popovers/withVertexScrollingPositionUpdates',
+    'util/popovers/withElementScrollingPositionUpdates',
     'util/range',
     'util/jquery.withinScrollable'
 ], function(

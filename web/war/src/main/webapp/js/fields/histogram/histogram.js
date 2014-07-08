@@ -107,7 +107,13 @@ define([
 
                 isDateTime = this.attr.property.displayTime === true,
 
-                values = this.values = vals,
+                values = this.values = (
+                    isDate && !isDateTime ?
+                        _.map(vals, function(v) {
+                            return v + (new Date(v).getTimezoneOffset() * 60000);
+                        }) :
+                        vals
+                ),
 
                 width = this.width = this.$node.scrollParent().width() - margin.left - margin.right,
                 height = this.height = HEIGHT - margin.top - margin.bottom,
@@ -257,7 +263,7 @@ define([
                     });
 
             if (isDate) {
-                xAxis.tickFormat(d3.time.format.multi([
+                xAxis.tickFormat(d3.time.format.utc.multi([
                     ['.%L', function(d) {
                         return d.getMilliseconds();
                     }],
