@@ -16,6 +16,7 @@
 
     <modules>
         <module>jetty-server</module>
+        <module>storm-local</module>
     </modules>
 
 </project>

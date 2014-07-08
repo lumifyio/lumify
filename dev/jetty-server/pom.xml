@@ -11,7 +11,7 @@
 
     <artifactId>lumify-dev-jetty-server</artifactId>
     <name>Lumify: Dev: Jetty Server</name>
-    <description>This project is only here to create a good classpath with the enterprise plugins for your IDE</description>
+    <description>This project is only here to create a good classpath with the plugins for your IDE</description>
 
     <dependencies>
         <dependency>
