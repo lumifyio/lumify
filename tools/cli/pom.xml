@@ -25,6 +25,11 @@
             <artifactId>lumify-user-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-format</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

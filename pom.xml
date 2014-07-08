@@ -41,6 +41,7 @@
         <module>storm</module>
         <module>tools</module>
         <module>web</module>
+        <module>dev</module>
     </modules>
 
     <build>
