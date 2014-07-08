@@ -17,6 +17,10 @@ import static org.securegraph.util.Preconditions.checkNotNull;
 
 public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(MimeTypeOntologyMapperGraphPropertyWorker.class);
+    public static final String CONFIG_ONTOLOGY_IRI_IMAGE = "ontology.iri.image";
+    public static final String CONFIG_ONTOLOGY_IRI_AUDIO = "ontology.iri.audio";
+    public static final String CONFIG_ONTOLOGY_IRI_VIDEO = "ontology.iri.video";
+    public static final String CONFIG_ONTOLOGY_IRI_DOCUMENT = "ontology.iri.document";
     private Concept imageConcept;
     private Concept audioConcept;
     private Concept videoConcept;
@@ -26,28 +30,28 @@ public class MimeTypeOntologyMapperGraphPropertyWorker extends GraphPropertyWork
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         super.prepare(workerPrepareData);
 
-        String imageIri = getConfiguration().get("ontology.iri.image");
+        String imageIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_IMAGE);
         if (imageIri != null) {
             imageConcept = getOntologyRepository().getConceptByIRI(imageIri);
-            checkNotNull(imageConcept, "Could not find concept " + imageIri);
+            checkNotNull(imageConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_IMAGE + ")" + imageIri);
         }
 
-        String audioIri = getConfiguration().get("ontology.iri.audio");
+        String audioIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_AUDIO);
         if (audioIri != null) {
             audioConcept = getOntologyRepository().getConceptByIRI(audioIri);
-            checkNotNull(audioConcept, "Could not find concept " + audioIri);
+            checkNotNull(audioConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_AUDIO + ")" + audioIri);
         }
 
-        String videoIri = getConfiguration().get("ontology.iri.video");
+        String videoIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_VIDEO);
         if (videoIri != null) {
             videoConcept = getOntologyRepository().getConceptByIRI(videoIri);
-            checkNotNull(videoConcept, "Could not find concept " + videoIri);
+            checkNotNull(videoConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_VIDEO + ")" + videoIri);
         }
 
-        String documentIri = getConfiguration().get("ontology.iri.document");
+        String documentIri = getConfiguration().get(CONFIG_ONTOLOGY_IRI_DOCUMENT);
         if (documentIri != null) {
             documentConcept = getOntologyRepository().getConceptByIRI(documentIri);
-            checkNotNull(documentConcept, "Could not find concept " + documentIri);
+            checkNotNull(documentConcept, "Could not find concept (" + CONFIG_ONTOLOGY_IRI_DOCUMENT + ")" + documentIri);
         }
     }
 

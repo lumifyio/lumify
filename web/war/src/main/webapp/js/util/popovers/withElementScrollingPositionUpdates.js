@@ -1,9 +1,9 @@
 
 define([], function() {
 
-    return withVertexScrollingPositionUpdates;
+    return withElementScrollingPositionUpdates;
 
-    function withVertexScrollingPositionUpdates() {
+    function withElementScrollingPositionUpdates() {
 
         this.before('teardown', function() {
             this.removePositionUpdating();
@@ -16,21 +16,26 @@ define([], function() {
 
         this.onRegisterForPositionChanges = function(event, data) {
 
-            if (!data || !data.vertexId) {
-                return console.error('Registering for position events requires a vertexId');
-            }
-
             event.stopPropagation();
 
             var self = this,
                 $target = $(event.target),
-                scroller = $target.scrollParent(),
+                scroller = data && data.scrollSelector ?
+                    $target.closest(data.scrollSelector) :
+                    $target.scrollParent(),
                 sendPositionChange = function() {
-                    var position = $target.offset();
+                    var position = $target.offset(),
+                        width = $target.outerWidth(),
+                        height = $target.outerHeight();
+
                     self.trigger(event.target, 'positionChanged', {
                         position: {
-                            x: position.left + $target.outerWidth(true) / 2,
-                            y: position.top + $target.outerHeight(true) / 2
+                            x: position.left + width / 2,
+                            y: position.top + height / 2,
+                            xMin: position.left,
+                            xMax: position.left + width,
+                            yMin: position.top,
+                            yMax: position.top + height
                         }
                     })
                 };

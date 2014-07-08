@@ -1,8 +1,7 @@
 define([
     'service/serviceBase',
-    'promise!util/service/ontologyPromise',
     'util/formatters'
-], function(ServiceBase, ontology, F) {
+], function(ServiceBase, F) {
     'use strict';
 
     function RelationshipService() {
@@ -14,14 +13,6 @@ define([
 
     RelationshipService.prototype.setProperty = function(propertyName, value, visibilitySource, justificationText,
         sourceInfo, sourceId, destId, id) {
-        var ontologyProperty = ontology.propertiesByTitle[propertyName];
-        if (ontologyProperty && ontologyProperty.dataType === 'date') {
-            if (ontologyProperty.displayTime) {
-                value = F.date.dateTimeStringUtc(value)
-            } else {
-                value = F.date.dateStringUtc(value);
-            }
-        }
         return this._ajaxPost({
             url: 'relationship/property/set',
             data: {

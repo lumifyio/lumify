@@ -62,6 +62,7 @@ define(['util/withTeardown'], function(withTeardown) {
                         propertyId: this.attr.property.title,
                         values: values,
                         predicate: predicate,
+                        metadata: options && options.metadata,
                         options: options
                     });
                 }

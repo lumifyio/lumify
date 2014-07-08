@@ -1,8 +1,7 @@
 define([
     'service/serviceBase',
-    'promise!util/service/ontologyPromise',
     'util/formatters'
-], function(ServiceBase, ontology, F) {
+], function(ServiceBase, F) {
     'use strict';
 
     function VertexService() {
@@ -19,16 +18,9 @@ define([
         value,
         visibilitySource,
         justificationText,
-        sourceInfo
+        sourceInfo,
+        metadata
     ) {
-        var ontologyProperty = ontology.propertiesByTitle[propertyName];
-        if (ontologyProperty && ontologyProperty.dataType === 'date') {
-            if (ontologyProperty.displayTime) {
-                value = F.date.dateTimeStringUtc(value)
-            } else {
-                value = F.date.dateStringUtc(value);
-            }
-        }
         return this._ajaxPost({
             url: 'vertex/property/set',
             data: _.tap({
@@ -41,6 +33,9 @@ define([
             }, function(o) {
                 if (propertyKey) {
                     o.propertyKey = propertyKey
+                }
+                if (metadata) {
+                    o.metadata = JSON.stringify(metadata)
                 }
             })
         });

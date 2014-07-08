@@ -1,7 +1,9 @@
 package io.lumify.core.cmdline;
 
-import io.lumify.core.model.ontology.OntologyRepository;
 import com.google.inject.Inject;
+import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -11,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public class OwlExport extends CommandLineBase {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OwlExport.class);
     private OntologyRepository ontologyRepository;
     private String outFileName;
     private IRI documentIRI;
@@ -65,6 +68,7 @@ public class OwlExport extends CommandLineBase {
         }
         try {
             ontologyRepository.exportOntology(out, this.documentIRI);
+            LOGGER.info("owl export complete");
             return 0;
         } finally {
             out.close();
