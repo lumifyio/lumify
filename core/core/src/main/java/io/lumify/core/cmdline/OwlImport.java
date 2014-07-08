@@ -2,6 +2,8 @@ package io.lumify.core.cmdline;
 
 import com.google.inject.Inject;
 import io.lumify.core.model.ontology.OntologyRepository;
+import io.lumify.core.util.LumifyLogger;
+import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -10,6 +12,7 @@ import org.semanticweb.owlapi.model.IRI;
 import java.io.File;
 
 public class OwlImport extends CommandLineBase {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OwlImport.class);
     private OntologyRepository ontologyRepository;
     private String inFileName;
     private String documentIRIString;
@@ -62,6 +65,7 @@ public class OwlImport extends CommandLineBase {
         ontologyRepository.importFile(inFile, documentIRI, getAuthorizations());
         getGraph().flush();
         ontologyRepository.clearCache();
+        LOGGER.info("owl import complete");
         return 0;
     }
 
