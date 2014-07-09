@@ -9,14 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lumify-dev-jetty-server</artifactId>
-    <name>Lumify: Dev: Jetty Server</name>
+    <artifactId>lumify-dev-tomcat-server</artifactId>
+
+    <name>Lumify: Dev: Tomcat Server</name>
     <description>This project is only here to create a good classpath with the plugins for your IDE</description>
 
     <dependencies>
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-jetty-server</artifactId>
+            <artifactId>lumify-tomcat-server</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

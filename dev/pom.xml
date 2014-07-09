@@ -17,6 +17,7 @@
     <modules>
         <module>jetty-server</module>
         <module>storm-local</module>
+        <module>tomcat-server</module>
     </modules>
 
 </project>
