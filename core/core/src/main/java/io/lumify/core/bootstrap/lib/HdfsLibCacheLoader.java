@@ -1,6 +1,5 @@
 package io.lumify.core.bootstrap.lib;
 
-import com.google.common.io.Files;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.util.LumifyLogger;
@@ -39,7 +38,8 @@ public class HdfsLibCacheLoader extends LibLoader {
         }
 
         if (hdfsLibCacheTempDirectory == null) {
-            hdfsLibCacheTempDirectory = Files.createTempDir();
+            File baseDir = new File(System.getProperty("java.io.tmpdir"));
+            hdfsLibCacheTempDirectory = new File(baseDir, "lumify-hdfslibcache");
         }
 
         FileSystem hdfsFileSystem = getFileSystem(configuration);
