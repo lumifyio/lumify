@@ -165,8 +165,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             Boolean displayTime,
             Double boost) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
-        ((InMemoryConcept) concept).getProperties().add(property);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, boost);
+        concept.getProperties().add(property);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
@@ -185,7 +185,6 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             final PropertyType dataType,
             final String displayName,
             ArrayList<PossibleValueType> possibleValues,
-            Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
