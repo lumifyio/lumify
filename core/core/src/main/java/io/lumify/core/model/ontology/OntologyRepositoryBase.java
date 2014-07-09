@@ -34,8 +34,8 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
 
     public void defineOntology(Authorizations authorizations) {
-        Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
-        Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
+        Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root", null);
+        Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing", null);
         addEntityGlyphIcon(entityConcept);
         importBaseOwlFile(authorizations);
     }
@@ -195,7 +195,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         LOGGER.info("Importing ontology class " + uri + " (label: " + label + ")");
 
         Concept parent = getParentConcept(o, ontologyClass, inDir, authorizations);
-        Concept result = getOrCreateConcept(parent, uri, label);
+        Concept result = getOrCreateConcept(parent, uri, label, inDir);
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
@@ -234,7 +234,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return result;
     }
 
-    private void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
+    protected void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
             if (!iconFile.exists()) {

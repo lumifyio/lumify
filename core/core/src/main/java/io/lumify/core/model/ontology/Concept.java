@@ -114,4 +114,6 @@ public abstract class Concept {
     public abstract byte[] getGlyphIcon();
 
     public abstract byte[] getMapGlyphIcon();
+
+    public abstract String getIRI();
 }

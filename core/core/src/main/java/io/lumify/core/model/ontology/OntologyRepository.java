@@ -47,7 +47,7 @@ public interface OntologyRepository {
 
     List<Concept> getAllLeafNodesByConcept(Concept concept);
 
-    Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName);
+    Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
     Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
 

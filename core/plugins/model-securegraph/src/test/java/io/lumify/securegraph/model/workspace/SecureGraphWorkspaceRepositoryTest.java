@@ -88,7 +88,7 @@ public class SecureGraphWorkspaceRepositoryTest {
 
         when(ontologyRepository.getConceptByIRI(eq(OntologyRepository.ROOT_CONCEPT_IRI))).thenReturn(rootConcept);
 
-        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString())).thenReturn(workspaceConcept);
+        when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(WorkspaceRepository.WORKSPACE_CONCEPT_NAME), anyString(), null)).thenReturn(workspaceConcept);
         when(workspaceConcept.getTitle()).thenReturn(WorkspaceRepository.WORKSPACE_CONCEPT_NAME);
 
         when(workspaceToEntityRelationship.getIRI()).thenReturn("workspaceToEntityRelationshipId");

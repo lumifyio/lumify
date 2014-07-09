@@ -1,6 +1,7 @@
 package io.lumify.core.model.ontology;
 
 import io.lumify.core.exception.LumifyException;
+import io.lumify.core.model.properties.LumifyProperties;
 import org.securegraph.Authorizations;
 
 import java.util.ArrayList;
@@ -13,14 +14,19 @@ public class InMemoryConcept extends Concept {
     private String titleFormula;
     private String subtitleFormula;
     private String timeFormula;
-    private boolean glyphIconResource;
     private String conceptIRI;
     private byte[] glyphIcon;
+    private byte[] mapGlyphIcon;
     private boolean userVisible;
 
     protected InMemoryConcept(String conceptIRI, String parentIRI) {
         super(parentIRI, new ArrayList<OntologyProperty>());
         this.conceptIRI = conceptIRI;
+    }
+
+    @Override
+    public String getIRI() {
+        return this.conceptIRI;
     }
 
     @Override
@@ -30,7 +36,7 @@ public class InMemoryConcept extends Concept {
 
     @Override
     public boolean hasGlyphIconResource() {
-        return glyphIconResource;
+        return glyphIcon != null;
     }
 
     @Override
@@ -82,6 +88,14 @@ public class InMemoryConcept extends Concept {
             this.timeFormula = (String) value;
         } else if (OntologyLumifyProperties.USER_VISIBLE.getPropertyName().equals(name)) {
             this.userVisible = (Boolean) value;
+        } else if (LumifyProperties.GLYPH_ICON.getPropertyName().equals(name)) {
+            this.glyphIcon = (byte[]) value;
+        } else if (LumifyProperties.MAP_GLYPH_ICON.getPropertyName().equals(name)) {
+            this.mapGlyphIcon = (byte[]) value;
+        } else if (LumifyProperties.TITLE.getPropertyName().equals(name)) {
+            this.title = (String) value;
+        } else if (LumifyProperties.DISPLAY_NAME.getPropertyName().equals(name)) {
+            this.displayName = (String) value;
         } else {
             throw new LumifyException("Set not implemented for property " + name);
         }
@@ -105,52 +119,12 @@ public class InMemoryConcept extends Concept {
         return glyphIcon;
     }
 
-    public void setHasGlyphIcon(boolean hasGlyphIcon) {
-        glyphIconResource = hasGlyphIcon;
-    }
-
-    public void setGlyphIcon(byte[] inputStream) {
-        this.glyphIcon = inputStream;
-    }
-
     @Override
     public byte[] getMapGlyphIcon() {
-        return null;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public void setDisplayType(String displayType) {
-        this.displayType = displayType;
-    }
-
-    public void setTitleFormula(String titleFormula) {
-        this.titleFormula = titleFormula;
-    }
-
-    public void setUserVisible(boolean userVisible) {
-        this.userVisible = userVisible;
+        return mapGlyphIcon;
     }
 
     public String getConceptIRI() {
         return conceptIRI;
-    }
-
-    public void setSubtitleFormula(String subtitleFormula) {
-        this.subtitleFormula = subtitleFormula;
-    }
-
-    public void setTimeFormula(String timeFormula) {
-        this.timeFormula = timeFormula;
     }
 }

@@ -349,7 +349,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
+    public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir) {
         Concept concept = getConceptByIRI(conceptIRI);
         if (concept != null) {
             return concept;

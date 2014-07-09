@@ -27,6 +27,11 @@ public class SecureGraphConcept extends Concept {
     }
 
     @Override
+    public String getIRI() {
+        return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
+    }
+
+    @Override
     public String getTitle() {
         return OntologyLumifyProperties.ONTOLOGY_TITLE.getPropertyValue(vertex);
     }
