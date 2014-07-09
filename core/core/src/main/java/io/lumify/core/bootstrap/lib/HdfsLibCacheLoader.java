@@ -50,8 +50,6 @@ public class HdfsLibCacheLoader extends LibLoader {
         } catch (Exception ex) {
             throw new LumifyException(String.format("Could not sync HDFS libcache. %s -> %s", hdfsLibCacheDirectory, libCacheDirectory.getAbsolutePath()), ex);
         }
-
-        addLibDirectory(libCacheDirectory);
     }
 
     private File ensureLocalLibCacheDirectory() {
@@ -103,6 +101,8 @@ public class HdfsLibCacheLoader extends LibLoader {
             if (!tempLocalFile.renameTo(newLocalFile)) {
                 throw new LumifyException("Could not move file " + tempLocalFile + " to " + newLocalFile);
             }
+
+            addLibFile(newLocalFile);
         }
     }
 
