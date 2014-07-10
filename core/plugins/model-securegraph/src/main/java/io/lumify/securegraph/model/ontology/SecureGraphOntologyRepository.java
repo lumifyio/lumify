@@ -482,7 +482,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }
-            POSSIBLE_VALUES.setProperty(builder, possibleValues, VISIBILITY.getVisibility());
+            if (possibleValues != null) {
+                POSSIBLE_VALUES.setProperty(builder, possibleValues, VISIBILITY.getVisibility());
+            }
             typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();
         }
