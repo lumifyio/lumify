@@ -8,6 +8,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -65,11 +66,12 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), outJson.toString(2));
 
         JSONObject formatJson = outJson.optJSONObject("format");
-
         Double duration = null;
         if (formatJson != null) {
             duration = formatJson.optDouble("duration");
         }
+
+        Integer cwRotationNeeded = extractRotationFromJSON(outJson);
 
         Map<String, Object> metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
@@ -85,6 +87,19 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (duration != null) {
             getWorkQueueRepository().pushGraphPropertyQueue(data.getElement(), PROPERTY_KEY, durationIri);
         }
+    }
+
+    private static Integer extractRotationFromJSON(JSONObject json) {
+        Integer rotate = null;
+        try {
+            JSONArray streamsJson = json.optJSONArray("streams");
+            JSONObject streamsIndex0Json = streamsJson.optJSONObject(0);
+            JSONObject tagsJson = streamsIndex0Json.optJSONObject("tags");
+            rotate = tagsJson.optInt("rotate");
+        } catch (NullPointerException e) {
+            LOGGER.info("Could not retrieve a \"rotate\" value from the JSON object.");
+        }
+        return rotate;
     }
 
     @Override
@@ -109,7 +124,6 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (mimeType.startsWith("audio") && audioDurationIri == null) {
             return false;
         }
-
         return true;
     }
 
