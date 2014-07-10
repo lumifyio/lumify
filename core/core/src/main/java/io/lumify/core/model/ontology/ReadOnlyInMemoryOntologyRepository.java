@@ -9,6 +9,7 @@ import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -140,7 +141,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -166,7 +167,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
@@ -183,9 +184,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
-            if (possibleValues.size() > 0) {
-                property.setPossibleValues(possibleValues);
-            }
+            property.setPossibleValues(possibleValues);
             propertiesCache.put(propertyName, property);
         }
         return property;

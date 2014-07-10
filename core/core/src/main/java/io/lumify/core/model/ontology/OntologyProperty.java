@@ -9,7 +9,6 @@ import org.securegraph.type.GeoPoint;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +38,7 @@ public abstract class OntologyProperty {
 
     public abstract Double getBoost();
 
-    public abstract List<PossibleValueType> getPossibleValues();
+    public abstract JSONObject getPossibleValues();
 
     public static JSONArray toJsonProperties(Iterable<OntologyProperty> properties) {
         JSONArray json = new JSONArray();
@@ -60,15 +59,8 @@ public abstract class OntologyProperty {
             json.put("userVisible", getUserVisible());
             json.put("searchable", getSearchable());
             json.put("dataType", getDataType().toString());
-            if (getPossibleValues() != null && getPossibleValues().size() > 0) {
-                JSONArray possibleValues = new JSONArray();
-                for (PossibleValueType possibleValueProperty : getPossibleValues()) {
-                    JSONObject possibleValue = new JSONObject();
-                    possibleValue.put("key", possibleValueProperty.getKey());
-                    possibleValue.put("value", possibleValueProperty.getValue());
-                    possibleValues.put(possibleValue);
-                }
-                json.put("possibleValues", possibleValues);
+            if (getPossibleValues() != null) {
+                json.put("possibleValues", getPossibleValues());
             }
             return json;
         } catch (JSONException e) {

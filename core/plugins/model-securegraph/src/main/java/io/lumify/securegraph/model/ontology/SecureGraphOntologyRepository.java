@@ -12,7 +12,7 @@ import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.TimingCallable;
-import org.apache.commons.lang.SerializationUtils;
+import org.json.JSONObject;
 import org.securegraph.*;
 import org.securegraph.property.StreamingPropertyValue;
 import org.securegraph.util.ConvertingIterable;
@@ -394,7 +394,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -445,7 +445,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -460,7 +460,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             if (boost != null) {
                 if (graph.isFieldBoostSupported()) {
-                    definePropertyBuilder.boost(boost.doubleValue());
+                    definePropertyBuilder.boost(boost);
                 } else {
                     LOGGER.warn("Field boosting is not support by the graph");
                 }
@@ -482,9 +482,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             if (displayName != null && !displayName.trim().isEmpty()) {
                 DISPLAY_NAME.setProperty(builder, displayName.trim(), VISIBILITY.getVisibility());
             }
-            if (possibleValues.size() > 0) {
-                POSSIBLE_VALUES.setProperty(builder, SerializationUtils.serialize(possibleValues), VISIBILITY.getVisibility());
-            }
+            POSSIBLE_VALUES.setProperty(builder, possibleValues, VISIBILITY.getVisibility());
             typeProperty = new SecureGraphOntologyProperty(builder.save(getAuthorizations()));
             graph.flush();
         }

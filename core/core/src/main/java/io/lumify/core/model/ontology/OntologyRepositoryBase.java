@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
@@ -295,7 +294,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
 
-            ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
+            JSONObject possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
             addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         }
@@ -306,7 +305,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -495,28 +494,16 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
     }
 
-    protected ArrayList<PossibleValueType> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValuesByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getPropertyName());
+    protected JSONObject getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getPropertyName());
+        if (val == null || val.trim().length() == 0) {
+            return null;
+        }
+        return new JSONObject(val);
     }
 
     protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {
         return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
-    }
-
-    protected ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
-        ArrayList<PossibleValueType> possibleValueTypes = new ArrayList<PossibleValueType>();
-        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
-            if (annotation.getProperty().getIRI().toString().equals(uri)) {
-                OWLLiteral value = (OWLLiteral) annotation.getValue();
-                String[] possibleValues = value.getLiteral().split(",");
-                for (String possibleValue : possibleValues) {
-                    String[] parsedValue = possibleValue.split(":");
-                    checkArgument(parsedValue.length == 2, "Possible values must be in the format mapping:value");
-                    possibleValueTypes.add(new PossibleValueType(parsedValue[0], parsedValue[1]));
-                }
-            }
-        }
-        return possibleValueTypes;
     }
 
     private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
