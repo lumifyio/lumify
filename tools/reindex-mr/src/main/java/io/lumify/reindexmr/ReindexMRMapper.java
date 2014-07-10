@@ -7,7 +7,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.securegraph.Authorizations;
 import org.securegraph.Element;
 import org.securegraph.GraphFactory;
-import org.securegraph.Vertex;
 import org.securegraph.accumulo.AccumuloAuthorizations;
 import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.mapreduce.SecureGraphMRUtils;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
+public class ReindexMRMapper extends Mapper<String, Element, Object, Element> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ReindexMRMapper.class);
     private static final int BATCH_SIZE = 100;
     private AccumuloGraph graph;
@@ -54,9 +53,9 @@ public class ReindexMRMapper extends Mapper<String, Vertex, Object, Vertex> {
     }
 
     @Override
-    protected void map(String rowKey, Vertex vertex, Context context) throws IOException, InterruptedException {
-        context.setStatus("Vertex Id: " + vertex.getId());
-        elementCache.add(vertex);
+    protected void map(String rowKey, Element element, Context context) throws IOException, InterruptedException {
+        context.setStatus("Element Id: " + element.getId());
+        elementCache.add(element);
         if (elementCache.size() >= BATCH_SIZE) {
             writeCache();
         }

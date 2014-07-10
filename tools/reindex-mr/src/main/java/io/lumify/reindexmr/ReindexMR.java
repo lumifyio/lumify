@@ -19,6 +19,7 @@ import org.apache.hadoop.util.ToolRunner;
 import org.securegraph.Graph;
 import org.securegraph.accumulo.AccumuloGraph;
 import org.securegraph.accumulo.AccumuloGraphConfiguration;
+import org.securegraph.accumulo.mapreduce.AccumuloEdgeInputFormat;
 import org.securegraph.accumulo.mapreduce.AccumuloVertexInputFormat;
 import org.securegraph.accumulo.mapreduce.ElementMapper;
 
@@ -38,8 +39,6 @@ public class ReindexMR extends Configured implements Tool {
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
 
-        Job job = new Job(conf, "lumifyReindex");
-
         String[] authorizations = new String[]{
                 LumifyVisibility.SUPER_USER_VISIBILITY_STRING,
                 OntologyRepository.VISIBILITY_STRING,
@@ -50,14 +49,24 @@ public class ReindexMR extends Configured implements Tool {
         String zooKeepers = accumuloGraphConfiguration.getZookeeperServers();
         String principal = accumuloGraphConfiguration.getAccumuloUsername();
         AuthenticationToken authorizationToken = accumuloGraphConfiguration.getAuthenticationToken();
-        AccumuloVertexInputFormat.setInputInfo(job, graph, instanceName, zooKeepers, principal, authorizationToken, authorizations);
 
-        job.setJarByClass(ReindexMR.class);
-        job.setMapperClass(ReindexMRMapper.class);
-        job.setInputFormatClass(AccumuloVertexInputFormat.class);
-        job.setOutputFormatClass(NullOutputFormat.class);
-        job.setNumReduceTasks(0);
-        return job.waitForCompletion(true) ? 0 : 1;
+        Job jobVertices = new Job(conf, "lumifyReindex-vertices");
+        AccumuloVertexInputFormat.setInputInfo(jobVertices, graph, instanceName, zooKeepers, principal, authorizationToken, authorizations);
+        jobVertices.setJarByClass(ReindexMR.class);
+        jobVertices.setMapperClass(ReindexMRMapper.class);
+        jobVertices.setOutputFormatClass(NullOutputFormat.class);
+        jobVertices.setInputFormatClass(AccumuloVertexInputFormat.class);
+        jobVertices.setNumReduceTasks(0);
+
+        Job jobEdges = new Job(conf, "lumifyReindex-edges");
+        AccumuloEdgeInputFormat.setInputInfo(jobEdges, graph, instanceName, zooKeepers, principal, authorizationToken, authorizations);
+        jobEdges.setJarByClass(ReindexMR.class);
+        jobEdges.setMapperClass(ReindexMRMapper.class);
+        jobEdges.setOutputFormatClass(NullOutputFormat.class);
+        jobEdges.setInputFormatClass(AccumuloEdgeInputFormat.class);
+        jobEdges.setNumReduceTasks(0);
+
+        return (jobVertices.waitForCompletion(true) && jobEdges.waitForCompletion(true)) ? 0 : 1;
     }
 
     private Configuration getConfiguration(String[] args, io.lumify.core.config.Configuration lumifyConfig) {
