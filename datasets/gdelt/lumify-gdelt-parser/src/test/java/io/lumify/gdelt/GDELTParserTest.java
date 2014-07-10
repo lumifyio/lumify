@@ -60,5 +60,13 @@ public class GDELTParserTest {
         assertEquals(1, event.getNumSources());
         assertEquals(5, event.getNumArticles());
         assertEquals(2.24358974358974, event.getAverageTone(), 0.01);
+
+        assertEquals(5, event.getActor1GeoType());
+        assertEquals("Staffordshire, Staffordshire, United Kingdom", event.getActor1GeoFullName());
+        assertEquals("UK", event.getActor1GeoCountryCode());
+        assertEquals("UKM9", event.getActor1GeoADM1Code());
+        assertEquals(52.8333, event.getActor1GeoLatitude(), 0.01);
+        assertEquals(-2, event.getActor1GeoLongitude(), 0.01);
+        assertEquals(-2608511, event.getActor1GeoFeatureId());
     }
 }
