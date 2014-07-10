@@ -36,11 +36,12 @@ import static org.securegraph.util.IterableUtils.*;
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphOntologyRepository.class);
+    public static final String ID_PREFIX = "ontology_";
+    public static final String ID_PREFIX_PROPERTY = ID_PREFIX + "prop_";
+    public static final String ID_PREFIX_RELATIONSHIP = ID_PREFIX + "rel_";
+    public static final String ID_PREFIX_CONCEPT = ID_PREFIX + "concept_";
     private Graph graph;
     private Authorizations authorizations;
-    private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
-            .build();
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
@@ -76,7 +77,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         graph.flush();
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
-        this.conceptsCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();
     }
 
@@ -153,10 +153,14 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
-                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
+                            Vertex sourceVertex = single(vertex.getVertices(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations()));
+                            String sourceConceptIRI = ONTOLOGY_TITLE.getPropertyValue(sourceVertex);
+
+                            Vertex destVertex = single(vertex.getVertices(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations()));
+                            String destConceptIRI = ONTOLOGY_TITLE.getPropertyValue(destVertex);
+
                             final List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(vertex);
-                            return new SecureGraphRelationship(vertex, sourceVertexId, destVertexId, inverseOfIRIs);
+                            return new SecureGraphRelationship(vertex, sourceConceptIRI, destConceptIRI, inverseOfIRIs);
                         }
                     });
                 }
@@ -364,7 +368,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_CONCEPT + conceptIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
@@ -394,7 +398,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         if (matchingEdges.size() > 0) {
             return;
         }
-        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
+        String edgeId = fromVertex.getId() + "-" + toVertex.getId();
+        fromVertex.getGraph().addEdge(edgeId, fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
     }
 
     @Override
@@ -410,7 +415,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Boolean displayTime,
             Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
+        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -435,7 +440,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + from.getIRI() + "-" + to.getIRI(), VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
@@ -451,6 +456,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getOrCreatePropertyType(
+            final Concept concept,
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
@@ -476,7 +482,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
+            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + concept.getIRI() + "_" + propertyName, VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
