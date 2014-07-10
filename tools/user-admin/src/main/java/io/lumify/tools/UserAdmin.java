@@ -306,7 +306,14 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private String privilegesAsString(Set<Privilege> privileges) {
-        return privileges.toString().replaceAll(" ", "");
+        SortedSet<Privilege> sortedPrivileges = new TreeSet<Privilege>(new Comparator<Privilege>() {
+            @Override
+            public int compare(Privilege p1, Privilege p2) {
+                return p1.ordinal() - p2.ordinal();
+            }
+        });
+        sortedPrivileges.addAll(privileges);
+        return sortedPrivileges.toString().replaceAll(" ", "");
     }
 
     private String authorizationsAsString(Authorizations authorizations) {
