@@ -25,8 +25,10 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
     private ProcessRunner processRunner;
     private static final String AUDIO_DURATION_IRI = "ontology.iri.audioDuration";
     private static final String VIDEO_DURATION_IRI = "ontology.iri.videoDuration";
+    private static final String VIDEO_ROTATION_IRI = "ontology.iri.videoRotation";
     private String audioDurationIri;
     private String videoDurationIri;
+    private String videoRotationIri;
 
     @Override
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
@@ -40,6 +42,11 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         videoDurationIri = (String) workerPrepareData.getStormConf().get(VIDEO_DURATION_IRI);
         if (videoDurationIri == null || videoDurationIri.length() == 0) {
             LOGGER.warn("Could not find config: " + VIDEO_DURATION_IRI + ": skipping video duration extraction.");
+        }
+
+        videoRotationIri = (String) workerPrepareData.getStormConf().get(VIDEO_ROTATION_IRI);
+        if (videoRotationIri == null || videoRotationIri.length() == 0) {
+            LOGGER.warn("Could not find config: " + VIDEO_ROTATION_IRI + ": skipping video rotation extraction.");
         }
     }
 
@@ -71,7 +78,6 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             duration = formatJson.optDouble("duration");
         }
 
-        Integer cwRotationNeeded = extractRotationFromJSON(outJson);
 
         Map<String, Object> metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
@@ -80,6 +86,18 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (duration != null) {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
+
+        Integer videoRotation = extractRotationFromJSON(outJson);
+        if (videoRotation != null) {
+            data.getElement().addPropertyValue(
+                    PROPERTY_KEY,
+                    videoRotationIri,
+                    videoRotation,
+                    data.getVisibility(),
+                    getAuthorizations());
+        }
+
+
 
         m.save(getAuthorizations());
         getGraph().flush();
