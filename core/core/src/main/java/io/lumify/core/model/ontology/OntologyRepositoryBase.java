@@ -52,7 +52,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         try {
             importFile(baseOwlFile, IRI.create(iri), null, authorizations);
         } catch (Exception e) {
-            throw new LumifyException("Could not import ontology file", e);
+            throw new LumifyException("Could not import ontology file: " + fileName + " (iri: " + iri + ")", e);
         } finally {
             CloseableUtils.closeQuietly(baseOwlFile);
         }

@@ -104,17 +104,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         List<OWLOntology> loadedOntologies = new ArrayList<OWLOntology>();
         Iterable<Property> ontologyFiles = getOntologyFiles();
         for (Property ontologyFile : ontologyFiles) {
-            IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
-            if (excludedIRI != null && excludedIRI.equals(lumifyBaseOntologyIRI)) {
+            IRI ontologyFileIRI = IRI.create(ontologyFile.getKey());
+            if (excludedIRI != null && excludedIRI.equals(ontologyFileIRI)) {
                 continue;
             }
             InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
             try {
                 Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
                 LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
-                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
-                OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
-                loadedOntologies.add(o);
+                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, ontologyFileIRI);
+                try {
+                    OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
+                    loadedOntologies.add(o);
+                } catch (UnloadableImportException ex) {
+                    LOGGER.error("Could not load %s", ontologyFileIRI, ex);
+                }
             } finally {
                 lumifyBaseOntologyIn.close();
             }
@@ -307,7 +311,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getConceptByIRI(String conceptIRI) {
-        Vertex conceptVertex = graph.getVertex(conceptIRI, getAuthorizations());
+        // use the query API instead of the getVertex API to ensure we use the search index
+        // to ensure the ontology has been indexed.
+        Vertex conceptVertex = singleOrDefault(graph.query(getAuthorizations())
+                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
+                .has(ONTOLOGY_TITLE.getPropertyName(), conceptIRI)
+                .vertices(), null);
         return conceptVertex != null ? new SecureGraphConcept(conceptVertex) : null;
     }
 
