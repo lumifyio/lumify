@@ -85,6 +85,17 @@
 
         sed -i -e "s/localhost:8020/${ip_address}:8020/" /usr/lib/hadoop/etc/hadoop/core-site.xml
 
+        vi /usr/lib/hadoop/etc/hadoop/hdfs-site.xml
+        # add the following in the configuration element:
+          <property>
+            <name>dfs.permissions.enabled</name>
+            <value>false</value>
+          </property>
+          <property>
+            <name>dfs.datanode.synconclose</name>
+            <value>true</value>
+          </property>
+
 
 ### Accumulo
 
@@ -226,7 +237,7 @@
 
         service zookeeper-server start
 
-        /usr/lib/accumulo/bin/accumulo init --instance-name lumify --password password
+        sudo -u accumulo /usr/lib/accumulo/bin/accumulo init --instance-name lumify --password password
 
 
 ### start services
@@ -239,7 +250,7 @@
 
         service zookeeper-server start
 
-        /usr/lib/accumulo/bin/start-all.sh
+        sudo -u accumulo /usr/lib/accumulo/bin/start-all.sh
 
         /usr/lib/elasticsearch/bin/elasticsearch
 
