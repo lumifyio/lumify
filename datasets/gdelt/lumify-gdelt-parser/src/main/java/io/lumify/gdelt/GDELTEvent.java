@@ -3,9 +3,11 @@ package io.lumify.gdelt;
 import java.util.Date;
 
 public class GDELTEvent {
+    // Event ID and Date Attributes
     private String globalEventId;
     private Date dateOfOccurrence;
 
+    // Actor 1 Attributes
     private String actor1Code;
     private String actor1Name;
     private String actor1CountryCode;
@@ -17,6 +19,7 @@ public class GDELTEvent {
     private String actor1Type2Code;
     private String actor1Type3Code;
 
+    // Actor 2 Attributes
     private String actor2Code;
     private String actor2Name;
     private String actor2CountryCode;
@@ -28,24 +31,48 @@ public class GDELTEvent {
     private String actor2Type2Code;
     private String actor2Type3Code;
 
+    // Event Action Attributes
     private boolean isRootEvent;
     private String eventCode;
     private String eventBaseCode;
     private String eventRootCode;
     private int quadClass;
-    private float goldsteinScale;
+    private double goldsteinScale;
     private int numMentions;
     private int numSources;
     private int numArticles;
-    private float averageTone;
+    private double averageTone;
 
+    // Actor 1 Event Geography
     private int actor1GeoType;
     private String actor1GeoFullName;
     private String actor1GeoCountryCode;
     private String actor1GeoADM1Code;
-    private float actor1GeoLatitude;
-    private float actor1GeoLongitude;
-    private int actor1GeoFeatureId;
+    private double actor1GeoLatitude;
+    private double actor1GeoLongitude;
+    private String actor1GeoFeatureId;
+
+    // Actor 2 Event Geography
+    private int actor2GeoType;
+    private String actor2GeoFullName;
+    private String actor2GeoCountryCode;
+    private String actor2GeoADM1Code;
+    private double actor2GeoLatitude;
+    private double actor2GeoLongitude;
+    private String actor2GeoFeatureId;
+
+    // Action Event Geography
+    private int actionGeoType;
+    private String actionGeoFullName;
+    private String actionGeoCountryCode;
+    private String actionGeoADM1Code;
+    private double actionGeoLatitude;
+    private double actionGeoLongitude;
+    private String actionGeoFeatureId;
+
+    // Date Management Fields
+    private Date dateAdded;
+    private String sourceUrl;
 
     public String getGlobalEventId() {
         return globalEventId;
@@ -59,20 +86,25 @@ public class GDELTEvent {
     public void setDateOfOccurrence(Date dateOfOccurrence) {
         this.dateOfOccurrence = dateOfOccurrence;
     }
+
     public boolean isRootEvent() {
         return isRootEvent;
     }
-    @GDELTField(name="IsRootEvent", required = true, type = Boolean.class)
+
+    @GDELTField(name="IsRootEvent", required = true)
     public void setRootEvent(boolean isRootEvent) {
         this.isRootEvent = isRootEvent;
     }
+
     public String getEventCode() {
         return eventCode;
     }
+
     @GDELTField(name = "EventCode", required = true)
     public void setEventCode(String eventCode) {
         this.eventCode = eventCode;
     }
+
     public String getEventBaseCode() {
         return eventBaseCode;
     }
@@ -95,17 +127,17 @@ public class GDELTEvent {
         return quadClass;
     }
 
-    @GDELTField(name = "QuadClass", type = Integer.class, required = true)
+    @GDELTField(name = "QuadClass", required = true)
     public void setQuadClass(int quadClass) {
         this.quadClass = quadClass;
     }
 
-    public float getGoldsteinScale() {
+    public double getGoldsteinScale() {
         return goldsteinScale;
     }
 
-    @GDELTField(name = "GoldsteinScale", type = Float.class, required = true)
-    public void setGoldsteinScale(float goldsteinScale) {
+    @GDELTField(name = "GoldsteinScale")
+    public void setGoldsteinScale(double goldsteinScale) {
         this.goldsteinScale = goldsteinScale;
     }
 
@@ -113,7 +145,7 @@ public class GDELTEvent {
         return numMentions;
     }
 
-    @GDELTField(name = "NumMentions", type = Integer.class)
+    @GDELTField(name = "NumMentions")
     public void setNumMentions(int numMentions) {
         this.numMentions = numMentions;
     }
@@ -122,7 +154,7 @@ public class GDELTEvent {
         return numSources;
     }
 
-    @GDELTField(name = "NumSources", type = Integer.class)
+    @GDELTField(name = "NumSources")
     public void setNumSources(int numSources) {
         this.numSources = numSources;
     }
@@ -131,7 +163,7 @@ public class GDELTEvent {
         return numArticles;
     }
 
-    @GDELTField(name = "NumArticles", type = Integer.class)
+    @GDELTField(name = "NumArticles")
     public void setNumArticles(int numArticles) {
         this.numArticles = numArticles;
     }
@@ -141,12 +173,12 @@ public class GDELTEvent {
         this.globalEventId = globalEventId;
     }
 
-    public float getAverageTone() {
+    public double getAverageTone() {
         return averageTone;
     }
 
-    @GDELTField(name = "AvgTone", type = Float.class)
-    public void setAverageTone(float averageTone) {
+    @GDELTField(name = "AvgTone")
+    public void setAverageTone(double averageTone) {
         this.averageTone = averageTone;
     }
 
@@ -334,7 +366,7 @@ public class GDELTEvent {
         return actor1GeoType;
     }
 
-    @GDELTField(name = "Actor1Geo_Type", type = Integer.class)
+    @GDELTField(name = "Actor1Geo_Type")
     public void setActor1GeoType(int actor1GeoType) {
         this.actor1GeoType = actor1GeoType;
     }
@@ -366,30 +398,174 @@ public class GDELTEvent {
         this.actor1GeoADM1Code = actor1GeoADM1Code;
     }
 
-    public float getActor1GeoLatitude() {
+    public double getActor1GeoLatitude() {
         return actor1GeoLatitude;
     }
 
-    @GDELTField(name = "Actor1Geo_Lat", type = Float.class)
-    public void setActor1GeoLatitude(float actor1GeoLatitude) {
+    @GDELTField(name = "Actor1Geo_Lat")
+    public void setActor1GeoLatitude(double actor1GeoLatitude) {
         this.actor1GeoLatitude = actor1GeoLatitude;
     }
 
-    public float getActor1GeoLongitude() {
+    public double getActor1GeoLongitude() {
         return actor1GeoLongitude;
     }
 
-    @GDELTField(name = "Actor1Geo_Long", type = Float.class)
-    public void setActor1GeoLongitude(float actor1GeoLongitude) {
+    @GDELTField(name = "Actor1Geo_Long")
+    public void setActor1GeoLongitude(double actor1GeoLongitude) {
         this.actor1GeoLongitude = actor1GeoLongitude;
     }
 
-    public int getActor1GeoFeatureId() {
+    public String getActor1GeoFeatureId() {
         return actor1GeoFeatureId;
     }
 
-    @GDELTField(name = "Actor1Geo_FeatureID", type = Integer.class)
-    public void setActor1GeoFeatureId(int actor1GeoFeatureId) {
+    @GDELTField(name = "Actor1Geo_FeatureID")
+    public void setActor1GeoFeatureId(String actor1GeoFeatureId) {
         this.actor1GeoFeatureId = actor1GeoFeatureId;
+    }
+
+    public int getActor2GeoType() {
+        return actor2GeoType;
+    }
+
+    @GDELTField(name = "Actor2Geo_Type")
+    public void setActor2GeoType(int actor2GeoType) {
+        this.actor2GeoType = actor2GeoType;
+    }
+
+    public String getActor2GeoFullName() {
+        return actor2GeoFullName;
+    }
+
+    @GDELTField(name = "Actor2Geo_FullName")
+    public void setActor2GeoFullName(String actor2GeoFullName) {
+        this.actor2GeoFullName = actor2GeoFullName;
+    }
+
+    public String getActor2GeoCountryCode() {
+        return actor2GeoCountryCode;
+    }
+
+    @GDELTField(name = "Actor2Geo_CountryCode")
+    public void setActor2GeoCountryCode(String actor2GeoCountryCode) {
+        this.actor2GeoCountryCode = actor2GeoCountryCode;
+    }
+
+    public String getActor2GeoADM1Code() {
+        return actor2GeoADM1Code;
+    }
+
+    @GDELTField(name = "Actor2Geo_ADM1Code")
+    public void setActor2GeoADM1Code(String actor2GeoADM1Code) {
+        this.actor2GeoADM1Code = actor2GeoADM1Code;
+    }
+
+    public double getActor2GeoLatitude() {
+        return actor2GeoLatitude;
+    }
+
+    @GDELTField(name = "Actor2Geo_Lat")
+    public void setActor2GeoLatitude(double actor2GeoLatitude) {
+        this.actor2GeoLatitude = actor2GeoLatitude;
+    }
+
+    public double getActor2GeoLongitude() {
+        return actor2GeoLongitude;
+    }
+
+    @GDELTField(name = "Actor2Geo_Long")
+    public void setActor2GeoLongitude(double actor2GeoLongitude) {
+        this.actor2GeoLongitude = actor2GeoLongitude;
+    }
+
+    public String getActor2GeoFeatureId() {
+        return actor2GeoFeatureId;
+    }
+
+    @GDELTField(name = "Actor2Geo_FeatureID")
+    public void setActor2GeoFeatureId(String actor2GeoFeatureId) {
+        this.actor2GeoFeatureId = actor2GeoFeatureId;
+    }
+
+    public int getActionGeoType() {
+        return actionGeoType;
+    }
+
+    @GDELTField(name = "ActionGeo_Type")
+    public void setActionGeoType(int actionGeoType) {
+        this.actionGeoType = actionGeoType;
+    }
+
+    public String getActionGeoFullName() {
+        return actionGeoFullName;
+    }
+
+    @GDELTField(name = "ActionGeo_FullName")
+    public void setActionGeoFullName(String actionGeoFullName) {
+        this.actionGeoFullName = actionGeoFullName;
+    }
+
+    public String getActionGeoCountryCode() {
+        return actionGeoCountryCode;
+    }
+
+    @GDELTField(name = "ActionGeo_CountryCode")
+    public void setActionGeoCountryCode(String actionGeoCountryCode) {
+        this.actionGeoCountryCode = actionGeoCountryCode;
+    }
+
+    public String getActionGeoADM1Code() {
+        return actionGeoADM1Code;
+    }
+
+    @GDELTField(name = "ActionGeo_ADM1Code")
+    public void setActionGeoADM1Code(String actionGeoADM1Code) {
+        this.actionGeoADM1Code = actionGeoADM1Code;
+    }
+
+    public double getActionGeoLatitude() {
+        return actionGeoLatitude;
+    }
+
+    @GDELTField(name = "ActionGeo_Lat")
+    public void setActionGeoLatitude(double actionGeoLatitude) {
+        this.actionGeoLatitude = actionGeoLatitude;
+    }
+
+    public double getActionGeoLongitude() {
+        return actionGeoLongitude;
+    }
+
+    @GDELTField(name = "ActionGeo_Long")
+    public void setActionGeoLongitude(double actionGeoLongitude) {
+        this.actionGeoLongitude = actionGeoLongitude;
+    }
+
+    public String getActionGeoFeatureId() {
+        return actionGeoFeatureId;
+    }
+
+    @GDELTField(name = "ActionGeo_FeatureID")
+    public void setActionGeoFeatureId(String actionGeoFeatureId) {
+        this.actionGeoFeatureId = actionGeoFeatureId;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    @GDELTField(name = "DATEADDED", dateFormat = "yyyyMMdd")
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    @GDELTField(name = "SOURCEURL")
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 }

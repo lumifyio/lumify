@@ -11,5 +11,4 @@ import java.lang.annotation.Target;
     String name();
     boolean required() default false;
     String dateFormat() default "";
-    Class type() default String.class;
 }

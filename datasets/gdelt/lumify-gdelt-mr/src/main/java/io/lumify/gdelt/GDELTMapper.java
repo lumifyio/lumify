@@ -4,7 +4,6 @@ import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.SystemUser;
 import io.lumify.core.util.LumifyLogger;
@@ -32,6 +31,7 @@ import java.util.Map;
 public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GDELTMapper.class);
 
+    private GDELTParser parser;
     private AccumuloGraph graph;
     private Visibility visibility;
     private AccumuloAuthorizations authorizations;
@@ -42,6 +42,7 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
+        this.parser = new GDELTParser();
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
         this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.visibility = new Visibility("");
@@ -63,11 +64,20 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     }
 
     private void safeMap(LongWritable filePosition, Text line, Context context) throws IOException, InterruptedException, ParseException {
-        GDELTEvent event = GDELTParser.parseLine(line.toString());
+        GDELTEvent event = parser.parseLine(line.toString());
         VertexBuilder eventVertexBuilder = prepareVertex(generateEventId(event), visibility);
         GDELTProperties.CONCEPT_TYPE.setProperty(eventVertexBuilder, GDELTConstants.EVENT_CONCEPT_URI, visibility);
         GDELTProperties.GLOBAL_EVENT_ID.setProperty(eventVertexBuilder, event.getGlobalEventId(), visibility);
-        GDELTProperties.EVENT_DATE.setProperty(eventVertexBuilder, event.getEventDate(), visibility);
+        GDELTProperties.EVENT_DATE_OF_OCCURRENCE.setProperty(eventVertexBuilder, event.getDateOfOccurrence(), visibility);
+        GDELTProperties.EVENT_IS_ROOT_EVENT.setProperty(eventVertexBuilder, event.isRootEvent(), visibility);
+        GDELTProperties.EVENT_CODE.setProperty(eventVertexBuilder, event.getEventCode(), visibility);
+        GDELTProperties.EVENT_BASE_CODE.setProperty(eventVertexBuilder, event.getEventBaseCode(), visibility);
+        GDELTProperties.EVENT_ROOT_CODE.setProperty(eventVertexBuilder, event.getEventRootCode(), visibility);
+        GDELTProperties.EVENT_QUAD_CLASS.setProperty(eventVertexBuilder, event.getQuadClass(), visibility);
+        GDELTProperties.EVENT_GOLDSTEIN_SCALE.setProperty(eventVertexBuilder, event.getGoldsteinScale(), visibility);
+        GDELTProperties.EVENT_NUM_MENTIONS.setProperty(eventVertexBuilder, event.getNumMentions(), visibility);
+        GDELTProperties.EVENT_NUM_SOURCES.setProperty(eventVertexBuilder, event.getNumSources(), visibility);
+        GDELTProperties.EVENT_NUM_ARTICLES.setProperty(eventVertexBuilder, event.getNumArticles(), visibility);
 
         Vertex eventVertex = eventVertexBuilder.save(authorizations);
 

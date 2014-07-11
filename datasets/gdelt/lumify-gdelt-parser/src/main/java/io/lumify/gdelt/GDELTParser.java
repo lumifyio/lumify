@@ -61,25 +61,23 @@ public class GDELTParser {
             }
             column = column.trim();
 
-            Class type = annotation.type();
+            Class type = method.getParameterTypes()[0];
 
             try {
-                if (type.equals(Date.class) || !annotation.dateFormat().equals("")) {
+                if (type.equals(String.class)) {
+                    method.invoke(event, column);
+                } else if (type.equals(Date.class)) {
                     String formatString = annotation.dateFormat();
                     if (formatString == null) {
                         throw new ParseException("Date type requires dataFormat annotation parameter", index);
                     }
                     Date date = new SimpleDateFormat(formatString).parse(column);
                     method.invoke(event, date);
-                } else if (type.equals(String.class)) {
-                    method.invoke(event, column);
-                } else if (type.equals(Integer.class)) {
+                } else if (type.equals(Integer.class) || type.equals(Integer.TYPE)) {
                     method.invoke(event, Integer.parseInt(column));
-                } else if (type.equals(Float.class)) {
-                    method.invoke(event, Float.parseFloat(column));
-                } else if (type.equals(String.class)) {
-                    method.invoke(event, column);
-                } else if (type.equals(Boolean.class)) {
+                } else if (type.equals(Double.class) || type.equals(Double.TYPE)) {
+                    method.invoke(event, Double.parseDouble(column));
+                } else if (type.equals(Boolean.class) || type.equals(Boolean.TYPE)) {
                     method.invoke(event, column.equals("1"));
                 } else {
                     throw new ParseException(type + " is not supported", index);

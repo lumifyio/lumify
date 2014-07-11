@@ -26,6 +26,41 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://lumify.io#color -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;color"/>
+    
+
+
+    <!-- http://lumify.io#glyphIconFileName -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;glyphIconFileName"/>
+    
+
+
+    <!-- http://lumify.io#timeFormula -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;timeFormula"/>
+    
+
+
+    <!-- http://lumify.io#titleFormula -->
+
+    <owl:AnnotationProperty rdf:about="&lumify;titleFormula"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
     // Object Properties
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +103,7 @@
     <!-- http://lumify.io/gdelt#actorCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#actorCode">
-        <rdfs:label xml:lang="en">Actor Code</rdfs:label>
+        <rdfs:label xml:lang="en">Code</rdfs:label>
         <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -85,13 +120,32 @@
     
 
 
+    <!-- http://lumify.io/gdelt#avgTone -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#avgTone">
+        <rdfs:label xml:lang="en">Average Tone</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/gdelt#countryCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#countryCode">
         <rdfs:label xml:lang="en">Country Code</rdfs:label>
-        <lumify:possibleValues xml:lang="en">WSB:West Bank,BAG:Baghdad,GZS:Gaza Strip,AFR:Africa,ASA:Asia,BLK:Balkans,CRB:Caribbean,CAU:Caucasus,CFR:Central Africa,CAS:Central Asia,CEU:Central Europe,EIN:East Indies,EAF:Eastern Africa,EEU:Eastern Europe,EUR:Europe,LAM:Latin America,MEA:Middle East,MDT:Mediterranean,NAF:North Africa,NMR:North America,PGS:Persian Gulf,SCN:Scandinavia,SAM:South America,SAS:South Asia,SEA:Southeast Asia,SAF:Southern Africa,WAF:West Africa,WST:The West,AFG:Afghanistan,ALA:Aland Islands,ALB:Albania,DZA:Algeria,ASM:American Samoa,AND:Andorra,AGO:Angola,AIA:Anguilla,ATG:Antigua and Barbuda,ARG:Argentina,ARM:Armenia,ABW:Aruba,AUS:Australia,AUT:Austria,AZE:Azerbaijan,BHS:Bahamas,BHR:Bahrain,BGD:Bangladesh,BRB:Barbados,BLR:Belarus,BEL:Belgium,BLZ:Belize,BEN:Benin,BMU:Bermuda,BTN:Bhutan,BOL:Bolivia,BIH:Bosnia and Herzegovina,BWA:Botswana,BRA:Brazil,VGB:British Virgin Islands,BRN:Brunei Darussalam,BGR:Bulgaria,BFA:Burkina Faso,BDI:Burundi,KHM:Cambodia,CMR:Cameroon,CAN:Canada,CPV:Cape Verde,CYM:Cayman Islands,CAF:Central African Republic,TCD:Chad,CHL:Chile,CHN:China,COL:Columbia,COM:Comoros,COD:Democratic Republic of the Congo,COG:People&apos;s Republic of the Congo,COK:Cook Islands,CRI:Costa Rica,CIV:Ivory Coast,HRV:Croatia,CUB:Cuba,CYP:Cyprus,CZE:Czech Republic,DNK:Denmark,DJI:Djibouti,DMA:Dominica,DOM:Dominican Republic,TMP:East Timor,ECU:Ecuador,EGY:Egypt,SLV:El Salvador,GNQ:Equatorial Guinea,ERI:Eritrea,EST:Estonia,ETH:Ethiopia,FRO:Faeroe Islands,FLK:Falkland Islands,FJI:Fiji,FIN:Finland,FRA:France,GUF:French Guiana,PYF:French Polynesia,GAB:Gabon,GMB:Gambia,GEO:Georgia,DEU:Germany,GHA:Ghana,GIB:Gibraltar,GRC:Greece,GRL:Greenland,GRD:Grenada,GLP:Guadeloupe,GUM:Guam,GTM:Guatemala,GIN:Guinea,GNB:Guinea-Bissau,GUY:Guyana,HTI:Haiti,VAT:Vatican City,HND:Honduras,HKG:Hong Kong,HUN:Hungary,ISL:Iceland,IND:India,IDN:Indonesia,IRN:Iran,IRQ:Iraq,IRL:Ireland,IMY:Isle of Man,ISR:Israel,ITA:Italy,JAM:Jamaica,JPN:Japan,JOR:Jordan,KAZ:Kazakhstan,KEN:Kenya,KIR:Kiribati,PRK:North Korea,KOR:South Korea,KWT:Kuwait,KGZ:Kyrgyzstan,LAO:Laos,LVA:Latvia,LBN:Lebanon,LSO:Lesotho,LBR:Liberia,LBY:Libya,LIE:Liechtenstein,LTU:Lithuania,LUX:Luxembourg,MAC:Macao,MKD:Macedonia,MDG:Madagascar,MWI:Malawi,MYS:Malaysia,MDV:Maldives,MLI:Mali,MLT:Malta,MHL:Marshall Islands,MTQ:Martinique,MRT:Mauritania,MUS:Mauritius,MYT:Mayotte,MEX:Mexico,FSM:Micronesia,MDA:Moldova,MCO:Monaco,MNG:Mongolia,MTN:Montenegro,MSR:Montserrat,MAR:Morocco,MOZ:Mozambique,MMR:Myanmar,NAM:Namibia,NRU:Nauru,NPL:Nepal,NLD:Netherlands,ANT:Netherlands Antilles,NCL:New Caledonia,NZL:New Zealand,NIC:Nicaragua,NER:Niger,NGA:Nigeria,NIU:Niue,NFK:Norfolk Island,MNP:Northern Mariana Islands,NOR:Norway,PSE:Occupied Palestinian Territory,OMN:Oman,PAK:Pakistan,PLW:Palau,PAN:Panama,PNG:Papua New Guinea,PRY:Paraguay,PER:Peru,PHL:Philippines,PCN:Pitcairn,POL:Poland,PRT:Portugal,PRI:Puerto Rico,QAT:Qatar,REU:Runion,ROM:Romania,RUS:Russia,RWA:Rwanda,SHN:Saint Helena,KNA:Saint Kitts-Nevis,LCA:Saint Lucia,SPM:Saint Pierre and Miquelon,VCT:Saint Vincent and the Grenadines,WSM:Samoa,SMR:San Marino,STP:Sao Tome and Principe,SAU:Saudi Arabia,SEN:Senegal,SRB:Serbia,SYC:Seychelles,SLE:Sierra Leone,SGP:Singapore,SVK:Slovakia,SVN:Slovenia,SLB:Solomon Islands,SOM:Somalia,ZAF:South Africa,ESP:Spain,LKA:Sri Lanka,SDN:Sudan,SUR:Suriname,SJM:Svalbard and Jan Mayen Islands,SWZ:Swaziland,SWE:Sweden,CHE:Switzerland,SYR:Syria,TWN:Taiwan,TJK:Tajikistan,TZA:Tanzania,THA:Thailand,TGO:Togo,TKL:Tokelau,TON:Tonga,TTO:Trinidad and Tobago,TUN:Tunisia,TUR:Turkey,TKM:Turkmenistan,TCA:Turks and Caicos Islands,TUV:Tuvalu,UGA:Uganda,UKR:Ukraine,ARE:United Arab Emirates,GBR:United Kingdom,USA:United States,VIR:United States Virgin Islands,URY:Uruguay,UZB:Uzbekistan,VUT:Vanuatu,VEN:Venezuela,VNM:Vietnam,WLF:Wallis and Futuna Islands,ESH:Western Sahara,YEM:Yemen,ZMB:Zambia,ZWE:Zimbabwe</lumify:possibleValues>
         <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
         <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#dateAdded -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#dateAdded">
+        <rdfs:label xml:lang="en">Date Added to GDELT</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;dateTime"/>
     </owl:DatatypeProperty>
     
 
@@ -106,11 +160,151 @@
     
 
 
+    <!-- http://lumify.io/gdelt#ethnicCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#ethnicCode">
+        <rdfs:label xml:lang="en">Ethnic Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#eventBaseCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#eventBaseCode">
+        <rdfs:label xml:lang="en">Base Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#eventCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#eventCode">
+        <rdfs:label xml:lang="en">Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://lumify.io/gdelt#globalEventId -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#globalEventId">
         <rdfs:label xml:lang="en">Global Event ID</rdfs:label>
         <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#goldsteinScale -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#goldsteinScale">
+        <rdfs:label xml:lang="en">Goldstein Scale</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#isRootEvent -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#isRootEvent">
+        <rdfs:label xml:lang="en">Is Root Event</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#knownGroupCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#knownGroupCode">
+        <rdfs:label xml:lang="en">Known Group Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#numArticles -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#numArticles">
+        <rdfs:label xml:lang="en">Number of Articles</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#numMentions -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#numMentions">
+        <rdfs:label xml:lang="en">Number of Mentions</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#numSources -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#numSources">
+        <rdfs:label xml:lang="en">Number of Sources</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#quadClass -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#quadClass">
+        <rdfs:label xml:lang="en">Quad Class</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#religionCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#religionCode">
+        <rdfs:label xml:lang="en">Religion Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#rootCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#rootCode">
+        <rdfs:label xml:lang="en">Root Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#sourceUrl -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#sourceUrl">
+        <rdfs:label xml:lang="en">Source URL</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltEvent"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://lumify.io/gdelt#typeCode -->
+
+    <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#typeCode">
+        <rdfs:label xml:lang="en">Type Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://lumify.io/gdelt#gdeltActor"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
