@@ -333,6 +333,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (inverseOf instanceof OWLObjectProperty) {
                 if (fromRelationship == null) {
                     fromRelationship = getRelationshipByIRI(iri);
+                    checkNotNull(fromRelationship, "could not find from relationship: " + iri);
                 }
 
                 OWLObjectProperty inverseOfOWLObjectProperty = (OWLObjectProperty) inverseOf;

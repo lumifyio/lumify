@@ -426,11 +426,20 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship) {
+        checkNotNull(fromRelationship, "fromRelationship is required");
+        checkNotNull(fromRelationship, "inverseOfRelationship is required");
+
         SecureGraphRelationship fromRelationshipSg = (SecureGraphRelationship) fromRelationship;
         SecureGraphRelationship inverseOfRelationshipSg = (SecureGraphRelationship) inverseOfRelationship;
 
-        findOrAddEdge(fromRelationshipSg.getVertex(), inverseOfRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
-        findOrAddEdge(inverseOfRelationshipSg.getVertex(), fromRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
+        Vertex fromVertex = fromRelationshipSg.getVertex();
+        checkNotNull(fromVertex, "fromVertex is required");
+
+        Vertex inverseVertex = inverseOfRelationshipSg.getVertex();
+        checkNotNull(inverseVertex, "inverseVertex is required");
+
+        findOrAddEdge(fromVertex, inverseVertex, LabelName.INVERSE_OF.toString());
+        findOrAddEdge(inverseVertex, fromVertex, LabelName.INVERSE_OF.toString());
     }
 
     @Override
@@ -440,7 +449,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + from.getIRI() + "-" + to.getIRI(), VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + relationshipIRI + "-" + from.getIRI() + "-" + to.getIRI(), VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
