@@ -30,6 +30,7 @@
         cd ~
         chmod u+x jdk-6u45-linux-x64-rpm.bin
         ./jdk-6u45-linux-x64-rpm.bin
+        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45/jre; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
 
 
 ### EPEL Repository
@@ -277,7 +278,7 @@
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         sudo sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
 
-        sudo /usr/lib/hadoop/bin/hadoop fs -mkdir -p /lumify/libcache
+        /usr/lib/hadoop/bin/hadoop fs -mkdir -p /lumify/libcache
 
 
 ## Build and Deploy Lumify
@@ -290,7 +291,7 @@
 ### build and deploy the Lumify web application and authentication plugin
 
         cd ~/lumify
-        mvn package -P web/war -pl lumify-web-war -am
+        mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
 
         sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/lumify.war
