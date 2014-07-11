@@ -52,7 +52,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         try {
             importFile(baseOwlFile, IRI.create(iri), null, authorizations);
         } catch (Exception e) {
-            throw new LumifyException("Could not import ontology file", e);
+            throw new LumifyException("Could not import ontology file: " + fileName + " (iri: " + iri + ")", e);
         } finally {
             CloseableUtils.closeQuietly(baseOwlFile);
         }
@@ -333,6 +333,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (inverseOf instanceof OWLObjectProperty) {
                 if (fromRelationship == null) {
                     fromRelationship = getRelationshipByIRI(iri);
+                    checkNotNull(fromRelationship, "could not find from relationship: " + iri);
                 }
 
                 OWLObjectProperty inverseOfOWLObjectProperty = (OWLObjectProperty) inverseOf;
@@ -506,7 +507,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
     }
 
-    private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+    protected String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().getIRI().toString().equals(uri)) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();

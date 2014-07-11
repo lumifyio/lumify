@@ -36,11 +36,12 @@ import static org.securegraph.util.IterableUtils.*;
 @Singleton
 public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(SecureGraphOntologyRepository.class);
+    public static final String ID_PREFIX = "ontology_";
+    public static final String ID_PREFIX_PROPERTY = ID_PREFIX + "prop_";
+    public static final String ID_PREFIX_RELATIONSHIP = ID_PREFIX + "rel_";
+    public static final String ID_PREFIX_CONCEPT = ID_PREFIX + "concept_";
     private Graph graph;
     private Authorizations authorizations;
-    private Cache<String, Concept> conceptsCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
-            .build();
     private Cache<String, List<Concept>> allConceptsWithPropertiesCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
@@ -76,7 +77,6 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         graph.flush();
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
-        this.conceptsCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();
     }
 
@@ -104,17 +104,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         List<OWLOntology> loadedOntologies = new ArrayList<OWLOntology>();
         Iterable<Property> ontologyFiles = getOntologyFiles();
         for (Property ontologyFile : ontologyFiles) {
-            IRI lumifyBaseOntologyIRI = IRI.create(ontologyFile.getKey());
-            if (excludedIRI != null && excludedIRI.equals(lumifyBaseOntologyIRI)) {
+            IRI ontologyFileIRI = IRI.create(ontologyFile.getKey());
+            if (excludedIRI != null && excludedIRI.equals(ontologyFileIRI)) {
                 continue;
             }
             InputStream lumifyBaseOntologyIn = ((StreamingPropertyValue) ontologyFile.getValue()).getInputStream();
             try {
                 Reader lumifyBaseOntologyReader = new InputStreamReader(lumifyBaseOntologyIn);
                 LOGGER.info("Loading existing ontology: %s", ontologyFile.getKey());
-                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, lumifyBaseOntologyIRI);
-                OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
-                loadedOntologies.add(o);
+                OWLOntologyDocumentSource lumifyBaseOntologySource = new ReaderDocumentSource(lumifyBaseOntologyReader, ontologyFileIRI);
+                try {
+                    OWLOntology o = m.loadOntologyFromOntologyDocument(lumifyBaseOntologySource, config);
+                    loadedOntologies.add(o);
+                } catch (UnloadableImportException ex) {
+                    LOGGER.error("Could not load %s", ontologyFileIRI, ex);
+                }
             } finally {
                 lumifyBaseOntologyIn.close();
             }
@@ -149,10 +153,14 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
                     return toList(new ConvertingIterable<Vertex, Relationship>(vertices) {
                         @Override
                         protected Relationship convert(Vertex vertex) {
-                            String sourceVertexId = single(vertex.getVertexIds(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
-                            String destVertexId = single(vertex.getVertexIds(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations())).toString();
+                            Vertex sourceVertex = single(vertex.getVertices(Direction.IN, LabelName.HAS_EDGE.toString(), getAuthorizations()));
+                            String sourceConceptIRI = ONTOLOGY_TITLE.getPropertyValue(sourceVertex);
+
+                            Vertex destVertex = single(vertex.getVertices(Direction.OUT, LabelName.HAS_EDGE.toString(), getAuthorizations()));
+                            String destConceptIRI = ONTOLOGY_TITLE.getPropertyValue(destVertex);
+
                             final List<String> inverseOfIRIs = getRelationshipInverseOfIRIs(vertex);
-                            return new SecureGraphRelationship(vertex, sourceVertexId, destVertexId, inverseOfIRIs);
+                            return new SecureGraphRelationship(vertex, sourceConceptIRI, destConceptIRI, inverseOfIRIs);
                         }
                     });
                 }
@@ -307,7 +315,12 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     public Concept getConceptByIRI(String conceptIRI) {
-        Vertex conceptVertex = graph.getVertex(conceptIRI, getAuthorizations());
+        // use the query API instead of the getVertex API to ensure we use the search index
+        // to ensure the ontology has been indexed.
+        Vertex conceptVertex = singleOrDefault(graph.query(getAuthorizations())
+                .has(CONCEPT_TYPE.getPropertyName(), TYPE_CONCEPT)
+                .has(ONTOLOGY_TITLE.getPropertyName(), conceptIRI)
+                .vertices(), null);
         return conceptVertex != null ? new SecureGraphConcept(conceptVertex) : null;
     }
 
@@ -355,7 +368,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return concept;
         }
 
-        VertexBuilder builder = graph.prepareVertex(conceptIRI, VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_CONCEPT + conceptIRI, VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_CONCEPT, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, conceptIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
@@ -385,7 +398,8 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
         if (matchingEdges.size() > 0) {
             return;
         }
-        fromVertex.getGraph().addEdge(fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
+        String edgeId = fromVertex.getId() + "-" + toVertex.getId();
+        fromVertex.getGraph().addEdge(edgeId, fromVertex, toVertex, edgeLabel, VISIBILITY.getVisibility(), getAuthorizations());
     }
 
     @Override
@@ -401,7 +415,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             Boolean displayTime,
             Double boost) {
         checkNotNull(concept, "vertex was null");
-        OntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
+        OntologyProperty property = getOrCreatePropertyType(concept, propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         checkNotNull(property, "Could not find property: " + propertyIRI);
 
         findOrAddEdge(((SecureGraphConcept) concept).getVertex(), ((SecureGraphOntologyProperty) property).getVertex(), LabelName.HAS_PROPERTY.toString());
@@ -412,11 +426,20 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected void getOrCreateInverseOfRelationship(Relationship fromRelationship, Relationship inverseOfRelationship) {
+        checkNotNull(fromRelationship, "fromRelationship is required");
+        checkNotNull(fromRelationship, "inverseOfRelationship is required");
+
         SecureGraphRelationship fromRelationshipSg = (SecureGraphRelationship) fromRelationship;
         SecureGraphRelationship inverseOfRelationshipSg = (SecureGraphRelationship) inverseOfRelationship;
 
-        findOrAddEdge(fromRelationshipSg.getVertex(), inverseOfRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
-        findOrAddEdge(inverseOfRelationshipSg.getVertex(), fromRelationshipSg.getVertex(), LabelName.INVERSE_OF.toString());
+        Vertex fromVertex = fromRelationshipSg.getVertex();
+        checkNotNull(fromVertex, "fromVertex is required");
+
+        Vertex inverseVertex = inverseOfRelationshipSg.getVertex();
+        checkNotNull(inverseVertex, "inverseVertex is required");
+
+        findOrAddEdge(fromVertex, inverseVertex, LabelName.INVERSE_OF.toString());
+        findOrAddEdge(inverseVertex, fromVertex, LabelName.INVERSE_OF.toString());
     }
 
     @Override
@@ -426,7 +449,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             return relationship;
         }
 
-        VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
+        VertexBuilder builder = graph.prepareVertex(ID_PREFIX_RELATIONSHIP + relationshipIRI + "-" + from.getIRI() + "-" + to.getIRI(), VISIBILITY.getVisibility());
         CONCEPT_TYPE.setProperty(builder, TYPE_RELATIONSHIP, VISIBILITY.getVisibility());
         ONTOLOGY_TITLE.setProperty(builder, relationshipIRI, VISIBILITY.getVisibility());
         DISPLAY_NAME.setProperty(builder, displayName, VISIBILITY.getVisibility());
@@ -442,6 +465,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     private OntologyProperty getOrCreatePropertyType(
+            final Concept concept,
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
@@ -467,7 +491,7 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
             }
             definePropertyBuilder.define();
 
-            VertexBuilder builder = graph.prepareVertex(VISIBILITY.getVisibility());
+            VertexBuilder builder = graph.prepareVertex(ID_PREFIX_PROPERTY + concept.getIRI() + "_" + propertyName, VISIBILITY.getVisibility());
             CONCEPT_TYPE.setProperty(builder, TYPE_PROPERTY, VISIBILITY.getVisibility());
             ONTOLOGY_TITLE.setProperty(builder, propertyName, VISIBILITY.getVisibility());
             DATA_TYPE.setProperty(builder, dataType.toString(), VISIBILITY.getVisibility());
