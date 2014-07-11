@@ -507,7 +507,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
     }
 
-    private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+    protected String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().getIRI().toString().equals(uri)) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();
