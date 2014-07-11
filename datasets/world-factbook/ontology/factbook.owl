@@ -1,0 +1,1319 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+        <!ENTITY lumify "http://lumify.io#" >
+        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+        ]>
+
+
+<rdf:RDF xmlns="http://lumify.io/worldfactbook#"
+         xml:base="http://lumify.io/worldfactbook"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:lumify="http://lumify.io#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/worldfactbook">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+
+    <owl:Class rdf:about="http://lumify.io/worldfactbook#country">
+        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <lumify:color>rgb(0, 0, 255)</lumify:color>
+    </owl:Class>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2192">
+		<rdfs:label xml:lang="en">Preliminary statement</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2028">
+		<rdfs:label xml:lang="en">Background</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry usually highlights major historic events and current issues and may include a statement about one or two key future trends.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2203">
+		<rdfs:label xml:lang="en">Geographic overview</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2144">
+		<rdfs:label xml:lang="en">Location</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry identifies the country's regional location, neighboring countries, and adjacent bodies of water.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2011">
+		<rdfs:label xml:lang="en">Geographic coordinates</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes rounded latitude and longitude figures for the centroid or center point of a country expressed in degrees and minutes; it is based on the locations provided in the Geographic Names Server (GNS), maintained by the National Geospatial-Intelligence Agency on behalf of the US Board on Geographic Names.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2145">
+		<rdfs:label xml:lang="en">Map references</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the name of the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2147">
+		<rdfs:label xml:lang="en">Area</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes three subfields. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2023">
+		<rdfs:label xml:lang="en">Area - comparative</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides an area comparison based on total area equivalents. Most entities are compared with the entire US or one of the 50 states based on area measurements (1990 revised) provided by the US Bureau of the Census. The smaller entities are compared with Washington, DC (178 sq km, 69 sq mi) or The Mall in Washington, DC (0.59 sq km, 0.23 sq mi, 146 acres).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2096">
+		<rdfs:label xml:lang="en">Land boundaries</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2060">
+		<rdfs:label xml:lang="en">Coastline</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total length of the boundary between the land area (including islands) and the sea.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2106">
+		<rdfs:label xml:lang="en">Maritime claims</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the following claims, the definitions of which are excerpted from the United Nations Convention on the Law of the Sea (UNCLOS), which alone contains the full and definitive descriptions:</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2059">
+		<rdfs:label xml:lang="en">Climate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a brief description of typical weather regimes throughout the year.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2125">
+		<rdfs:label xml:lang="en">Terrain</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains a brief description of the topography.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2020">
+		<rdfs:label xml:lang="en">Elevation extremes</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes both the highest point and the lowest point.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2111">
+		<rdfs:label xml:lang="en">Natural resources</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists a country's mineral, petroleum, hydropower, and other resources of commercial importance, such as rare earth elements (REEs). In general, products appear only if they make a significant contribution to the economy, or are likely to do so in the future.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2097">
+		<rdfs:label xml:lang="en">Land use</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains the percentage shares of total land area for three different types of land use: </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2146">
+		<rdfs:label xml:lang="en">Irrigated land</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of square kilometers of land area that is artificially supplied with water.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2201">
+		<rdfs:label xml:lang="en">Total renewable water resources</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the long-term average water availability for a country in cubic kilometers of precipitation, recharged ground water, and surface inflows from surrounding countries. The values have been adjusted to account for overlap resulting from surface flow recharge of groundwater sources. Total renewable water resources provides the water total available to a country but does not include water resource totals that have been reserved for upstream or downstream countries through international agreements. Note that these values are averages and do not accurately reflect the total available in any given year. Annual available resources can vary greatly due to short-term and long-term climatic and weather variations.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2202">
+		<rdfs:label xml:lang="en">Freshwater withdrawal (domestic/industrial/agricultural)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the annual quantity of water in cubic kilometers removed from available sources for use in any purpose. Water drawn-off is not necessarily entirely consumed and some portion may be returned for further use downstream. Domestic sector use refers to water supplied by public distribution systems. Note that some of this total may be used for small industrial and/or limited agricultural purposes. Industrial sector use is the quantity of water used by self-supplied industries not connected to a public distribution system. Agricultural sector use includes water used for irrigation and livestock watering, and does not account for agriculture directly dependent on rainfall. Included are figures for </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2021">
+		<rdfs:label xml:lang="en">Natural hazards</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists potential natural disasters. For countries where volcanic activity is common, a </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2032">
+		<rdfs:label xml:lang="en">Environment - current issues</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists the most pressing and important environmental problems. The following terms and abbreviations are used throughout the entry:</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2033">
+		<rdfs:label xml:lang="en">Environment - international agreements</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry separates country participation in international environmental agreements into two levels - </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2113">
+		<rdfs:label xml:lang="en">Geography - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous geographic information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2110">
+		<rdfs:label xml:lang="en">Nationality</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the identifying terms for citizens - </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2075">
+		<rdfs:label xml:lang="en">Ethnic groups</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides an ordered listing of ethnic groups starting with the largest and normally includes the percent of total population.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2098">
+		<rdfs:label xml:lang="en">Languages</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a rank ordering of languages starting with the largest and sometimes includes the percent of total population speaking that language.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2122">
+		<rdfs:label xml:lang="en">Religions</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is an ordered listing of religions by adherents starting with the largest group and sometimes includes the percent of total population. The core characteristics and beliefs of the world's major religions are described below.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2257">
+		<rdfs:label xml:lang="en">Demographic profile</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry describes a country’s key demographic features and trends and how they vary among regional, ethnic, and socioeconomic sub-populations. Some of the topics addressed are population age structure, fertility, health, mortality, poverty, education, and migration.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2119">
+		<rdfs:label xml:lang="en">Population</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives an estimate from the US Bureau of the Census based on statistics from population censuses, vital statistics registration systems, or sample surveys pertaining to the recent past and on assumptions about future trends. The total population presents one overall measure of the potential impact of the country on the world and within its region. Note: Starting with the 1993 </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2010">
+		<rdfs:label xml:lang="en">Age structure</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the distribution of the population according to age. Information is included by sex and age group as follows: </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2261">
+		<rdfs:label xml:lang="en">Dependency ratios</rdfs:label>
+		<rdfs:comment xml:lang="en">Dependency ratios are a measure of the age structure of a population. They relate the number of individuals that are likely to be economically "dependent" on the support of others. Dependency ratios contrast the ratio of youths (ages 0-14) and the elderly (ages 65+) to the number of those in the working-age group (ages 15-64). Changes in the dependency ratio provide an indication of potential social support requirements resulting from changes in population age structures. As fertility levels decline, the dependency ratio initially falls because the proportion of youths decreases while the proportion of the population of working age increases. As fertility levels continue to decline, dependency ratios eventually increase because the proportion of the population of working age starts to decline and the proportion of elderly persons continues to increase.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2177">
+		<rdfs:label xml:lang="en">Median age</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the age that divides a population into two numerically equal groups; that is, half the people are younger than this age and half are older. It is a single index that summarizes the age distribution of a population. Currently, the median age ranges from a low of about 15 in Uganda and Gaza Strip to 40 or more in several European countries and Japan. See the entry for "Age structure" for the importance of a young versus an older age structure and, by implication, a low versus a higher median age.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2002">
+		<rdfs:label xml:lang="en">Population growth rate</rdfs:label>
+		<rdfs:comment xml:lang="en">The average annual percent change in the population, resulting from a surplus (or deficit) of births over deaths and the balance of migrants entering and leaving a country. The rate may be positive or negative. The growth rate is a factor in determining how great a burden would be imposed on a country by the changing needs of its people for infrastructure (e.g., schools, hospitals, housing, roads), resources (e.g., food, water, electricity), and jobs. Rapid population growth can be seen as threatening by neighboring countries.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2054">
+		<rdfs:label xml:lang="en">Birth rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the average annual number of births during a year per 1,000 persons in the population at midyear; also known as crude birth rate. The birth rate is usually the dominant factor in determining the rate of population growth. It depends on both the level of fertility and the age structure of the population.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2066">
+		<rdfs:label xml:lang="en">Death rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the average annual number of deaths during a year per 1,000 population at midyear; also known as crude death rate. The death rate, while only a rough indicator of the mortality situation in a country, accurately indicates the current mortality impact on population growth. This indicator is significantly affected by age distribution, and most countries will eventually show a rise in the overall death rate, in spite of continued decline in mortality at all ages, as declining fertility results in an aging population.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2112">
+		<rdfs:label xml:lang="en">Net migration rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the figure for the difference between the number of persons entering and leaving a country during the year per 1,000 persons (based on midyear population). An excess of persons entering the country is referred to as net immigration (e.g., 3.56 migrants/1,000 population); an excess of persons leaving the country as net emigration (e.g., -9.26 migrants/1,000 population). The net migration rate indicates the contribution of migration to the overall level of population change. The net migration rate does not distinguish between economic migrants, refugees, and other types of migrants nor does it distinguish between lawful migrants and undocumented migrants.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2212">
+		<rdfs:label xml:lang="en">Urbanization</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides two measures of the degree of urbanization of a population. The first, </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2219">
+		<rdfs:label xml:lang="en">Major urban areas - population</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the population of the capital and up to four major cities defined as urban agglomerations with populations of at least 750,000 people. An </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2018">
+		<rdfs:label xml:lang="en">Sex ratio</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the number of males for each female in five age groups - </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2223">
+		<rdfs:label xml:lang="en">Maternal mortality rate</rdfs:label>
+		<rdfs:comment xml:lang="en">The maternal mortality rate (MMR) is the annual number of female deaths per 100,000 live births from any cause related to or aggravated by pregnancy or its management (excluding accidental or incidental causes). The MMR includes deaths during pregnancy, childbirth, or within 42 days of termination of pregnancy, irrespective of the duration and site of the pregnancy, for a specified year.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2091">
+		<rdfs:label xml:lang="en">Infant mortality rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of deaths of infants under one year old in a given year per 1,000 live births in the same year; included is the total death rate, and deaths by sex, </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2102">
+		<rdfs:label xml:lang="en">Life expectancy at birth</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains the average number of years to be lived by a group of people born in the same year, if mortality at each age remains constant in the future. The entry includes </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2258">
+		<rdfs:label xml:lang="en">Contraceptive prevalence rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This field gives the percent of women of reproductive age (15-49) who are married or in union and are using, or whose sexual partner is using, a method of contraception according to the date of the most recent available data. The contraceptive prevalence rate is an indicator of health services, development, and women’s empowerment. It is also useful in understanding, past, present, and future fertility trends, especially in developing countries.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2127">
+		<rdfs:label xml:lang="en">Total fertility rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives a figure for the average number of children that would be born per woman if all women lived to the end of their childbearing years and bore children according to a given fertility rate at each age. The total fertility rate (TFR) is a more direct measure of the level of fertility than the crude birth rate, since it refers to births per woman. This indicator shows the potential for population change in the country. A rate of two children per woman is considered the replacement rate for a population, resulting in relative stability in terms of total numbers. Rates above two children indicate populations growing in size and whose median age is declining. Higher rates may also indicate difficulties for families, in some situations, to feed and educate their children and for women to enter the labor force. Rates below two children indicate populations decreasing in size and growing older. Global fertility rates are in general decline and this trend is most pronounced in industrialized countries, especially Western Europe, where populations are projected to decline dramatically over the next 50 years.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2225">
+		<rdfs:label xml:lang="en">Health expenditures</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the total expenditure on health as a percentage of GDP. Health expenditures are broadly defined as activities performed either by institutions or individuals through the application of medical, paramedical, and/or nursing knowledge and technology, the primary purpose of which is to promote, restore, or maintain health.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2226">
+		<rdfs:label xml:lang="en">Physicians density</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of medical doctors (physicians), including generalist and specialist medical practitioners, per 1,000 of the population. Medical doctors are defined as doctors that study, diagnose, treat, and prevent illness, disease, injury, and other physical and mental impairments in humans through the application of modern medicine. They also plan, supervise, and evaluate care and treatment plans by other health care providers. The World Health Organization estimates that fewer than 2.3 health workers (physicians, nurses, and midwives only) per 1,000 would be insufficient to achieve coverage of primary healthcare needs.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2227">
+		<rdfs:label xml:lang="en">Hospital bed density</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the number of hospital beds per 1,000 people; it serves as a general measure of inpatient service availability. Hospital beds include inpatient beds available in public, private, general, and specialized hospitals and rehabilitation centers. In most cases, beds for both acute and chronic care are included. Because the level of inpatient services required for individual countries depends on several factors - such as demographic issues and the burden of disease - there is no global target for the number of hospital beds per country. So, while 2 beds per 1,000 in one country may be sufficient, 2 beds per 1,000 in another may be woefully inadequate because of the number of people hospitalized by disease.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2216">
+		<rdfs:label xml:lang="en">Drinking water source</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides information about access to improved or unimproved drinking water sources available to segments of the population of a country. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2217">
+		<rdfs:label xml:lang="en">Sanitation facility access</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides information about access to improved or unimproved sanitation facilities available to segments of the population of a country. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2155">
+		<rdfs:label xml:lang="en">HIV/AIDS - adult prevalence rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives an estimate of the percentage of adults (aged 15-49) living with HIV/AIDS. The adult prevalence rate is calculated by dividing the estimated number of adults living with HIV/AIDS at yearend by the total adult population at yearend.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2156">
+		<rdfs:label xml:lang="en">HIV/AIDS - people living with HIV/AIDS</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives an estimate of all people (adults and children) alive at yearend with HIV infection, whether or not they have developed symptoms of AIDS.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2157">
+		<rdfs:label xml:lang="en">HIV/AIDS - deaths</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives an estimate of the number of adults and children who died of AIDS during a given calendar year.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2193">
+		<rdfs:label xml:lang="en">Major infectious diseases</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists major infectious diseases likely to be encountered in countries where the risk of such diseases is assessed to be very high as compared to the United States. These infectious diseases represent risks to US government personnel traveling to the specified country for a period of less than three years. The </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2228">
+		<rdfs:label xml:lang="en">Obesity - adult prevalence rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the percent of a country's population considered to be obese. Obesity is defined as an adult having a Body Mass Index (BMI) greater to or equal to 30.0. BMI is calculated by taking a person's weight in kg and dividing it by the person's squared height in meters.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2224">
+		<rdfs:label xml:lang="en">Children under the age of 5 years underweight</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the percent of children under five considered to be underweight. Underweight means weight-for-age is approximately 2 kg below for standard at age one, 3 kg below standard for ages two and three, and 4 kg below standard for ages four and five. This statistic is an indicator of the nutritional status of a community. Children who suffer from growth retardation as a result of poor diets and/or recurrent infections tend to have a greater risk of suffering illness and death.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2206">
+		<rdfs:label xml:lang="en">Education expenditures</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the public expenditure on education as a percent of GDP.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2103">
+		<rdfs:label xml:lang="en">Literacy</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2205">
+		<rdfs:label xml:lang="en">School life expectancy (primary to tertiary education)</rdfs:label>
+		<rdfs:comment xml:lang="en">School life expectancy (SLE) is the total number of years of schooling (primary to tertiary) that a child can expect to receive, assuming that the probability of his or her being enrolled in school at any particular future age is equal to the current enrollment ratio at that age. Caution must be maintained when utilizing this indicator in international comparisons. For example, a year or grade completed in one country is not necessarily the same in terms of educational content or quality as a year or grade completed in another country. SLE represents the expected number of years of schooling that will be completed, including years spent repeating one or more grades.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2256">
+		<rdfs:label xml:lang="en">Mother's mean age at first birth</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the mean (average) age of mothers at the birth of their first child. It is a useful indicator for gauging the success of family planning programs aiming to reduce maternal mortality, increase contraceptive use – particularly among married and unmarried adolescents, delay age at first marriage, and improve the health of newborns.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2229">
+		<rdfs:label xml:lang="en">Unemployment, youth ages 15-24</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the percent of the total labor force ages 15-24 unemployed during a specified year.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2022">
+		<rdfs:label xml:lang="en">People - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous demographic information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2255">
+		<rdfs:label xml:lang="en">Child labor - children ages 5-14</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the percent of children aged 5-14 (or the age range specified) engaged in child labor. We define “child labor” as work that deprives children of their childhood, their potential, and their dignity, and that is harmful to physical and mental development. It refers to work that is mentally, physically, socially, or morally dangerous and harmful to children. Such labor may deprive them of the opportunity to attend school, oblige them to leave school prematurely, or require them to combine school attendance with excessively long and heavy work. In its most extreme forms, child labor involves children being enslaved, separated from their families, exposed to serious hazards and illnesses, and/or left to fend for themselves on the streets of large cities – often a very early age.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2142">
+		<rdfs:label xml:lang="en">Country name</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes all forms of the country's name approved by the US Board on Geographic Names (Italy is used as an example): </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2189">
+		<rdfs:label xml:lang="en">Union name</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2006">
+		<rdfs:label xml:lang="en">Dependency status</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry describes the formal relationship between a particular nonindependent entity and an independent state.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2128">
+		<rdfs:label xml:lang="en">Government type</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the basic form of government. Definitions of the major governmental terms are as follows. (Note that for some countries more than one definition applies.):</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2190">
+		<rdfs:label xml:lang="en">Political structure</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2057">
+		<rdfs:label xml:lang="en">Capital</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2051">
+		<rdfs:label xml:lang="en">Administrative divisions</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry generally gives the numbers, designatory terms, and first-order administrative divisions as approved by the US Board on Geographic Names (BGN). Changes that have been reported but not yet acted on by the BGN are noted.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2191">
+		<rdfs:label xml:lang="en">Member states</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2068">
+		<rdfs:label xml:lang="en">Dependent areas</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains an alphabetical listing of all nonindependent entities associated in some way with a particular independent state.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2088">
+		<rdfs:label xml:lang="en">Independence</rdfs:label>
+		<rdfs:comment xml:lang="en">For most countries, this entry gives the date that sovereignty was achieved and from which nation, empire, or trusteeship. For the other countries, the date given may not represent "independence" in the strict sense, but rather some significant nationhood event such as the traditional founding date or the date of unification, federation, confederation, establishment, fundamental change in the form of government, or state succession. For a number of countries, the establishment of statehood was a lengthy evolutionary process occurring over decades or even centuries. In such cases, several significant dates are cited. Dependent areas include the notation "none" followed by the nature of their dependency status. Also see the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2109">
+		<rdfs:label xml:lang="en">National holiday</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the primary national day of celebration - usually independence day.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2063">
+		<rdfs:label xml:lang="en">Constitution</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides information on a country’s constitution. It includes the dates of previous constitutions, the dates of the main steps in making and implementing the latest constitution, and the dates of amendments. For countries with 1-3 previous constitutions, the years are listed; for those with 4-9 previous, the entry is listed as “several previous,” and for those with 10 or more, the entry is “many previous.” Amendment entries are treated in the same manner, and include the date(s) of the last amendment(s).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2100">
+		<rdfs:label xml:lang="en">Legal system</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the description of a country's legal system. A statement on judicial review of legislative acts is also included for a number of countries. The legal systems of nearly all countries are generally modeled upon elements of five main types: civil law (including French law, the Napoleonic Code, Roman law, Roman-Dutch law, and Spanish law); common law (including United State law); customary law; mixed or pluralistic law; and religious law (including Islamic law). An additional type of legal system - international law, which governs the conduct of independent nations in their relationships with one another - is also addressed below. The following list describes these legal systems, the countries or world regions where these systems are enforced, and a brief statement on the origins and major features of each.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2220">
+		<rdfs:label xml:lang="en">International law organization participation</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes information on a country's acceptance of jurisdiction of the International Court of Justice (ICJ) and of the International Criminal Court (ICCt); 55 countries have accepted ICJ jurisdiction with reservations and 11 have accepted ICJ jurisdiction without reservations; 114 countries have accepted ICCt jurisdiction.  Appendix B: International Organizations and Groups  explains the differing mandates of the ICJ and ICCt.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2123">
+		<rdfs:label xml:lang="en">Suffrage</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the age at enfranchisement and whether the right to vote is universal or restricted.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2077">
+		<rdfs:label xml:lang="en">Executive branch</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes several subfields. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2101">
+		<rdfs:label xml:lang="en">Legislative branch</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains information on the structure (unicameral, bicameral, tricameral), formal name, number of seats, and term of office. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2094">
+		<rdfs:label xml:lang="en">Judicial branch</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes three subfields. The </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2118">
+		<rdfs:label xml:lang="en">Political parties and leaders</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a listing of significant political parties, coalitions, and electoral lists as of each country's last legislative election, unless otherwise noted.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2115">
+		<rdfs:label xml:lang="en">Political pressure groups and leaders</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a listing of a country's political, social, labor, or religious organizations that are involved in politics, or that exert political pressure, but whose leaders do not stand for legislative election. International movements or organizations are generally not listed.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2107">
+		<rdfs:label xml:lang="en">International organization participation</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists in alphabetical order by abbreviation those international organizations in which the subject country is a member or participates in some other way.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2149">
+		<rdfs:label xml:lang="en">Diplomatic representation in the US</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2007">
+		<rdfs:label xml:lang="en">Diplomatic representation from the US</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2081">
+		<rdfs:label xml:lang="en">Flag description</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a written flag description produced from actual flags or the best information available at the time the entry was written. The flags of independent states are used by their dependencies unless there is an officially recognized local flag. Some disputed and other areas do not have flags.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2230">
+		<rdfs:label xml:lang="en">National symbol(s)</rdfs:label>
+		<rdfs:comment xml:lang="en">A national symbol is a faunal, floral, or other abstract representation - or some distinctive object - that over time has come to be closely identified with a country or entity. Not all countries have national symbols; a few countries have more than one.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2218">
+		<rdfs:label xml:lang="en">National anthem</rdfs:label>
+		<rdfs:comment xml:lang="en">A generally patriotic musical composition - usually in the form of a song or hymn of praise - that evokes and eulogizes the history, traditions, or struggles of a nation or its people. National anthems can be officially recognized as a national song by a country's constitution or by an enacted law, or simply by tradition. Although most anthems contain lyrics, some do not.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2140">
+		<rdfs:label xml:lang="en">Government - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous government information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2116">
+		<rdfs:label xml:lang="en">Economy - overview</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry briefly describes the type of economy, including the degree of market orientation, the level of economic development, the most important natural resources, and the unique areas of specialization. It also characterizes major economic events and policy changes in the most recent 12 months and may include a statement about one or two key future macroeconomic trends.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2001">
+		<rdfs:label xml:lang="en">GDP (purchasing power parity)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the gross domestic product (GDP) or value of all final goods and services produced within a nation in a given year. A nation's GDP at purchasing power parity (PPP) exchange rates is the sum value of all goods and services produced in the country valued at prices prevailing in the United States in the year noted. This is the measure most economists prefer when looking at per-capita welfare and when comparing living conditions or use of resources across countries. The measure is difficult to compute, as a US dollar value has to be assigned to all goods and services in the country regardless of whether these goods and services have a direct equivalent in the United States (for example, the value of an ox-cart or non-US military equipment); as a result, PPP estimates for some countries are based on a small and sometimes different set of goods and services. In addition, many countries do not formally participate in the World Bank's PPP project that calculates these measures, so the resulting GDP estimates for these countries may lack precision. For many developing countries, PPP-based GDP measures are multiples of the official exchange rate (OER) measure. The differences between the OER- and PPP-denominated GDP values for most of the wealthy industrialized countries are generally much smaller.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2195">
+		<rdfs:label xml:lang="en">GDP (official exchange rate)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the gross domestic product (GDP) or value of all final goods and services produced within a nation in a given year. A nation's GDP at official exchange rates (OER) is the home-currency-denominated annual GDP figure divided by the bilateral average US exchange rate with that country in that year. The measure is simple to compute and gives a precise measure of the value of output. Many economists prefer this measure when gauging the economic power an economy maintains vis-à-vis its neighbors, judging that an exchange rate captures the purchasing power a nation enjoys in the international marketplace. Official exchange rates, however, can be artificially fixed and/or subject to manipulation - resulting in claims of the country having an under- or over-valued currency - and are not necessarily the equivalent of a market-determined exchange rate. Moreover, even if the official exchange rate is market-determined, market exchange rates are frequently established by a relatively small set of goods and services (the ones the country trades) and may not capture the value of the larger set of goods the country produces. Furthermore, OER-converted GDP is not well suited to comparing domestic GDP over time, since appreciation/depreciation from one year to the next will make the OER GDP value rise/fall regardless of whether home-currency-denominated GDP changed.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2003">
+		<rdfs:label xml:lang="en">GDP - real growth rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives GDP growth on an annual basis adjusted for inflation and expressed as a percent. The growth rates are year-over-year, and not compounded.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2004">
+		<rdfs:label xml:lang="en">GDP - per capita (PPP)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry shows GDP on a purchasing power parity basis divided by population as of 1 July for the same year.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2260">
+		<rdfs:label xml:lang="en">Gross national saving</rdfs:label>
+		<rdfs:comment xml:lang="en">Gross national saving is derived by deducting final consumption expenditure (household plus government) from Gross national disposable income, and consists of personal saving, plus business saving (the sum of the capital consumption allowance and retained business profits), plus government saving (the excess of tax revenues over expenditures), but excludes foreign saving (the excess of imports of goods and services over exports). The figures are presented as a percent of GDP. A negative number indicates that the economy as a whole is spending more income than it produces, thus drawing down national wealth (dissaving).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2259">
+		<rdfs:label xml:lang="en">GDP - composition, by end use</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry shows who does the spending in an economy: consumers, businesses, government, and foreigners. The distribution gives the percentage contribution to total GDP of </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2012">
+		<rdfs:label xml:lang="en">GDP - composition, by sector of origin</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry shows where production takes place in an economy. The distribution gives the percentage contribution of </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2052">
+		<rdfs:label xml:lang="en">Agriculture - products</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is an ordered listing of major crops and products starting with the most important.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2090">
+		<rdfs:label xml:lang="en">Industries</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a rank ordering of industries starting with the largest by value of annual output.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2089">
+		<rdfs:label xml:lang="en">Industrial production growth rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the annual percentage increase in industrial production (includes manufacturing, mining, and construction).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2095">
+		<rdfs:label xml:lang="en">Labor force</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains the total labor force figure.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2048">
+		<rdfs:label xml:lang="en">Labor force - by occupation</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists the percentage distribution of the labor force by sector of occupation. </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2129">
+		<rdfs:label xml:lang="en">Unemployment rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry contains the percent of the labor force that is without jobs. Substantial underemployment might be noted.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2047">
+		<rdfs:label xml:lang="en">Household income or consumption by percentage share</rdfs:label>
+		<rdfs:comment xml:lang="en">Data on household income or consumption come from household surveys, the results adjusted for household size. Nations use different standards and procedures in collecting and adjusting the data. Surveys based on income will normally show a more unequal distribution than surveys based on consumption. The quality of surveys is improving with time, yet caution is still necessary in making inter-country comparisons.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2046">
+		<rdfs:label xml:lang="en">Population below poverty line</rdfs:label>
+		<rdfs:comment xml:lang="en">National estimates of the percentage of the population falling below the poverty line are based on surveys of sub-groups, with the results weighted by the number of people in each group. Definitions of poverty vary considerably among nations. For example, rich nations generally employ more generous standards of poverty than poor nations.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2172">
+		<rdfs:label xml:lang="en">Distribution of family income - Gini index</rdfs:label>
+		<rdfs:comment xml:lang="en">This index measures the degree of inequality in the distribution of family income in a country. The index is calculated from the Lorenz curve, in which cumulative family income is plotted against the number of families arranged from the poorest to the richest. The index is the ratio of (a) the area between a country's Lorenz curve and the 45 degree helping line to (b) the entire triangular area under the 45 degree line. The more nearly equal a country's income distribution, the closer its Lorenz curve to the 45 degree line and the lower its Gini index, e.g., a Scandinavian country with an index of 25. The more unequal a country's income distribution, the farther its Lorenz curve from the 45 degree line and the higher its Gini index, e.g., a Sub-Saharan country with an index of 50. If income were distributed with perfect equality, the Lorenz curve would coincide with the 45 degree line and the index would be zero; if income were distributed with perfect inequality, the Lorenz curve would coincide with the horizontal axis and the right vertical axis and the index would be 100.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2056">
+		<rdfs:label xml:lang="en">Budget</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2221">
+		<rdfs:label xml:lang="en">Taxes and other revenues</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry records total taxes and other revenues received by the national government during the time period indicated, expressed as a percent of GDP. Taxes include personal and corporate income taxes, value added taxes, excise taxes, and tariffs. Other revenues include social contributions - such as payments for social security and hospital insurance - grants, and net revenues from public enterprises. Normalizing the data, by dividing total revenues by GDP, enables easy comparisons across countries, and provides an average rate at which all income (GDP) is paid to the national level government for the supply of public goods and services.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2222">
+		<rdfs:label xml:lang="en">Budget surplus (+) or deficit (-)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry records the difference between national government revenues and expenditures, expressed as a percent of GDP. A positive (+) number indicates that revenues exceeded expenditures (a budget surplus), while a negative (-) number indicates the reverse (a budget deficit). Normalizing the data, by dividing the budget balance by GDP, enables easy comparisons across countries and indicates whether a national government saves or borrows money. Countries with high budget deficits (relative to their GDPs) generally have more difficulty raising funds to finance expenditures, than those with lower deficits.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2186">
+		<rdfs:label xml:lang="en">Public debt</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry records the cumulative total of all government borrowings less repayments that are denominated in a country's home currency. Public debt should not be confused with external debt, which reflects the foreign currency liabilities of both the private and public sector and must be financed out of foreign exchange earnings.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2080">
+		<rdfs:label xml:lang="en">Fiscal year</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry identifies the beginning and ending months for a country's accounting period of 12 months, which often is the calendar year but which may begin in any month. All yearly references are for the calendar year (CY) unless indicated as a noncalendar fiscal year (FY).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2092">
+		<rdfs:label xml:lang="en">Inflation rate (consumer prices)</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry furnishes the annual percent change in consumer prices compared with the previous year's consumer prices.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2207">
+		<rdfs:label xml:lang="en">Central bank discount rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the annualized interest rate a country's central bank charges commercial, depository banks for loans to meet temporary shortages of funds.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2208">
+		<rdfs:label xml:lang="en">Commercial bank prime lending rate</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a simple average of annualized interest rates commercial banks charge on new loans, denominated in the national currency, to their most credit-worthy customers.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2214">
+		<rdfs:label xml:lang="en">Stock of narrow money</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry, also known as "M1," comprises the total quantity of currency in circulation (notes and coins) plus demand deposits denominated in the national currency held by nonbank financial institutions, state and local governments, nonfinancial public enterprises, and the private sector of the economy, measured at a specific point in time. National currency units have been converted to US dollars at the closing exchange rate for the date of the information. Because of exchange rate movements, changes in money stocks measured in national currency units may vary significantly from those shown in US dollars, and caution is urged when making comparisons over time in US dollars. Narrow money consists of more liquid assets than broad money and the assets generally function as a "medium of exchange" for an economy.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2215">
+		<rdfs:label xml:lang="en">Stock of broad money</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry covers all of "Narrow money," plus the total quantity of time and savings deposits, credit union deposits, institutional money market funds, short-term repurchase agreements between the central bank and commercial deposit banks, and other large liquid assets held by nonbank financial institutions, state and local governments, nonfinancial public enterprises, and the private sector of the economy. National currency units have been converted to US dollars at the closing exchange rate for the date of the information. Because of exchange rate movements, changes in money stocks measured in national currency units may vary significantly from those shown in US dollars, and caution is urged when making comparisons over time in US dollars. In addition to serving as a medium of exchange, broad money includes assets that are slightly less liquid than narrow money and the assets tend to function as a "store of value" - a means of holding wealth.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2211">
+		<rdfs:label xml:lang="en">Stock of domestic credit</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total quantity of credit, denominated in the domestic currency, provided by financial institutions to the central bank, state and local governments, public non-financial corporations, and the private sector. The national currency units have been converted to US dollars at the closing exchange rate on the date of the information.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2200">
+		<rdfs:label xml:lang="en">Market value of publicly traded shares</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the value of shares issued by publicly traded companies at a price determined in the national stock markets on the final day of the period indicated. It is simply the latest price per share multiplied by the total number of outstanding shares, cumulated over all companies listed on the particular exchange.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2187">
+		<rdfs:label xml:lang="en">Current account balance</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry records a country's net trade in goods and services, plus net earnings from rents, interest, profits, and dividends, and net transfer payments (such as pension funds and worker remittances) to and from the rest of the world during the period specified. These figures are calculated on an exchange rate basis, i.e., not in purchasing power parity (PPP) terms.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2078">
+		<rdfs:label xml:lang="en">Exports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the total US dollar amount of merchandise exports on an f.o.b. (free on board) basis. These figures are calculated on an exchange rate basis, i.e., not in purchasing power parity (PPP) terms.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2049">
+		<rdfs:label xml:lang="en">Exports - commodities</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a listing of the highest-valued exported products; it sometimes includes the percent of total dollar value.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2050">
+		<rdfs:label xml:lang="en">Exports - partners</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a rank ordering of trading partners starting with the most important; it sometimes includes the percent of total dollar value.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2087">
+		<rdfs:label xml:lang="en">Imports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the total US dollar amount of merchandise imports on a c.i.f. (cost, insurance, and freight) or f.o.b. (free on board) basis. These figures are calculated on an exchange rate basis, i.e., not in purchasing power parity (PPP) terms.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2058">
+		<rdfs:label xml:lang="en">Imports - commodities</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a listing of the highest-valued imported products; it sometimes includes the percent of total dollar value.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2061">
+		<rdfs:label xml:lang="en">Imports - partners</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides a rank ordering of trading partners starting with the most important; it sometimes includes the percent of total dollar value.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2188">
+		<rdfs:label xml:lang="en">Reserves of foreign exchange and gold</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the dollar value for the stock of all financial assets that are available to the central monetary authority for use in meeting a country's balance of payments needs as of the end-date of the period specified. This category includes not only foreign currency and gold, but also a country's holdings of Special Drawing Rights in the International Monetary Fund, and its reserve position in the Fund.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2079">
+		<rdfs:label xml:lang="en">Debt - external</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total public and private debt owed to nonresidents repayable in internationally accepted currencies, goods, or services. These figures are calculated on an exchange rate basis, i.e., not in purchasing power parity (PPP) terms.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2198">
+		<rdfs:label xml:lang="en">Stock of direct foreign investment - at home</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the cumulative US dollar value of all investments in the home country made directly by residents - primarily companies - of other countries as of the end of the time period indicated. Direct investment excludes investment through purchase of shares.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2199">
+		<rdfs:label xml:lang="en">Stock of direct foreign investment - abroad</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the cumulative US dollar value of all investments in foreign countries made directly by residents - primarily companies - of the home country, as of the end of the time period indicated. Direct investment excludes investment through purchase of shares.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2076">
+		<rdfs:label xml:lang="en">Exchange rates</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides the average annual price of a country's monetary unit for the time period specified, expressed in units of local currency per US dollar, as determined by international market forces or by official fiat. The International Organization for Standardization (ISO) 4217 alphabetic currency code for the national medium of exchange is presented in parenthesis. Closing daily exchange rates are not presented in </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2204">
+		<rdfs:label xml:lang="en">Economy of the area administered by Turkish Cypriots</rdfs:label>
+		<rdfs:comment xml:lang="en"></rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2232">
+		<rdfs:label xml:lang="en">Electricity - production</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the annual electricity generated expressed in kilowatt-hours. The discrepancy between the amount of electricity generated and/or imported and the amount consumed and/or exported is accounted for as loss in transmission and distribution.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2233">
+		<rdfs:label xml:lang="en">Electricity - consumption</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry consists of total electricity generated annually plus imports and minus exports, expressed in kilowatt-hours. The discrepancy between the amount of electricity generated and/or imported and the amount consumed and/or exported is accounted for as loss in transmission and distribution.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2234">
+		<rdfs:label xml:lang="en">Electricity - exports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total exported electricity in kilowatt-hours.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2235">
+		<rdfs:label xml:lang="en">Electricity - imports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total imported electricity in kilowatt-hours.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2236">
+		<rdfs:label xml:lang="en">Electricity - installed generating capacity</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total capacity of currently installed generators, expressed in kilowatts (kW), to produce electricity. A 10-kilowatt (kW) generator will produce 10 kilowatt hours (kWh) of electricity, if it runs continuously for one hour.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2237">
+		<rdfs:label xml:lang="en">Electricity - from fossil fuels</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry measures the capacity of plants that generate electricity by burning fossil fuels (such as coal, petroleum products, and natural gas), expressed as a share of the country's total generating capacity.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2239">
+		<rdfs:label xml:lang="en">Electricity - from nuclear fuels</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry measures the capacity of plants that generate electricity through radioactive decay of nuclear fuel, expressed as a share of the country's total generating capacity.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2238">
+		<rdfs:label xml:lang="en">Electricity - from hydroelectric plants</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry measures the capacity of plants that generate electricity by water-driven turbines, expressed as a share of the country's total generating capacity.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2240">
+		<rdfs:label xml:lang="en">Electricity - from other renewable sources</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry measures the capacity of plants that generate electricity by using renewable energy sources other than hydroelectric (including, for example, wind, waves, solar, and geothermal), expressed as a share of the country's total generating capacity.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2241">
+		<rdfs:label xml:lang="en">Crude oil - production</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total amount of crude oil produced, in barrels per day (bbl/day).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2242">
+		<rdfs:label xml:lang="en">Crude oil - exports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total amount of crude oil exported, in barrels per day (bbl/day).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2243">
+		<rdfs:label xml:lang="en">Crude oil - imports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total amount of crude oil imported, in barrels per day (bbl/day).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2244">
+		<rdfs:label xml:lang="en">Crude oil - proved reserves</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the stock of proved reserves of crude oil, in barrels (bbl). Proved reserves are those quantities of petroleum which, by analysis of geological and engineering data, can be estimated with a high degree of confidence to be commercially recoverable from a given date forward, from known reservoirs and under current economic conditions.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2245">
+		<rdfs:label xml:lang="en">Refined petroleum products - production</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the country's total output of refined petroleum products, in barrels per day (bbl/day). The discrepancy between the amount of refined petroleum products produced and/or imported and the amount consumed and/or exported is due to the omission of stock changes, refinery gains, and other complicating factors.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2246">
+		<rdfs:label xml:lang="en">Refined petroleum products - consumption</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the country's total consumption of refined petroleum products, in barrels per day (bbl/day). The discrepancy between the amount of refined petroleum products produced and/or imported and the amount consumed and/or exported is due to the omission of stock changes, refinery gains, and other complicating factors.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2247">
+		<rdfs:label xml:lang="en">Refined petroleum products - exports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the country's total exports of refined petroleum products, in barrels per day (bbl/day).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2248">
+		<rdfs:label xml:lang="en">Refined petroleum products - imports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the country's total imports of refined petroleum products, in barrels per day (bbl/day).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2249">
+		<rdfs:label xml:lang="en">Natural gas - production</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total natural gas produced in cubic meters (cu m). The discrepancy between the amount of natural gas produced and/or imported and the amount consumed and/or exported is due to the omission of stock changes and other complicating factors.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2250">
+		<rdfs:label xml:lang="en">Natural gas - consumption</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total natural gas consumed in cubic meters (cu m). The discrepancy between the amount of natural gas produced and/or imported and the amount consumed and/or exported is due to the omission of stock changes and other complicating factors.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2251">
+		<rdfs:label xml:lang="en">Natural gas - exports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total natural gas exported in cubic meters (cu m).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2252">
+		<rdfs:label xml:lang="en">Natural gas - imports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total natural gas imported in cubic meters (cu m).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2253">
+		<rdfs:label xml:lang="en">Natural gas - proved reserves</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the stock of proved reserves of natural gas in cubic meters (cu m). Proved reserves are those quantities of natural gas, which, by analysis of geological and engineering data, can be estimated with a high degree of confidence to be commercially recoverable from a given date forward, from known reservoirs and under current economic conditions.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2254">
+		<rdfs:label xml:lang="en">Carbon dioxide emissions from consumption of energy</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry is the total amount of carbon dioxide, measured in metric tons, released by burning fossil fuels in the process of producing and consuming energy.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2150">
+		<rdfs:label xml:lang="en">Telephones - main lines in use</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of main telephone lines in use.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2151">
+		<rdfs:label xml:lang="en">Telephones - mobile cellular</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of mobile cellular telephone subscribers.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2124">
+		<rdfs:label xml:lang="en">Telephone system</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a brief general assessment of the system with details on the domestic and international components. The following terms and abbreviations are used throughout the entry:</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2213">
+		<rdfs:label xml:lang="en">Broadcast media</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry provides information on the approximate number of public and private TV and radio stations in a country, as well as basic information on the availability of satellite and cable TV services.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2154">
+		<rdfs:label xml:lang="en">Internet country code</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes the two-letter codes maintained by the International Organization for Standardization (ISO) in the ISO 3166 Alpha-2 list and used by the Internet Assigned Numbers Authority (IANA) to establish country-coded top-level domains (ccTLDs).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2184">
+		<rdfs:label xml:lang="en">Internet hosts</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists the number of Internet hosts available within a country. An Internet host is a computer connected directly to the Internet; normally an Internet Service Provider's (ISP) computer is a host. Internet users may use either a hard-wired terminal, at an institution with a mainframe computer connected directly to the Internet, or may connect remotely by way of a modem via telephone line, cable, or satellite to the Internet Service Provider's host computer. The number of hosts is one indicator of the extent of Internet connectivity.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2153">
+		<rdfs:label xml:lang="en">Internet users</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of users within a country that access the Internet. Statistics vary from country to country and may include users who access the Internet at least several times a week to those who access it only once within a period of several months.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2138">
+		<rdfs:label xml:lang="en">Communications - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous communications information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2053">
+		<rdfs:label xml:lang="en">Airports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of airports or airfields recognizable from the air. The runway(s) may be paved (concrete or asphalt surfaces) or unpaved (grass, earth, sand, or gravel surfaces) and may include closed or abandoned installations. Airports or airfields that are no longer recognizable (overgrown, no facilities, etc.) are not included. Note that not all airports have accommodations for refueling, maintenance, or air traffic control.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2030">
+		<rdfs:label xml:lang="en">Airports - with paved runways</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of airports with paved runways (concrete or asphalt surfaces) by length. For airports with more than one runway, only the longest runway is included according to the following five groups - (1) </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2031">
+		<rdfs:label xml:lang="en">Airports - with unpaved runways</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of airports with unpaved runways (grass, dirt, sand, or gravel surfaces) by length. For airports with more than one runway, only the longest runway is included according to the following five groups - (1) </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2019">
+		<rdfs:label xml:lang="en">Heliports</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total number of heliports with hard-surface runways, helipads, or landing areas that support routine sustained helicopter operations exclusively and have support facilities including one or more of the following facilities: lighting, fuel, passenger handling, or maintenance. It includes former airports used exclusively for helicopter operations but excludes heliports limited to day operations and natural clearings that could support helicopter landings and takeoffs.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2117">
+		<rdfs:label xml:lang="en">Pipelines</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the lengths and types of pipelines for transporting products like natural gas, crude oil, or petroleum products.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2121">
+		<rdfs:label xml:lang="en">Railways</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry states the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2085">
+		<rdfs:label xml:lang="en">Roadways</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2093">
+		<rdfs:label xml:lang="en">Waterways</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the total length of navigable rivers, canals, and other inland bodies of water.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2108">
+		<rdfs:label xml:lang="en">Merchant marine</rdfs:label>
+		<rdfs:comment xml:lang="en">Merchant marine may be defined as all ships engaged in the carriage of goods; or all commercial vessels (as opposed to all nonmilitary ships), which excludes tugs, fishing vessels, offshore oil rigs, etc. This entry contains information in four fields - </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2120">
+		<rdfs:label xml:lang="en">Ports and terminals</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists major ports and terminals primarily on the basis of the amount of cargo tonnage shipped through the facilities on an annual basis. In some instances, the number of containers handled or ship visits were also considered. Most ports service multiple classes of vessels including bulk carriers (dry and liquid), break bulk cargoes (goods loaded individually in bags, boxes, crates, or drums; sometimes palletized), containers, roll-on/roll-off, and passenger ships. The listing leads off with </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2008">
+		<rdfs:label xml:lang="en">Transportation - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous transportation information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2055">
+		<rdfs:label xml:lang="en">Military branches</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry lists the service branches subordinate to defense ministries or the equivalent (typically ground, naval, air, and marine forces).</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2024">
+		<rdfs:label xml:lang="en">Military service age and obligation</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the required ages for voluntary or conscript military service and the length of service obligation.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2105">
+		<rdfs:label xml:lang="en">Manpower available for military service</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of males and females falling in the military age range for a country (defined as being ages 16-49) and assumes that every individual is fit to serve.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2025">
+		<rdfs:label xml:lang="en">Manpower fit for military service</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of males and females falling in the military age range for a country (defined as being ages 16-49) and who are not otherwise disqualified for health reasons; accounts for the health situation in the country and provides a more realistic estimate of the actual number fit to serve.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2026">
+		<rdfs:label xml:lang="en">Manpower reaching militarily significant age annually</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives the number of males and females entering the military manpower pool (i.e., reaching age 16) in any given year and is a measure of the availability of military-age young adults.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2034">
+		<rdfs:label xml:lang="en">Military expenditures</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives spending on defense programs for the most recent year available as a percent of gross domestic product (GDP); the GDP is calculated on an exchange rate basis, i.e., not in terms of purchasing power parity (PPP). For countries with no military forces, this figure can include expenditures on public security and police.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2137">
+		<rdfs:label xml:lang="en">Military - note</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes miscellaneous military information of significance not included elsewhere.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2070">
+		<rdfs:label xml:lang="en">Disputes - international</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes a wide variety of situations that range from traditional bilateral boundary disputes to unilateral claims of one sort or another. Information regarding disputes over international terrestrial and maritime boundaries has been reviewed by the US Department of State. References to other situations involving borders or frontiers may also be included, such as resource disputes, geopolitical questions, or irredentist issues; however, inclusion does not necessarily constitute official acceptance or recognition by the US Government.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2194">
+		<rdfs:label xml:lang="en">Refugees and internally displaced persons</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry includes those persons residing in a country as </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2196">
+		<rdfs:label xml:lang="en">Trafficking in persons</rdfs:label>
+		<rdfs:comment xml:lang="en">Trafficking in persons is modern-day slavery, involving victims who are forced, defrauded, or coerced into labor or sexual exploitation. The International Labor Organization (ILO), the UN agency charged with addressing labor standards, employment, and social protection issues, estimates that 12.3 million people worldwide are enslaved in forced labor, bonded labor, forced child labor, sexual servitude, and involuntary servitude at any given time. Human trafficking is a multi-dimensional threat, depriving people of their human rights and freedoms, risking global health, promoting social breakdown, inhibiting development by depriving countries of their human capital, and helping fuel the growth of organized crime. In 2000, the US Congress passed the Trafficking Victims Protection Act (TVPA), reauthorized in 2003 and 2005, which provides tools for the US to combat trafficking in persons, both domestically and abroad. One of the law's key components is the creation of the US Department of State's annual </rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+	<owl:DatatypeProperty rdf:about="http://lumify.io/worldfactbook#f2086">
+		<rdfs:label xml:lang="en">Illicit drugs</rdfs:label>
+		<rdfs:comment xml:lang="en">This entry gives information on the five categories of illicit drugs - narcotics, stimulants, depressants (sedatives), hallucinogens, and cannabis. These categories include many drugs legally produced and prescribed by doctors as well as those illegally produced and sold outside of medical channels.</rdfs:comment>
+		<rdfs:domain rdf:resource="http://lumify.io/worldfactbook#country"/>
+		<rdfs:range rdf:resource="&xsd;string"/>
+	</owl:DatatypeProperty>
+
+
+
+</rdf:RDF>
