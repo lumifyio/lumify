@@ -157,6 +157,8 @@
         tar xzf ~/apache-storm-0.9.2-incubating.tar.gz
         ln -s apache-storm-0.9.2-incubating storm
 
+        mkdir storm/logs
+
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         echo "storm.zookeeper.servers:" >> /opt/storm/conf/storm.yaml
         echo " - ${ip_address}" >> /opt/storm/conf/storm.yaml
@@ -253,11 +255,10 @@
 
         sudo -u accumulo /usr/lib/accumulo/bin/start-all.sh
 
-        /usr/lib/elasticsearch/bin/elasticsearch -d
+        sudo -u esearch /usr/lib/elasticsearch/bin/elasticsearch -d
 
         service rabbitmq-server start
 
-        mkdir /opt/storm/logs
         /opt/storm/bin/storm nimbus 2>&1 > /opt/storm/logs/nimbus-console.out &
         /opt/storm/bin/storm supervisor 2>&1 > /opt/storm/logs/supervisor-console.out &
 
@@ -287,6 +288,7 @@
 
         cd ~/lumify-root
         mvn install
+
 
 ### build and deploy the Lumify web application and authentication plugin
 
