@@ -29,7 +29,6 @@ public class XmlToOwl extends CommandLineBase {
     private static final String CMD_OPT_INPUT = "in";
     private static final String CMD_OPT_OUTPUT = "out";
     private static final String OWL_FILE_TEMPLATE_CONTENTS = "<!-- CONTENTS -->";
-    private static final String COUNTRY_CONCEPT_IRI = "http://lumify.io/worldfactbook#country";
     private XPathExpression fieldXPath;
     private XPathExpression descriptionXPath;
 
