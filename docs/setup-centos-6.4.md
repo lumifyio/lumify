@@ -1,5 +1,10 @@
 # Lumify on CentOS 6.4
 
+## Performance Considerations
+
+1. at least 2 CPU cores
+1. at least 4GB of RAM
+1. at least 8GB of disk space
 
 ## Network Considerations
 
