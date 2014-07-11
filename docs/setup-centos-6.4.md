@@ -70,7 +70,7 @@
 
         cd ~
         curl http://archive.cloudera.com/cdh4/one-click-install/redhat/6/x86_64/cloudera-cdh-4-0.x86_64.rpm -O
-        rpm -iVH cloudera-cdh-4-0.x86_64.rpm
+        rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
         mkdir /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
