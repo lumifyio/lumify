@@ -83,6 +83,8 @@
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         echo "${ip_address} $(hostname)" >> /etc/hosts
 
+        sed -i -e "s/localhost:8020/${ip_address}:8020/" /usr/lib/hadoop/etc/hadoop/core-site.xml
+
 
 ### Accumulo
 
@@ -98,13 +100,15 @@
         cp accumulo/conf/examples/1GB/standalone/* accumulo/conf
 
         sed -i -e "s|HADOOP_PREFIX=/path/to/hadoop|HADOOP_PREFIX=/usr/lib/hadoop|" \
-               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/opt/jdk|" \
+               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/usr/java/jdk1.6.0_45/jre|" \
                -e "s|ZOOKEEPER_HOME=/path/to/zookeeper|ZOOKEEPER_HOME=/usr/lib/zookeeper|" \
           accumulo/conf/accumulo-env.sh
 
         vi accumulo/conf/accumulo-site.xml
-        # follow the instructions in the comment in the general.classpaths property
-        # add:
+        # 1) follow the instructions in the comment in the general.classpaths property
+
+        vi accumulo/conf/accumulo-site.xml
+        # 2) add the following in the configuration element:
           <property>
               <name>instance.dfs.uri</name>
               <value>hdfs://192.168.33.10:8020</value>
@@ -215,14 +219,13 @@
 
 *as root:*
 
-        hdfs namenode -format
+        sudo -u hdfs hdfs namenode -format
         service hadoop-hdfs-namenode start
         service hadoop-hdfs-secondarynamenode start
         service hadoop-hdfs-datanode start
 
         service zookeeper-server start
 
-        /usr/lib/zookeeper/bin/zkServer.sh start
         /usr/lib/accumulo/bin/accumulo init --instance-name lumify --password password
 
 
