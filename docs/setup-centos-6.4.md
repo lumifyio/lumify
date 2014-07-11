@@ -252,10 +252,11 @@
 
         sudo -u accumulo /usr/lib/accumulo/bin/start-all.sh
 
-        /usr/lib/elasticsearch/bin/elasticsearch
+        /usr/lib/elasticsearch/bin/elasticsearch -d
 
         service rabbitmq-server start
 
+        mkdir /opt/storm/logs
         /opt/storm/bin/storm nimbus 2>&1 > /opt/storm/logs/nimbus-console.out &
         /opt/storm/bin/storm supervisor 2>&1 > /opt/storm/logs/supervisor-console.out &
 
