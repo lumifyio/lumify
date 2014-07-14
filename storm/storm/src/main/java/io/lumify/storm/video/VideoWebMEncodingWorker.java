@@ -24,6 +24,11 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+
+        //Get the Video Rotation property from the vertex.
+        int videoRotation = 180;
+        String[] ffmpegRotationStrings = VideoUtils.createFFMPEGRotationOptions(videoRotation);
+
         File webmFile = File.createTempFile("encode_webm_", ".webm");
         try {
             processRunner.execute(
@@ -39,6 +44,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                             "-bufsize", "1000k",
                             "-threads", "2",
                             "-vf", "scale=720:480",
+                            "-vf", "transpose=1,transpose=1",
                             "-acodec", "libvorbis",
                             "-map", "0", // process all streams
                             "-map", "-0:s", // ignore subtitles
@@ -48,6 +54,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
+            //TODO. Should scale always be 720:480?
 
             ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 

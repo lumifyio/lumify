@@ -8,6 +8,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.video.VideoUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -87,7 +88,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        Integer videoRotation = extractRotationFromJSON(outJson);
+        Integer videoRotation = VideoUtils.extractRotationFromJSON(outJson);
         if (videoRotation != null) {
             data.getElement().addPropertyValue(
                     PROPERTY_KEY,
@@ -107,18 +108,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         }
     }
 
-    private static Integer extractRotationFromJSON(JSONObject json) {
-        Integer rotate = null;
-        try {
-            JSONArray streamsJson = json.optJSONArray("streams");
-            JSONObject streamsIndex0Json = streamsJson.optJSONObject(0);
-            JSONObject tagsJson = streamsIndex0Json.optJSONObject("tags");
-            rotate = tagsJson.optInt("rotate");
-        } catch (NullPointerException e) {
-            LOGGER.info("Could not retrieve a \"rotate\" value from the JSON object.");
-        }
-        return rotate;
-    }
+
 
     @Override
     public boolean isHandled(Element element, Property property) {
