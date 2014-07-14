@@ -79,9 +79,9 @@
         rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
-        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
-        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
-
+        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary}
+        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary}
+        
         service zookeeper-server init
         # The following warning is expected (and ok):
         # No myid provided, be sure to specify it in /var/lib/zookeeper/myid if using non-standalone
