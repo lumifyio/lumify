@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.StringUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -17,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class VideoMp4EncodingWorker extends GraphPropertyWorker {
@@ -28,44 +28,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File mp4File = File.createTempFile("encode_mp4_", ".mp4");
         File mp4RelocatedFile = File.createTempFile("relocated_mp4_", ".mp4");
-
-        //Get the Video Rotation property from the vertex.
-        int videoRotation = 180;
-        String[] ffmpegRotationOptions = VideoUtils.createFFMPEGRotationOptions(videoRotation);
-
-        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
-        ffmpegOptionsList.add("-y");
-        ffmpegOptionsList.add("-i");
-        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
-        ffmpegOptionsList.add("-vcodec");
-        ffmpegOptionsList.add("libx264");
-        ffmpegOptionsList.add("-vprofile");
-        ffmpegOptionsList.add("high");
-        ffmpegOptionsList.add("-preset");
-        ffmpegOptionsList.add("slow");
-        ffmpegOptionsList.add("-b:v");
-        ffmpegOptionsList.add("500k");
-        ffmpegOptionsList.add("-maxrate");
-        ffmpegOptionsList.add("500k");
-        ffmpegOptionsList.add("-bufsize");
-        ffmpegOptionsList.add("1000k");
-        ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add("scale=720:480");
-        if (ffmpegRotationOptions != null) {
-            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
-            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
-        }
-        ffmpegOptionsList.add("-threads");
-        ffmpegOptionsList.add("0");
-        ffmpegOptionsList.add("-acodec");
-        ffmpegOptionsList.add("libfdk_aac");
-        ffmpegOptionsList.add("-b:a");
-        ffmpegOptionsList.add("128k");
-        ffmpegOptionsList.add("-f");
-        ffmpegOptionsList.add("mp4");
-        ffmpegOptionsList.add(mp4File.getAbsolutePath());
-        String[] ffmpegOptionsArray = createStringArrayFromList(ffmpegOptionsList);
-
+        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForMp4(data, mp4File);
         try {
             processRunner.execute(
                     "ffmpeg",
@@ -103,12 +66,47 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         }
     }
 
-    private static String[] createStringArrayFromList(List<String> list) {
-        String[] stringArray = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            stringArray[i] = list.get(i);
+    public String[] prepareFFMPEGOptionsForMp4(GraphPropertyWorkData data, File mp4File) {
+        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
+        if (videoRotation == null){
+            videoRotation = 0;
         }
-        return stringArray;
+        String[] ffmpegRotationOptions = VideoRotation.createFFMPEGRotationOptions(videoRotation);
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-y");
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
+        ffmpegOptionsList.add("-vcodec");
+        ffmpegOptionsList.add("libx264");
+        ffmpegOptionsList.add("-vprofile");
+        ffmpegOptionsList.add("high");
+        ffmpegOptionsList.add("-preset");
+        ffmpegOptionsList.add("slow");
+        ffmpegOptionsList.add("-b:v");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-maxrate");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-bufsize");
+        ffmpegOptionsList.add("1000k");
+        ffmpegOptionsList.add("-vf");
+        ffmpegOptionsList.add("scale=720:480");
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+        ffmpegOptionsList.add("-threads");
+        ffmpegOptionsList.add("0");
+        ffmpegOptionsList.add("-acodec");
+        ffmpegOptionsList.add("libfdk_aac");
+        ffmpegOptionsList.add("-b:a");
+        ffmpegOptionsList.add("128k");
+        ffmpegOptionsList.add("-f");
+        ffmpegOptionsList.add("mp4");
+        ffmpegOptionsList.add(mp4File.getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtils.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
+        //TODO. Should scale always be 720:480?
     }
 
     @Override

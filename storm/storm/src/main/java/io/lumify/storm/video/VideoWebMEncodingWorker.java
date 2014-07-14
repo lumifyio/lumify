@@ -6,6 +6,7 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.StringUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -15,6 +16,7 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,37 +26,16 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
-
-        //Get the Video Rotation property from the vertex.
-        int videoRotation = 180;
-        String[] ffmpegRotationStrings = VideoUtils.createFFMPEGRotationOptions(videoRotation);
-
         File webmFile = File.createTempFile("encode_webm_", ".webm");
+        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForWebM(data, webmFile);
         try {
             processRunner.execute(
                     "ffmpeg",
-                    new String[]{
-                            "-y", // overwrite output files
-                            "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "libvpx",
-                            "-b:v", "600k",
-                            "-qmin", "10",
-                            "-qmax", "42",
-                            "-maxrate", "500k",
-                            "-bufsize", "1000k",
-                            "-threads", "2",
-                            "-vf", "scale=720:480",
-                            "-vf", "transpose=1,transpose=1",
-                            "-acodec", "libvorbis",
-                            "-map", "0", // process all streams
-                            "-map", "-0:s", // ignore subtitles
-                            "-f", "webm",
-                            webmFile.getAbsolutePath()
-                    },
+                    ffmpegOptionsArray,
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
-            //TODO. Should scale always be 720:480?
+
 
             ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
@@ -72,6 +53,51 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         } finally {
             webmFile.delete();
         }
+    }
+
+    private String[] prepareFFMPEGOptionsForWebM(GraphPropertyWorkData data, File webmFile){
+        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
+        if (videoRotation == null){
+            videoRotation = 0;
+        }
+        String[] ffmpegRotationOptions = VideoRotation.createFFMPEGRotationOptions(videoRotation);
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-y");
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
+        ffmpegOptionsList.add("-vcodec");
+        ffmpegOptionsList.add("libvpx");
+        ffmpegOptionsList.add("-b:v");
+        ffmpegOptionsList.add("600k");
+        ffmpegOptionsList.add("-qmin");
+        ffmpegOptionsList.add("10");
+        ffmpegOptionsList.add("-qmax");
+        ffmpegOptionsList.add("42");
+        ffmpegOptionsList.add("-maxrate");
+        ffmpegOptionsList.add("500k");
+        ffmpegOptionsList.add("-bufsize");
+        ffmpegOptionsList.add("1000k");
+        ffmpegOptionsList.add("-threads");
+        ffmpegOptionsList.add("2");
+        ffmpegOptionsList.add("-vf");
+        ffmpegOptionsList.add("scale=720:480");
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+        ffmpegOptionsList.add("-acodec");
+        ffmpegOptionsList.add("libvorbis");
+        ffmpegOptionsList.add("-map");
+        ffmpegOptionsList.add("0");
+        ffmpegOptionsList.add("-map");
+        ffmpegOptionsList.add("-0:s");
+        ffmpegOptionsList.add("-f");
+        ffmpegOptionsList.add("webm");
+        ffmpegOptionsList.add(webmFile.getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtils.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
+        //TODO. Should scale always be 720:480?
     }
 
     @Override
