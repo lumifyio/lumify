@@ -8,15 +8,13 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.video.VideoUtils;
-import org.json.JSONArray;
+import io.lumify.storm.video.VideoRotation;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
 import org.securegraph.mutation.ExistingElementMutation;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -56,22 +54,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         String mimeType = (String) data.getProperty().getMetadata().get(RawLumifyProperties.MIME_TYPE.getPropertyName());
         boolean isAudio = mimeType.startsWith("audio");
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        processRunner.execute(
-                "ffprobe",
-                new String[]{
-                        "-v", "quiet",
-                        "-print_format", "json",
-                        "-show_format",
-                        "-show_streams",
-                        data.getLocalFile().getAbsolutePath()
-                },
-                out,
-                data.getLocalFile().getAbsolutePath() + ": "
-        );
-        String outString = new String(out.toByteArray());
-        JSONObject outJson = new JSONObject(outString);
-        LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), outJson.toString(2));
+        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
 
         JSONObject formatJson = outJson.optJSONObject("format");
         Double duration = null;
@@ -88,7 +71,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        Integer videoRotation = VideoUtils.extractRotationFromJSON(outJson);
+        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
         if (videoRotation != null) {
             data.getElement().addPropertyValue(
                     PROPERTY_KEY,
