@@ -30,6 +30,9 @@ import java.util.*;
 public abstract class BaseRequestHandler implements Handler {
 
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    protected static final int EXPIRES_1_HOUR = 60 * 60;
+    protected static final int EXPIRES_1_DAY = 24 * 60 * 60;
 
     protected static final ResourceBundle STRINGS = ResourceBundle.getBundle("MessageBundle", Locale.getDefault());
 
@@ -214,6 +217,10 @@ public abstract class BaseRequestHandler implements Handler {
 
     protected Set<Privilege> getPrivileges(User user) {
         return getUserRepository().getPrivileges(user);
+    }
+
+    public static void setMaxAge(final HttpServletResponse response, int numberOfSeconds) {
+        response.setHeader("Cache-Control", "max-age=" + numberOfSeconds);
     }
 
     protected void respondWithNotFound(final HttpServletResponse response) throws IOException {

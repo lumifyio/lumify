@@ -87,6 +87,45 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>cache</filter-name>
+        <filter-class>io.lumify.web.CacheServletFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.ejs</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.less</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.hbs</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <url-pattern>*.map</url-pattern>
+    </filter-mapping>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Everything in the webapp</web-resource-name>

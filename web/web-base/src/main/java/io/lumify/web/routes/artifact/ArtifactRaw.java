@@ -1,5 +1,8 @@
 package io.lumify.web.routes.artifact;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.MediaLumifyProperties;
@@ -9,14 +12,11 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,8 +26,8 @@ import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.lumify.core.model.properties.RawLumifyProperties.*;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.lumify.core.model.properties.RawLumifyProperties.*;
 
 public class ArtifactRaw extends BaseRequestHandler {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(ArtifactRaw.class);
@@ -71,6 +71,7 @@ public class ArtifactRaw extends BaseRequestHandler {
         } else {
             String mimeType = getMimeType(artifactVertex);
             response.setContentType(mimeType);
+            setMaxAge(response, EXPIRES_1_HOUR);
             if (download) {
                 response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
             } else {
