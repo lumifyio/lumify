@@ -11,19 +11,17 @@ public class VideoRotationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
 
     public static Integer retrieveVideoRotation(ProcessRunner processRunner, GraphPropertyWorkData data) {
-        JSONObject json;
         try {
-            json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+            JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+            if (json != null) {
+                Integer videoRotation = extractRotationFromJSON(json);
+                return videoRotation;
+            }
         } catch (Exception e) {
             return null;
         }
 
-        if (json != null) {
-            Integer videoRotation = extractRotationFromJSON(json);
-            return videoRotation;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     private static Integer extractRotationFromJSON(JSONObject json) {
