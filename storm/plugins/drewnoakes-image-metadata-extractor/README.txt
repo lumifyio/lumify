@@ -10,3 +10,19 @@ repository.ontology.owl.3.dir=/Users/jon.hellmann/Documents/lumify-all/lumify-pu
 Check and make sure the following are not inside this file:
 ontology.iri.yAxisFlipNeeded=http://lumify.io/exif#yAxisFlipNeeded
 ontology.iri.cwRotationNeeded=http://lumify.io/exif#cwRotationNeeded
+
+
+Check that file:
+/Users/jon.hellmann/Documents/lumify-all/lumify-public/dev/storm-local/pom.xml
+has:
+<dependency>
+    <groupId>io.lumify</groupId>
+    <artifactId>lumify-drewnoakes-image-metadata-extractor</artifactId>
+    <version>${project.version}</version>
+</dependency>
+
+
+Check that file:
+/Users/jon.hellmann/Documents/lumify-all/lumify-public/storm/plugins/pom.xml
+has:
+<module>drewnoakes-image-metadata-extractor</module>
