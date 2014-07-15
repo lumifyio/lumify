@@ -8,6 +8,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.DurationUtil;
 import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
@@ -56,13 +57,9 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         boolean isAudio = mimeType.startsWith("audio");
 
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-
-        Double duration;
-        try {
-            JSONObject formatJson = outJson.optJSONObject("format");
-            duration = formatJson.optDouble("duration");
-        } catch (Exception e){
-            duration = null;
+        Double duration = null;
+        if (outJson != null){
+            duration = DurationUtil.extractDurationFromJSON(outJson);
         }
 
         Map<String, Object> metadata = data.createPropertyMetadata();
