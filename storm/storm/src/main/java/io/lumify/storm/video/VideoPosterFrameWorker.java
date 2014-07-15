@@ -6,6 +6,8 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.*;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -15,6 +17,7 @@ import org.securegraph.property.StreamingPropertyValue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,20 +28,11 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
+        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForPosterFrame(data, videoPosterFrameFile);
         try {
             processRunner.execute(
                     "ffmpeg",
-                    new String[]{
-                            "-itsoffset", "-4",
-                            "-i", data.getLocalFile().getAbsolutePath(),
-                            "-vcodec", "png",
-                            "-vframes", "1",
-                            "-an",
-                            "-f", "rawvideo",
-                            "-s", "720x480",
-                            "-y",
-                            videoPosterFrameFile.getAbsolutePath()
-                    },
+                    ffmpegOptionsArray,
                     null,
                     data.getLocalFile().getAbsolutePath() + ": "
             );
@@ -64,6 +58,56 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         } finally {
             videoPosterFrameFile.delete();
         }
+    }
+
+    private String[] prepareFFMPEGOptionsForPosterFrame(GraphPropertyWorkData data, File videoPosterFrameFile) {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+
+        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
+        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
+            videoRotation = 0;
+        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
+
+        Double duration = DurationUtil.extractDurationFromJSON(json);
+        String durationString = null;
+        if (duration != null) {
+            durationString = Integer.toString( (int) (duration / 4) );
+        }
+
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        //Add the time offset for where the poster frame will be taken.
+        if (durationString != null) {
+            ffmpegOptionsList.add("-itsoffset");
+            ffmpegOptionsList.add("-" + durationString);
+        }
+
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(data.getLocalFile().getAbsolutePath());
+        ffmpegOptionsList.add("-vcodec");
+        ffmpegOptionsList.add("png");
+        ffmpegOptionsList.add("-vframes");
+        ffmpegOptionsList.add("1");
+        ffmpegOptionsList.add("-an");
+        ffmpegOptionsList.add("-f");
+        ffmpegOptionsList.add("rawvideo");
+
+        //Scale.
+        ffmpegOptionsList.add("-s");
+        ffmpegOptionsList.add(displayDimensions[0] + "x" + displayDimensions[1]);
+
+        //Rotation.
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
+        ffmpegOptionsList.add("-y");
+        ffmpegOptionsList.add(videoPosterFrameFile.getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
     }
 
     @Override
