@@ -51,6 +51,9 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     private Cache<String, List<Relationship>> relationshipLabelsCache = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
+    private Cache<String, JSONObject> jsonCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build();
 
     @Inject
     public SecureGraphOntologyRepository(final Graph graph,
@@ -72,9 +75,21 @@ public class SecureGraphOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
+    public JSONObject getJson() {
+        JSONObject json = this.jsonCache.getIfPresent("json");
+        if (json != null) {
+            return json;
+        }
+        json = super.getJson();
+        this.jsonCache.put("json", json);
+        return json;
+    }
+
+    @Override
     public void clearCache() {
         LOGGER.info("clearing ontology cache");
         graph.flush();
+        this.jsonCache.invalidateAll();
         this.allConceptsWithPropertiesCache.invalidateAll();
         this.allPropertiesCache.invalidateAll();
         this.relationshipLabelsCache.invalidateAll();

@@ -30,17 +30,14 @@ public class Ontology extends BaseRequestHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, HandlerChain chain) throws Exception {
-        JSONObject resultJson = new JSONObject();
+        JSONObject resultJson = ontologyRepository.getJson();
 
-        Iterable<Concept> concepts = ontologyRepository.getConceptsWithProperties();
-        resultJson.put("concepts", Concept.toJsonConcepts(concepts));
+        String eTag = generateETag(resultJson.toString().getBytes());
+        if (testEtagHeaders(request, response, eTag)) {
+            return;
+        }
 
-        Iterable<OntologyProperty> properties = ontologyRepository.getProperties();
-        resultJson.put("properties", OntologyProperty.toJsonProperties(properties));
-
-        Iterable<Relationship> relationships = ontologyRepository.getRelationshipLabels();
-        resultJson.put("relationships", Relationship.toJsonRelationships(relationships));
-
+        addETagHeader(response, eTag);
         respondWithJson(response, resultJson);
     }
 }

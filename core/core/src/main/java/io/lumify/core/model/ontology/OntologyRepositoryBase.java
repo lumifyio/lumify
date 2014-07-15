@@ -569,4 +569,19 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             }
         }
     }
+
+    @Override
+    public JSONObject getJson() {
+        JSONObject resultJson = new JSONObject();
+
+        Iterable<Concept> concepts = getConceptsWithProperties();
+        resultJson.put("concepts", Concept.toJsonConcepts(concepts));
+
+        Iterable<OntologyProperty> properties = getProperties();
+        resultJson.put("properties", OntologyProperty.toJsonProperties(properties));
+
+        Iterable<Relationship> relationships = getRelationshipLabels();
+        resultJson.put("relationships", Relationship.toJsonRelationships(relationships));
+        return resultJson;
+    }
 }
