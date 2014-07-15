@@ -3,6 +3,7 @@ package io.lumify.core.model.ontology;
 import io.lumify.core.security.LumifyVisibility;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
@@ -47,7 +48,7 @@ public interface OntologyRepository {
 
     List<Concept> getAllLeafNodesByConcept(Concept concept);
 
-    Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName);
+    Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir);
 
     Relationship getOrCreateRelationshipType(Concept from, Concept to, String relationshipIRI, String displayName);
 
@@ -60,4 +61,6 @@ public interface OntologyRepository {
     void exportOntology(OutputStream out, IRI documentIRI) throws Exception;
 
     void writePackage(File file, IRI documentIRI, Authorizations authorizations) throws Exception;
+
+    JSONObject getJson();
 }

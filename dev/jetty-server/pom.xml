@@ -54,11 +54,6 @@
             <artifactId>lumify-geocoder-bing</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-google-analytics</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

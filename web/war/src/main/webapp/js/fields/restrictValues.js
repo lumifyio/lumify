@@ -18,16 +18,19 @@ define([
 
             this.filterUpdated(val);
 
+            var propertyPossibleValues = this.attr.property.possibleValues,
+                possibleValues = _.map(Object.keys(propertyPossibleValues), function(key) {
+                return {
+                    key: key,
+                    value: propertyPossibleValues[key],
+                    selected: key === val
+                }
+            });
+
             this.$node.html(template({
                 predicates: this.attr.predicates,
                 displayName: this.attr.property.displayName,
-                values: _.map(this.attr.property.possibleValues, function(possibleValue) {
-                    if (possibleValue.key === val) {
-                        possibleValue.selected = true;
-                    }
-
-                    return possibleValue;
-                })
+                values: possibleValues
             }));
 
             this.on('change', {

@@ -1,5 +1,8 @@
 package io.lumify.web.routes.artifact;
 
+import com.altamiracorp.miniweb.HandlerChain;
+import com.altamiracorp.miniweb.utils.UrlUtils;
+import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.model.artifactThumbnails.ArtifactThumbnailRepository;
 import io.lumify.core.model.user.UserRepository;
@@ -8,14 +11,11 @@ import io.lumify.core.user.User;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.web.BaseRequestHandler;
-import com.altamiracorp.miniweb.HandlerChain;
-import com.altamiracorp.miniweb.utils.UrlUtils;
+import org.apache.commons.io.IOUtils;
 import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 import org.securegraph.Vertex;
 import org.securegraph.property.StreamingPropertyValue;
-import com.google.inject.Inject;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -62,9 +62,9 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
 
             response.setContentType("image/jpeg");
             response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
+            setMaxAge(response, EXPIRES_1_HOUR);
 
-            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "poster-frame", boundaryDims[0],
-                    boundaryDims[1], user);
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "poster-frame", boundaryDims[0], boundaryDims[1], user);
             if (thumbnailData != null) {
                 LOGGER.debug("Cache hit for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
@@ -80,12 +80,17 @@ public class ArtifactPosterFrame extends BaseRequestHandler {
             respondWithNotFound(response);
             return;
         }
+
         InputStream in = rawPosterFrameValue.getInputStream();
         try {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (poster-frame) %d x %d", graphVertexId, boundaryDims[0], boundaryDims[1]);
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "poster-frame", in,
-                        boundaryDims, user).getThumbnailData();
+
+                response.setContentType("image/jpeg");
+                response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
+                setMaxAge(response, EXPIRES_1_HOUR);
+
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "poster-frame", in, boundaryDims, user).getThumbnailData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();

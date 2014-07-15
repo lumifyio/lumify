@@ -1,5 +1,10 @@
 # Lumify on CentOS 6.4
 
+## Performance Considerations
+
+1. at least 2 CPU cores
+1. at least 4GB of RAM
+1. at least 8GB of disk space
 
 ## Network Considerations
 
@@ -30,6 +35,7 @@
         cd ~
         chmod u+x jdk-6u45-linux-x64-rpm.bin
         ./jdk-6u45-linux-x64-rpm.bin
+        echo "export JAVA_HOME=/usr/java/jdk1.6.0_45/jre; export PATH=\$JAVA_HOME/bin:\$PATH" > /etc/profile.d/java.sh
 
 
 ### EPEL Repository
@@ -70,16 +76,31 @@
 
         cd ~
         curl http://archive.cloudera.com/cdh4/one-click-install/redhat/6/x86_64/cloudera-cdh-4-0.x86_64.rpm -O
-        rpm -iVH cloudera-cdh-4-0.x86_64.rpm
+        rpm -ivH cloudera-cdh-4-0.x86_64.rpm
         yum install -y hadoop-0.20-conf-pseudo zookeeper-server
 
-        mkdir /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
-        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
-
+        mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
+        chown hdfs:hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/{name,namesecondary,data}
+        
         service zookeeper-server init
+        # The following warning is expected (and ok):
+        # No myid provided, be sure to specify it in /var/lib/zookeeper/myid if using non-standalone
 
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         echo "${ip_address} $(hostname)" >> /etc/hosts
+
+        sed -i -e "s/localhost:8020/${ip_address}:8020/" /usr/lib/hadoop/etc/hadoop/core-site.xml
+
+        vi /usr/lib/hadoop/etc/hadoop/hdfs-site.xml
+        # add the following in the configuration element:
+          <property>
+            <name>dfs.permissions.enabled</name>
+            <value>false</value>
+          </property>
+          <property>
+            <name>dfs.datanode.synconclose</name>
+            <value>true</value>
+          </property>
 
 
 ### Accumulo
@@ -94,15 +115,19 @@
         tar xzf ~/accumulo-1.5.1-bin.tar.gz
         ln -s accumulo-1.5.1 accumulo
         cp accumulo/conf/examples/1GB/standalone/* accumulo/conf
-
+        
+        chown -R accumulo:hadoop accumulo/
+        
         sed -i -e "s|HADOOP_PREFIX=/path/to/hadoop|HADOOP_PREFIX=/usr/lib/hadoop|" \
-               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/opt/jdk|" \
+               -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/usr/java/jdk1.6.0_45/jre|" \
                -e "s|ZOOKEEPER_HOME=/path/to/zookeeper|ZOOKEEPER_HOME=/usr/lib/zookeeper|" \
           accumulo/conf/accumulo-env.sh
 
         vi accumulo/conf/accumulo-site.xml
-        # follow the instructions in the comment in the general.classpaths property
-        # add:
+        # 1) follow the instructions in the comment in the general.classpaths property
+
+        vi accumulo/conf/accumulo-site.xml
+        # 2) add the following in the configuration element:
           <property>
               <name>instance.dfs.uri</name>
               <value>hdfs://192.168.33.10:8020</value>
@@ -124,6 +149,8 @@
         cd /usr/lib
         tar xzf ~/elasticsearch-1.1.2.tar.gz
         ln -s elasticsearch-1.1.2 elasticsearch
+        
+        chown -R esearch:hadoop elasticsearch/
 
         elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
         elasticsearch/bin/plugin install mobz/elasticsearch-head
@@ -138,6 +165,8 @@
         cd /opt
         tar xzf ~/apache-storm-0.9.2-incubating.tar.gz
         ln -s apache-storm-0.9.2-incubating storm
+
+        mkdir storm/logs
 
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         echo "storm.zookeeper.servers:" >> /opt/storm/conf/storm.yaml
@@ -213,15 +242,14 @@
 
 *as root:*
 
-        hdfs namenode -format
+        sudo -u hdfs hdfs namenode -format
         service hadoop-hdfs-namenode start
         service hadoop-hdfs-secondarynamenode start
         service hadoop-hdfs-datanode start
 
         service zookeeper-server start
 
-        /usr/lib/zookeeper/bin/zkServer.sh start
-        /usr/lib/accumulo/bin/accumulo init --instance-name lumify --password password
+        sudo -u accumulo /usr/lib/accumulo/bin/accumulo init --instance-name lumify --password password
 
 
 ### start services
@@ -234,9 +262,9 @@
 
         service zookeeper-server start
 
-        /usr/lib/accumulo/bin/start-all.sh
+        sudo -u accumulo /usr/lib/accumulo/bin/start-all.sh
 
-        /usr/lib/elasticsearch/bin/elasticsearch
+        sudo -u esearch /usr/lib/elasticsearch/bin/elasticsearch -d
 
         service rabbitmq-server start
 
@@ -260,7 +288,7 @@
         ip_address=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d / -f 1)
         sudo sed -i -e "s/192.168.33.10/${ip_address}/" /opt/lumify/config/lumify.properties
 
-        sudo /usr/lib/hadoop/bin/hadoop fs -mkdir -p /lumify/libcache
+        /usr/lib/hadoop/bin/hadoop fs -mkdir -p /lumify/libcache
 
 
 ## Build and Deploy Lumify
@@ -270,10 +298,11 @@
         cd ~/lumify-root
         mvn install
 
+
 ### build and deploy the Lumify web application and authentication plugin
 
         cd ~/lumify
-        mvn package -P web/war -pl lumify-web-war -am
+        mvn package -P web-war -pl web/war -am
         mvn package -pl web/plugins/auth-username-only -am
 
         sudo cp web/war/target/lumify-web-war-0.2.0-SNAPSHOT.war /opt/jetty/webapps/lumify.war

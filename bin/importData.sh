@@ -8,7 +8,7 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
-classpath=$(${DIR}/classpath.sh tools/import)
+classpath=$(${DIR}/classpath.sh dev/import-local)
 if [ $? -ne 0 ]; then
   echo "${classpath}"
   exit

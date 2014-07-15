@@ -5,9 +5,11 @@ import com.google.common.cache.CacheBuilder;
 import io.lumify.core.config.Configuration;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.exception.LumifyResourceNotFoundException;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.securegraph.Authorizations;
 import org.securegraph.TextIndexHint;
 import org.securegraph.inmemory.InMemoryAuthorizations;
@@ -69,55 +71,36 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
 
     @Override
     protected Concept importOntologyClass(OWLOntology o, OWLClass ontologyClass, File inDir, Authorizations authorizations) throws IOException {
-        String uri = ontologyClass.getIRI().toString();
+        InMemoryConcept concept = (InMemoryConcept) super.importOntologyClass(o, ontologyClass, inDir, authorizations);
+        conceptsCache.put(concept.getIRI(), concept);
+        return concept;
+    }
 
-        InMemoryConcept parent = (InMemoryConcept) getParentConcept(o, ontologyClass, inDir, authorizations);
-        InMemoryConcept result = (InMemoryConcept) getOrCreateConcept(parent, uri, getLabel(o, ontologyClass));
-
-        String color = getColor(o, ontologyClass);
-        if (color != null) {
-            result.setColor(color);
-        }
-
-        String displayType = getDisplayType(o, ontologyClass);
-        if (displayType != null) {
-            result.setDisplayType(displayType);
-        }
-
-        String titleFormula = getTitleFormula(o, ontologyClass);
-        if (titleFormula != null) {
-            result.setTitleFormula(titleFormula);
-        }
-
-        String subtitleFormula = getSubtitleFormula(o, ontologyClass);
-        if (subtitleFormula != null) {
-            result.setSubtitleFormula(subtitleFormula);
-        }
-
-        String timeFormula = getTimeFormula(o, ontologyClass);
-        if (timeFormula != null) {
-            result.setTimeFormula(timeFormula);
-        }
-
-        result.setUserVisible(getUserVisible(o, ontologyClass));
-
-        String glyphIconFileName = getGlyphIconFileName(o, ontologyClass);
-        if (glyphIconFileName != null) {
+    @Override
+    protected void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
+        if (glyphIconFileName == null) {
+            concept.setProperty(propertyKey, null, authorizations);
+        } else {
             File iconFile = new File(inDir, glyphIconFileName);
             if (!iconFile.exists()) {
                 throw new RuntimeException("Could not find icon file: " + iconFile.toString());
             }
-            InputStream iconFileIn = new FileInputStream(iconFile);
-            result.setGlyphIcon(IOUtils.toByteArray(iconFileIn));
-            result.setHasGlyphIcon(true);
+            try {
+                InputStream iconFileIn = new FileInputStream(iconFile);
+                try {
+                    concept.setProperty(propertyKey, IOUtils.toByteArray(iconFileIn), authorizations);
+                } finally {
+                    iconFileIn.close();
+                }
+            } catch (IOException ex) {
+                throw new LumifyException("Failed to set glyph icon to " + iconFile, ex);
+            }
         }
-        conceptsCache.put(uri, result);
-        return result;
     }
 
     @Override
     protected void addEntityGlyphIconToEntityConcept(Concept entityConcept, byte[] rawImg) {
-        ((InMemoryConcept) entityConcept).setGlyphIcon(rawImg);
+        entityConcept.setProperty(LumifyProperties.GLYPH_ICON.getPropertyName(), rawImg, null);
     }
 
     @Override
@@ -158,15 +141,15 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
             Double boost) {
         checkNotNull(concept, "concept was null");
-        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
-        ((InMemoryConcept) concept).getProperties().add(property);
+        InMemoryOntologyProperty property = getOrCreatePropertyType(propertyIRI, dataType, displayName, possibleValues, userVisible, searchable, displayTime, boost);
+        concept.getProperties().add(property);
         checkNotNull(property, "Could not find property: " + propertyIRI);
         return property;
     }
@@ -184,8 +167,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             final String propertyName,
             final PropertyType dataType,
             final String displayName,
-            ArrayList<PossibleValueType> possibleValues,
-            Collection<TextIndexHint> textIndexHints,
+            JSONObject possibleValues,
             boolean userVisible,
             boolean searchable,
             Boolean displayTime,
@@ -202,9 +184,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
             if (displayName != null && !displayName.trim().isEmpty()) {
                 property.setDisplayName(displayName);
             }
-            if (possibleValues.size() > 0) {
-                property.setPossibleValues(possibleValues);
-            }
+            property.setPossibleValues(possibleValues);
             propertiesCache.put(propertyName, property);
         }
         return property;
@@ -340,7 +320,7 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
     }
 
     @Override
-    public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName) {
+    public Concept getOrCreateConcept(Concept parent, String conceptIRI, String displayName, File inDir) {
         InMemoryConcept concept = (InMemoryConcept) getConceptByIRI(conceptIRI);
         if (concept != null) {
             return concept;
@@ -350,8 +330,8 @@ public class ReadOnlyInMemoryOntologyRepository extends OntologyRepositoryBase {
         } else {
             concept = new InMemoryConcept(conceptIRI, ((InMemoryConcept) parent).getConceptIRI());
         }
-        concept.setTitle(conceptIRI);
-        concept.setDisplayName(displayName);
+        concept.setProperty(LumifyProperties.TITLE.getPropertyName(), conceptIRI, null);
+        concept.setProperty(LumifyProperties.DISPLAY_NAME.getPropertyName(), displayName, null);
         conceptsCache.put(conceptIRI, concept);
 
         return concept;

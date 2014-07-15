@@ -1,6 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class InMemoryOntologyProperty extends OntologyProperty {
     private String title;
@@ -8,7 +8,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     private boolean searchable;
     private String displayName;
     private PropertyType dataType;
-    private ArrayList<PossibleValueType> possibleValues;
+    private JSONObject possibleValues;
     private Boolean displayTime;
     private Double boost;
 
@@ -38,7 +38,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
     }
 
     @Override
-    public ArrayList<PossibleValueType> getPossibleValues() {
+    public JSONObject getPossibleValues() {
         return possibleValues;
     }
 
@@ -76,7 +76,7 @@ public class InMemoryOntologyProperty extends OntologyProperty {
         this.dataType = dataType;
     }
 
-    public void setPossibleValues(ArrayList<PossibleValueType> possibleValues) {
+    public void setPossibleValues(JSONObject possibleValues) {
         this.possibleValues = possibleValues;
     }
 

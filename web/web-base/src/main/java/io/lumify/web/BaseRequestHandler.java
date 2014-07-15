@@ -12,6 +12,7 @@ import io.lumify.core.model.workspace.WorkspaceRepository;
 import io.lumify.core.user.Privilege;
 import io.lumify.core.user.ProxyUser;
 import io.lumify.core.user.User;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -30,6 +33,9 @@ import java.util.*;
 public abstract class BaseRequestHandler implements Handler {
 
     public static final String LUMIFY_WORKSPACE_ID_HEADER_NAME = "Lumify-Workspace-Id";
+    private static final String RFC1123_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    protected static final int EXPIRES_1_HOUR = 60 * 60;
+    protected static final int EXPIRES_1_DAY = 24 * 60 * 60;
 
     protected static final ResourceBundle STRINGS = ResourceBundle.getBundle("MessageBundle", Locale.getDefault());
 
@@ -216,8 +222,46 @@ public abstract class BaseRequestHandler implements Handler {
         return getUserRepository().getPrivileges(user);
     }
 
+    public static void setMaxAge(final HttpServletResponse response, int numberOfSeconds) {
+        response.setHeader("Cache-Control", "max-age=" + numberOfSeconds);
+    }
+
+    public static String generateETag(byte[] data) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] sha = digest.digest(data);
+            return Hex.encodeHexString(sha);
+        } catch (NoSuchAlgorithmException e) {
+            throw new LumifyException("Could not find SHA-256", e);
+        }
+    }
+
+    public static void addETagHeader(final HttpServletResponse response, String eTag) {
+        response.setHeader("ETag", "\"" + eTag + "\"");
+    }
+
+    public boolean testEtagHeaders(HttpServletRequest request, HttpServletResponse response, String eTag) throws IOException {
+        String ifNoneMatch = request.getHeader("If-None-Match");
+        if (ifNoneMatch != null) {
+            if (ifNoneMatch.startsWith("\"") && ifNoneMatch.length() > 2) {
+                ifNoneMatch = ifNoneMatch.substring(1, ifNoneMatch.length() - 1);
+            }
+            if (eTag.equalsIgnoreCase(ifNoneMatch)) {
+                addETagHeader(response, eTag);
+                respondWithNotModified(response);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected void respondWithNotFound(final HttpServletResponse response) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    protected void respondWithNotModified(final HttpServletResponse response) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
     }
 
     protected void respondWithNotFound(final HttpServletResponse response, String message) throws IOException {

@@ -67,6 +67,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             String format = thumbnail.getFormat();
             response.setContentType("image/" + format);
             response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
+            setMaxAge(response, EXPIRES_1_HOUR);
 
             thumbnailData = thumbnail.getThumbnailData();
             if (thumbnailData != null) {
@@ -92,6 +93,7 @@ public class ArtifactThumbnail extends BaseRequestHandler {
             String format = thumbnail.getFormat();
             response.setContentType("image/" + format);
             response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + "." + format);
+            setMaxAge(response, EXPIRES_1_HOUR);
 
             thumbnailData = thumbnail.getThumbnailData();
         } finally {

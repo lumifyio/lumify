@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+        <!ENTITY lumify "http://lumify.io#" >
+        <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+        <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+        <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+        <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+        ]>
+
+
+<rdf:RDF xmlns="http://lumify.io/worldfactbook#"
+         xml:base="http://lumify.io/worldfactbook"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:lumify="http://lumify.io#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://lumify.io/worldfactbook">
+        <owl:imports rdf:resource="http://lumify.io"/>
+    </owl:Ontology>
+
+    <owl:Class rdf:about="http://lumify.io/worldfactbook#country">
+        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <lumify:color>rgb(0, 0, 255)</lumify:color>
+    </owl:Class>
+
+<!-- CONTENTS -->
+
+</rdf:RDF>

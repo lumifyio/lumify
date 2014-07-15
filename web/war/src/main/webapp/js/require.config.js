@@ -69,6 +69,7 @@ var require = {
         'rangy-serializer': { deps:['rangy'] },
         'scrollStop': { exports: 'jQuery', deps:['jquery'] },
         'three': { exports: 'THREE' },
+        'timezone-js': { deps:['jquery'] },
         'underscore': { exports: '_' },
         'videojs': { exports: 'videojs' }
     }

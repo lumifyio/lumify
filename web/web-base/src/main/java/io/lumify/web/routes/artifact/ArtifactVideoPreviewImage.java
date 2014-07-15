@@ -62,10 +62,10 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
             boundaryDims[1] = Integer.parseInt(widthStr);
 
             response.setContentType("image/jpeg");
-            response.addHeader("Content-Disposition", "inline; filename=thumbnail" + boundaryDims[0] + ".jpg");
+            response.addHeader("Content-Disposition", "inline; filename=videoPreview" + boundaryDims[0] + ".jpg");
+            setMaxAge(response, EXPIRES_1_HOUR);
 
-            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0],
-                    boundaryDims[1], user);
+            byte[] thumbnailData = artifactThumbnailRepository.getThumbnailData(artifactVertex.getId(), "video-preview", boundaryDims[0], boundaryDims[1], user);
             if (thumbnailData != null) {
                 LOGGER.debug("Cache hit for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
                 ServletOutputStream out = response.getOutputStream();
@@ -85,8 +85,12 @@ public class ArtifactVideoPreviewImage extends BaseRequestHandler {
         try {
             if (widthStr != null) {
                 LOGGER.info("Cache miss for: %s (video-preview) %d x %d", artifactVertex.getId().toString(), boundaryDims[0], boundaryDims[1]);
-                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "video-preview", in,
-                        boundaryDims, user).getThumbnailData();
+
+                response.setContentType("image/jpeg");
+                response.addHeader("Content-Disposition", "inline; filename=videoPreview" + boundaryDims[0] + ".jpg");
+                setMaxAge(response, EXPIRES_1_HOUR);
+
+                byte[] thumbnailData = artifactThumbnailRepository.createThumbnail(artifactVertex, "video-preview", in, boundaryDims, user).getThumbnailData();
                 ServletOutputStream out = response.getOutputStream();
                 out.write(thumbnailData);
                 out.close();

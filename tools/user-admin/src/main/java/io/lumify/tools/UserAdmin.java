@@ -145,10 +145,25 @@ public class UserAdmin extends CommandLineBase {
 
     private int list(CommandLine cmd) {
         Iterable<User> users = getUserRepository().findAll();
+        List<User> sortedUsers = new ArrayList<User>();
+        for (User user : users) {
+            sortedUsers.add(user);
+        }
+        Collections.sort(sortedUsers, new Comparator<User>() {
+            @Override
+            public int compare(User u1, User u2) {
+                Date d1 = u1.getCreateDate();
+                Date d2 = u2.getCreateDate();
+                if (d1 != null && d2 != null) {
+                    return u1.getCreateDate().compareTo(u2.getCreateDate());
+                }
+                return 0;
+            }
+        });
         if (cmd.hasOption(CMD_OPT_AS_TABLE)) {
-            printUsers(users);
+            printUsers(sortedUsers);
         } else {
-            for (User user : users) {
+            for (User user : sortedUsers) {
                 printUser(user);
             }
         }
@@ -306,7 +321,14 @@ public class UserAdmin extends CommandLineBase {
     }
 
     private String privilegesAsString(Set<Privilege> privileges) {
-        return privileges.toString().replaceAll(" ", "");
+        SortedSet<Privilege> sortedPrivileges = new TreeSet<Privilege>(new Comparator<Privilege>() {
+            @Override
+            public int compare(Privilege p1, Privilege p2) {
+                return p1.ordinal() - p2.ordinal();
+            }
+        });
+        sortedPrivileges.addAll(privileges);
+        return sortedPrivileges.toString().replaceAll(" ", "");
     }
 
     private String authorizationsAsString(Authorizations authorizations) {

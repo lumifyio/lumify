@@ -192,9 +192,9 @@ define([
                 }
 
                 if (ontologyProperty.possibleValues) {
-                    var foundPossibleValue = _.findWhere(ontologyProperty.possibleValues, { key: value });
+                    var foundPossibleValue = ontologyProperty.possibleValues[value];
                     if (foundPossibleValue) {
-                        return foundPossibleValue.value;
+                        return foundPossibleValue;
                     } else {
                         console.warn('Unknown ontology value for key', value, ontologyProperty);
                     }

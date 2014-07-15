@@ -1,9 +1,6 @@
 package io.lumify.core.model.ontology;
 
-import io.lumify.core.model.properties.types.BooleanLumifyProperty;
-import io.lumify.core.model.properties.types.ByteArrayLumifyProperty;
-import io.lumify.core.model.properties.types.DoubleLumifyProperty;
-import io.lumify.core.model.properties.types.StringLumifyProperty;
+import io.lumify.core.model.properties.types.*;
 
 /**
  * LumifyProperty values used for storage of Ontology concepts.
@@ -33,7 +30,7 @@ public final class OntologyLumifyProperties {
 
     public static final StringLumifyProperty COLOR = new StringLumifyProperty("http://lumify.io#color");
 
-    public static final ByteArrayLumifyProperty POSSIBLE_VALUES = new ByteArrayLumifyProperty("http://lumify.io#possibleValues");
+    public static final JsonLumifyProperty POSSIBLE_VALUES = new JsonLumifyProperty("http://lumify.io#possibleValues");
 
     public static final StringLumifyProperty TEXT_INDEX_HINTS = new StringLumifyProperty("http://lumify.io#textIndexHints");
 

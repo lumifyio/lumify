@@ -520,7 +520,12 @@
     <owl:DatatypeProperty rdf:about="http://lumify.io/dev#gender">
         <rdfs:label xml:lang="en">Gender</rdfs:label>
         <lumify:textIndexHints>EXACT_MATCH</lumify:textIndexHints>
-        <lumify:possibleValues xml:lang="en">M:Male,F:Female</lumify:possibleValues>
+        <lumify:possibleValues xml:lang="en">
+        {
+            "M": "Male",
+            "F": "Female"
+        }
+        </lumify:possibleValues>
         <rdfs:domain rdf:resource="http://lumify.io/dev#person"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>

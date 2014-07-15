@@ -27,15 +27,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class OntologyRepositoryBase implements OntologyRepository {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(OntologyRepositoryBase.class);
 
     public void defineOntology(Authorizations authorizations) {
-        Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root");
-        Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing");
+        Concept rootConcept = getOrCreateConcept(null, OntologyRepository.ROOT_CONCEPT_IRI, "root", null);
+        Concept entityConcept = getOrCreateConcept(rootConcept, OntologyRepository.ENTITY_CONCEPT_IRI, "thing", null);
         addEntityGlyphIcon(entityConcept);
         importBaseOwlFile(authorizations);
     }
@@ -53,7 +52,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         try {
             importFile(baseOwlFile, IRI.create(iri), null, authorizations);
         } catch (Exception e) {
-            throw new LumifyException("Could not import ontology file", e);
+            throw new LumifyException("Could not import ontology file: " + fileName + " (iri: " + iri + ")", e);
         } finally {
             CloseableUtils.closeQuietly(baseOwlFile);
         }
@@ -195,7 +194,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         LOGGER.info("Importing ontology class " + uri + " (label: " + label + ")");
 
         Concept parent = getParentConcept(o, ontologyClass, inDir, authorizations);
-        Concept result = getOrCreateConcept(parent, uri, label);
+        Concept result = getOrCreateConcept(parent, uri, label, inDir);
 
         String color = getColor(o, ontologyClass);
         if (color != null) {
@@ -234,7 +233,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return result;
     }
 
-    private void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
+    protected void setIconProperty(Concept concept, File inDir, String glyphIconFileName, String propertyKey, Authorizations authorizations) throws IOException {
         if (glyphIconFileName != null) {
             File iconFile = new File(inDir, glyphIconFileName);
             if (!iconFile.exists()) {
@@ -295,7 +294,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
 
             LOGGER.info("Adding data property " + propertyIRI + " to class " + domainConcept.getTitle());
 
-            ArrayList<PossibleValueType> possibleValues = getPossibleValues(o, dataTypeProperty);
+            JSONObject possibleValues = getPossibleValues(o, dataTypeProperty);
             Collection<TextIndexHint> textIndexHints = getTextIndexHints(o, dataTypeProperty);
             addPropertyTo(domainConcept, propertyIRI, propertyDisplayName, propertyType, possibleValues, textIndexHints, userVisible, searchable, displayTime, boost);
         }
@@ -306,7 +305,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             String propertyIRI,
             String displayName,
             PropertyType dataType,
-            ArrayList<PossibleValueType> possibleValues,
+            JSONObject possibleValues,
             Collection<TextIndexHint> textIndexHints,
             boolean userVisible,
             boolean searchable,
@@ -334,6 +333,7 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
             if (inverseOf instanceof OWLObjectProperty) {
                 if (fromRelationship == null) {
                     fromRelationship = getRelationshipByIRI(iri);
+                    checkNotNull(fromRelationship, "could not find from relationship: " + iri);
                 }
 
                 OWLObjectProperty inverseOfOWLObjectProperty = (OWLObjectProperty) inverseOf;
@@ -495,31 +495,19 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
         return getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.MAP_GLYPH_ICON_FILE_NAME.getPropertyName());
     }
 
-    protected ArrayList<PossibleValueType> getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
-        return getAnnotationValuesByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getPropertyName());
+    protected JSONObject getPossibleValues(OWLOntology o, OWLEntity owlEntity) {
+        String val = getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.POSSIBLE_VALUES.getPropertyName());
+        if (val == null || val.trim().length() == 0) {
+            return null;
+        }
+        return new JSONObject(val);
     }
 
     protected Collection<TextIndexHint> getTextIndexHints(OWLOntology o, OWLDataProperty owlEntity) {
         return TextIndexHint.parse(getAnnotationValueByUri(o, owlEntity, OntologyLumifyProperties.TEXT_INDEX_HINTS.getPropertyName()));
     }
 
-    protected ArrayList<PossibleValueType> getAnnotationValuesByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
-        ArrayList<PossibleValueType> possibleValueTypes = new ArrayList<PossibleValueType>();
-        for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
-            if (annotation.getProperty().getIRI().toString().equals(uri)) {
-                OWLLiteral value = (OWLLiteral) annotation.getValue();
-                String[] possibleValues = value.getLiteral().split(",");
-                for (String possibleValue : possibleValues) {
-                    String[] parsedValue = possibleValue.split(":");
-                    checkArgument(parsedValue.length == 2, "Possible values must be in the format mapping:value");
-                    possibleValueTypes.add(new PossibleValueType(parsedValue[0], parsedValue[1]));
-                }
-            }
-        }
-        return possibleValueTypes;
-    }
-
-    private String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
+    protected String getAnnotationValueByUri(OWLOntology o, OWLEntity owlEntity, String uri) {
         for (OWLAnnotation annotation : owlEntity.getAnnotations(o)) {
             if (annotation.getProperty().getIRI().toString().equals(uri)) {
                 OWLLiteral value = (OWLLiteral) annotation.getValue();
@@ -580,5 +568,20 @@ public abstract class OntologyRepositoryBase implements OntologyRepository {
                 filter.put("propertyDataType", property.getDataType());
             }
         }
+    }
+
+    @Override
+    public JSONObject getJson() {
+        JSONObject resultJson = new JSONObject();
+
+        Iterable<Concept> concepts = getConceptsWithProperties();
+        resultJson.put("concepts", Concept.toJsonConcepts(concepts));
+
+        Iterable<OntologyProperty> properties = getProperties();
+        resultJson.put("properties", OntologyProperty.toJsonProperties(properties));
+
+        Iterable<Relationship> relationships = getRelationshipLabels();
+        resultJson.put("relationships", Relationship.toJsonRelationships(relationships));
+        return resultJson;
     }
 }

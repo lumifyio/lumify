@@ -18,5 +18,6 @@
         <module>wikipedia</module>
         <module>flight-aware</module>
         <module>twitter</module>
+        <module>world-factbook</module>
     </modules>
 </project>
