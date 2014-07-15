@@ -17,7 +17,7 @@ public class VideoDimensionsUtil {
             JSONArray streamsJson = json.optJSONArray("streams");
             JSONObject streamsIndex0Json = streamsJson.optJSONObject(0);
             width = streamsIndex0Json.optInt("width");
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             LOGGER.info("Could not retrieve a \"width\" value from the JSON object.");
         }
         return width;
@@ -32,7 +32,7 @@ public class VideoDimensionsUtil {
             JSONArray streamsJson = json.optJSONArray("streams");
             JSONObject streamsIndex0Json = streamsJson.optJSONObject(0);
             height = streamsIndex0Json.optInt("height");
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             LOGGER.info("Could not retrieve a \"height\" value from the JSON object.");
         }
         return height;
