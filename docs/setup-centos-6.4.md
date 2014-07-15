@@ -115,7 +115,9 @@
         tar xzf ~/accumulo-1.5.1-bin.tar.gz
         ln -s accumulo-1.5.1 accumulo
         cp accumulo/conf/examples/1GB/standalone/* accumulo/conf
-
+        
+        chown -R accumulo:hadoop accumulo/
+        
         sed -i -e "s|HADOOP_PREFIX=/path/to/hadoop|HADOOP_PREFIX=/usr/lib/hadoop|" \
                -e "s|JAVA_HOME=/path/to/java|JAVA_HOME=/usr/java/jdk1.6.0_45/jre|" \
                -e "s|ZOOKEEPER_HOME=/path/to/zookeeper|ZOOKEEPER_HOME=/usr/lib/zookeeper|" \
