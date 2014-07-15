@@ -72,7 +72,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        Integer videoRotation = VideoRotationUtil.retrieveVideoRotation(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
         if (videoRotation != null) {
             data.getElement().addPropertyValue(
                     PROPERTY_KEY,

@@ -6,8 +6,10 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.StringUtil;
 import io.lumify.storm.util.VideoRotationUtil;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -68,10 +70,11 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     public String[] prepareFFMPEGOptionsForMp4(GraphPropertyWorkData data, File mp4File) {
-        Integer videoRotation = VideoRotationUtil.retrieveVideoRotation(processRunner, data);
-        if (videoRotation == null){
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
             videoRotation = 0;
-        }
+
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();

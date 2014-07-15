@@ -1,15 +1,14 @@
 package io.lumify.storm.util;
 
-import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import io.lumify.core.util.ProcessRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class VideoRotationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
 
+    /*
     public static Integer retrieveVideoRotation(ProcessRunner processRunner, GraphPropertyWorkData data) {
         try {
             JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
@@ -23,8 +22,12 @@ public class VideoRotationUtil {
 
         return null;
     }
+    */
 
-    private static Integer extractRotationFromJSON(JSONObject json) {
+    public static Integer extractRotationFromJSON(JSONObject json) {
+        if (json == null)
+            return null;
+
         Integer rotate = null;
         try {
             JSONArray streamsJson = json.optJSONArray("streams");
@@ -43,11 +46,11 @@ public class VideoRotationUtil {
      * @return returns null when no rotation is needed for video.
      */
     public static String[] createFFMPEGRotationOptions(int videoRotation) {
-        if (videoRotation == 90) {
+        if (videoRotation % 360 == 90) {
             return new String[]{"-vf", "transpose=1"};
-        } else if (videoRotation == 180) {
+        } else if (videoRotation % 360 == 180) {
             return new String[]{"-vf", "transpose=1,transpose=1"};
-        } else if (videoRotation == 270) {
+        } else if (videoRotation % 360 == 270) {
             return new String[]{"-vf", "transpose=2"};
         } else {
             return null;
