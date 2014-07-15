@@ -91,7 +91,7 @@ public class GDELTEvent {
         return isRootEvent;
     }
 
-    @GDELTField(name="IsRootEvent", required = true)
+    @GDELTField(name = "IsRootEvent", required = true)
     public void setRootEvent(boolean isRootEvent) {
         this.isRootEvent = isRootEvent;
     }
@@ -567,5 +567,33 @@ public class GDELTEvent {
     @GDELTField(name = "SOURCEURL")
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
+    }
+
+    public GDELTActor getActor1() {
+        return new GDELTActor(
+                this.getActor1Code(),
+                this.getActor1Name(),
+                this.getActor1CountryCode(),
+                this.getActor1KnownGroupCode(),
+                this.getActor1EthnicCode(),
+                this.getActor1Religion1Code(),
+                this.getActor1Religion2Code(),
+                this.getActor1Type1Code(),
+                this.getActor1Type2Code(),
+                this.getActor1Type3Code());
+    }
+
+    public GDELTActor getActor2() {
+        return new GDELTActor(
+                this.getActor2Code(),
+                this.getActor2Name(),
+                this.getActor2CountryCode(),
+                this.getActor2KnownGroupCode(),
+                this.getActor2EthnicCode(),
+                this.getActor2Religion1Code(),
+                this.getActor2Religion2Code(),
+                this.getActor2Type1Code(),
+                this.getActor2Type2Code(),
+                this.getActor2Type3Code());
     }
 }
