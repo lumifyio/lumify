@@ -8,6 +8,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoDimensionsUtil;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
@@ -58,13 +59,16 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         }
     }
 
-    private String[] prepareFFMPEGOptionsForWebM(GraphPropertyWorkData data, File webmFile){
+    private String[] prepareFFMPEGOptionsForWebM(GraphPropertyWorkData data, File webmFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)
             videoRotation = 0;
-
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+
+        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
+        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
+        String ffmpegScaleOptions = VideoDimensionsUtil.createFFMPEGScaleOptions(videoWidth, videoHeight, videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
@@ -85,7 +89,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-threads");
         ffmpegOptionsList.add("2");
         ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add("scale=720:480");
+        ffmpegOptionsList.add(ffmpegScaleOptions);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);
@@ -101,7 +105,6 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add(webmFile.getAbsolutePath());
         String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
         return ffmpegOptionsArray;
-        //TODO. Should scale always be 720:480?
     }
 
     @Override
