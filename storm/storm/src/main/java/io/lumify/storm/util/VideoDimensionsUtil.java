@@ -38,13 +38,13 @@ public class VideoDimensionsUtil {
         return height;
     }
 
-    public static String createFFMPEGScaleOptions(Integer videoWidth, Integer videoHeight, Integer videoRotation) {
+    public static int[] calculateDisplayDimensions(Integer videoWidth, Integer videoHeight, Integer videoRotation) {
         //Assumed display rectangle to fit into = 720:480.
         int maxWidth = 720;
         int maxHeight = 480;
 
         if (videoWidth == null || videoHeight == null) {
-            return "scale=" + maxWidth + ":" + maxHeight;
+            return new int[]{maxWidth, maxHeight};
         }
         if (videoRotation == null)
             videoRotation = 0;
@@ -66,8 +66,7 @@ public class VideoDimensionsUtil {
             newWidth = maxWidth;
             newHeight = (int) Math.round(newWidth / aspectRatio);
         }
-
-        return "scale=" + newWidth + ":" + newHeight;
+        return new int[]{newWidth, newHeight};
     }
 
 
