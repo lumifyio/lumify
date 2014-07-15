@@ -57,12 +57,13 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
 
         JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
 
-        JSONObject formatJson = outJson.optJSONObject("format");
-        Double duration = null;
-        if (formatJson != null) {
+        Double duration;
+        try {
+            JSONObject formatJson = outJson.optJSONObject("format");
             duration = formatJson.optDouble("duration");
+        } catch (Exception e){
+            duration = null;
         }
-
 
         Map<String, Object> metadata = data.createPropertyMetadata();
         ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
@@ -72,14 +73,16 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
-        if (videoRotation != null) {
-            data.getElement().addPropertyValue(
-                    PROPERTY_KEY,
-                    videoRotationIri,
-                    videoRotation,
-                    data.getVisibility(),
-                    getAuthorizations());
+        if (outJson != null) {
+            Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(outJson);
+            if (videoRotation != null) {
+                data.getElement().addPropertyValue(
+                        PROPERTY_KEY,
+                        videoRotationIri,
+                        videoRotation,
+                        data.getVisibility(),
+                        getAuthorizations());
+            }
         }
 
 
