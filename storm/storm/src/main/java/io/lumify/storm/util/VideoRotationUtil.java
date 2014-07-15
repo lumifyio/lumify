@@ -19,14 +19,14 @@ public class VideoRotationUtil {
         }
 
         if (json != null) {
-            Integer videoRotation = extractRotationFromMovAndMp4JSON(json);
+            Integer videoRotation = extractRotationFromJSON(json);
             return videoRotation;
         } else {
             return null;
         }
     }
 
-    private static Integer extractRotationFromMovAndMp4JSON(JSONObject json) {
+    private static Integer extractRotationFromJSON(JSONObject json) {
         Integer rotate = null;
         try {
             JSONArray streamsJson = json.optJSONArray("streams");
