@@ -149,6 +149,8 @@
         cd /usr/lib
         tar xzf ~/elasticsearch-1.1.2.tar.gz
         ln -s elasticsearch-1.1.2 elasticsearch
+        
+        chown -R esearch:hadoop elasticsearch/
 
         elasticsearch/bin/plugin install org.securegraph/securegraph-elasticsearch-plugin/0.6.0
         elasticsearch/bin/plugin install mobz/elasticsearch-head
