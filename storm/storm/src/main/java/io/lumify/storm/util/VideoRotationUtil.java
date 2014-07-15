@@ -1,15 +1,14 @@
-package io.lumify.storm.video;
+package io.lumify.storm.util;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.JSONExtractor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class VideoRotation {
-    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotation.class);
+public class VideoRotationUtil {
+    private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
 
     public static Integer retrieveVideoRotation(ProcessRunner processRunner, GraphPropertyWorkData data) {
         JSONObject json;

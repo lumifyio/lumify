@@ -8,7 +8,8 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.video.VideoRotation;
+import io.lumify.storm.util.JSONExtractor;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -71,7 +72,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
             m.addPropertyValue(PROPERTY_KEY, durationIri, duration, metadata, data.getVisibility());
         }
 
-        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.retrieveVideoRotation(processRunner, data);
         if (videoRotation != null) {
             data.getElement().addPropertyValue(
                     PROPERTY_KEY,

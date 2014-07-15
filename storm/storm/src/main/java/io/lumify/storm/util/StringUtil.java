@@ -1,8 +1,8 @@
-package io.lumify.storm;
+package io.lumify.storm.util;
 
 import java.util.List;
 
-public class StringUtils {
+public class StringUtil {
     public static String[] createStringArrayFromList(List<String> list) {
         String[] stringArray = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {

@@ -6,7 +6,8 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.StringUtils;
+import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -67,11 +68,11 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     }
 
     public String[] prepareFFMPEGOptionsForMp4(GraphPropertyWorkData data, File mp4File) {
-        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.retrieveVideoRotation(processRunner, data);
         if (videoRotation == null){
             videoRotation = 0;
         }
-        String[] ffmpegRotationOptions = VideoRotation.createFFMPEGRotationOptions(videoRotation);
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
@@ -104,7 +105,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-f");
         ffmpegOptionsList.add("mp4");
         ffmpegOptionsList.add(mp4File.getAbsolutePath());
-        String[] ffmpegOptionsArray = StringUtils.createStringArrayFromList(ffmpegOptionsList);
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
         return ffmpegOptionsArray;
         //TODO. Should scale always be 720:480?
     }

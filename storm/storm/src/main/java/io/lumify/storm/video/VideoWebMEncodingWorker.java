@@ -6,7 +6,8 @@ import io.lumify.core.ingest.graphProperty.GraphPropertyWorker;
 import io.lumify.core.model.properties.MediaLumifyProperties;
 import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
-import io.lumify.storm.StringUtils;
+import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -56,11 +57,11 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     }
 
     private String[] prepareFFMPEGOptionsForWebM(GraphPropertyWorkData data, File webmFile){
-        Integer videoRotation = VideoRotation.retrieveVideoRotation(processRunner, data);
+        Integer videoRotation = VideoRotationUtil.retrieveVideoRotation(processRunner, data);
         if (videoRotation == null){
             videoRotation = 0;
         }
-        String[] ffmpegRotationOptions = VideoRotation.createFFMPEGRotationOptions(videoRotation);
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
@@ -95,7 +96,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-f");
         ffmpegOptionsList.add("webm");
         ffmpegOptionsList.add(webmFile.getAbsolutePath());
-        String[] ffmpegOptionsArray = StringUtils.createStringArrayFromList(ffmpegOptionsList);
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
         return ffmpegOptionsArray;
         //TODO. Should scale always be 720:480?
     }

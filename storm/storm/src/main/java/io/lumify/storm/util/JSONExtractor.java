@@ -1,4 +1,4 @@
-package io.lumify.storm;
+package io.lumify.storm.util;
 
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.util.LumifyLogger;
