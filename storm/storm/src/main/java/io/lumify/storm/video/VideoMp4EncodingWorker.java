@@ -83,11 +83,11 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
 
         Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
         Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
-        String ffmpegScaleOptions = VideoDimensionsUtil.createFFMPEGScaleOptions(videoWidth, videoHeight, videoRotation);
+        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
 
         LOGGER.debug("videoWidth = " + videoWidth);
         LOGGER.debug("videoHeight = " + videoHeight);
-        LOGGER.debug("ffmpegScaleOptions = " + ffmpegScaleOptions);
+        LOGGER.debug("ffmpegScaleOptions = " + displayDimensions);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
@@ -106,7 +106,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-bufsize");
         ffmpegOptionsList.add("1000k");
         ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add(ffmpegScaleOptions);
+        ffmpegOptionsList.add("scale=" + displayDimensions[0] + ":" + displayDimensions[1]);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);

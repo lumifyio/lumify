@@ -68,7 +68,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
 
         Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
         Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
-        String ffmpegScaleOptions = VideoDimensionsUtil.createFFMPEGScaleOptions(videoWidth, videoHeight, videoRotation);
+        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
@@ -89,7 +89,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("-threads");
         ffmpegOptionsList.add("2");
         ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add(ffmpegScaleOptions);
+        ffmpegOptionsList.add("scale=" + displayDimensions[0] + ":" + displayDimensions[1]);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);
