@@ -8,22 +8,6 @@ import org.json.JSONObject;
 public class VideoRotationUtil {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoRotationUtil.class);
 
-    /*
-    public static Integer retrieveVideoRotation(ProcessRunner processRunner, GraphPropertyWorkData data) {
-        try {
-            JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-            if (json != null) {
-                Integer videoRotation = extractRotationFromJSON(json);
-                return videoRotation;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-
-        return null;
-    }
-    */
-
     public static Integer extractRotationFromJSON(JSONObject json) {
         if (json == null)
             return null;
