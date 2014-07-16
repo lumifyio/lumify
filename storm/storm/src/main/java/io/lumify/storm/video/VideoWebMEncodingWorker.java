@@ -39,7 +39,6 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
                     data.getLocalFile().getAbsolutePath() + ": "
             );
 
-
             ExistingElementMutation<Vertex> m = data.getElement().prepareMutation();
 
             InputStream webmFileIn = new FileInputStream(webmFile);

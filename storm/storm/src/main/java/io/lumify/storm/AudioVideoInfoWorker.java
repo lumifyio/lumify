@@ -92,8 +92,6 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         }
     }
 
-
-
     @Override
     public boolean isHandled(Element element, Property property) {
         if (property == null) {
@@ -116,6 +114,7 @@ public class AudioVideoInfoWorker extends GraphPropertyWorker {
         if (mimeType.startsWith("audio") && audioDurationIri == null) {
             return false;
         }
+
         return true;
     }
 
