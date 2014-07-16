@@ -70,17 +70,12 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
             videoRotation = 0;
         int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
 
-        Double duration = DurationUtil.extractDurationFromJSON(json);
-        String durationString = null;
-        if (duration != null) {
-            durationString = Integer.toString((int) (duration / 4));
-        }
-
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         //Add the time offset for where the poster frame will be taken.
-        if (durationString != null) {
+        Double duration = DurationUtil.extractDurationFromJSON(json);
+        if (duration != null) {
             ffmpegOptionsList.add("-itsoffset");
-            ffmpegOptionsList.add("-" + durationString);
+            ffmpegOptionsList.add("-" + (duration / 2.0));
         }
 
         ffmpegOptionsList.add("-i");

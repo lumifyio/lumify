@@ -10,6 +10,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.StringUtil;
 import org.apache.commons.io.FileUtils;
 import org.securegraph.Element;
 import org.securegraph.Property;
@@ -83,16 +84,24 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract) throws IOException, InterruptedException {
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir);
         processRunner.execute(
                 "ffmpeg",
-                new String[]{
-                        "-i", videoFileName.getAbsolutePath(),
-                        "-r", "" + framesPerSecondToExtract,
-                        new File(outDir, "image-%8d.png").getAbsolutePath()
-                },
+                ffmpegOptionsArray,
                 null,
                 videoFileName.getAbsolutePath() + ": "
         );
+    }
+
+    private String[] prepareFFMPEGOptions(File videoFileName, File outDir) {
+        ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
+        ffmpegOptionsList.add("-i");
+        ffmpegOptionsList.add(videoFileName.getAbsolutePath());
+        ffmpegOptionsList.add("-r");
+        ffmpegOptionsList.add("" + framesPerSecondToExtract);
+        ffmpegOptionsList.add(new File(outDir, "image-%8d.png").getAbsolutePath());
+        String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
+        return ffmpegOptionsArray;
     }
 
     @Override
