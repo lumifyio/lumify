@@ -44,7 +44,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
-            extractFrames(data.getLocalFile(), tempDir, framesPerSecondToExtract);
+            extractFrames(data.getLocalFile(), tempDir, framesPerSecondToExtract, data);
 
             List<String> propertyKeys = new ArrayList<String>();
             long videoDuration = 0;
@@ -87,8 +87,8 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         }
     }
 
-    private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract) throws IOException, InterruptedException {
-        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir);
+    private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract, GraphPropertyWorkData data) throws IOException, InterruptedException {
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir, data);
         processRunner.execute(
                 "ffmpeg",
                 ffmpegOptionsArray,
@@ -97,7 +97,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         );
     }
 
-    private String[] prepareFFMPEGOptions(File videoFileName, File outDir) {
+    private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
         Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
