@@ -10,8 +10,12 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.StringUtil;
+import io.lumify.storm.util.VideoDimensionsUtil;
+import io.lumify.storm.util.VideoRotationUtil;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.securegraph.Element;
 import org.securegraph.Property;
 import org.securegraph.Vertex;
@@ -94,11 +98,31 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private String[] prepareFFMPEGOptions(File videoFileName, File outDir) {
+        JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
+        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
+        Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
+        if (videoRotation == null)
+            videoRotation = 0;
+        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
+
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-i");
         ffmpegOptionsList.add(videoFileName.getAbsolutePath());
         ffmpegOptionsList.add("-r");
         ffmpegOptionsList.add("" + framesPerSecondToExtract);
+
+        //Scale.
+        ffmpegOptionsList.add("-s");
+        ffmpegOptionsList.add(displayDimensions[0] + "x" + displayDimensions[1]);
+
+        //Rotation.
+        String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
+        if (ffmpegRotationOptions != null) {
+            ffmpegOptionsList.add(ffmpegRotationOptions[0]);
+            ffmpegOptionsList.add(ffmpegRotationOptions[1]);
+        }
+
         ffmpegOptionsList.add(new File(outDir, "image-%8d.png").getAbsolutePath());
         String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
         return ffmpegOptionsArray;

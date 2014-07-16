@@ -62,7 +62,6 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-
         Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
         Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
