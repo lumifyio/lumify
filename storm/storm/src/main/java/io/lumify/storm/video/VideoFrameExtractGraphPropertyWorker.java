@@ -99,12 +99,9 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
 
     private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
-        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)
             videoRotation = 0;
-        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-i");
@@ -113,10 +110,11 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("" + framesPerSecondToExtract);
 
         //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
         ffmpegOptionsList.add("-s");
-        ffmpegOptionsList.add(displayDimensions[0] + "x" + displayDimensions[1]);
+        ffmpegOptionsList.add("720x480");
 
-        //Rotation.
+        //Rotate.
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);

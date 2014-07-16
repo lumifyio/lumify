@@ -30,7 +30,7 @@ public class JSONExtractor {
             );
             String outString = new String(out.toByteArray());
             JSONObject json = new JSONObject(outString);
-            LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), json.toString(2));
+            //LOGGER.debug("info for %s:\n%s", data.getLocalFile().getAbsolutePath(), json.toString(2));
             return json;
         } catch (IOException e) {
             LOGGER.info("Could not retrieve JSONObject using ffprobe.");

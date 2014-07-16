@@ -66,10 +66,6 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
             videoRotation = 0;
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
-        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
-        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
-        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
-
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
         ffmpegOptionsList.add("-i");
@@ -88,12 +84,18 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("1000k");
         ffmpegOptionsList.add("-threads");
         ffmpegOptionsList.add("2");
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
         ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add("scale=" + displayDimensions[0] + ":" + displayDimensions[1]);
+        ffmpegOptionsList.add("scale=720:480");
+
+        //Rotate.
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);
         }
+
         ffmpegOptionsList.add("-acodec");
         ffmpegOptionsList.add("libvorbis");
         ffmpegOptionsList.add("-map");

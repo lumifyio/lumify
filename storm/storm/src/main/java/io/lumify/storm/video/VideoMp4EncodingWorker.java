@@ -81,14 +81,6 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
             videoRotation = 0;
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
 
-        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
-        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
-        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
-
-        LOGGER.debug("videoWidth = " + videoWidth);
-        LOGGER.debug("videoHeight = " + videoHeight);
-        LOGGER.debug("ffmpegScaleOptions = " + displayDimensions);
-
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         ffmpegOptionsList.add("-y");
         ffmpegOptionsList.add("-i");
@@ -105,12 +97,18 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("500k");
         ffmpegOptionsList.add("-bufsize");
         ffmpegOptionsList.add("1000k");
+
+        //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
         ffmpegOptionsList.add("-vf");
-        ffmpegOptionsList.add("scale=" + displayDimensions[0] + ":" + displayDimensions[1]);
+        ffmpegOptionsList.add("scale=720:480");
+
+        //Rotate.
         if (ffmpegRotationOptions != null) {
             ffmpegOptionsList.add(ffmpegRotationOptions[0]);
             ffmpegOptionsList.add(ffmpegRotationOptions[1]);
         }
+
         ffmpegOptionsList.add("-threads");
         ffmpegOptionsList.add("0");
         ffmpegOptionsList.add("-acodec");
@@ -122,7 +120,6 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add(mp4File.getAbsolutePath());
         String[] ffmpegOptionsArray = StringUtil.createStringArrayFromList(ffmpegOptionsList);
         return ffmpegOptionsArray;
-        //TODO. Should scale always be 720:480?
     }
 
     @Override

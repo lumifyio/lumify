@@ -56,13 +56,15 @@ public class VideoDimensionsUtil {
             videoHeight = temp;
         }
 
-        //Let the video be no larger than maxWidth:maxHeight.
+        //Let the video be no larger than maxWidth by maxHeight.
         double aspectRatio = (double) videoWidth / videoHeight;
         int newWidth, newHeight;
-        if (videoHeight > videoWidth) {
+        if (  ( (double) videoHeight / maxHeight ) > ( (double) videoWidth / maxWidth) ) {
+            //Height is the constraining dimension.
             newHeight = maxHeight;
             newWidth = (int) Math.round(newHeight * aspectRatio);
         } else {
+            //Width is the constraining dimension.
             newWidth = maxWidth;
             newHeight = (int) Math.round(newWidth / aspectRatio);
         }

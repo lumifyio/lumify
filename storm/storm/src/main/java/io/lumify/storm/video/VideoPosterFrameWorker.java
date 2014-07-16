@@ -62,19 +62,16 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
 
     private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
-        Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);
-        Integer videoHeight = VideoDimensionsUtil.extractHeightFromJSON(json);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)
             videoRotation = 0;
-        int[] displayDimensions = VideoDimensionsUtil.calculateDisplayDimensions(videoWidth, videoHeight, videoRotation);
 
         ArrayList<String> ffmpegOptionsList = new ArrayList<String>();
         //Add the time offset for where the poster frame will be taken.
         Double duration = DurationUtil.extractDurationFromJSON(json);
         if (duration != null) {
             ffmpegOptionsList.add("-itsoffset");
-            ffmpegOptionsList.add("-" + (duration / 2.0));
+            ffmpegOptionsList.add("-" + (duration / 3.0));
         }
 
         ffmpegOptionsList.add("-i");
@@ -88,8 +85,9 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         ffmpegOptionsList.add("rawvideo");
 
         //Scale.
+        //Will not force conversion to 720:480 aspect ratio, but will resize video with original aspect ratio.
         ffmpegOptionsList.add("-s");
-        ffmpegOptionsList.add(displayDimensions[0] + "x" + displayDimensions[1]);
+        ffmpegOptionsList.add("720x480");
 
         //Rotation.
         String[] ffmpegRotationOptions = VideoRotationUtil.createFFMPEGRotationOptions(videoRotation);
