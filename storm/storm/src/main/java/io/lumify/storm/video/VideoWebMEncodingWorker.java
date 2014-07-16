@@ -8,7 +8,6 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.ProcessRunner;
 import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.StringUtil;
-import io.lumify.storm.util.VideoDimensionsUtil;
 import io.lumify.storm.util.VideoRotationUtil;
 import org.json.JSONObject;
 import org.securegraph.Element;
