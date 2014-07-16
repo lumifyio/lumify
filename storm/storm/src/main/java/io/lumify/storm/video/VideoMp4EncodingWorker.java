@@ -36,7 +36,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File mp4File = File.createTempFile("encode_mp4_", ".mp4");
         File mp4RelocatedFile = File.createTempFile("relocated_mp4_", ".mp4");
-        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForMp4(data, mp4File);
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(data, mp4File);
         try {
             processRunner.execute(
                     "ffmpeg",
@@ -74,7 +74,7 @@ public class VideoMp4EncodingWorker extends GraphPropertyWorker {
         }
     }
 
-    public String[] prepareFFMPEGOptionsForMp4(GraphPropertyWorkData data, File mp4File) {
+    public String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File mp4File) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)

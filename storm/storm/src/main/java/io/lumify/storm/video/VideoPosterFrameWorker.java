@@ -28,7 +28,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File videoPosterFrameFile = File.createTempFile("video_poster_frame", ".png");
-        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForPosterFrame(data, videoPosterFrameFile);
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(data, videoPosterFrameFile);
         try {
             processRunner.execute(
                     "ffmpeg",
@@ -60,7 +60,7 @@ public class VideoPosterFrameWorker extends GraphPropertyWorker {
         }
     }
 
-    private String[] prepareFFMPEGOptionsForPosterFrame(GraphPropertyWorkData data, File videoPosterFrameFile) {
+    private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File videoPosterFrameFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
 
         Integer videoWidth = VideoDimensionsUtil.extractWidthFromJSON(json);

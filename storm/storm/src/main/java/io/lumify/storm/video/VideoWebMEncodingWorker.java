@@ -31,7 +31,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
         File webmFile = File.createTempFile("encode_webm_", ".webm");
-        String[] ffmpegOptionsArray = prepareFFMPEGOptionsForWebM(data, webmFile);
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(data, webmFile);
         try {
             processRunner.execute(
                     "ffmpeg",
@@ -59,7 +59,7 @@ public class VideoWebMEncodingWorker extends GraphPropertyWorker {
         }
     }
 
-    private String[] prepareFFMPEGOptionsForWebM(GraphPropertyWorkData data, File webmFile) {
+    private String[] prepareFFMPEGOptions(GraphPropertyWorkData data, File webmFile) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)
