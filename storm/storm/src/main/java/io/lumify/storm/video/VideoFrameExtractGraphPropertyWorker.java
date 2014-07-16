@@ -10,6 +10,7 @@ import io.lumify.core.model.properties.RawLumifyProperties;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.core.util.ProcessRunner;
+import io.lumify.storm.util.DurationUtil;
 import io.lumify.storm.util.JSONExtractor;
 import io.lumify.storm.util.StringUtil;
 import io.lumify.storm.util.VideoRotationUtil;
@@ -36,10 +37,10 @@ import static org.securegraph.util.IterableUtils.toList;
 public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(VideoFrameExtractGraphPropertyWorker.class);
     private ProcessRunner processRunner;
-    private double framesPerSecondToExtract = 0.1; // TODO make this configurable
 
     @Override
     public void execute(InputStream in, GraphPropertyWorkData data) throws Exception {
+        double framesPerSecondToExtract = calculateFramesPerSecondToExtract(data);
         Pattern fileNamePattern = Pattern.compile("image-([0-9]+)\\.png");
         File tempDir = Files.createTempDir();
         try {
@@ -87,7 +88,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
     }
 
     private void extractFrames(File videoFileName, File outDir, double framesPerSecondToExtract, GraphPropertyWorkData data) throws IOException, InterruptedException {
-        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir, data);
+        String[] ffmpegOptionsArray = prepareFFMPEGOptions(videoFileName, outDir, data, framesPerSecondToExtract);
         processRunner.execute(
                 "ffmpeg",
                 ffmpegOptionsArray,
@@ -96,7 +97,7 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
         );
     }
 
-    private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data) {
+    private String[] prepareFFMPEGOptions(File videoFileName, File outDir, GraphPropertyWorkData data, double framesPerSecondToExtract) {
         JSONObject json = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
         Integer videoRotation = VideoRotationUtil.extractRotationFromJSON(json);
         if (videoRotation == null)
@@ -224,6 +225,18 @@ public class VideoFrameExtractGraphPropertyWorker extends GraphPropertyWorker {
             results.remove(results.size() - 1);
         }
         return results;
+    }
+
+    private double calculateFramesPerSecondToExtract(GraphPropertyWorkData data) {
+        int numberOfFrames = 20;
+        JSONObject outJson = JSONExtractor.retrieveJSONObjectUsingFFPROBE(processRunner, data);
+        Double duration = null;
+        if (outJson != null) {
+            duration = DurationUtil.extractDurationFromJSON(outJson);
+        }
+
+        double framesPerSecondToExtract = numberOfFrames / duration;
+        return framesPerSecondToExtract;
     }
 
 
