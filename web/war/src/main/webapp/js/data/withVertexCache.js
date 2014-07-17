@@ -70,22 +70,23 @@ define([
 
         this.refresh = function(vertex) {
             var self = this,
-                deferred = null;
+                deferred = $.Deferred(),
+                request = null,
+                cachedVertex;
 
             if (_.isArray(vertex)) {
                 var vertices = [], toRequest = [];
                 vertex.forEach(function(v) {
-                    var cachedVertex = self.vertex(v);
+                    cachedVertex = self.vertex(v);
                     if (cachedVertex) {
                         vertices.push(cachedVertex);
                     } else {
                         toRequest.push(v);
                     }
                 })
-                deferred = $.Deferred();
 
                 if (toRequest.length) {
-                    this.vertexService.getMultiple(toRequest)
+                    request = this.vertexService.getMultiple(toRequest)
                         .done(function(data) {
                             deferred.resolve(vertices.concat(data.vertices));
                         })
@@ -93,12 +94,33 @@ define([
                     deferred.resolve(vertices);
                 }
 
-                return deferred;
             } else if (_.isString(vertex) || _.isNumber(vertex)) {
-                deferred = this.vertexService.getVertexProperties(vertex);
+                cachedVertex = this.vertex(vertex);
+                if (cachedVertex) {
+                    deferred.resolve(cachedVertex);
+                } else {
+                    request = this.vertexService.getVertexProperties(vertex)
+                        .done(function(data) {
+                            deferred.resolve(data[0]);
+                        })
+                }
             } else {
-                deferred = this.vertexService.getVertexProperties(vertex.id);
+                cachedVertex = this.vertex(vertex.id);
+                if (cachedVertex) {
+                    deferred.resolve(cachedVertex);
+                } else {
+                    request = this.vertexService.getVertexProperties(vertex.id)
+                        .done(function(data) {
+                            deferred.resolve(data[0]);
+                        })
+                }
             }
+
+            deferred.abort = function() {
+                if (request) {
+                    request.abort();
+                }
+            };
 
             return deferred;
         };

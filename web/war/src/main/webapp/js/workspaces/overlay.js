@@ -72,8 +72,6 @@ define([
             this.on(document, 'verticesUpdated', this.updateDiffBadge)
             this.on(document, 'verticesAdded', this.updateDiffBadge)
             this.on(document, 'edgesDeleted', this.updateDiffBadge)
-            this.on(document, 'ajaxComplete', this.onAjaxComplete);
-            this.on(document, 'ajaxSend', this.onAjaxSend);
 
             this.on(document, 'showDiffPanel', this.showDiffPanel);
             this.on(document, 'escape', this.closeDiffPanel);
@@ -97,26 +95,6 @@ define([
             var badge = this.$node.find('.badge');
             if (badge.is(':visible')) {
                 badge.popover('hide');
-            }
-        };
-
-        this.onAjaxSend = function(event, xhr, settings) {
-            if (isWorkspaceDiffPost(settings)) {
-                this.disableAutoUpdateBadge = true;
-            }
-        };
-
-        this.onAjaxComplete = function(event, xhr, settings) {
-
-            // Automatically call diff after every POST
-            if ((!this.disableAutoUpdateBadge) &&
-                /post/i.test(settings.type) &&
-                settings.url !== 'vertex/multiple') {
-
-                xhr.done(this.updateDiffBadge.bind(this));
-            } else if (isWorkspaceDiffPost(settings)) {
-                this.disableAutoUpdateBadge = false;
-                xhr.done(this.updateDiffBadge.bind(this));
             }
         };
 
@@ -220,10 +198,16 @@ define([
             );
         };
 
-        this.updateDiffBadge = function() {
+        this.updateDiffBadge = function(event, data) {
             var self = this,
                 node = this.select('nameSelector'),
                 badge = this.$node.find('.badge');
+
+            if (event && event.type === 'verticesUpdated') {
+                if (!data || !data.options || data.options.originalEvent !== 'propertiesChange') {
+                    return;
+                }
+            }
 
             if (!badge.length) {
                 badge = $('<span class="badge"></span>')
