@@ -59,7 +59,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             } else {
                 cwRotationNeeded = 0;
             }
-
             Boolean yAxisFlipNeeded;
             if (yAxisFlipNeededPropertyIri != null) {
                 yAxisFlipNeeded = (Boolean) artifactVertex.getPropertyValue(yAxisFlipNeededPropertyIri);
