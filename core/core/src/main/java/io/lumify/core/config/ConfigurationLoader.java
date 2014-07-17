@@ -86,7 +86,7 @@ public abstract class ConfigurationLoader {
             Constructor constructor = configLoaderClass.getConstructor(Map.class);
             configurationLoader = (ConfigurationLoader) constructor.newInstance(initParameters);
         } catch (Exception e) {
-            throw new LumifyException("Could not load configuration class", e);
+            throw new LumifyException("Could not load configuration class: " + configLoaderClass.getName(), e);
         }
         return configurationLoader;
     }
@@ -95,7 +95,7 @@ public abstract class ConfigurationLoader {
 
     protected void doConfigureLog4j() {
         File log4jFile = resolveFileName("log4j.xml");
-        if (!log4jFile.exists()) {
+        if (log4jFile == null || !log4jFile.exists()) {
             throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
         }
         DOMConfigurator.configure(log4jFile.getAbsolutePath());
