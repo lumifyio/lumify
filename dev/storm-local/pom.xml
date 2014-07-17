@@ -67,7 +67,7 @@
 
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-mapped-ingest</artifactId>
+            <artifactId>lumify-csv-structured-ingest</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
