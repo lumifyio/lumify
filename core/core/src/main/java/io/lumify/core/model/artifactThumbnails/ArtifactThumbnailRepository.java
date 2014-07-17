@@ -55,14 +55,16 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             int cwRotationNeeded = 0;
             if (cwRotationNeededPropertyIri != null) {
                 Integer nullable = (Integer) artifactVertex.getPropertyValue(cwRotationNeededPropertyIri);
-                if (nullable != null)
+                if (nullable != null) {
                     cwRotationNeeded = nullable;
+                }
             }
             boolean yAxisFlipNeeded = false;
             if (yAxisFlipNeededPropertyIri != null) {
                 Boolean nullable = (Boolean) artifactVertex.getPropertyValue(yAxisFlipNeededPropertyIri);
-                if (nullable != null)
+                if (nullable != null) {
                     yAxisFlipNeeded = nullable;
+                }
             }
 
             //Rotate and flip image.
