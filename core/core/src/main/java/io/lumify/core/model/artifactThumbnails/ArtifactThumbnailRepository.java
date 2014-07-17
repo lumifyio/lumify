@@ -65,8 +65,6 @@ public abstract class ArtifactThumbnailRepository extends Repository<BigTableArt
             } else {
                 yAxisFlipNeeded = false;
             }
-            LOGGER.info("cwRotationNeeded = " + cwRotationNeeded);
-            LOGGER.info("yAxisFlipNeeded = " + yAxisFlipNeeded);
             BufferedImage transformedImage = ImageUtils.reOrientImage(originalImage, yAxisFlipNeeded, cwRotationNeeded);
 
             //Get new image dimensions, which will be used for the icon.
