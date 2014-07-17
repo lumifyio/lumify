@@ -69,7 +69,7 @@ define([
                     })
                     .call(function() {
                         this.enter()
-                            .append('tr')
+                            .insert('tr', '.buttons-row')
                             .attr('class', 'property-row')
                             .call(function() {
                                 this.append('td')
