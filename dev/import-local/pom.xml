@@ -14,22 +14,16 @@
     <description>This project is only here to create a good classpath with the plugins for your IDE</description>
 
     <dependencies>
+        <dependency>
+            <groupId>io.lumify</groupId>
+            <artifactId>lumify-import</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- file import supporting file handler dependencies -->
         <dependency>
             <groupId>io.lumify</groupId>
-            <artifactId>lumify-core</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
             <artifactId>lumify-csv-structured-ingest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.lumify</groupId>
-            <artifactId>lumify-import</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
