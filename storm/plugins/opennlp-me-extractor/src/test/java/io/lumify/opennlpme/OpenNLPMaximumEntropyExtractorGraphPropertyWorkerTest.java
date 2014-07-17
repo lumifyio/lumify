@@ -1,6 +1,7 @@
 package io.lumify.opennlpme;
 
 import com.google.inject.Injector;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
@@ -55,7 +56,7 @@ public class OpenNLPMaximumEntropyExtractorGraphPropertyWorkerTest {
 
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
-        io.lumify.core.config.Configuration configuration = new io.lumify.core.config.Configuration(config);
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         extractor = new OpenNLPMaximumEntropyExtractorGraphPropertyWorker() {
             @Override

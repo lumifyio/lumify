@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.ConfigurationHelper;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.ingest.graphProperty.*;
 import io.lumify.core.metrics.JmxMetricsManager;
@@ -60,7 +61,8 @@ public class GraphPropertyBolt extends BaseRichBolt {
     public void prepare(final Map stormConf, TopologyContext context, OutputCollector collector) {
         LOGGER.info("Configuring environment for bolt: %s-%d", context.getThisComponentId(), context.getThisTaskId());
         this.collector = collector;
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new io.lumify.core.config.Configuration(stormConf)));
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(stormConf).createConfiguration();
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(configuration));
 
         prepareJmx();
         prepareUser(stormConf);

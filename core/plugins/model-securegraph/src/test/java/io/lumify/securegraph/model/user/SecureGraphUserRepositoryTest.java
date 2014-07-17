@@ -1,6 +1,7 @@
 package io.lumify.securegraph.model.user;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -46,7 +47,7 @@ public class SecureGraphUserRepositoryTest {
         when(ontologyRepository.getOrCreateConcept((Concept) isNull(), eq(UserRepository.LUMIFY_USER_CONCEPT_ID), anyString(), (java.io.File) anyObject())).thenReturn(userConcept);
         when(userConcept.getTitle()).thenReturn(UserRepository.LUMIFY_USER_CONCEPT_ID);
 
-        Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
+        Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();;
         secureGraphUserRepository = new SecureGraphUserRepository(
                 lumifyConfiguration,
                 authorizationRepository,

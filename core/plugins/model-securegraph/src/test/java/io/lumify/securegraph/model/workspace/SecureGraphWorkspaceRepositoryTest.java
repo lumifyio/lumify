@@ -1,6 +1,7 @@
 package io.lumify.securegraph.model.workspace;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
@@ -78,7 +79,7 @@ public class SecureGraphWorkspaceRepositoryTest {
         graph = new InMemoryGraph(config, idGenerator, new DefaultSearchIndex(config.getConfig()));
         authorizationRepository = new InMemoryAuthorizationRepository();
 
-        Configuration lumifyConfiguration = new Configuration(new HashMap<Object, Object>());
+        Configuration lumifyConfiguration = new HashMapConfigurationLoader(new HashMap()).createConfiguration();
         InMemoryUserRepository userRepository = new InMemoryUserRepository(lumifyConfiguration, userListenerUtil);
         user1 = (InMemoryUser) userRepository.addUser("user2", "user2", null, "none", new String[0]);
         graph.addVertex(user1.getUserId(), visibility, authorizations);

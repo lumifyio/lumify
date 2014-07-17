@@ -1,36 +1,35 @@
 package io.lumify.web;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import io.lumify.core.FrameworkUtils;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.ConfigurationLoader;
+import io.lumify.core.config.FileConfigurationLoader;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import org.apache.log4j.xml.DOMConfigurator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.File;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ApplicationBootstrap implements ServletContextListener {
     private static LumifyLogger LOGGER;
-    public static final String APP_CONFIG_LOCATION = "application.config.location";
-    public static final String APP_LOG4J_LOCATION = "application.config.log4j.location";
+    public static final String APP_CONFIG_LOADER = "application.config.loader";
     private UserRepository userRepository;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         final ServletContext context = sce.getServletContext();
 
-        initializeLog4j(context);
+        LOGGER = LumifyLoggerFactory.getLogger(ApplicationBootstrap.class);
 
         LOGGER.info("Servlet context initialized...");
         try {
@@ -58,24 +57,6 @@ public final class ApplicationBootstrap implements ServletContextListener {
         }
     }
 
-    private void initializeLog4j(final ServletContext context) {
-        String log4jFile = context.getInitParameter(APP_LOG4J_LOCATION);
-        checkNotNull(log4jFile, "Missing " + APP_LOG4J_LOCATION + " context parameter");
-        checkArgument(!log4jFile.isEmpty(), "Empty " + APP_LOG4J_LOCATION + " context parameter");
-
-        if (log4jFile.startsWith("file://")) {
-            log4jFile = log4jFile.substring("file://".length());
-        }
-
-        if (!new File(log4jFile).exists()) {
-            throw new RuntimeException("Could not find log4j configuration at \"" + log4jFile + "\". Did you forget to copy \"docs/log4j.xml.sample\" to \"" + log4jFile + "\"");
-        }
-
-        DOMConfigurator.configure(log4jFile);
-        LOGGER = LumifyLoggerFactory.getLogger(ApplicationBootstrap.class);
-        LOGGER.info("Using log4j.xml: %s", log4jFile);
-    }
-
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         if (LOGGER != null) {
@@ -83,9 +64,26 @@ public final class ApplicationBootstrap implements ServletContextListener {
         }
     }
 
-    private Configuration fetchApplicationConfiguration(final ServletContext context) {
-        final String configLocation = context.getInitParameter(APP_CONFIG_LOCATION);
-        return Configuration.loadConfigurationFile(configLocation);
+    private Configuration fetchApplicationConfiguration(final ServletContext context) throws ClassNotFoundException {
+        Map<String, String> initParameters = getInitParametersAsMap(context);
+        final String configLoaderName = context.getInitParameter(APP_CONFIG_LOADER);
+        Class configLoader;
+        if (configLoaderName == null) {
+            configLoader = FileConfigurationLoader.class;
+        } else {
+            configLoader = Class.forName(configLoaderName);
+        }
+        return ConfigurationLoader.load(configLoader, initParameters);
+    }
+
+    private Map<String, String> getInitParametersAsMap(ServletContext context) {
+        Map<String, String> initParameters = new HashMap<String, String>();
+        Enumeration<String> e = context.getInitParameterNames();
+        while (e.hasMoreElements()) {
+            String initParameterName = e.nextElement();
+            initParameters.put(initParameterName, context.getInitParameter(initParameterName));
+        }
+        return initParameters;
     }
 
     @Inject

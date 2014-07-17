@@ -3,6 +3,7 @@ package io.lumify.reindexmr;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workspace.WorkspaceRepository;
@@ -34,7 +35,7 @@ public class ReindexMR extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        io.lumify.core.config.Configuration lumifyConfig = io.lumify.core.config.Configuration.loadConfigurationFile();
+        io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
         Configuration conf = getConfiguration(args, lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));

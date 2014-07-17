@@ -3,6 +3,7 @@ package io.lumify.friendster;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.model.ontology.Concept;
 import io.lumify.core.model.ontology.OntologyRepository;
 import io.lumify.core.model.ontology.Relationship;
@@ -55,7 +56,7 @@ public class ImportMR extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        io.lumify.core.config.Configuration lumifyConfig = io.lumify.core.config.Configuration.loadConfigurationFile();
+        io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
         Configuration conf = getConfiguration(args, lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
         InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));

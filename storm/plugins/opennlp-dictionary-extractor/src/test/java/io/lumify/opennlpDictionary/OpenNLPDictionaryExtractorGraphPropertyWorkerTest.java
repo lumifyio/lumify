@@ -1,16 +1,13 @@
 package io.lumify.opennlpDictionary;
 
+import com.google.inject.Injector;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
 import io.lumify.core.ingest.term.extraction.TermMention;
 import io.lumify.core.user.User;
 import io.lumify.opennlpDictionary.model.DictionaryEntryRepository;
-import org.securegraph.Vertex;
-import org.securegraph.Visibility;
-import org.securegraph.inmemory.InMemoryAuthorizations;
-import org.securegraph.inmemory.InMemoryGraph;
-import com.google.inject.Injector;
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.namefind.DictionaryNameFinder;
 import opennlp.tools.namefind.TokenNameFinder;
@@ -22,6 +19,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.securegraph.Vertex;
+import org.securegraph.Visibility;
+import org.securegraph.inmemory.InMemoryAuthorizations;
+import org.securegraph.inmemory.InMemoryGraph;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,9 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.securegraph.util.IterableUtils.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.securegraph.util.IterableUtils.toList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
@@ -60,7 +61,7 @@ public class OpenNLPDictionaryExtractorGraphPropertyWorkerTest {
 
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
-        io.lumify.core.config.Configuration configuration = new io.lumify.core.config.Configuration(config);
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();;
 
         graph = new InMemoryGraph();
 

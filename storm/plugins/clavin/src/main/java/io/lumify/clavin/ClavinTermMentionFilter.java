@@ -90,20 +90,18 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
     private String countryIri;
     private String cityIri;
     private String geoLocationIri;
-    private AuditRepository auditRespository;
+    private AuditRepository auditRepository;
     private User user;
 
     @Override
     public void prepare(TermMentionFilterPrepareData termMentionFilterPrepareData) throws Exception {
         super.prepare(termMentionFilterPrepareData);
 
-        Configuration config = new Configuration(termMentionFilterPrepareData.getStormConf());
-
         LOGGER.info("Configuring CLAVIN Location Resolution.");
         prepareIris(termMentionFilterPrepareData);
-        prepareClavinLuceneIndex(config);
-        prepareFuzzy(config);
-        prepareTargetConcepts(config);
+        prepareClavinLuceneIndex(getConfiguration());
+        prepareFuzzy(getConfiguration());
+        prepareTargetConcepts(getConfiguration());
         user = termMentionFilterPrepareData.getUser();
     }
 
@@ -234,7 +232,7 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
                 results.add(termMention);
             }
         }
-        auditRespository.auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
+        auditRepository.auditAnalyzedBy(AuditAction.ANALYZED_BY, artifactGraphVertex, getClass().getSimpleName(),
                 user, artifactGraphVertex.getVisibility());
         return results;
     }
@@ -294,6 +292,6 @@ public class ClavinTermMentionFilter extends TermMentionFilter {
 
     @Inject
     public void setAuditRepository(AuditRepository auditRepository) {
-        this.auditRespository = auditRepository;
+        this.auditRepository = auditRepository;
     }
 }

@@ -1,5 +1,6 @@
 package io.lumify.tikaTextExtractor;
 
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.model.audit.AuditRepository;
@@ -47,7 +48,7 @@ public class TikaTextExtractorGraphPropertyWorkerTest {
 
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
-        io.lumify.core.config.Configuration configuration = new io.lumify.core.config.Configuration(config);
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();
 
         GraphPropertyWorkerPrepareData prepareData = new GraphPropertyWorkerPrepareData(null, null, null, null, null, null);
         textExtractor.setConfiguration(configuration);

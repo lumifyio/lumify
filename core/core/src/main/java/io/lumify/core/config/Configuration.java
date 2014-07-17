@@ -7,13 +7,11 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.*;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Responsible for parsing application configuration file and providing
@@ -21,7 +19,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Configuration {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(Configuration.class);
-    public static final String CONFIGURATION_LOCATION = "/opt/lumify/config/";
     public static final String HADOOP_URL = "hadoop.url";
     public static final String HDFS_LIB_CACHE_SOURCE_DIRECTORY = "hdfsLibcache.sourceDirectory";
     public static final String HDFS_LIB_CACHE_TEMP_DIRECTORY = "hdfsLibcache.tempDirectory";
@@ -55,6 +52,7 @@ public final class Configuration {
     public static final String DEFAULT_PRIVILEGES = "newuser.privileges";
     public static final String WEB_PROPERTIES_PREFIX = "web.ui.";
     public static final String WEB_GEOCODER_ENABLED = WEB_PROPERTIES_PREFIX + "geocoder.enabled";
+    private final ConfigurationLoader configurationLoader;
 
     private Map<String, String> config = new HashMap<String, String>();
 
@@ -63,7 +61,8 @@ public final class Configuration {
      */
     public static final String UNKNOWN_STRING = "Unknown";
 
-    public Configuration(final Map<?, ?> config) {
+    Configuration(final ConfigurationLoader configurationLoader, final Map<?, ?> config) {
+        this.configurationLoader = configurationLoader;
         for (Map.Entry entry : config.entrySet()) {
             if (entry.getValue() != null) {
                 set(entry.getKey().toString(), entry.getValue());
@@ -183,71 +182,6 @@ public final class Configuration {
         }
     }
 
-    public static Configuration loadConfigurationFile() {
-        return loadConfigurationFile(CONFIGURATION_LOCATION);
-    }
-
-    public static Configuration loadConfigurationFile(String configDirectory) {
-        checkNotNull(configDirectory, "The specified config file URL was null");
-        checkArgument(!configDirectory.isEmpty(), "The specified config file URL was empty");
-
-        LOGGER.debug("Attempting to load configuration from directory: %s", configDirectory);
-        if (configDirectory.startsWith("file://")) {
-            configDirectory = configDirectory.substring("file://".length());
-        }
-        File configDirectoryFile = new File(configDirectory);
-        if (!configDirectoryFile.exists()) {
-            throw new RuntimeException("Could not find config directory: " + configDirectory);
-        }
-
-        File[] files = configDirectoryFile.listFiles();
-        if (files == null) {
-            throw new RuntimeException("Could not parse directory name: " + configDirectory);
-        }
-        Arrays.sort(files, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        Map<String, String> properties = new HashMap<String, String>();
-        for (File f : files) {
-            if (!f.getAbsolutePath().endsWith(".properties")) {
-                continue;
-            }
-            try {
-                Map<String, String> fileProperties = loadFile(f.getAbsolutePath());
-                for (Map.Entry<String, String> filePropertyEntry : fileProperties.entrySet()) {
-                    properties.put(filePropertyEntry.getKey(), filePropertyEntry.getValue());
-                }
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not load config file: " + f.getAbsolutePath(), ex);
-            }
-        }
-
-        return new Configuration(properties);
-    }
-
-    private static Map<String, String> loadFile(final String fileName) throws IOException {
-        Map<String, String> results = new HashMap<String, String>();
-        LOGGER.info("Loading config file: %s", fileName);
-        FileInputStream in = new FileInputStream(fileName);
-        try {
-            Properties properties = new Properties();
-            properties.load(in);
-            for (Map.Entry<Object, Object> prop : properties.entrySet()) {
-                String key = prop.getKey().toString();
-                String value = prop.getValue().toString();
-                results.put(key, value);
-            }
-        } catch (Exception e) {
-            LOGGER.info("Could not load configuration file: %s", fileName);
-        } finally {
-            in.close();
-        }
-        return results;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -270,6 +204,10 @@ public final class Configuration {
             conf.set(entry.getKey().toString(), entry.getValue().toString());
         }
         return conf;
+    }
+
+    public File resolveFileName(String fileName) {
+        return this.configurationLoader.resolveFileName(fileName);
     }
 }
 

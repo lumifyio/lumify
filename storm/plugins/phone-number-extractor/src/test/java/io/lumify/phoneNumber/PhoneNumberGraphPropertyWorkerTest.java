@@ -2,6 +2,7 @@ package io.lumify.phoneNumber;
 
 import com.google.common.base.Charsets;
 import com.google.inject.Injector;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkData;
 import io.lumify.core.ingest.graphProperty.GraphPropertyWorkerPrepareData;
 import io.lumify.core.ingest.graphProperty.TermMentionFilter;
@@ -55,7 +56,7 @@ public class PhoneNumberGraphPropertyWorkerTest {
         Map config = new HashMap();
         config.put(io.lumify.core.config.Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY, "http://lumify.io/test#artifactHasEntity");
         config.put(PhoneNumberGraphPropertyWorker.CONFIG_PHONE_NUMBER_IRI, "http://lumify.io/test#phoneNumber");
-        io.lumify.core.config.Configuration configuration = new io.lumify.core.config.Configuration(config);
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(config).createConfiguration();;
 
         extractor = new PhoneNumberGraphPropertyWorker() {
             @Override

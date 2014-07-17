@@ -7,6 +7,7 @@ import io.lumify.core.FrameworkUtils;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.model.workQueue.WorkQueueRepository;
 import io.lumify.core.user.User;
@@ -18,10 +19,10 @@ import org.securegraph.Authorizations;
 import org.securegraph.Graph;
 
 import java.net.URI;
+import java.util.HashMap;
 
 public abstract class CommandLineBase {
     protected static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(CommandLineBase.class);
-    private String configLocation = Configuration.CONFIGURATION_LOCATION;
     private Configuration configuration;
     private boolean willExit = false;
     protected boolean initFramework = true;
@@ -102,9 +103,6 @@ public abstract class CommandLineBase {
     protected abstract int run(CommandLine cmd) throws Exception;
 
     protected void processOptions(CommandLine cmd) throws Exception {
-        if (cmd.hasOption("configLocation")) {
-            configLocation = cmd.getOptionValue("configLocation");
-        }
     }
 
     protected Options getOptions() {
@@ -117,20 +115,12 @@ public abstract class CommandLineBase {
                         .create()
         );
 
-        options.addOption(
-                OptionBuilder
-                        .withLongOpt("configLocation")
-                        .withDescription("Configuration file location")
-                        .hasArg()
-                        .create()
-        );
-
         return options;
     }
 
     protected Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = Configuration.loadConfigurationFile(configLocation);
+            configuration = ConfigurationLoader.load();
         }
         return configuration;
     }

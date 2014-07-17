@@ -10,6 +10,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
 import io.lumify.core.model.properties.EntityLumifyProperties;
@@ -55,7 +56,8 @@ public class TweetProcessorBolt extends BaseRichBolt {
 
     @Override
     public void prepare(Map stormConf, TopologyContext topologyContext, OutputCollector outputCollector) {
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new io.lumify.core.config.Configuration(stormConf)));
+        io.lumify.core.config.Configuration configuration = new HashMapConfigurationLoader(stormConf).createConfiguration();
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(configuration));
         prepareUser(stormConf);
     }
 

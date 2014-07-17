@@ -3,6 +3,7 @@ package io.lumify.wikipedia.mapreduce;
 import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
 import com.google.inject.Inject;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.ontology.OntologyLumifyProperties;
@@ -90,7 +91,7 @@ class ImportMRMapper extends ElementMapper<LongWritable, Text, Text, Mutation> {
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
-        Configuration configuration = new Configuration(configurationMap);
+        Configuration configuration = new HashMapConfigurationLoader(configurationMap).createConfiguration();
         this.auditRepository = new SecureGraphAuditRepository(null, versionService, configuration, null, userRepository);
         this.sourceFileName = context.getConfiguration().get(CONFIG_SOURCE_FILE_NAME);
 

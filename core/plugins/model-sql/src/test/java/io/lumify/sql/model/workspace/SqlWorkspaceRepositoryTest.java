@@ -1,6 +1,7 @@
 package io.lumify.sql.model.workspace;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyAccessDeniedException;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
@@ -51,7 +52,7 @@ public class SqlWorkspaceRepositoryTest {
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         Map<?, ?> configMap = new HashMap<Object, Object>();
-        Configuration lumifyConfiguration = new Configuration(configMap);
+        Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
         sqlWorkspaceRepository = new SqlWorkspaceRepository(sessionFactory, sqlUserRepository);
         testUser = (SqlUser) sqlUserRepository.addUser("123", "user 1", null, null, new String[0]);

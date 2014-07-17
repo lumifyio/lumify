@@ -9,9 +9,13 @@ import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import com.altamiracorp.bigtable.model.ModelSession;
 import com.altamiracorp.bigtable.model.Row;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Gauge;
+import com.google.inject.Inject;
 import io.lumify.core.bootstrap.InjectHelper;
 import io.lumify.core.bootstrap.LumifyBootstrap;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.metrics.MetricsManager;
 import io.lumify.core.model.user.UserRepository;
 import io.lumify.core.user.User;
@@ -20,9 +24,6 @@ import io.lumify.core.util.LumifyLoggerFactory;
 import io.lumify.model.bigtablequeue.model.QueueItem;
 import io.lumify.model.bigtablequeue.model.QueueItemRepository;
 import io.lumify.model.bigtablequeue.model.QueueItemRowKey;
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Gauge;
-import com.google.inject.Inject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +57,8 @@ public class BigtableWorkQueueSpout extends BaseRichSpout {
 
     @Override
     public void open(final Map conf, TopologyContext topologyContext, SpoutOutputCollector collector) {
-        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(new Configuration(conf)));
+        Configuration configuration = ConfigurationLoader.load();
+        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(configuration));
 
         this.collector = collector;
         this.user = userRepository.getSystemUser();

@@ -2,15 +2,6 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    <context-param>
-        <param-name>application.config.location</param-name>
-        <param-value>/opt/lumify/config</param-value>
-    </context-param>
-    <context-param>
-        <param-name>application.config.log4j.location</param-name>
-        <param-value>/opt/lumify/config/log4j.xml</param-value>
-    </context-param>
-
     <listener>
         <listener-class>io.lumify.web.ApplicationBootstrap</listener-class>
     </listener>

@@ -1,6 +1,7 @@
 package io.lumify.sql.model.user;
 
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.exception.LumifyException;
 import io.lumify.core.model.user.AuthorizationRepository;
 import io.lumify.core.model.user.UserListenerUtil;
@@ -41,7 +42,7 @@ public class SqlUserRepositoryTest {
         ServiceRegistry serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder);
         Map<?, ?> configMap = new HashMap<Object, Object>();
-        Configuration lumifyConfiguration = new Configuration(configMap);
+        Configuration lumifyConfiguration = new HashMapConfigurationLoader(configMap).createConfiguration();;
         UserListenerUtil userListenerUtil = new UserListenerUtil();
         sqlUserRepository = new SqlUserRepository(lumifyConfiguration, authorizationRepository, sessionFactory, userListenerUtil);
     }
