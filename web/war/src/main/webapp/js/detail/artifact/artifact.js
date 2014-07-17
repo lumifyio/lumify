@@ -216,9 +216,8 @@ define([
             ).done(this.handleVertexLoaded.bind(this));
         };
 
-        this.handleVertexLoaded = function(vertexResponse, config) {
+        this.handleVertexLoaded = function(vertex, config) {
             var self = this,
-                vertex = vertexResponse[0],
                 displayType = this.attr.data.concept.displayType,
                 properties = vertex && vertex.properties;
 

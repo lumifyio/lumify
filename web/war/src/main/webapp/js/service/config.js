@@ -5,9 +5,30 @@ define([
 
     // Override in configuration.properties with `web.ui` prefix
     var DEFAULTS = {
+
+        // Load related vertices thresholds
         'vertex.loadRelatedMaxBeforePrompt': 50,
         'vertex.loadRelatedMaxForceSearch': 250,
+
+        // Hide multivalue properties after this count
         'properties.multivalue.defaultVisibleCount': 2,
+
+        // Property Metadata shown in info popover
+        'properties.metadata.propertyNames': 'http://lumify.io#sourceTimezone,' +
+                                             'http://lumify.io#modifiedDate,' +
+                                             'http://lumify.io#modifiedBy,' +
+                                             'sandboxStatus,' +
+                                             'http://lumify.io#confidence',
+        'properties.metadata.propertyNamesDisplay': 'Original,' +
+                                                    'Modified,' +
+                                                    'By,' +
+                                                    'Status,' +
+                                                    'Confidence',
+        'properties.metadata.propertyNamesType': 'timezone,' +
+                                                 'datetime,' +
+                                                 'user,' +
+                                                 'sandboxStatus,' +
+                                                 'percent',
         'map.provider': 'google',
         'map.provider.osm.url': 'https://a.tile.openstreetmap.org/${z}/${x}/${y}.png,' +
                                 'https://b.tile.openstreetmap.org/${z}/${x}/${y}.png,' +

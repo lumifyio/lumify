@@ -17,7 +17,56 @@ define([
             },
 
             sandboxStatus: function(vertex) {
-                return (/^(private|public_changed)$/i).test(vertex.sandboxStatus) ? 'unpublished' : undefined;
+                return V.metadata.sandboxStatus(vertex.sandboxStatus);
+            },
+
+            metadata: {
+                // Define/override metadata dataType specific displayTransformers here
+                //
+                // All functions receive: function(value, property, vertexId)
+                // return a value synchronously
+                // - or -
+                // append "Async" to function name and return a $.Deferred().promise()
+
+                datetime: function(value) {
+                    return F.date.dateTimeString(value);
+                },
+
+                sandboxStatus: function(value) {
+                    return (/^(private|public_changed)$/i).test(value) ? 'unpublished' : undefined;
+                },
+
+                percent: function(value) {
+                    return F.number.percent(value);
+                },
+
+                userAsync: function(userId) {
+                    var d = $.Deferred();
+                    require(['service/user'], function(UserService) {
+                        new UserService().userInfo(userId)
+                            .fail(d.reject)
+                            .done(function(user) {
+                                d.resolve(user.displayName);
+                            });
+                    })
+                    return d.promise();
+                }
+            },
+
+            properties: {
+                // Define/override dataType specific displayTransformers here
+                //
+                // All functions receive: function(HtmlElement, property, vertexId)
+                // Must populate the dom element with value
+                //
+                // for example: geoLocation: function(...) { el.textContent = 'coords'; }
+
+                visibility: function(el, property) {
+                    $('<i>').text((
+                        property.value &&
+                        property.value.source
+                    ) || 'public').appendTo(el);
+                }
             },
 
             hasMetadata: function(property) {

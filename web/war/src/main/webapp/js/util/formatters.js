@@ -108,6 +108,12 @@ define([
                     return (decimalAdjust('round', number / 1000, -1) + 'K');
                 } else return FORMATTERS.number.pretty(number);
             },
+            percent: function(number) {
+                if (_.isString(number)) {
+                    number = parseFloat(number);
+                }
+                return Math.round(number * 100) + '%';
+            },
             /**
              * Split 32-bit integers into 12-bit index, 20-bit offset
              */
@@ -203,12 +209,18 @@ define([
                 }
 
                 if (geo && geo.latitude && geo.longitude) {
-                    return (
-                        _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
-                    ).toFixed(3) + ', ' +
-                    (
-                        _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
-                    ).toFixed(3);
+                    var latlon = (
+                            _.isNumber(geo.latitude) ? geo.latitude : parseFloat(geo.latitude)
+                        ).toFixed(3) + ', ' +
+                        (
+                            _.isNumber(geo.longitude) ? geo.longitude : parseFloat(geo.longitude)
+                        ).toFixed(3);
+
+                    if (geo.description) {
+                        return geo.description + ' ' + latlon;
+                    }
+
+                    return latlon;
                 }
             }
         },

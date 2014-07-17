@@ -32,24 +32,26 @@ define([
     'use strict';
 
     var component = defineComponent(Properties),
+        VISIBILITY_NAME = 'http://lumify.io#visibilityJson',
         AUDIT_DATE_DISPLAY = ['date-relative', 'date'],
         AUDIT_DATE_DISPLAY_RELATIVE = 0,
         AUDIT_DATE_DISPLAY_REAL = 1,
         MAX_AUDIT_ITEMS = 3,
         CURRENT_DATE_DISPLAY = AUDIT_DATE_DISPLAY_RELATIVE,
-        alreadyWarnedAboutMissingOntology = {};
+        alreadyWarnedAboutMissingOntology = {},
+        ontologyService = new OntologyService(),
+        vertexService = new VertexService(),
+        relationshipService = new RelationshipService(),
+        auditService = new AuditService(),
+        configService = new ConfigService();
 
-    component.filterPropertiesForDisplay = filterPropertiesForDisplay;
     return component;
 
-    function Properties() {
-        var self = this;
+    function isVisibility(property) {
+        return property.name === VISIBILITY_NAME;
+    }
 
-        this.ontologyService = new OntologyService();
-        this.vertexService = new VertexService();
-        this.relationshipService = new RelationshipService();
-        this.auditService = new AuditService();
-        this.configService = new ConfigService();
+    function Properties() {
 
         this.defaultAttrs({
             addNewPropertiesSelector: '.add-new-properties',
@@ -62,43 +64,119 @@ define([
             showMorePropertiesSelector: '.show-more button'
         });
 
+        this.showPropertyInfo = function(button, property) {
+            var vertexId = this.attr.data.id,
+                $target = $(button),
+                shouldOpen = $target.lookupAllComponents().length === 0;
+
+            require(['util/popovers/propertyInfo/propertyInfo'], function(PropertyInfo) {
+                if (shouldOpen) {
+                    PropertyInfo.attachTo($target, {
+                        property: property,
+                        vertexId: vertexId
+                    });
+                } else {
+                    $target.teardownComponent(PropertyInfo);
+                }
+            });
+        };
+
         this.update = function(properties) {
-            var row = this.tableRoot.selectAll('tr.property-row')
-                    .data(properties, function(p) {
-                        return p.name + p.key;
+            var self = this,
+                displayProperties = _.chain(properties)
+                    .filter(function(property) {
+                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
+
+                        return isVisibility(property) || (
+                            ontologyProperty && ontologyProperty.userVisible
+                        );
                     })
+                    .tap(function(properties) {
+                        var visibility = _.find(properties, isVisibility);
+                        if (!visibility) {
+                            properties.push({
+                                name: VISIBILITY_NAME,
+                                value: self.attr.data[VISIBILITY_NAME]
+                            });
+                        }
+                    })
+                    .sortBy(function(property) {
+                        if (isVisibility(property)) {
+                            return '0';
+                        }
+
+                        var ontologyProperty = self.ontologyProperties.byTitle[property.name];
+                        if (ontologyProperty && ontologyProperty.displayName) {
+                            return '1' + ontologyProperty.displayName.toLowerCase();
+                        }
+                        return '2' + propertyName.toLowerCase();
+                    })
+                    .value(),
+                row = this.tableRoot.selectAll('tr.property-row')
+                    .data(displayProperties)
                     .call(function() {
                         this.enter()
                             .insert('tr', '.buttons-row')
-                            .attr('class', 'property-row')
+                            .attr('class', 'property-row ')
                             .call(function() {
                                 this.append('td')
                                     .attr('class', 'property-name')
+                                    .attr('width', '40%')
                                     .append('strong')
 
                                 this.append('td')
                                     .attr('class', 'property-value')
                                     .attr('colspan', 2)
                                     .call(function() {
-                                        this.append('span');
+                                        this.append('span').attr('class', 'value');
                                         this.append('button')
                                             .attr('class', 'info')
-                                            .on('click', function() {
-                                            })
+                                            .on('click', function(property) {
+                                                self.showPropertyInfo(this, property);
+                                            });
+                                        this.append('span').attr('class', 'visibility');
                                     })
                             })
                     });
 
+            row.each(function(d) {
+                $(this).removePrefixedClasses('property-row-')
+                    .addClass('property-row-' + F.className.to(d.name + d.key));
+            });
+
             row.select('td.property-name strong')
-                .text(function(d) {
-                    return d.name;
+                .text(function(d, index) {
+                    if (index > 0 && displayProperties[index - 1].name === d.name) {
+                        return '';
+                    }
+
+                    return isVisibility(d) ?
+                        'Visibility' :
+                        self.ontologyProperties.byTitle[d.name].displayName;
                 })
 
-            row.select('td.property-value span')
-                .text(function(d) {
-                    console.log('grabbing val', d.value)
-                    return d.value;
-                })
+            row.select('td.property-value')
+                .each(function(property) {
+                    var valueSpan = d3.select(this).select('.value').node(),
+                        visibilitySpan = d3.select(this).select('.visibility').node(),
+                        visibility = isVisibility(property),
+                        ontologyProperty = self.ontologyProperties.byTitle[property.name],
+                        dataType = ontologyProperty && ontologyProperty.dataType;
+
+                    if (visibility) {
+                        dataType = 'visibility';
+                    } else {
+                        F.vertex.properties.visibility(
+                            visibilitySpan, { value: property[VISIBILITY_NAME] }, self.attr.data.id);
+                    }
+
+                    if (dataType && F.vertex.properties[dataType]) {
+                        F.vertex.properties[dataType](valueSpan, property, self.attr.data.id);
+                        return;
+                    }
+
+                    valueSpan.textContent = F.vertex.displayProp(property);
+                });
 
             row.exit().remove()
         };
@@ -124,7 +202,18 @@ define([
                                 .attr('class', 'add-new-properties btn btn-mini btn-default')
                                 .text('Add Property');
                 });
-            self.update(properties);
+
+            $.when(
+                ontologyService.relationships(),
+                ontologyService.properties(),
+                configService.getProperties()
+            ).done(function(ontologyRelationships, ontologyProperties, config) {
+                    var popoutEnabled = false;
+
+                    self.ontologyProperties = ontologyProperties;
+                    self.ontologyRelationships = ontologyRelationships;
+                    self.update(properties);
+            });
 
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
@@ -223,8 +312,8 @@ define([
                 require(['hbs!detail/properties/item'], itemTemplate.resolve);
 
                 $.when(
-                        this.ontologyService.ontology(),
-                        this.auditRequest = this.auditService.getAudits(this.attr.data.id),
+                        ontologyService.ontology(),
+                        this.auditRequest = auditService.getAudits(this.attr.data.id),
                         itemTemplate
                     ).done(function(ontology, auditResponse, itemTemplate) {
                         var audits = _.sortBy(auditResponse[0].auditHistory, function(a) {
@@ -300,7 +389,7 @@ define([
                 });
 
             Object.keys(auditsByProperty).forEach(function(propertyNameAndKey) {
-                var propLi = self.$node.find('.property-' + F.className.to(propertyNameAndKey)),
+                var propLi = self.$node.find('.property-row-' + F.className.to(propertyNameAndKey)),
                     audits = auditsByProperty[propertyNameAndKey],
                     propertyKey = audits[0].propertyAudit.propertyKey,
                     propertyName = audits[0].propertyAudit.propertyName;
@@ -342,8 +431,6 @@ define([
                     MAX_TO_DISPLAY: MAX_AUDIT_ITEMS
                 }));
             });
-
-            this.updatePopovers();
         };
 
         this.createInfoJsonFromAudit = function(audit, direction) {
@@ -393,57 +480,22 @@ define([
         this.onDeleteProperty = function(event, data) {
             var self = this;
 
-            if (F.vertex.isEdge(this.attr.data)) {
-                self.relationshipService.deleteProperty(
-                        data.property.name,
-                        this.attr.data.properties.source.value,
-                        this.attr.data.properties.target.value,
-                        this.attr.data.id)
-                .fail(this.requestFailure.bind(this))
-                .done(function(newProperties) {
-                    var properties = $.extend({}, self.attr.data.properties, newProperties);
-                    self.displayProperties(self.attr.data);
-                });
-
-            } else {
-                this.vertexService.deleteProperty(this.attr.data.id, data.property)
-                    .fail(this.requestFailure.bind(this, event.target))
-            }
+            vertexService.deleteProperty(this.attr.data.id, data.property)
+                .fail(this.requestFailure.bind(this, event.target))
         };
 
         this.onAddProperty = function(event, data) {
-            var self = this,
-                isEdge = F.vertex.isEdge(this.attr.data),
-                done = isEdge ? function(edge) {
-                    self.attr.data = edge;
-                    self.displayProperties(self.attr.data);
-                } : function() { };
-
             if (data.property.name === 'http://lumify.io#visibilityJson') {
 
-                this[isEdge ? 'relationshipService' : 'vertexService'].setVisibility(
+                vertexService.setVisibility(
                         this.attr.data.id,
                         data.property.visibilitySource)
                     .fail(this.requestFailure.bind(this))
-                    .done(done);
-
-            } else if (isEdge) {
-
-                this.relationshipService.setProperty(
-                        data.property.name,
-                        data.property.value,
-                        data.property.visibilitySource,
-                        data.property.justificationText,
-                        data.property.sourceInfo,
-                        this.attr.data.properties.source.value,
-                        this.attr.data.properties.target.value,
-                        this.attr.data.id)
-                    .fail(this.requestFailure.bind(this))
-                    .done(done);
+                    .done(this.closePropertyForm.bind(this));
 
             } else {
 
-                this.vertexService.setProperty(
+                vertexService.setProperty(
                         this.attr.data.id,
                         data.property.key,
                         data.property.name,
@@ -453,9 +505,13 @@ define([
                         data.property.sourceInfo,
                         data.property.metadata)
                     .fail(this.requestFailure.bind(this))
-                    .done(done);
+                    .done(this.closePropertyForm.bind(this));
             }
 
+        };
+
+        this.closePropertyForm = function() {
+            this.$node.find('.underneath').teardownComponent(PropertyForm);
         };
 
         this.requestFailure = function(request, message, error) {
@@ -503,176 +559,6 @@ define([
             });
         };
 
-        this.updatePopovers = function() {
-            var self = this;
-
-            require(['detail/properties/propertyInfo'], function(PropertyInfo) {
-
-                var infos = self.$node.find('.info');
-
-                infos.each(function() {
-                    var $this = $(this),
-                        popover = $this.data('popover'),
-                        property = $this.data('property'),
-                        ontologyProperty = self.ontologyProperties.byTitle[property.name];
-
-                    if (property.name === 'http://lumify.io#visibilityJson' || ontologyProperty) {
-                        if (!F.vertex.hasMetadata(property) && Privileges.missingEDIT) {
-                            $this.hide();
-                            return;
-                        } else {
-                            $this.show();
-                        }
-
-                        if (popover) {
-                            popover.destroy();
-                        }
-
-                        $this.popover({
-                            trigger: 'click',
-                            placement: 'top',
-                            content: 'Loading...',
-                        });
-
-                        popover = $this.data('popover');
-
-                        var tip = popover.tip(),
-                            content = tip.find('.popover-content');
-
-                        $this.off('shown').on('shown', _.throttle(function(e) {
-                            var b = $(this),
-                                p = b.data('popover'),
-                                t = p.$tip;
-
-                            e.stopPropagation();
-
-                            $(document).off('.propertyInfo').on('click.propertyInfo', function(event) {
-                                var $target = $(event.target);
-
-                                infos.not($this).popover('hide');
-                                if (!$target.is($this) &&
-                                    $target.closest('.popover').length === 0) {
-
-                                    $this.popover('hide');
-                                    $(document).off('.propertyInfo');
-                                }
-                            });
-
-                            self.off('positionPropertyInfo').on('positionPropertyInfo', function() {
-                                    var buttonWidth = b.width(),
-                                        buttonHeight = b.height(),
-                                        buttonOffset = b.offset(),
-                                        padding = 5,
-                                        popoverWidth = t.width(),
-                                        popoverHeight = t.height(),
-                                        positionBottom = buttonOffset.top < popoverHeight,
-                                        actualTop = positionBottom ?
-                                            (buttonOffset.top + buttonHeight + padding) :
-                                            (buttonOffset.top - popoverHeight - padding),
-                                        placementPageCoordinates = {
-                                            top: Math.max(0, actualTop),
-                                            left: Math.min(
-                                                buttonOffset.left - popoverWidth / 2 + buttonWidth / 2 + 3,
-                                                $(window).width() - popoverWidth - padding * 2
-                                            )
-                                        },
-                                        placementParentCoordinates = {
-                                            top: placementPageCoordinates.top - b.offsetParent().offset().top,
-                                            left: placementPageCoordinates.left - b.offsetParent().offset().left,
-                                        };
-
-                                if (buttonOffset.top < 0) {
-                                    p.hide();
-                                    $(document).off('.propertyInfo');
-                                    return;
-                                }
-
-                                t.css(placementParentCoordinates)
-                                t.removeClass('top bottom').addClass(positionBottom ? 'bottom' : 'top');
-                            });
-                            self.trigger('positionPropertyInfo');
-                            self.trigger(content, 'willDisplayPropertyInfo');
-                        }, 1000));
-
-                        popover.setContent = function() {
-                            var $tip = this.tip()
-                            $tip.removeClass('fade in top bottom left right')
-                        };
-
-                        content.teardownAllComponents();
-                        PropertyInfo.attachTo(content, {
-                            property: $this.data('property')
-                        })
-                    } else {
-                        $this.remove();
-                    }
-                })
-            })
-        }
-
-        this.displayProperties = function(vertex) {
-            var self = this;
-
-            $.when(
-                this.ontologyService.relationships(),
-                this.ontologyService.properties(),
-                this.configService.getProperties()
-            ).done(function(ontologyRelationships, ontologyProperties, config) {
-                    var filtered = filterPropertiesForDisplay(vertex, ontologyProperties, ontologyRelationships),
-                        popoutEnabled = false,
-                        iconProperty = _.findWhere(filtered, { key: 'http://lumify.io#glyphIcon' });
-
-                    self.ontologyProperties = ontologyProperties;
-
-                    if (iconProperty) {
-                        self.trigger(self.select('glyphIconSelector'), 'iconUpdated', { src: iconProperty.value });
-                    }
-
-                    if ($('#app').hasClass('fullscreen-details')) {
-                        popoutEnabled = true;
-                    }
-
-                    var previousName,
-                        repeatCount = 0,
-                        lastNonHidden = _.first(filtered),
-                        max = parseInt(config['properties.multivalue.defaultVisibleCount'], 0),
-                        formatNumber = function(c) {
-                            var numberHidden = Math.max(0, c - max);
-                            if (numberHidden) {
-                                return F.number.pretty(numberHidden);
-                            }
-                        },
-                        props = $(propertiesTemplate({
-                            properties: _.map(filtered, function(p, i) {
-                                p.isRepeated = !!(previousName && previousName === p.name);
-                                if (!p.isRepeated) {
-                                    if (previousName) {
-                                        lastNonHidden.hiddenNumber = formatNumber(repeatCount);
-                                    }
-                                    repeatCount = 0;
-                                }
-
-                                p.hidden = repeatCount++ >= max;
-                                if (!p.hidden) {
-                                    lastNonHidden = p;
-                                }
-                                p.popout = popoutEnabled;
-                                if (i === (filtered.length - 1) && previousName) {
-                                    lastNonHidden.hiddenNumber = formatNumber(repeatCount);
-                                }
-
-                                previousName = p.name;
-                                return p;
-                            })
-                        }));
-                    self.$node.html(props);
-                    self.updateVisibility();
-                    self.updateJustification();
-                    self.updatePopovers();
-                });
-            self.trigger('toggleAuditDisplay', { displayed: false })
-        };
-
         this.updateJustification = function() {
             this.$node.find('.justification').each(function() {
                 var justification = $(this),
@@ -700,111 +586,5 @@ define([
                 });
             });
         };
-    }
-
-    function filterPropertiesForDisplay(vertex, ontologyProperties, ontologyRelationships) {
-        var properties = vertex.properties,
-            visibilityJsonName = 'http://lumify.io#visibilityJson',
-            visibilityValue = F.vertex.prop({properties: properties}, visibilityJsonName, {source: ''}),
-            visibilityOntology = ontologyProperties.byTitle['http://lumify.io#visibility'],
-            displayProperties = [],
-            visibilityProperty = {
-                isVisibility: true,
-                name: visibilityJsonName,
-                value: visibilityValue,
-                cls: F.className.to(visibilityJsonName),
-                displayName: (visibilityOntology && visibilityOntology.displayName) ||
-                    'Visibility',
-                visibilityJson: JSON.stringify(visibilityValue),
-                metadata: _.pick(
-                    _.findWhere(properties, {name: visibilityJsonName}) || {},
-                    'http://lumify.io#modifiedBy',
-                    'http://lumify.io#modifiedDate',
-                    'http://lumify.io#sourceTimezone',
-                    'http://lumify.io#confidence'
-                )
-            };
-
-        displayProperties.push(visibilityProperty);
-        visibilityProperty.json = JSON.stringify(visibilityProperty);
-
-        var relationshipType, relationshipProperty;
-        if (vertex.label && ontologyRelationships && (relationshipType = ontologyRelationships.byTitle[vertex.label])) {
-            relationshipProperty = {
-                displayType: 'string',
-                string: true,
-                name: 'type',
-                stringValue: relationshipType.displayName,
-                displayName: 'Relation',
-                hideVisibility: true
-            }
-            displayProperties.push(relationshipProperty);
-            relationshipProperty.json = JSON.stringify(relationshipProperty);
-        }
-
-        _.sortBy(properties, function(p) {
-            var ontologyProperty = ontologyProperties.byTitle[p.name];
-            if (ontologyProperty) {
-                return ontologyProperty.displayName;
-            }
-            return p.name;
-        }).forEach(function(property) {
-            var value = property.value,
-                name = property.name,
-                stringValue = F.vertex.displayProp(property),
-                ontologyProperty = ontologyProperties.byTitle[name],
-                displayName = ontologyProperty && ontologyProperty.displayName,
-                displayType = ontologyProperty && ontologyProperty.dataType,
-                visibility = property['http://lumify.io#visibilityJson'],
-                isEdge = F.vertex.isEdge({properties: properties}),
-                propertyView;
-
-            if (ontologyProperty && ontologyProperty.userVisible) {
-                propertyView = {
-                    name: name,
-                    key: property.key,
-                    value: value,
-                    cls: F.className.to(name + property.key),
-                    stringValue: _.isUndefined(stringValue) ? value : stringValue,
-                    displayName: displayName || name,
-                    displayType: displayType || 'string',
-                    visibility: visibility,
-                    visibilityJson: _.isUndefined(visibility) ? '' : JSON.stringify(visibility),
-                    metadata: _.pick(
-                        property,
-                        '_justificationMetadata',
-                        '_sourceMetadata',
-                        'http://lumify.io#modifiedBy',
-                        'http://lumify.io#modifiedDate',
-                        'http://lumify.io#sourceTimezone',
-                        'http://lumify.io#confidence',
-                        'sandboxStatus'
-                    )
-                }
-
-            } else if (name === '_sourceMetadata') {
-                propertyView = {
-                    name: 'sourceMetadata',
-                    value: value,
-                    displayName: 'Justification',
-                    displayType: 'justification'
-                };
-            } else if (name === '_justificationMetadata') {
-                propertyView = {
-                    name: 'justificationMetadata',
-                    value: value,
-                    displayName: 'Justification',
-                    displayType: 'justification'
-                };
-            }
-
-            if (propertyView) {
-                propertyView[propertyView.displayType] = true;
-                propertyView.json = JSON.stringify(propertyView);
-                displayProperties.push(propertyView);
-            }
-        });
-
-        return displayProperties;
     }
 });
