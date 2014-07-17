@@ -43,21 +43,14 @@ define([
 
     function ConfigService() {
         ServiceBase.call(this);
+        this.memoizeFunctions('config', ['getProperties']);
         return this;
     }
 
     ConfigService.prototype = Object.create(ServiceBase.prototype);
 
-    ConfigService.prototype.getProperties = function(refresh) {
-        if (!refresh && this.cachedProperties) {
-            return this.cachedProperties;
-        }
-
-        this.cachedProperties =
-            this._ajaxGet({ url: 'configuration' })
-                .then(this.applyDefaults);
-
-        return this.cachedProperties;
+    ConfigService.prototype.getProperties = function() {
+        return this._ajaxGet({ url: 'configuration' }).then(this.applyDefaults);
     };
 
     ConfigService.prototype.applyDefaults = function(properties) {
