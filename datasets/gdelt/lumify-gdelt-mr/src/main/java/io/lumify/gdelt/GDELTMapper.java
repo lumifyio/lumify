@@ -2,6 +2,7 @@ package io.lumify.gdelt;
 
 import com.altamiracorp.bigtable.model.accumulo.AccumuloSession;
 import io.lumify.core.config.Configuration;
+import io.lumify.core.config.HashMapConfigurationLoader;
 import io.lumify.core.model.audit.Audit;
 import io.lumify.core.model.audit.AuditAction;
 import io.lumify.core.model.properties.types.LumifyProperty;
@@ -40,14 +41,14 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
-        this.parser = new GDELTParser();
         Map configurationMap = SecureGraphMRUtils.toMap(context.getConfiguration());
+        this.parser = new GDELTParser();
         this.graph = (AccumuloGraph) new GraphFactory().createGraph(MapUtils.getAllWithPrefix(configurationMap, "graph"));
         this.visibility = new Visibility("");
         this.authorizations = new AccumuloAuthorizations();
         this.user = new SystemUser(null);
         VersionService versionService = new VersionService();
-        Configuration configuration = new Configuration(configurationMap);
+        Configuration configuration = new HashMapConfigurationLoader(configurationMap).createConfiguration();
         this.auditRepository = new SecureGraphAuditRepository(null, versionService, configuration, null, userRepository);
     }
 
@@ -104,28 +105,13 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
             return;
         }
 
-        context.getCounter(GDELTImportCounters.ACTORS_ATTEMPTED).increment(1);
-
         // actor 1 vertex
-        VertexBuilder vertexBuilder = prepareVertex(generateActorId(actor), visibility);
-        GDELTProperties.CONCEPT_TYPE.setProperty(vertexBuilder, GDELTConstants.ACTOR_CONCEPT_URI, visibility);
-        GDELTProperties.ACTOR_CODE.setProperty(vertexBuilder, actor.getCode(), visibility);
-        setOptionalProperty(GDELTProperties.ACTOR_NAME, vertexBuilder, actor.getName());
-        setOptionalProperty(GDELTProperties.ACTOR_COUNTRY_CODE, vertexBuilder, actor.getCountryCode());
-        setOptionalProperty(GDELTProperties.ACTOR_ETHNIC_CODE, vertexBuilder, actor.getEthnicCode());
-        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "1", actor.getReligion1Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "2", actor.getReligion2Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "1", actor.getType1Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "2", actor.getType2Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "3", actor.getType3Code());
-        Vertex actorVertex = vertexBuilder.save(authorizations);
+        Vertex actorVertex = importActor(actor, context);
 
         // audit actor 1
         Text key = new Text(Audit.TABLE_NAME);
         Audit auditActor = auditRepository.createAudit(AuditAction.CREATE, actorVertex.getId(), "GDELT MR", "", user, visibility);
         context.write(key, AccumuloSession.createMutationFromRow(auditActor));
-
-        context.getCounter(GDELTImportCounters.ACTORS_PROCESSED).increment(1);
 
         context.getCounter(GDELTImportCounters.EDGES_ATTEMPTED).increment(1);
 
@@ -149,28 +135,13 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
             return;
         }
 
-        context.getCounter(GDELTImportCounters.ACTORS_ATTEMPTED).increment(1);
-
-        // actor 2 vertex
-        VertexBuilder vertexBuilder = prepareVertex(generateActorId(actor), visibility);
-        GDELTProperties.CONCEPT_TYPE.setProperty(vertexBuilder, GDELTConstants.ACTOR_CONCEPT_URI, visibility);
-        GDELTProperties.ACTOR_CODE.setProperty(vertexBuilder, actor.getCode(), visibility);
-        setOptionalProperty(GDELTProperties.ACTOR_NAME, vertexBuilder, actor.getName());
-        setOptionalProperty(GDELTProperties.ACTOR_COUNTRY_CODE, vertexBuilder, actor.getCountryCode());
-        setOptionalProperty(GDELTProperties.ACTOR_ETHNIC_CODE, vertexBuilder, actor.getEthnicCode());
-        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "1", actor.getReligion1Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "2", actor.getReligion2Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "1", actor.getType1Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "2", actor.getType2Code());
-        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "3", actor.getType3Code());
-        Vertex actorVertex = vertexBuilder.save(authorizations);
+        // actor 2
+        Vertex actorVertex = importActor(actor, context);
 
         // audit actor 2
         Text key = new Text(Audit.TABLE_NAME);
         Audit auditActor = auditRepository.createAudit(AuditAction.CREATE, actorVertex.getId(), "GDELT MR", "", user, visibility);
         context.write(key, AccumuloSession.createMutationFromRow(auditActor));
-
-        context.getCounter(GDELTImportCounters.ACTORS_PROCESSED).increment(1);
 
         context.getCounter(GDELTImportCounters.EDGES_ATTEMPTED).increment(1);
 
@@ -184,6 +155,27 @@ public class GDELTMapper extends ElementMapper<LongWritable, Text, Text, Mutatio
         context.write(eventToActor2EdgeKey, AccumuloSession.createMutationFromRow(auditEventToActor2Edge));
 
         context.getCounter(GDELTImportCounters.EDGES_PROCESSED).increment(1);
+    }
+
+    private Vertex importActor(GDELTActor actor, Context context) {
+        context.getCounter(GDELTImportCounters.ACTORS_ATTEMPTED).increment(1);
+
+        VertexBuilder vertexBuilder = prepareVertex(generateActorId(actor), visibility);
+        GDELTProperties.CONCEPT_TYPE.setProperty(vertexBuilder, GDELTConstants.ACTOR_CONCEPT_URI, visibility);
+        GDELTProperties.ACTOR_CODE.setProperty(vertexBuilder, actor.getCode(), visibility);
+        setOptionalProperty(GDELTProperties.ACTOR_NAME, vertexBuilder, actor.getName());
+        setOptionalProperty(GDELTProperties.ACTOR_COUNTRY_CODE, vertexBuilder, actor.getCountryCode());
+        setOptionalProperty(GDELTProperties.ACTOR_KNOWN_GROUP_CODE, vertexBuilder, actor.getKnownGroupCode());
+        setOptionalProperty(GDELTProperties.ACTOR_ETHNIC_CODE, vertexBuilder, actor.getEthnicCode());
+        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "1", actor.getReligion1Code());
+        addOptionPropertyValue(GDELTProperties.ACTOR_RELIGION_CODE, vertexBuilder, "2", actor.getReligion2Code());
+        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "1", actor.getType1Code());
+        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "2", actor.getType2Code());
+        addOptionPropertyValue(GDELTProperties.ACTOR_TYPE_CODE, vertexBuilder, "3", actor.getType3Code());
+
+        context.getCounter(GDELTImportCounters.ACTORS_PROCESSED).increment(1);
+
+        return vertexBuilder.save(authorizations);
     }
 
     private void setOptionalProperty(LumifyProperty property, VertexBuilder vertexBuilder, Object propertyValue) {

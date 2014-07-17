@@ -1,6 +1,9 @@
 package io.lumify.gdelt;
 
 
+import io.lumify.core.bootstrap.InjectHelper;
+import io.lumify.core.bootstrap.LumifyBootstrap;
+import io.lumify.core.config.ConfigurationLoader;
 import io.lumify.core.util.LumifyLogger;
 import io.lumify.core.util.LumifyLoggerFactory;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
@@ -24,9 +27,10 @@ public class GDELTRunner extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        io.lumify.core.config.Configuration lumifyConfig = io.lumify.core.config.Configuration.loadConfigurationFile();
+        io.lumify.core.config.Configuration lumifyConfig = ConfigurationLoader.load();
         Configuration conf = getConfiguration(args, lumifyConfig);
         AccumuloGraphConfiguration accumuloGraphConfiguration = new AccumuloGraphConfiguration(conf, "graph.");
+//        InjectHelper.inject(this, LumifyBootstrap.bootstrapModuleMaker(lumifyConfig));
 
         Job job = new Job(conf, "GDELTImport");
 

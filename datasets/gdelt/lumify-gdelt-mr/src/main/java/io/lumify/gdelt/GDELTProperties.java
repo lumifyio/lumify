@@ -1,10 +1,10 @@
 package io.lumify.gdelt;
 
-import io.lumify.core.model.ontology.OntologyLumifyProperties;
+import io.lumify.core.model.properties.LumifyProperties;
 import io.lumify.core.model.properties.types.*;
 
 public class GDELTProperties {
-    public static final StringLumifyProperty CONCEPT_TYPE = OntologyLumifyProperties.CONCEPT_TYPE;
+    public static final StringLumifyProperty CONCEPT_TYPE = LumifyProperties.CONCEPT_TYPE;
 
     // event properties
     public static final StringLumifyProperty GLOBAL_EVENT_ID = new StringLumifyProperty("http://lumify.io/gdelt#globalEventId");
