@@ -43,6 +43,10 @@ import static org.securegraph.util.IterableUtils.singleOrDefault;
 
 public abstract class GraphPropertyWorker {
     private static final LumifyLogger LOGGER = LumifyLoggerFactory.getLogger(GraphPropertyWorker.class);
+    public static final String CONFIG_LOCATION_IRI = "ontology.iri.location";
+    public static final String CONFIG_ORGANIZATION_IRI = "ontology.iri.organization";
+    public static final String CONFIG_PERSON_IRI = "ontology.iri.person";
+    public static final String THING_IRI = "http://www.w3.org/2002/07/owl#Thing";
     private Graph graph;
     private WorkQueueRepository workQueueRepository;
     private OntologyRepository ontologyRepository;
@@ -51,12 +55,30 @@ public abstract class GraphPropertyWorker {
     private GraphPropertyWorkerPrepareData workerPrepareData;
     private Configuration configuration;
     private String artifactHasEntityIri;
+    private String locationIri;
+    private String organizationIri;
+    private String personIri;
 
     public void prepare(GraphPropertyWorkerPrepareData workerPrepareData) throws Exception {
         this.workerPrepareData = workerPrepareData;
         this.artifactHasEntityIri = getConfiguration().get(Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
         if (this.artifactHasEntityIri == null) {
             throw new LumifyException("Could not find configuration for " + Configuration.ONTOLOGY_IRI_ARTIFACT_HAS_ENTITY);
+        }
+
+        this.locationIri = (String) workerPrepareData.getStormConf().get(CONFIG_LOCATION_IRI);
+        if (this.locationIri == null || this.locationIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + CONFIG_LOCATION_IRI);
+        }
+
+        this.organizationIri = (String) workerPrepareData.getStormConf().get(CONFIG_ORGANIZATION_IRI);
+        if (this.organizationIri == null || this.organizationIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + CONFIG_ORGANIZATION_IRI);
+        }
+
+        this.personIri = (String) workerPrepareData.getStormConf().get(CONFIG_PERSON_IRI);
+        if (this.personIri == null || this.personIri.length() == 0) {
+            throw new LumifyException("Could not find configuration: " + CONFIG_PERSON_IRI);
         }
     }
 
@@ -144,6 +166,20 @@ public abstract class GraphPropertyWorker {
 
         String mimeType = (String) property.getMetadata().get(LumifyProperties.MIME_TYPE.getPropertyName());
         return !(mimeType == null || !mimeType.startsWith("text"));
+    }
+
+    protected String mapToOntologyIri(String type) {
+        String ontologyClassUri;
+        if ("location".equals(type)) {
+            ontologyClassUri = this.locationIri;
+        } else if ("organization".equals(type)) {
+            ontologyClassUri = this.organizationIri;
+        } else if ("person".equals(type)) {
+            ontologyClassUri = this.personIri;
+        } else {
+            ontologyClassUri = THING_IRI;
+        }
+        return ontologyClassUri;
     }
 
     protected void addVideoTranscriptAsTextPropertiesToMutation(ExistingElementMutation<Vertex> mutation, String propertyKey, VideoTranscript videoTranscript, Map<String, Object> metadata, Visibility visibility) {

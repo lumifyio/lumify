@@ -64,7 +64,7 @@ public class KnownEntityExtractorGraphPropertyWorker extends GraphPropertyWorker
             int start = searchResult.getLastIndex() - match.getMatchText().length();
             int end = searchResult.getLastIndex();
             String sign = match.getEntityTitle();
-            String ontologyClassUri = match.getConceptTitle();
+            String ontologyClassUri = mapToOntologyIri(match.getConceptTitle());
             termMentions.add(new TermMention.Builder(start, end, sign, ontologyClassUri, propertyKey, visibility)
                     .resolved(true)
                     .useExisting(true)
