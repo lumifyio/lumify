@@ -12,7 +12,8 @@ define([
     'hbs!./template',
     'hbs!../audit/audit-list',
     'data',
-    'sf'
+    'sf',
+    'd3'
 ], function(
     defineComponent,
     OntologyService,
@@ -26,7 +27,8 @@ define([
     propertiesTemplate,
     auditsListTemplate,
     appData,
-    sf) {
+    sf,
+    d3) {
     'use strict';
 
     var component = defineComponent(Properties),
@@ -60,7 +62,69 @@ define([
             showMorePropertiesSelector: '.show-more button'
         });
 
+        this.update = function(properties) {
+            var row = this.tableRoot.selectAll('tr.property-row')
+                    .data(properties, function(p) {
+                        return p.name + p.key;
+                    })
+                    .call(function() {
+                        this.enter()
+                            .append('tr')
+                            .attr('class', 'property-row')
+                            .call(function() {
+                                this.append('td')
+                                    .attr('class', 'property-name')
+                                    .append('strong')
+
+                                this.append('td')
+                                    .attr('class', 'property-value')
+                                    .attr('colspan', 2)
+                                    .call(function() {
+                                        this.append('span');
+                                        this.append('button')
+                                            .attr('class', 'info')
+                                            .on('click', function() {
+                                            })
+                                    })
+                            })
+                    });
+
+            row.select('td.property-name strong')
+                .text(function(d) {
+                    return d.name;
+                })
+
+            row.select('td.property-value span')
+                .text(function(d) {
+                    console.log('grabbing val', d.value)
+                    return d.value;
+                })
+
+            row.exit().remove()
+        };
+
         this.after('initialize', function() {
+            var self = this,
+                properties = this.attr.data.properties,
+                node = this.node,
+                root = d3.select(node);
+
+            root.append('div').attr('class', 'entity_audit_events');
+
+            this.tableRoot = root
+                .append('table')
+                .attr('class', 'table')
+                .call(function() {
+                    this.append('tr')
+                        .attr('class', 'buttons-row requires-EDIT')
+                        .append('td')
+                            .attr('colspan', 3)
+                            .attr('class', 'buttons')
+                            .append('button')
+                                .attr('class', 'add-new-properties btn btn-mini btn-default')
+                                .text('Add Property');
+                });
+            self.update(properties);
 
             this.on('click', {
                 addNewPropertiesSelector: this.onAddNewPropertiesClicked,
@@ -75,8 +139,7 @@ define([
             this.on('editProperty', this.onEditProperty);
             this.on(document, 'verticesUpdated', this.onVerticesUpdated);
 
-            var self = this,
-                positionPopovers = _.throttle(function() {
+            var positionPopovers = _.throttle(function() {
                     self.trigger('positionPropertyInfo');
                 }, 1000 / 60),
                 scrollParent = this.$node.scrollParent();
@@ -91,10 +154,10 @@ define([
                 .off('.properties')
                 .on('toggleAuditDisplay.properties', this.onToggleAuditing.bind(this));
 
-            this.$node.html(propertiesTemplate({
-                properties: null
-            }));
-            this.displayProperties(this.attr.data);
+            //this.$node.html(propertiesTemplate({
+                //properties: null
+            //}));
+            //this.displayProperties(this.attr.data);
         });
 
         this.before('teardown', function() {
@@ -321,7 +384,8 @@ define([
             data.vertices.forEach(function(vertex) {
                 if (vertex.id === self.attr.data.id) {
                     self.attr.data.properties = vertex.properties;
-                    self.displayProperties(vertex);
+                    self.update(vertex.properties)
+                    //self.displayProperties(vertex);
                 }
             });
         };
