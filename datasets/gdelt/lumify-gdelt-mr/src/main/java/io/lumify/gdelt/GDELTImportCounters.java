@@ -1,0 +1,12 @@
+package io.lumify.gdelt;
+
+public enum GDELTImportCounters {
+    EVENTS_ATTEMPTED,
+    EVENTS_PROCESSED,
+    ACTORS_ATTEMPTED,
+    ACTORS_PROCESSED,
+    ACTORS_SKIPPED,
+    EDGES_ATTEMPTED,
+    EDGES_PROCESSED,
+    ERRORS
+}

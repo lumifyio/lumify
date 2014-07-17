@@ -19,5 +19,6 @@
         <module>flight-aware</module>
         <module>twitter</module>
         <module>world-factbook</module>
+        <module>gdelt</module>
     </modules>
 </project>
