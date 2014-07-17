@@ -31,9 +31,9 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://lumify.io/exif#datetaken -->
+    <!-- http://lumify.io/exif#dateTaken -->
 
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#datetaken">
+        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#dateTaken">
             <rdfs:label xml:lang="en">Date Taken</rdfs:label>
             <lumify:displayTime rdf:datatype="&xsd;boolean">true</lumify:displayTime>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
@@ -64,9 +64,9 @@
 
 
 
-    <!-- http://lumify.io/exif#devicemake -->
+    <!-- http://lumify.io/exif#deviceMake -->
 
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#devicemake">
+        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#deviceMake">
             <rdfs:label xml:lang="en">Device Make</rdfs:label>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;string"/>
@@ -74,9 +74,9 @@
 
 
 
-    <!-- http://lumify.io/exif#devicemodel -->
+    <!-- http://lumify.io/exif#deviceModel -->
 
-        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#devicemodel">
+        <owl:DatatypeProperty rdf:about="http://lumify.io/exif#deviceModel">
             <rdfs:label xml:lang="en">Device Model</rdfs:label>
             <rdfs:domain rdf:resource="http://lumify.io/dev#image"/>
             <rdfs:range rdf:resource="&xsd;string"/>
