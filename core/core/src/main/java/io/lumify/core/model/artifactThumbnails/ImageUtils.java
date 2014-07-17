@@ -10,46 +10,35 @@ public class ImageUtils {
      * Flipping (Mirroring) is performed BEFORE Rotating the image. Example: Flipping the image over the y Axis, and then rotating it 90 degrees CW
      * is not the same as rotating the image 90 degrees CW and then flipping it over the y Axis.
      */
-    public static BufferedImage reOrientImage(BufferedImage image, Boolean yAxisFlipNeeded, Integer rotationNeeded) {
-        if (yAxisFlipNeeded == null) {
-            yAxisFlipNeeded = false;
-        }
-        if (rotationNeeded == null) {
-            rotationNeeded = 0;
-        }
-
+    public static BufferedImage reOrientImage(BufferedImage image, boolean yAxisFlipNeeded, int cwRotationNeeded) {
         //If angle greater than 360 is entered, reduce this angle.
-        rotationNeeded = rotationNeeded % 360;
-
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int type = thumbnailType(image);
+        cwRotationNeeded = cwRotationNeeded % 360;
 
         BufferedImage orientedImage = image;
-        if (!yAxisFlipNeeded && rotationNeeded == 0) {
+        if (!yAxisFlipNeeded && cwRotationNeeded == 0) {
             //EXIF Orientation 1.
             return image;
-        } else if (yAxisFlipNeeded && rotationNeeded == 0) {
+        } else if (yAxisFlipNeeded && cwRotationNeeded == 0) {
             //EXIF Orientation 2.
             orientedImage = flipImageHorizontally(image);
-        } else if (!yAxisFlipNeeded && rotationNeeded == 180) {
+        } else if (!yAxisFlipNeeded && cwRotationNeeded == 180) {
             //EXIF Orientation 3.
             orientedImage = rotateImage(image, 180);
-        } else if (yAxisFlipNeeded && rotationNeeded == 180) {
+        } else if (yAxisFlipNeeded && cwRotationNeeded == 180) {
             //EXIF Orientation 4.
             orientedImage = flipImageVertically(image);
-        } else if (yAxisFlipNeeded && rotationNeeded == 270) {
+        } else if (yAxisFlipNeeded && cwRotationNeeded == 270) {
             //EXIF Orientation 5.
             orientedImage = flipImageVertically(image);
             orientedImage = rotateImage(orientedImage, 90);
-        } else if (!yAxisFlipNeeded && rotationNeeded == 90) {
+        } else if (!yAxisFlipNeeded && cwRotationNeeded == 90) {
             //EXIF Orientation 6.
             orientedImage = rotateImage(image, 90);
-        } else if (yAxisFlipNeeded && rotationNeeded == 90) {
+        } else if (yAxisFlipNeeded && cwRotationNeeded == 90) {
             //EXIF Orientation 7.
             orientedImage = flipImageVertically(image);
             orientedImage = rotateImage(orientedImage, 270);
-        } else if (!yAxisFlipNeeded && rotationNeeded == 270) {
+        } else if (!yAxisFlipNeeded && cwRotationNeeded == 270) {
             //EXIF Orientation 8.
             orientedImage = rotateImage(image, 270);
         } else {
