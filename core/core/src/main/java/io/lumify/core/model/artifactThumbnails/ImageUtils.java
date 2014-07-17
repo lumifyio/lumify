@@ -72,11 +72,8 @@ public class ImageUtils {
 
 
     public static BufferedImage rotateImage(BufferedImage image,
-                                            Integer rotationNeeded) {
-        if (rotationNeeded == null) {
-            rotationNeeded = 0;
-        }
-        double angle = Math.toRadians(rotationNeeded);
+                                            int cwRotationNeeded) {
+        double angle = Math.toRadians(cwRotationNeeded);
         int type = thumbnailType(image);
         double sin = Math.abs(Math.sin(angle));
         double cos = Math.abs(Math.cos(angle));
