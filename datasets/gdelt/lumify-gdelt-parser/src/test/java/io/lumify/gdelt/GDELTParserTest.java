@@ -20,15 +20,16 @@ import static org.junit.Assert.assertTrue;
 public class GDELTParserTest {
 
     private GDELTParser parser;
+    private GDELTEvent event;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         this.parser = new GDELTParser();
+        this.event = this.parser.parseLine("303291233\t20040703\t200407\t2004\t2004.5014\tEDU\tSTUDENT\tUSA\tALQ\tara\tALE\tHIN\tEDU\tRAD\tMOD\tBUS\tCOMPANY\tUSA\tALT\tart\tALA\tHIT\tBUS\tDAR\tDOM\t1\t040\t040\t04\t1\t1.0\t5\t1\t5\t2.24358974358974\t5\tStaffordshire, Staffordshire, United Kingdom\tUK\tUKM9\t52.8333\t-2\t-2608511\t6\tLondon, United Kingdom\tUK2\tUKM92\t62.8333\t-3\t-3608511\t7\tChelsea, United Kingdom\tUK3\tUKM93\t72.8333\t-4\t-4608511\t20140701\thttp://www.thisismoney.co.uk/news/article-2675900/Student-loans-firm-shamed-axing-fake-legal-threats-Company-admits-sending-300-000-graduates-letters-past-decade.html?ITO=1490&ns_campaign=1490/RK=0");
     }
 
     @Test
     public void testParseEventDataFields() throws Exception {
-        GDELTEvent event = parser.parseLine("303291233\t20040703\t200407\t2004\t2004.5014\tEDU\tSTUDENT\tUSA\tALQ\tara\tALE\tHIN\tEDU\tRAD\tMOD\tBUS\tCOMPANY\tUSA\tALT\tart\tALA\tHIT\tBUS\tDAR\tDOM\t1\t040\t040\t04\t1\t1.0\t5\t1\t5\t2.24358974358974\t5\tStaffordshire, Staffordshire, United Kingdom\tUK\tUKM9\t52.8333\t-2\t-2608511\t6\tLondon, United Kingdom\tUK2\tUKM92\t62.8333\t-3\t-3608511\t7\tChelsea, United Kingdom\tUK3\tUKM93\t72.8333\t-4\t-4608511\t20140701\thttp://www.thisismoney.co.uk/news/article-2675900/Student-loans-firm-shamed-axing-fake-legal-threats-Company-admits-sending-300-000-graduates-letters-past-decade.html?ITO=1490&ns_campaign=1490/RK=0");
         assertEquals("303291233", event.getGlobalEventId());
         assertEquals(new SimpleDateFormat("yyyyMMdd").parse("20040703"), event.getDateOfOccurrence());
 
@@ -91,6 +92,36 @@ public class GDELTParserTest {
 
         assertEquals(new SimpleDateFormat("yyyyMMdd").parse("20140701"), event.getDateAdded());
         assertEquals("http://www.thisismoney.co.uk/news/article-2675900/Student-loans-firm-shamed-axing-fake-legal-threats-Company-admits-sending-300-000-graduates-letters-past-decade.html?ITO=1490&ns_campaign=1490/RK=0", event.getSourceUrl());
+    }
+
+    @Test
+    public void testActor1() {
+        GDELTActor actor = event.getActor1();
+        assertEquals("EDU", actor.getCode());
+        assertEquals("STUDENT", actor.getName());
+        assertEquals("USA", actor.getCountryCode());
+        assertEquals("ALQ", actor.getKnownGroupCode());
+        assertEquals("ara", actor.getEthnicCode());
+        assertEquals("ALE", actor.getReligion1Code());
+        assertEquals("HIN", actor.getReligion2Code());
+        assertEquals("EDU", actor.getType1Code());
+        assertEquals("RAD", actor.getType2Code());
+        assertEquals("MOD", actor.getType3Code());
+    }
+
+    @Test
+    public void testActor2() {
+        GDELTActor actor = event.getActor2();
+        assertEquals("BUS", actor.getCode());
+        assertEquals("COMPANY", actor.getName());
+        assertEquals("USA", actor.getCountryCode());
+        assertEquals("ALT", actor.getKnownGroupCode());
+        assertEquals("art", actor.getEthnicCode());
+        assertEquals("ALA", actor.getReligion1Code());
+        assertEquals("HIT", actor.getReligion2Code());
+        assertEquals("BUS", actor.getType1Code());
+        assertEquals("DAR", actor.getType2Code());
+        assertEquals("DOM", actor.getType3Code());
     }
 
     @Ignore // Remove the annotation when making changes to parsing code. The test takes a long time to run.

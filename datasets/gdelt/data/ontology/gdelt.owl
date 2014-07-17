@@ -1223,7 +1223,7 @@
     <!-- http://lumify.io/gdelt#countryCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#countryCode">
-        <rdfs:label xml:lang="en">Country Code</rdfs:label>
+        <rdfs:label xml:lang="en">Country</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;WSB&quot;:&quot;West Bank&quot;,
    &quot;BAG&quot;:&quot;Baghdad&quot;,
@@ -1516,7 +1516,7 @@
     <!-- http://lumify.io/gdelt#ethnicCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#ethnicCode">
-        <rdfs:label xml:lang="en">Ethnic Code</rdfs:label>
+        <rdfs:label xml:lang="en">Ethnicity</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;aar&quot;:&quot;Afar&quot;,
    &quot;abk&quot;:&quot;Abkhaz&quot;,
@@ -2169,7 +2169,7 @@
     <!-- http://lumify.io/gdelt#eventBaseCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#eventBaseCode">
-        <rdfs:label xml:lang="en">Base Code</rdfs:label>
+        <rdfs:label xml:lang="en">Base</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;010&quot;:&quot;Make statement, not specified below&quot;,
    &quot;011&quot;:&quot;Decline comment&quot;,
@@ -2679,7 +2679,7 @@
     <!-- http://lumify.io/gdelt#knownGroupCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#knownGroupCode">
-        <rdfs:label xml:lang="en">Known Group Code</rdfs:label>
+        <rdfs:label xml:lang="en">Known Group</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;AAM&quot;:&quot;Al Aqsa Martyrs Brigade&quot;,
    &quot;ABD&quot;:&quot;Arab Bank for Economic Development in Africa&quot;,
@@ -2852,7 +2852,7 @@
     <!-- http://lumify.io/gdelt#religionCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#religionCode">
-        <rdfs:label xml:lang="en">Religion Code</rdfs:label>
+        <rdfs:label xml:lang="en">Religion</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;ADR&quot;:&quot;African Diasporic Religion&quot;,
    &quot;ALE&quot;:&quot;Alewi&quot;,
@@ -2895,7 +2895,7 @@
     <!-- http://lumify.io/gdelt#rootCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#rootCode">
-        <rdfs:label xml:lang="en">Root Code</rdfs:label>
+        <rdfs:label xml:lang="en">Root</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;01&quot;:&quot;MAKE PUBLIC STATEMENT&quot;,
    &quot;02&quot;:&quot;APPEAL&quot;,
@@ -2937,7 +2937,7 @@
     <!-- http://lumify.io/gdelt#typeCode -->
 
     <owl:DatatypeProperty rdf:about="http://lumify.io/gdelt#typeCode">
-        <rdfs:label xml:lang="en">Type Code</rdfs:label>
+        <rdfs:label xml:lang="en">Type</rdfs:label>
         <lumify:possibleValues xml:lang="en">{  
    &quot;COP&quot;:&quot;Police forces&quot;,
    &quot;GOV&quot;:&quot;Government&quot;,
@@ -3000,7 +3000,10 @@
 
     <owl:Class rdf:about="http://lumify.io/gdelt#gdeltActor">
         <rdfs:label xml:lang="en">GDELT Actor</rdfs:label>
-        <lumify:glyphIconFileName xml:lang="en">glyphicons_399_e-mail@2x.png</lumify:glyphIconFileName>
+        <lumify:glyphIconFileName xml:lang="en">gdelt-actor.png</lumify:glyphIconFileName>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#actorCode&apos;)</lumify:subtitleFormula>
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#actorName&apos;) || prop(&apos;http://lumify.io/gdelt#actorCode&apos;) || &apos;&apos;</lumify:titleFormula>
+        <lumify:color xml:lang="en">rgb(28, 137, 28)</lumify:color>
     </owl:Class>
     
 
@@ -3009,9 +3012,10 @@
 
     <owl:Class rdf:about="http://lumify.io/gdelt#gdeltEvent">
         <rdfs:label xml:lang="en">GDELT Event</rdfs:label>
-        <lumify:glyphIconFileName xml:lang="en">glyphicons_355_announcement@2x.png</lumify:glyphIconFileName>
+        <lumify:glyphIconFileName xml:lang="en">gdelt-event.png</lumify:glyphIconFileName>
         <lumify:timeFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#dateOfOccurrence&apos;) || &apos;&apos;</lumify:timeFormula>
-        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#globalEventId&apos;) || &apos;&apos;</lumify:titleFormula>
+        <lumify:titleFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#eventCode&apos;) || prop(&apos;http://lumify.io/gdelt#globalEventId&apos;)</lumify:titleFormula>
+        <lumify:subtitleFormula xml:lang="en">prop(&apos;http://lumify.io/gdelt#globalEventId&apos;)</lumify:subtitleFormula>
         <lumify:color xml:lang="en">rgb(23, 30, 239)</lumify:color>
     </owl:Class>
 </rdf:RDF>
