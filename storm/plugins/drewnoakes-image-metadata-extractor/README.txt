@@ -13,7 +13,7 @@ ontology.iri.cwRotationNeeded=http://lumify.io/exif#cwRotationNeeded
 
 
 Check that file:
-/Users/jon.hellmann/Documents/lumify-all/lumify-public/dev/storm-local/pom.xml
+/lumify-all/lumify-public/dev/storm-local/pom.xml
 has:
 <dependency>
     <groupId>io.lumify</groupId>
@@ -23,6 +23,6 @@ has:
 
 
 Check that file:
-/Users/jon.hellmann/Documents/lumify-all/lumify-public/storm/plugins/pom.xml
+/lumify-all/lumify-public/storm/plugins/pom.xml
 has:
 <module>drewnoakes-image-metadata-extractor</module>
